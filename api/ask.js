@@ -7,7 +7,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get question from website
     const { subject, question } = req.body || {};
 
     // Check question
@@ -17,7 +16,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Get Gemini API key from Vercel
+    // Gemini API key
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -26,42 +25,45 @@ export default async function handler(req, res) {
       });
     }
 
-    // AI Teacher instructions
+    // AI teacher prompt
     const prompt = `
 You are the AI teacher for Invincible Coaching Classes.
 
-You teach students Mathematics, Physics and Chemistry.
+You teach students from Classes 9 to 12.
 
 Subject: ${subject || "General"}
 
 Student Question:
 ${question}
 
-Teaching rules:
+Teaching Rules:
 
-1. Assume the student may have very little prior knowledge.
-2. Explain the concept in simple language.
-3. Do not just give the final answer.
+1. Assume the student is a beginner.
+2. Explain the concept in very simple language.
+3. Do not directly jump to the final answer.
 4. Explain the reasoning step by step.
-5. For numerical problems:
-   - Write the given information.
-   - Write the required quantity.
-   - Write the relevant formula.
-   - Substitute values carefully.
-   - Calculate step by step.
-   - Give the final answer with correct unit.
-6. For Mathematics, show important mathematical steps clearly.
-7. For Physics, explain the physical meaning of the formula before using it.
-8. For Chemistry, explain the relevant concept, reaction, equation or calculation clearly.
-9. Mention common mistakes when useful.
-10. Keep the explanation suitable for a school/coaching student.
-11. Use simple formatting with headings and short paragraphs.
-12. Never pretend that an answer is correct if the information is insufficient.
+5. For numerical questions:
+   - Write Given
+   - Write Required
+   - Write Formula
+   - Put values
+   - Calculate step by step
+   - Give Final Answer
+6. For Mathematics, show every important calculation.
+7. For Physics, explain the physical meaning of the formula.
+8. For Chemistry, explain the concept before solving.
+9. Use simple examples wherever useful.
+10. Keep the explanation focused and classroom-friendly.
+11. Use proper mathematical notation where possible.
+12. At the end, give a short section called "Answer".
+13. Do not mention that you are an AI.
+
+Answer the student's question now.
 `;
 
-    // Send question to Gemini
+    // Gemini API
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" +
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
         encodeURIComponent(apiKey),
       {
         method: "POST",
@@ -77,42 +79,50 @@ Teaching rules:
                 }
               ]
             }
-          ]
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 2000
+          }
         })
       }
     );
 
-    // Read Gemini response
     const data = await response.json();
 
-    // Handle Gemini error
+    // Gemini error
     if (!response.ok) {
-      console.error("Gemini API error:", data);
+      console.error("Gemini API Error:", data);
 
       return res.status(response.status).json({
         error:
           data?.error?.message ||
-          "Gemini API request failed."
+          "Gemini could not process the question."
       });
     }
 
-    // Extract AI answer
+    // Extract answer
     const answer =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      data?.candidates?.[0]?.content?.parts
+        ?.map(part => part.text || "")
+        .join("")
+        .trim();
 
     if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned an empty answer."
+        error: "No answer was returned by Gemini."
       });
     }
 
-    // Send answer back to website
+    // Send answer to website
     return res.status(200).json({
+      success: true,
+      subject: subject || "General",
       answer: answer
     });
 
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Server Error:", error);
 
     return res.status(500).json({
       error: "Something went wrong while solving the question."
