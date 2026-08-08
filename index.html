@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Invincible Doubt Desk</title>
 
@@ -180,7 +176,7 @@
     }
 
     .logic-title {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 900;
       color: #09244a;
       margin-bottom: 18px;
@@ -195,7 +191,7 @@
 
     .feedback {
       display: none;
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .feedback-title {
@@ -260,7 +256,7 @@
       }
 
       .logic-title {
-        font-size: 25px;
+        font-size: 26px;
       }
 
       .answer-text {
@@ -288,17 +284,28 @@
     <label>Select Subject</label>
 
     <div class="subjects">
-      <button class="subject active" data-subject="Mathematics">
+
+      <button
+        type="button"
+        class="subject active"
+        data-subject="Mathematics">
         Mathematics
       </button>
 
-      <button class="subject" data-subject="Physics">
+      <button
+        type="button"
+        class="subject"
+        data-subject="Physics">
         Physics
       </button>
 
-      <button class="subject" data-subject="Chemistry">
+      <button
+        type="button"
+        class="subject"
+        data-subject="Chemistry">
         Chemistry
       </button>
+
     </div>
 
     <label for="question">
@@ -319,48 +326,48 @@
     <div class="photo-buttons">
 
       <button
-        class="photo-btn"
-        id="cameraBtn"
         type="button"
-      >
+        class="photo-btn"
+        id="cameraBtn">
         📷 Take Photo
       </button>
 
       <button
-        class="photo-btn"
-        id="uploadBtn"
         type="button"
-      >
+        class="photo-btn"
+        id="uploadBtn">
         🖼️ Upload Photo
       </button>
 
     </div>
 
-    <img id="imagePreview">
+    <img
+      id="imagePreview"
+      alt="Selected question"
+    >
 
-    <button id="removeImage" type="button">
+    <button
+      type="button"
+      id="removeImage">
       Remove Photo
     </button>
 
     <button
-      class="ask-btn"
-      id="askBtn"
       type="button"
-    >
+      class="ask-btn"
+      id="askBtn">
       ASK AI
     </button>
 
     <div
       class="loading"
-      id="loading"
-    >
+      id="loading">
       Thinking... Please wait.
     </div>
 
     <div
       class="answer-box"
-      id="answerBox"
-    >
+      id="answerBox">
 
       <div class="logic-title">
         Aao Logic Samjhate Hain
@@ -368,13 +375,12 @@
 
       <div
         class="answer-text"
-        id="answerText"
-      ></div>
+        id="answerText">
+      </div>
 
       <div
         class="feedback"
-        id="feedback"
-      >
+        id="feedback">
 
         <div class="feedback-title">
           Still confused?
@@ -383,18 +389,16 @@
         <div class="feedback-buttons">
 
           <button
-            class="feedback-btn"
-            id="againBtn"
             type="button"
-          >
+            class="feedback-btn"
+            id="againBtn">
             Not Satisfied — Explain Again
           </button>
 
           <button
-            class="feedback-btn teacher-btn"
-            id="teacherBtn"
             type="button"
-          >
+            class="feedback-btn teacher-btn"
+            id="teacherBtn">
             Teacher Help
           </button>
 
@@ -427,10 +431,10 @@
   const imagePreview =
     document.getElementById("imagePreview");
 
-  const removeImage =
+  const removeImageButton =
     document.getElementById("removeImage");
 
-  const askBtn =
+  const askButton =
     document.getElementById("askBtn");
 
   const loading =
@@ -445,29 +449,36 @@
   const feedback =
     document.getElementById("feedback");
 
-  // Subject selection
-  document.querySelectorAll(".subject").forEach(button => {
 
-    button.addEventListener("click", () => {
+  // SUBJECT SELECTION
 
-      document
-        .querySelectorAll(".subject")
-        .forEach(btn => btn.classList.remove("active"));
+  document
+    .querySelectorAll(".subject")
+    .forEach(function(button) {
 
-      button.classList.add("active");
+      button.addEventListener("click", function() {
 
-      selectedSubject =
-        button.dataset.subject;
+        document
+          .querySelectorAll(".subject")
+          .forEach(function(btn) {
+            btn.classList.remove("active");
+          });
+
+        button.classList.add("active");
+
+        selectedSubject =
+          button.getAttribute("data-subject");
+
+      });
 
     });
 
-  });
 
+  // UPLOAD PHOTO
 
-  // Upload button
   document
     .getElementById("uploadBtn")
-    .addEventListener("click", () => {
+    .addEventListener("click", function() {
 
       imageInput.removeAttribute("capture");
 
@@ -476,10 +487,11 @@
     });
 
 
-  // Camera button
+  // TAKE PHOTO
+
   document
     .getElementById("cameraBtn")
-    .addEventListener("click", () => {
+    .addEventListener("click", function() {
 
       imageInput.setAttribute(
         "capture",
@@ -491,145 +503,211 @@
     });
 
 
-  // Image selected
-  imageInput.addEventListener("change", event => {
+  // IMAGE SELECTED
 
-    const file = event.target.files[0];
+  imageInput.addEventListener(
+    "change",
+    function(event) {
 
-    if (!file) return;
+      const file =
+        event.target.files[0];
 
-    if (!file.type.startsWith("image/")) {
-      alert("Please select an image.");
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-
-      const result = reader.result;
-
-      selectedImage = {
-        data: result.split(",")[1],
-        mimeType: file.type
-      };
-
-      imagePreview.src = result;
-      imagePreview.style.display = "block";
-      removeImage.style.display = "block";
-
-    };
-
-    reader.readAsDataURL(file);
-
-  });
-
-
-  // Remove image
-  removeImage.addEventListener("click", () => {
-
-    selectedImage = null;
-
-    imageInput.value = "";
-
-    imagePreview.src = "";
-    imagePreview.style.display = "none";
-
-    removeImage.style.display = "none";
-
-  });
-
-
-  // Ask AI
-  askBtn.addEventListener("click", async () => {
-
-    const question =
-      questionInput.value.trim();
-
-    if (!question && !selectedImage) {
-
-      alert(
-        "Please type a question or upload a photo."
-      );
-
-      return;
-
-    }
-
-    askBtn.disabled = true;
-    loading.style.display = "block";
-
-    answerBox.style.display = "none";
-    feedback.style.display = "none";
-
-    try {
-
-      const response = await fetch(
-        "/api/ask",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-            subject,
-            question,
-            image: selectedImage
-          })
-        }
-      );
-
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-          "Unable to get answer."
-        );
+      if (!file) {
+        return;
       }
 
-      answerText.textContent =
-        cleanAnswer(data.answer);
+      if (!file.type.startsWith("image/")) {
 
-      answerBox.style.display = "block";
-      feedback.style.display = "block";
+        alert(
+          "Please select an image."
+        );
 
-      answerBox.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+        return;
+      }
 
-    } catch (error) {
+      const reader =
+        new FileReader();
 
-      answerBox.style.display = "block";
+      reader.onload = function() {
 
-      answerText.textContent =
-        "Sorry, answer nahi aa paaya.\n\n" +
-        error.message;
+        const result =
+          reader.result;
 
-    } finally {
+        selectedImage = {
+          data: result.split(",")[1],
+          mimeType: file.type
+        };
 
-      askBtn.disabled = false;
-      loading.style.display = "none";
+        imagePreview.src = result;
+
+        imagePreview.style.display =
+          "block";
+
+        removeImageButton.style.display =
+          "block";
+
+      };
+
+      reader.readAsDataURL(file);
 
     }
+  );
 
-  });
+
+  // REMOVE PHOTO
+
+  removeImageButton.addEventListener(
+    "click",
+    function() {
+
+      selectedImage = null;
+
+      imageInput.value = "";
+
+      imagePreview.src = "";
+
+      imagePreview.style.display =
+        "none";
+
+      removeImageButton.style.display =
+        "none";
+
+    }
+  );
 
 
-  // Remove unwanted markdown/programming symbols
+  // ASK AI
+
+  askButton.addEventListener(
+    "click",
+    async function() {
+
+      const question =
+        questionInput.value.trim();
+
+      if (!question && !selectedImage) {
+
+        alert(
+          "Please type a question or upload a photo."
+        );
+
+        return;
+      }
+
+      askButton.disabled = true;
+
+      loading.style.display =
+        "block";
+
+      answerBox.style.display =
+        "none";
+
+      feedback.style.display =
+        "none";
+
+      try {
+
+        const response =
+          await fetch(
+            "/api/ask",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+
+                subject:
+                  selectedSubject,
+
+                question:
+                  question,
+
+                image:
+                  selectedImage
+
+              })
+
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Unable to get answer."
+          );
+
+        }
+
+
+        answerText.textContent =
+          cleanAnswer(data.answer);
+
+
+        answerBox.style.display =
+          "block";
+
+        feedback.style.display =
+          "block";
+
+
+        answerBox.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+
+      } catch (error) {
+
+        answerBox.style.display =
+          "block";
+
+        answerText.textContent =
+          "Sorry, answer nahi aa paaya.\n\n" +
+          error.message;
+
+      } finally {
+
+        askButton.disabled = false;
+
+        loading.style.display =
+          "none";
+
+      }
+
+    }
+  );
+
+
+  // CLEAN AI RESPONSE
+
   function cleanAnswer(text) {
 
-    if (!text) return "";
+    if (!text) {
+      return "";
+    }
 
     return text
       .replace(/#{1,6}\s?/g, "")
       .replace(/\*\*/g, "")
       .replace(/\*/g, "")
       .replace(/\\text\{([^}]*)\}/g, "$1")
+      .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+      .replace(/\\times/g, "×")
+      .replace(/\\div/g, "÷")
+      .replace(/\\cdot/g, "×")
+      .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+      .replace(/\\left/g, "")
+      .replace(/\\right/g, "")
       .replace(/\\\[/g, "")
       .replace(/\\\]/g, "")
       .replace(/\$\$/g, "")
@@ -640,30 +718,44 @@
   }
 
 
-  // Explain again
+  // NOT SATISFIED
+
   document
     .getElementById("againBtn")
-    .addEventListener("click", () => {
+    .addEventListener(
+      "click",
+      function() {
 
-      questionInput.value =
-        questionInput.value +
-        "\n\nPlease explain this again in an even simpler way with a small example.";
+        const oldQuestion =
+          questionInput.value.trim();
 
-      askBtn.click();
+        const newQuestion =
+          oldQuestion +
+          "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
 
-    });
+        questionInput.value =
+          newQuestion;
+
+        askButton.click();
+
+      }
+    );
 
 
-  // Teacher help
+  // TEACHER HELP
+
   document
     .getElementById("teacherBtn")
-    .addEventListener("click", () => {
+    .addEventListener(
+      "click",
+      function() {
 
-      alert(
-        "Please contact your Invincible Coaching Classes teacher for personal help."
-      );
+        alert(
+          "Please contact your Invincible Coaching Classes teacher for personal help."
+        );
 
-    });
+      }
+    );
 
 </script>
 
