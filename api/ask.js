@@ -6,11 +6,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { subject, question } = req.body || {};
+    const {
+      subject,
+      question,
+      image
+    } = req.body || {};
 
-    if (!question || !question.trim()) {
+    if (!question && !image) {
       return res.status(400).json({
-        error: "Please enter a question."
+        error: "Please enter a question or upload a photo."
       });
     }
 
@@ -18,203 +22,158 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "Gemini API key is missing."
+        error: "Gemini API key is not configured."
       });
     }
 
+    const model =
+      process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+
     const prompt = `
-You are the AI teacher for Invincible Coaching Classes.
+You are a friendly school teacher for Invincible Coaching Classes.
 
-You teach school students Mathematics, Physics and Chemistry.
+The student wants to understand the question, not just get the answer.
 
-Subject:
-${subject || "General"}
+Subject: ${subject || "General"}
 
 Student Question:
-${question}
-
-IMPORTANT:
-
-Start every solution EXACTLY with:
-
-Aao logic samjhate hain
-
-Do not write:
-Answer:
-Let's solve it.
-Let's understand it.
-AI Teacher Solution
-Here is the solution.
+${question || "Solve the question shown in the image."}
 
 TEACHING STYLE:
 
-- Explain like a friendly school teacher.
-- Use simple Hinglish where helpful.
-- Keep the answer SHORT.
-- Keep the explanation easy and interesting.
-- Assume the student may not know the concept.
-- Avoid long lectures.
-- Avoid unnecessary theory.
-- Do not repeat the student's question.
-- Explain the logic before or along with the calculation.
-- The student should understand the answer quickly.
+1. Start directly with:
+Aao Logic Samjhate Hain
 
-FORMATTING:
+2. Explain in very simple language suitable for school students.
 
-Do NOT use Markdown symbols.
+3. Use short sentences.
 
-Do NOT use:
-###
-**
-*
-$
-LaTeX
-HTML
-code blocks
+4. Avoid complicated words.
 
-Never write mathematical expressions using LaTeX.
+5. Explain the basic idea first.
 
-Use normal school-style mathematics.
+6. Then show the formula if needed.
 
-WRONG:
-$V = a^3$
+7. Put values into the formula.
 
-RIGHT:
-V = a³
+8. Show only the necessary calculation.
 
-WRONG:
-$cm^3$
+9. Give the final answer clearly.
 
-RIGHT:
-cm³
+10. If it is a numerical question, use this simple structure:
 
-Use:
-×
-÷
-²
-³
-√
-=
-
-SIMPLE QUESTION FORMAT:
-
-Aao logic samjhate hain
-
-[Very short and simple explanation]
-
-[Calculation if needed]
-
-Final Answer:
-[answer]
-
-NUMERICAL QUESTION FORMAT:
-
-Aao logic samjhate hain
+Aao Logic Samjhate Hain
 
 Given:
-[important value]
+...
 
 Formula:
-[simple formula]
+...
 
-Calculation:
-[short calculation]
+Putting values:
+...
 
-Final Answer:
-[answer with unit]
+Answer:
+...
 
-CONCEPTUAL QUESTION FORMAT:
+11. If it is a theory question, explain the concept in 3–6 short points.
 
-Aao logic samjhate hain
+12. If it is mathematics, show calculations clearly.
 
-[Simple explanation in 2–4 short sentences]
+13. If it is physics, mention the relevant formula and unit.
 
-Key Point:
-[one important thing to remember]
+14. If it is chemistry, explain the concept in simple student-friendly language.
 
-SUBJECT RULES:
+15. Add one short "Yaad Rakho" point when useful.
 
-For Mathematics:
-- Show only necessary steps.
-- Explain the mathematical logic simply.
-- Do not make easy questions unnecessarily lengthy.
+16. Keep the complete answer SHORT.
 
-For Physics:
-- Give formula.
-- Substitute values clearly.
-- Show calculation.
-- Always write the correct unit.
+17. Do NOT give unnecessary background information.
 
-For Chemistry:
-- Explain the concept simply.
-- Show chemical equations only when required.
-- Keep reactions and calculations easy to understand.
+18. Do NOT repeat the question.
 
-FOR VERY EASY QUESTIONS:
+19. Do NOT use Markdown headings.
 
-Keep the answer extremely short.
+20. Do NOT use symbols such as:
+###
+**
+$
+\\text{}
+\$begin:math:display$
+\\$end:math:display$
 
-Do not add unnecessary:
-- Common mistakes
-- Extra examples
-- Long theory
-- Additional tips
+21. Do NOT write programming-like formatting.
 
-Only include these when genuinely useful.
+22. Do NOT use long paragraphs.
 
-The final response must feel like a teacher explaining on a classroom board.
+23. Do not say "AI Teacher Solution".
 
-The student should NEVER feel overwhelmed.
+24. Do not mention that you are an AI.
 
-Keep answers concise, clear, friendly and exam-friendly.
+25. Answer like a real, patient school teacher explaining on a classroom smart board.
+
+IMPORTANT:
+The student should be able to read the complete solution comfortably on a mobile phone.
+
+At the end write:
+
+Final Answer: [answer]
+
+Then:
+
+Yaad Rakho: [one short useful point]
 `;
 
-    const model = "gemini-3.5-flash-lite";
+    const parts = [
+      {
+        text: prompt
+      }
+    ];
 
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/" +
-      model +
-      ":generateContent?key=" +
-      encodeURIComponent(apiKey);
-
-    const response = await fetch(url, {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: prompt
-              }
-            ]
-          }
-        ],
-
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 900
+    // Add uploaded image if available
+    if (image && image.data) {
+      parts.push({
+        inline_data: {
+          mime_type: image.mimeType || "image/jpeg",
+          data: image.data
         }
-      })
-    });
+      });
+    }
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts
+            }
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 700
+          }
+        })
+      }
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini API Error:", data);
+      console.error("Gemini error:", data);
 
       return res.status(response.status).json({
         error:
           data?.error?.message ||
-          "Gemini API request failed."
+          "Unable to get solution from Gemini."
       });
     }
 
-    let answer =
+    const answer =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
@@ -222,44 +181,19 @@ Keep answers concise, clear, friendly and exam-friendly.
 
     if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned no answer."
+        error: "Gemini returned an empty answer."
       });
     }
 
-    // Clean unwanted formatting
-    answer = answer
-      .replace(/\*\*/g, "")
-      .replace(/###/g, "")
-      .replace(/##/g, "")
-      .replace(/#/g, "")
-      .replace(/\$/g, "")
-      .replace(/\\text\{([^}]*)\}/g, "$1")
-      .replace(/\\mathrm\{([^}]*)\}/g, "$1")
-      .replace(/\\times/g, "×")
-      .replace(/\\div/g, "÷")
-      .replace(/\\cdot/g, "×")
-      .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
-      .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
-      .replace(/\\left/g, "")
-      .replace(/\\right/g, "")
-      .trim();
-
-    // Make sure the desired opening is present
-    if (!answer.startsWith("Aao logic samjhate hain")) {
-      answer = "Aao logic samjhate hain\n\n" + answer;
-    }
-
     return res.status(200).json({
-      success: true,
-      subject: subject || "General",
-      answer: answer
+      answer
     });
 
   } catch (error) {
-    console.error("Server Error:", error);
+    console.error(error);
 
     return res.status(500).json({
-      error: "Something went wrong while solving the doubt."
+      error: "Something went wrong. Please try again."
     });
   }
 }
