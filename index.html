@@ -2,142 +2,158 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Invincible Doubt Desk</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-    }
-
-    .header {
-      background: #102a56;
-      color: white;
-      padding: 22px 18px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 27px;
-      margin-bottom: 7px;
-    }
-
-    .header p {
-      font-size: 14px;
-      opacity: 0.9;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fa;
+      color: #101828;
     }
 
     .container {
-      max-width: 700px;
+      width: min(720px, 94%);
       margin: 30px auto;
-      padding: 0 18px;
     }
 
-    .welcome {
+    .header {
       text-align: center;
       margin-bottom: 25px;
     }
 
-    .welcome h2 {
-      font-size: 25px;
-      margin-bottom: 8px;
+    .header h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 800;
+      color: #09244a;
     }
 
-    .welcome p {
-      color: #647084;
+    .header p {
+      margin-top: 7px;
+      color: #667085;
+      font-size: 15px;
     }
 
     .card {
       background: white;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
-      margin-bottom: 20px;
+      padding: 25px;
+      border-radius: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
 
-    .label {
-      font-weight: bold;
-      margin-bottom: 10px;
+    label {
       display: block;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
 
     .subjects {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 25px;
     }
 
     .subject {
-      border: 2px solid #dbe2ed;
+      padding: 15px 8px;
+      border: 2px solid #d7dee8;
+      border-radius: 14px;
       background: white;
-      padding: 13px 5px;
-      border-radius: 10px;
+      color: #1769c2;
+      font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
     }
 
     .subject.active {
-      background: #102a56;
+      background: #09244a;
       color: white;
-      border-color: #102a56;
+      border-color: #09244a;
     }
 
     textarea {
       width: 100%;
-      min-height: 150px;
-      border: 2px solid #dbe2ed;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 16px;
+      min-height: 170px;
+      padding: 18px;
+      border: 2px solid #dce2ea;
+      border-radius: 18px;
+      font-size: 18px;
       resize: vertical;
       outline: none;
-      font-family: Arial, sans-serif;
+      font-family: inherit;
     }
 
     textarea:focus {
-      border-color: #102a56;
+      border-color: #1769c2;
     }
 
-    .photo-area {
-      margin-top: 18px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .photo-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
     }
 
     .photo-btn {
-      border: 2px solid #dbe2ed;
+      padding: 17px 10px;
+      border: 2px solid #d7dee8;
+      border-radius: 15px;
       background: white;
-      padding: 12px 15px;
-      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
       cursor: pointer;
-      font-weight: bold;
     }
 
-    input[type="file"] {
+    .photo-btn:hover {
+      background: #f3f6fa;
+    }
+
+    #imageInput {
       display: none;
+    }
+
+    #imagePreview {
+      display: none;
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      margin-top: 15px;
+      border-radius: 15px;
+      border: 2px solid #e1e6ed;
+    }
+
+    #removeImage {
+      display: none;
+      margin: 10px auto 0;
+      border: none;
+      background: none;
+      color: #d92d20;
+      font-weight: 700;
+      cursor: pointer;
     }
 
     .ask-btn {
       width: 100%;
       margin-top: 20px;
+      padding: 19px;
       border: none;
-      background: #e86f1c;
+      border-radius: 16px;
+      background: #ed7118;
       color: white;
-      padding: 15px;
-      border-radius: 12px;
-      font-size: 17px;
-      font-weight: bold;
+      font-size: 20px;
+      font-weight: 800;
       cursor: pointer;
     }
 
@@ -146,59 +162,113 @@
       cursor: not-allowed;
     }
 
-    .answer-box {
-      display: none;
-      background: white;
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
-      margin-bottom: 20px;
-    }
-
-    .answer-title {
-      color: #102a56;
-      font-size: 21px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .answer {
-      white-space: pre-wrap;
-      line-height: 1.6;
-      font-size: 16px;
-    }
-
     .loading {
       display: none;
       text-align: center;
-      margin-top: 18px;
-      color: #102a56;
-      font-weight: bold;
+      padding: 20px;
+      font-weight: 700;
+      color: #1769c2;
     }
 
-    .error {
-      color: #c62828;
-      background: #ffebee;
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 15px;
+    .answer-box {
       display: none;
+      margin-top: 25px;
+      padding: 22px;
+      background: #f8fafc;
+      border-radius: 20px;
+      border: 2px solid #e1e7ef;
+    }
+
+    .logic-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #09244a;
+      margin-bottom: 18px;
+    }
+
+    .answer-text {
+      white-space: pre-wrap;
+      font-size: 18px;
+      line-height: 1.65;
+      color: #172033;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .feedback-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .feedback-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .feedback-btn {
+      padding: 14px 10px;
+      border-radius: 13px;
+      border: 2px solid #d7dee8;
+      background: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .teacher-btn {
+      background: #09244a;
+      color: white;
+      border-color: #09244a;
     }
 
     .footer {
       text-align: center;
-      color: #697386;
-      font-size: 13px;
-      padding: 20px;
+      color: #667085;
+      margin: 25px 0;
+      font-size: 14px;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 600px) {
+      .container {
+        width: 94%;
+        margin: 18px auto;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .header h1 {
+        font-size: 27px;
+      }
+
       .subjects {
         grid-template-columns: 1fr;
       }
 
-      .header h1 {
-        font-size: 23px;
+      .photo-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      textarea {
+        font-size: 17px;
+      }
+
+      .logic-title {
+        font-size: 25px;
+      }
+
+      .answer-text {
+        font-size: 17px;
+      }
+
+      .feedback-buttons {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -206,176 +276,297 @@
 
 <body>
 
-  <header class="header">
+<div class="container">
+
+  <div class="header">
     <h1>Invincible Doubt Desk</h1>
-    <p>AI + Teacher Doubt Solving</p>
-  </header>
+    <p>Ask your doubt. Understand the logic.</p>
+  </div>
 
-  <main class="container">
+  <div class="card">
 
-    <section class="welcome">
-      <h2>Ask Your Doubt</h2>
-      <p>Understand the concept. Don't just memorize the answer.</p>
-    </section>
+    <label>Select Subject</label>
 
-    <section class="card">
-
-      <label class="label">Select Subject</label>
-
-      <div class="subjects">
-
-        <button
-          type="button"
-          class="subject active"
-          onclick="selectSubject(this)">
-          Mathematics
-        </button>
-
-        <button
-          type="button"
-          class="subject"
-          onclick="selectSubject(this)">
-          Physics
-        </button>
-
-        <button
-          type="button"
-          class="subject"
-          onclick="selectSubject(this)">
-          Chemistry
-        </button>
-
-      </div>
-
-      <label class="label">Your Question</label>
-
-      <textarea
-        id="question"
-        placeholder="Type your question here..."></textarea>
-
-      <div class="photo-area">
-
-        <label class="photo-btn">
-          📷 Take Photo
-          <input
-            type="file"
-            id="cameraInput"
-            accept="image/*"
-            capture="environment">
-        </label>
-
-        <label class="photo-btn">
-          🖼️ Upload Photo
-          <input
-            type="file"
-            id="photoInput"
-            accept="image/*">
-        </label>
-
-      </div>
-
-      <button
-        id="askButton"
-        class="ask-btn"
-        type="button"
-        onclick="askAI()">
-        ASK AI
+    <div class="subjects">
+      <button class="subject active" data-subject="Mathematics">
+        Mathematics
       </button>
 
-      <div id="loading" class="loading">
-        AI Teacher is solving your doubt...
+      <button class="subject" data-subject="Physics">
+        Physics
+      </button>
+
+      <button class="subject" data-subject="Chemistry">
+        Chemistry
+      </button>
+    </div>
+
+    <label for="question">
+      Your Question
+    </label>
+
+    <textarea
+      id="question"
+      placeholder="Type your question here..."
+    ></textarea>
+
+    <input
+      id="imageInput"
+      type="file"
+      accept="image/*"
+    >
+
+    <div class="photo-buttons">
+
+      <button
+        class="photo-btn"
+        id="cameraBtn"
+        type="button"
+      >
+        📷 Take Photo
+      </button>
+
+      <button
+        class="photo-btn"
+        id="uploadBtn"
+        type="button"
+      >
+        🖼️ Upload Photo
+      </button>
+
+    </div>
+
+    <img id="imagePreview">
+
+    <button id="removeImage" type="button">
+      Remove Photo
+    </button>
+
+    <button
+      class="ask-btn"
+      id="askBtn"
+      type="button"
+    >
+      ASK AI
+    </button>
+
+    <div
+      class="loading"
+      id="loading"
+    >
+      Thinking... Please wait.
+    </div>
+
+    <div
+      class="answer-box"
+      id="answerBox"
+    >
+
+      <div class="logic-title">
+        Aao Logic Samjhate Hain
       </div>
 
-      <div id="error" class="error"></div>
+      <div
+        class="answer-text"
+        id="answerText"
+      ></div>
 
-    </section>
+      <div
+        class="feedback"
+        id="feedback"
+      >
 
-    <section id="answerBox" class="answer-box">
+        <div class="feedback-title">
+          Still confused?
+        </div>
 
-      <div class="answer-title">
-        AI Teacher's Solution
+        <div class="feedback-buttons">
+
+          <button
+            class="feedback-btn"
+            id="againBtn"
+            type="button"
+          >
+            Not Satisfied — Explain Again
+          </button>
+
+          <button
+            class="feedback-btn teacher-btn"
+            id="teacherBtn"
+            type="button"
+          >
+            Teacher Help
+          </button>
+
+        </div>
+
       </div>
 
-      <div id="answer" class="answer"></div>
+    </div>
 
-    </section>
+  </div>
 
-  </main>
-
-  <footer class="footer">
+  <div class="footer">
     © Invincible Coaching Classes
-  </footer>
+  </div>
+
+</div>
 
 
-  <script>
+<script>
 
-    let selectedSubject = "Mathematics";
+  let selectedSubject = "Mathematics";
+  let selectedImage = null;
 
+  const questionInput =
+    document.getElementById("question");
 
-    function selectSubject(button) {
+  const imageInput =
+    document.getElementById("imageInput");
 
-      document.querySelectorAll(".subject").forEach(function(btn) {
-        btn.classList.remove("active");
-      });
+  const imagePreview =
+    document.getElementById("imagePreview");
+
+  const removeImage =
+    document.getElementById("removeImage");
+
+  const askBtn =
+    document.getElementById("askBtn");
+
+  const loading =
+    document.getElementById("loading");
+
+  const answerBox =
+    document.getElementById("answerBox");
+
+  const answerText =
+    document.getElementById("answerText");
+
+  const feedback =
+    document.getElementById("feedback");
+
+  // Subject selection
+  document.querySelectorAll(".subject").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      document
+        .querySelectorAll(".subject")
+        .forEach(btn => btn.classList.remove("active"));
 
       button.classList.add("active");
 
-      selectedSubject = button.innerText.trim();
+      selectedSubject =
+        button.dataset.subject;
+
+    });
+
+  });
+
+
+  // Upload button
+  document
+    .getElementById("uploadBtn")
+    .addEventListener("click", () => {
+
+      imageInput.removeAttribute("capture");
+
+      imageInput.click();
+
+    });
+
+
+  // Camera button
+  document
+    .getElementById("cameraBtn")
+    .addEventListener("click", () => {
+
+      imageInput.setAttribute(
+        "capture",
+        "environment"
+      );
+
+      imageInput.click();
+
+    });
+
+
+  // Image selected
+  imageInput.addEventListener("change", event => {
+
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image.");
+      return;
     }
 
+    const reader = new FileReader();
 
-    async function askAI() {
+    reader.onload = () => {
 
-      const question =
-        document.getElementById("question").value.trim();
+      const result = reader.result;
 
-      const askButton =
-        document.getElementById("askButton");
+      selectedImage = {
+        data: result.split(",")[1],
+        mimeType: file.type
+      };
 
-      const loading =
-        document.getElementById("loading");
+      imagePreview.src = result;
+      imagePreview.style.display = "block";
+      removeImage.style.display = "block";
 
-      const answerBox =
-        document.getElementById("answerBox");
+    };
 
-      const answer =
-        document.getElementById("answer");
+    reader.readAsDataURL(file);
 
-      const error =
-        document.getElementById("error");
-
-
-      // Clear previous messages
-      error.style.display = "none";
-      error.innerText = "";
-
-      answerBox.style.display = "none";
-      answer.innerText = "";
+  });
 
 
-      // Check question
-      if (!question) {
+  // Remove image
+  removeImage.addEventListener("click", () => {
 
-        error.innerText =
-          "Please type your question first.";
+    selectedImage = null;
 
-        error.style.display = "block";
+    imageInput.value = "";
 
-        return;
-      }
+    imagePreview.src = "";
+    imagePreview.style.display = "none";
 
+    removeImage.style.display = "none";
 
-      // Loading state
-      askButton.disabled = true;
-      askButton.innerText = "SOLVING...";
-
-      loading.style.display = "block";
+  });
 
 
-      try {
+  // Ask AI
+  askBtn.addEventListener("click", async () => {
 
-        const response = await fetch("/api/ask", {
+    const question =
+      questionInput.value.trim();
 
+    if (!question && !selectedImage) {
+
+      alert(
+        "Please type a question or upload a photo."
+      );
+
+      return;
+
+    }
+
+    askBtn.disabled = true;
+    loading.style.display = "block";
+
+    answerBox.style.display = "none";
+    feedback.style.display = "none";
+
+    try {
+
+      const response = await fetch(
+        "/api/ask",
+        {
           method: "POST",
 
           headers: {
@@ -383,66 +574,98 @@
           },
 
           body: JSON.stringify({
-
-            subject: selectedSubject,
-
-            question: question
-
+            subject,
+            question,
+            image: selectedImage
           })
-
-        });
-
-
-        const data = await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.error ||
-            "Something went wrong."
-          );
-
         }
+      );
 
+      const data =
+        await response.json();
 
-        // Show AI answer
-        answer.innerText =
-          data.answer || "No answer received.";
-
-        answerBox.style.display = "block";
-
-
-        // Scroll to answer
-        answerBox.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-
-      } catch (err) {
-
-        console.error(err);
-
-        error.innerText =
-          err.message ||
-          "Unable to connect to AI.";
-
-        error.style.display = "block";
-
-      } finally {
-
-        askButton.disabled = false;
-
-        askButton.innerText = "ASK AI";
-
-        loading.style.display = "none";
-
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "Unable to get answer."
+        );
       }
+
+      answerText.textContent =
+        cleanAnswer(data.answer);
+
+      answerBox.style.display = "block";
+      feedback.style.display = "block";
+
+      answerBox.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+    } catch (error) {
+
+      answerBox.style.display = "block";
+
+      answerText.textContent =
+        "Sorry, answer nahi aa paaya.\n\n" +
+        error.message;
+
+    } finally {
+
+      askBtn.disabled = false;
+      loading.style.display = "none";
 
     }
 
-  </script>
+  });
+
+
+  // Remove unwanted markdown/programming symbols
+  function cleanAnswer(text) {
+
+    if (!text) return "";
+
+    return text
+      .replace(/#{1,6}\s?/g, "")
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/\\text\{([^}]*)\}/g, "$1")
+      .replace(/\\\[/g, "")
+      .replace(/\\\]/g, "")
+      .replace(/\$\$/g, "")
+      .replace(/\$/g, "")
+      .replace(/```[\s\S]*?```/g, "")
+      .trim();
+
+  }
+
+
+  // Explain again
+  document
+    .getElementById("againBtn")
+    .addEventListener("click", () => {
+
+      questionInput.value =
+        questionInput.value +
+        "\n\nPlease explain this again in an even simpler way with a small example.";
+
+      askBtn.click();
+
+    });
+
+
+  // Teacher help
+  document
+    .getElementById("teacherBtn")
+    .addEventListener("click", () => {
+
+      alert(
+        "Please contact your Invincible Coaching Classes teacher for personal help."
+      );
+
+    });
+
+</script>
 
 </body>
 </html>
