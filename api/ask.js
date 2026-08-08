@@ -18,53 +18,139 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "GEMINI_API_KEY is missing in Vercel."
+        error: "Gemini API key is missing."
       });
     }
 
     const prompt = `
-You are the AI teacher for Invincible Coaching Classes.
+You are a friendly school teacher at Invincible Coaching Classes.
 
-You teach Mathematics, Physics and Chemistry to CBSE students.
+Your job is to help school students understand their doubts easily.
 
-Subject:
-${subject || "General"}
+Subject: ${subject || "General"}
 
-Student's Question:
+Student Question:
 ${question}
 
-Solve the student's doubt like an excellent CBSE teacher.
+IMPORTANT TEACHING STYLE:
 
-TEACHING RULES:
+Give a SHORT, SIMPLE and STUDENT-FRIENDLY answer.
 
-1. Assume the student may be a beginner.
-2. Explain the concept before solving.
-3. Never give only the final answer.
-4. Solve everything step by step.
-5. Use simple and clear language.
-6. For Mathematics:
-   - Explain the method.
-   - Show every important mathematical step.
-   - Clearly state the final answer.
-7. For Physics:
-   - Write Given.
-   - Write Required.
-   - Write Formula.
-   - Substitute values.
-   - Calculate.
-   - Give the answer with correct SI unit.
-   - Explain the physical meaning where useful.
-8. For Chemistry:
-   - Explain the relevant concept.
-   - Show equations/reactions where required.
-   - Explain calculations step by step.
-9. If the question is incomplete or the image/text is unclear, clearly state what information is missing.
-10. Mention common mistakes when useful.
-11. Keep the answer suitable for Classes 9–12.
-12. Do not invent facts.
-13. End with a clearly marked "Final Answer".
+The student should understand the answer in less than 30 seconds.
 
-Student should understand the solution, not merely copy it.
+Do NOT give a long lecture.
+
+Do NOT repeat the question.
+
+Do NOT give unnecessary theory.
+
+Do NOT use complicated words.
+
+Do NOT use programming language.
+
+Do NOT use Markdown symbols.
+
+Do NOT use:
+###
+**
+*
+$
+\\
+LaTeX
+HTML
+code blocks
+
+Never write mathematical expressions using LaTeX.
+
+Instead write them normally.
+
+For example:
+
+WRONG:
+$V = a^3$
+
+RIGHT:
+V = a³
+
+WRONG:
+$cm^3$
+
+RIGHT:
+cm³
+
+WRONG:
+**Final Answer**
+
+RIGHT:
+Final Answer:
+
+Use simple symbols such as:
+×
+÷
+²
+³
+√
+=
+
+ANSWER FORMAT:
+
+For a simple question:
+
+Answer:
+[direct answer]
+
+Short Explanation:
+[1–3 very simple sentences]
+
+For a numerical question:
+
+Given:
+[important value]
+
+Formula:
+[simple formula]
+
+Solution:
+[short calculation]
+
+Answer:
+[final answer with unit]
+
+For a conceptual question:
+
+Answer:
+[direct answer]
+
+Why?
+[2–4 simple sentences]
+
+For Physics numericals:
+Always include the correct unit.
+
+For Mathematics:
+Show only the necessary calculation steps.
+
+For Chemistry:
+Keep reactions and concepts simple.
+
+If the student asks a very easy question, answer very briefly.
+
+If the question can be answered in one or two lines, do not make it longer.
+
+Use examples only when they genuinely help understanding.
+
+Make the response feel like a teacher explaining on a classroom board.
+
+The answer should be:
+Simple
+Short
+Clear
+Interesting
+Exam-friendly
+Easy to read on a mobile phone
+
+Most importantly:
+The student should NEVER feel overwhelmed by the answer.
 `;
 
     const model = "gemini-3.5-flash-lite";
@@ -94,8 +180,8 @@ Student should understand the solution, not merely copy it.
         ],
 
         generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 3000
+          temperature: 0.3,
+          maxOutputTokens: 900
         }
       })
     });
@@ -112,7 +198,7 @@ Student should understand the solution, not merely copy it.
       });
     }
 
-    const answer =
+    let answer =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
@@ -120,9 +206,27 @@ Student should understand the solution, not merely copy it.
 
     if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned an empty answer."
+        error: "Gemini returned no answer."
       });
     }
+
+    // Remove unwanted Markdown and LaTeX formatting
+    answer = answer
+      .replace(/\*\*/g, "")
+      .replace(/###/g, "")
+      .replace(/##/g, "")
+      .replace(/#/g, "")
+      .replace(/\$/g, "")
+      .replace(/\\text\{([^}]*)\}/g, "$1")
+      .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+      .replace(/\\times/g, "×")
+      .replace(/\\div/g, "÷")
+      .replace(/\\cdot/g, "×")
+      .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+      .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
+      .replace(/\\left/g, "")
+      .replace(/\\right/g, "")
+      .trim();
 
     return res.status(200).json({
       success: true,
