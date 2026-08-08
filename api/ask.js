@@ -25,37 +25,49 @@ export default async function handler(req, res) {
     const prompt = `
 You are the AI teacher for Invincible Coaching Classes.
 
-Subject: ${subject || "General"}
+You teach Mathematics, Physics and Chemistry to CBSE students.
 
-Student's question:
+Subject:
+${subject || "General"}
+
+Student's Question:
 ${question}
 
-Solve this like an excellent CBSE teacher.
+Solve the student's doubt like an excellent CBSE teacher.
 
-Rules:
-- Assume the student may be a beginner.
-- Explain the concept simply.
-- Solve step by step.
-- Do not give only the final answer.
-- For Mathematics: show calculations clearly.
-- For Physics: show formula, substitution, units and reasoning.
-- For Chemistry: explain the concept/reaction/calculation clearly.
-- For numericals use:
-  Given
-  Required
-  Formula
-  Substitution
-  Calculation
-  Final Answer
-- If the question is incomplete, clearly state what information is missing.
+TEACHING RULES:
+
+1. Assume the student may be a beginner.
+2. Explain the concept before solving.
+3. Never give only the final answer.
+4. Solve everything step by step.
+5. Use simple and clear language.
+6. For Mathematics:
+   - Explain the method.
+   - Show every important mathematical step.
+   - Clearly state the final answer.
+7. For Physics:
+   - Write Given.
+   - Write Required.
+   - Write Formula.
+   - Substitute values.
+   - Calculate.
+   - Give the answer with correct SI unit.
+   - Explain the physical meaning where useful.
+8. For Chemistry:
+   - Explain the relevant concept.
+   - Show equations/reactions where required.
+   - Explain calculations step by step.
+9. If the question is incomplete or the image/text is unclear, clearly state what information is missing.
+10. Mention common mistakes when useful.
+11. Keep the answer suitable for Classes 9–12.
+12. Do not invent facts.
+13. End with a clearly marked "Final Answer".
+
+Student should understand the solution, not merely copy it.
 `;
 
-    /*
-      IMPORTANT:
-      We will change ONLY this model name if Google reports
-      that this model is unavailable for your account.
-    */
-    const model = "gemini-2.5-flash-lite";
+    const model = "gemini-3.5-flash-lite";
 
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
@@ -65,9 +77,11 @@ Rules:
 
     const response = await fetch(url, {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json"
       },
+
       body: JSON.stringify({
         contents: [
           {
@@ -77,17 +91,24 @@ Rules:
               }
             ]
           }
-        ]
+        ],
+
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 3000
+        }
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini API error:", data);
+      console.error("Gemini API Error:", data);
 
       return res.status(response.status).json({
-        error: data?.error?.message || "Gemini API request failed."
+        error:
+          data?.error?.message ||
+          "Gemini API request failed."
       });
     }
 
@@ -99,19 +120,21 @@ Rules:
 
     if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned no answer."
+        error: "Gemini returned an empty answer."
       });
     }
 
     return res.status(200).json({
-      answer
+      success: true,
+      subject: subject || "General",
+      answer: answer
     });
 
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Server Error:", error);
 
     return res.status(500).json({
-      error: "Server error while solving the doubt."
+      error: "Something went wrong while solving the doubt."
     });
   }
 }
