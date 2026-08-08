@@ -6,11 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      subject,
-      question,
-      image
-    } = req.body || {};
+    const { subject, question, image } = req.body || {};
 
     if (!question && !image) {
       return res.status(400).json({
@@ -26,41 +22,34 @@ export default async function handler(req, res) {
       });
     }
 
-    const model =
-      process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+    // Gemini 3.5 Flash-Lite
+    const model = "gemini-3.5-flash-lite";
 
     const prompt = `
 You are a friendly school teacher for Invincible Coaching Classes.
-
-The student wants to understand the question, not just get the answer.
 
 Subject: ${subject || "General"}
 
 Student Question:
 ${question || "Solve the question shown in the image."}
 
-TEACHING STYLE:
+Start every response exactly with:
 
-1. Start directly with:
 Aao Logic Samjhate Hain
 
-2. Explain in very simple language suitable for school students.
+Teaching style:
 
-3. Use short sentences.
+- Explain like a friendly school teacher.
+- Use simple Hinglish where helpful.
+- Keep the answer short.
+- Use simple words.
+- Explain the basic idea first.
+- Show only necessary calculations.
+- Do not give long lectures.
+- Do not repeat the question.
+- Do not overwhelm the student.
 
-4. Avoid complicated words.
-
-5. Explain the basic idea first.
-
-6. Then show the formula if needed.
-
-7. Put values into the formula.
-
-8. Show only the necessary calculation.
-
-9. Give the final answer clearly.
-
-10. If it is a numerical question, use this simple structure:
+For numerical questions use:
 
 Aao Logic Samjhate Hain
 
@@ -73,55 +62,38 @@ Formula:
 Putting values:
 ...
 
-Answer:
+Final Answer:
 ...
 
-11. If it is a theory question, explain the concept in 3–6 short points.
+For theory questions:
+Explain the concept in 3–5 short sentences.
 
-12. If it is mathematics, show calculations clearly.
+For Mathematics:
+Show only necessary calculation steps.
 
-13. If it is physics, mention the relevant formula and unit.
+For Physics:
+Give formula, substitution and correct unit.
 
-14. If it is chemistry, explain the concept in simple student-friendly language.
+For Chemistry:
+Explain the concept simply and show equations only when required.
 
-15. Add one short "Yaad Rakho" point when useful.
+Add a short "Yaad Rakho" point only when useful.
 
-16. Keep the complete answer SHORT.
-
-17. Do NOT give unnecessary background information.
-
-18. Do NOT repeat the question.
-
-19. Do NOT use Markdown headings.
-
-20. Do NOT use symbols such as:
+Do NOT use:
 ###
 **
 $
-\\text{}
-\$begin:math:display$
-\\$end:math:display$
+LaTeX
+HTML
+code blocks
+programming-style formatting
 
-21. Do NOT write programming-like formatting.
+Do NOT write:
+AI Teacher Solution
+Let's solve it
+Let's understand it
 
-22. Do NOT use long paragraphs.
-
-23. Do not say "AI Teacher Solution".
-
-24. Do not mention that you are an AI.
-
-25. Answer like a real, patient school teacher explaining on a classroom smart board.
-
-IMPORTANT:
-The student should be able to read the complete solution comfortably on a mobile phone.
-
-At the end write:
-
-Final Answer: [answer]
-
-Then:
-
-Yaad Rakho: [one short useful point]
+Make the response look like a teacher explaining on a classroom board.
 `;
 
     const parts = [
@@ -130,7 +102,7 @@ Yaad Rakho: [one short useful point]
       }
     ];
 
-    // Add uploaded image if available
+    // Send uploaded image to Gemini
     if (image && image.data) {
       parts.push({
         inline_data: {
@@ -144,15 +116,18 @@ Yaad Rakho: [one short useful point]
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify({
           contents: [
             {
-              parts
+              parts: parts
             }
           ],
+
           generationConfig: {
             temperature: 0.3,
             maxOutputTokens: 700
@@ -173,7 +148,7 @@ Yaad Rakho: [one short useful point]
       });
     }
 
-    const answer =
+    let answer =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
@@ -185,12 +160,40 @@ Yaad Rakho: [one short useful point]
       });
     }
 
+    // Remove unwanted formatting
+    answer = answer
+      .replace(/#{1,6}\s?/g, "")
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/\\text\{([^}]*)\}/g, "$1")
+      .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+      .replace(/\\times/g, "×")
+      .replace(/\\div/g, "÷")
+      .replace(/\\cdot/g, "×")
+      .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+      .replace(/\\left/g, "")
+      .replace(/\\right/g, "")
+      .replace(/\\\[/g, "")
+      .replace(/\\\]/g, "")
+      .replace(/\$\$/g, "")
+      .replace(/\$/g, "")
+      .replace(/```[\s\S]*?```/g, "")
+      .trim();
+
+    if (!answer.startsWith("Aao Logic Samjhate Hain")) {
+      answer =
+        "Aao Logic Samjhate Hain\n\n" +
+        answer;
+    }
+
     return res.status(200).json({
-      answer
+      success: true,
+      subject: subject || "General",
+      answer: answer
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("Server Error:", error);
 
     return res.status(500).json({
       error: "Something went wrong. Please try again."
