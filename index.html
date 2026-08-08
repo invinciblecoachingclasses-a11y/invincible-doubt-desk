@@ -718,7 +718,7 @@
   }
 
 
-  // NOT SATISFIED
+  // NOT SATISFIED - EXPLAIN AGAIN
 
   document
     .getElementById("againBtn")
@@ -742,7 +742,7 @@
     );
 
 
-  // TEACHER HELP
+  // TEACHER HELP - OPEN WHATSAPP
 
   document
     .getElementById("teacherBtn")
@@ -750,8 +750,35 @@
       "click",
       function() {
 
-        alert(
-          "Please contact your Invincible Coaching Classes teacher for personal help."
+        const studentQuestion =
+          questionInput.value.trim();
+
+        const aiExplanation =
+          answerText.textContent.trim();
+
+        const whatsappMessage =
+          "Hello Invincible Coaching Classes Teacher.%0A%0A" +
+          "I need personal help with this doubt.%0A%0A" +
+          "Subject: " +
+          encodeURIComponent(selectedSubject) +
+          "%0A%0A" +
+          "Student Question:%0A" +
+          encodeURIComponent(
+            studentQuestion ||
+            "Question from uploaded image"
+          ) +
+          "%0A%0A" +
+          "AI Explanation:%0A" +
+          encodeURIComponent(aiExplanation) +
+          "%0A%0APlease help me with this doubt.";
+
+        const whatsappURL =
+          "https://wa.me/919667453931?text=" +
+          whatsappMessage;
+
+        window.open(
+          whatsappURL,
+          "_blank"
         );
 
       }
