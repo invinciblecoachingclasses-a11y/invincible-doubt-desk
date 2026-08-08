@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invincible Doubt Desk</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .header {
+      background: #102a56;
+      color: white;
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 27px;
+      margin-bottom: 7px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+      font-size: 25px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #647084;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+      margin-bottom: 20px;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .subject {
+      border: 2px solid #dbe2ed;
+      background: white;
+      padding: 13px 5px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .subject.active {
+      background: #102a56;
+      color: white;
+      border-color: #102a56;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      border: 2px solid #dbe2ed;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #102a56;
+    }
+
+    .photo-area {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .photo-btn {
+      border: 2px solid #dbe2ed;
+      background: white;
+      padding: 12px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .ask-btn {
+      width: 100%;
+      margin-top: 20px;
+      border: none;
+      background: #e86f1c;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .ask-btn:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      text-align: center;
+      color: #697386;
+      font-size: 13px;
+      padding: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .subjects {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="header">
+    <h1>Invincible Doubt Desk</h1>
+    <p>AI + Teacher Doubt Solving</p>
+  </header>
+
+  <main class="container">
+
+    <section class="welcome">
+      <h2>Ask Your Doubt</h2>
+      <p>Understand the concept. Don't just memorize the answer.</p>
+    </section>
+
+    <section class="card">
+
+      <label class="label">Select Subject</label>
+
+      <div class="subjects">
+        <button class="subject active" onclick="selectSubject(this)">
+          Mathematics
+        </button>
+
+        <button class="subject" onclick="selectSubject(this)">
+          Physics
+        </button>
+
+        <button class="subject" onclick="selectSubject(this)">
+          Chemistry
+        </button>
+      </div>
+
+      <label class="label">Your Question</label>
+
+      <textarea
+        id="question"
+        placeholder="Type your question here...">
+      </textarea>
+
+      <div class="photo-area">
+
+        <label class="photo-btn">
+          📷 Take Photo
+          <input type="file" accept="image/*" capture="environment">
+        </label>
+
+        <label class="photo-btn">
+          🖼️ Upload Photo
+          <input type="file" accept="image/*">
+        </label>
+
+      </div>
+
+      <button class="ask-btn" onclick="askAI()">
+        ASK AI
+      </button>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    © Invincible Coaching Classes
+  </footer>
+
+  <script>
+    let selectedSubject = "Mathematics";
+
+    function selectSubject(button) {
+      document.querySelectorAll(".subject").forEach(function(btn) {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      selectedSubject = button.innerText.trim();
+    }
+
+    function askAI() {
+      const question = document.getElementById("question").value.trim();
+
+      if (!question) {
+        alert("Please type your question or upload a photo.");
+        return;
+      }
+
+      alert(
+        "Your " + selectedSubject +
+        " doubt has been received. AI solving will be connected in the next step."
+      );
+    }
+  </script>
+
+</body>
+</html>
