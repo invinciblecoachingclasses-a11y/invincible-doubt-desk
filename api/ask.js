@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
@@ -7,61 +6,60 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get data sent by the website
     const { subject, question } = req.body || {};
 
-    // Check question
     if (!question || !question.trim()) {
       return res.status(400).json({
         error: "Please enter a question."
       });
     }
 
-    // Check Gemini API key
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "Gemini API key is not configured in Vercel."
+        error: "Gemini API key is not configured."
       });
     }
 
-    // Teacher-style instruction for Gemini
     const prompt = `
 You are the AI teacher for Invincible Coaching Classes.
 
-The student is asking a ${subject || "general"} question.
+Subject: ${subject || "General"}
 
-Your job is to solve the question like an excellent CBSE teacher.
-
-IMPORTANT RULES:
-1. Do not simply give the final answer.
-2. Explain the concept first in simple language.
-3. Solve the problem step by step.
-4. Show formulas clearly.
-5. Explain what each symbol means when necessary.
-6. For numerical questions, show:
-   Given → Formula → Substitution → Calculation → Final Answer.
-7. For Mathematics, show all important steps.
-8. For Physics, include units and explain the physical meaning.
-9. For Chemistry, explain the reaction/concept and important conditions.
-10. If the student's question is unclear, ask what information is missing.
-11. Keep the explanation suitable for a school/CBSE student.
-12. Do not make up information.
-13. Use simple English with a little Hindi/Hinglish only when it helps understanding.
-
-Student's question:
+Student Question:
 ${question}
+
+Teaching rules:
+1. Assume the student may have zero prior knowledge.
+2. Explain in very simple language.
+3. Do not simply give the final answer.
+4. Explain the reasoning step-by-step.
+5. For numerical questions use:
+   Given
+   Find
+   Formula
+   Substitution
+   Calculation
+   Final Answer
+6. For Mathematics, show important calculation steps.
+7. For Physics, explain formulas, units and physical meaning.
+8. For Chemistry, explain the concept and reasoning clearly.
+9. Use examples when useful.
+10. Make the final answer clearly visible.
+11. If information is missing, tell the student what is missing.
+12. Keep the explanation suitable for school students.
+
+Answer like a clear and patient teacher.
 `;
 
-    // Send question to Gemini
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
+        encodeURIComponent(apiKey),
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": apiKey
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           contents: [
@@ -72,44 +70,45 @@ ${question}
                 }
               ]
             }
-          ]
+          ],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 2048
+          }
         })
       }
     );
 
-    // Get Gemini response
     const data = await response.json();
 
-    // Handle Gemini error
     if (!response.ok) {
-      console.error("Gemini API Error:", data);
+      console.error("Gemini error:", data);
 
       return res.status(500).json({
-        error: "Gemini could not solve the question.",
-        details: data?.error?.message || "Unknown Gemini API error"
+        error:
+          data?.error?.message ||
+          "Gemini could not solve the question."
       });
     }
 
-    // Extract AI answer
     const answer =
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!answer) {
       return res.status(500).json({
-        error: "Gemini returned an empty answer."
+        error: "No answer was received from Gemini."
       });
     }
 
-    // Send answer back to website
     return res.status(200).json({
       answer: answer
     });
 
   } catch (error) {
-    console.error("Server Error:", error);
+    console.error("Server error:", error);
 
     return res.status(500).json({
-      error: "Something went wrong while solving the question."
+      error: "Something went wrong while solving the doubt."
     });
   }
 }
