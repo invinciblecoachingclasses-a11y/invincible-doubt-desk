@@ -28,22 +28,13 @@ export default async function handler(req, res) {
       body.questionType || "MCQ"
     ).trim();
 
-    /*
-     * Language support
-     *
-     * English = English test
-     * Hindi = Hindi test
-     * Bilingual = English + Hindi together
-     */
-
     const language = String(
       body.language || "Bilingual"
     ).trim();
 
     if (!className || !subject || !chapter) {
       return res.status(400).json({
-        error:
-          "Class, subject and chapter are required."
+        error: "Class, subject and chapter are required."
       });
     }
 
@@ -51,54 +42,40 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error:
-          "GEMINI_API_KEY is missing in Vercel Environment Variables."
+        error: "GEMINI_API_KEY is missing in Vercel."
       });
     }
 
-    /*
-     * =====================================================
-     * LANGUAGE INSTRUCTIONS
-     * =====================================================
-     */
+    /* =====================================================
+       LANGUAGE
+    ===================================================== */
 
     let languageInstruction = "";
 
     if (language === "Hindi") {
-
       languageInstruction = `
-Write the complete test in Hindi.
+Generate the complete test in Hindi using Devanagari script.
 
-Use Devanagari script for:
-- Questions
-- Options
-- Explanations
-- Test title
+Questions, options, explanations and test title should be in Hindi.
 
-Keep scientific and mathematical symbols, formulas,
-units and standard scientific terms correct.
+Keep mathematical symbols, formulas, units and standard
+scientific notation correct.
 `;
+    }
 
-    } else if (language === "English") {
-
+    else if (language === "English") {
       languageInstruction = `
-Write the complete test in English.
+Generate the complete test in English.
 
 Use clear, simple CBSE/NCERT-level English.
 `;
+    }
 
-    } else {
-
+    else {
       languageInstruction = `
-Create a BILINGUAL test.
+Generate a BILINGUAL test.
 
-For EVERY question:
-English question
-Hindi translation of the same question
-
-For EVERY option:
-English option
-Hindi translation of the same option
+Every question must contain BOTH English and Hindi.
 
 Example:
 
@@ -117,120 +94,95 @@ C) वाट
 D) Pascal
 D) पास्कल
 
-Do NOT create separate English and Hindi questions.
-Each question must contain both languages.
+The Hindi and English versions must ask exactly the same thing.
+Do not create separate questions for each language.
 `;
-
     }
 
-    /*
-     * =====================================================
-     * PROMPT
-     * =====================================================
-     */
+    /* =====================================================
+       PROMPT
+    ===================================================== */
 
     const prompt = `
-You are an expert CBSE and NCERT teacher and professional
+You are an expert CBSE/NCERT teacher and professional
 question-paper creator for Invincible Coaching Classes.
 
 Create a high-quality student test.
 
-CLASS:
-${className}
-
-SUBJECT:
-${subject}
-
-CHAPTER:
-${chapter}
-
-NUMBER OF QUESTIONS:
-${numberOfQuestions}
-
-DIFFICULTY:
-${difficulty}
-
-QUESTION TYPE:
-${questionType}
-
-LANGUAGE:
-${language}
+Class: ${className}
+Subject: ${subject}
+Chapter: ${chapter}
+Number of Questions: ${numberOfQuestions}
+Difficulty: ${difficulty}
+Question Type: ${questionType}
+Language: ${language}
 
 ${languageInstruction}
 
-IMPORTANT ACADEMIC RULES:
+STRICT RULES:
 
 1. Follow CBSE/NCERT level appropriate for Class ${className}.
 
-2. Every question MUST belong strictly to:
+2. Every question must belong strictly to:
 ${subject} → ${chapter}
 
 3. Do not use questions from unrelated chapters.
 
 4. Generate EXACTLY ${numberOfQuestions} questions.
 
-5. Every question MUST contain exactly FOUR options.
+5. Every question must contain exactly FOUR options.
 
-6. Each question MUST have exactly ONE correct answer.
+6. Only ONE option can be correct.
 
 7. Do not repeat questions.
 
-8. Include a balanced mixture of conceptual,
-   application-based and reasoning questions.
+8. Include conceptual and application-based questions.
 
-9. For Mathematics:
-   include appropriate numerical/problem-solving questions.
+9. For Mathematics, include appropriate numerical/problem-solving
+questions.
 
-10. For Physics:
-    include appropriate numerical/problem-solving questions,
-    formulas and conceptual questions.
+10. For Physics, include appropriate numerical/problem-solving
+questions and conceptual questions.
 
-11. For Chemistry:
-    include conceptual, reaction-based and numerical questions
-    where appropriate.
+11. For Chemistry, include conceptual, reaction-based and
+numerical questions where appropriate.
 
 12. Questions must be academically correct.
 
-13. Keep questions suitable for actual school/coaching assessment.
+13. Questions must be suitable for school and coaching assessment.
 
-14. Do not create unnecessarily complicated questions.
+14. Avoid ambiguous questions.
 
-15. Avoid ambiguity.
+15. Every question must contain an explanation.
 
-16. Every question must have an explanation.
+16. correctAnswer must be exactly:
+A
+B
+C
+or
+D
 
-17. The correctAnswer MUST be exactly one of:
-    A
-    B
-    C
-    D
+17. Return ONLY JSON.
 
-18. Do not use Markdown.
+18. Do not return Markdown.
 
-19. Do not use code fences.
+19. Do not return code fences.
 
-20. Return ONLY JSON matching the supplied schema.
+20. Do not return fewer than ${numberOfQuestions} questions.
 
-21. VERY IMPORTANT:
-    The questions array MUST contain exactly
-    ${numberOfQuestions} objects.
+21. Do not return more than ${numberOfQuestions} questions.
 
-22. Do not stop early.
+22. Question IDs must be 1, 2, 3, 4... sequentially.
 
-23. Do not return fewer than ${numberOfQuestions} questions.
-
-24. Do not return more than ${numberOfQuestions} questions.
-
-25. The question numbering must start at 1 and continue sequentially.
-
-The test must be useful for students of Invincible Coaching Classes.
+IMPORTANT:
+The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
 `;
 
-    /*
-     * =====================================================
-     * STRICT JSON SCHEMA
-     * =====================================================
-     */
+    /* =====================================================
+       JSON SCHEMA
+       IMPORTANT:
+       This is responseSchema, NOT responseFormat.
+    ===================================================== */
 
     const responseSchema = {
       type: "OBJECT",
@@ -264,9 +216,6 @@ The test must be useful for students of Invincible Coaching Classes.
         questions: {
           type: "ARRAY",
 
-          minItems: numberOfQuestions,
-          maxItems: numberOfQuestions,
-
           items: {
 
             type: "OBJECT",
@@ -284,9 +233,6 @@ The test must be useful for students of Invincible Coaching Classes.
               options: {
                 type: "ARRAY",
 
-                minItems: 4,
-                maxItems: 4,
-
                 items: {
                   type: "STRING"
                 }
@@ -294,7 +240,6 @@ The test must be useful for students of Invincible Coaching Classes.
 
               correctAnswer: {
                 type: "STRING",
-
                 enum: [
                   "A",
                   "B",
@@ -318,7 +263,6 @@ The test must be useful for students of Invincible Coaching Classes.
             ]
           }
         }
-
       },
 
       required: [
@@ -332,11 +276,9 @@ The test must be useful for students of Invincible Coaching Classes.
       ]
     };
 
-    /*
-     * =====================================================
-     * GEMINI API
-     * =====================================================
-     */
+    /* =====================================================
+       GEMINI REQUEST
+    ===================================================== */
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
@@ -364,16 +306,13 @@ The test must be useful for students of Invincible Coaching Classes.
 
           generationConfig: {
 
-            temperature: 0.4,
+            temperature: 0.3,
 
             maxOutputTokens: 32768,
 
-            responseFormat: {
-              text: {
-                mimeType: "application/json",
-                schema: responseSchema
-              }
-            }
+            responseMimeType: "application/json",
+
+            responseSchema: responseSchema
 
           }
 
@@ -383,11 +322,9 @@ The test must be useful for students of Invincible Coaching Classes.
 
     const data = await response.json();
 
-    /*
-     * =====================================================
-     * API ERROR
-     * =====================================================
-     */
+    /* =====================================================
+       API ERROR
+    ===================================================== */
 
     if (!response.ok) {
 
@@ -399,15 +336,13 @@ The test must be useful for students of Invincible Coaching Classes.
       return res.status(500).json({
         error:
           data?.error?.message ||
-          "Gemini API failed to generate the test."
+          "Gemini could not generate the test."
       });
     }
 
-    /*
-     * =====================================================
-     * GET AI RESPONSE
-     * =====================================================
-     */
+    /* =====================================================
+       GET RESPONSE
+    ===================================================== */
 
     const text =
       data?.candidates?.[0]?.content?.parts
@@ -418,7 +353,7 @@ The test must be useful for students of Invincible Coaching Classes.
     if (!text) {
 
       console.error(
-        "Gemini returned no text:",
+        "Empty Gemini response:",
         JSON.stringify(data, null, 2)
       );
 
@@ -428,11 +363,9 @@ The test must be useful for students of Invincible Coaching Classes.
       });
     }
 
-    /*
-     * =====================================================
-     * PARSE JSON
-     * =====================================================
-     */
+    /* =====================================================
+       PARSE JSON
+    ===================================================== */
 
     let test;
 
@@ -448,7 +381,7 @@ The test must be useful for students of Invincible Coaching Classes.
       );
 
       console.error(
-        "RAW GEMINI RESPONSE:",
+        "Raw Gemini response:",
         text
       );
 
@@ -458,21 +391,14 @@ The test must be useful for students of Invincible Coaching Classes.
       });
     }
 
-    /*
-     * =====================================================
-     * BASIC VALIDATION
-     * =====================================================
-     */
+    /* =====================================================
+       CHECK QUESTIONS
+    ===================================================== */
 
     if (
       !test ||
       !Array.isArray(test.questions)
     ) {
-
-      console.error(
-        "Invalid test structure:",
-        test
-      );
 
       return res.status(500).json({
         error:
@@ -480,11 +406,17 @@ The test must be useful for students of Invincible Coaching Classes.
       });
     }
 
+    if (test.questions.length === 0) {
+
+      return res.status(500).json({
+        error:
+          "AI returned zero questions."
+      });
+    }
+
     /*
-     * IMPORTANT:
-     * Do NOT silently accept fewer questions.
-     *
-     * If user asks for 30, they must get 30.
+     * If Gemini returns fewer questions,
+     * report the actual number.
      */
 
     if (
@@ -493,7 +425,11 @@ The test must be useful for students of Invincible Coaching Classes.
     ) {
 
       console.error(
-        `Expected ${numberOfQuestions} questions but received ${test.questions.length}`
+        "Question count mismatch:",
+        {
+          requested: numberOfQuestions,
+          received: test.questions.length
+        }
       );
 
       return res.status(500).json({
@@ -501,19 +437,18 @@ The test must be useful for students of Invincible Coaching Classes.
         error:
           `AI generated ${test.questions.length} questions instead of ${numberOfQuestions}. Please try again.`,
 
-        generated:
-          test.questions.length,
-
         requested:
-          numberOfQuestions
+          numberOfQuestions,
+
+        received:
+          test.questions.length
+
       });
     }
 
-    /*
-     * =====================================================
-     * CLEAN QUESTIONS
-     * =====================================================
-     */
+    /* =====================================================
+       CLEAN QUESTIONS
+    ===================================================== */
 
     const cleanedQuestions =
       test.questions.map(function(q, index) {
@@ -522,10 +457,6 @@ The test must be useful for students of Invincible Coaching Classes.
           Array.isArray(q.options)
             ? q.options
             : [];
-
-        /*
-         * Ensure exactly 4 options.
-         */
 
         options =
           options
@@ -541,39 +472,27 @@ The test must be useful for students of Invincible Coaching Classes.
             .trim()
             .toUpperCase();
 
-        /*
-         * Sometimes AI may return:
-         *
-         * "A)"
-         * "A) Newton"
-         * "Option A"
-         *
-         * Extract A/B/C/D.
-         */
-
         const match =
-          correctAnswer.match(
-            /[ABCD]/
-          );
+          correctAnswer.match(/[ABCD]/);
 
         if (match) {
-          correctAnswer =
-            match[0];
+          correctAnswer = match[0];
         }
 
         return {
 
-          id:
-            index + 1,
+          id: index + 1,
 
           question:
             String(
               q.question || ""
             ).trim(),
 
-          options,
+          options: options,
 
-          correctAnswer,
+          correctAnswer:
+
+            correctAnswer,
 
           explanation:
             String(
@@ -584,11 +503,9 @@ The test must be useful for students of Invincible Coaching Classes.
 
       });
 
-    /*
-     * =====================================================
-     * FINAL VALIDATION
-     * =====================================================
-     */
+    /* =====================================================
+       FINAL VALIDATION
+    ===================================================== */
 
     for (
       let i = 0;
@@ -603,9 +520,8 @@ The test must be useful for students of Invincible Coaching Classes.
 
         return res.status(500).json({
           error:
-            `Question ${i + 1} is empty. Please try again.`
+            `Question ${i + 1} is empty.`
         });
-
       }
 
       if (
@@ -617,7 +533,6 @@ The test must be useful for students of Invincible Coaching Classes.
           error:
             `Question ${i + 1} does not have exactly 4 options.`
         });
-
       }
 
       if (
@@ -630,16 +545,13 @@ The test must be useful for students of Invincible Coaching Classes.
           error:
             `Question ${i + 1} has an invalid correct answer.`
         });
-
       }
 
     }
 
-    /*
-     * =====================================================
-     * FINAL TEST OBJECT
-     * =====================================================
-     */
+    /* =====================================================
+       FINAL RESPONSE
+    ===================================================== */
 
     const finalTest = {
 
@@ -647,15 +559,20 @@ The test must be useful for students of Invincible Coaching Classes.
         test.testTitle ||
         `${subject} - ${chapter} Test`,
 
-      className,
+      className:
+        className,
 
-      subject,
+      subject:
+        subject,
 
-      chapter,
+      chapter:
+        chapter,
 
-      difficulty,
+      difficulty:
+        difficulty,
 
-      language,
+      language:
+        language,
 
       questions:
         cleanedQuestions
@@ -663,7 +580,7 @@ The test must be useful for students of Invincible Coaching Classes.
     };
 
     console.log(
-      `SUCCESS: Generated ${cleanedQuestions.length} questions`
+      `SUCCESS: ${cleanedQuestions.length} questions generated for ${className} ${subject} ${chapter}`
     );
 
     return res.status(200).json(
