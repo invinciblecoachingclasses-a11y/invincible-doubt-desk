@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
@@ -6,305 +7,626 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      className,
-      subject,
-      chapter,
-      numberOfQuestions = 10,
-      difficulty = "Moderate"
-    } = req.body || {};
 
-    if (!className || !subject || !chapter) {
-      return res.status(400).json({
-        error: "Class, subject and chapter are required."
-      });
-    }
+    const body = req.body || {};
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const className = String(
+      body.className || ""
+    ).trim();
 
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "GEMINI_API_KEY is missing in Vercel."
-      });
-    }
+    const subject = String(
+      body.subject || ""
+    ).trim();
 
-    const count = Math.min(
-      Math.max(Number(numberOfQuestions) || 10, 5),
+    const chapter = String(
+      body.chapter || ""
+    ).trim();
+
+    const numberOfQuestions = Math.min(
+      Math.max(
+        parseInt(body.numberOfQuestions, 10) || 20,
+        5
+      ),
       30
     );
 
-    const prompt = `
-You are an expert CBSE/NCERT teacher creating a test for Invincible Coaching Classes.
+    const difficulty = String(
+      body.difficulty || "Moderate"
+    ).trim();
 
-Create exactly ${count} MCQ questions.
+    const questionType = String(
+      body.questionType || "MCQ"
+    ).trim();
 
-Class: ${className}
-Subject: ${subject}
-Chapter: ${chapter}
-Difficulty: ${difficulty}
+    if (!className || !subject || !chapter) {
+      return res.status(400).json({
+        error:
+          "Class, subject and chapter are required."
+      });
+    }
 
-Rules:
-- Questions must be appropriate for the given class.
-- Questions must strictly belong to the specified chapter.
-- Do not use questions from another chapter.
-- Every question must have exactly 4 options.
-- Only one option must be correct.
-- Include conceptual and application-based questions.
-- For Physics and Mathematics, include suitable numerical questions.
-- For Chemistry, include suitable conceptual, reaction and numerical questions where relevant.
-- Avoid duplicate questions.
-- Questions must be academically correct.
-- Keep language student-friendly.
-- Give a short explanation for every answer.
+    const apiKey =
+      process.env.GEMINI_API_KEY;
 
-Return ONLY JSON.
+    if (!apiKey) {
+      return res.status(500).json({
+        error:
+          "Gemini API key is not configured in Vercel."
+      });
+    }
+
+
+    /* =====================================================
+       GENERATE QUESTIONS IN SMALL BATCHES
+       ===================================================== */
+
+    let allQuestions = [];
+
+    const MAX_ATTEMPTS = 8;
+
+    let attempt = 0;
+
+
+    while (
+      allQuestions.length < numberOfQuestions &&
+      attempt < MAX_ATTEMPTS
+    ) {
+
+      attempt++;
+
+      const remaining =
+        numberOfQuestions -
+        allQuestions.length;
+
+      /*
+       * Never ask Gemini for too many questions
+       * in one request.
+       */
+
+      const batchSize =
+        Math.min(10, remaining);
+
+
+      /*
+       * Give Gemini the questions already generated
+       * so it avoids repeating them.
+       */
+
+      const previousQuestions =
+        allQuestions
+          .map((q, index) =>
+            `${index + 1}. ${q.question}`
+          )
+          .join("\n");
+
+
+      const prompt = `
+
+You are an expert CBSE and NCERT teacher creating a professional student test for:
+
+Invincible Coaching Classes.
+
+Create EXACTLY ${batchSize} NEW MCQ questions.
+
+CLASS: ${className}
+SUBJECT: ${subject}
+CHAPTER: ${chapter}
+DIFFICULTY: ${difficulty}
+
+IMPORTANT:
+
+1. Follow CBSE/NCERT level appropriate for Class ${className}.
+2. Questions must strictly belong to the chapter:
+   "${chapter}"
+3. Do not include questions from unrelated chapters.
+4. Create EXACTLY ${batchSize} questions.
+5. Every question must have exactly 4 options.
+6. Only ONE option must be correct.
+7. Do not repeat questions.
+8. Questions must be academically correct.
+9. Use a mixture of conceptual and application-based questions.
+10. For Mathematics and Physics, include suitable numerical/problem-solving questions.
+11. For Chemistry, include suitable conceptual, reaction-based and numerical questions where appropriate.
+12. Keep questions clear and student-friendly.
+13. Do NOT provide explanations.
+14. Do NOT use Markdown.
+15. Return ONLY valid JSON.
+16. Do not put the JSON inside markdown code blocks.
+17. correctAnswer must contain ONLY A, B, C or D.
+
+Previously generated questions are listed below.
+
+DO NOT repeat them:
+
+${previousQuestions || "None"}
+
+Return exactly this structure:
+
+{
+  "questions": [
+    {
+      "question": "Question text",
+      "options": [
+        "A) Option 1",
+        "B) Option 2",
+        "C) Option 3",
+        "D) Option 4"
+      ],
+      "correctAnswer": "A"
+    }
+  ]
+}
+
+REMEMBER:
+
+Generate EXACTLY ${batchSize} questions.
+Exactly 4 options per question.
+Exactly one correct answer.
+JSON ONLY.
 `;
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
-      {
-        method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": apiKey
-        },
+      try {
 
-        body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [
+        const response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              "x-goog-api-key":
+                apiKey
+            },
+
+            body: JSON.stringify({
+
+              contents: [
                 {
-                  text: prompt
+                  role: "user",
+
+                  parts: [
+                    {
+                      text: prompt
+                    }
+                  ]
                 }
-              ]
-            }
-          ],
+              ],
 
-          generationConfig: {
-            responseMimeType: "application/json",
+              generationConfig: {
 
-            responseSchema: {
-              type: "OBJECT",
+                temperature: 0.7,
 
-              properties: {
-                testTitle: {
-                  type: "STRING"
-                },
+                maxOutputTokens: 7000,
 
-                questions: {
-                  type: "ARRAY",
+                responseMimeType:
+                  "application/json"
 
-                  items: {
-                    type: "OBJECT",
+              }
 
-                    properties: {
-                      id: {
-                        type: "INTEGER"
-                      },
+            })
 
-                      question: {
-                        type: "STRING"
-                      },
-
-                      options: {
-                        type: "ARRAY",
-
-                        items: {
-                          type: "STRING"
-                        }
-                      },
-
-                      correctAnswer: {
-                        type: "STRING"
-                      },
-
-                      explanation: {
-                        type: "STRING"
-                      }
-                    },
-
-                    required: [
-                      "id",
-                      "question",
-                      "options",
-                      "correctAnswer",
-                      "explanation"
-                    ]
-                  }
-                }
-              },
-
-              required: [
-                "testTitle",
-                "questions"
-              ]
-            }
           }
-        })
-      }
-    );
+        );
 
-    const data = await response.json();
 
-    console.log(
-      "Gemini status:",
-      response.status
-    );
+        const data =
+          await response.json();
 
-    if (!response.ok) {
-      console.error(
-        "Gemini error:",
-        JSON.stringify(data, null, 2)
-      );
 
-      return res.status(500).json({
-        error:
-          data?.error?.message ||
-          "Gemini API request failed."
-      });
-    }
+        if (!response.ok) {
 
-    const parts =
-      data?.candidates?.[0]?.content?.parts || [];
+          console.error(
+            "Gemini API error:",
+            JSON.stringify(
+              data,
+              null,
+              2
+            )
+          );
 
-    const text = parts
-      .map(part => part?.text || "")
-      .join("")
-      .trim();
-
-    if (!text) {
-      console.error(
-        "No text from Gemini:",
-        JSON.stringify(data, null, 2)
-      );
-
-      return res.status(500).json({
-        error: "Gemini returned no test data."
-      });
-    }
-
-    let result;
-
-    try {
-      result = JSON.parse(text);
-    } catch (error) {
-      console.error(
-        "JSON parsing failed:",
-        text
-      );
-
-      return res.status(500).json({
-        error: "Gemini returned invalid JSON."
-      });
-    }
-
-    if (
-      !result ||
-      !Array.isArray(result.questions)
-    ) {
-      return res.status(500).json({
-        error: "Gemini did not return a questions array."
-      });
-    }
-
-    const questions = result.questions
-      .map((q, index) => {
-
-        if (!q) return null;
-
-        if (
-          !q.question ||
-          !Array.isArray(q.options)
-        ) {
-          return null;
+          continue;
         }
 
-        if (q.options.length !== 4) {
-          return null;
+
+        const text =
+          data?.candidates?.[0]
+            ?.content?.parts
+            ?.map(part =>
+              part.text || ""
+            )
+            .join("")
+            .trim();
+
+
+        if (!text) {
+
+          console.error(
+            "Gemini returned empty response."
+          );
+
+          continue;
         }
 
-        let answer =
-          String(
-            q.correctAnswer || ""
+
+        let parsed;
+
+
+        try {
+
+          parsed =
+            JSON.parse(text);
+
+        } catch (error) {
+
+          console.error(
+            "JSON parse error:",
+            error
+          );
+
+          console.error(
+            "Raw Gemini response:",
+            text
+          );
+
+          continue;
+        }
+
+
+        const questions =
+          Array.isArray(
+            parsed?.questions
           )
-            .trim()
-            .toUpperCase();
+            ? parsed.questions
+            : [];
+
 
         /*
-         Convert:
-         A
-         B
-         C
-         D
-        */
+         * Validate every question.
+         */
 
-        if (
-          !["A", "B", "C", "D"].includes(answer)
+        for (
+          const q of questions
         ) {
-          const match =
-            answer.match(/[ABCD]/);
 
-          if (match) {
-            answer = match[0];
+          if (
+            allQuestions.length >=
+            numberOfQuestions
+          ) {
+            break;
           }
-        }
 
-        if (
-          !["A", "B", "C", "D"].includes(answer)
-        ) {
-          return null;
-        }
 
-        return {
-          id: index + 1,
+          if (!q) {
+            continue;
+          }
 
-          question:
-            String(q.question).trim(),
 
-          options:
-            q.options.map(
-              option =>
-                String(option).trim()
-            ),
-
-          correctAnswer: answer,
-
-          explanation:
+          const questionText =
             String(
-              q.explanation || ""
-            ).trim()
-        };
-      })
-      .filter(Boolean);
+              q.question ||
+              q.questionText ||
+              ""
+            ).trim();
 
-    if (!questions.length) {
-      return res.status(500).json({
-        error:
-          "Gemini generated a response, but no valid questions were found."
-      });
+
+          let options =
+            Array.isArray(q.options)
+              ? q.options
+              : [];
+
+
+          /*
+           * Require exactly 4 options.
+           */
+
+          if (
+            !questionText ||
+            options.length !== 4
+          ) {
+            continue;
+          }
+
+
+          options =
+            options.map(
+              function(option) {
+
+                return String(option)
+                  .replace(
+                    /^[A-D][\)\.\:\-]\s*/i,
+                    ""
+                  )
+                  .trim();
+
+              }
+            );
+
+
+          /*
+           * Find correct answer.
+           */
+
+          let correctAnswer =
+            q.correctAnswer;
+
+
+          if (
+            correctAnswer ===
+            undefined ||
+            correctAnswer ===
+            null
+          ) {
+
+            correctAnswer =
+              q.answer;
+
+          }
+
+
+          let answerIndex = -1;
+
+
+          if (
+            typeof correctAnswer ===
+            "number"
+          ) {
+
+            answerIndex =
+              correctAnswer;
+
+          }
+
+
+          else {
+
+            const answerText =
+              String(
+                correctAnswer || ""
+              )
+                .trim()
+                .toUpperCase();
+
+
+            /*
+             * Accept:
+             * A
+             * A)
+             * A.
+             * Option A
+             * Answer: A
+             */
+
+            const letterMatch =
+              answerText.match(
+                /[ABCD]/
+              );
+
+
+            if (letterMatch) {
+
+              answerIndex =
+                letterMatch[0]
+                  .charCodeAt(0) -
+                65;
+
+            }
+
+            else if (
+              /^[0-3]$/.test(
+                answerText
+              )
+            ) {
+
+              answerIndex =
+                Number(answerText);
+
+            }
+
+          }
+
+
+          if (
+            answerIndex < 0 ||
+            answerIndex > 3
+          ) {
+
+            continue;
+
+          }
+
+
+          /*
+           * Avoid duplicate questions.
+           */
+
+          const normalizedQuestion =
+            questionText
+              .toLowerCase()
+              .replace(
+                /[^a-z0-9]+/g,
+                " "
+              )
+              .trim();
+
+
+          const duplicate =
+            allQuestions.some(
+              function(existing) {
+
+                const existingText =
+                  String(
+                    existing.question
+                  )
+                    .toLowerCase()
+                    .replace(
+                      /[^a-z0-9]+/g,
+                      " "
+                    )
+                    .trim();
+
+                return (
+                  existingText ===
+                  normalizedQuestion
+                );
+
+              }
+            );
+
+
+          if (duplicate) {
+            continue;
+          }
+
+
+          allQuestions.push({
+
+            id:
+              allQuestions.length + 1,
+
+            question:
+              questionText,
+
+            options:
+              options.slice(0, 4),
+
+            answer:
+              answerIndex,
+
+            correctAnswer:
+              String.fromCharCode(
+                65 + answerIndex
+              ),
+
+            explanation:
+              String(
+                q.explanation || ""
+              ).trim()
+
+          });
+
+        }
+
+
+        console.log(
+          `Attempt ${attempt}: Added ${questions.length} AI questions. Total valid questions: ${allQuestions.length}/${numberOfQuestions}`
+        );
+
+
+      } catch (batchError) {
+
+        console.error(
+          "Batch generation error:",
+          batchError
+        );
+
+      }
+
     }
 
-    return res.status(200).json({
+
+    /* =====================================================
+       FINAL CHECK
+       ===================================================== */
+
+    if (
+      allQuestions.length <
+      numberOfQuestions
+    ) {
+
+      return res.status(500).json({
+
+        error:
+          `AI could generate only ${allQuestions.length} valid questions out of ${numberOfQuestions}. Please try generating the test again.`
+
+      });
+
+    }
+
+
+    /*
+     * Make absolutely sure we return
+     * only the requested number.
+     */
+
+    allQuestions =
+      allQuestions.slice(
+        0,
+        numberOfQuestions
+      );
+
+
+    /*
+     * Re-number questions.
+     */
+
+    allQuestions =
+      allQuestions.map(
+        function(q, index) {
+
+          return {
+
+            id: index + 1,
+
+            question:
+              q.question,
+
+            options:
+              q.options,
+
+            answer:
+              q.answer,
+
+            correctAnswer:
+              q.correctAnswer,
+
+            explanation:
+              q.explanation
+
+          };
+
+        }
+      );
+
+
+    /* =====================================================
+       FINAL TEST
+       ===================================================== */
+
+    const finalTest = {
+
       testTitle:
-        result.testTitle ||
         `${subject} - ${chapter} Test`,
 
       className:
-        String(className),
+        className,
 
       subject:
-        String(subject),
+        subject,
 
       chapter:
-        String(chapter),
+        chapter,
 
       difficulty:
-        String(difficulty),
+        difficulty,
 
-      questions
-    });
+      questions:
+        allQuestions
+
+    };
+
+
+    console.log(
+      `SUCCESS: Generated exactly ${allQuestions.length}/${numberOfQuestions} questions.`
+    );
+
+
+    return res.status(200).json(
+      finalTest
+    );
+
 
   } catch (error) {
 
@@ -313,10 +635,15 @@ Return ONLY JSON.
       error
     );
 
+
     return res.status(500).json({
+
       error:
         error?.message ||
         "Something went wrong while generating the test."
+
     });
+
   }
+
 }
