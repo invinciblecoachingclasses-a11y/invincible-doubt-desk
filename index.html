@@ -41,6 +41,32 @@
       font-size: 15px;
     }
 
+    /* MODE SWITCH */
+
+    .mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .mode-btn {
+      padding: 15px 10px;
+      border: 2px solid #d7dee8;
+      border-radius: 14px;
+      background: white;
+      color: #1769c2;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .mode-btn.active {
+      background: #09244a;
+      color: white;
+      border-color: #09244a;
+    }
+
     .card {
       background: white;
       padding: 25px;
@@ -140,7 +166,8 @@
       cursor: pointer;
     }
 
-    .ask-btn {
+    .ask-btn,
+    .submit-test-btn {
       width: 100%;
       margin-top: 20px;
       padding: 19px;
@@ -153,7 +180,8 @@
       cursor: pointer;
     }
 
-    .ask-btn:disabled {
+    .ask-btn:disabled,
+    .submit-test-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -229,7 +257,129 @@
       font-size: 14px;
     }
 
+    /* TEST SYSTEM */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .test-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .test-form input,
+    .test-form select {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #dce2ea;
+      border-radius: 13px;
+      font-size: 16px;
+      background: white;
+      outline: none;
+    }
+
+    .test-form input:focus,
+    .test-form select:focus {
+      border-color: #1769c2;
+    }
+
+    .test-info {
+      background: #f8fafc;
+      border: 2px solid #e1e7ef;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+
+    .test-info strong {
+      color: #09244a;
+    }
+
+    .question-card {
+      border: 2px solid #e1e7ef;
+      border-radius: 17px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+
+    .question-number {
+      color: #1769c2;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border: 2px solid #e1e7ef;
+      border-radius: 12px;
+      margin: 8px 0;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .option:hover {
+      background: #f8fafc;
+    }
+
+    .option input {
+      margin-top: 3px;
+    }
+
+    .test-result {
+      display: none;
+      text-align: center;
+      padding: 25px 15px;
+      margin-top: 20px;
+      background: #f8fafc;
+      border: 2px solid #e1e7ef;
+      border-radius: 20px;
+    }
+
+    .score {
+      font-size: 46px;
+      font-weight: 900;
+      color: #09244a;
+    }
+
+    .result-detail {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    .restart-btn {
+      margin-top: 18px;
+      padding: 14px 20px;
+      border: 2px solid #09244a;
+      border-radius: 13px;
+      background: white;
+      color: #09244a;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .notice {
+      margin-top: 12px;
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
     @media (max-width: 600px) {
+
       .container {
         width: 94%;
         margin: 18px auto;
@@ -266,7 +416,12 @@
       .feedback-buttons {
         grid-template-columns: 1fr;
       }
+
+      .mode-switch {
+        grid-template-columns: 1fr 1fr;
+      }
     }
+
   </style>
 </head>
 
@@ -279,9 +434,41 @@
     <p>Ask your doubt. Understand the logic.</p>
   </div>
 
-  <div class="card">
 
-    <label>Select Subject</label>
+  <!-- MODE SWITCH -->
+
+  <div class="mode-switch">
+
+    <button
+      type="button"
+      class="mode-btn active"
+      id="doubtModeBtn">
+
+      ASK A DOUBT
+
+    </button>
+
+    <button
+      type="button"
+      class="mode-btn"
+      id="testModeBtn">
+
+      TAKE A TEST
+
+    </button>
+
+  </div>
+
+
+  <!-- EXISTING DOUBT DESK -->
+
+  <div
+    class="card"
+    id="doubtSection">
+
+    <label>
+      Select Subject
+    </label>
 
     <div class="subjects">
 
@@ -289,24 +476,31 @@
         type="button"
         class="subject active"
         data-subject="Mathematics">
+
         Mathematics
+
       </button>
 
       <button
         type="button"
         class="subject"
         data-subject="Physics">
+
         Physics
+
       </button>
 
       <button
         type="button"
         class="subject"
         data-subject="Chemistry">
+
         Chemistry
+
       </button>
 
     </div>
+
 
     <label for="question">
       Your Question
@@ -317,11 +511,13 @@
       placeholder="Type your question here..."
     ></textarea>
 
+
     <input
       id="imageInput"
       type="file"
       accept="image/*"
     >
+
 
     <div class="photo-buttons">
 
@@ -329,41 +525,56 @@
         type="button"
         class="photo-btn"
         id="cameraBtn">
+
         📷 Take Photo
+
       </button>
 
       <button
         type="button"
         class="photo-btn"
         id="uploadBtn">
+
         🖼️ Upload Photo
+
       </button>
 
     </div>
+
 
     <img
       id="imagePreview"
       alt="Selected question"
     >
 
+
     <button
       type="button"
       id="removeImage">
+
       Remove Photo
+
     </button>
+
 
     <button
       type="button"
       class="ask-btn"
       id="askBtn">
+
       ASK AI
+
     </button>
+
 
     <div
       class="loading"
       id="loading">
+
       Thinking... Please wait.
+
     </div>
+
 
     <div
       class="answer-box"
@@ -378,6 +589,7 @@
         id="answerText">
       </div>
 
+
       <div
         class="feedback"
         id="feedback">
@@ -386,20 +598,26 @@
           Still confused?
         </div>
 
+
         <div class="feedback-buttons">
 
           <button
             type="button"
             class="feedback-btn"
             id="againBtn">
+
             Not Satisfied — Explain Again
+
           </button>
+
 
           <button
             type="button"
             class="feedback-btn teacher-btn"
             id="teacherBtn">
+
             Teacher Help
+
           </button>
 
         </div>
@@ -410,6 +628,189 @@
 
   </div>
 
+
+  <!-- NEW AUTOMATED TEST MODULE -->
+
+  <div
+    class="card hidden"
+    id="testSection">
+
+    <label>
+      Take an Automated Test
+    </label>
+
+
+    <div id="testSetup">
+
+      <div class="test-form">
+
+        <input
+          id="studentName"
+          type="text"
+          placeholder="Student Name"
+        >
+
+
+        <input
+          id="studentMobile"
+          type="tel"
+          inputmode="numeric"
+          placeholder="Mobile Number"
+        >
+
+
+        <select id="testClass">
+
+          <option value="">
+            Select Class
+          </option>
+
+          <option value="9">
+            Class 9
+          </option>
+
+          <option value="10">
+            Class 10
+          </option>
+
+          <option value="11">
+            Class 11
+          </option>
+
+          <option value="12">
+            Class 12
+          </option>
+
+        </select>
+
+
+        <select id="testSubject">
+
+          <option value="">
+            Select Subject
+          </option>
+
+          <option value="Physics">
+            Physics
+          </option>
+
+          <option value="Chemistry">
+            Chemistry
+          </option>
+
+          <option value="Mathematics">
+            Mathematics
+          </option>
+
+        </select>
+
+
+        <select id="testSelect">
+
+          <option value="">
+            Select Test
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="test-info">
+
+        <strong>
+          Available now:
+        </strong>
+
+        Class 10 Physics — Electricity Test 01
+
+        <div class="notice">
+
+          We are building the test library step-by-step.
+          More classes, subjects and tests will be added next.
+
+        </div>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="submit-test-btn"
+        id="startTestBtn">
+
+        START TEST
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="testArea"
+      class="hidden">
+
+      <div
+        class="test-info"
+        id="testHeader">
+      </div>
+
+
+      <div
+        id="questionsContainer">
+      </div>
+
+
+      <button
+        type="button"
+        class="submit-test-btn"
+        id="submitTestBtn">
+
+        SUBMIT TEST
+
+      </button>
+
+    </div>
+
+
+    <div
+      class="test-result"
+      id="testResult">
+
+      <div>
+        Test Result
+      </div>
+
+
+      <div
+        class="score"
+        id="scoreText">
+
+        0/0
+
+      </div>
+
+
+      <div
+        class="result-detail"
+        id="resultDetail">
+      </div>
+
+
+      <button
+        type="button"
+        class="restart-btn"
+        id="restartTestBtn">
+
+        TAKE ANOTHER TEST
+
+      </button>
+
+    </div>
+
+  </div>
+
+
   <div class="footer">
     © Invincible Coaching Classes
   </div>
@@ -419,91 +820,159 @@
 
 <script>
 
+  /* =====================================================
+     MODE SWITCH
+  ===================================================== */
+
+  const doubtModeBtn =
+    document.getElementById("doubtModeBtn");
+
+  const testModeBtn =
+    document.getElementById("testModeBtn");
+
+  const doubtSection =
+    document.getElementById("doubtSection");
+
+  const testSection =
+    document.getElementById("testSection");
+
+
+  doubtModeBtn.addEventListener(
+    "click",
+    function() {
+
+      doubtModeBtn.classList.add("active");
+
+      testModeBtn.classList.remove("active");
+
+      doubtSection.classList.remove("hidden");
+
+      testSection.classList.add("hidden");
+
+    }
+  );
+
+
+  testModeBtn.addEventListener(
+    "click",
+    function() {
+
+      testModeBtn.classList.add("active");
+
+      doubtModeBtn.classList.remove("active");
+
+      testSection.classList.remove("hidden");
+
+      doubtSection.classList.add("hidden");
+
+    }
+  );
+
+
+  /* =====================================================
+     EXISTING DOUBT DESK
+  ===================================================== */
+
   let selectedSubject = "Mathematics";
+
   let selectedImage = null;
+
 
   const questionInput =
     document.getElementById("question");
 
+
   const imageInput =
     document.getElementById("imageInput");
+
 
   const imagePreview =
     document.getElementById("imagePreview");
 
+
   const removeImageButton =
     document.getElementById("removeImage");
+
 
   const askButton =
     document.getElementById("askBtn");
 
+
   const loading =
     document.getElementById("loading");
+
 
   const answerBox =
     document.getElementById("answerBox");
 
+
   const answerText =
     document.getElementById("answerText");
+
 
   const feedback =
     document.getElementById("feedback");
 
 
-  // SUBJECT SELECTION
-
   document
     .querySelectorAll(".subject")
     .forEach(function(button) {
 
-      button.addEventListener("click", function() {
+      button.addEventListener(
+        "click",
+        function() {
 
-        document
-          .querySelectorAll(".subject")
-          .forEach(function(btn) {
-            btn.classList.remove("active");
-          });
+          document
+            .querySelectorAll(".subject")
+            .forEach(function(btn) {
 
-        button.classList.add("active");
+              btn.classList.remove("active");
 
-        selectedSubject =
-          button.getAttribute("data-subject");
+            });
 
-      });
+
+          button.classList.add("active");
+
+
+          selectedSubject =
+            button.getAttribute("data-subject");
+
+        }
+      );
 
     });
 
-
-  // UPLOAD PHOTO
 
   document
     .getElementById("uploadBtn")
-    .addEventListener("click", function() {
+    .addEventListener(
+      "click",
+      function() {
 
-      imageInput.removeAttribute("capture");
+        imageInput.removeAttribute("capture");
 
-      imageInput.click();
+        imageInput.click();
 
-    });
+      }
+    );
 
-
-  // TAKE PHOTO
 
   document
     .getElementById("cameraBtn")
-    .addEventListener("click", function() {
+    .addEventListener(
+      "click",
+      function() {
 
-      imageInput.setAttribute(
-        "capture",
-        "environment"
-      );
+        imageInput.setAttribute(
+          "capture",
+          "environment"
+        );
 
-      imageInput.click();
+        imageInput.click();
 
-    });
+      }
+    );
 
-
-  // IMAGE SELECTED
 
   imageInput.addEventListener(
     "change",
@@ -512,9 +981,11 @@
       const file =
         event.target.files[0];
 
+
       if (!file) {
         return;
       }
+
 
       if (!file.type.startsWith("image/")) {
 
@@ -523,38 +994,51 @@
         );
 
         return;
+
       }
+
 
       const reader =
         new FileReader();
 
-      reader.onload = function() {
 
-        const result =
-          reader.result;
+      reader.onload =
+        function() {
 
-        selectedImage = {
-          data: result.split(",")[1],
-          mimeType: file.type
+          const result =
+            reader.result;
+
+
+          selectedImage = {
+
+            data:
+              result.split(",")[1],
+
+            mimeType:
+              file.type
+
+          };
+
+
+          imagePreview.src =
+            result;
+
+
+          imagePreview.style.display =
+            "block";
+
+
+          removeImageButton.style.display =
+            "block";
+
         };
 
-        imagePreview.src = result;
-
-        imagePreview.style.display =
-          "block";
-
-        removeImageButton.style.display =
-          "block";
-
-      };
 
       reader.readAsDataURL(file);
 
     }
   );
 
-
-  // REMOVE PHOTO
 
   removeImageButton.addEventListener(
     "click",
@@ -576,14 +1060,13 @@
   );
 
 
-  // ASK AI
-
   askButton.addEventListener(
     "click",
     async function() {
 
       const question =
         questionInput.value.trim();
+
 
       if (!question && !selectedImage) {
 
@@ -592,18 +1075,25 @@
         );
 
         return;
+
       }
 
-      askButton.disabled = true;
+
+      askButton.disabled =
+        true;
+
 
       loading.style.display =
         "block";
 
+
       answerBox.style.display =
         "none";
 
+
       feedback.style.display =
         "none";
+
 
       try {
 
@@ -611,25 +1101,30 @@
           await fetch(
             "/api/ask",
             {
-              method: "POST",
+
+              method:
+                "POST",
 
               headers: {
+
                 "Content-Type":
                   "application/json"
+
               },
 
-              body: JSON.stringify({
+              body:
+                JSON.stringify({
 
-                subject:
-                  selectedSubject,
+                  subject:
+                    selectedSubject,
 
-                question:
-                  question,
+                  question:
+                    question,
 
-                image:
-                  selectedImage
+                  image:
+                    selectedImage
 
-              })
+                })
 
             }
           );
@@ -656,13 +1151,19 @@
         answerBox.style.display =
           "block";
 
+
         feedback.style.display =
           "block";
 
 
         answerBox.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
+
+          behavior:
+            "smooth",
+
+          block:
+            "start"
+
         });
 
 
@@ -671,13 +1172,16 @@
         answerBox.style.display =
           "block";
 
+
         answerText.textContent =
           "Sorry, answer nahi aa paaya.\n\n" +
           error.message;
 
       } finally {
 
-        askButton.disabled = false;
+        askButton.disabled =
+          false;
+
 
         loading.style.display =
           "none";
@@ -688,37 +1192,57 @@
   );
 
 
-  // CLEAN AI RESPONSE
-
   function cleanAnswer(text) {
 
     if (!text) {
       return "";
     }
 
+
     return text
+
       .replace(/#{1,6}\s?/g, "")
+
       .replace(/\*\*/g, "")
+
       .replace(/\*/g, "")
+
       .replace(/\\text\{([^}]*)\}/g, "$1")
+
       .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+
       .replace(/\\times/g, "×")
+
       .replace(/\\div/g, "÷")
+
       .replace(/\\cdot/g, "×")
-      .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+
+      .replace(
+        /\\sqrt\{([^}]*)\}/g,
+        "√($1)"
+      )
+
       .replace(/\\left/g, "")
+
       .replace(/\\right/g, "")
+
       .replace(/\\\[/g, "")
+
       .replace(/\\\]/g, "")
+
       .replace(/\$\$/g, "")
+
       .replace(/\$/g, "")
-      .replace(/```[\s\S]*?```/g, "")
+
+      .replace(
+        /```[\s\S]*?```/g,
+        ""
+      )
+
       .trim();
 
   }
 
-
-  // NOT SATISFIED - EXPLAIN AGAIN
 
   document
     .getElementById("againBtn")
@@ -729,20 +1253,17 @@
         const oldQuestion =
           questionInput.value.trim();
 
-        const newQuestion =
+
+        questionInput.value =
           oldQuestion +
           "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
 
-        questionInput.value =
-          newQuestion;
 
         askButton.click();
 
       }
     );
 
-
-  // TEACHER HELP - OPEN WHATSAPP
 
   document
     .getElementById("teacherBtn")
@@ -753,36 +1274,642 @@
         const studentQuestion =
           questionInput.value.trim();
 
+
         const aiExplanation =
           answerText.textContent.trim();
 
+
         const whatsappMessage =
+
           "Hello Invincible Coaching Classes Teacher.%0A%0A" +
+
           "I need personal help with this doubt.%0A%0A" +
+
           "Subject: " +
-          encodeURIComponent(selectedSubject) +
+
+          encodeURIComponent(
+            selectedSubject
+          ) +
+
           "%0A%0A" +
+
           "Student Question:%0A" +
+
           encodeURIComponent(
             studentQuestion ||
             "Question from uploaded image"
           ) +
+
           "%0A%0A" +
+
           "AI Explanation:%0A" +
-          encodeURIComponent(aiExplanation) +
+
+          encodeURIComponent(
+            aiExplanation
+          ) +
+
           "%0A%0APlease help me with this doubt.";
 
-        const whatsappURL =
-          "https://wa.me/919667453931?text=" +
-          whatsappMessage;
 
         window.open(
-          whatsappURL,
+
+          "https://wa.me/919667453931?text=" +
+          whatsappMessage,
+
           "_blank"
+
         );
 
       }
     );
+
+
+  /* =====================================================
+     AUTOMATED TEST V1
+  ===================================================== */
+
+  const testBank = {
+
+    "10|Physics": [
+
+      {
+
+        id: 1,
+
+        question:
+          "The SI unit of resistance is:",
+
+        options: [
+
+          "Watt",
+
+          "Volt",
+
+          "Ohm",
+
+          "Ampere"
+
+        ],
+
+        answer: 2
+
+      },
+
+
+      {
+
+        id: 2,
+
+        question:
+          "According to Ohm's law, at constant temperature:",
+
+        options: [
+
+          "V ∝ I",
+
+          "V ∝ 1/I",
+
+          "R ∝ I",
+
+          "R ∝ V"
+
+        ],
+
+        answer: 0
+
+      },
+
+
+      {
+
+        id: 3,
+
+        question:
+          "If the potential difference across a resistor is doubled and resistance remains constant, the current becomes:",
+
+        options: [
+
+          "Half",
+
+          "Double",
+
+          "Four times",
+
+          "Unchanged"
+
+        ],
+
+        answer: 1
+
+      },
+
+
+      {
+
+        id: 4,
+
+        question:
+          "The resistance of a conductor depends on:",
+
+        options: [
+
+          "Length only",
+
+          "Area only",
+
+          "Material, length and area",
+
+          "Current only"
+
+        ],
+
+        answer: 2
+
+      },
+
+
+      {
+
+        id: 5,
+
+        question:
+          "Which instrument is connected in parallel to measure potential difference?",
+
+        options: [
+
+          "Ammeter",
+
+          "Voltmeter",
+
+          "Galvanometer",
+
+          "Rheostat"
+
+        ],
+
+        answer: 1
+
+      }
+
+    ]
+
+  };
+
+
+  const testClass =
+    document.getElementById("testClass");
+
+
+  const testSubject =
+    document.getElementById("testSubject");
+
+
+  const testSelect =
+    document.getElementById("testSelect");
+
+
+  const startTestBtn =
+    document.getElementById("startTestBtn");
+
+
+  const testSetup =
+    document.getElementById("testSetup");
+
+
+  const testArea =
+    document.getElementById("testArea");
+
+
+  const testHeader =
+    document.getElementById("testHeader");
+
+
+  const questionsContainer =
+    document.getElementById("questionsContainer");
+
+
+  const submitTestBtn =
+    document.getElementById("submitTestBtn");
+
+
+  const testResult =
+    document.getElementById("testResult");
+
+
+  const scoreText =
+    document.getElementById("scoreText");
+
+
+  const resultDetail =
+    document.getElementById("resultDetail");
+
+
+  const restartTestBtn =
+    document.getElementById("restartTestBtn");
+
+
+  function updateTestList() {
+
+    testSelect.innerHTML =
+      '<option value="">Select Test</option>';
+
+
+    const key =
+      testClass.value +
+      "|" +
+      testSubject.value;
+
+
+    const tests =
+      testBank[key]
+        ? ["Electricity Test 01"]
+        : [];
+
+
+    tests.forEach(
+      function(testName) {
+
+        const option =
+          document.createElement("option");
+
+
+        option.value =
+          testName;
+
+
+        option.textContent =
+          testName;
+
+
+        testSelect.appendChild(
+          option
+        );
+
+      }
+    );
+
+  }
+
+
+  testClass.addEventListener(
+    "change",
+    updateTestList
+  );
+
+
+  testSubject.addEventListener(
+    "change",
+    updateTestList
+  );
+
+
+  startTestBtn.addEventListener(
+    "click",
+    function() {
+
+      const name =
+        document
+          .getElementById("studentName")
+          .value
+          .trim();
+
+
+      const mobile =
+        document
+          .getElementById("studentMobile")
+          .value
+          .trim();
+
+
+      const cls =
+        testClass.value;
+
+
+      const subject =
+        testSubject.value;
+
+
+      const test =
+        testSelect.value;
+
+
+      if (
+        !name ||
+        !mobile ||
+        !cls ||
+        !subject ||
+        !test
+      ) {
+
+        alert(
+          "Please fill Name, Mobile Number, Class, Subject and Test."
+        );
+
+        return;
+
+      }
+
+
+      if (
+        !/^[0-9]{10}$/.test(mobile)
+      ) {
+
+        alert(
+          "Please enter a valid 10-digit mobile number."
+        );
+
+        return;
+
+      }
+
+
+      const questions =
+        testBank[
+          cls + "|" + subject
+        ];
+
+
+      if (!questions) {
+
+        alert(
+          "This test is not available yet. We will add it next."
+        );
+
+        return;
+
+      }
+
+
+      testSetup.classList.add(
+        "hidden"
+      );
+
+
+      testArea.classList.remove(
+        "hidden"
+      );
+
+
+      testResult.style.display =
+        "none";
+
+
+      testHeader.innerHTML =
+
+        "<strong>Class " +
+        cls +
+        " " +
+        subject +
+        "</strong><br>" +
+
+        test +
+
+        " &nbsp; | &nbsp; " +
+
+        questions.length +
+
+        " Questions &nbsp; | &nbsp; " +
+
+        questions.length +
+
+        " Marks";
+
+
+      questionsContainer.innerHTML =
+        "";
+
+
+      questions.forEach(
+        function(q, index) {
+
+          const card =
+            document.createElement(
+              "div"
+            );
+
+
+          card.className =
+            "question-card";
+
+
+          let optionsHTML =
+            "";
+
+
+          q.options.forEach(
+            function(
+              option,
+              optionIndex
+            ) {
+
+              optionsHTML +=
+
+                '<label class="option">' +
+
+                '<input type="radio" name="q' +
+                q.id +
+                '" value="' +
+                optionIndex +
+                '">' +
+
+                '<span>' +
+                option +
+                '</span>' +
+
+                '</label>';
+
+            }
+          );
+
+
+          card.innerHTML =
+
+            '<div class="question-number">' +
+
+            "QUESTION " +
+
+            (index + 1) +
+
+            "</div>" +
+
+            '<div class="question-text">' +
+
+            q.question +
+
+            "</div>" +
+
+            optionsHTML;
+
+
+          questionsContainer.appendChild(
+            card
+          );
+
+        }
+      );
+
+
+      window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+      });
+
+    }
+  );
+
+
+  submitTestBtn.addEventListener(
+    "click",
+    function() {
+
+      const cls =
+        testClass.value;
+
+
+      const subject =
+        testSubject.value;
+
+
+      const questions =
+        testBank[
+          cls + "|" + subject
+        ];
+
+
+      if (!questions) {
+        return;
+      }
+
+
+      let correct = 0;
+
+      let attempted = 0;
+
+
+      questions.forEach(
+        function(q) {
+
+          const selected =
+            document.querySelector(
+              'input[name="q' +
+              q.id +
+              '"]:checked'
+            );
+
+
+          if (selected) {
+
+            attempted++;
+
+
+            if (
+              Number(selected.value) ===
+              q.answer
+            ) {
+
+              correct++;
+
+            }
+
+          }
+
+        }
+      );
+
+
+      const wrong =
+        attempted - correct;
+
+
+      const unanswered =
+        questions.length -
+        attempted;
+
+
+      const percentage =
+        Math.round(
+          (correct / questions.length) *
+          100
+        );
+
+
+      scoreText.textContent =
+
+        correct +
+        "/" +
+        questions.length;
+
+
+      resultDetail.innerHTML =
+
+        "<strong>" +
+        percentage +
+        "%</strong><br>" +
+
+        "Correct: " +
+        correct +
+        "<br>" +
+
+        "Wrong: " +
+        wrong +
+        "<br>" +
+
+        "Unanswered: " +
+        unanswered;
+
+
+      testArea.classList.add(
+        "hidden"
+      );
+
+
+      testResult.style.display =
+        "block";
+
+
+      testResult.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+      });
+
+    }
+  );
+
+
+  restartTestBtn.addEventListener(
+    "click",
+    function() {
+
+      testResult.style.display =
+        "none";
+
+
+      testSetup.classList.remove(
+        "hidden"
+      );
+
+
+      testArea.classList.add(
+        "hidden"
+      );
+
+
+      window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+      });
+
+    }
+  );
 
 </script>
 
