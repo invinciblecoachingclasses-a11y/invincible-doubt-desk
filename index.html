@@ -7,264 +7,43 @@
 
 <style>
 *{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fa;color:#101828}
+.container{width:min(720px,94%);margin:30px auto}
+.header{text-align:center;margin-bottom:25px}
+.header h1{margin:0;font-size:32px;font-weight:800;color:#09244a}
+.header p{margin-top:7px;color:#667085;font-size:15px}
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.mode-btn{padding:15px 10px;border:2px solid #d7dee8;border-radius:14px;background:white;color:#1769c2;font-size:16px;font-weight:800;cursor:pointer}
+.mode-btn.active{background:#09244a;color:white;border-color:#09244a}
+.card{background:white;padding:25px;border-radius:22px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+label{display:block;font-size:18px;font-weight:700;margin-bottom:12px}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:25px}
+.subject{padding:15px 8px;border:2px solid #d7dee8;border-radius:14px;background:white;color:#1769c2;font-size:16px;font-weight:700;cursor:pointer}
+.subject.active{background:#09244a;color:white;border-color:#09244a}
+textarea{width:100%;min-height:170px;padding:18px;border:2px solid #dce2ea;border-radius:18px;font-size:18px;resize:vertical;outline:none;font-family:inherit}
+textarea:focus{border-color:#1769c2}
+.photo-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+.photo-btn{padding:17px 10px;border:2px solid #d7dee8;border-radius:15px;background:white;font-size:16px;font-weight:700;cursor:pointer}
+#imageInput{display:none}
+#imagePreview{display:none;width:100%;max-height:260px;object-fit:contain;margin-top:15px;border-radius:15px;border:2px solid #e1e6ed}
+#removeImage{display:none;margin:10px auto 0;border:none;background:none;color:#d92d20;font-weight:700;cursor:pointer}
+.ask-btn,.submit-test-btn,.generate-btn{width:100%;margin-top:20px;padding:19px;border:none;border-radius:16px;background:#ed7118;color:white;font-size:20px;font-weight:800;cursor:pointer}
+.generate-btn{background:#09244a}
+.ask-btn:disabled,.submit-test-btn:disabled,.generate-btn:disabled{opacity:.6;cursor:not-allowed}
+.loading{display:none;text-align:center;padding:20px;font-weight:700;color:#1769c2}
+.answer-box{display:none;margin-top:25px;padding:22px;background:#f8fafc;border-radius:20px;border:2px solid #e1e7ef}
+.logic-title{font-size:30px;font-weight:900;color:#09244a;margin-bottom:18px}
+.answer-text{white-space:pre-wrap;font-size:18px;line-height:1.65;color:#172033}
+.feedback{display:none;margin-top:22px}
+.feedback-title{font-size:17px;font-weight:700;margin-bottom:12px}
+.feedback-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.feedback-btn{padding:14px 10px;border-radius:13px;border:2px solid #d7dee8;background:white;font-weight:700;cursor:pointer;font-size:14px}
+.teacher-btn{background:#09244a;color:white;border-color:#09244a}
+.footer{text-align:center;color:#667085;margin:25px 0;font-size:14px}
+.hidden{display:none!important}
 
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f7fa;
-color:#101828
-}
-
-.container{
-width:min(720px,94%);
-margin:30px auto
-}
-
-.header{
-text-align:center;
-margin-bottom:25px
-}
-
-.header h1{
-margin:0;
-font-size:32px;
-font-weight:800;
-color:#09244a
-}
-
-.header p{
-margin-top:7px;
-color:#667085;
-font-size:15px
-}
-
-.mode-switch{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:18px
-}
-
-.mode-btn{
-padding:15px 10px;
-border:2px solid #d7dee8;
-border-radius:14px;
-background:white;
-color:#1769c2;
-font-size:16px;
-font-weight:800;
-cursor:pointer
-}
-
-.mode-btn.active{
-background:#09244a;
-color:white;
-border-color:#09244a
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:22px;
-box-shadow:0 8px 30px rgba(0,0,0,.08)
-}
-
-label{
-display:block;
-font-size:18px;
-font-weight:700;
-margin-bottom:12px
-}
-
-.subjects{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-bottom:25px
-}
-
-.subject{
-padding:15px 8px;
-border:2px solid #d7dee8;
-border-radius:14px;
-background:white;
-color:#1769c2;
-font-size:16px;
-font-weight:700;
-cursor:pointer
-}
-
-.subject.active{
-background:#09244a;
-color:white;
-border-color:#09244a
-}
-
-textarea{
-width:100%;
-min-height:170px;
-padding:18px;
-border:2px solid #dce2ea;
-border-radius:18px;
-font-size:18px;
-resize:vertical;
-outline:none;
-font-family:inherit
-}
-
-textarea:focus{
-border-color:#1769c2
-}
-
-.photo-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:15px
-}
-
-.photo-btn{
-padding:17px 10px;
-border:2px solid #d7dee8;
-border-radius:15px;
-background:white;
-font-size:16px;
-font-weight:700;
-cursor:pointer
-}
-
-#imageInput{
-display:none
-}
-
-#imagePreview{
-display:none;
-width:100%;
-max-height:260px;
-object-fit:contain;
-margin-top:15px;
-border-radius:15px;
-border:2px solid #e1e6ed
-}
-
-#removeImage{
-display:none;
-margin:10px auto 0;
-border:none;
-background:none;
-color:#d92d20;
-font-weight:700;
-cursor:pointer
-}
-
-.ask-btn,
-.submit-test-btn,
-.generate-btn{
-width:100%;
-margin-top:20px;
-padding:19px;
-border:none;
-border-radius:16px;
-background:#ed7118;
-color:white;
-font-size:20px;
-font-weight:800;
-cursor:pointer
-}
-
-.generate-btn{
-background:#09244a
-}
-
-.ask-btn:disabled,
-.submit-test-btn:disabled,
-.generate-btn:disabled{
-opacity:.6;
-cursor:not-allowed
-}
-
-.loading{
-display:none;
-text-align:center;
-padding:20px;
-font-weight:700;
-color:#1769c2
-}
-
-.answer-box{
-display:none;
-margin-top:25px;
-padding:22px;
-background:#f8fafc;
-border-radius:20px;
-border:2px solid #e1e7ef
-}
-
-.logic-title{
-font-size:30px;
-font-weight:900;
-color:#09244a;
-margin-bottom:18px
-}
-
-.answer-text{
-white-space:pre-wrap;
-font-size:18px;
-line-height:1.65;
-color:#172033
-}
-
-.feedback{
-display:none;
-margin-top:22px
-}
-
-.feedback-title{
-font-size:17px;
-font-weight:700;
-margin-bottom:12px
-}
-
-.feedback-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
-}
-
-.feedback-btn{
-padding:14px 10px;
-border-radius:13px;
-border:2px solid #d7dee8;
-background:white;
-font-weight:700;
-cursor:pointer;
-font-size:14px
-}
-
-.teacher-btn{
-background:#09244a;
-color:white;
-border-color:#09244a
-}
-
-.footer{
-text-align:center;
-color:#667085;
-margin:25px 0;
-font-size:14px
-}
-
-.hidden{
-display:none!important
-}
-
-.test-form{
-display:grid;
-gap:14px
-}
-
-.test-form input,
-.test-form select{
+.test-form{display:grid;gap:14px}
+.test-form input,.test-form select{
 width:100%;
 padding:15px;
 border:2px solid #dce2ea;
@@ -273,11 +52,7 @@ font-size:16px;
 background:white;
 outline:none
 }
-
-.test-form input:focus,
-.test-form select:focus{
-border-color:#1769c2
-}
+.test-form input:focus,.test-form select:focus{border-color:#1769c2}
 
 .test-info{
 background:#f8fafc;
@@ -287,16 +62,8 @@ padding:16px;
 margin:18px 0
 }
 
-.test-info strong{
-color:#09244a
-}
-
-.notice{
-margin-top:12px;
-color:#667085;
-font-size:14px;
-line-height:1.45
-}
+.test-info strong{color:#09244a}
+.notice{margin-top:12px;color:#667085;font-size:14px;line-height:1.45}
 
 .generator-box{
 margin-top:22px;
@@ -324,8 +91,7 @@ grid-template-columns:1fr 1fr;
 gap:12px
 }
 
-.generator-grid input,
-.generator-grid select{
+.generator-grid input,.generator-grid select{
 width:100%;
 padding:14px;
 border:2px solid #dce2ea;
@@ -335,14 +101,11 @@ background:white;
 outline:none
 }
 
-.generator-grid input:focus,
-.generator-grid select:focus{
+.generator-grid input:focus,.generator-grid select:focus{
 border-color:#1769c2
 }
 
-.full{
-grid-column:1/-1
-}
+.full{grid-column:1/-1}
 
 .generator-loading{
 display:none;
@@ -386,13 +149,8 @@ font-size:16px;
 line-height:1.45
 }
 
-.option:hover{
-background:#f8fafc
-}
-
-.option input{
-margin-top:3px
-}
+.option:hover{background:#f8fafc}
+.option input{margin-top:3px}
 
 .test-result{
 display:none;
@@ -428,52 +186,17 @@ cursor:pointer
 }
 
 @media(max-width:600px){
-
-.container{
-width:94%;
-margin:18px auto
-}
-
-.card{
-padding:18px
-}
-
-.header h1{
-font-size:27px
-}
-
-.subjects{
-grid-template-columns:1fr
-}
-
-.photo-buttons{
-grid-template-columns:1fr
-}
-
-textarea{
-font-size:17px
-}
-
-.logic-title{
-font-size:26px
-}
-
-.answer-text{
-font-size:17px
-}
-
-.feedback-buttons{
-grid-template-columns:1fr
-}
-
-.generator-grid{
-grid-template-columns:1fr
-}
-
-.full{
-grid-column:auto
-}
-
+.container{width:94%;margin:18px auto}
+.card{padding:18px}
+.header h1{font-size:27px}
+.subjects{grid-template-columns:1fr}
+.photo-buttons{grid-template-columns:1fr}
+textarea{font-size:17px}
+.logic-title{font-size:26px}
+.answer-text{font-size:17px}
+.feedback-buttons{grid-template-columns:1fr}
+.generator-grid{grid-template-columns:1fr}
+.full{grid-column:auto}
 }
 </style>
 </head>
@@ -488,23 +211,18 @@ grid-column:auto
 </div>
 
 <div class="mode-switch">
-
-<button type="button"
-class="mode-btn active"
-id="doubtModeBtn">
+<button type="button" class="mode-btn active" id="doubtModeBtn">
 ASK A DOUBT
 </button>
 
-<button type="button"
-class="mode-btn"
-id="testModeBtn">
+<button type="button" class="mode-btn" id="testModeBtn">
 TAKE A TEST
 </button>
-
 </div>
 
-
-<!-- ================= DOUBT DESK ================= -->
+<!-- =====================================================
+DOUBT SECTION
+===================================================== -->
 
 <div class="card" id="doubtSection">
 
@@ -538,24 +256,27 @@ Your Question / अपना प्रश्न
 
 <textarea
 id="question"
-placeholder="Type your question in English, हिन्दी or Hinglish...&#10;&#10;अपना प्रश्न English, हिन्दी या Hinglish में लिखें..."
-></textarea>
+placeholder="Type your question in English, हिन्दी or Hinglish...
+
+अपना प्रश्न English, हिन्दी या Hinglish में लिखें...">
+</textarea>
 
 <input
 id="imageInput"
 type="file"
-accept="image/*"
->
+accept="image/*">
 
 <div class="photo-buttons">
 
-<button type="button"
+<button
+type="button"
 class="photo-btn"
 id="cameraBtn">
 Take Photo / फोटो लें
 </button>
 
-<button type="button"
+<button
+type="button"
 class="photo-btn"
 id="uploadBtn">
 Upload Photo / फोटो अपलोड करें
@@ -565,8 +286,7 @@ Upload Photo / फोटो अपलोड करें
 
 <img
 id="imagePreview"
-alt="Selected question"
->
+alt="Selected question">
 
 <button
 type="button"
@@ -626,17 +346,18 @@ Teacher Help
 
 </div>
 </div>
-
+</div>
 </div>
 
-</div>
-
-
-<!-- ================= TEST SYSTEM ================= -->
+<!-- =====================================================
+TEST SECTION
+===================================================== -->
 
 <div class="card hidden" id="testSection">
 
-<label>Take an Automated Test</label>
+<label>
+Take an Automated Test
+</label>
 
 <div id="testSetup">
 
@@ -645,38 +366,63 @@ Teacher Help
 <input
 id="studentName"
 type="text"
-placeholder="Student Name / विद्यार्थी का नाम"
->
+placeholder="Student Name / विद्यार्थी का नाम">
 
 <input
 id="studentMobile"
 type="tel"
 inputmode="numeric"
-placeholder="Mobile Number / मोबाइल नंबर"
->
+placeholder="Mobile Number / मोबाइल नंबर">
 
 <select id="testClass">
 
-<option value="">Select Class / कक्षा चुनें</option>
-<option value="9">Class 9 / कक्षा 9</option>
-<option value="10">Class 10 / कक्षा 10</option>
-<option value="11">Class 11 / कक्षा 11</option>
-<option value="12">Class 12 / कक्षा 12</option>
+<option value="">
+Select Class / कक्षा चुनें
+</option>
+
+<option value="9">
+Class 9 / कक्षा 9
+</option>
+
+<option value="10">
+Class 10 / कक्षा 10
+</option>
+
+<option value="11">
+Class 11 / कक्षा 11
+</option>
+
+<option value="12">
+Class 12 / कक्षा 12
+</option>
 
 </select>
 
 <select id="testSubject">
 
-<option value="">Select Subject / विषय चुनें</option>
-<option value="Physics">Physics / भौतिक विज्ञान</option>
-<option value="Chemistry">Chemistry / रसायन विज्ञान</option>
-<option value="Mathematics">Mathematics / गणित</option>
+<option value="">
+Select Subject / विषय चुनें
+</option>
+
+<option value="Physics">
+Physics / भौतिक विज्ञान
+</option>
+
+<option value="Chemistry">
+Chemistry / रसायन विज्ञान
+</option>
+
+<option value="Mathematics">
+Mathematics / गणित
+</option>
 
 </select>
 
 <select id="testSelect">
 
-<option value="">Select Test / टेस्ट चुनें</option>
+<option value="">
+Select Test / टेस्ट चुनें
+</option>
 
 </select>
 
@@ -684,17 +430,20 @@ placeholder="Mobile Number / मोबाइल नंबर"
 
 <div class="test-info">
 
-<strong>Available now:</strong>
+<strong>
+Available now:
+</strong>
 
 Class 10 Physics — Electricity Test 01
 
 <div class="notice">
 
 The original test is still available.
+<br>
+
 You can also generate a fresh AI test below.
 
 </div>
-
 </div>
 
 <button
@@ -704,8 +453,9 @@ id="startTestBtn">
 START TEST
 </button>
 
-
-<!-- ================= AI TEST GENERATOR ================= -->
+<!-- =====================================================
+AI TEST GENERATOR
+===================================================== -->
 
 <div class="generator-box">
 
@@ -714,29 +464,58 @@ AI Test Generator
 </div>
 
 <div class="generator-subtitle">
+
 Choose the class, subject, chapter and language.
+
 <br>
+
 कक्षा, विषय, अध्याय और भाषा चुनें। AI अपने आप नया टेस्ट बनाएगा।
+
 </div>
 
 <div class="generator-grid">
 
 <select id="aiClass">
 
-<option value="">Select Class / कक्षा चुनें</option>
-<option value="9">Class 9 / कक्षा 9</option>
-<option value="10">Class 10 / कक्षा 10</option>
-<option value="11">Class 11 / कक्षा 11</option>
-<option value="12">Class 12 / कक्षा 12</option>
+<option value="">
+Select Class / कक्षा चुनें
+</option>
+
+<option value="9">
+Class 9 / कक्षा 9
+</option>
+
+<option value="10">
+Class 10 / कक्षा 10
+</option>
+
+<option value="11">
+Class 11 / कक्षा 11
+</option>
+
+<option value="12">
+Class 12 / कक्षा 12
+</option>
 
 </select>
 
 <select id="aiSubject">
 
-<option value="">Select Subject / विषय चुनें</option>
-<option value="Physics">Physics / भौतिक विज्ञान</option>
-<option value="Chemistry">Chemistry / रसायन विज्ञान</option>
-<option value="Mathematics">Mathematics / गणित</option>
+<option value="">
+Select Subject / विषय चुनें
+</option>
+
+<option value="Physics">
+Physics / भौतिक विज्ञान
+</option>
+
+<option value="Chemistry">
+Chemistry / रसायन विज्ञान
+</option>
+
+<option value="Mathematics">
+Mathematics / गणित
+</option>
 
 </select>
 
@@ -744,38 +523,76 @@ Choose the class, subject, chapter and language.
 class="full"
 id="aiChapter"
 type="text"
-placeholder="Chapter name / अध्याय का नाम e.g. Electricity / विद्युत"
->
+placeholder="Chapter name / अध्याय का नाम e.g. Electricity / विद्युत">
 
 <select id="aiNumber">
 
-<option value="10">10 Questions / 10 प्रश्न</option>
-<option value="15">15 Questions / 15 प्रश्न</option>
-<option value="20" selected>20 Questions / 20 प्रश्न</option>
-<option value="25">25 Questions / 25 प्रश्न</option>
-<option value="30">30 Questions / 30 प्रश्न</option>
+<option value="10">
+10 Questions / 10 प्रश्न
+</option>
+
+<option value="15">
+15 Questions / 15 प्रश्न
+</option>
+
+<option value="20"
+selected>
+20 Questions / 20 प्रश्न
+</option>
+
+<option value="25">
+25 Questions / 25 प्रश्न
+</option>
+
+<option value="30">
+30 Questions / 30 प्रश्न
+</option>
 
 </select>
 
 <select id="aiDifficulty">
 
-<option value="Easy">Easy / आसान</option>
-<option value="Moderate" selected>Moderate / मध्यम</option>
-<option value="Hard">Hard / कठिन</option>
+<option value="Easy">
+Easy / आसान
+</option>
+
+<option value="Moderate"
+selected>
+Moderate / मध्यम
+</option>
+
+<option value="Hard">
+Hard / कठिन
+</option>
 
 </select>
 
-<select class="full" id="aiLanguage">
+<select
+class="full"
+id="aiLanguage">
 
-<option value="English">English</option>
-<option value="Hindi">हिन्दी</option>
-<option value="Bilingual" selected>English + हिन्दी / Bilingual</option>
+<option value="English">
+English
+</option>
+
+<option value="Hindi">
+हिन्दी
+</option>
+
+<option value="Bilingual"
+selected>
+English + हिन्दी / Bilingual
+</option>
 
 </select>
 
-<select class="full" id="aiQuestionType">
+<select
+class="full"
+id="aiQuestionType">
 
-<option value="MCQ">MCQ / बहुविकल्पीय प्रश्न</option>
+<option value="MCQ">
+MCQ / बहुविकल्पीय प्रश्न
+</option>
 
 </select>
 
@@ -795,23 +612,16 @@ Creating your test... / आपका टेस्ट बनाया जा र�
 </div>
 
 </div>
-
 </div>
 
-
-<!-- ================= TEST AREA ================= -->
-
-<div
-id="testArea"
-class="hidden">
+<div id="testArea" class="hidden">
 
 <div
 class="test-info"
 id="testHeader">
 </div>
 
-<div
-id="questionsContainer">
+<div id="questionsContainer">
 </div>
 
 <button
@@ -823,14 +633,13 @@ SUBMIT TEST / टेस्ट जमा करें
 
 </div>
 
-
-<!-- ================= RESULT ================= -->
-
 <div
 class="test-result"
 id="testResult">
 
-<div>Test Result / परीक्षा परिणाम</div>
+<div>
+Test Result / परीक्षा परिणाम
+</div>
 
 <div
 class="score"
@@ -854,13 +663,11 @@ TAKE ANOTHER TEST
 
 </div>
 
-
 <div class="footer">
 © Invincible Coaching Classes
 </div>
 
 </div>
-
 
 <script>
 
@@ -883,9 +690,11 @@ document.getElementById("testSection");
 doubtModeBtn.addEventListener("click",function(){
 
 doubtModeBtn.classList.add("active");
+
 testModeBtn.classList.remove("active");
 
 doubtSection.classList.remove("hidden");
+
 testSection.classList.add("hidden");
 
 });
@@ -893,79 +702,83 @@ testSection.classList.add("hidden");
 testModeBtn.addEventListener("click",function(){
 
 testModeBtn.classList.add("active");
+
 doubtModeBtn.classList.remove("active");
 
 testSection.classList.remove("hidden");
+
 doubtSection.classList.add("hidden");
 
 });
-
 
 /* =====================================================
 DOUBT DESK
 ===================================================== */
 
 let selectedSubject="Mathematics";
+
 let selectedImage=null;
 
-const questionInput=
+const questionInput =
 document.getElementById("question");
 
-const imageInput=
+const imageInput =
 document.getElementById("imageInput");
 
-const imagePreview=
+const imagePreview =
 document.getElementById("imagePreview");
 
-const removeImageButton=
+const removeImageButton =
 document.getElementById("removeImage");
 
-const askButton=
+const askButton =
 document.getElementById("askBtn");
 
-const loading=
+const loading =
 document.getElementById("loading");
 
-const answerBox=
+const answerBox =
 document.getElementById("answerBox");
 
-const answerText=
+const answerText =
 document.getElementById("answerText");
 
-const feedback=
+const feedback =
 document.getElementById("feedback");
 
-
-document.querySelectorAll(".subject")
+document
+.querySelectorAll(".subject")
 .forEach(function(button){
 
 button.addEventListener("click",function(){
 
-document.querySelectorAll(".subject")
+document
+.querySelectorAll(".subject")
 .forEach(function(btn){
 btn.classList.remove("active");
 });
 
 button.classList.add("active");
 
-selectedSubject=
+selectedSubject =
 button.getAttribute("data-subject");
 
 });
 
 });
 
-
-document.getElementById("uploadBtn")
+document
+.getElementById("uploadBtn")
 .addEventListener("click",function(){
 
 imageInput.removeAttribute("capture");
+
 imageInput.click();
 
 });
 
-
-document.getElementById("cameraBtn")
+document
+.getElementById("cameraBtn")
 .addEventListener("click",function(){
 
 imageInput.setAttribute(
@@ -977,25 +790,30 @@ imageInput.click();
 
 });
 
+imageInput.addEventListener(
+"change",
+function(event){
 
-imageInput.addEventListener("change",function(event){
-
-const file=event.target.files[0];
+const file =
+event.target.files[0];
 
 if(!file)return;
 
 if(!file.type.startsWith("image/")){
 
 alert("Please select an image.");
+
 return;
 
 }
 
-const reader=new FileReader();
+const reader =
+new FileReader();
 
 reader.onload=function(){
 
-const result=reader.result;
+const result =
+reader.result;
 
 selectedImage={
 data:result.split(",")[1],
@@ -1003,7 +821,9 @@ mimeType:file.type
 };
 
 imagePreview.src=result;
+
 imagePreview.style.display="block";
+
 removeImageButton.style.display="block";
 
 };
@@ -1012,21 +832,26 @@ reader.readAsDataURL(file);
 
 });
 
-
-removeImageButton.addEventListener("click",function(){
+removeImageButton
+.addEventListener("click",function(){
 
 selectedImage=null;
+
 imageInput.value="";
+
 imagePreview.src="";
+
 imagePreview.style.display="none";
+
 removeImageButton.style.display="none";
 
 });
 
+askButton
+.addEventListener("click",async function(){
 
-askButton.addEventListener("click",async function(){
-
-const question=questionInput.value.trim();
+const question =
+questionInput.value.trim();
 
 if(!question&&!selectedImage){
 
@@ -1040,43 +865,54 @@ return;
 }
 
 askButton.disabled=true;
+
 loading.style.display="block";
+
 answerBox.style.display="none";
+
 feedback.style.display="none";
 
 try{
 
-const response=await fetch(
-"/api/ask",
-{
+const response =
+await fetch("/api/ask",{
+
 method:"POST",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
 
 subject:selectedSubject,
+
 question:question,
+
 image:selectedImage
 
 })
-}
-);
 
-const data=await response.json();
+});
+
+const data =
+await response.json();
 
 if(!response.ok){
 
 throw new Error(
-data.error||"Unable to get answer."
+data.error||
+"Unable to get answer."
 );
 
 }
 
-answerText.textContent=
+answerText.textContent =
 cleanAnswer(data.answer);
 
 answerBox.style.display="block";
+
 feedback.style.display="block";
 
 answerBox.scrollIntoView({
@@ -1088,53 +924,74 @@ block:"start"
 
 answerBox.style.display="block";
 
-answerText.textContent=
+answerText.textContent =
 "Sorry, answer nahi aa paaya.\n\n"+
 error.message;
 
 }finally{
 
 askButton.disabled=false;
+
 loading.style.display="none";
 
 }
 
 });
 
+/* =====================================================
+CLEAN AI ANSWER
+===================================================== */
 
 function cleanAnswer(text){
 
 if(!text)return "";
 
 return text
+
 .replace(/#{1,6}\s?/g,"")
+
 .replace(/\*\*/g,"")
+
 .replace(/\*/g,"")
+
 .replace(/\\text\{([^}]*)\}/g,"$1")
+
 .replace(/\\mathrm\{([^}]*)\}/g,"$1")
+
 .replace(/\\times/g,"×")
+
 .replace(/\\div/g,"÷")
+
 .replace(/\\cdot/g,"×")
+
 .replace(/\\sqrt\{([^}]*)\}/g,"√($1)")
+
 .replace(/\\left/g,"")
+
 .replace(/\\right/g,"")
+
 .replace(/\\\[/g,"")
+
 .replace(/\\\]/g,"")
+
 .replace(/\$\$/g,"")
+
 .replace(/\$/g,"")
+
 .replace(/```[\s\S]*?```/g,"")
+
 .trim();
 
 }
 
-
-document.getElementById("againBtn")
+document
+.getElementById("againBtn")
 .addEventListener("click",function(){
 
-const oldQuestion=
+const oldQuestion =
 questionInput.value.trim();
 
-questionInput.value=
+questionInput.value =
 oldQuestion+
 "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
 
@@ -1142,31 +999,37 @@ askButton.click();
 
 });
 
-
-document.getElementById("teacherBtn")
+document
+.getElementById("teacherBtn")
 .addEventListener("click",function(){
 
-const studentQuestion=
+const studentQuestion =
 questionInput.value.trim();
 
-const aiExplanation=
+const aiExplanation =
 answerText.textContent.trim();
 
-const whatsappMessage=
+const whatsappMessage =
 
 "Hello Invincible Coaching Classes Teacher.%0A%0A"+
+
 "I need personal help with this doubt.%0A%0A"+
+
 "Subject: "+
 encodeURIComponent(selectedSubject)+
 "%0A%0A"+
+
 "Student Question:%0A"+
 encodeURIComponent(
 studentQuestion||
 "Question from uploaded image"
 )+
+
 "%0A%0A"+
+
 "AI Explanation:%0A"+
 encodeURIComponent(aiExplanation)+
+
 "%0A%0APlease help me with this doubt.";
 
 window.open(
@@ -1176,7 +1039,6 @@ whatsappMessage,
 );
 
 });
-
 
 /* =====================================================
 MANUAL TEST BANK
@@ -1189,21 +1051,36 @@ const testBank={
 {
 id:1,
 question:"The SI unit of resistance is:",
-options:["Watt","Volt","Ohm","Ampere"],
+options:[
+"Watt",
+"Volt",
+"Ohm",
+"Ampere"
+],
 answer:2
 },
 
 {
 id:2,
 question:"According to Ohm's law, at constant temperature:",
-options:["V ∝ I","V ∝ 1/I","R ∝ I","R ∝ V"],
+options:[
+"V ∝ I",
+"V ∝ 1/I",
+"R ∝ I",
+"R ∝ V"
+],
 answer:0
 },
 
 {
 id:3,
 question:"If the potential difference across a resistor is doubled and resistance remains constant, the current becomes:",
-options:["Half","Double","Four times","Unchanged"],
+options:[
+"Half",
+"Double",
+"Four times",
+"Unchanged"
+],
 answer:1
 },
 
@@ -1235,56 +1112,56 @@ answer:1
 
 };
 
-
 /* =====================================================
 TEST VARIABLES
 ===================================================== */
 
 let activeQuestions=[];
+
 let activeTestTitle="";
+
 let activeTestClass="";
+
 let activeTestSubject="";
 
-
-const testClass=
+const testClass =
 document.getElementById("testClass");
 
-const testSubject=
+const testSubject =
 document.getElementById("testSubject");
 
-const testSelect=
+const testSelect =
 document.getElementById("testSelect");
 
-const startTestBtn=
+const startTestBtn =
 document.getElementById("startTestBtn");
 
-const testSetup=
+const testSetup =
 document.getElementById("testSetup");
 
-const testArea=
+const testArea =
 document.getElementById("testArea");
 
-const testHeader=
+const testHeader =
 document.getElementById("testHeader");
 
-const questionsContainer=
+const questionsContainer =
 document.getElementById("questionsContainer");
 
-const submitTestBtn=
+const submitTestBtn =
 document.getElementById("submitTestBtn");
 
-const testResult=
+const testResult =
 document.getElementById("testResult");
 
-const scoreText=
+const scoreText =
 document.getElementById("scoreText");
 
-const resultDetail=
+const resultDetail =
 document.getElementById("resultDetail");
 
-const restartTestBtn=
+const restartTestBtn =
 document.getElementById("restartTestBtn");
-
 
 /* =====================================================
 MANUAL TEST LIST
@@ -1292,23 +1169,26 @@ MANUAL TEST LIST
 
 function updateTestList(){
 
-testSelect.innerHTML=
+testSelect.innerHTML =
 '<option value="">Select Test</option>';
 
-const key=
-testClass.value+"|"+testSubject.value;
+const key =
+testClass.value+
+"|"+
+testSubject.value;
 
-const tests=
-testBank[key]
-?["Electricity Test 01"]
-:[];
+const tests =
+testBank[key]?
+["Electricity Test 01"]:
+[];
 
 tests.forEach(function(testName){
 
-const option=
+const option =
 document.createElement("option");
 
 option.value=testName;
+
 option.textContent=testName;
 
 testSelect.appendChild(option);
@@ -1327,26 +1207,40 @@ testSubject.addEventListener(
 updateTestList
 );
 
-
 /* =====================================================
 START MANUAL TEST
 ===================================================== */
 
-startTestBtn.addEventListener("click",function(){
+startTestBtn.addEventListener(
+"click",
+function(){
 
-const name=
-document.getElementById("studentName")
+const name =
+document
+.getElementById("studentName")
 .value.trim();
 
-const mobile=
-document.getElementById("studentMobile")
+const mobile =
+document
+.getElementById("studentMobile")
 .value.trim();
 
-const cls=testClass.value;
-const subject=testSubject.value;
-const test=testSelect.value;
+const cls =
+testClass.value;
 
-if(!name||!mobile||!cls||!subject||!test){
+const subject =
+testSubject.value;
+
+const test =
+testSelect.value;
+
+if(
+!name||
+!mobile||
+!cls||
+!subject||
+!test
+){
 
 alert(
 "Please fill Name, Mobile Number, Class, Subject and Test."
@@ -1366,8 +1260,10 @@ return;
 
 }
 
-const questions=
-testBank[cls+"|"+subject];
+const questions =
+testBank[
+cls+"|"+subject
+];
 
 if(!questions){
 
@@ -1387,48 +1283,61 @@ test
 
 });
 
-
 /* =====================================================
 AI TEST GENERATOR
 ===================================================== */
 
-const generateTestBtn=
-document.getElementById("generateTestBtn");
+const generateTestBtn =
+document.getElementById(
+"generateTestBtn"
+);
 
-const generatorLoading=
-document.getElementById("generatorLoading");
+const generatorLoading =
+document.getElementById(
+"generatorLoading"
+);
 
-
-generateTestBtn.addEventListener(
+generateTestBtn
+.addEventListener(
 "click",
 async function(){
 
-const cls=
-document.getElementById("aiClass")
-.value;
+const cls =
+document.getElementById(
+"aiClass"
+).value;
 
-const subject=
-document.getElementById("aiSubject")
-.value;
+const subject =
+document.getElementById(
+"aiSubject"
+).value;
 
-const chapter=
-document.getElementById("aiChapter")
-.value.trim();
+const chapter =
+document.getElementById(
+"aiChapter"
+).value.trim();
 
-const numberOfQuestions=
+const numberOfQuestions =
 Number(
-document.getElementById("aiNumber").value
+document.getElementById(
+"aiNumber"
+).value
 );
 
-const difficulty=
-document.getElementById("aiDifficulty").value;
+const difficulty =
+document.getElementById(
+"aiDifficulty"
+).value;
 
-const questionType=
-document.getElementById("aiQuestionType").value;
+const questionType =
+document.getElementById(
+"aiQuestionType"
+).value;
 
-const language=
-document.getElementById("aiLanguage").value;
-
+const language =
+document.getElementById(
+"aiLanguage"
+).value;
 
 if(!cls||!subject||!chapter){
 
@@ -1440,39 +1349,63 @@ return;
 
 }
 
-
 generateTestBtn.disabled=true;
-generatorLoading.style.display="block";
 
+generatorLoading.style.display="block";
 
 try{
 
-const response=
+const response =
 await fetch(
 "/api/generate-test",
 {
+
 method:"POST",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
 
 className:cls,
+
 subject:subject,
+
 chapter:chapter,
-numberOfQuestions:numberOfQuestions,
+
+numberOfQuestions:
+numberOfQuestions,
+
 difficulty:difficulty,
-questionType:questionType,
+
+questionType:
+questionType,
+
 language:language
 
 })
-}
+
+});
+
+const rawText =
+await response.text();
+
+let data;
+
+try{
+
+data =
+JSON.parse(rawText);
+
+}catch(parseError){
+
+throw new Error(
+"Server returned invalid data. Please check /api/generate-test."
 );
 
-
-const data=
-await response.json();
-
+}
 
 if(!response.ok){
 
@@ -1483,21 +1416,24 @@ data.error||
 
 }
 
-
-const generated=
+const generated =
 extractQuestions(data);
-
 
 if(!generated.length){
 
+console.error(
+"AI response received but no valid questions were extracted:",
+data
+);
+
 throw new Error(
-"No questions were returned by AI."
+"AI returned data, but no valid questions could be read. Please try again."
 );
 
 }
 
-
 activeTestClass=cls;
+
 activeTestSubject=subject;
 
 startQuestions(
@@ -1506,8 +1442,12 @@ generated,
 "AI Test — "+chapter
 );
 
-
 }catch(error){
+
+console.error(
+"AI test generation error:",
+error
+);
 
 alert(
 "Test generation failed.\n\n"+
@@ -1517,31 +1457,51 @@ error.message
 }finally{
 
 generateTestBtn.disabled=false;
+
 generatorLoading.style.display="none";
 
 }
 
 });
 
-
 /* =====================================================
-EXTRACT AI QUESTIONS
+FIXED AI QUESTION EXTRACTOR
+
+Supports:
+questions[]
+test.questions[]
+data.questions[]
+
+And:
+correctAnswer
+answer
+correct
+
+Also supports:
+A/B/C/D
+0/1/2/3
+actual option text
 ===================================================== */
 
 function extractQuestions(data){
 
 let questions=[];
 
+/* Locate questions array */
 
 if(Array.isArray(data)){
+
 questions=data;
+
 }
 
 else if(
 data &&
 Array.isArray(data.questions)
 ){
+
 questions=data.questions;
+
 }
 
 else if(
@@ -1549,7 +1509,9 @@ data &&
 data.test &&
 Array.isArray(data.test.questions)
 ){
+
 questions=data.test.questions;
+
 }
 
 else if(
@@ -1557,40 +1519,189 @@ data &&
 data.data &&
 Array.isArray(data.data.questions)
 ){
+
 questions=data.data.questions;
+
 }
 
+/* Normalise questions */
 
 return questions
+
 .map(function(q,index){
 
-let options=
-q.options||
-q.choices||
-[];
-
-let answer=
-q.answer;
-
 if(
-typeof answer==="string" &&
-options.length
+!q||
+typeof q!=="object"
 ){
 
-const letter=
-answer.trim().toUpperCase();
+return null;
 
-if(letter==="A")answer=0;
-if(letter==="B")answer=1;
-if(letter==="C")answer=2;
-if(letter==="D")answer=3;
-
-if(
-answer>=0 &&
-answer<options.length
-){
-answer=Number(answer);
 }
+
+const questionText =
+String(
+
+q.question||
+
+q.questionText||
+
+q.text||
+
+""
+
+).trim();
+
+let options=[];
+
+if(Array.isArray(q.options)){
+
+options=q.options;
+
+}
+
+else if(
+Array.isArray(q.choices)
+){
+
+options=q.choices;
+
+}
+
+else if(
+Array.isArray(q.answers)
+){
+
+options=q.answers;
+
+}
+
+options =
+options.map(function(option){
+
+if(
+option &&
+typeof option==="object"
+){
+
+return String(
+
+option.text||
+
+option.label||
+
+option.value||
+
+""
+
+).trim();
+
+}
+
+return String(
+option||""
+).trim();
+
+});
+
+/* =====================================================
+CORRECT ANSWER
+===================================================== */
+
+let answer =
+q.correctAnswer;
+
+if(
+answer===undefined||
+answer===null||
+answer===""
+){
+
+answer=q.answer;
+
+}
+
+if(
+answer===undefined||
+answer===null||
+answer===""
+){
+
+answer=q.correct;
+
+}
+
+/* Convert answer */
+
+if(typeof answer==="string"){
+
+const value =
+answer
+.trim()
+.toUpperCase();
+
+if(value==="A"){
+
+answer=0;
+
+}
+
+else if(value==="B"){
+
+answer=1;
+
+}
+
+else if(value==="C"){
+
+answer=2;
+
+}
+
+else if(value==="D"){
+
+answer=3;
+
+}
+
+else if(
+/^[0-9]+$/.test(value)
+){
+
+answer=Number(value);
+
+}
+
+else{
+
+const optionIndex =
+options.findIndex(
+function(option){
+
+return option
+.trim()
+.toUpperCase()===value;
+
+});
+
+answer =
+optionIndex!==-1?
+optionIndex:
+NaN;
+
+}
+
+}
+
+else if(typeof answer==="number"){
+
+answer=Number(answer);
+
+}
+
+else{
+
+answer=NaN;
 
 }
 
@@ -1599,31 +1710,39 @@ return{
 id:index+1,
 
 question:
-q.question||
-q.questionText||
-"Question "+(index+1),
+questionText,
 
-options:options,
+options:
+options,
 
-answer:Number(answer)
+answer:
+answer
 
 };
 
 })
+
 .filter(function(q){
 
 return(
-q.question &&
-q.options.length>=2 &&
-Number.isFinite(q.answer) &&
-q.answer>=0 &&
+
+q!==null&&
+
+q.question.length>0&&
+
+q.options.length===4&&
+
+Number.isFinite(q.answer)&&
+
+q.answer>=0&&
+
 q.answer<q.options.length
+
 );
 
 });
 
 }
-
 
 /* =====================================================
 START ANY TEST
@@ -1636,10 +1755,13 @@ testTitle
 ){
 
 activeQuestions=questions;
+
 activeTestTitle=testTitle;
 
 testSetup.classList.add("hidden");
+
 testArea.classList.remove("hidden");
+
 testResult.style.display="none";
 
 testHeader.innerHTML=
@@ -1647,34 +1769,41 @@ testHeader.innerHTML=
 "<strong>"+
 headerTitle+
 "</strong><br>"+
-testTitle+
-" &nbsp; | &nbsp; "+
-questions.length+
-" Questions &nbsp; | &nbsp; "+
-questions.length+
-" Marks";
 
+testTitle+
+
+" &nbsp; | &nbsp; "+
+
+questions.length+
+
+" Questions &nbsp; | &nbsp; "+
+
+questions.length+
+
+" Marks";
 
 questionsContainer.innerHTML="";
 
+questions.forEach(
+function(q,index){
 
-questions.forEach(function(q,index){
+const card =
+document.createElement(
+"div"
+);
 
-const card=
-document.createElement("div");
-
-card.className="question-card";
-
+card.className =
+"question-card";
 
 let optionsHTML="";
 
-
-q.options.forEach(function(
+q.options.forEach(
+function(
 option,
 optionIndex
 ){
 
-optionsHTML+=
+optionsHTML +=
 
 '<label class="option">'+
 
@@ -1685,40 +1814,44 @@ optionIndex+
 '">'+
 
 '<span>'+
-escapeHTML(String(option))+
+escapeHTML(
+String(option)
+)+
 '</span>'+
 
 '</label>';
 
 });
 
-
 card.innerHTML=
 
 '<div class="question-number">'+
-"QUESTION "+
+'QUESTION '+
 (index+1)+
-"</div>"+
+'</div>'+
 
 '<div class="question-text">'+
-escapeHTML(String(q.question))+
-"</div>"+
+escapeHTML(
+String(q.question)
+)+
+'</div>'+
 
 optionsHTML;
 
-
-questionsContainer.appendChild(card);
+questionsContainer
+.appendChild(card);
 
 });
 
-
 window.scrollTo({
+
 top:0,
+
 behavior:"smooth"
+
 });
 
 }
-
 
 /* =====================================================
 SAFE HTML
@@ -1727,46 +1860,67 @@ SAFE HTML
 function escapeHTML(text){
 
 return text
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
-
 
 /* =====================================================
 SUBMIT TEST
 ===================================================== */
 
-submitTestBtn.addEventListener(
+submitTestBtn
+.addEventListener(
 "click",
 function(){
 
-const questions=activeQuestions;
+const questions =
+activeQuestions;
 
 if(!questions.length)return;
 
-
 let correct=0;
+
 let attempted=0;
 
+questions.forEach(
+function(q){
 
-questions.forEach(function(q){
-
-const selected=
+const selected =
 document.querySelector(
+
 'input[name="q'+
 q.id+
 '"]:checked'
-);
 
+);
 
 if(selected){
 
 attempted++;
-
 
 if(
 Number(selected.value)===
@@ -1781,70 +1935,86 @@ correct++;
 
 });
 
+const wrong =
+attempted-
+correct;
 
-const wrong=
-attempted-correct;
+const unanswered =
+questions.length-
+attempted;
 
-const unanswered=
-questions.length-attempted;
-
-const percentage=
+const percentage =
 Math.round(
-(correct/questions.length)*100
+(correct/
+questions.length)*
+100
 );
 
-
-scoreText.textContent=
-correct+"/"+questions.length;
-
+scoreText.textContent =
+correct+
+"/"+
+questions.length;
 
 resultDetail.innerHTML=
 
 "<strong>"+
 percentage+
 "%</strong><br>"+
+
 "Correct: "+
 correct+
-"<br>"+
-"Wrong: "+
+
+"<br>Wrong: "+
 wrong+
-"<br>"+
-"Unanswered: "+
+
+"<br>Unanswered: "+
 unanswered;
 
+testArea.classList.add(
+"hidden"
+);
 
-testArea.classList.add("hidden");
-
-testResult.style.display="block";
-
+testResult.style.display =
+"block";
 
 testResult.scrollIntoView({
+
 behavior:"smooth",
+
 block:"start"
-});
 
 });
 
+});
 
 /* =====================================================
 RESTART
 ===================================================== */
 
-restartTestBtn.addEventListener(
+restartTestBtn
+.addEventListener(
 "click",
 function(){
 
-testResult.style.display="none";
+testResult.style.display =
+"none";
 
-testSetup.classList.remove("hidden");
+testSetup.classList.remove(
+"hidden"
+);
 
-testArea.classList.add("hidden");
+testArea.classList.add(
+"hidden"
+);
 
 activeQuestions=[];
 
 window.scrollTo({
+
 top:0,
+
 behavior:"smooth"
+
 });
 
 });
