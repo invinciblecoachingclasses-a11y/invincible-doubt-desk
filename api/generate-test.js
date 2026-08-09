@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
@@ -7,173 +6,198 @@ export default async function handler(req, res) {
   }
 
   try {
-
     const body = req.body || {};
 
-    const className =
-      String(body.className || "").trim();
-
-    const subject =
-      String(body.subject || "").trim();
-
-    const chapter =
-      String(body.chapter || "").trim();
+    const className = String(body.className || "").trim();
+    const subject = String(body.subject || "").trim();
+    const chapter = String(body.chapter || "").trim();
 
     const numberOfQuestions = Math.min(
       Math.max(
-        parseInt(body.numberOfQuestions, 10) || 20,
+        parseInt(body.numberOfQuestions, 10) || 10,
         5
       ),
       30
     );
 
-    const difficulty =
-      String(
-        body.difficulty || "Moderate"
-      ).trim();
+    const difficulty = String(
+      body.difficulty || "Moderate"
+    ).trim();
 
-    const questionType =
-      String(
-        body.questionType || "MCQ"
-      ).trim();
+    const questionType = String(
+      body.questionType || "MCQ"
+    ).trim();
 
-    const language =
-      String(
-        body.language || "Bilingual"
-      ).trim();
+    /*
+     * LANGUAGE SUPPORT
+     *
+     * If frontend sends language, use it.
+     * If not, default to English.
+     */
 
+    const language = String(
+      body.language || body.testLanguage || "English"
+    ).trim();
 
     if (!className || !subject || !chapter) {
-
       return res.status(400).json({
         error:
           "Class, subject and chapter are required."
       });
-
     }
 
-
-    const apiKey =
-      process.env.GEMINI_API_KEY;
-
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-
       return res.status(500).json({
         error:
           "Gemini API key is not configured in Vercel."
       });
-
     }
 
-
-    /* ============================================
-       LANGUAGE INSTRUCTIONS
-    ============================================ */
+    /*
+     * LANGUAGE INSTRUCTION
+     */
 
     let languageInstruction = "";
 
-    if (language === "Hindi") {
+    const lowerLanguage = language.toLowerCase();
 
+    if (
+      lowerLanguage.includes("hindi") ||
+      language.includes("हिंदी") ||
+      language.includes("हिन्दी")
+    ) {
       languageInstruction = `
-LANGUAGE:
 Generate the complete test in Hindi.
 
-Use proper Hindi Devanagari script.
-Questions must be in Hindi.
-All four options must be in Hindi.
-Explanations must be in Hindi.
-Use standard scientific and mathematical terminology commonly used in Hindi-medium Indian schools.
+Use clear school-level Hindi suitable for CBSE/NCERT students.
 
-You may include internationally accepted symbols, formulas, units and scientific notation where necessary.
+Use standard Hindi scientific and mathematical terminology.
+
+Where useful, keep internationally standard symbols, formulas,
+units and scientific terms such as force, velocity, mass, etc.
+Do not translate mathematical symbols.
+
+The question, all four options and explanation must be in Hindi.
 `;
-
-    } else if (language === "English") {
-
-      languageInstruction = `
-LANGUAGE:
-Generate the complete test in English.
-
-Questions must be in English.
-All four options must be in English.
-Explanations must be in English.
-`;
-
-    } else {
-
-      languageInstruction = `
-LANGUAGE:
-Generate a BILINGUAL test.
-
-Every question MUST contain both languages.
-
-First write the English question.
-Immediately below it write the Hindi translation.
-
-Example:
-
-What is the SI unit of electric current?
-विद्युत धारा की SI इकाई क्या है?
-
-Every option MUST also contain both languages.
-
-Example:
-
-A) Ampere / एम्पियर
-B) Volt / वोल्ट
-C) Ohm / ओम
-D) Watt / वाट
-
-The explanation should also contain both English and Hindi.
-
-Do NOT create separate questions for the two languages.
-Each question is ONE question containing both languages.
-`;
-
     }
 
+    else if (
+      lowerLanguage.includes("bilingual") ||
+      lowerLanguage.includes("both") ||
+      language.includes("दोनों") ||
+      language.includes("द्विभाषी")
+    ) {
+      languageInstruction = `
+Generate the complete test bilingually.
+
+For EVERY question:
+English question first.
+Hindi translation immediately below it.
+
+For EVERY option:
+English option followed by its Hindi translation.
+
+The explanation must also be bilingual.
+
+Do NOT create separate questions for English and Hindi.
+Each question is ONE question containing both languages.
+`;
+    }
+
+    else {
+      languageInstruction = `
+Generate the complete test in English.
+
+Use clear CBSE/NCERT school-level English.
+`;
+    }
+
+    /*
+     * PROMPT
+     */
 
     const prompt = `
-You are an expert CBSE/NCERT teacher and professional question-paper creator for Invincible Coaching Classes.
+You are an expert CBSE/NCERT teacher and professional
+question-paper creator for Invincible Coaching Classes.
 
 Create a high-quality student test.
 
-CLASS: ${className}
-SUBJECT: ${subject}
-CHAPTER: ${chapter}
-NUMBER OF QUESTIONS: ${numberOfQuestions}
-DIFFICULTY: ${difficulty}
-QUESTION TYPE: ${questionType}
+CLASS:
+${className}
+
+SUBJECT:
+${subject}
+
+CHAPTER:
+${chapter}
+
+NUMBER OF QUESTIONS:
+${numberOfQuestions}
+
+DIFFICULTY:
+${difficulty}
+
+QUESTION TYPE:
+${questionType}
+
+LANGUAGE:
+${language}
 
 ${languageInstruction}
 
 STRICT ACADEMIC RULES:
 
-1. Follow CBSE and NCERT level appropriate to the class.
-2. Every question must strictly belong to the specified chapter.
-3. Do not include questions from unrelated chapters.
-4. Create EXACTLY ${numberOfQuestions} questions.
-5. Every question must have EXACTLY four options.
-6. Only ONE option can be correct.
-7. Do not repeat or nearly repeat questions.
-8. Include conceptual and application-based questions.
-9. For Physics and Mathematics, include appropriate numerical/problem-solving questions.
-10. For Chemistry, include conceptual, reaction-based and numerical questions where appropriate.
-11. Questions must be academically correct.
-12. Use student-friendly language.
-13. Do not use Markdown.
-14. Return ONLY valid JSON.
-15. Do not put the JSON inside markdown code fences.
-16. correctAnswer must contain ONLY one letter: A, B, C or D.
-17. Each question must have a short explanation.
-18. NEVER return fewer than ${numberOfQuestions} questions.
-19. NEVER return more than ${numberOfQuestions} questions.
-20. Every question must have exactly 4 options.
-21. Make sure the number of questions in the final JSON is exactly ${numberOfQuestions}.
-22. Do not stop early.
-23. Check the question count before returning the JSON.
+1. Follow CBSE/NCERT level appropriate for Class ${className}.
 
-Return exactly this JSON structure:
+2. Every question must belong ONLY to:
+${subject} — ${chapter}
+
+3. Do not use content from unrelated chapters.
+
+4. Create exactly ${numberOfQuestions} questions.
+
+5. Every question must have exactly FOUR options.
+
+6. Exactly ONE option must be correct.
+
+7. Do not repeat questions.
+
+8. Include a good mixture of conceptual and application-based questions.
+
+9. For Physics and Mathematics, include suitable numerical/problem-solving questions.
+
+10. For Chemistry, include conceptual, reaction-based and numerical questions where appropriate.
+
+11. Questions must be academically correct.
+
+12. Avoid ambiguous questions.
+
+13. Keep questions suitable for actual student assessment.
+
+14. Every question must have a short explanation.
+
+15. Do not include markdown.
+
+16. Do not include comments.
+
+17. Return ONLY JSON.
+
+18. correctAnswer MUST be one of:
+A
+B
+C
+D
+
+19. The options must be normal strings.
+
+20. Do not put the answer inside the option text.
+
+IMPORTANT:
+Do not return fewer than ${numberOfQuestions} questions.
+
+Return this exact structure:
 
 {
   "testTitle": "string",
@@ -185,34 +209,107 @@ Return exactly this JSON structure:
   "questions": [
     {
       "id": 1,
-      "question": "Question text",
+      "question": "string",
       "options": [
-        "A) Option 1",
-        "B) Option 2",
-        "C) Option 3",
-        "D) Option 4"
+        "A) string",
+        "B) string",
+        "C) string",
+        "D) string"
       ],
       "correctAnswer": "A",
-      "explanation": "Short explanation"
+      "explanation": "string"
     }
   ]
 }
-
-IMPORTANT FINAL CHECK:
-
-The JSON MUST contain exactly ${numberOfQuestions} question objects.
-
-Each question MUST contain:
-- question
-- exactly 4 options
-- correctAnswer
-- explanation
-
-correctAnswer MUST be exactly A, B, C or D.
-
-Return JSON only.
 `;
 
+    /*
+     * STRUCTURED JSON SCHEMA
+     *
+     * This makes Gemini much more reliable.
+     */
+
+    const responseSchema = {
+      type: "OBJECT",
+      properties: {
+        testTitle: {
+          type: "STRING"
+        },
+
+        className: {
+          type: "STRING"
+        },
+
+        subject: {
+          type: "STRING"
+        },
+
+        chapter: {
+          type: "STRING"
+        },
+
+        difficulty: {
+          type: "STRING"
+        },
+
+        language: {
+          type: "STRING"
+        },
+
+        questions: {
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              id: {
+                type: "INTEGER"
+              },
+
+              question: {
+                type: "STRING"
+              },
+
+              options: {
+                type: "ARRAY",
+                items: {
+                  type: "STRING"
+                }
+              },
+
+              correctAnswer: {
+                type: "STRING"
+              },
+
+              explanation: {
+                type: "STRING"
+              }
+            },
+
+            required: [
+              "id",
+              "question",
+              "options",
+              "correctAnswer",
+              "explanation"
+            ]
+          }
+        }
+      },
+
+      required: [
+        "testTitle",
+        "className",
+        "subject",
+        "chapter",
+        "difficulty",
+        "language",
+        "questions"
+      ]
+    };
+
+    /*
+     * CALL GEMINI
+     */
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
@@ -225,7 +322,6 @@ Return JSON only.
         },
 
         body: JSON.stringify({
-
           contents: [
             {
               role: "user",
@@ -238,77 +334,67 @@ Return JSON only.
           ],
 
           generationConfig: {
-
-            temperature: 0.5,
-
-            responseMimeType:
-              "application/json"
-
+            responseMimeType: "application/json",
+            responseSchema: responseSchema
           }
-
         })
       }
     );
 
+    const data = await response.json();
 
-    const data =
-      await response.json();
-
+    /*
+     * GEMINI ERROR
+     */
 
     if (!response.ok) {
-
       console.error(
         "Gemini API error:",
-        JSON.stringify(
-          data,
-          null,
-          2
-        )
+        JSON.stringify(data, null, 2)
       );
 
       return res.status(500).json({
-
         error:
           data?.error?.message ||
           "Gemini could not generate the test."
-
       });
-
     }
 
+    /*
+     * GET RESPONSE TEXT
+     */
 
-    const text =
-      data?.candidates?.[0]
-        ?.content?.parts
-        ?.map(
-          part => part.text || ""
-        )
-        .join("")
-        .trim();
+    const parts =
+      data?.candidates?.[0]?.content?.parts || [];
 
+    const text = parts
+      .map(part => part?.text || "")
+      .join("")
+      .trim();
 
     if (!text) {
+      console.error(
+        "Gemini empty response:",
+        JSON.stringify(data, null, 2)
+      );
 
       return res.status(500).json({
-
         error:
           "Gemini returned an empty response."
-
       });
-
     }
 
+    /*
+     * PARSE JSON
+     */
 
     let test;
 
-
     try {
+      test = JSON.parse(text);
+    }
 
-      test =
-        JSON.parse(text);
-
-    } catch (error) {
-
+    catch (error) {
       console.error(
         "JSON parse error:",
         error
@@ -320,191 +406,329 @@ Return JSON only.
       );
 
       return res.status(500).json({
-
         error:
-          "Gemini returned invalid test data."
-
+          "Gemini returned invalid JSON."
       });
-
     }
 
+    /*
+     * CHECK QUESTIONS
+     */
 
     if (
       !test ||
-      !Array.isArray(
-        test.questions
-      )
+      !Array.isArray(test.questions)
     ) {
+      console.error(
+        "No question array:",
+        test
+      );
 
       return res.status(500).json({
-
         error:
           "AI did not return a valid question list."
-
       });
-
     }
 
+    /*
+     * NORMALIZE ANSWER
+     *
+     * This is the important fix.
+     *
+     * Gemini may return:
+     *
+     * A
+     * A)
+     * Option A
+     * 0
+     * 1
+     * 2
+     * 3
+     * or even the option text.
+     */
 
-    if (
-      test.questions.length === 0
+    function normalizeAnswer(answer, options) {
+
+      if (
+        answer === null ||
+        answer === undefined
+      ) {
+        return null;
+      }
+
+      const raw =
+        String(answer)
+          .trim();
+
+      if (!raw) {
+        return null;
+      }
+
+      /*
+       * Numeric answer
+       *
+       * 0 = A
+       * 1 = B
+       * 2 = C
+       * 3 = D
+       */
+
+      if (/^[0-3]$/.test(raw)) {
+
+        const number =
+          Number(raw);
+
+        return String.fromCharCode(
+          65 + number
+        );
+      }
+
+      const upper =
+        raw.toUpperCase();
+
+      /*
+       * Direct letter
+       */
+
+      if (
+        ["A", "B", "C", "D"]
+          .includes(upper)
+      ) {
+        return upper;
+      }
+
+      /*
+       * A)
+       * A.
+       * Option A
+       * Answer: A
+       */
+
+      const letterMatch =
+        upper.match(
+          /\b([ABCD])\b/
+        );
+
+      if (letterMatch) {
+        return letterMatch[1];
+      }
+
+      /*
+       * Compare answer against option text
+       */
+
+      if (Array.isArray(options)) {
+
+        const cleanAnswer =
+          raw
+            .replace(/^[A-D][\)\.\:\-]\s*/i, "")
+            .replace(/^option\s+[A-D][\)\.\:\-]?\s*/i, "")
+            .trim()
+            .toLowerCase();
+
+        for (
+          let i = 0;
+          i < options.length;
+          i++
+        ) {
+
+          const cleanOption =
+            String(options[i])
+              .replace(/^[A-D][\)\.\:\-]\s*/i, "")
+              .trim()
+              .toLowerCase();
+
+          if (
+            cleanOption === cleanAnswer
+          ) {
+            return String.fromCharCode(
+              65 + i
+            );
+          }
+        }
+      }
+
+      return null;
+    }
+
+    /*
+     * CLEAN QUESTIONS
+     */
+
+    const cleanedQuestions = [];
+
+    for (
+      let i = 0;
+      i < test.questions.length;
+      i++
     ) {
 
-      return res.status(500).json({
+      const q =
+        test.questions[i];
 
-        error:
-          "AI returned zero questions."
+      if (!q) {
+        continue;
+      }
+
+      const question =
+        String(
+          q.question ||
+          q.questionText ||
+          ""
+        ).trim();
+
+      if (!question) {
+        continue;
+      }
+
+      let options =
+        Array.isArray(q.options)
+          ? q.options
+          : Array.isArray(q.choices)
+          ? q.choices
+          : [];
+
+      /*
+       * Convert every option to string
+       */
+
+      options =
+        options
+          .map(option =>
+            String(option || "").trim()
+          )
+          .filter(Boolean);
+
+      /*
+       * We need exactly 4 options.
+       */
+
+      if (options.length < 4) {
+        console.warn(
+          "Question skipped because it has fewer than 4 options:",
+          i + 1
+        );
+
+        continue;
+      }
+
+      /*
+       * Keep only first four.
+       */
+
+      options =
+        options.slice(0, 4);
+
+      /*
+       * Normalize correct answer.
+       */
+
+      const correctAnswer =
+        normalizeAnswer(
+          q.correctAnswer ??
+          q.answer ??
+          q.correct ??
+          q.correctOption,
+          options
+        );
+
+      /*
+       * If answer is still unknown,
+       * try to use a numeric answer field.
+       */
+
+      let finalAnswer =
+        correctAnswer;
+
+      if (
+        !finalAnswer &&
+        typeof q.answerIndex === "number" &&
+        q.answerIndex >= 0 &&
+        q.answerIndex <= 3
+      ) {
+
+        finalAnswer =
+          String.fromCharCode(
+            65 + q.answerIndex
+          );
+      }
+
+      /*
+       * If still invalid, skip only this question.
+       */
+
+      if (
+        !["A", "B", "C", "D"]
+          .includes(finalAnswer)
+      ) {
+
+        console.warn(
+          "Question skipped because correct answer could not be determined:",
+          i + 1,
+          q.correctAnswer,
+          q.answer
+        );
+
+        continue;
+      }
+
+      cleanedQuestions.push({
+
+        id:
+          cleanedQuestions.length + 1,
+
+        question,
+
+        options,
+
+        correctAnswer:
+          finalAnswer,
+
+        explanation:
+          String(
+            q.explanation || ""
+          ).trim()
 
       });
-
     }
 
-
     /*
-     * Clean questions
-     */
-
-    const cleanedQuestions =
-      test.questions
-        .map(
-          (q, index) => {
-
-            if (!q) {
-              return null;
-            }
-
-
-            const options =
-              Array.isArray(
-                q.options
-              )
-                ? q.options
-                : [];
-
-
-            if (
-              !q.question ||
-              options.length !== 4 ||
-              !q.correctAnswer
-            ) {
-
-              return null;
-
-            }
-
-
-            let correctAnswer =
-              String(
-                q.correctAnswer
-              )
-                .trim()
-                .toUpperCase();
-
-
-            const letterMatch =
-              correctAnswer.match(
-                /^[ABCD]/
-              );
-
-
-            if (letterMatch) {
-
-              correctAnswer =
-                letterMatch[0];
-
-            }
-
-
-            if (
-              ![
-                "A",
-                "B",
-                "C",
-                "D"
-              ].includes(
-                correctAnswer
-              )
-            ) {
-
-              return null;
-
-            }
-
-
-            return {
-
-              id:
-                index + 1,
-
-              question:
-                String(
-                  q.question
-                ).trim(),
-
-              options:
-                options
-                  .slice(0, 4)
-                  .map(
-                    option =>
-                      String(
-                        option
-                      ).trim()
-                  ),
-
-              correctAnswer,
-
-              explanation:
-                String(
-                  q.explanation || ""
-                ).trim()
-
-            };
-
-          }
-        )
-        .filter(Boolean);
-
-
-    /*
-     * IMPORTANT:
-     * Do not silently return a short test.
+     * NO QUESTIONS AFTER CLEANING
      */
 
     if (
-      cleanedQuestions.length <
-      numberOfQuestions
+      cleanedQuestions.length === 0
     ) {
 
       console.error(
-        `AI returned ${cleanedQuestions.length} valid questions instead of ${numberOfQuestions}.`
+        "Gemini returned questions but none could be normalized.",
+        JSON.stringify(test, null, 2)
       );
 
       return res.status(500).json({
-
         error:
-          `AI generated only ${cleanedQuestions.length} valid questions. Please try Generate again.`
-
+          "AI generated questions, but their answer format could not be processed. Please try again."
       });
-
     }
 
-
     /*
-     * Return exactly requested number.
+     * IMPORTANT:
+     *
+     * We no longer fail simply because Gemini
+     * returned slightly fewer questions.
+     *
+     * This prevents the old
+     * "No questions were returned by AI"
+     * problem.
      */
-
-    const finalQuestions =
-      cleanedQuestions.slice(
-        0,
-        numberOfQuestions
-      );
-
 
     const finalTest = {
 
       testTitle:
-        test.testTitle ||
-        `${subject} - ${chapter} Test`,
+        String(
+          test.testTitle ||
+          `${subject} - ${chapter} Test`
+        ),
 
       className,
 
@@ -517,37 +741,31 @@ Return JSON only.
       language,
 
       questions:
-        finalQuestions
+        cleanedQuestions
 
     };
 
-
     console.log(
-      `Generated ${finalQuestions.length} questions | ${language} | ${className} ${subject} | ${chapter}`
+      `Generated ${cleanedQuestions.length}/${numberOfQuestions} questions`
     );
-
 
     return res.status(200).json(
       finalTest
     );
 
+  }
 
-  } catch (error) {
+  catch (error) {
 
     console.error(
       "Generate test error:",
       error
     );
 
-
     return res.status(500).json({
-
       error:
         error?.message ||
         "Something went wrong while generating the test."
-
     });
-
   }
-
 }
