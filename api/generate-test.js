@@ -6,18 +6,32 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      className,
-      subject,
-      chapter,
-      numberOfQuestions = 20,
-      difficulty = "Moderate",
-      questionType = "MCQ"
-    } = req.body || {};
+    const body = req.body || {};
+
+    const className = String(body.className || "").trim();
+    const subject = String(body.subject || "").trim();
+    const chapter = String(body.chapter || "").trim();
+
+    const numberOfQuestions = Math.min(
+      Math.max(
+        parseInt(body.numberOfQuestions, 10) || 20,
+        5
+      ),
+      30
+    );
+
+    const difficulty = String(
+      body.difficulty || "Moderate"
+    ).trim();
+
+    const questionType = String(
+      body.questionType || "MCQ"
+    ).trim();
 
     if (!className || !subject || !chapter) {
       return res.status(400).json({
-        error: "Class, subject and chapter are required."
+        error:
+          "Class, subject and chapter are required."
       });
     }
 
@@ -25,78 +39,88 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "Gemini API key is not configured."
+        error:
+          "Gemini API key is not configured in Vercel."
       });
     }
 
     const prompt = `
-You are an expert Indian school teacher and professional test-paper creator for Invincible Coaching Classes.
+You are an expert CBSE/NCERT teacher and professional question-paper creator for Invincible Coaching Classes.
 
-Create a high-quality student test using the following information:
+Create a student test.
 
-Class: ${className}
-Subject: ${subject}
-Chapter: ${chapter}
-Number of Questions: ${numberOfQuestions}
-Difficulty: ${difficulty}
-Question Type: ${questionType}
+CLASS: ${className}
+SUBJECT: ${subject}
+CHAPTER: ${chapter}
+NUMBER OF QUESTIONS: ${numberOfQuestions}
+DIFFICULTY: ${difficulty}
+QUESTION TYPE: ${questionType}
 
-IMPORTANT RULES:
+STRICT RULES:
 
-1. Follow the CBSE/NCERT level appropriate for the given class.
-2. Questions must strictly belong to the given subject and chapter.
-3. Do not create questions from unrelated chapters.
-4. Questions must be academically correct.
-5. Avoid duplicate or nearly duplicate questions.
-6. Use a balanced mixture of conceptual and application-based questions.
-7. For Physics and Mathematics, include numerical/problem-solving questions where appropriate.
-8. For Chemistry, include conceptual, reaction-based and numerical questions where appropriate.
-9. Keep language clear and student-friendly.
-10. Make the test useful for actual classroom assessment.
-11. Every question must have exactly one correct answer.
-12. Provide the correct answer separately.
-13. Provide a short explanation for every answer.
-14. Do not use Markdown.
-15. Return ONLY valid JSON.
+1. Follow CBSE and NCERT level appropriate to the class.
+2. Every question must be strictly from the specified chapter.
+3. Do not include questions from other chapters.
+4. Create exactly ${numberOfQuestions} questions.
+5. Every question must have exactly four options.
+6. Only ONE option can be correct.
+7. Do not repeat questions.
+8. Mix conceptual and application-based questions.
+9. For Physics and Mathematics, include appropriate numerical/problem-solving questions.
+10. For Chemistry, include conceptual, reaction-based and numerical questions where appropriate.
+11. Questions must be academically correct.
+12. Keep wording clear and student-friendly.
+13. Do not use Markdown.
+14. Return ONLY valid JSON.
+15. Do not put ```json or ``` around the response.
+16. correctAnswer must contain ONLY one letter: A, B, C or D.
+17. The explanation must briefly explain why that answer is correct.
 
-Return JSON in exactly this structure:
+Return exactly this JSON structure:
 
 {
   "testTitle": "string",
-  "className": "string",
-  "subject": "string",
-  "chapter": "string",
-  "difficulty": "string",
+  "className": "${className}",
+  "subject": "${subject}",
+  "chapter": "${chapter}",
+  "difficulty": "${difficulty}",
   "questions": [
     {
       "id": 1,
-      "question": "string",
+      "question": "Question text",
       "options": [
-        "A) string",
-        "B) string",
-        "C) string",
-        "D) string"
+        "A) Option 1",
+        "B) Option 2",
+        "C) Option 3",
+        "D) Option 4"
       ],
       "correctAnswer": "A",
-      "explanation": "string"
+      "explanation": "Short explanation"
     }
   ]
 }
 
-Make exactly ${numberOfQuestions} questions.
+Remember:
+- Exactly ${numberOfQuestions} questions.
+- Exactly 4 options per question.
+- Exactly one correct answer.
+- JSON only.
 `;
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "x-goog-api-key": apiKey
         },
+
         body: JSON.stringify({
           contents: [
             {
+              role: "user",
               parts: [
                 {
                   text: prompt
@@ -104,8 +128,8 @@ Make exactly ${numberOfQuestions} questions.
               ]
             }
           ],
+
           generationConfig: {
-            temperature: 0.7,
             responseMimeType: "application/json"
           }
         })
@@ -115,20 +139,33 @@ Make exactly ${numberOfQuestions} questions.
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini API error:", data);
+      console.error(
+        "Gemini API error:",
+        JSON.stringify(data, null, 2)
+      );
 
       return res.status(500).json({
-        error: "Gemini could not generate the test.",
-        details: data
+        error:
+          data?.error?.message ||
+          "Gemini could not generate the test."
       });
     }
 
     const text =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      data?.candidates?.[0]?.content?.parts
+        ?.map(part => part.text || "")
+        .join("")
+        .trim();
 
     if (!text) {
+      console.error(
+        "Empty Gemini response:",
+        JSON.stringify(data, null, 2)
+      );
+
       return res.status(500).json({
-        error: "Gemini returned an empty response."
+        error:
+          "Gemini returned an empty response."
       });
     }
 
@@ -136,21 +173,171 @@ Make exactly ${numberOfQuestions} questions.
 
     try {
       test = JSON.parse(text);
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
+    } catch (error) {
+      console.error(
+        "JSON parse error:",
+        error
+      );
+
+      console.error(
+        "Gemini raw response:",
+        text
+      );
 
       return res.status(500).json({
-        error: "Gemini returned invalid test data."
+        error:
+          "Gemini returned invalid test data."
       });
     }
 
-    return res.status(200).json(test);
+    if (
+      !test ||
+      !Array.isArray(test.questions)
+    ) {
+      console.error(
+        "Invalid test structure:",
+        test
+      );
+
+      return res.status(500).json({
+        error:
+          "No questions were returned by AI."
+      });
+    }
+
+    if (test.questions.length === 0) {
+      return res.status(500).json({
+        error:
+          "AI returned zero questions."
+      });
+    }
+
+    /*
+     * Clean and validate every question
+     */
+
+    const cleanedQuestions =
+      test.questions
+        .map((q, index) => {
+
+          if (!q) {
+            return null;
+          }
+
+          const options =
+            Array.isArray(q.options)
+              ? q.options
+              : [];
+
+          if (
+            !q.question ||
+            options.length !== 4 ||
+            !q.correctAnswer
+          ) {
+            return null;
+          }
+
+          let correctAnswer =
+            String(
+              q.correctAnswer
+            )
+              .trim()
+              .toUpperCase();
+
+          /*
+           * If Gemini accidentally returns
+           * "A) ..." or "Option A",
+           * extract the letter.
+           */
+
+          const letterMatch =
+            correctAnswer.match(
+              /^[ABCD]/
+            );
+
+          if (letterMatch) {
+            correctAnswer =
+              letterMatch[0];
+          }
+
+          if (
+            !["A", "B", "C", "D"].includes(
+              correctAnswer
+            )
+          ) {
+            return null;
+          }
+
+          return {
+            id: index + 1,
+
+            question:
+              String(q.question).trim(),
+
+            options:
+              options
+                .slice(0, 4)
+                .map(option =>
+                  String(option).trim()
+                ),
+
+            correctAnswer,
+
+            explanation:
+              String(
+                q.explanation || ""
+              ).trim()
+          };
+        })
+        .filter(Boolean);
+
+    if (cleanedQuestions.length === 0) {
+      return res.status(500).json({
+        error:
+          "AI generated questions, but they were not in the required format."
+      });
+    }
+
+    /*
+     * Return a clean response to frontend
+     */
+
+    const finalTest = {
+      testTitle:
+        test.testTitle ||
+        `${subject} - ${chapter} Test`,
+
+      className,
+
+      subject,
+
+      chapter,
+
+      difficulty,
+
+      questions:
+        cleanedQuestions
+    };
+
+    console.log(
+      `Generated ${cleanedQuestions.length} questions for ${className} ${subject} - ${chapter}`
+    );
+
+    return res.status(200).json(
+      finalTest
+    );
 
   } catch (error) {
-    console.error("Generate test error:", error);
+
+    console.error(
+      "Generate test error:",
+      error
+    );
 
     return res.status(500).json({
-      error: "Something went wrong while generating the test."
+      error:
+        error?.message ||
+        "Something went wrong while generating the test."
     });
   }
 }
