@@ -12,9 +12,9 @@ export default async function handler(req, res) {
     const subject = String(body.subject || "").trim();
     const chapter = String(body.chapter || "").trim();
 
-    const requestedQuestions = Math.min(
+    const numberOfQuestions = Math.min(
       Math.max(
-        parseInt(body.numberOfQuestions, 10) || 20,
+        parseInt(body.numberOfQuestions, 10) || 10,
         5
       ),
       30
@@ -38,522 +38,402 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "Gemini API key is not configured in Vercel."
+        error: "GEMINI_API_KEY is missing in Vercel."
       });
     }
 
     /*
      * IMPORTANT:
      * We are NOT using Gemini 2.5.
-     * Current stable model.
+     * Current production model.
      */
     const MODEL = "gemini-3.6-flash";
 
     /*
-     * Generate bilingual questions.
+     * EXACT JSON SCHEMA
      *
-     * Existing frontend structure is preserved:
-     * question
-     * options
-     * correctAnswer
-     * explanation
-     *
-     * English + Hindi are placed together in the same fields,
-     * so the existing HTML does not need to be changed.
+     * This forces Gemini to return:
+     * - exactly the requested number of questions
+     * - exactly 4 options
+     * - correct answer
+     * - explanation
      */
+    const questionSchema = {
+      type: "object",
+      properties: {
+        id: {
+          type: "integer"
+        },
+
+        question: {
+          type: "string",
+          description:
+            "Bilingual question. English first, then Hindi."
+        },
+
+        options: {
+          type: "array",
+          minItems: 4,
+          maxItems: 4,
+          items: {
+            type: "string",
+            description:
+              "Bilingual option. English first, then Hindi."
+          }
+        },
+
+        correctAnswer: {
+          type: "string",
+          enum: ["A", "B", "C", "D"]
+        },
+
+        explanation: {
+          type: "string",
+          description:
+            "Bilingual explanation. English first, then Hindi."
+        }
+      },
+
+      required: [
+        "id",
+        "question",
+        "options",
+        "correctAnswer",
+        "explanation"
+      ]
+    };
+
+    const responseSchema = {
+      type: "object",
+
+      properties: {
+        testTitle: {
+          type: "string"
+        },
+
+        className: {
+          type: "string"
+        },
+
+        subject: {
+          type: "string"
+        },
+
+        chapter: {
+          type: "string"
+        },
+
+        difficulty: {
+          type: "string"
+        },
+
+        questions: {
+          type: "array",
+
+          minItems: numberOfQuestions,
+          maxItems: numberOfQuestions,
+
+          items: questionSchema
+        }
+      },
+
+      required: [
+        "testTitle",
+        "className",
+        "subject",
+        "chapter",
+        "difficulty",
+        "questions"
+      ]
+    };
 
     const prompt = `
-You are an expert CBSE/NCERT teacher and professional question-paper creator for Invincible Coaching Classes.
+You are the official AI test generator for Invincible Coaching Classes.
 
-Create a high-quality student test.
+Create a CBSE/NCERT student test.
 
-CLASS: ${className}
-SUBJECT: ${subject}
-CHAPTER: ${chapter}
-NUMBER OF QUESTIONS REQUIRED: ${requestedQuestions}
-DIFFICULTY: ${difficulty}
-QUESTION TYPE: ${questionType}
+CLASS:
+${className}
 
-IMPORTANT LANGUAGE REQUIREMENT:
+SUBJECT:
+${subject}
 
-Every question must be bilingual.
+CHAPTER:
+${chapter}
 
-First write the English version.
-Then write the Hindi version.
+NUMBER OF QUESTIONS:
+${numberOfQuestions}
 
-Format:
+DIFFICULTY:
+${difficulty}
+
+QUESTION TYPE:
+${questionType}
+
+LANGUAGE REQUIREMENT:
+The test must work for BOTH English-medium and Hindi-medium students.
+
+Every question MUST be bilingual.
+
+Write:
 English question
 Hindi question
 
-Every option must also be bilingual.
+Every option MUST be bilingual.
 
 Example:
 A) 9.8 m/s² / 9.8 मीटर/सेकंड²
 
-Every explanation must also be bilingual.
+Every explanation MUST be bilingual.
 
-The student should be able to understand the complete test in either English or Hindi medium.
+Example:
+English explanation / हिंदी में व्याख्या
 
-STRICT ACADEMIC RULES:
+IMPORTANT ACADEMIC RULES:
 
-1. Follow CBSE and NCERT level appropriate to the class.
-2. Every question must be strictly from the specified chapter.
-3. Do not include questions from any other chapter.
-4. Generate EXACTLY ${requestedQuestions} questions.
-5. Do NOT generate fewer than ${requestedQuestions} questions.
-6. Every question must have EXACTLY four options.
-7. Options must be A, B, C and D.
-8. Only ONE option can be correct.
-9. Do not repeat questions.
-10. Mix conceptual and application-based questions.
-11. For Physics and Mathematics, include appropriate numerical/problem-solving questions.
-12. For Chemistry, include conceptual, reaction-based and numerical questions where appropriate.
-13. Questions must be academically correct.
-14. Use proper mathematical notation in plain text.
-15. Keep wording clear and student-friendly.
-16. Do not use Markdown.
-17. Do not use code fences.
-18. Return ONLY valid JSON.
-19. Do not write anything before or after the JSON.
-20. correctAnswer must contain ONLY one letter: A, B, C or D.
-21. The explanation must briefly explain why the answer is correct.
-22. Make sure the Hindi translation has the same meaning as the English question.
-23. Do not translate scientific terms incorrectly.
-24. Use standard school-level Hindi terminology.
-25. If a scientific term is normally used in English in Indian classrooms, you may keep the English term in brackets.
+1. Follow CBSE and NCERT level for ${className}.
+2. Questions must strictly belong to the chapter "${chapter}".
+3. Do not use questions from another chapter.
+4. Generate EXACTLY ${numberOfQuestions} questions.
+5. Never generate fewer questions.
+6. Never generate more questions.
+7. Every question must have exactly 4 options.
+8. Options must be A, B, C and D.
+9. Only one option must be correct.
+10. Do not repeat questions.
+11. Questions should be academically accurate.
+12. Include conceptual and application-based questions.
+13. For Physics and Mathematics, include suitable numerical/problem-solving questions.
+14. For Chemistry, include appropriate conceptual, reaction-based and numerical questions.
+15. Keep questions appropriate for the selected class.
+16. Use simple, clear language.
+17. Use proper Hindi scientific terminology.
+18. English and Hindi versions must have exactly the same meaning.
+19. correctAnswer must be exactly one of A, B, C or D.
+20. The explanation must clearly explain the correct answer.
+21. Do not include Markdown.
+22. Do not include code fences.
+23. Do not include any text outside the JSON response.
 
-VERY IMPORTANT:
+CRITICAL:
+The student requested ${numberOfQuestions} questions.
 
-The requested number is ${requestedQuestions}.
+Return exactly ${numberOfQuestions} questions.
 
-You MUST return:
-${requestedQuestions} questions.
+If the student asks for 10, return 10.
+If the student asks for 20, return 20.
+If the student asks for 30, return 30.
 
-Do not stop early.
-Do not return 8 when 10 are requested.
-Do not return 14 when 30 are requested.
+Do NOT return 8, 14, 18 or any other number.
 
-Before finalizing, internally check:
-- Number of questions = ${requestedQuestions}
-- Every question has 4 options
-- Every question has exactly one correct answer
-- Every question has English + Hindi
-- Every option has English + Hindi
-- Every explanation has English + Hindi
-- All questions belong to ${chapter}
-
-Return exactly this JSON structure:
-
-{
-  "testTitle": "string",
-  "className": "${className}",
-  "subject": "${subject}",
-  "chapter": "${chapter}",
-  "difficulty": "${difficulty}",
-  "questions": [
-    {
-      "id": 1,
-      "question": "English question / Hindi question",
-      "options": [
-        "A) English option / Hindi option",
-        "B) English option / Hindi option",
-        "C) English option / Hindi option",
-        "D) English option / Hindi option"
-      ],
-      "correctAnswer": "A",
-      "explanation": "English explanation / Hindi explanation"
-    }
-  ]
-}
+The final result must be a complete bilingual test.
 `;
 
     /*
-     * Function to call Gemini
+     * Use Google's CURRENT Interactions API.
+     *
+     * No Gemini 2.5.
+     * No old response_mime_type configuration.
      */
-    async function callGemini(extraInstruction = "") {
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/interactions",
+      {
+        method: "POST",
 
-      const finalPrompt =
-        prompt +
-        "\n\n" +
-        extraInstruction;
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey
+        },
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-        {
-          method: "POST",
+        body: JSON.stringify({
+          model: MODEL,
 
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": apiKey
-          },
+          input: prompt,
 
-          body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: [
-                  {
-                    text: finalPrompt
-                  }
-                ]
-              }
-            ]
-          })
-        }
+          response_format: {
+            type: "text",
+
+            mime_type: "application/json",
+
+            schema: responseSchema
+          }
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    /*
+     * If Google API returns an error,
+     * show the REAL error instead of
+     * "No questions were returned".
+     */
+    if (!response.ok) {
+      console.error(
+        "Gemini API ERROR:",
+        JSON.stringify(data, null, 2)
       );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error(
-          "Gemini API error:",
-          JSON.stringify(data, null, 2)
-        );
-
-        throw new Error(
+      return res.status(500).json({
+        error:
           data?.error?.message ||
+          data?.message ||
           "Gemini API request failed."
-        );
-      }
-
-      const text =
-        data?.candidates?.[0]?.content?.parts
-          ?.map(part => part?.text || "")
-          .join("")
-          .trim();
-
-      if (!text) {
-        console.error(
-          "Gemini returned no text:",
-          JSON.stringify(data, null, 2)
-        );
-
-        throw new Error(
-          "Gemini returned an empty response."
-        );
-      }
-
-      return text;
+      });
     }
 
     /*
-     * Safely extract JSON from Gemini response.
+     * Interactions API normally provides
+     * output_text.
      */
-    function extractJSON(text) {
-
-      let cleaned = String(text || "").trim();
-
-      /*
-       * Remove markdown code fences if Gemini
-       * accidentally adds them.
-       */
-      cleaned = cleaned
-        .replace(/^```json\s*/i, "")
-        .replace(/^```\s*/i, "")
-        .replace(/\s*```$/i, "")
-        .trim();
-
-      /*
-       * First try direct JSON.
-       */
-      try {
-        return JSON.parse(cleaned);
-      } catch (e) {
-        // Continue with extraction.
-      }
-
-      /*
-       * Find first { and last }.
-       */
-      const firstBrace = cleaned.indexOf("{");
-      const lastBrace = cleaned.lastIndexOf("}");
-
-      if (
-        firstBrace !== -1 &&
-        lastBrace !== -1 &&
-        lastBrace > firstBrace
-      ) {
-        const possibleJSON =
-          cleaned.slice(
-            firstBrace,
-            lastBrace + 1
-          );
-
-        try {
-          return JSON.parse(possibleJSON);
-        } catch (e) {
-          console.error(
-            "Could not parse extracted JSON:",
-            possibleJSON
-          );
-        }
-      }
-
-      return null;
-    }
+    let text =
+      data?.output_text ||
+      "";
 
     /*
-     * Validate and clean questions.
+     * Fallback in case output_text isn't present.
      */
-    function cleanQuestions(test) {
+    if (!text && Array.isArray(data?.output)) {
 
-      if (
-        !test ||
-        !Array.isArray(test.questions)
-      ) {
-        return [];
-      }
+      for (const item of data.output) {
 
-      const cleaned = [];
-
-      for (
-        let i = 0;
-        i < test.questions.length;
-        i++
-      ) {
-
-        const q = test.questions[i];
-
-        if (!q) {
-          continue;
-        }
-
-        const question =
-          String(q.question || "").trim();
-
-        const options =
-          Array.isArray(q.options)
-            ? q.options
-            : [];
-
-        let correctAnswer =
-          String(
-            q.correctAnswer || ""
-          )
-            .trim()
-            .toUpperCase();
-
-        const explanation =
-          String(
-            q.explanation || ""
-          ).trim();
-
-        /*
-         * Extract A/B/C/D if Gemini writes
-         * something like "A) Option..."
-         */
-        const match =
-          correctAnswer.match(/[ABCD]/);
-
-        if (match) {
-          correctAnswer = match[0];
-        }
-
-        /*
-         * Strict validation.
-         */
-        if (!question) {
-          continue;
-        }
-
-        if (options.length !== 4) {
-          continue;
+        if (
+          item?.type === "text" &&
+          typeof item?.text === "string"
+        ) {
+          text += item.text;
         }
 
         if (
-          !["A", "B", "C", "D"].includes(
-            correctAnswer
-          )
+          item?.content &&
+          Array.isArray(item.content)
         ) {
-          continue;
+
+          for (const part of item.content) {
+
+            if (
+              typeof part?.text === "string"
+            ) {
+              text += part.text;
+            }
+          }
         }
-
-        /*
-         * Ensure all four options contain text.
-         */
-        const cleanedOptions =
-          options
-            .slice(0, 4)
-            .map(option =>
-              String(option || "").trim()
-            );
-
-        if (
-          cleanedOptions.some(
-            option => !option
-          )
-        ) {
-          continue;
-        }
-
-        cleaned.push({
-          id: cleaned.length + 1,
-          question,
-          options: cleanedOptions,
-          correctAnswer,
-          explanation
-        });
       }
+    }
 
-      return cleaned;
+    text = String(text || "").trim();
+
+    if (!text) {
+
+      console.error(
+        "Gemini returned no output:",
+        JSON.stringify(data, null, 2)
+      );
+
+      return res.status(500).json({
+        error:
+          "Gemini returned an empty response. Please try again."
+      });
     }
 
     /*
-     * FIRST ATTEMPT
+     * Parse JSON.
      */
-    let rawText;
+    let test;
 
     try {
-      rawText = await callGemini();
+
+      test = JSON.parse(text);
+
     } catch (error) {
 
       console.error(
-        "First Gemini attempt failed:",
+        "JSON parsing failed:",
         error
       );
 
+      console.error(
+        "Raw Gemini output:",
+        text
+      );
+
       return res.status(500).json({
         error:
-          error?.message ||
-          "Gemini could not generate the test."
+          "AI returned invalid test data. Please try again."
       });
     }
 
-    let test =
-      extractJSON(rawText);
-
-    let questions =
-      cleanQuestions(test);
-
     /*
-     * SECOND ATTEMPT:
-     *
-     * If Gemini returned invalid JSON,
-     * too few questions, or malformed questions,
-     * ask it again.
+     * Validate test.
      */
     if (
-      questions.length !==
-      requestedQuestions
-    ) {
-
-      console.log(
-        `First attempt returned ${questions.length}/${requestedQuestions}. Retrying.`
-      );
-
-      const retryInstruction = `
-CRITICAL RETRY.
-
-Your previous response was not acceptable.
-
-Required questions: ${requestedQuestions}
-Valid questions received: ${questions.length}
-
-Generate the COMPLETE test again.
-
-You MUST return exactly ${requestedQuestions} valid questions.
-
-Each question MUST contain:
-- question
-- exactly 4 options
-- correctAnswer
-- explanation
-
-Every question, option and explanation MUST contain both English and Hindi.
-
-Do not return a partial test.
-
-Return JSON only.
-`;
-
-      try {
-
-        rawText =
-          await callGemini(
-            retryInstruction
-          );
-
-        test =
-          extractJSON(rawText);
-
-        questions =
-          cleanQuestions(test);
-
-      } catch (error) {
-
-        console.error(
-          "Retry failed:",
-          error
-        );
-
-        return res.status(500).json({
-          error:
-            error?.message ||
-            "Gemini could not generate the test."
-        });
-      }
-    }
-
-    /*
-     * Final strict check.
-     *
-     * We do NOT silently send 8 questions
-     * when the user asked for 10.
-     */
-    if (
-      questions.length !==
-      requestedQuestions
+      !test ||
+      !Array.isArray(test.questions)
     ) {
 
       console.error(
-        `Final question count: ${questions.length}/${requestedQuestions}`
+        "Invalid test structure:",
+        test
       );
 
       return res.status(500).json({
         error:
-          `AI generated ${questions.length} valid questions instead of ${requestedQuestions}. Please try Generate again.`
+          "AI returned an invalid test structure. Please try again."
       });
     }
 
     /*
-     * Final test object.
+     * EXACT QUESTION COUNT CHECK
      */
-    const finalTest = {
+    if (
+      test.questions.length !==
+      numberOfQuestions
+    ) {
 
-      testTitle:
-        test?.testTitle ||
-        `${subject} - ${chapter} Test / ${subject} - ${chapter} परीक्षा`,
+      console.error(
+        `Wrong question count: ${test.questions.length}/${numberOfQuestions}`
+      );
 
-      className,
+      return res.status(500).json({
+        error:
+          `AI returned ${test.questions.length} questions instead of ${numberOfQuestions}. Please press Generate again.`
+      });
+    }
 
-      subject,
+    /*
+     * Validate every question.
+     */
+    const questions = [];
 
-      chapter,
+    for (
+      let i = 0;
+      i < test.questions.length;
+      i++
+    ) {
 
-      difficulty,
+      const q = test.questions[i];
 
-      questions
-    };
+      if (!q) {
+        return res.status(500).json({
+          error:
+            `Question ${i + 1} is missing. Please try again.`
+        });
+      }
 
-    console.log(
-      `SUCCESS: Generated exactly ${questions.length} questions for ${className} ${subject} - ${chapter}`
-    );
+      if (
+        typeof q.question !== "string" ||
+        !q.question.trim()
+      ) {
+        return res.status(500).json({
+          error:
+            `Question ${i + 1} has no question text.`
+        });
+      }
 
-    return res.status(200).json(
-      finalTest
-    );
-
-  } catch (error) {
-
-    console.error(
-      "Generate test error:",
-      error
-    );
-
-    return res.status(500).json({
-      error:
-        error?.message ||
-        "Something went wrong while generating the test."
-    });
-  }
-}
+      if (
+        !Array.isArray(q.options) ||
+        q.options.length !== 4
+      ) {
+        return res.status(500).json({
+          error:
+            `Question ${i + 1}
