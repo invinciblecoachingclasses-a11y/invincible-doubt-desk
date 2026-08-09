@@ -28,13 +28,24 @@ export default async function handler(req, res) {
       body.questionType || "MCQ"
     ).trim();
 
+    /*
+     * Language:
+     * English = English only
+     * Hindi = Hindi only
+     * Bilingual = English + Hindi
+     *
+     * If frontend does not send language,
+     * Bilingual is used automatically.
+     */
+
     const language = String(
       body.language || "Bilingual"
     ).trim();
 
     if (!className || !subject || !chapter) {
       return res.status(400).json({
-        error: "Class, subject and chapter are required."
+        error:
+          "Class, subject and chapter are required."
       });
     }
 
@@ -42,214 +53,237 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "GEMINI_API_KEY is missing in Vercel."
+        error:
+          "Gemini API key is not configured in Vercel."
       });
     }
 
-    /* =====================================================
-       LANGUAGE
-    ===================================================== */
+    /*
+     * =====================================================
+     * LANGUAGE INSTRUCTION
+     * =====================================================
+     */
 
     let languageInstruction = "";
 
-    if (language === "Hindi") {
+    if (language.toLowerCase() === "hindi") {
+
       languageInstruction = `
-Generate the complete test in Hindi using Devanagari script.
+LANGUAGE:
+Generate the complete test in Hindi.
 
-Questions, options, explanations and test title should be in Hindi.
-
-Keep mathematical symbols, formulas, units and standard
-scientific notation correct.
+Use natural school-level Hindi.
+Use Devanagari script.
+Keep standard scientific and mathematical symbols unchanged.
+Where an English scientific term is commonly used in Indian classrooms,
+you may include the English term in brackets.
 `;
-    }
 
-    else if (language === "English") {
+    } else if (
+      language.toLowerCase() === "english"
+    ) {
+
       languageInstruction = `
-Generate the complete test in English.
-
-Use clear, simple CBSE/NCERT-level English.
+LANGUAGE:
+Generate the complete test in English only.
+Use clear CBSE/NCERT student-friendly English.
 `;
-    }
 
-    else {
+    } else {
+
       languageInstruction = `
-Generate a BILINGUAL test.
+LANGUAGE:
+Generate the test in BOTH English and Hindi.
 
-Every question must contain BOTH English and Hindi.
+Every question MUST contain both languages.
+
+Format each question like:
+
+"Which force attracts objects towards the Earth?
+पृथ्वी वस्तुओं को अपनी ओर किस बल से आकर्षित करती है?"
+
+Every option MUST also contain both languages.
 
 Example:
 
-What is the SI unit of force?
-बल की SI इकाई क्या है?
+"A) Gravitational force / गुरुत्वाकर्षण बल"
+"B) Magnetic force / चुंबकीय बल"
+"C) Frictional force / घर्षण बल"
+"D) Electrostatic force / वैद्युतस्थैतिक बल"
 
-A) Newton
-A) न्यूटन
-
-B) Joule
-B) जूल
-
-C) Watt
-C) वाट
-
-D) Pascal
-D) पास्कल
-
-The Hindi and English versions must ask exactly the same thing.
-Do not create separate questions for each language.
+Do NOT generate some questions only in English and others only in Hindi.
+Every question and every option must contain both languages.
 `;
     }
 
-    /* =====================================================
-       PROMPT
-    ===================================================== */
+
+    /*
+     * =====================================================
+     * AI PROMPT
+     * =====================================================
+     */
 
     const prompt = `
-You are an expert CBSE/NCERT teacher and professional
-question-paper creator for Invincible Coaching Classes.
+You are an expert CBSE and NCERT teacher and professional test-paper creator for Invincible Coaching Classes.
 
-Create a high-quality student test.
+Create an online student test.
 
-Class: ${className}
-Subject: ${subject}
-Chapter: ${chapter}
-Number of Questions: ${numberOfQuestions}
-Difficulty: ${difficulty}
-Question Type: ${questionType}
-Language: ${language}
+CLASS: ${className}
+SUBJECT: ${subject}
+CHAPTER: ${chapter}
+NUMBER OF QUESTIONS REQUIRED: ${numberOfQuestions}
+DIFFICULTY: ${difficulty}
+QUESTION TYPE: ${questionType}
 
 ${languageInstruction}
 
-STRICT RULES:
+STRICT ACADEMIC RULES:
 
-1. Follow CBSE/NCERT level appropriate for Class ${className}.
+1. Follow CBSE and NCERT level appropriate to Class ${className}.
 
-2. Every question must belong strictly to:
-${subject} → ${chapter}
+2. Every question must be strictly related to:
+${chapter}
 
-3. Do not use questions from unrelated chapters.
+3. Do NOT include questions from unrelated chapters.
 
 4. Generate EXACTLY ${numberOfQuestions} questions.
 
-5. Every question must contain exactly FOUR options.
+5. Do NOT generate fewer questions.
 
-6. Only ONE option can be correct.
+6. Generate exactly FOUR options for every question.
 
-7. Do not repeat questions.
+7. Only ONE option must be correct.
 
-8. Include conceptual and application-based questions.
+8. Do not repeat questions.
 
-9. For Mathematics, include appropriate numerical/problem-solving
-questions.
+9. Questions must be academically accurate.
 
-10. For Physics, include appropriate numerical/problem-solving
-questions and conceptual questions.
+10. Questions should test actual understanding, not random facts.
 
-11. For Chemistry, include conceptual, reaction-based and
-numerical questions where appropriate.
+11. Mix conceptual, application-based and numerical questions where appropriate.
 
-12. Questions must be academically correct.
+12. For Physics:
+Include suitable conceptual and numerical/problem-solving questions.
 
-13. Questions must be suitable for school and coaching assessment.
+13. For Mathematics:
+Include calculations, concepts and application-based questions where appropriate.
 
-14. Avoid ambiguous questions.
+14. For Chemistry:
+Include conceptual, reaction-based and numerical questions where appropriate.
 
-15. Every question must contain an explanation.
+15. For Class 9 and 10:
+Keep questions appropriate to school/CBSE level.
 
-16. correctAnswer must be exactly:
-A
-B
-C
-or
-D
+16. For Class 11 and 12:
+Use appropriate senior-secondary CBSE/NCERT level.
 
-17. Return ONLY JSON.
+17. Avoid ambiguous questions.
 
-18. Do not return Markdown.
+18. Avoid two possible correct answers.
 
-19. Do not return code fences.
+19. Do not use Markdown.
 
-20. Do not return fewer than ${numberOfQuestions} questions.
+20. Do not use code blocks.
 
-21. Do not return more than ${numberOfQuestions} questions.
+21. Return structured JSON only.
 
-22. Question IDs must be 1, 2, 3, 4... sequentially.
+22. The answer field must be a NUMBER:
+0 = first option
+1 = second option
+2 = third option
+3 = fourth option
 
-IMPORTANT:
-The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
+23. The answer must always correspond to the correct option.
+
+24. Every question must contain exactly four options.
+
+25. Every question must contain a short explanation.
+
+26. Do not add introductory text before the JSON.
+
+27. Do not add concluding text after the JSON.
+
+The final output must contain exactly ${numberOfQuestions} questions.
+
+Think carefully about every question before returning the final JSON.
 `;
 
-    /* =====================================================
-       JSON SCHEMA
-       IMPORTANT:
-       This is responseSchema, NOT responseFormat.
-    ===================================================== */
 
-    const responseSchema = {
-      type: "OBJECT",
+    /*
+     * =====================================================
+     * JSON SCHEMA
+     * =====================================================
+     *
+     * This prevents the old problem where Gemini sometimes
+     * returned only 8 questions instead of 10 or 14 instead
+     * of 30.
+     */
+
+    const schema = {
+      type: "object",
 
       properties: {
 
         testTitle: {
-          type: "STRING"
+          type: "string"
         },
 
         className: {
-          type: "STRING"
+          type: "string"
         },
 
         subject: {
-          type: "STRING"
+          type: "string"
         },
 
         chapter: {
-          type: "STRING"
+          type: "string"
         },
 
         difficulty: {
-          type: "STRING"
-        },
-
-        language: {
-          type: "STRING"
+          type: "string"
         },
 
         questions: {
-          type: "ARRAY",
+          type: "array",
+
+          minItems: numberOfQuestions,
+          maxItems: numberOfQuestions,
 
           items: {
 
-            type: "OBJECT",
+            type: "object",
 
             properties: {
 
               id: {
-                type: "INTEGER"
+                type: "integer"
               },
 
               question: {
-                type: "STRING"
+                type: "string"
               },
 
               options: {
-                type: "ARRAY",
+
+                type: "array",
+
+                minItems: 4,
+                maxItems: 4,
 
                 items: {
-                  type: "STRING"
+                  type: "string"
                 }
               },
 
-              correctAnswer: {
-                type: "STRING",
-                enum: [
-                  "A",
-                  "B",
-                  "C",
-                  "D"
-                ]
+              answer: {
+                type: "integer",
+                minimum: 0,
+                maximum: 3
               },
 
               explanation: {
-                type: "STRING"
+                type: "string"
               }
 
             },
@@ -258,7 +292,7 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
               "id",
               "question",
               "options",
-              "correctAnswer",
+              "answer",
               "explanation"
             ]
           }
@@ -271,17 +305,22 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
         "subject",
         "chapter",
         "difficulty",
-        "language",
         "questions"
       ]
     };
 
-    /* =====================================================
-       GEMINI REQUEST
-    ===================================================== */
+
+    /*
+     * =====================================================
+     * GEMINI 3.6 FLASH
+     * =====================================================
+     *
+     * IMPORTANT:
+     * Gemini 2.5 is NOT used anywhere.
+     */
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
       {
         method: "POST",
 
@@ -304,15 +343,42 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
             }
           ],
 
+          systemInstruction: {
+            parts: [
+              {
+                text: `
+You are a highly accurate CBSE/NCERT question-paper generator.
+
+Follow the requested class, subject and chapter strictly.
+
+Never reduce the requested number of questions.
+
+If the requested number is 10, return exactly 10.
+If the requested number is 15, return exactly 15.
+If the requested number is 20, return exactly 20.
+If the requested number is 25, return exactly 25.
+If the requested number is 30, return exactly 30.
+
+Every question must have exactly four options.
+
+For bilingual tests, every question and every option must be available in both English and Hindi.
+
+Return only the requested structured data.
+`
+              }
+            ]
+          },
+
           generationConfig: {
 
-            temperature: 0.3,
+            maxOutputTokens: 30000,
 
-            maxOutputTokens: 32768,
-
-            responseMimeType: "application/json",
-
-            responseSchema: responseSchema
+            responseFormat: {
+              text: {
+                mimeType: "application/json",
+                schema: schema
+              }
+            }
 
           }
 
@@ -320,11 +386,15 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
       }
     );
 
+
+    /*
+     * =====================================================
+     * READ GEMINI RESPONSE
+     * =====================================================
+     */
+
     const data = await response.json();
 
-    /* =====================================================
-       API ERROR
-    ===================================================== */
 
     if (!response.ok) {
 
@@ -340,15 +410,13 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
       });
     }
 
-    /* =====================================================
-       GET RESPONSE
-    ===================================================== */
 
     const text =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
         .trim();
+
 
     if (!text) {
 
@@ -363,9 +431,12 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
       });
     }
 
-    /* =====================================================
-       PARSE JSON
-    ===================================================== */
+
+    /*
+     * =====================================================
+     * PARSE JSON
+     * =====================================================
+     */
 
     let test;
 
@@ -381,19 +452,22 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
       );
 
       console.error(
-        "Raw Gemini response:",
+        "Gemini response:",
         text
       );
 
       return res.status(500).json({
         error:
-          "Gemini returned invalid JSON."
+          "Gemini returned invalid test data."
       });
     }
 
-    /* =====================================================
-       CHECK QUESTIONS
-    ===================================================== */
+
+    /*
+     * =====================================================
+     * VALIDATE QUESTIONS
+     * =====================================================
+     */
 
     if (
       !test ||
@@ -402,21 +476,23 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
 
       return res.status(500).json({
         error:
-          "AI did not return a valid questions list."
+          "No questions were returned by AI."
       });
     }
 
-    if (test.questions.length === 0) {
-
-      return res.status(500).json({
-        error:
-          "AI returned zero questions."
-      });
-    }
 
     /*
-     * If Gemini returns fewer questions,
-     * report the actual number.
+     * IMPORTANT:
+     * Do NOT silently remove invalid questions.
+     *
+     * Previously, invalid questions were filtered out.
+     * That is one reason you could receive:
+     *
+     * 8 questions instead of 10
+     * 14 questions instead of 30
+     *
+     * Now we reject the complete generation if the
+     * requested number is not returned.
      */
 
     if (
@@ -425,74 +501,100 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
     ) {
 
       console.error(
-        "Question count mismatch:",
-        {
-          requested: numberOfQuestions,
-          received: test.questions.length
-        }
+        `Expected ${numberOfQuestions} questions but received ${test.questions.length}.`
       );
 
       return res.status(500).json({
-
         error:
-          `AI generated ${test.questions.length} questions instead of ${numberOfQuestions}. Please try again.`,
-
-        requested:
-          numberOfQuestions,
-
-        received:
-          test.questions.length
-
+          `AI generated ${test.questions.length} questions instead of ${numberOfQuestions}. Please generate the test again.`
       });
     }
 
-    /* =====================================================
-       CLEAN QUESTIONS
-    ===================================================== */
+
+    /*
+     * =====================================================
+     * CLEAN QUESTIONS
+     * =====================================================
+     */
 
     const cleanedQuestions =
       test.questions.map(function(q, index) {
 
-        let options =
-          Array.isArray(q.options)
-            ? q.options
-            : [];
-
-        options =
-          options
-            .slice(0, 4)
-            .map(function(option) {
-              return String(option || "").trim();
-            });
-
-        let correctAnswer =
-          String(
-            q.correctAnswer || ""
-          )
-            .trim()
-            .toUpperCase();
-
-        const match =
-          correctAnswer.match(/[ABCD]/);
-
-        if (match) {
-          correctAnswer = match[0];
+        if (!q) {
+          throw new Error(
+            `Question ${index + 1} is missing.`
+          );
         }
+
+
+        if (
+          typeof q.question !== "string" ||
+          !q.question.trim()
+        ) {
+
+          throw new Error(
+            `Question ${index + 1} has no question text.`
+          );
+        }
+
+
+        if (
+          !Array.isArray(q.options) ||
+          q.options.length !== 4
+        ) {
+
+          throw new Error(
+            `Question ${index + 1} does not have exactly four options.`
+          );
+        }
+
+
+        const options =
+          q.options.map(function(option) {
+
+            return String(option || "").trim();
+
+          });
+
+
+        if (
+          options.some(
+            option => !option
+          )
+        ) {
+
+          throw new Error(
+            `Question ${index + 1} contains an empty option.`
+          );
+        }
+
+
+        const answer =
+          Number(q.answer);
+
+
+        if (
+          !Number.isInteger(answer) ||
+          answer < 0 ||
+          answer > 3
+        ) {
+
+          throw new Error(
+            `Question ${index + 1} has an invalid correct answer.`
+          );
+        }
+
 
         return {
 
           id: index + 1,
 
           question:
-            String(
-              q.question || ""
-            ).trim(),
+            String(q.question).trim(),
 
-          options: options,
+          options,
 
-          correctAnswer:
-
-            correctAnswer,
+          answer,
 
           explanation:
             String(
@@ -503,55 +605,21 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
 
       });
 
-    /* =====================================================
-       FINAL VALIDATION
-    ===================================================== */
 
-    for (
-      let i = 0;
-      i < cleanedQuestions.length;
-      i++
-    ) {
-
-      const q =
-        cleanedQuestions[i];
-
-      if (!q.question) {
-
-        return res.status(500).json({
-          error:
-            `Question ${i + 1} is empty.`
-        });
-      }
-
-      if (
-        !Array.isArray(q.options) ||
-        q.options.length !== 4
-      ) {
-
-        return res.status(500).json({
-          error:
-            `Question ${i + 1} does not have exactly 4 options.`
-        });
-      }
-
-      if (
-        !["A", "B", "C", "D"].includes(
-          q.correctAnswer
-        )
-      ) {
-
-        return res.status(500).json({
-          error:
-            `Question ${i + 1} has an invalid correct answer.`
-        });
-      }
-
-    }
-
-    /* =====================================================
-       FINAL RESPONSE
-    ===================================================== */
+    /*
+     * =====================================================
+     * FINAL RESPONSE
+     * =====================================================
+     *
+     * This format is compatible with your CURRENT HTML.
+     *
+     * Your existing extractQuestions() already expects:
+     *
+     * question
+     * options
+     * answer
+     *
+     */
 
     const finalTest = {
 
@@ -559,33 +627,31 @@ The questions array MUST contain EXACTLY ${numberOfQuestions} questions.
         test.testTitle ||
         `${subject} - ${chapter} Test`,
 
-      className:
-        className,
+      className,
 
-      subject:
-        subject,
+      subject,
 
-      chapter:
-        chapter,
+      chapter,
 
-      difficulty:
-        difficulty,
+      difficulty,
 
-      language:
-        language,
+      language,
 
       questions:
         cleanedQuestions
 
     };
 
+
     console.log(
-      `SUCCESS: ${cleanedQuestions.length} questions generated for ${className} ${subject} ${chapter}`
+      `SUCCESS: Generated exactly ${cleanedQuestions.length} questions for ${className} ${subject} - ${chapter} (${language})`
     );
+
 
     return res.status(200).json(
       finalTest
     );
+
 
   } catch (error) {
 
