@@ -369,7 +369,7 @@ margin-bottom:8px
 .question-text{
 font-size:18px;
 font-weight:700;
-line-height:1.45;
+line-height:1.55;
 margin-bottom:14px
 }
 
@@ -383,7 +383,7 @@ border-radius:12px;
 margin:8px 0;
 cursor:pointer;
 font-size:16px;
-line-height:1.35
+line-height:1.45
 }
 
 .option:hover{
@@ -503,6 +503,7 @@ TAKE A TEST
 
 </div>
 
+
 <!-- ================= DOUBT DESK ================= -->
 
 <div class="card" id="doubtSection">
@@ -532,12 +533,12 @@ Chemistry
 </div>
 
 <label for="question">
-Your Question
+Your Question / अपना प्रश्न
 </label>
 
 <textarea
 id="question"
-placeholder="Type your question here..."
+placeholder="Type your question in English, हिन्दी or Hinglish...&#10;&#10;अपना प्रश्न English, हिन्दी या Hinglish में लिखें..."
 ></textarea>
 
 <input
@@ -551,13 +552,13 @@ accept="image/*"
 <button type="button"
 class="photo-btn"
 id="cameraBtn">
-Take Photo
+Take Photo / फोटो लें
 </button>
 
 <button type="button"
 class="photo-btn"
 id="uploadBtn">
-Upload Photo
+Upload Photo / फोटो अपलोड करें
 </button>
 
 </div>
@@ -577,13 +578,13 @@ Remove Photo
 type="button"
 class="ask-btn"
 id="askBtn">
-ASK AI
+ASK AI / AI से पूछें
 </button>
 
 <div
 class="loading"
 id="loading">
-Thinking... Please wait.
+Thinking... / सोच रहा हूँ...
 </div>
 
 <div
@@ -604,7 +605,7 @@ class="feedback"
 id="feedback">
 
 <div class="feedback-title">
-Still confused?
+Still confused? / अभी भी समझ नहीं आया?
 </div>
 
 <div class="feedback-buttons">
@@ -630,6 +631,7 @@ Teacher Help
 
 </div>
 
+
 <!-- ================= TEST SYSTEM ================= -->
 
 <div class="card hidden" id="testSection">
@@ -643,38 +645,38 @@ Teacher Help
 <input
 id="studentName"
 type="text"
-placeholder="Student Name"
+placeholder="Student Name / विद्यार्थी का नाम"
 >
 
 <input
 id="studentMobile"
 type="tel"
 inputmode="numeric"
-placeholder="Mobile Number"
+placeholder="Mobile Number / मोबाइल नंबर"
 >
 
 <select id="testClass">
 
-<option value="">Select Class</option>
-<option value="9">Class 9</option>
-<option value="10">Class 10</option>
-<option value="11">Class 11</option>
-<option value="12">Class 12</option>
+<option value="">Select Class / कक्षा चुनें</option>
+<option value="9">Class 9 / कक्षा 9</option>
+<option value="10">Class 10 / कक्षा 10</option>
+<option value="11">Class 11 / कक्षा 11</option>
+<option value="12">Class 12 / कक्षा 12</option>
 
 </select>
 
 <select id="testSubject">
 
-<option value="">Select Subject</option>
-<option value="Physics">Physics</option>
-<option value="Chemistry">Chemistry</option>
-<option value="Mathematics">Mathematics</option>
+<option value="">Select Subject / विषय चुनें</option>
+<option value="Physics">Physics / भौतिक विज्ञान</option>
+<option value="Chemistry">Chemistry / रसायन विज्ञान</option>
+<option value="Mathematics">Mathematics / गणित</option>
 
 </select>
 
 <select id="testSelect">
 
-<option value="">Select Test</option>
+<option value="">Select Test / टेस्ट चुनें</option>
 
 </select>
 
@@ -702,6 +704,7 @@ id="startTestBtn">
 START TEST
 </button>
 
+
 <!-- ================= AI TEST GENERATOR ================= -->
 
 <div class="generator-box">
@@ -711,28 +714,29 @@ AI Test Generator
 </div>
 
 <div class="generator-subtitle">
-Choose the class, subject and chapter.
-AI will create a fresh test automatically.
+Choose the class, subject, chapter and language.
+<br>
+कक्षा, विषय, अध्याय और भाषा चुनें। AI अपने आप नया टेस्ट बनाएगा।
 </div>
 
 <div class="generator-grid">
 
 <select id="aiClass">
 
-<option value="">Select Class</option>
-<option value="9">Class 9</option>
-<option value="10">Class 10</option>
-<option value="11">Class 11</option>
-<option value="12">Class 12</option>
+<option value="">Select Class / कक्षा चुनें</option>
+<option value="9">Class 9 / कक्षा 9</option>
+<option value="10">Class 10 / कक्षा 10</option>
+<option value="11">Class 11 / कक्षा 11</option>
+<option value="12">Class 12 / कक्षा 12</option>
 
 </select>
 
 <select id="aiSubject">
 
-<option value="">Select Subject</option>
-<option value="Physics">Physics</option>
-<option value="Chemistry">Chemistry</option>
-<option value="Mathematics">Mathematics</option>
+<option value="">Select Subject / विषय चुनें</option>
+<option value="Physics">Physics / भौतिक विज्ञान</option>
+<option value="Chemistry">Chemistry / रसायन विज्ञान</option>
+<option value="Mathematics">Mathematics / गणित</option>
 
 </select>
 
@@ -740,30 +744,38 @@ AI will create a fresh test automatically.
 class="full"
 id="aiChapter"
 type="text"
-placeholder="Chapter name e.g. Electricity"
+placeholder="Chapter name / अध्याय का नाम e.g. Electricity / विद्युत"
 >
 
 <select id="aiNumber">
 
-<option value="10">10 Questions</option>
-<option value="15">15 Questions</option>
-<option value="20" selected>20 Questions</option>
-<option value="25">25 Questions</option>
-<option value="30">30 Questions</option>
+<option value="10">10 Questions / 10 प्रश्न</option>
+<option value="15">15 Questions / 15 प्रश्न</option>
+<option value="20" selected>20 Questions / 20 प्रश्न</option>
+<option value="25">25 Questions / 25 प्रश्न</option>
+<option value="30">30 Questions / 30 प्रश्न</option>
 
 </select>
 
 <select id="aiDifficulty">
 
-<option value="Easy">Easy</option>
-<option value="Moderate" selected>Moderate</option>
-<option value="Hard">Hard</option>
+<option value="Easy">Easy / आसान</option>
+<option value="Moderate" selected>Moderate / मध्यम</option>
+<option value="Hard">Hard / कठिन</option>
+
+</select>
+
+<select class="full" id="aiLanguage">
+
+<option value="English">English</option>
+<option value="Hindi">हिन्दी</option>
+<option value="Bilingual" selected>English + हिन्दी / Bilingual</option>
 
 </select>
 
 <select class="full" id="aiQuestionType">
 
-<option value="MCQ">MCQ</option>
+<option value="MCQ">MCQ / बहुविकल्पीय प्रश्न</option>
 
 </select>
 
@@ -779,12 +791,13 @@ GENERATE AI TEST
 <div
 class="generator-loading"
 id="generatorLoading">
-Creating your test... Please wait.
+Creating your test... / आपका टेस्ट बनाया जा रहा है...
 </div>
 
 </div>
 
 </div>
+
 
 <!-- ================= TEST AREA ================= -->
 
@@ -805,10 +818,11 @@ id="questionsContainer">
 type="button"
 class="submit-test-btn"
 id="submitTestBtn">
-SUBMIT TEST
+SUBMIT TEST / टेस्ट जमा करें
 </button>
 
 </div>
+
 
 <!-- ================= RESULT ================= -->
 
@@ -816,7 +830,7 @@ SUBMIT TEST
 class="test-result"
 id="testResult">
 
-<div>Test Result</div>
+<div>Test Result / परीक्षा परिणाम</div>
 
 <div
 class="score"
@@ -840,11 +854,13 @@ TAKE ANOTHER TEST
 
 </div>
 
+
 <div class="footer">
 © Invincible Coaching Classes
 </div>
 
 </div>
+
 
 <script>
 
@@ -852,23 +868,36 @@ TAKE ANOTHER TEST
 MODE SWITCH
 ===================================================== */
 
-const doubtModeBtn=document.getElementById("doubtModeBtn");
-const testModeBtn=document.getElementById("testModeBtn");
-const doubtSection=document.getElementById("doubtSection");
-const testSection=document.getElementById("testSection");
+const doubtModeBtn =
+document.getElementById("doubtModeBtn");
+
+const testModeBtn =
+document.getElementById("testModeBtn");
+
+const doubtSection =
+document.getElementById("doubtSection");
+
+const testSection =
+document.getElementById("testSection");
 
 doubtModeBtn.addEventListener("click",function(){
+
 doubtModeBtn.classList.add("active");
 testModeBtn.classList.remove("active");
+
 doubtSection.classList.remove("hidden");
 testSection.classList.add("hidden");
+
 });
 
 testModeBtn.addEventListener("click",function(){
+
 testModeBtn.classList.add("active");
 doubtModeBtn.classList.remove("active");
+
 testSection.classList.remove("hidden");
 doubtSection.classList.add("hidden");
+
 });
 
 
@@ -879,41 +908,75 @@ DOUBT DESK
 let selectedSubject="Mathematics";
 let selectedImage=null;
 
-const questionInput=document.getElementById("question");
-const imageInput=document.getElementById("imageInput");
-const imagePreview=document.getElementById("imagePreview");
-const removeImageButton=document.getElementById("removeImage");
-const askButton=document.getElementById("askBtn");
-const loading=document.getElementById("loading");
-const answerBox=document.getElementById("answerBox");
-const answerText=document.getElementById("answerText");
-const feedback=document.getElementById("feedback");
+const questionInput=
+document.getElementById("question");
 
-document.querySelectorAll(".subject").forEach(function(button){
+const imageInput=
+document.getElementById("imageInput");
+
+const imagePreview=
+document.getElementById("imagePreview");
+
+const removeImageButton=
+document.getElementById("removeImage");
+
+const askButton=
+document.getElementById("askBtn");
+
+const loading=
+document.getElementById("loading");
+
+const answerBox=
+document.getElementById("answerBox");
+
+const answerText=
+document.getElementById("answerText");
+
+const feedback=
+document.getElementById("feedback");
+
+
+document.querySelectorAll(".subject")
+.forEach(function(button){
 
 button.addEventListener("click",function(){
 
-document.querySelectorAll(".subject").forEach(function(btn){
+document.querySelectorAll(".subject")
+.forEach(function(btn){
 btn.classList.remove("active");
 });
 
 button.classList.add("active");
 
-selectedSubject=button.getAttribute("data-subject");
+selectedSubject=
+button.getAttribute("data-subject");
 
 });
 
 });
 
-document.getElementById("uploadBtn").addEventListener("click",function(){
+
+document.getElementById("uploadBtn")
+.addEventListener("click",function(){
+
 imageInput.removeAttribute("capture");
 imageInput.click();
+
 });
 
-document.getElementById("cameraBtn").addEventListener("click",function(){
-imageInput.setAttribute("capture","environment");
+
+document.getElementById("cameraBtn")
+.addEventListener("click",function(){
+
+imageInput.setAttribute(
+"capture",
+"environment"
+);
+
 imageInput.click();
+
 });
+
 
 imageInput.addEventListener("change",function(event){
 
@@ -922,8 +985,10 @@ const file=event.target.files[0];
 if(!file)return;
 
 if(!file.type.startsWith("image/")){
+
 alert("Please select an image.");
 return;
+
 }
 
 const reader=new FileReader();
@@ -947,6 +1012,7 @@ reader.readAsDataURL(file);
 
 });
 
+
 removeImageButton.addEventListener("click",function(){
 
 selectedImage=null;
@@ -957,13 +1023,18 @@ removeImageButton.style.display="none";
 
 });
 
+
 askButton.addEventListener("click",async function(){
 
 const question=questionInput.value.trim();
 
 if(!question&&!selectedImage){
 
-alert("Please type a question or upload a photo.");
+alert(
+"Please type a question or upload a photo.\n"+
+"कृपया प्रश्न लिखें या फोटो अपलोड करें।"
+);
+
 return;
 
 }
@@ -975,25 +1046,35 @@ feedback.style.display="none";
 
 try{
 
-const response=await fetch("/api/ask",{
+const response=await fetch(
+"/api/ask",
+{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
+
 subject:selectedSubject,
 question:question,
 image:selectedImage
+
 })
-});
+}
+);
 
 const data=await response.json();
 
 if(!response.ok){
-throw new Error(data.error||"Unable to get answer.");
+
+throw new Error(
+data.error||"Unable to get answer."
+);
+
 }
 
-answerText.textContent=cleanAnswer(data.answer);
+answerText.textContent=
+cleanAnswer(data.answer);
 
 answerBox.style.display="block";
 feedback.style.display="block";
@@ -1025,7 +1106,7 @@ function cleanAnswer(text){
 
 if(!text)return "";
 
-return String(text)
+return text
 .replace(/#{1,6}\s?/g,"")
 .replace(/\*\*/g,"")
 .replace(/\*/g,"")
@@ -1047,9 +1128,11 @@ return String(text)
 }
 
 
-document.getElementById("againBtn").addEventListener("click",function(){
+document.getElementById("againBtn")
+.addEventListener("click",function(){
 
-const oldQuestion=questionInput.value.trim();
+const oldQuestion=
+questionInput.value.trim();
 
 questionInput.value=
 oldQuestion+
@@ -1060,10 +1143,14 @@ askButton.click();
 });
 
 
-document.getElementById("teacherBtn").addEventListener("click",function(){
+document.getElementById("teacherBtn")
+.addEventListener("click",function(){
 
-const studentQuestion=questionInput.value.trim();
-const aiExplanation=answerText.textContent.trim();
+const studentQuestion=
+questionInput.value.trim();
+
+const aiExplanation=
+answerText.textContent.trim();
 
 const whatsappMessage=
 
@@ -1158,19 +1245,45 @@ let activeTestTitle="";
 let activeTestClass="";
 let activeTestSubject="";
 
-const testClass=document.getElementById("testClass");
-const testSubject=document.getElementById("testSubject");
-const testSelect=document.getElementById("testSelect");
-const startTestBtn=document.getElementById("startTestBtn");
-const testSetup=document.getElementById("testSetup");
-const testArea=document.getElementById("testArea");
-const testHeader=document.getElementById("testHeader");
-const questionsContainer=document.getElementById("questionsContainer");
-const submitTestBtn=document.getElementById("submitTestBtn");
-const testResult=document.getElementById("testResult");
-const scoreText=document.getElementById("scoreText");
-const resultDetail=document.getElementById("resultDetail");
-const restartTestBtn=document.getElementById("restartTestBtn");
+
+const testClass=
+document.getElementById("testClass");
+
+const testSubject=
+document.getElementById("testSubject");
+
+const testSelect=
+document.getElementById("testSelect");
+
+const startTestBtn=
+document.getElementById("startTestBtn");
+
+const testSetup=
+document.getElementById("testSetup");
+
+const testArea=
+document.getElementById("testArea");
+
+const testHeader=
+document.getElementById("testHeader");
+
+const questionsContainer=
+document.getElementById("questionsContainer");
+
+const submitTestBtn=
+document.getElementById("submitTestBtn");
+
+const testResult=
+document.getElementById("testResult");
+
+const scoreText=
+document.getElementById("scoreText");
+
+const resultDetail=
+document.getElementById("resultDetail");
+
+const restartTestBtn=
+document.getElementById("restartTestBtn");
 
 
 /* =====================================================
@@ -1182,15 +1295,18 @@ function updateTestList(){
 testSelect.innerHTML=
 '<option value="">Select Test</option>';
 
-const key=testClass.value+"|"+testSubject.value;
+const key=
+testClass.value+"|"+testSubject.value;
 
-const tests=testBank[key]
+const tests=
+testBank[key]
 ?["Electricity Test 01"]
 :[];
 
 tests.forEach(function(testName){
 
-const option=document.createElement("option");
+const option=
+document.createElement("option");
 
 option.value=testName;
 option.textContent=testName;
@@ -1201,8 +1317,15 @@ testSelect.appendChild(option);
 
 }
 
-testClass.addEventListener("change",updateTestList);
-testSubject.addEventListener("change",updateTestList);
+testClass.addEventListener(
+"change",
+updateTestList
+);
+
+testSubject.addEventListener(
+"change",
+updateTestList
+);
 
 
 /* =====================================================
@@ -1211,8 +1334,13 @@ START MANUAL TEST
 
 startTestBtn.addEventListener("click",function(){
 
-const name=document.getElementById("studentName").value.trim();
-const mobile=document.getElementById("studentMobile").value.trim();
+const name=
+document.getElementById("studentName")
+.value.trim();
+
+const mobile=
+document.getElementById("studentMobile")
+.value.trim();
 
 const cls=testClass.value;
 const subject=testSubject.value;
@@ -1230,16 +1358,23 @@ return;
 
 if(!/^[0-9]{10}$/.test(mobile)){
 
-alert("Please enter a valid 10-digit mobile number.");
+alert(
+"Please enter a valid 10-digit mobile number."
+);
+
 return;
 
 }
 
-const questions=testBank[cls+"|"+subject];
+const questions=
+testBank[cls+"|"+subject];
 
 if(!questions){
 
-alert("This test is not available yet.");
+alert(
+"This test is not available yet."
+);
+
 return;
 
 }
@@ -1257,23 +1392,43 @@ test
 AI TEST GENERATOR
 ===================================================== */
 
-const generateTestBtn=document.getElementById("generateTestBtn");
-const generatorLoading=document.getElementById("generatorLoading");
+const generateTestBtn=
+document.getElementById("generateTestBtn");
 
-generateTestBtn.addEventListener("click",async function(){
+const generatorLoading=
+document.getElementById("generatorLoading");
 
-const cls=document.getElementById("aiClass").value;
-const subject=document.getElementById("aiSubject").value;
-const chapter=document.getElementById("aiChapter").value.trim();
+
+generateTestBtn.addEventListener(
+"click",
+async function(){
+
+const cls=
+document.getElementById("aiClass")
+.value;
+
+const subject=
+document.getElementById("aiSubject")
+.value;
+
+const chapter=
+document.getElementById("aiChapter")
+.value.trim();
 
 const numberOfQuestions=
-Number(document.getElementById("aiNumber").value);
+Number(
+document.getElementById("aiNumber").value
+);
 
 const difficulty=
 document.getElementById("aiDifficulty").value;
 
 const questionType=
 document.getElementById("aiQuestionType").value;
+
+const language=
+document.getElementById("aiLanguage").value;
+
 
 if(!cls||!subject||!chapter){
 
@@ -1285,12 +1440,17 @@ return;
 
 }
 
+
 generateTestBtn.disabled=true;
 generatorLoading.style.display="block";
 
+
 try{
 
-const response=await fetch("/api/generate-test",{
+const response=
+await fetch(
+"/api/generate-test",
+{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -1302,14 +1462,17 @@ subject:subject,
 chapter:chapter,
 numberOfQuestions:numberOfQuestions,
 difficulty:difficulty,
-questionType:questionType
+questionType:questionType,
+language:language
 
 })
-});
+}
+);
 
-const data=await response.json();
 
-console.log("AI TEST RESPONSE:",data);
+const data=
+await response.json();
+
 
 if(!response.ok){
 
@@ -1320,17 +1483,19 @@ data.error||
 
 }
 
-const generated=extractQuestions(data);
 
-console.log("EXTRACTED QUESTIONS:",generated);
+const generated=
+extractQuestions(data);
+
 
 if(!generated.length){
 
 throw new Error(
-"AI returned data, but the questions were not in a usable format."
+"No questions were returned by AI."
 );
 
 }
+
 
 activeTestClass=cls;
 activeTestSubject=subject;
@@ -1341,9 +1506,8 @@ generated,
 "AI Test — "+chapter
 );
 
-}catch(error){
 
-console.error("AI TEST ERROR:",error);
+}catch(error){
 
 alert(
 "Test generation failed.\n\n"+
@@ -1361,16 +1525,13 @@ generatorLoading.style.display="none";
 
 
 /* =====================================================
-FIXED AI QUESTION EXTRACTOR
+EXTRACT AI QUESTIONS
 ===================================================== */
 
 function extractQuestions(data){
 
 let questions=[];
 
-/*
-Accept all common response structures.
-*/
 
 if(Array.isArray(data)){
 questions=data;
@@ -1400,138 +1561,64 @@ questions=data.data.questions;
 }
 
 
-/*
-Convert every AI question into the format
-used by the test system.
-*/
-
 return questions
 .map(function(q,index){
 
-if(!q)return null;
-
 let options=
-Array.isArray(q.options)
-?q.options
-:Array.isArray(q.choices)
-?q.choices
-:[];
-
-
-/*
-IMPORTANT FIX:
-
-Backend sends correctAnswer.
-Old frontend was looking only for answer.
-*/
+q.options||
+q.choices||
+[];
 
 let answer=
-q.correctAnswer !== undefined
-?q.correctAnswer
-:q.answer;
-
-
-/*
-Sometimes AI can return:
-A
-A)
-Option A
-Answer: A
-0
-1
-2
-3
-*/
-
-if(typeof answer==="string"){
-
-let cleanAnswer=
-answer
-.trim()
-.toUpperCase();
-
-
-const letterMatch=
-cleanAnswer.match(/[ABCD]/);
-
-if(letterMatch){
-
-answer=
-letterMatch[0].charCodeAt(0)-65;
-
-}else if(/^[0-3]$/.test(cleanAnswer)){
-
-answer=Number(cleanAnswer);
-
-}else{
-
-answer=NaN;
-
-}
-
-}else{
-
-answer=Number(answer);
-
-}
-
-
-/*
-Clean options.
-*/
-
-options=
-options
-.map(function(option){
-
-return String(option)
-.replace(/^[A-D][\)\.\:\-]\s*/i,"")
-.trim();
-
-});
-
-
-/*
-Require at least four options.
-*/
+q.answer;
 
 if(
-!q.question||
-options.length<4||
-!Number.isFinite(answer)||
-answer<0||
-answer>3
+typeof answer==="string" &&
+options.length
 ){
 
-return null;
+const letter=
+answer.trim().toUpperCase();
 
+if(letter==="A")answer=0;
+if(letter==="B")answer=1;
+if(letter==="C")answer=2;
+if(letter==="D")answer=3;
+
+if(
+answer>=0 &&
+answer<options.length
+){
+answer=Number(answer);
 }
 
+}
 
 return{
 
 id:index+1,
 
 question:
-String(
 q.question||
 q.questionText||
-"Question "+(index+1)
-).trim(),
+"Question "+(index+1),
 
-options:options.slice(0,4),
+options:options,
 
-answer:Number(answer),
-
-explanation:
-String(q.explanation||"").trim()
+answer:Number(answer)
 
 };
 
 })
 .filter(function(q){
 
-return q!==null;
+return(
+q.question &&
+q.options.length>=2 &&
+Number.isFinite(q.answer) &&
+q.answer>=0 &&
+q.answer<q.options.length
+);
 
 });
 
@@ -1558,26 +1645,34 @@ testResult.style.display="none";
 testHeader.innerHTML=
 
 "<strong>"+
-escapeHTML(headerTitle)+
+headerTitle+
 "</strong><br>"+
-escapeHTML(testTitle)+
+testTitle+
 " &nbsp; | &nbsp; "+
 questions.length+
 " Questions &nbsp; | &nbsp; "+
 questions.length+
 " Marks";
 
+
 questionsContainer.innerHTML="";
+
 
 questions.forEach(function(q,index){
 
-const card=document.createElement("div");
+const card=
+document.createElement("div");
 
 card.className="question-card";
 
+
 let optionsHTML="";
 
-q.options.forEach(function(option,optionIndex){
+
+q.options.forEach(function(
+option,
+optionIndex
+){
 
 optionsHTML+=
 
@@ -1597,6 +1692,7 @@ escapeHTML(String(option))+
 
 });
 
+
 card.innerHTML=
 
 '<div class="question-number">'+
@@ -1610,9 +1706,11 @@ escapeHTML(String(q.question))+
 
 optionsHTML;
 
+
 questionsContainer.appendChild(card);
 
 });
+
 
 window.scrollTo({
 top:0,
@@ -1628,7 +1726,7 @@ SAFE HTML
 
 function escapeHTML(text){
 
-return String(text)
+return text
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
@@ -1642,24 +1740,33 @@ return String(text)
 SUBMIT TEST
 ===================================================== */
 
-submitTestBtn.addEventListener("click",function(){
+submitTestBtn.addEventListener(
+"click",
+function(){
 
 const questions=activeQuestions;
 
 if(!questions.length)return;
 
+
 let correct=0;
 let attempted=0;
 
+
 questions.forEach(function(q){
 
-const selected=document.querySelector(
-'input[name="q'+q.id+'"]:checked'
+const selected=
+document.querySelector(
+'input[name="q'+
+q.id+
+'"]:checked'
 );
+
 
 if(selected){
 
 attempted++;
+
 
 if(
 Number(selected.value)===
@@ -1674,17 +1781,22 @@ correct++;
 
 });
 
-const wrong=attempted-correct;
 
-const unanswered=questions.length-attempted;
+const wrong=
+attempted-correct;
+
+const unanswered=
+questions.length-attempted;
 
 const percentage=
 Math.round(
 (correct/questions.length)*100
 );
 
+
 scoreText.textContent=
 correct+"/"+questions.length;
+
 
 resultDetail.innerHTML=
 
@@ -1700,9 +1812,11 @@ wrong+
 "Unanswered: "+
 unanswered;
 
+
 testArea.classList.add("hidden");
 
 testResult.style.display="block";
+
 
 testResult.scrollIntoView({
 behavior:"smooth",
@@ -1716,7 +1830,9 @@ block:"start"
 RESTART
 ===================================================== */
 
-restartTestBtn.addEventListener("click",function(){
+restartTestBtn.addEventListener(
+"click",
+function(){
 
 testResult.style.display="none";
 
