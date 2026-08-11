@@ -623,10 +623,6 @@ grid-column:auto
 
 <div class="container">
 
-<!-- =====================================================
-INVINCIBLE COACHING CLASSES BRAND BANNER
-===================================================== -->
-
 <div class="brand-banner">
 
 <div class="brand-name">
@@ -653,11 +649,6 @@ Concepts • Logic • Practice • Excellence
 
 </div>
 
-
-<!-- =====================================================
-DOUBT DESK HEADER
-===================================================== -->
-
 <div class="header">
 
 <h1>
@@ -669,11 +660,6 @@ Ask your doubt. Understand the logic.
 </p>
 
 </div>
-
-
-<!-- =====================================================
-MODE SWITCH
-===================================================== -->
 
 <div class="mode-switch">
 
@@ -692,11 +678,6 @@ TAKE A TEST
 </button>
 
 </div>
-
-
-<!-- =====================================================
-DOUBT DESK
-===================================================== -->
 
 <div class="card" id="doubtSection">
 
@@ -831,11 +812,6 @@ Teacher Help
 
 </div>
 
-
-<!-- =====================================================
-TEST SYSTEM
-===================================================== -->
-
 <div
 class="card hidden"
 id="testSection">
@@ -938,11 +914,6 @@ class="submit-test-btn"
 id="startTestBtn">
 START TEST
 </button>
-
-
-<!-- =====================================================
-AI TEST GENERATOR
-===================================================== -->
 
 <div class="generator-box">
 
@@ -1080,11 +1051,6 @@ Creating your test... Please wait.
 
 </div>
 
-
-<!-- =====================================================
-TEST AREA
-===================================================== -->
-
 <div
 id="testArea"
 class="hidden">
@@ -1106,11 +1072,6 @@ SUBMIT TEST
 </button>
 
 </div>
-
-
-<!-- =====================================================
-RESULT
-===================================================== -->
 
 <div
 class="test-result"
@@ -1140,11 +1101,6 @@ TAKE ANOTHER TEST
 
 </div>
 
-
-<!-- =====================================================
-FOOTER
-===================================================== -->
-
 <div class="footer">
 
 <div class="footer-brand">
@@ -1160,7 +1116,6 @@ Cultivating the Unbeatable Mind
 </div>
 
 </div>
-
 
 <script>
 
@@ -1920,6 +1875,12 @@ return;
 
 }
 
+
+/* SAVE MANUAL TEST CLASS + SUBJECT */
+
+activeTestClass = cls;
+activeTestSubject = subject;
+
 startQuestions(
 
 questions,
@@ -2262,7 +2223,6 @@ q.answer
 )&&
 
 q.answer>=0&&
-
 q.answer<q.options.length
 
 );
@@ -2432,12 +2392,12 @@ return text
 
 
 /* =====================================================
-SUBMIT TEST
+SUBMIT TEST + SAVE RESULT
 ===================================================== */
 
 submitTestBtn.addEventListener(
 "click",
-function(){
+async function(){
 
 const questions=
 activeQuestions;
@@ -2445,14 +2405,22 @@ activeQuestions;
 if(!questions.length)
 return;
 
+submitTestBtn.disabled=true;
+
+submitTestBtn.textContent=
+"SUBMITTING...";
+
 
 let correct=0;
 
 let attempted=0;
 
 
+const answers=[];
+
+
 questions.forEach(
-function(q){
+function(q,index){
 
 const selected=
 document.querySelector(
@@ -2461,14 +2429,19 @@ q.id+
 '"]:checked'
 );
 
+let selectedAnswer=null;
+
 
 if(selected){
 
 attempted++;
 
+selectedAnswer=
+Number(selected.value);
+
 
 if(
-Number(selected.value)===
+selectedAnswer===
 Number(q.answer)
 ){
 
@@ -2478,6 +2451,28 @@ correct++;
 
 }
 
+
+answers.push({
+
+questionNumber:
+index+1,
+
+question:
+q.question,
+
+selectedAnswer:
+selectedAnswer,
+
+correctAnswer:
+Number(q.answer),
+
+isCorrect:
+selectedAnswer!==null &&
+selectedAnswer===
+Number(q.answer)
+
+});
+
 });
 
 
@@ -2485,15 +2480,17 @@ const wrong=
 attempted-correct;
 
 const unanswered=
-questions.length-
-attempted;
+questions.length-attempted;
 
 const percentage=
 Math.round(
-(correct/questions.length)*
-100
+(correct/questions.length)*100
 );
 
+
+/* =====================================================
+SHOW RESULT
+===================================================== */
 
 scoreText.textContent=
 correct+
@@ -2513,7 +2510,9 @@ correct+
 wrong+
 "<br>"+
 "Unanswered: "+
-unanswered;
+unanswered+
+"<br><br>"+
+"<span id='saveStatus'>Saving your result...</span>";
 
 
 testArea.classList.add(
@@ -2531,6 +2530,191 @@ behavior:"smooth",
 block:"start"
 
 });
+
+
+/* =====================================================
+STUDENT DETAILS
+===================================================== */
+
+const studentName=
+document.getElementById(
+"studentName"
+).value.trim();
+
+const studentMobile=
+document.getElementById(
+"studentMobile"
+).value.trim();
+
+
+/* =====================================================
+CHAPTER
+===================================================== */
+
+let chapter="";
+
+
+if(activeTestTitle){
+
+if(
+activeTestTitle
+.startsWith("AI Test —")
+){
+
+chapter=
+activeTestTitle
+.replace(
+"AI Test —",
+""
+)
+.trim();
+
+}else{
+
+chapter=
+activeTestTitle
+.replace(
+/\s+Test\s+\d+$/i,
+""
+)
+.trim();
+
+}
+
+}
+
+
+/* =====================================================
+SAVE TO SUPABASE
+===================================================== */
+
+try{
+
+const response=
+await fetch(
+"/api/save-test-attempt",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+studentName:
+studentName,
+
+studentMobile:
+studentMobile,
+
+studentClass:
+activeTestClass||
+testClass.value,
+
+subject:
+activeTestSubject||
+testSubject.value,
+
+chapter:
+chapter,
+
+testTitle:
+activeTestTitle,
+
+testType:
+activeTestTitle
+.startsWith("AI Test")
+? "AI"
+: "Manual",
+
+totalQuestions:
+questions.length,
+
+attempted:
+attempted,
+
+correct:
+correct,
+
+wrong:
+wrong,
+
+unanswered:
+unanswered,
+
+percentage:
+percentage,
+
+answers:
+answers
+
+})
+
+}
+);
+
+
+const data=
+await response.json();
+
+
+if(!response.ok){
+
+throw new Error(
+data.error||
+"Unable to save test result."
+);
+
+}
+
+
+const saveStatus=
+document.getElementById(
+"saveStatus"
+);
+
+
+if(saveStatus){
+
+saveStatus.textContent=
+"✓ Result saved successfully.";
+
+saveStatus.style.fontWeight=
+"700";
+
+}
+
+}catch(error){
+
+console.error(
+"Save result error:",
+error
+);
+
+
+const saveStatus=
+document.getElementById(
+"saveStatus"
+);
+
+
+if(saveStatus){
+
+saveStatus.textContent=
+"Result calculated. Saving to server failed.";
+
+}
+
+}finally{
+
+submitTestBtn.disabled=false;
+
+submitTestBtn.textContent=
+"SUBMIT TEST";
+
+}
 
 });
 
@@ -2555,6 +2739,12 @@ testArea.classList.add(
 );
 
 activeQuestions=[];
+
+activeTestTitle="";
+
+activeTestClass="";
+
+activeTestSubject="";
 
 window.scrollTo({
 
