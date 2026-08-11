@@ -36,64 +36,93 @@ export default async function handler(req, res) {
     if (!supabaseUrl || !supabaseKey) {
       return res.status(500).json({
         success: false,
-        error:
-          "Supabase environment variables are not configured."
+        error: "Supabase environment variables are not configured."
       });
     }
 
     // ==========================================================
-    // RECEIVE TEST RESULT
+    // RECEIVE DATA
     // ==========================================================
 
     const body = req.body || {};
 
-    const {
-      studentName,
-      studentMobile,
-      studentClass,
-      subject,
-      chapter,
-      testTitle,
-      testType,
-      totalQuestions,
-      attempted,
-      correct,
-      wrong,
-      unanswered,
-      percentage,
-      answers
-    } = body;
+    const testId =
+      body.testId ||
+      body.test_id ||
+      null;
+
+    const studentId =
+      body.studentId ||
+      body.student_id ||
+      null;
+
+    const score =
+      Number(
+        body.score ??
+        body.percentage ??
+        0
+      );
+
+    const totalMarks =
+      Number(
+        body.totalMarks ??
+        body.total_marks ??
+        body.totalQuestions ??
+        0
+      );
+
+    const correctAnswers =
+      Number(
+        body.correctAnswers ??
+        body.correct_answers ??
+        body.correct ??
+        0
+      );
+
+    const startedAt =
+      body.startedAt ||
+      body.started_at ||
+      null;
+
+    const completedAt =
+      body.completedAt ||
+      body.completed_at ||
+      new Date().toISOString();
 
     // ==========================================================
-    // BASIC VALIDATION
+    // VALIDATION
     // ==========================================================
 
-    if (!studentName) {
+    if (!testId) {
       return res.status(400).json({
         success: false,
-        error: "Student name is required."
+        error: "Test ID is missing."
       });
     }
 
-    if (!studentMobile) {
+    if (!studentId) {
       return res.status(400).json({
         success: false,
-        error: "Student mobile number is required."
+        error: "Student ID is missing."
       });
     }
 
-    if (!subject) {
-      return res.status(400).json({
-        success: false,
-        error: "Subject is required."
-      });
-    }
+    // ==========================================================
+    // PREPARE RECORD
+    // ==========================================================
 
-    if (!testTitle) {
-      return res.status(400).json({
-        success: false,
-        error: "Test title is required."
-      });
+    const record = {
+      test_id: testId,
+      student_id: studentId,
+      score: score,
+      total_marks: totalMarks,
+      correct_answers: correctAnswers,
+      completed_at: completedAt
+    };
+
+    // Add started_at only when available.
+    if (startedAt) {
+      record.started_at = startedAt;
     }
 
     // ==========================================================
@@ -102,58 +131,6 @@ export default async function handler(req, res) {
 
     const endpoint =
       `${supabaseUrl}/rest/v1/test_attempts`;
-
-    // ==========================================================
-    // DATA
-    // ==========================================================
-
-    const record = {
-
-      student_name:
-        studentName,
-
-      student_mobile:
-        studentMobile,
-
-      class:
-        studentClass || null,
-
-      subject:
-        subject,
-
-      chapter:
-        chapter || null,
-
-      test_title:
-        testTitle,
-
-      test_type:
-        testType || "Manual",
-
-      total_questions:
-        Number(totalQuestions) || 0,
-
-      attempted:
-        Number(attempted) || 0,
-
-      correct:
-        Number(correct) || 0,
-
-      wrong:
-        Number(wrong) || 0,
-
-      unanswered:
-        Number(unanswered) || 0,
-
-      percentage:
-        Number(percentage) || 0,
-
-      answers:
-        answers || [],
-
-      submitted_at:
-        new Date().toISOString()
-    };
 
     // ==========================================================
     // INSERT
@@ -165,9 +142,7 @@ export default async function handler(req, res) {
         method: "POST",
 
         headers: {
-
-          "Content-Type":
-            "application/json",
+          "Content-Type": "application/json",
 
           "apikey":
             supabaseKey,
@@ -182,6 +157,10 @@ export default async function handler(req, res) {
         body:
           JSON.stringify(record)
       });
+
+    // ==========================================================
+    // READ RESPONSE
+    // ==========================================================
 
     const responseText =
       await response.text();
@@ -203,11 +182,11 @@ export default async function handler(req, res) {
     if (!response.ok) {
 
       console.error(
-        "Supabase test attempt error:",
+        "SUPABASE SAVE ERROR:",
         data
       );
 
-      return res.status(500).json({
+      return res.status(response.status).json({
 
         success: false,
 
@@ -217,10 +196,9 @@ export default async function handler(req, res) {
           data?.hint ||
           "Unable to save test attempt.",
 
-        supabase:
+        supabaseError:
           data
       });
-
     }
 
     // ==========================================================
@@ -243,6 +221,10 @@ export default async function handler(req, res) {
 
   } catch (error) {
 
+    // ==========================================================
+    // UNEXPECTED ERROR
+    // ==========================================================
+
     console.error(
       "SAVE TEST ATTEMPT ERROR:",
       error
@@ -257,7 +239,5 @@ export default async function handler(req, res) {
         "Unexpected server error."
 
     });
-
   }
-
 }
