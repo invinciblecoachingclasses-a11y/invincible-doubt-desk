@@ -1307,12 +1307,15 @@ document.getElementById("teacherBtn").addEventListener("click", function(){
     const studentQuestion = questionInput.value.trim();
     const aiExplanation = answerText.textContent.trim();
     const whatsappMessage = 
-    "Hello Invincible Coaching Classes Teacher.%0A%0A" +
-    "I need personal help with this doubt.%0A%0A" +
-    "Subject: " + encodeURIComponent(selectedSubject) + "%0A%0A" +
-    "Student Question:%0A" + encodeURIComponent(studentQuestion || "Question from uploaded image") + "%0A%0A" +
-    "AI Explanation:%0A" + encodeURIComponent(aiExplanation) + "%0A%0APlease help me with this doubt.";
-    window.open("https://wa.me/919667453931?text=" + whatsappMessage, "_blank");
+    "Hello Invincible Coaching Classes Teacher.\n\n" +
+    "I need personal help with this doubt.\n\n" +
+    "Subject: " + selectedSubject + "\n\n" +
+    "Student Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\n" +
+    "AI Explanation:\n" + aiExplanation + "\n\n" +
+    "Please help me with this doubt.";
+    
+    // Encode properly for WhatsApp
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
 });
 
 
@@ -1742,8 +1745,11 @@ restartTestBtn.addEventListener("click", function(){
 
 whatsappShareBtn.addEventListener("click", function(){
     const currentUrl = window.location.href;
-    const msg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆%0A%0AThink you can beat my score? Take the challenge here:%0A" + currentUrl;
-    window.open("https://wa.me/?text=" + msg, "_blank");
+    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + currentUrl;
+    
+    // Properly encode the message so WhatsApp can read it
+    const encodedMsg = encodeURIComponent(rawMsg);
+    window.open("https://api.whatsapp.com/send?text=" + encodedMsg, "_blank");
 });
 
 </script>
