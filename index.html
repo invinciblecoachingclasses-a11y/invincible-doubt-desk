@@ -522,17 +522,23 @@ margin-top:3px
 }
 
 /* =====================================================
-RESULT
+RESULT & ANALYTICS
 ===================================================== */
 
 .test-result{
 display:none;
-text-align:center;
 padding:25px 15px;
 margin-top:20px;
 background:#f8fafc;
 border:2px solid #e1e7ef;
 border-radius:20px
+}
+
+.score-box {
+text-align: center;
+border-bottom: 2px solid #e1e7ef;
+padding-bottom: 20px;
+margin-bottom: 20px;
 }
 
 .score{
@@ -545,6 +551,70 @@ color:#09244a
 font-size:17px;
 line-height:1.7;
 margin-top:8px
+}
+
+/* New Review Section Styles */
+.review-title {
+font-size: 22px;
+font-weight: 900;
+color: #09244a;
+margin-bottom: 15px;
+text-align: center;
+}
+
+.review-card {
+background: white;
+border: 2px solid #e1e7ef;
+border-radius: 15px;
+padding: 16px;
+margin-bottom: 15px;
+text-align: left;
+}
+
+.review-q-num {
+font-weight: 800;
+color: #667085;
+font-size: 14px;
+margin-bottom: 5px;
+}
+
+.review-q-text {
+font-weight: 700;
+font-size: 16px;
+margin-bottom: 12px;
+}
+
+.review-item {
+margin-bottom: 6px;
+font-size: 15px;
+}
+
+.review-correct {
+color: #027a48;
+font-weight: 700;
+background: #ecfdf3;
+padding: 4px 8px;
+border-radius: 6px;
+display: inline-block;
+}
+
+.review-wrong {
+color: #b42318;
+font-weight: 700;
+background: #fef3f2;
+padding: 4px 8px;
+border-radius: 6px;
+display: inline-block;
+}
+
+.review-explanation {
+margin-top: 10px;
+padding: 10px;
+background: #f0f4f8;
+border-left: 4px solid #1769c2;
+border-radius: 4px;
+font-size: 14px;
+color: #101828;
 }
 
 .restart-btn{
@@ -1097,19 +1167,15 @@ SUBMIT TEST
 class="test-result"
 id="testResult">
 
-<div>
-Test Result
+<div class="score-box">
+    <div>Test Result</div>
+    <div class="score" id="scoreText">0/0</div>
+    <div class="result-detail" id="resultDetail"></div>
 </div>
 
-<div
-class="score"
-id="scoreText">
-0/0
-</div>
-
-<div
-class="result-detail"
-id="resultDetail">
+<div class="review-title">Detailed Analysis</div>
+<div id="reviewContainer">
+    <!-- Analysis cards injected here via JS -->
 </div>
 
 <button
@@ -1339,11 +1405,13 @@ async function loadDatabaseTests(){
                 if(!testBank[key][q.test_title]){
                     testBank[key][q.test_title] = [];
                 }
+                // Also load the new explanation column
                 testBank[key][q.test_title].push({
                     id: index + 1,
                     question: q.question_text,
                     options: [q.option_1, q.option_2, q.option_3, q.option_4],
-                    answer: q.correct_option
+                    answer: q.correct_option,
+                    explanation: q.explanation // NEW FIELD
                 });
             });
         }
@@ -1379,6 +1447,7 @@ const submitTestBtn = document.getElementById("submitTestBtn");
 const testResult = document.getElementById("testResult");
 const scoreText = document.getElementById("scoreText");
 const resultDetail = document.getElementById("resultDetail");
+const reviewContainer = document.getElementById("reviewContainer"); // New section
 const restartTestBtn = document.getElementById("restartTestBtn");
 const timerDisplay = document.getElementById("timerDisplay");
 const whatsappShareBtn = document.getElementById("whatsappShareBtn");
@@ -1555,7 +1624,8 @@ function extractQuestions(data){
             id: index+1,
             question: q.question || q.questionText || "Question " + (index+1),
             options: options,
-            answer: Number(answer)
+            answer: Number(answer),
+            explanation: q.explanation // Map AI explanation if available
         };
     }).filter(function(q){
         return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length);
@@ -1574,6 +1644,7 @@ function startQuestions(questions, headerTitle, testTitle){
     testSetup.classList.add("hidden");
     testArea.classList.remove("hidden");
     testResult.style.display = "none";
+    reviewContainer.innerHTML = ""; // Clear old reviews
     
     testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + 
                            escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + 
@@ -1611,12 +1682,13 @@ SAFE HTML
 ===================================================== */
 
 function escapeHTML(text){
-    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    if(!text) return "";
+    return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
 
 /* =====================================================
-SUBMIT TEST + SAVE RESULT
+SUBMIT TEST + SAVE RESULT + BUILD REVIEW
 ===================================================== */
 
 submitTestBtn.addEventListener("click", async function(){
@@ -1629,22 +1701,54 @@ submitTestBtn.addEventListener("click", async function(){
 
     let correct=0, attempted=0;
     const answers=[];
+    let reviewHTML = ""; // Build the review section
 
     questions.forEach(function(q,index){
         const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
         let selectedAnswer = null;
+        let isCorrect = false;
+
         if(selected){
             attempted++;
             selectedAnswer = Number(selected.value);
-            if(selectedAnswer === Number(q.answer)) correct++;
+            if(selectedAnswer === Number(q.answer)){
+                correct++;
+                isCorrect = true;
+            }
         }
+        
         answers.push({
             questionNumber: index+1,
             question: q.question,
             selectedAnswer: selectedAnswer,
             correctAnswer: Number(q.answer),
-            isCorrect: selectedAnswer!==null && selectedAnswer===Number(q.answer)
+            isCorrect: isCorrect
         });
+
+        /* Build Review Card for this Question */
+        let statusBadge = isCorrect 
+            ? '<span class="review-correct">✓ Correct</span>' 
+            : '<span class="review-wrong">✗ Incorrect / Skipped</span>';
+            
+        let studentPick = selectedAnswer !== null 
+            ? escapeHTML(q.options[selectedAnswer]) 
+            : "<em>Did not attempt</em>";
+            
+        let correctPick = escapeHTML(q.options[q.answer]);
+        
+        let explanationBox = q.explanation 
+            ? '<div class="review-explanation"><strong>Teacher\'s Logic:</strong> ' + escapeHTML(q.explanation) + '</div>'
+            : '';
+
+        reviewHTML += `
+            <div class="review-card">
+                <div class="review-q-num">Q${index+1} ${statusBadge}</div>
+                <div class="review-q-text">${escapeHTML(q.question)}</div>
+                <div class="review-item"><strong>You answered:</strong> ${studentPick}</div>
+                <div class="review-item"><strong>Correct answer:</strong> ${correctPick}</div>
+                ${explanationBox}
+            </div>
+        `;
     });
 
     const wrong = attempted - correct;
@@ -1659,7 +1763,7 @@ submitTestBtn.addEventListener("click", async function(){
     };
 
     /* =====================================================
-    SHOW RESULT
+    SHOW RESULT & REVIEW
     ===================================================== */
     scoreText.textContent = correct + "/" + questions.length;
     resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>" +
@@ -1667,6 +1771,8 @@ submitTestBtn.addEventListener("click", async function(){
                              "Wrong: " + wrong + "<br>" +
                              "Unanswered: " + unanswered + "<br><br>" +
                              "<span id='saveStatus'>Saving your result...</span>";
+
+    reviewContainer.innerHTML = reviewHTML;
 
     testArea.classList.add("hidden");
     testResult.style.display = "block";
@@ -1747,7 +1853,6 @@ whatsappShareBtn.addEventListener("click", function(){
     const currentUrl = window.location.href;
     const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + currentUrl;
     
-    // Properly encode the message so WhatsApp can read it
     const encodedMsg = encodeURIComponent(rawMsg);
     window.open("https://api.whatsapp.com/send?text=" + encodedMsg, "_blank");
 });
