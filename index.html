@@ -464,8 +464,20 @@ font-weight:700
 }
 
 /* =====================================================
-QUESTIONS
+QUESTIONS & TIMER
 ===================================================== */
+
+.timer-box {
+font-size: 24px;
+font-weight: 900;
+color: #d92d20;
+text-align: center;
+padding: 14px;
+border: 2px solid #d92d20;
+border-radius: 14px;
+margin-bottom: 18px;
+background: #fff4f3;
+}
 
 .question-card{
 border:2px solid #e1e7ef;
@@ -543,7 +555,15 @@ border-radius:13px;
 background:white;
 color:#09244a;
 font-weight:800;
-cursor:pointer
+cursor:pointer;
+width: 100%;
+}
+
+.whatsapp-btn{
+background:#25D366;
+color:white;
+border-color:#25D366;
+margin-top:12px;
 }
 
 /* =====================================================
@@ -1050,6 +1070,11 @@ Creating your test... Please wait.
 id="testArea"
 class="hidden">
 
+<!-- THE NEW TIMER BOX -->
+<div class="timer-box" id="timerDisplay">
+⏳ 20:00
+</div>
+
 <div
 class="test-info"
 id="testHeader">
@@ -1094,6 +1119,14 @@ id="restartTestBtn">
 TAKE ANOTHER TEST
 </button>
 
+<!-- THE NEW WHATSAPP SHARE BUTTON -->
+<button
+type="button"
+class="restart-btn whatsapp-btn"
+id="whatsappShareBtn">
+SHARE SCORE ON WHATSAPP
+</button>
+
 </div>
 
 <div class="footer">
@@ -1118,44 +1151,23 @@ Cultivating the Unbeatable Mind
 MODE SWITCH
 ===================================================== */
 
-const doubtModeBtn =
-document.getElementById("doubtModeBtn");
+const doubtModeBtn = document.getElementById("doubtModeBtn");
+const testModeBtn = document.getElementById("testModeBtn");
+const doubtSection = document.getElementById("doubtSection");
+const testSection = document.getElementById("testSection");
 
-const testModeBtn =
-document.getElementById("testModeBtn");
-
-const doubtSection =
-document.getElementById("doubtSection");
-
-const testSection =
-document.getElementById("testSection");
-
-doubtModeBtn.addEventListener(
-"click",
-function(){
-
-doubtModeBtn.classList.add("active");
-
-testModeBtn.classList.remove("active");
-
-doubtSection.classList.remove("hidden");
-
-testSection.classList.add("hidden");
-
+doubtModeBtn.addEventListener("click", function(){
+    doubtModeBtn.classList.add("active");
+    testModeBtn.classList.remove("active");
+    doubtSection.classList.remove("hidden");
+    testSection.classList.add("hidden");
 });
 
-testModeBtn.addEventListener(
-"click",
-function(){
-
-testModeBtn.classList.add("active");
-
-doubtModeBtn.classList.remove("active");
-
-testSection.classList.remove("hidden");
-
-doubtSection.classList.add("hidden");
-
+testModeBtn.addEventListener("click", function(){
+    testModeBtn.classList.add("active");
+    doubtModeBtn.classList.remove("active");
+    testSection.classList.remove("hidden");
+    doubtSection.classList.add("hidden");
 });
 
 
@@ -1164,416 +1176,143 @@ DOUBT DESK
 ===================================================== */
 
 let selectedSubject="Mathematics";
-
 let selectedImage=null;
 
-const questionInput=
-document.getElementById("question");
+const questionInput = document.getElementById("question");
+const imageInput = document.getElementById("imageInput");
+const imagePreview = document.getElementById("imagePreview");
+const removeImageButton = document.getElementById("removeImage");
+const askButton = document.getElementById("askBtn");
+const loading = document.getElementById("loading");
+const answerBox = document.getElementById("answerBox");
+const answerText = document.getElementById("answerText");
+const feedback = document.getElementById("feedback");
 
-const imageInput=
-document.getElementById("imageInput");
-
-const imagePreview=
-document.getElementById("imagePreview");
-
-const removeImageButton=
-document.getElementById("removeImage");
-
-const askButton=
-document.getElementById("askBtn");
-
-const loading=
-document.getElementById("loading");
-
-const answerBox=
-document.getElementById("answerBox");
-
-const answerText=
-document.getElementById("answerText");
-
-const feedback=
-document.getElementById("feedback");
-
-
-document.querySelectorAll(".subject")
-.forEach(function(button){
-
-button.addEventListener(
-"click",
-function(){
-
-document.querySelectorAll(".subject")
-.forEach(function(btn){
-
-btn.classList.remove("active");
-
+document.querySelectorAll(".subject").forEach(function(button){
+    button.addEventListener("click", function(){
+        document.querySelectorAll(".subject").forEach(function(btn){
+            btn.classList.remove("active");
+        });
+        button.classList.add("active");
+        selectedSubject = button.getAttribute("data-subject");
+    });
 });
 
-button.classList.add("active");
-
-selectedSubject=
-button.getAttribute(
-"data-subject"
-);
-
+document.getElementById("uploadBtn").addEventListener("click", function(){
+    imageInput.removeAttribute("capture");
+    imageInput.click();
 });
 
+document.getElementById("cameraBtn").addEventListener("click", function(){
+    imageInput.setAttribute("capture", "environment");
+    imageInput.click();
 });
 
-
-document.getElementById("uploadBtn")
-.addEventListener(
-"click",
-function(){
-
-imageInput.removeAttribute(
-"capture"
-);
-
-imageInput.click();
-
+imageInput.addEventListener("change", function(event){
+    const file = event.target.files[0];
+    if(!file)return;
+    if(!file.type.startsWith("image/")){
+        alert("Please select an image.");
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(){
+        const result = reader.result;
+        selectedImage = {
+            data: result.split(",")[1],
+            mimeType: file.type
+        };
+        imagePreview.src = result;
+        imagePreview.style.display = "block";
+        removeImageButton.style.display = "block";
+    };
+    reader.readAsDataURL(file);
 });
 
-
-document.getElementById("cameraBtn")
-.addEventListener(
-"click",
-function(){
-
-imageInput.setAttribute(
-"capture",
-"environment"
-);
-
-imageInput.click();
-
+removeImageButton.addEventListener("click", function(){
+    selectedImage=null;
+    imageInput.value="";
+    imagePreview.src="";
+    imagePreview.style.display="none";
+    removeImageButton.style.display="none";
 });
 
+askButton.addEventListener("click", async function(){
+    const question = questionInput.value.trim();
+    if(!question && !selectedImage){
+        alert("Please type a question or upload a photo.");
+        return;
+    }
+    askButton.disabled = true;
+    loading.style.display = "block";
+    answerBox.style.display = "none";
+    feedback.style.display = "none";
 
-imageInput.addEventListener(
-"change",
-function(event){
-
-const file=
-event.target.files[0];
-
-if(!file)return;
-
-if(!file.type.startsWith("image/")){
-
-alert(
-"Please select an image."
-);
-
-return;
-
-}
-
-const reader=
-new FileReader();
-
-reader.onload=function(){
-
-const result=
-reader.result;
-
-selectedImage={
-
-data:
-result.split(",")[1],
-
-mimeType:
-file.type
-
-};
-
-imagePreview.src=result;
-
-imagePreview.style.display=
-"block";
-
-removeImageButton.style.display=
-"block";
-
-};
-
-reader.readAsDataURL(file);
-
+    try{
+        const response = await fetch("/api/ask", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                subject: selectedSubject,
+                question: question,
+                image: selectedImage
+            })
+        });
+        const data = await response.json();
+        if(!response.ok){
+            throw new Error(data.error || "Unable to get answer.");
+        }
+        answerText.textContent = cleanAnswer(data.answer);
+        answerBox.style.display = "block";
+        feedback.style.display = "block";
+        answerBox.scrollIntoView({ behavior:"smooth", block:"start" });
+    }catch(error){
+        answerBox.style.display = "block";
+        answerText.textContent = "Sorry, answer nahi aa paaya.\n\n" + error.message;
+    }finally{
+        askButton.disabled = false;
+        loading.style.display = "none";
+    }
 });
-
-
-removeImageButton.addEventListener(
-"click",
-function(){
-
-selectedImage=null;
-
-imageInput.value="";
-
-imagePreview.src="";
-
-imagePreview.style.display=
-"none";
-
-removeImageButton.style.display=
-"none";
-
-});
-
-
-askButton.addEventListener(
-"click",
-async function(){
-
-const question=
-questionInput.value.trim();
-
-if(!question&&!selectedImage){
-
-alert(
-"Please type a question or upload a photo."
-);
-
-return;
-
-}
-
-askButton.disabled=true;
-
-loading.style.display=
-"block";
-
-answerBox.style.display=
-"none";
-
-feedback.style.display=
-"none";
-
-try{
-
-const response=
-await fetch(
-"/api/ask",
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-subject:
-selectedSubject,
-
-question:
-question,
-
-image:
-selectedImage
-
-})
-
-}
-);
-
-const data=
-await response.json();
-
-if(!response.ok){
-
-throw new Error(
-data.error||
-"Unable to get answer."
-);
-
-}
-
-answerText.textContent=
-cleanAnswer(data.answer);
-
-answerBox.style.display=
-"block";
-
-feedback.style.display=
-"block";
-
-answerBox.scrollIntoView({
-
-behavior:"smooth",
-
-block:"start"
-
-});
-
-}catch(error){
-
-answerBox.style.display=
-"block";
-
-answerText.textContent=
-"Sorry, answer nahi aa paaya.\n\n"+
-error.message;
-
-}finally{
-
-askButton.disabled=false;
-
-loading.style.display=
-"none";
-
-}
-
-});
-
 
 function cleanAnswer(text){
-
-if(!text)return "";
-
-return text
-
-.replace(
-/#{1,6}\s?/g,
-""
-)
-
-.replace(
-/\*\*/g,
-""
-)
-
-.replace(
-/\*/g,
-""
-)
-
-.replace(
-/\\text\{([^}]*)\}/g,
-"$1"
-)
-
-.replace(
-/\\mathrm\{([^}]*)\}/g,
-"$1"
-)
-
-.replace(
-/\\times/g,
-"×"
-)
-
-.replace(
-/\\div/g,
-"÷"
-)
-
-.replace(
-/\\cdot/g,
-"×"
-)
-
-.replace(
-/\\sqrt\{([^}]*)\}/g,
-"√($1)"
-)
-
-.replace(
-/\\left/g,
-""
-)
-
-.replace(
-/\\right/g,
-""
-)
-
-.replace(
-/\\\[/g,
-""
-)
-
-.replace(
-/\\\]/g,
-""
-)
-
-.replace(
-/\$\$/g,
-""
-)
-
-.replace(
-/\$/g,
-""
-)
-
-.replace(
-/```[\s\S]*?```/g,
-""
-)
-
-.trim();
-
+    if(!text)return "";
+    return text
+    .replace(/#{1,6}\s?/g, "")
+    .replace(/\*\*/g, "")
+    .replace(/\*/g, "")
+    .replace(/\\text\{([^}]*)\}/g, "$1")
+    .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+    .replace(/\\times/g, "×")
+    .replace(/\\div/g, "÷")
+    .replace(/\\cdot/g, "×")
+    .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+    .replace(/\\left/g, "")
+    .replace(/\\right/g, "")
+    .replace(/\\\[/g, "")
+    .replace(/\\\]/g, "")
+    .replace(/\$\$/g, "")
+    .replace(/\$/g, "")
+    .replace(/```[\s\S]*?```/g, "")
+    .trim();
 }
 
-
-document.getElementById("againBtn")
-.addEventListener(
-"click",
-function(){
-
-const oldQuestion=
-questionInput.value.trim();
-
-questionInput.value=
-oldQuestion+
-"\n\nExplain this again in an even simpler way. Use a small example if helpful.";
-
-askButton.click();
-
+document.getElementById("againBtn").addEventListener("click", function(){
+    const oldQuestion = questionInput.value.trim();
+    questionInput.value = oldQuestion + "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
+    askButton.click();
 });
 
-
-document.getElementById("teacherBtn")
-.addEventListener(
-"click",
-function(){
-
-const studentQuestion=
-questionInput.value.trim();
-
-const aiExplanation=
-answerText.textContent.trim();
-
-const whatsappMessage=
-
-"Hello Invincible Coaching Classes Teacher.%0A%0A"+
-"I need personal help with this doubt.%0A%0A"+
-"Subject: "+
-encodeURIComponent(
-selectedSubject
-)+
-"%0A%0A"+
-"Student Question:%0A"+
-encodeURIComponent(
-studentQuestion||
-"Question from uploaded image"
-)+
-"%0A%0A"+
-"AI Explanation:%0A"+
-encodeURIComponent(
-aiExplanation
-)+
-"%0A%0APlease help me with this doubt.";
-
-window.open(
-"https://wa.me/919667453931?text="+
-whatsappMessage,
-"_blank"
-);
-
+document.getElementById("teacherBtn").addEventListener("click", function(){
+    const studentQuestion = questionInput.value.trim();
+    const aiExplanation = answerText.textContent.trim();
+    const whatsappMessage = 
+    "Hello Invincible Coaching Classes Teacher.%0A%0A" +
+    "I need personal help with this doubt.%0A%0A" +
+    "Subject: " + encodeURIComponent(selectedSubject) + "%0A%0A" +
+    "Student Question:%0A" + encodeURIComponent(studentQuestion || "Question from uploaded image") + "%0A%0A" +
+    "AI Explanation:%0A" + encodeURIComponent(aiExplanation) + "%0A%0APlease help me with this doubt.";
+    window.open("https://wa.me/919667453931?text=" + whatsappMessage, "_blank");
 });
 
 
@@ -1591,15 +1330,12 @@ async function loadDatabaseTests(){
         if(Array.isArray(data)){
             data.forEach(function(q, index){
                 const key = q.class_name + "|" + q.subject;
-                
                 if(!testBank[key]){
                     testBank[key] = {};
                 }
-                
                 if(!testBank[key][q.test_title]){
                     testBank[key][q.test_title] = [];
                 }
-                
                 testBank[key][q.test_title].push({
                     id: index + 1,
                     question: q.question_text,
@@ -1612,88 +1348,67 @@ async function loadDatabaseTests(){
         console.error("Error loading tests from database:", error);
     }
 }
-
-// Fetch tests when the page loads
 loadDatabaseTests();
 
 
 /* =====================================================
-TEST VARIABLES
+TEST VARIABLES & TIMER
 ===================================================== */
 
 let activeQuestions=[];
-
 let activeTestTitle="";
-
 let activeTestClass="";
-
 let activeTestSubject="";
+let finalScoreData = {}; // For WhatsApp Share
+
+let testTimerInterval = null;
+let timeRemaining = 1200; // 20 minutes = 1200 seconds
+
+const testClass = document.getElementById("testClass");
+const testSubject = document.getElementById("testSubject");
+const testSelect = document.getElementById("testSelect");
+const startTestBtn = document.getElementById("startTestBtn");
+const testSetup = document.getElementById("testSetup");
+const testArea = document.getElementById("testArea");
+const testHeader = document.getElementById("testHeader");
+const questionsContainer = document.getElementById("questionsContainer");
+const submitTestBtn = document.getElementById("submitTestBtn");
+const testResult = document.getElementById("testResult");
+const scoreText = document.getElementById("scoreText");
+const resultDetail = document.getElementById("resultDetail");
+const restartTestBtn = document.getElementById("restartTestBtn");
+const timerDisplay = document.getElementById("timerDisplay");
+const whatsappShareBtn = document.getElementById("whatsappShareBtn");
 
 
-const testClass=
-document.getElementById(
-"testClass"
-);
+/* =====================================================
+TIMER FUNCTIONS
+===================================================== */
+function startTimer() {
+    clearInterval(testTimerInterval);
+    timeRemaining = 1200; // Reset to 20 minutes
+    updateTimerUI();
 
-const testSubject=
-document.getElementById(
-"testSubject"
-);
+    testTimerInterval = setInterval(function() {
+        timeRemaining--;
+        updateTimerUI();
 
-const testSelect=
-document.getElementById(
-"testSelect"
-);
+        if (timeRemaining <= 0) {
+            clearInterval(testTimerInterval);
+            alert("⏰ Time's up! Your test is automatically submitting.");
+            submitTestBtn.click();
+        }
+    }, 1000);
+}
 
-const startTestBtn=
-document.getElementById(
-"startTestBtn"
-);
-
-const testSetup=
-document.getElementById(
-"testSetup"
-);
-
-const testArea=
-document.getElementById(
-"testArea"
-);
-
-const testHeader=
-document.getElementById(
-"testHeader"
-);
-
-const questionsContainer=
-document.getElementById(
-"questionsContainer"
-);
-
-const submitTestBtn=
-document.getElementById(
-"submitTestBtn"
-);
-
-const testResult=
-document.getElementById(
-"testResult"
-);
-
-const scoreText=
-document.getElementById(
-"scoreText"
-);
-
-const resultDetail=
-document.getElementById(
-"resultDetail"
-);
-
-const restartTestBtn=
-document.getElementById(
-"restartTestBtn"
-);
+function updateTimerUI() {
+    if (!timerDisplay) return;
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    const mStr = minutes < 10 ? "0" + minutes : minutes;
+    const sStr = seconds < 10 ? "0" + seconds : seconds;
+    timerDisplay.textContent = "⏳ " + mStr + ":" + sStr;
+}
 
 
 /* =====================================================
@@ -1701,141 +1416,55 @@ MANUAL TEST LIST
 ===================================================== */
 
 function updateTestList(){
+    testSelect.innerHTML = '<option value="">Select Test</option>';
+    const key = testClass.value + "|" + testSubject.value;
 
-testSelect.innerHTML=
-'<option value="">Select Test</option>';
-
-const key=
-testClass.value+
-"|" +
-testSubject.value;
-
-if(testBank[key]){
-    const testTitles = Object.keys(testBank[key]);
-    
-    testTitles.forEach(
-    function(testName){
-
-    const option=
-    document.createElement(
-    "option"
-    );
-
-    option.value=testName;
-
-    option.textContent=
-    testName;
-
-    testSelect.appendChild(
-    option
-    );
-
-    });
+    if(testBank[key]){
+        const testTitles = Object.keys(testBank[key]);
+        testTitles.forEach(function(testName){
+            const option = document.createElement("option");
+            option.value = testName;
+            option.textContent = testName;
+            testSelect.appendChild(option);
+        });
+    }
 }
-
-}
-
-testClass.addEventListener(
-"change",
-updateTestList
-);
-
-testSubject.addEventListener(
-"change",
-updateTestList
-);
+testClass.addEventListener("change", updateTestList);
+testSubject.addEventListener("change", updateTestList);
 
 
 /* =====================================================
 START MANUAL TEST
 ===================================================== */
 
-startTestBtn.addEventListener(
-"click",
-function(){
+startTestBtn.addEventListener("click", function(){
+    const name = document.getElementById("studentName").value.trim();
+    const mobile = document.getElementById("studentMobile").value.trim();
+    const cls = testClass.value;
+    const subject = testSubject.value;
+    const test = testSelect.value;
 
-const name=
-document.getElementById(
-"studentName"
-).value.trim();
+    if(!name || !mobile || !cls || !subject || !test){
+        alert("Please fill Name, Mobile Number, Class, Subject and Test.");
+        return;
+    }
+    if(!/^[0-9]{10}$/.test(mobile)){
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+    }
 
-const mobile=
-document.getElementById(
-"studentMobile"
-).value.trim();
+    let questions = null;
+    if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){
+        questions = testBank[cls+"|"+subject][test];
+    }
+    if(!questions || !questions.length){
+        alert("This test is not available yet.");
+        return;
+    }
 
-const cls=
-testClass.value;
-
-const subject=
-testSubject.value;
-
-const test=
-testSelect.value;
-
-if(
-!name||
-!mobile||
-!cls||
-!subject||
-!test
-){
-
-alert(
-"Please fill Name, Mobile Number, Class, Subject and Test."
-);
-
-return;
-
-}
-
-if(
-!/^[0-9]{10}$/.test(mobile)
-){
-
-alert(
-"Please enter a valid 10-digit mobile number."
-);
-
-return;
-
-}
-
-let questions = null;
-
-if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){
-    questions = testBank[cls+"|"+subject][test];
-}
-
-if(!questions || !questions.length){
-
-alert(
-"This test is not available yet."
-);
-
-return;
-
-}
-
-
-/* SAVE MANUAL TEST CLASS + SUBJECT */
-
-activeTestClass = cls;
-activeTestSubject = subject;
-
-startQuestions(
-
-questions,
-
-"Class "+
-cls+
-" "+
-subject,
-
-test
-
-);
-
+    activeTestClass = cls;
+    activeTestSubject = subject;
+    startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
 
@@ -1843,180 +1472,55 @@ test
 AI TEST GENERATOR
 ===================================================== */
 
-const generateTestBtn=
-document.getElementById(
-"generateTestBtn"
-);
+const generateTestBtn = document.getElementById("generateTestBtn");
+const generatorLoading = document.getElementById("generatorLoading");
 
-const generatorLoading=
-document.getElementById(
-"generatorLoading"
-);
+generateTestBtn.addEventListener("click", async function(){
+    const cls = document.getElementById("aiClass").value;
+    const subject = document.getElementById("aiSubject").value;
+    const chapter = document.getElementById("aiChapter").value.trim();
+    const numberOfQuestions = Number(document.getElementById("aiNumber").value);
+    const difficulty = document.getElementById("aiDifficulty").value;
+    const questionType = document.getElementById("aiQuestionType").value;
 
+    if(!cls || !subject || !chapter){
+        alert("Please select Class, Subject and enter Chapter.");
+        return;
+    }
 
-generateTestBtn.addEventListener(
-"click",
-async function(){
+    generateTestBtn.disabled = true;
+    generatorLoading.style.display = "block";
 
-const cls=
-document.getElementById(
-"aiClass"
-).value;
+    try{
+        const response = await fetch("/api/generate-test", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                className: cls,
+                subject: subject,
+                chapter: chapter,
+                numberOfQuestions: numberOfQuestions,
+                difficulty: difficulty,
+                questionType: questionType,
+                language: "English + Hindi"
+            })
+        });
 
-const subject=
-document.getElementById(
-"aiSubject"
-).value;
+        const data = await response.json();
+        if(!response.ok) throw new Error(data.error || "Unable to generate test.");
 
-const chapter=
-document.getElementById(
-"aiChapter"
-).value.trim();
+        const generated = extractQuestions(data);
+        if(!generated.length) throw new Error("No questions were returned by AI.");
 
-const numberOfQuestions=
-Number(
-document.getElementById(
-"aiNumber"
-).value
-);
-
-const difficulty=
-document.getElementById(
-"aiDifficulty"
-).value;
-
-const questionType=
-document.getElementById(
-"aiQuestionType"
-).value;
-
-
-if(
-!cls||
-!subject||
-!chapter
-){
-
-alert(
-"Please select Class, Subject and enter Chapter."
-);
-
-return;
-
-}
-
-
-generateTestBtn.disabled=
-true;
-
-generatorLoading.style.display=
-"block";
-
-
-try{
-
-const response=
-await fetch(
-"/api/generate-test",
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-className:cls,
-
-subject:subject,
-
-chapter:chapter,
-
-numberOfQuestions:
-numberOfQuestions,
-
-difficulty:
-difficulty,
-
-questionType:
-questionType,
-
-language:
-"English + Hindi"
-
-})
-
-}
-);
-
-
-const data=
-await response.json();
-
-
-if(!response.ok){
-
-throw new Error(
-data.error||
-"Unable to generate test."
-);
-
-}
-
-
-const generated=
-extractQuestions(data);
-
-
-if(!generated.length){
-
-throw new Error(
-"No questions were returned by AI."
-);
-
-}
-
-
-activeTestClass=
-cls;
-
-activeTestSubject=
-subject;
-
-startQuestions(
-
-generated,
-
-"Class "+
-cls+
-" "+
-subject,
-
-"AI Test — "+
-chapter
-
-);
-
-
-}catch(error){
-
-alert(
-"Test generation failed.\n\n"+
-error.message
-);
-
-}finally{
-
-generateTestBtn.disabled=
-false;
-
-generatorLoading.style.display=
-"none";
-
-}
-
+        activeTestClass = cls;
+        activeTestSubject = subject;
+        startQuestions(generated, "Class " + cls + " " + subject, "AI Test — " + chapter);
+    }catch(error){
+        alert("Test generation failed.\n\n" + error.message);
+    }finally{
+        generateTestBtn.disabled = false;
+        generatorLoading.style.display = "none";
+    }
 });
 
 
@@ -2025,152 +1529,34 @@ EXTRACT AI QUESTIONS
 ===================================================== */
 
 function extractQuestions(data){
+    let questions=[];
+    if(Array.isArray(data)) questions = data;
+    else if(data && Array.isArray(data.questions)) questions = data.questions;
+    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions;
+    else if(data && data.data && Array.isArray(data.data.questions)) questions = data.data.questions;
 
-let questions=[];
-
-
-if(Array.isArray(data)){
-
-questions=data;
-
-}
-
-else if(
-data &&
-Array.isArray(data.questions)
-){
-
-questions=
-data.questions;
-
-}
-
-else if(
-data &&
-data.test &&
-Array.isArray(
-data.test.questions
-)
-){
-
-questions=
-data.test.questions;
-
-}
-
-else if(
-data &&
-data.data &&
-Array.isArray(
-data.data.questions
-)
-){
-
-questions=
-data.data.questions;
-
-}
-
-
-return questions
-
-.map(
-function(q,index){
-
-let options=
-q.options||
-q.choices||
-[];
-
-let answer=
-q.answer;
-
-if(
-answer===undefined||
-answer===null
-){
-
-answer=
-q.correctAnswer;
-
-}
-
-
-if(
-typeof answer==="string" &&
-options.length
-){
-
-const letter=
-answer
-.trim()
-.toUpperCase();
-
-if(letter==="A")
-answer=0;
-
-if(letter==="B")
-answer=1;
-
-if(letter==="C")
-answer=2;
-
-if(letter==="D")
-answer=3;
-
-if(
-answer>=0 &&
-answer<options.length
-){
-
-answer=
-Number(answer);
-
-}
-
-}
-
-
-return{
-
-id:index+1,
-
-question:
-q.question||
-q.questionText||
-"Question "+
-(index+1),
-
-options:
-options,
-
-answer:
-Number(answer)
-
-};
-
-})
-
-.filter(
-function(q){
-
-return(
-
-q.question&&
-
-q.options.length>=2&&
-
-Number.isFinite(
-q.answer
-)&&
-
-q.answer>=0&&
-q.answer<q.options.length
-
-);
-
-});
-
+    return questions.map(function(q,index){
+        let options = q.options || q.choices || [];
+        let answer = q.answer;
+        if(answer===undefined || answer===null) answer = q.correctAnswer;
+        
+        if(typeof answer==="string" && options.length){
+            const letter = answer.trim().toUpperCase();
+            if(letter==="A") answer=0;
+            if(letter==="B") answer=1;
+            if(letter==="C") answer=2;
+            if(letter==="D") answer=3;
+            if(answer>=0 && answer<options.length) answer = Number(answer);
+        }
+        return {
+            id: index+1,
+            question: q.question || q.questionText || "Question " + (index+1),
+            options: options,
+            answer: Number(answer)
+        };
+    }).filter(function(q){
+        return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length);
+    });
 }
 
 
@@ -2178,122 +1564,42 @@ q.answer<q.options.length
 START ANY TEST
 ===================================================== */
 
-function startQuestions(
+function startQuestions(questions, headerTitle, testTitle){
+    activeQuestions = questions;
+    activeTestTitle = testTitle;
+    
+    testSetup.classList.add("hidden");
+    testArea.classList.remove("hidden");
+    testResult.style.display = "none";
+    
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + 
+                           escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + 
+                           " Questions &nbsp; | &nbsp; " + questions.length + " Marks";
 
-questions,
+    questionsContainer.innerHTML = "";
 
-headerTitle,
+    questions.forEach(function(q,index){
+        const card = document.createElement("div");
+        card.className = "question-card";
 
-testTitle
+        let optionsHTML="";
+        q.options.forEach(function(option, optionIndex){
+            optionsHTML += '<label class="option">' +
+                           '<input type="radio" name="q' + q.id + '" value="' + optionIndex + '">' +
+                           '<span>' + escapeHTML(String(option)) + '</span>' +
+                           '</label>';
+        });
 
-){
+        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div>' +
+                         '<div class="question-text">' + escapeHTML(String(q.question)) + '</div>' +
+                         optionsHTML;
+        questionsContainer.appendChild(card);
+    });
 
-activeQuestions=
-questions;
-
-activeTestTitle=
-testTitle;
-
-testSetup.classList.add(
-"hidden"
-);
-
-testArea.classList.remove(
-"hidden"
-);
-
-testResult.style.display=
-"none";
-
-testHeader.innerHTML=
-
-"<strong>"+
-escapeHTML(headerTitle)+
-"</strong><br>"+
-escapeHTML(testTitle)+
-" &nbsp; | &nbsp; "+
-questions.length+
-" Questions &nbsp; | &nbsp; "+
-questions.length+
-" Marks";
-
-
-questionsContainer.innerHTML="";
-
-
-questions.forEach(
-function(q,index){
-
-const card=
-document.createElement(
-"div"
-);
-
-card.className=
-"question-card";
-
-
-let optionsHTML="";
-
-
-q.options.forEach(
-function(
-option,
-optionIndex
-){
-
-optionsHTML+=
-
-'<label class="option">'+
-
-'<input type="radio" name="q'+
-q.id+
-'" value="'+
-optionIndex+
-'">'+
-
-'<span>'+
-escapeHTML(
-String(option)
-)+
-'</span>'+
-
-'</label>';
-
-});
-
-
-card.innerHTML=
-
-'<div class="question-number">'+
-"QUESTION "+
-(index+1)+
-"</div>"+
-
-'<div class="question-text">'+
-escapeHTML(
-String(q.question)
-)+
-"</div>"+
-
-optionsHTML;
-
-
-questionsContainer.appendChild(
-card
-);
-
-});
-
-
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
-
+    window.scrollTo({ top:0, behavior:"smooth" });
+    
+    // START THE COUNTDOWN
+    startTimer();
 }
 
 
@@ -2302,34 +1608,7 @@ SAFE HTML
 ===================================================== */
 
 function escapeHTML(text){
-
-return text
-
-.replace(
-/&/g,
-"&amp;"
-)
-
-.replace(
-/</g,
-"&lt;"
-)
-
-.replace(
-/>/g,
-"&gt;"
-)
-
-.replace(
-/"/g,
-"&quot;"
-)
-
-.replace(
-/'/g,
-"&#039;"
-);
-
+    return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
 
@@ -2337,368 +1616,134 @@ return text
 SUBMIT TEST + SAVE RESULT
 ===================================================== */
 
-submitTestBtn.addEventListener(
-"click",
-async function(){
+submitTestBtn.addEventListener("click", async function(){
+    clearInterval(testTimerInterval); // Stop timer immediately!
+    const questions = activeQuestions;
+    if(!questions.length) return;
 
-const questions=
-activeQuestions;
+    submitTestBtn.disabled = true;
+    submitTestBtn.textContent = "SUBMITTING...";
 
-if(!questions.length)
-return;
+    let correct=0, attempted=0;
+    const answers=[];
 
-submitTestBtn.disabled=true;
+    questions.forEach(function(q,index){
+        const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
+        let selectedAnswer = null;
+        if(selected){
+            attempted++;
+            selectedAnswer = Number(selected.value);
+            if(selectedAnswer === Number(q.answer)) correct++;
+        }
+        answers.push({
+            questionNumber: index+1,
+            question: q.question,
+            selectedAnswer: selectedAnswer,
+            correctAnswer: Number(q.answer),
+            isCorrect: selectedAnswer!==null && selectedAnswer===Number(q.answer)
+        });
+    });
 
-submitTestBtn.textContent=
-"SUBMITTING...";
+    const wrong = attempted - correct;
+    const unanswered = questions.length - attempted;
+    const percentage = Math.round((correct/questions.length)*100);
 
+    // Save for WhatsApp share
+    finalScoreData = {
+        percentage: percentage,
+        scoreString: correct + "/" + questions.length,
+        testName: activeTestTitle
+    };
 
-let correct=0;
+    /* =====================================================
+    SHOW RESULT
+    ===================================================== */
+    scoreText.textContent = correct + "/" + questions.length;
+    resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>" +
+                             "Correct: " + correct + "<br>" +
+                             "Wrong: " + wrong + "<br>" +
+                             "Unanswered: " + unanswered + "<br><br>" +
+                             "<span id='saveStatus'>Saving your result...</span>";
 
-let attempted=0;
+    testArea.classList.add("hidden");
+    testResult.style.display = "block";
+    testResult.scrollIntoView({ behavior:"smooth", block:"start" });
 
+    /* =====================================================
+    SAVE TO SUPABASE
+    ===================================================== */
+    const studentName = document.getElementById("studentName").value.trim();
+    const studentMobile = document.getElementById("studentMobile").value.trim();
+    let chapter = "";
 
-const answers=[];
+    if(activeTestTitle){
+        if(activeTestTitle.startsWith("AI Test —")) chapter = activeTestTitle.replace("AI Test —","").trim();
+        else chapter = activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim();
+    }
 
+    try{
+        const response = await fetch("/api/save-test-attempt", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                studentName: studentName,
+                studentMobile: studentMobile,
+                studentClass: activeTestClass || testClass.value,
+                subject: activeTestSubject || testSubject.value,
+                chapter: chapter,
+                testTitle: activeTestTitle,
+                testType: activeTestTitle.startsWith("AI Test") ? "AI" : "Manual",
+                totalQuestions: questions.length,
+                attempted: attempted,
+                correct: correct,
+                wrong: wrong,
+                unanswered: unanswered,
+                percentage: percentage,
+                answers: answers
+            })
+        });
 
-questions.forEach(
-function(q,index){
+        const data = await response.json();
+        if(!response.ok) throw new Error(data.error || "Unable to save test result.");
 
-const selected=
-document.querySelector(
-'input[name="q'+
-q.id+
-'"]:checked'
-);
-
-let selectedAnswer=null;
-
-
-if(selected){
-
-attempted++;
-
-selectedAnswer=
-Number(selected.value);
-
-
-if(
-selectedAnswer===
-Number(q.answer)
-){
-
-correct++;
-
-}
-
-}
-
-
-answers.push({
-
-questionNumber:
-index+1,
-
-question:
-q.question,
-
-selectedAnswer:
-selectedAnswer,
-
-correctAnswer:
-Number(q.answer),
-
-isCorrect:
-selectedAnswer!==null &&
-selectedAnswer===
-Number(q.answer)
-
-});
-
-});
-
-
-const wrong=
-attempted-correct;
-
-const unanswered=
-questions.length-attempted;
-
-const percentage=
-Math.round(
-(correct/questions.length)*100
-);
-
-
-/* =====================================================
-SHOW RESULT
-===================================================== */
-
-scoreText.textContent=
-correct+
-"/"+
-questions.length;
-
-
-resultDetail.innerHTML=
-
-"<strong>"+
-percentage+
-"%</strong><br>"+
-"Correct: "+
-correct+
-"<br>"+
-"Wrong: "+
-wrong+
-"<br>"+
-"Unanswered: "+
-unanswered+
-"<br><br>"+
-"<span id='saveStatus'>Saving your result...</span>";
-
-
-testArea.classList.add(
-"hidden"
-);
-
-testResult.style.display=
-"block";
-
-
-testResult.scrollIntoView({
-
-behavior:"smooth",
-
-block:"start"
-
+        const saveStatus = document.getElementById("saveStatus");
+        if(saveStatus){
+            saveStatus.textContent = "✓ Result saved successfully.";
+            saveStatus.style.fontWeight = "700";
+            saveStatus.style.color = "green";
+        }
+    }catch(error){
+        const saveStatus = document.getElementById("saveStatus");
+        if(saveStatus){
+            saveStatus.textContent = "ERROR: " + error.message;
+            saveStatus.style.color = "red";
+        }
+    }finally{
+        submitTestBtn.disabled = false;
+        submitTestBtn.textContent = "SUBMIT TEST";
+    }
 });
 
 
 /* =====================================================
-STUDENT DETAILS
+RESTART & SHARE BUTTONS
 ===================================================== */
 
-const studentName=
-document.getElementById(
-"studentName"
-).value.trim();
-
-const studentMobile=
-document.getElementById(
-"studentMobile"
-).value.trim();
-
-
-/* =====================================================
-CHAPTER
-===================================================== */
-
-let chapter="";
-
-
-if(activeTestTitle){
-
-if(
-activeTestTitle
-.startsWith("AI Test —")
-){
-
-chapter=
-activeTestTitle
-.replace(
-"AI Test —",
-""
-)
-.trim();
-
-}else{
-
-chapter=
-activeTestTitle
-.replace(
-/\s+Test\s+\d+$/i,
-""
-)
-.trim();
-
-}
-
-}
-
-
-/* =====================================================
-SAVE TO SUPABASE
-===================================================== */
-
-try{
-
-const response=
-await fetch(
-"/api/save-test-attempt",
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-
-studentName:
-studentName,
-
-studentMobile:
-studentMobile,
-
-studentClass:
-activeTestClass||
-testClass.value,
-
-subject:
-activeTestSubject||
-testSubject.value,
-
-chapter:
-chapter,
-
-testTitle:
-activeTestTitle,
-
-testType:
-activeTestTitle
-.startsWith("AI Test")
-? "AI"
-: "Manual",
-
-totalQuestions:
-questions.length,
-
-attempted:
-attempted,
-
-correct:
-correct,
-
-wrong:
-wrong,
-
-unanswered:
-unanswered,
-
-percentage:
-percentage,
-
-answers:
-answers
-
-})
-
-}
-);
-
-
-const data=
-await response.json();
-
-
-if(!response.ok){
-
-throw new Error(
-data.error||
-"Unable to save test result."
-);
-
-}
-
-
-const saveStatus=
-document.getElementById(
-"saveStatus"
-);
-
-
-if(saveStatus){
-
-saveStatus.textContent=
-"✓ Result saved successfully.";
-
-saveStatus.style.fontWeight=
-"700";
-saveStatus.style.color = "green";
-
-}
-
-}catch(error){
-
-console.error(
-"Save result error:",
-error
-);
-
-
-const saveStatus=
-document.getElementById(
-"saveStatus"
-);
-
-
-if(saveStatus){
-
-saveStatus.textContent=
-"ERROR: " + error.message;
-
-saveStatus.style.color = "red";
-
-}
-
-}finally{
-
-submitTestBtn.disabled=false;
-
-submitTestBtn.textContent=
-"SUBMIT TEST";
-
-}
-
+restartTestBtn.addEventListener("click", function(){
+    testResult.style.display = "none";
+    testSetup.classList.remove("hidden");
+    testArea.classList.add("hidden");
+    activeQuestions = [];
+    activeTestTitle = "";
+    activeTestClass = "";
+    activeTestSubject = "";
+    window.scrollTo({ top:0, behavior:"smooth" });
 });
 
-
-/* =====================================================
-RESTART
-===================================================== */
-
-restartTestBtn.addEventListener(
-"click",
-function(){
-
-testResult.style.display=
-"none";
-
-testSetup.classList.remove(
-"hidden"
-);
-
-testArea.classList.add(
-"hidden"
-);
-
-activeQuestions=[];
-
-activeTestTitle="";
-
-activeTestClass="";
-
-activeTestSubject="";
-
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
-
+whatsappShareBtn.addEventListener("click", function(){
+    const currentUrl = window.location.href;
+    const msg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆%0A%0AThink you can beat my score? Take the challenge here:%0A" + currentUrl;
+    window.open("https://wa.me/?text=" + msg, "_blank");
 });
 
 </script>
