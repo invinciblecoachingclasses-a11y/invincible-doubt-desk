@@ -74,7 +74,114 @@ color:#b9c7da
 }
 
 /* =====================================================
-HEADER
+DAILY PUZZLE CARD
+===================================================== */
+
+.puzzle-banner {
+background: #fff8eb;
+border: 2px solid #f9b959;
+border-radius: 18px;
+padding: 16px;
+margin-bottom: 18px;
+box-shadow: 0 4px 15px rgba(249,185,89,.15);
+}
+
+.puzzle-tag {
+color: #b54708;
+font-weight: 900;
+font-size: 13px;
+text-transform: uppercase;
+letter-spacing: .5px;
+margin-bottom: 6px;
+}
+
+.puzzle-q {
+font-size: 16px;
+font-weight: 700;
+color: #101828;
+line-height: 1.45;
+margin-bottom: 10px;
+}
+
+.puzzle-toggle-btn {
+background: #b54708;
+color: white;
+border: none;
+padding: 7px 14px;
+border-radius: 9px;
+font-weight: 700;
+font-size: 13px;
+cursor: pointer;
+}
+
+.puzzle-solution {
+display: none;
+margin-top: 10px;
+padding: 10px;
+background: white;
+border-radius: 9px;
+border: 1px dashed #f9b959;
+font-size: 14px;
+line-height: 1.45;
+color: #061a38;
+}
+
+/* =====================================================
+WALL OF FAME (LEADERBOARD)
+===================================================== */
+
+.leaderboard-card {
+background: white;
+border: 2px solid #e1e7ef;
+border-radius: 18px;
+padding: 16px;
+margin-bottom: 18px;
+}
+
+.leaderboard-title {
+font-size: 18px;
+font-weight: 900;
+color: #09244a;
+margin-bottom: 12px;
+text-align: center;
+}
+
+.leaderboard-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 9px 12px;
+background: #f8fafc;
+border-radius: 10px;
+margin-bottom: 6px;
+font-size: 14px;
+font-weight: 700;
+}
+
+.leaderboard-rank {
+background: #09244a;
+color: white;
+border-radius: 50%;
+width: 24px;
+height: 24px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+font-size: 12px;
+margin-right: 8px;
+}
+
+.leaderboard-rank.first { background: #eab308; }
+.leaderboard-rank.second { background: #94a3b8; }
+.leaderboard-rank.third { background: #b45309; }
+
+.leaderboard-score {
+color: #027a48;
+font-weight: 900;
+}
+
+/* =====================================================
+HEADER & SWITCH
 ===================================================== */
 
 .header{
@@ -94,10 +201,6 @@ margin-top:7px;
 color:#667085;
 font-size:15px
 }
-
-/* =====================================================
-MODE SWITCH
-===================================================== */
 
 .mode-switch{
 display:grid;
@@ -124,7 +227,7 @@ border-color:#09244a
 }
 
 /* =====================================================
-CARD
+CARD & CONTROLS
 ===================================================== */
 
 .card{
@@ -140,10 +243,6 @@ font-size:18px;
 font-weight:700;
 margin-bottom:12px
 }
-
-/* =====================================================
-SUBJECTS
-===================================================== */
 
 .subjects{
 display:grid;
@@ -169,10 +268,6 @@ color:white;
 border-color:#09244a
 }
 
-/* =====================================================
-TEXTAREA
-===================================================== */
-
 textarea{
 width:100%;
 min-height:170px;
@@ -188,10 +283,6 @@ font-family:inherit
 textarea:focus{
 border-color:#1769c2
 }
-
-/* =====================================================
-PHOTO
-===================================================== */
 
 .photo-buttons{
 display:grid;
@@ -234,10 +325,6 @@ font-weight:700;
 cursor:pointer
 }
 
-/* =====================================================
-BUTTONS
-===================================================== */
-
 .ask-btn,
 .submit-test-btn,
 .generate-btn{
@@ -264,10 +351,6 @@ opacity:.6;
 cursor:not-allowed
 }
 
-/* =====================================================
-LOADING
-===================================================== */
-
 .loading{
 display:none;
 text-align:center;
@@ -275,10 +358,6 @@ padding:20px;
 font-weight:700;
 color:#1769c2
 }
-
-/* =====================================================
-ANSWER
-===================================================== */
 
 .answer-box{
 display:none;
@@ -302,10 +381,6 @@ font-size:18px;
 line-height:1.65;
 color:#172033
 }
-
-/* =====================================================
-FEEDBACK
-===================================================== */
 
 .feedback{
 display:none;
@@ -340,10 +415,6 @@ color:white;
 border-color:#09244a
 }
 
-/* =====================================================
-FOOTER
-===================================================== */
-
 .footer{
 text-align:center;
 color:#667085;
@@ -362,7 +433,7 @@ display:none!important
 }
 
 /* =====================================================
-TEST FORM
+TEST FORM & AI GENERATOR
 ===================================================== */
 
 .test-form{
@@ -404,10 +475,6 @@ color:#667085;
 font-size:14px;
 line-height:1.45
 }
-
-/* =====================================================
-AI GENERATOR
-===================================================== */
 
 .generator-box{
 margin-top:22px;
@@ -464,7 +531,7 @@ font-weight:700
 }
 
 /* =====================================================
-QUESTIONS & TIMER
+TEST QUESTIONS & TIMER
 ===================================================== */
 
 .timer-box {
@@ -553,7 +620,6 @@ line-height:1.7;
 margin-top:8px
 }
 
-/* New Review Section Styles */
 .review-title {
 font-size: 22px;
 font-weight: 900;
@@ -714,499 +780,181 @@ grid-column:auto
 <div class="container">
 
 <div class="brand-banner">
-
-<div class="brand-name">
-INVINCIBLE COACHING CLASSES
+    <div class="brand-name">INVINCIBLE COACHING CLASSES</div>
+    <div class="brand-tagline">Cultivating the Unbeatable Mind</div>
+    <div class="brand-line"></div>
+    <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS</div>
+    <div class="brand-subjects">Classes 9–12 &nbsp;•&nbsp; CBSE &nbsp;•&nbsp; Board Preparation</div>
+    <div class="brand-message">Concepts • Logic • Practice • Excellence</div>
 </div>
 
-<div class="brand-tagline">
-Cultivating the Unbeatable Mind
+<!-- DAILY BRAIN TEASER -->
+<div class="puzzle-banner" id="puzzleBox" style="display:none;">
+    <div class="puzzle-tag">⚡ Daily Brain Teaser</div>
+    <div class="puzzle-q" id="puzzleQuestion">Loading today's brain teaser...</div>
+    <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
+    <div class="puzzle-solution" id="puzzleSolution"></div>
 </div>
 
-<div class="brand-line"></div>
-
-<div class="brand-subjects">
-PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS
-</div>
-
-<div class="brand-subjects">
-Classes 9–12 &nbsp;•&nbsp; CBSE &nbsp;•&nbsp; Board Preparation
-</div>
-
-<div class="brand-message">
-Concepts • Logic • Practice • Excellence
-</div>
-
+<!-- WALL OF FAME (LEADERBOARD) -->
+<div class="leaderboard-card" id="leaderboardBox" style="display:none;">
+    <div class="leaderboard-title">🏆 Top Scorers (Wall of Fame)</div>
+    <div id="leaderboardList"></div>
 </div>
 
 <div class="header">
-
-<h1>
-Invincible Doubt Desk
-</h1>
-
-<p>
-Ask your doubt. Understand the logic.
-</p>
-
+    <h1>Invincible Doubt Desk</h1>
+    <p>Ask your doubt. Understand the logic.</p>
 </div>
 
 <div class="mode-switch">
-
-<button
-type="button"
-class="mode-btn active"
-id="doubtModeBtn">
-ASK A DOUBT
-</button>
-
-<button
-type="button"
-class="mode-btn"
-id="testModeBtn">
-TAKE A TEST
-</button>
-
+    <button type="button" class="mode-btn active" id="doubtModeBtn">ASK A DOUBT</button>
+    <button type="button" class="mode-btn" id="testModeBtn">TAKE A TEST</button>
 </div>
 
 <div class="card" id="doubtSection">
+    <label>Select Subject</label>
+    <div class="subjects">
+        <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
+        <button type="button" class="subject" data-subject="Physics">Physics</button>
+        <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
+    </div>
 
-<label>
-Select Subject
-</label>
+    <label for="question">Your Question</label>
+    <textarea id="question" placeholder="Type your question here... You can ask in English or Hindi."></textarea>
+    <input id="imageInput" type="file" accept="image/*">
 
-<div class="subjects">
+    <div class="photo-buttons">
+        <button type="button" class="photo-btn" id="cameraBtn">Take Photo</button>
+        <button type="button" class="photo-btn" id="uploadBtn">Upload Photo</button>
+    </div>
 
-<button
-type="button"
-class="subject active"
-data-subject="Mathematics">
-Mathematics
-</button>
+    <img id="imagePreview" alt="Selected question">
+    <button type="button" id="removeImage">Remove Photo</button>
+    <button type="button" class="ask-btn" id="askBtn">ASK AI</button>
 
-<button
-type="button"
-class="subject"
-data-subject="Physics">
-Physics
-</button>
+    <div class="loading" id="loading">Thinking... Please wait.</div>
 
-<button
-type="button"
-class="subject"
-data-subject="Chemistry">
-Chemistry
-</button>
-
+    <div class="answer-box" id="answerBox">
+        <div class="logic-title">Aao Logic Samjhate Hain</div>
+        <div class="answer-text" id="answerText"></div>
+        <div class="feedback" id="feedback">
+            <div class="feedback-title">Still confused?</div>
+            <div class="feedback-buttons">
+                <button type="button" class="feedback-btn" id="againBtn">Not Satisfied — Explain Again</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Help</button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<label for="question">
-Your Question
-</label>
-
-<textarea
-id="question"
-placeholder="Type your question here... You can ask in English or Hindi."
-></textarea>
-
-<input
-id="imageInput"
-type="file"
-accept="image/*"
->
-
-<div class="photo-buttons">
-
-<button
-type="button"
-class="photo-btn"
-id="cameraBtn">
-Take Photo
-</button>
-
-<button
-type="button"
-class="photo-btn"
-id="uploadBtn">
-Upload Photo
-</button>
-
-</div>
-
-<img
-id="imagePreview"
-alt="Selected question"
->
-
-<button
-type="button"
-id="removeImage">
-Remove Photo
-</button>
-
-<button
-type="button"
-class="ask-btn"
-id="askBtn">
-ASK AI
-</button>
-
-<div
-class="loading"
-id="loading">
-Thinking... Please wait.
-</div>
-
-<div
-class="answer-box"
-id="answerBox">
-
-<div class="logic-title">
-Aao Logic Samjhate Hain
-</div>
-
-<div
-class="answer-text"
-id="answerText">
-</div>
-
-<div
-class="feedback"
-id="feedback">
-
-<div class="feedback-title">
-Still confused?
-</div>
-
-<div class="feedback-buttons">
-
-<button
-type="button"
-class="feedback-btn"
-id="againBtn">
-Not Satisfied — Explain Again
-</button>
-
-<button
-type="button"
-class="feedback-btn teacher-btn"
-id="teacherBtn">
-Teacher Help
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div
-class="card hidden"
-id="testSection">
-
-<label>
-Take an Automated Test
-</label>
-
-<div id="testSetup">
-
-<div class="test-form">
-
-<input
-id="studentName"
-type="text"
-placeholder="Student Name"
->
-
-<input
-id="studentMobile"
-type="tel"
-inputmode="numeric"
-placeholder="Mobile Number"
->
-
-<select id="testClass">
-
-<option value="">
-Select Class
-</option>
-
-<option value="9">
-Class 9
-</option>
-
-<option value="10">
-Class 10
-</option>
-
-<option value="11">
-Class 11
-</option>
-
-<option value="12">
-Class 12
-</option>
-
-</select>
-
-<select id="testSubject">
-
-<option value="">
-Select Subject
-</option>
-
-<option value="Physics">
-Physics
-</option>
-
-<option value="Chemistry">
-Chemistry
-</option>
-
-<option value="Mathematics">
-Mathematics
-</option>
-
-</select>
-
-<select id="testSelect">
-
-<option value="">
-Select Test
-</option>
-
-</select>
-
-</div>
-
-<div class="test-info">
-
-<strong>
-Live Weekly Tests
-</strong>
-
-<div class="notice">
-Select your class and subject to see available tests loaded securely from the database. You can also generate a fresh AI test below.
-</div>
-
-</div>
-
-<button
-type="button"
-class="submit-test-btn"
-id="startTestBtn">
-START TEST
-</button>
-
-<div class="generator-box">
-
-<div class="generator-title">
-AI Test Generator
-</div>
-
-<div class="generator-subtitle">
-Choose the class, subject and chapter.
-AI will create a fresh test automatically.
-You can create tests in English or Hindi + English.
-</div>
-
-<div class="generator-grid">
-
-<select id="aiClass">
-
-<option value="">
-Select Class
-</option>
-
-<option value="9">
-Class 9
-</option>
-
-<option value="10">
-Class 10
-</option>
-
-<option value="11">
-Class 11
-</option>
-
-<option value="12">
-Class 12
-</option>
-
-</select>
-
-<select id="aiSubject">
-
-<option value="">
-Select Subject
-</option>
-
-<option value="Physics">
-Physics
-</option>
-
-<option value="Chemistry">
-Chemistry
-</option>
-
-<option value="Mathematics">
-Mathematics
-</option>
-
-</select>
-
-<input
-class="full"
-id="aiChapter"
-type="text"
-placeholder="Chapter name e.g. Electricity"
->
-
-<select id="aiNumber">
-
-<option value="10">
-10 Questions
-</option>
-
-<option value="15">
-15 Questions
-</option>
-
-<option value="20"
-selected>
-20 Questions
-</option>
-
-<option value="25">
-25 Questions
-</option>
-
-<option value="30">
-30 Questions
-</option>
-
-</select>
-
-<select id="aiDifficulty">
-
-<option value="Easy">
-Easy
-</option>
-
-<option value="Moderate"
-selected>
-Moderate
-</option>
-
-<option value="Hard">
-Hard
-</option>
-
-</select>
-
-<select
-class="full"
-id="aiQuestionType">
-
-<option value="MCQ">
-MCQ
-</option>
-
-</select>
-
-</div>
-
-<button
-type="button"
-class="generate-btn"
-id="generateTestBtn">
-GENERATE AI TEST
-</button>
-
-<div
-class="generator-loading"
-id="generatorLoading">
-Creating your test... Please wait.
-</div>
-
-</div>
-
-</div>
-
-<div
-id="testArea"
-class="hidden">
-
-<!-- THE NEW TIMER BOX -->
-<div class="timer-box" id="timerDisplay">
-⏳ 20:00
-</div>
-
-<div
-class="test-info"
-id="testHeader">
-</div>
-
-<div
-id="questionsContainer">
-</div>
-
-<button
-type="button"
-class="submit-test-btn"
-id="submitTestBtn">
-SUBMIT TEST
-</button>
-
-</div>
-
-<div
-class="test-result"
-id="testResult">
-
-<div class="score-box">
-    <div>Test Result</div>
-    <div class="score" id="scoreText">0/0</div>
-    <div class="result-detail" id="resultDetail"></div>
-</div>
-
-<div class="review-title">Detailed Analysis</div>
-<div id="reviewContainer">
-    <!-- Analysis cards injected here via JS -->
-</div>
-
-<button
-type="button"
-class="restart-btn"
-id="restartTestBtn">
-TAKE ANOTHER TEST
-</button>
-
-<!-- THE NEW WHATSAPP SHARE BUTTON -->
-<button
-type="button"
-class="restart-btn whatsapp-btn"
-id="whatsappShareBtn">
-SHARE SCORE ON WHATSAPP
-</button>
-
+<div class="card hidden" id="testSection">
+    <label>Take an Automated Test</label>
+    <div id="testSetup">
+        <div class="test-form">
+            <input id="studentName" type="text" placeholder="Student Name">
+            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="Mobile Number">
+
+            <select id="testClass">
+                <option value="">Select Class</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+
+            <select id="testSubject">
+                <option value="">Select Subject</option>
+                <option value="Science">Science (Class 9-10)</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+            </select>
+
+            <select id="testSelect">
+                <option value="">Select Test</option>
+            </select>
+        </div>
+
+        <div class="test-info">
+            <strong>Live Weekly Tests</strong>
+            <div class="notice">Select your class and subject to see available tests loaded securely from the database.</div>
+        </div>
+
+        <button type="button" class="submit-test-btn" id="startTestBtn">START TEST</button>
+
+        <div class="generator-box">
+            <div class="generator-title">AI Test Generator</div>
+            <div class="generator-subtitle">Choose the class, subject and chapter. AI will create a fresh test automatically.</div>
+            <div class="generator-grid">
+                <select id="aiClass">
+                    <option value="">Select Class</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                </select>
+
+                <select id="aiSubject">
+                    <option value="">Select Subject</option>
+                    <option value="Science">Science</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Mathematics">Mathematics</option>
+                </select>
+
+                <input class="full" id="aiChapter" type="text" placeholder="Chapter name e.g. Light">
+
+                <select id="aiNumber">
+                    <option value="10">10 Questions</option>
+                    <option value="15">15 Questions</option>
+                    <option value="20" selected>20 Questions</option>
+                    <option value="25">25 Questions</option>
+                    <option value="30">30 Questions</option>
+                </select>
+
+                <select id="aiDifficulty">
+                    <option value="Easy">Easy</option>
+                    <option value="Moderate" selected>Moderate</option>
+                    <option value="Hard">Hard</option>
+                </select>
+
+                <select class="full" id="aiQuestionType">
+                    <option value="MCQ">MCQ</option>
+                </select>
+            </div>
+
+            <button type="button" class="generate-btn" id="generateTestBtn">GENERATE AI TEST</button>
+            <div class="generator-loading" id="generatorLoading">Creating your test... Please wait.</div>
+        </div>
+    </div>
+
+    <div id="testArea" class="hidden">
+        <div class="timer-box" id="timerDisplay">⏳ 20:00</div>
+        <div class="test-info" id="testHeader"></div>
+        <div id="questionsContainer"></div>
+        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT TEST</button>
+    </div>
+
+    <div class="test-result" id="testResult">
+        <div class="score-box">
+            <div>Test Result</div>
+            <div class="score" id="scoreText">0/0</div>
+            <div class="result-detail" id="resultDetail"></div>
+        </div>
+
+        <div class="review-title">Detailed Analysis</div>
+        <div id="reviewContainer"></div>
+
+        <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn">SHARE SCORE ON WHATSAPP</button>
+    </div>
 </div>
 
 <div class="footer">
-
-<div class="footer-brand">
-Invincible Coaching Classes
-</div>
-
-Cultivating the Unbeatable Mind
-
-<br>
-
-© Invincible Coaching Classes
-
+    <div class="footer-brand">Invincible Coaching Classes</div>
+    Cultivating the Unbeatable Mind<br>
+    © Invincible Coaching Classes
 </div>
 
 </div>
@@ -1216,7 +964,6 @@ Cultivating the Unbeatable Mind
 /* =====================================================
 MODE SWITCH
 ===================================================== */
-
 const doubtModeBtn = document.getElementById("doubtModeBtn");
 const testModeBtn = document.getElementById("testModeBtn");
 const doubtSection = document.getElementById("doubtSection");
@@ -1236,11 +983,9 @@ testModeBtn.addEventListener("click", function(){
     doubtSection.classList.add("hidden");
 });
 
-
 /* =====================================================
 DOUBT DESK
 ===================================================== */
-
 let selectedSubject="Mathematics";
 let selectedImage=null;
 
@@ -1276,7 +1021,7 @@ document.getElementById("cameraBtn").addEventListener("click", function(){
 
 imageInput.addEventListener("change", function(event){
     const file = event.target.files[0];
-    if(!file)return;
+    if(!file) return;
     if(!file.type.startsWith("image/")){
         alert("Please select an image.");
         return;
@@ -1284,10 +1029,7 @@ imageInput.addEventListener("change", function(event){
     const reader = new FileReader();
     reader.onload = function(){
         const result = reader.result;
-        selectedImage = {
-            data: result.split(",")[1],
-            mimeType: file.type
-        };
+        selectedImage = { data: result.split(",")[1], mimeType: file.type };
         imagePreview.src = result;
         imagePreview.style.display = "block";
         removeImageButton.style.display = "block";
@@ -1325,9 +1067,8 @@ askButton.addEventListener("click", async function(){
             })
         });
         const data = await response.json();
-        if(!response.ok){
-            throw new Error(data.error || "Unable to get answer.");
-        }
+        if(!response.ok) throw new Error(data.error || "Unable to get answer.");
+
         answerText.textContent = cleanAnswer(data.answer);
         answerBox.style.display = "block";
         feedback.style.display = "block";
@@ -1342,7 +1083,7 @@ askButton.addEventListener("click", async function(){
 });
 
 function cleanAnswer(text){
-    if(!text)return "";
+    if(!text) return "";
     return text
     .replace(/#{1,6}\s?/g, "")
     .replace(/\*\*/g, "")
@@ -1372,68 +1113,93 @@ document.getElementById("againBtn").addEventListener("click", function(){
 document.getElementById("teacherBtn").addEventListener("click", function(){
     const studentQuestion = questionInput.value.trim();
     const aiExplanation = answerText.textContent.trim();
-    const whatsappMessage = 
-    "Hello Invincible Coaching Classes Teacher.\n\n" +
-    "I need personal help with this doubt.\n\n" +
-    "Subject: " + selectedSubject + "\n\n" +
-    "Student Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\n" +
-    "AI Explanation:\n" + aiExplanation + "\n\n" +
-    "Please help me with this doubt.";
-    
-    // Encode properly for WhatsApp
+    const whatsappMessage = "Hello Invincible Coaching Classes Teacher.\n\n" +
+        "I need personal help with this doubt.\n\n" +
+        "Subject: " + selectedSubject + "\n\n" +
+        "Student Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\n" +
+        "AI Explanation:\n" + aiExplanation + "\n\n" +
+        "Please help me with this doubt.";
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
 });
 
-
 /* =====================================================
-DATABASE TEST BANK
+FETCH DATA (PUZZLE, LEADERBOARD, TESTS)
 ===================================================== */
+let testBank = {};
 
-let testBank={};
-
-async function loadDatabaseTests(){
+async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
         const data = await response.json();
-        
-        if(Array.isArray(data)){
-            data.forEach(function(q, index){
+
+        // 1. Process Questions
+        if(data && Array.isArray(data.questions)){
+            data.questions.forEach(function(q, index){
                 const key = q.class_name + "|" + q.subject;
-                if(!testBank[key]){
-                    testBank[key] = {};
-                }
-                if(!testBank[key][q.test_title]){
-                    testBank[key][q.test_title] = [];
-                }
-                // Also load the new explanation column
+                if(!testBank[key]) testBank[key] = {};
+                if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
                 testBank[key][q.test_title].push({
                     id: index + 1,
                     question: q.question_text,
                     options: [q.option_1, q.option_2, q.option_3, q.option_4],
                     answer: q.correct_option,
-                    explanation: q.explanation // NEW FIELD
+                    explanation: q.explanation
                 });
             });
         }
+
+        // 2. Process Daily Puzzle
+        if(data && data.dailyPuzzle){
+            document.getElementById("puzzleBox").style.display = "block";
+            document.getElementById("puzzleQuestion").textContent = data.dailyPuzzle.question_text;
+            document.getElementById("puzzleSolution").textContent = data.dailyPuzzle.solution_text;
+        }
+
+        // 3. Process Leaderboard
+        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
+            const list = document.getElementById("leaderboardList");
+            list.innerHTML = "";
+            data.leaderboard.forEach(function(item, idx){
+                let rankClass = idx === 0 ? "first" : (idx === 1 ? "second" : (idx === 2 ? "third" : ""));
+                list.innerHTML += `
+                    <div class="leaderboard-item">
+                        <div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div>
+                        <div class="leaderboard-score">${item.percentage}%</div>
+                    </div>
+                `;
+            });
+            document.getElementById("leaderboardBox").style.display = "block";
+        }
     }catch(error){
-        console.error("Error loading tests from database:", error);
+        console.error("Error loading platform data:", error);
     }
 }
-loadDatabaseTests();
+loadPlatformData();
 
+// Daily Puzzle Toggle Logic
+const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
+const puzzleSolution = document.getElementById("puzzleSolution");
+puzzleToggleBtn.addEventListener("click", function(){
+    if(puzzleSolution.style.display === "block"){
+        puzzleSolution.style.display = "none";
+        puzzleToggleBtn.textContent = "Reveal Logic";
+    }else{
+        puzzleSolution.style.display = "block";
+        puzzleToggleBtn.textContent = "Hide Logic";
+    }
+});
 
 /* =====================================================
 TEST VARIABLES & TIMER
 ===================================================== */
-
-let activeQuestions=[];
-let activeTestTitle="";
-let activeTestClass="";
-let activeTestSubject="";
-let finalScoreData = {}; // For WhatsApp Share
+let activeQuestions = [];
+let activeTestTitle = "";
+let activeTestClass = "";
+let activeTestSubject = "";
+let finalScoreData = {};
 
 let testTimerInterval = null;
-let timeRemaining = 1200; // 20 minutes = 1200 seconds
+let timeRemaining = 1200;
 
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
@@ -1447,24 +1213,19 @@ const submitTestBtn = document.getElementById("submitTestBtn");
 const testResult = document.getElementById("testResult");
 const scoreText = document.getElementById("scoreText");
 const resultDetail = document.getElementById("resultDetail");
-const reviewContainer = document.getElementById("reviewContainer"); // New section
+const reviewContainer = document.getElementById("reviewContainer");
 const restartTestBtn = document.getElementById("restartTestBtn");
 const timerDisplay = document.getElementById("timerDisplay");
 const whatsappShareBtn = document.getElementById("whatsappShareBtn");
 
-
-/* =====================================================
-TIMER FUNCTIONS
-===================================================== */
 function startTimer() {
     clearInterval(testTimerInterval);
-    timeRemaining = 1200; // Reset to 20 minutes
+    timeRemaining = 1200;
     updateTimerUI();
 
     testTimerInterval = setInterval(function() {
         timeRemaining--;
         updateTimerUI();
-
         if (timeRemaining <= 0) {
             clearInterval(testTimerInterval);
             alert("⏰ Time's up! Your test is automatically submitting.");
@@ -1482,15 +1243,9 @@ function updateTimerUI() {
     timerDisplay.textContent = "⏳ " + mStr + ":" + sStr;
 }
 
-
-/* =====================================================
-MANUAL TEST LIST
-===================================================== */
-
 function updateTestList(){
     testSelect.innerHTML = '<option value="">Select Test</option>';
     const key = testClass.value + "|" + testSubject.value;
-
     if(testBank[key]){
         const testTitles = Object.keys(testBank[key]);
         testTitles.forEach(function(testName){
@@ -1504,11 +1259,9 @@ function updateTestList(){
 testClass.addEventListener("change", updateTestList);
 testSubject.addEventListener("change", updateTestList);
 
-
 /* =====================================================
 START MANUAL TEST
 ===================================================== */
-
 startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
@@ -1539,11 +1292,9 @@ startTestBtn.addEventListener("click", function(){
     startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
-
 /* =====================================================
 AI TEST GENERATOR
 ===================================================== */
-
 const generateTestBtn = document.getElementById("generateTestBtn");
 const generatorLoading = document.getElementById("generatorLoading");
 
@@ -1595,11 +1346,6 @@ generateTestBtn.addEventListener("click", async function(){
     }
 });
 
-
-/* =====================================================
-EXTRACT AI QUESTIONS
-===================================================== */
-
 function extractQuestions(data){
     let questions=[];
     if(Array.isArray(data)) questions = data;
@@ -1625,17 +1371,12 @@ function extractQuestions(data){
             question: q.question || q.questionText || "Question " + (index+1),
             options: options,
             answer: Number(answer),
-            explanation: q.explanation // Map AI explanation if available
+            explanation: q.explanation
         };
     }).filter(function(q){
         return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length);
     });
 }
-
-
-/* =====================================================
-START ANY TEST
-===================================================== */
 
 function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions;
@@ -1644,7 +1385,7 @@ function startQuestions(questions, headerTitle, testTitle){
     testSetup.classList.add("hidden");
     testArea.classList.remove("hidden");
     testResult.style.display = "none";
-    reviewContainer.innerHTML = ""; // Clear old reviews
+    reviewContainer.innerHTML = "";
     
     testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + 
                            escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + 
@@ -1671,28 +1412,19 @@ function startQuestions(questions, headerTitle, testTitle){
     });
 
     window.scrollTo({ top:0, behavior:"smooth" });
-    
-    // START THE COUNTDOWN
     startTimer();
 }
-
-
-/* =====================================================
-SAFE HTML
-===================================================== */
 
 function escapeHTML(text){
     if(!text) return "";
     return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
-
 /* =====================================================
-SUBMIT TEST + SAVE RESULT + BUILD REVIEW
+SUBMIT TEST & ANALYTICS
 ===================================================== */
-
 submitTestBtn.addEventListener("click", async function(){
-    clearInterval(testTimerInterval); // Stop timer immediately!
+    clearInterval(testTimerInterval);
     const questions = activeQuestions;
     if(!questions.length) return;
 
@@ -1701,7 +1433,7 @@ submitTestBtn.addEventListener("click", async function(){
 
     let correct=0, attempted=0;
     const answers=[];
-    let reviewHTML = ""; // Build the review section
+    let reviewHTML = "";
 
     questions.forEach(function(q,index){
         const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
@@ -1725,7 +1457,6 @@ submitTestBtn.addEventListener("click", async function(){
             isCorrect: isCorrect
         });
 
-        /* Build Review Card for this Question */
         let statusBadge = isCorrect 
             ? '<span class="review-correct">✓ Correct</span>' 
             : '<span class="review-wrong">✗ Incorrect / Skipped</span>';
@@ -1755,16 +1486,12 @@ submitTestBtn.addEventListener("click", async function(){
     const unanswered = questions.length - attempted;
     const percentage = Math.round((correct/questions.length)*100);
 
-    // Save for WhatsApp share
     finalScoreData = {
         percentage: percentage,
         scoreString: correct + "/" + questions.length,
         testName: activeTestTitle
     };
 
-    /* =====================================================
-    SHOW RESULT & REVIEW
-    ===================================================== */
     scoreText.textContent = correct + "/" + questions.length;
     resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>" +
                              "Correct: " + correct + "<br>" +
@@ -1773,14 +1500,10 @@ submitTestBtn.addEventListener("click", async function(){
                              "<span id='saveStatus'>Saving your result...</span>";
 
     reviewContainer.innerHTML = reviewHTML;
-
     testArea.classList.add("hidden");
     testResult.style.display = "block";
     testResult.scrollIntoView({ behavior:"smooth", block:"start" });
 
-    /* =====================================================
-    SAVE TO SUPABASE
-    ===================================================== */
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
     let chapter = "";
@@ -1833,11 +1556,6 @@ submitTestBtn.addEventListener("click", async function(){
     }
 });
 
-
-/* =====================================================
-RESTART & SHARE BUTTONS
-===================================================== */
-
 restartTestBtn.addEventListener("click", function(){
     testResult.style.display = "none";
     testSetup.classList.remove("hidden");
@@ -1852,9 +1570,7 @@ restartTestBtn.addEventListener("click", function(){
 whatsappShareBtn.addEventListener("click", function(){
     const currentUrl = window.location.href;
     const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + currentUrl;
-    
-    const encodedMsg = encodeURIComponent(rawMsg);
-    window.open("https://api.whatsapp.com/send?text=" + encodedMsg, "_blank");
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
 </script>
