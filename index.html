@@ -1432,33 +1432,36 @@ function escapeHTML(text){
 }
 
 /* =====================================================
-SMART BADGES LOGIC
+SMART BADGES LOGIC (UPDATED)
 ===================================================== */
 function generateBadges(percentage, timeSpentSeconds) {
     let badgesHTML = "";
     const hour = new Date().getHours();
 
-    // Invincible Scholar Badge
+    // 1. Invincible Scholar / Sharpshooter
     if(percentage === 100) {
         badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`;
-    } 
-    // Sharpshooter Badge
-    else if (percentage >= 80) {
+    } else if (percentage >= 80) {
         badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`;
+    } else if (percentage >= 50) {
+        badgesHTML += `<div class="badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; border:1px solid #38bdf8;">👍 Good Effort</div>`;
+    } else {
+        // Default badge so the box is NEVER empty
+        badgesHTML += `<div class="badge" style="background:rgba(148, 163, 184, 0.15); color:#94a3b8; border:1px solid #94a3b8;">🌱 Future Topper</div>`;
     }
 
-    // Speedster Badge (Finished under 10 mins with >= 80% accuracy)
+    // 2. Speedster Badge (Finished under 10 mins with >= 80% accuracy)
     if(timeSpentSeconds < 600 && percentage >= 80) {
         badgesHTML += `<div class="badge speedster">⚡ Speedster</div>`;
     }
 
-    // Night Owl (Tested between 11 PM and 4 AM)
+    // 3. Time-Based Badges
     if(hour >= 23 || hour <= 4) {
         badgesHTML += `<div class="badge nightowl">🦉 Night Owl</div>`;
-    }
-
-    // Early Bird (Tested between 5 AM and 8 AM)
-    if(hour >= 5 && hour <= 8) {
+    } else if (hour >= 18 && hour < 23) {
+        // Added Evening badge (6 PM to 11 PM)
+        badgesHTML += `<div class="badge" style="background:rgba(249, 115, 22, 0.15); color:#f97316; border:1px solid #f97316;">🌙 Evening Grinder</div>`;
+    } else if (hour >= 5 && hour <= 8) {
         badgesHTML += `<div class="badge earlybird">🌅 Early Bird</div>`;
     }
 
