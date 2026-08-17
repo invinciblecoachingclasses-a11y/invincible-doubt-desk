@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Invincible 360 | Complete Academic Ecosystem</title>
+<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access free AI doubt solving, Hinglish physics, chemistry, and mathematics weekly tests, and daily brain teasers.">
+
+<!-- CONFETTI LIBRARY FOR VISUAL DOPAMINE -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
 
@@ -583,7 +587,7 @@ width:auto;
 }
 
 /* =====================================================
-RESULT & ANALYTICS
+RESULT, BADGES & ANALYTICS
 ===================================================== */
 
 .test-result{
@@ -614,6 +618,32 @@ line-height:1.7;
 margin-top:8px;
 color:#cbd5e1;
 }
+
+/* BADGES STYLING */
+.badges-container {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+justify-content: center;
+margin: 15px 0;
+}
+
+.badge {
+padding: 8px 16px;
+border-radius: 20px;
+font-size: 14px;
+font-weight: 800;
+display: inline-flex;
+align-items: center;
+gap: 6px;
+box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
+.badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
+.badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
+.badge.earlybird { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
+.badge.sharp { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid #fb7185; }
 
 .review-title {
 font-size: 20px;
@@ -903,6 +933,7 @@ MOBILE OPTIMIZATIONS
         <div class="score-box">
             <div>Test Result</div>
             <div class="score" id="scoreText">0/0</div>
+            <div id="badgesContainer" class="badges-container"></div>
             <div class="result-detail" id="resultDetail"></div>
         </div>
 
@@ -923,6 +954,30 @@ MOBILE OPTIMIZATIONS
 </div>
 
 <script>
+
+/* =====================================================
+AUDIO SYNTHESIS FOR SUCCESS BEEP
+===================================================== */
+function playSuccessSound() {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
+        osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1); // Slide up to A6
+        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+    } catch(e) {
+        console.log("Audio play failed, skipping.");
+    }
+}
 
 /* =====================================================
 MODE SWITCH
@@ -1158,6 +1213,7 @@ let activeTestSubject = "";
 let finalScoreData = {};
 
 let testTimerInterval = null;
+let totalTimeLimit = 1200; // 20 minutes in seconds
 let timeRemaining = 1200;
 
 const testClass = document.getElementById("testClass");
@@ -1171,6 +1227,7 @@ const questionsContainer = document.getElementById("questionsContainer");
 const submitTestBtn = document.getElementById("submitTestBtn");
 const testResult = document.getElementById("testResult");
 const scoreText = document.getElementById("scoreText");
+const badgesContainer = document.getElementById("badgesContainer");
 const resultDetail = document.getElementById("resultDetail");
 const reviewContainer = document.getElementById("reviewContainer");
 const restartTestBtn = document.getElementById("restartTestBtn");
@@ -1179,7 +1236,7 @@ const whatsappShareBtn = document.getElementById("whatsappShareBtn");
 
 function startTimer() {
     clearInterval(testTimerInterval);
-    timeRemaining = 1200;
+    timeRemaining = totalTimeLimit;
     updateTimerUI();
 
     testTimerInterval = setInterval(function() {
@@ -1339,6 +1396,7 @@ function startQuestions(questions, headerTitle, testTitle){
     testArea.classList.remove("hidden");
     testResult.style.display = "none";
     reviewContainer.innerHTML = "";
+    badgesContainer.innerHTML = "";
     
     testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + 
                            escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + 
@@ -1373,7 +1431,42 @@ function escapeHTML(text){
     return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
+/* =====================================================
+SMART BADGES LOGIC
+===================================================== */
+function generateBadges(percentage, timeSpentSeconds) {
+    let badgesHTML = "";
+    const hour = new Date().getHours();
+
+    // Invincible Scholar Badge
+    if(percentage === 100) {
+        badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`;
+    } 
+    // Sharpshooter Badge
+    else if (percentage >= 80) {
+        badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`;
+    }
+
+    // Speedster Badge (Finished under 10 mins with >= 80% accuracy)
+    if(timeSpentSeconds < 600 && percentage >= 80) {
+        badgesHTML += `<div class="badge speedster">⚡ Speedster</div>`;
+    }
+
+    // Night Owl (Tested between 11 PM and 4 AM)
+    if(hour >= 23 || hour <= 4) {
+        badgesHTML += `<div class="badge nightowl">🦉 Night Owl</div>`;
+    }
+
+    // Early Bird (Tested between 5 AM and 8 AM)
+    if(hour >= 5 && hour <= 8) {
+        badgesHTML += `<div class="badge earlybird">🌅 Early Bird</div>`;
+    }
+
+    return badgesHTML;
+}
+
 submitTestBtn.addEventListener("click", async function(){
+    const timeSpent = totalTimeLimit - timeRemaining;
     clearInterval(testTimerInterval);
     const questions = activeQuestions;
     if(!questions.length) return;
@@ -1435,6 +1528,22 @@ submitTestBtn.addEventListener("click", async function(){
     const wrong = attempted - correct;
     const unanswered = questions.length - attempted;
     const percentage = Math.round((correct/questions.length)*100);
+
+    // Render Badges
+    badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
+
+    // Trigger Visual Dopamine (Confetti & Sound) if >= 80%
+    if (percentage >= 80) {
+        playSuccessSound();
+        if (typeof confetti === "function") {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#38bdf8', '#facc15', '#ec4899', '#34d399']
+            });
+        }
+    }
 
     finalScoreData = {
         percentage: percentage,
