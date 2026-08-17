@@ -4,126 +4,149 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Invincible Coaching Classes | Doubt Desk</title>
+<title>Invincible 360 | Complete Academic Ecosystem</title>
 
 <style>
 
 *{
-box-sizing:border-box
+box-sizing:border-box;
+transition: all 0.2s ease-in-out;
 }
 
 body{
 margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f7fa;
-color:#101828
+font-family: 'Inter', system-ui, -apple-system, sans-serif;
+background:#0f172a;
+color:#f8fafc;
 }
 
 .container{
-width:min(720px,94%);
-margin:22px auto
+width:min(760px, 94%);
+margin:25px auto;
 }
 
 /* =====================================================
-COACHING BRAND BANNER
+MODERN BRAND BANNER (INVINCIBLE 360)
 ===================================================== */
 
 .brand-banner{
-background:linear-gradient(135deg,#061a38,#09244a);
+background: linear-gradient(135deg, #1e293b, #0f172a);
 color:white;
-border-radius:22px;
-padding:23px 18px;
+border-radius:24px;
+padding:28px 20px;
 text-align:center;
-margin-bottom:18px;
-box-shadow:0 10px 30px rgba(9,36,74,.18);
-border:1px solid rgba(255,255,255,.08)
+margin-bottom:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.4);
+border: 1px solid rgba(56, 189, 248, 0.2);
+position: relative;
+overflow: hidden;
+}
+
+.brand-banner::before {
+content: '';
+position: absolute;
+top: 0; left: 0; right: 0; height: 4px;
+background: linear-gradient(90deg, #38bdf8, #6366f1, #ec4899);
 }
 
 .brand-name{
-font-size:25px;
+font-size:28px;
 font-weight:900;
-letter-spacing:.5px;
-margin:0
+letter-spacing:1px;
+margin:0;
+background: linear-gradient(90deg, #38bdf8, #818cf8);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
 }
 
 .brand-tagline{
-font-size:15px;
+font-size:14px;
 font-style:italic;
-margin-top:7px;
-color:#dbeafe
+margin-top:6px;
+color:#94a3b8;
 }
 
 .brand-line{
 height:1px;
-background:rgba(255,255,255,.2);
-margin:15px auto;
-width:75%
+background:rgba(255,255,255,.1);
+margin:16px auto;
+width:80%;
 }
 
 .brand-subjects{
 font-size:13px;
 font-weight:700;
-letter-spacing:.3px;
-color:#f8fafc
+letter-spacing:.5px;
+color:#cbd5e1;
 }
 
 .brand-message{
-margin-top:8px;
+margin-top:10px;
 font-size:12px;
-color:#b9c7da
+color:#38bdf8;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
 }
 
 /* =====================================================
-DAILY PUZZLE CARD
+DAILY PUZZLE CARD (NEON GLOW)
 ===================================================== */
 
 .puzzle-banner {
-background: #fff8eb;
-border: 2px solid #f9b959;
-border-radius: 18px;
-padding: 16px;
-margin-bottom: 18px;
-box-shadow: 0 4px 15px rgba(249,185,89,.15);
+background: linear-gradient(145deg, #1e293b, #111827);
+border: 2px solid #f59e0b;
+border-radius: 20px;
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
 }
 
 .puzzle-tag {
-color: #b54708;
+color: #f59e0b;
 font-weight: 900;
-font-size: 13px;
+font-size: 12px;
 text-transform: uppercase;
-letter-spacing: .5px;
-margin-bottom: 6px;
+letter-spacing: 1px;
+margin-bottom: 8px;
+display: flex;
+align-items: center;
+gap: 6px;
 }
 
 .puzzle-q {
-font-size: 16px;
+font-size: 17px;
 font-weight: 700;
-color: #101828;
-line-height: 1.45;
-margin-bottom: 10px;
+color: #f8fafc;
+line-height: 1.5;
+margin-bottom: 14px;
 }
 
 .puzzle-toggle-btn {
-background: #b54708;
-color: white;
+background: #f59e0b;
+color: #0f172a;
 border: none;
-padding: 7px 14px;
-border-radius: 9px;
-font-weight: 700;
+padding: 8px 16px;
+border-radius: 10px;
+font-weight: 800;
 font-size: 13px;
 cursor: pointer;
 }
 
+.puzzle-toggle-btn:hover {
+background: #d97706;
+}
+
 .puzzle-solution {
 display: none;
-margin-top: 10px;
-padding: 10px;
-background: white;
-border-radius: 9px;
-border: 1px dashed #f9b959;
+margin-top: 14px;
+padding: 14px;
+background: rgba(15, 23, 42, 0.6);
+border-radius: 12px;
+border: 1px dashed #f59e0b;
 font-size: 14px;
-line-height: 1.45;
-color: #061a38;
+line-height: 1.6;
+color: #e2e8f0;
 }
 
 /* =====================================================
@@ -131,52 +154,55 @@ WALL OF FAME (LEADERBOARD)
 ===================================================== */
 
 .leaderboard-card {
-background: white;
-border: 2px solid #e1e7ef;
-border-radius: 18px;
-padding: 16px;
-margin-bottom: 18px;
+background: #1e293b;
+border: 2px solid #334155;
+border-radius: 20px;
+padding: 20px;
+margin-bottom: 20px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .leaderboard-title {
 font-size: 18px;
 font-weight: 900;
-color: #09244a;
-margin-bottom: 12px;
+color: #38bdf8;
+margin-bottom: 14px;
 text-align: center;
+letter-spacing: .5px;
 }
 
 .leaderboard-item {
 display: flex;
 justify-content: space-between;
 align-items: center;
-padding: 9px 12px;
-background: #f8fafc;
-border-radius: 10px;
-margin-bottom: 6px;
+padding: 11px 14px;
+background: #0f172a;
+border-radius: 12px;
+margin-bottom: 8px;
 font-size: 14px;
 font-weight: 700;
+border: 1px solid rgba(255,255,255,0.05);
 }
 
 .leaderboard-rank {
-background: #09244a;
+background: #334155;
 color: white;
 border-radius: 50%;
-width: 24px;
-height: 24px;
+width: 26px;
+height: 26px;
 display: inline-flex;
 align-items: center;
 justify-content: center;
 font-size: 12px;
-margin-right: 8px;
+margin-right: 10px;
 }
 
-.leaderboard-rank.first { background: #eab308; }
-.leaderboard-rank.second { background: #94a3b8; }
-.leaderboard-rank.third { background: #b45309; }
+.leaderboard-rank.first { background: #eab308; color: #0f172a; }
+.leaderboard-rank.second { background: #94a3b8; color: #0f172a; }
+.leaderboard-rank.third { background: #d97706; color: white; }
 
 .leaderboard-score {
-color: #027a48;
+color: #34d399;
 font-weight: 900;
 }
 
@@ -186,123 +212,130 @@ HEADER & SWITCH
 
 .header{
 text-align:center;
-margin-bottom:20px
+margin-bottom:20px;
 }
 
 .header h1{
 margin:0;
-font-size:31px;
-font-weight:800;
-color:#09244a
+font-size:32px;
+font-weight:900;
+color:white;
 }
 
 .header p{
-margin-top:7px;
-color:#667085;
-font-size:15px
+margin-top:8px;
+color:#94a3b8;
+font-size:15px;
 }
 
 .mode-switch{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:18px
+gap:12px;
+margin-bottom:20px;
 }
 
 .mode-btn{
-padding:15px 10px;
-border:2px solid #d7dee8;
-border-radius:14px;
-background:white;
-color:#1769c2;
+padding:16px 10px;
+border:2px solid #334155;
+border-radius:16px;
+background:#1e293b;
+color:#38bdf8;
 font-size:16px;
 font-weight:800;
-cursor:pointer
+cursor:pointer;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .mode-btn.active{
-background:#09244a;
+background: linear-gradient(135deg, #0284c7, #0369a1);
 color:white;
-border-color:#09244a
+border-color:#38bdf8;
+box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
 }
 
 /* =====================================================
-CARD & CONTROLS
+CARDS & INPUTS
 ===================================================== */
 
 .card{
-background:white;
-padding:25px;
-border-radius:22px;
-box-shadow:0 8px 30px rgba(0,0,0,.08)
+background:#1e293b;
+padding:28px;
+border-radius:24px;
+box-shadow:0 15px 35px rgba(0,0,0,.4);
+border: 1px solid rgba(255,255,255,0.05);
 }
 
 label{
 display:block;
-font-size:18px;
+font-size:16px;
 font-weight:700;
-margin-bottom:12px
+margin-bottom:12px;
+color:#e2e8f0;
 }
 
 .subjects{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:10px;
-margin-bottom:25px
+margin-bottom:25px;
 }
 
 .subject{
-padding:15px 8px;
-border:2px solid #d7dee8;
+padding:16px 8px;
+border:2px solid #334155;
 border-radius:14px;
-background:white;
-color:#1769c2;
-font-size:16px;
+background:#0f172a;
+color:#38bdf8;
+font-size:15px;
 font-weight:700;
-cursor:pointer
+cursor:pointer;
 }
 
 .subject.active{
-background:#09244a;
-color:white;
-border-color:#09244a
+background:#38bdf8;
+color:#0f172a;
+border-color:#38bdf8;
+font-weight: 900;
 }
 
-textarea{
+textarea, input, select {
 width:100%;
-min-height:170px;
-padding:18px;
-border:2px solid #dce2ea;
-border-radius:18px;
-font-size:18px;
-resize:vertical;
+padding:16px;
+border:2px solid #334155;
+border-radius:14px;
+font-size:16px;
+background:#0f172a;
+color:white;
 outline:none;
-font-family:inherit
+font-family:inherit;
 }
 
-textarea:focus{
-border-color:#1769c2
+textarea:focus, input:focus, select:focus{
+border-color:#38bdf8;
+box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
 }
 
 .photo-buttons{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
-margin-top:15px
+margin-top:15px;
 }
 
 .photo-btn{
-padding:17px 10px;
-border:2px solid #d7dee8;
-border-radius:15px;
-background:white;
-font-size:16px;
+padding:16px 10px;
+border:2px solid #334155;
+border-radius:14px;
+background:#0f172a;
+color:#e2e8f0;
+font-size:15px;
 font-weight:700;
-cursor:pointer
+cursor:pointer;
 }
 
 #imageInput{
-display:none
+display:none;
 }
 
 #imagePreview{
@@ -311,8 +344,8 @@ width:100%;
 max-height:260px;
 object-fit:contain;
 margin-top:15px;
-border-radius:15px;
-border:2px solid #e1e6ed
+border-radius:14px;
+border:2px solid #334155;
 }
 
 #removeImage{
@@ -320,9 +353,9 @@ display:none;
 margin:10px auto 0;
 border:none;
 background:none;
-color:#d92d20;
+color:#ef4444;
 font-weight:700;
-cursor:pointer
+cursor:pointer;
 }
 
 .ask-btn,
@@ -330,262 +363,223 @@ cursor:pointer
 .generate-btn{
 width:100%;
 margin-top:20px;
-padding:19px;
+padding:18px;
 border:none;
 border-radius:16px;
-background:#ed7118;
+background: linear-gradient(135deg, #f97316, #ea580c);
 color:white;
-font-size:20px;
-font-weight:800;
-cursor:pointer
+font-size:18px;
+font-weight:900;
+cursor:pointer;
+box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
 }
 
 .generate-btn{
-background:#09244a
+background: linear-gradient(135deg, #38bdf8, #0284c7);
+color: #0f172a;
+box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
 }
 
 .ask-btn:disabled,
 .submit-test-btn:disabled,
 .generate-btn:disabled{
-opacity:.6;
-cursor:not-allowed
+opacity:.5;
+cursor:not-allowed;
 }
 
-.loading{
+.loading, .generator-loading{
 display:none;
 text-align:center;
 padding:20px;
 font-weight:700;
-color:#1769c2
+color:#38bdf8;
 }
+
+/* =====================================================
+ANSWER & AI OUTPUT
+===================================================== */
 
 .answer-box{
 display:none;
 margin-top:25px;
-padding:22px;
-background:#f8fafc;
+padding:24px;
+background:#0f172a;
 border-radius:20px;
-border:2px solid #e1e7ef
+border:2px solid #334155;
 }
 
 .logic-title{
-font-size:30px;
+font-size:24px;
 font-weight:900;
-color:#09244a;
-margin-bottom:18px
+color:#38bdf8;
+margin-bottom:15px;
 }
 
 .answer-text{
 white-space:pre-wrap;
-font-size:18px;
-line-height:1.65;
-color:#172033
+font-size:17px;
+line-height:1.7;
+color:#cbd5e1;
 }
 
 .feedback{
 display:none;
-margin-top:22px
+margin-top:20px;
 }
 
 .feedback-title{
-font-size:17px;
+font-size:15px;
 font-weight:700;
-margin-bottom:12px
+margin-bottom:10px;
+color:#94a3b8;
 }
 
 .feedback-buttons{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:10px
+gap:10px;
 }
 
 .feedback-btn{
 padding:14px 10px;
-border-radius:13px;
-border:2px solid #d7dee8;
-background:white;
+border-radius:12px;
+border:2px solid #334155;
+background:#1e293b;
+color:#e2e8f0;
 font-weight:700;
 cursor:pointer;
-font-size:14px
+font-size:13px;
 }
 
 .teacher-btn{
-background:#09244a;
-color:white;
-border-color:#09244a
-}
-
-.footer{
-text-align:center;
-color:#667085;
-margin:25px 0;
-font-size:14px;
-line-height:1.6
-}
-
-.footer-brand{
-font-weight:800;
-color:#09244a
-}
-
-.hidden{
-display:none!important
+background:#38bdf8;
+color:#0f172a;
+border-color:#38bdf8;
 }
 
 /* =====================================================
-TEST FORM & AI GENERATOR
+TEST FORM & GENERATOR
 ===================================================== */
 
 .test-form{
 display:grid;
-gap:14px
-}
-
-.test-form input,
-.test-form select{
-width:100%;
-padding:15px;
-border:2px solid #dce2ea;
-border-radius:13px;
-font-size:16px;
-background:white;
-outline:none
-}
-
-.test-form input:focus,
-.test-form select:focus{
-border-color:#1769c2
+gap:14px;
 }
 
 .test-info{
-background:#f8fafc;
-border:2px solid #e1e7ef;
+background:#0f172a;
+border:2px solid #334155;
 border-radius:16px;
 padding:16px;
-margin:18px 0
+margin:18px 0;
+color:#cbd5e1;
 }
 
 .test-info strong{
-color:#09244a
+color:#38bdf8;
 }
 
 .notice{
-margin-top:12px;
-color:#667085;
-font-size:14px;
-line-height:1.45
+margin-top:8px;
+color:#94a3b8;
+font-size:13px;
+line-height:1.5;
 }
 
 .generator-box{
-margin-top:22px;
-padding-top:22px;
-border-top:2px solid #e1e7ef
+margin-top:24px;
+padding-top:24px;
+border-top:2px solid #334155;
 }
 
 .generator-title{
-font-size:22px;
+font-size:20px;
 font-weight:900;
-color:#09244a;
-margin-bottom:7px
+color:white;
+margin-bottom:6px;
 }
 
 .generator-subtitle{
-font-size:14px;
-color:#667085;
-line-height:1.45;
-margin-bottom:16px
+font-size:13px;
+color:#94a3b8;
+line-height:1.5;
+margin-bottom:16px;
 }
 
 .generator-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px
-}
-
-.generator-grid input,
-.generator-grid select{
-width:100%;
-padding:14px;
-border:2px solid #dce2ea;
-border-radius:13px;
-font-size:16px;
-background:white;
-outline:none
-}
-
-.generator-grid input:focus,
-.generator-grid select:focus{
-border-color:#1769c2
+gap:12px;
 }
 
 .full{
-grid-column:1/-1
-}
-
-.generator-loading{
-display:none;
-text-align:center;
-padding:18px;
-color:#1769c2;
-font-weight:700
+grid-column:1/-1;
 }
 
 /* =====================================================
-TEST QUESTIONS & TIMER
+QUESTIONS & TIMER
 ===================================================== */
 
 .timer-box {
-font-size: 24px;
+font-size: 22px;
 font-weight: 900;
-color: #d92d20;
+color: #ef4444;
 text-align: center;
-padding: 14px;
-border: 2px solid #d92d20;
+padding: 12px;
+border: 2px solid #ef4444;
 border-radius: 14px;
 margin-bottom: 18px;
-background: #fff4f3;
+background: rgba(239, 68, 68, 0.1);
 }
 
 .question-card{
-border:2px solid #e1e7ef;
-border-radius:17px;
+border:2px solid #334155;
+border-radius:16px;
 padding:18px;
-margin:16px 0
+margin:16px 0;
+background:#0f172a;
 }
 
 .question-number{
-color:#1769c2;
+color:#38bdf8;
 font-weight:800;
-font-size:14px;
-margin-bottom:8px
+font-size:13px;
+margin-bottom:6px;
+text-transform: uppercase;
+letter-spacing: .5px;
 }
 
 .question-text{
-font-size:18px;
+font-size:17px;
 font-weight:700;
-line-height:1.45;
-margin-bottom:14px
+line-height:1.5;
+margin-bottom:14px;
+color:white;
 }
 
 .option{
 display:flex;
 align-items:flex-start;
 gap:10px;
-padding:12px;
-border:2px solid #e1e7ef;
+padding:14px;
+border:2px solid #334155;
 border-radius:12px;
 margin:8px 0;
 cursor:pointer;
-font-size:16px;
-line-height:1.35
+font-size:15px;
+line-height:1.4;
+background:#1e293b;
+color:#e2e8f0;
 }
 
 .option:hover{
-background:#f8fafc
+background:#283548;
+border-color:#38bdf8;
 }
 
 .option input{
-margin-top:3px
+margin-top:2px;
+width:auto;
 }
 
 /* =====================================================
@@ -596,42 +590,43 @@ RESULT & ANALYTICS
 display:none;
 padding:25px 15px;
 margin-top:20px;
-background:#f8fafc;
-border:2px solid #e1e7ef;
-border-radius:20px
+background:#0f172a;
+border:2px solid #334155;
+border-radius:20px;
 }
 
 .score-box {
 text-align: center;
-border-bottom: 2px solid #e1e7ef;
+border-bottom: 2px solid #334155;
 padding-bottom: 20px;
 margin-bottom: 20px;
 }
 
 .score{
-font-size:46px;
+font-size:42px;
 font-weight:900;
-color:#09244a
+color:#38bdf8;
 }
 
 .result-detail{
-font-size:17px;
+font-size:16px;
 line-height:1.7;
-margin-top:8px
+margin-top:8px;
+color:#cbd5e1;
 }
 
 .review-title {
-font-size: 22px;
+font-size: 20px;
 font-weight: 900;
-color: #09244a;
+color: white;
 margin-bottom: 15px;
 text-align: center;
 }
 
 .review-card {
-background: white;
-border: 2px solid #e1e7ef;
-border-radius: 15px;
+background: #1e293b;
+border: 2px solid #334155;
+border-radius: 14px;
 padding: 16px;
 margin-bottom: 15px;
 text-align: left;
@@ -639,137 +634,103 @@ text-align: left;
 
 .review-q-num {
 font-weight: 800;
-color: #667085;
-font-size: 14px;
-margin-bottom: 5px;
+color: #94a3b8;
+font-size: 13px;
+margin-bottom: 6px;
 }
 
 .review-q-text {
 font-weight: 700;
 font-size: 16px;
 margin-bottom: 12px;
+color: white;
 }
 
 .review-item {
 margin-bottom: 6px;
-font-size: 15px;
+font-size: 14px;
+color: #cbd5e1;
 }
 
 .review-correct {
-color: #027a48;
-font-weight: 700;
-background: #ecfdf3;
+color: #34d399;
+font-weight: 800;
+background: rgba(52, 211, 153, 0.1);
 padding: 4px 8px;
 border-radius: 6px;
 display: inline-block;
 }
 
 .review-wrong {
-color: #b42318;
-font-weight: 700;
-background: #fef3f2;
+color: #f87171;
+font-weight: 800;
+background: rgba(248, 113, 113, 0.1);
 padding: 4px 8px;
 border-radius: 6px;
 display: inline-block;
 }
 
 .review-explanation {
-margin-top: 10px;
-padding: 10px;
-background: #f0f4f8;
-border-left: 4px solid #1769c2;
-border-radius: 4px;
-font-size: 14px;
-color: #101828;
+margin-top: 12px;
+padding: 12px;
+background: #0f172a;
+border-left: 4px solid #38bdf8;
+border-radius: 6px;
+font-size: 13px;
+line-height: 1.5;
+color: #e2e8f0;
 }
 
 .restart-btn{
-margin-top:18px;
-padding:14px 20px;
-border:2px solid #09244a;
-border-radius:13px;
-background:white;
-color:#09244a;
+margin-top:15px;
+padding:16px 20px;
+border:2px solid #38bdf8;
+border-radius:14px;
+background:transparent;
+color:#38bdf8;
 font-weight:800;
 cursor:pointer;
 width: 100%;
 }
 
+.restart-btn:hover {
+background: rgba(56, 189, 248, 0.1);
+}
+
 .whatsapp-btn{
-background:#25D366;
-color:white;
-border-color:#25D366;
-margin-top:12px;
+background:#25D366 !important;
+color:white !important;
+border: none !important;
+box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}
+
+.footer{
+text-align:center;
+color:#64748b;
+margin:30px 0;
+font-size:13px;
+line-height:1.6;
+}
+
+.footer-brand{
+font-weight:800;
+color:#94a3b8;
+}
+
+.hidden{
+display:none!important;
 }
 
 /* =====================================================
-MOBILE
+MOBILE OPTIMIZATIONS
 ===================================================== */
-
 @media(max-width:600px){
-
-.container{
-width:94%;
-margin:15px auto
-}
-
-.brand-banner{
-padding:20px 14px;
-border-radius:19px
-}
-
-.brand-name{
-font-size:21px
-}
-
-.brand-tagline{
-font-size:14px
-}
-
-.brand-subjects{
-font-size:12px
-}
-
-.header h1{
-font-size:27px
-}
-
-.card{
-padding:18px
-}
-
-.subjects{
-grid-template-columns:1fr
-}
-
-.photo-buttons{
-grid-template-columns:1fr
-}
-
-textarea{
-font-size:17px
-}
-
-.logic-title{
-font-size:26px
-}
-
-.answer-text{
-font-size:17px
-}
-
-.feedback-buttons{
-grid-template-columns:1fr
-}
-
-.generator-grid{
-grid-template-columns:1fr
-}
-
-.full{
-grid-column:auto
-}
-
+.container{ width:95%; margin:12px auto; }
+.card{ padding:20px; }
+.subjects{ grid-template-columns:1fr; }
+.photo-buttons{ grid-template-columns:1fr; }
+.generator-grid{ grid-template-columns:1fr; }
+.full{ grid-column:auto; }
 }
 
 </style>
@@ -779,13 +740,13 @@ grid-column:auto
 
 <div class="container">
 
+<!-- MODERN BRAND BANNER -->
 <div class="brand-banner">
-    <div class="brand-name">INVINCIBLE COACHING CLASSES</div>
-    <div class="brand-tagline">Cultivating the Unbeatable Mind</div>
+    <div class="brand-name">INVINCIBLE 360</div>
+    <div class="brand-tagline">Complete Academic & Competitive Intelligence Ecosystem</div>
     <div class="brand-line"></div>
-    <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS</div>
-    <div class="brand-subjects">Classes 9–12 &nbsp;•&nbsp; CBSE &nbsp;•&nbsp; Board Preparation</div>
-    <div class="brand-message">Concepts • Logic • Practice • Excellence</div>
+    <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS &nbsp;•&nbsp; SCIENCE</div>
+    <div class="brand-message">AI Doubt Desk • Live Weekly Tests • Analytics • Daily Mastery</div>
 </div>
 
 <!-- DAILY BRAIN TEASER -->
@@ -803,8 +764,8 @@ grid-column:auto
 </div>
 
 <div class="header">
-    <h1>Invincible Doubt Desk</h1>
-    <p>Ask your doubt. Understand the logic.</p>
+    <h1>Student Hub</h1>
+    <p>Ask doubts, take timed exams, and track your performance.</p>
 </div>
 
 <div class="mode-switch">
@@ -812,6 +773,7 @@ grid-column:auto
     <button type="button" class="mode-btn" id="testModeBtn">TAKE A TEST</button>
 </div>
 
+<!-- DOUBT SECTION -->
 <div class="card" id="doubtSection">
     <label>Select Subject</label>
     <div class="subjects">
@@ -848,6 +810,7 @@ grid-column:auto
     </div>
 </div>
 
+<!-- TEST SECTION -->
 <div class="card hidden" id="testSection">
     <label>Take an Automated Test</label>
     <div id="testSetup">
@@ -952,9 +915,9 @@ grid-column:auto
 </div>
 
 <div class="footer">
-    <div class="footer-brand">Invincible Coaching Classes</div>
-    Cultivating the Unbeatable Mind<br>
-    © Invincible Coaching Classes
+    <div class="footer-brand">Invincible 360 Ecosystem</div>
+    Powered by Invincible Coaching Classes<br>
+    © 2026 All Rights Reserved
 </div>
 
 </div>
@@ -1113,7 +1076,7 @@ document.getElementById("againBtn").addEventListener("click", function(){
 document.getElementById("teacherBtn").addEventListener("click", function(){
     const studentQuestion = questionInput.value.trim();
     const aiExplanation = answerText.textContent.trim();
-    const whatsappMessage = "Hello Invincible Coaching Classes Teacher.\n\n" +
+    const whatsappMessage = "Hello Invincible 360 Teacher.\n\n" +
         "I need personal help with this doubt.\n\n" +
         "Subject: " + selectedSubject + "\n\n" +
         "Student Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\n" +
@@ -1132,7 +1095,6 @@ async function loadPlatformData(){
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        // 1. Process Questions
         if(data && Array.isArray(data.questions)){
             data.questions.forEach(function(q, index){
                 const key = q.class_name + "|" + q.subject;
@@ -1148,14 +1110,12 @@ async function loadPlatformData(){
             });
         }
 
-        // 2. Process Daily Puzzle
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "block";
             document.getElementById("puzzleQuestion").textContent = data.dailyPuzzle.question_text;
             document.getElementById("puzzleSolution").textContent = data.dailyPuzzle.solution_text;
         }
 
-        // 3. Process Leaderboard
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const list = document.getElementById("leaderboardList");
             list.innerHTML = "";
@@ -1176,7 +1136,6 @@ async function loadPlatformData(){
 }
 loadPlatformData();
 
-// Daily Puzzle Toggle Logic
 const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
 const puzzleSolution = document.getElementById("puzzleSolution");
 puzzleToggleBtn.addEventListener("click", function(){
@@ -1259,9 +1218,6 @@ function updateTestList(){
 testClass.addEventListener("change", updateTestList);
 testSubject.addEventListener("change", updateTestList);
 
-/* =====================================================
-START MANUAL TEST
-===================================================== */
 startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
@@ -1292,9 +1248,6 @@ startTestBtn.addEventListener("click", function(){
     startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
-/* =====================================================
-AI TEST GENERATOR
-===================================================== */
 const generateTestBtn = document.getElementById("generateTestBtn");
 const generatorLoading = document.getElementById("generatorLoading");
 
@@ -1420,9 +1373,6 @@ function escapeHTML(text){
     return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
-/* =====================================================
-SUBMIT TEST & ANALYTICS
-===================================================== */
 submitTestBtn.addEventListener("click", async function(){
     clearInterval(testTimerInterval);
     const questions = activeQuestions;
@@ -1542,13 +1492,13 @@ submitTestBtn.addEventListener("click", async function(){
         if(saveStatus){
             saveStatus.textContent = "✓ Result saved successfully.";
             saveStatus.style.fontWeight = "700";
-            saveStatus.style.color = "green";
+            saveStatus.style.color = "#34d399";
         }
     }catch(error){
         const saveStatus = document.getElementById("saveStatus");
         if(saveStatus){
             saveStatus.textContent = "ERROR: " + error.message;
-            saveStatus.style.color = "red";
+            saveStatus.style.color = "#f87171";
         }
     }finally{
         submitTestBtn.disabled = false;
@@ -1569,7 +1519,7 @@ restartTestBtn.addEventListener("click", function(){
 
 whatsappShareBtn.addEventListener("click", function(){
     const currentUrl = window.location.href;
-    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible Coaching Classes! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + currentUrl;
+    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + currentUrl;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
