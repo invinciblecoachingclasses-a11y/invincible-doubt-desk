@@ -166,29 +166,10 @@ FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
 }
-.story-progress-bar {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 12px;
-}
-.story-progress-seg {
-  height: 3px;
-  flex: 1;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.story-progress-fill {
-  height: 100%;
-  width: 0%;
-  background: #fff;
-}
-.story-view-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 10;
-}
+.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
+.story-progress-fill { height: 100%; width: 0%; background: #fff; }
+.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
 .story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
 .story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
 .story-body-content {
@@ -229,7 +210,7 @@ FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
 .sticker-btn.voted-correct { background: rgba(16, 185, 129, 0.3) !important; border-color: var(--accent-emerald) !important; }
 .sticker-btn.voted-wrong { background: rgba(244, 63, 94, 0.3) !important; border-color: var(--accent-rose) !important; }
 
-/* Story Action Bar (Reactions & Vault) */
+/* Story Action Bar & Viewers Button */
 .story-action-bar {
   display: flex;
   align-items: center;
@@ -259,6 +240,38 @@ FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
+}
+.viewers-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* VIEWERS BOTTOM SHEET DRAWER */
+.viewers-sheet {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #0b0f19;
+  border-top: 2px solid var(--accent-cyan);
+  border-radius: 20px 20px 0 0;
+  padding: 18px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: none;
+  z-index: 20;
+}
+.viewer-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
 }
 
 /* Modal for Creating Story */
@@ -452,18 +465,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     </div>
 </header>
 
-<!-- =====================================================
-24-HOUR STUDY STORIES TRAY (INSTA / SNAP STYLE)
-===================================================== -->
+<!-- 24-HOUR STUDY STORIES TRAY -->
 <div class="stories-tray-container" id="storiesTray">
-    <!-- Button to Add Story -->
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story">
             <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div>
         </div>
         <div class="story-username">Your Drop</div>
     </div>
-    <!-- Dynamic Story Circles Loaded Here -->
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
@@ -767,9 +776,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 
 </main>
 
-<!-- =====================================================
-MODAL: POST STUDY STORY (24-HR DROP)
-===================================================== -->
+<!-- MODAL: POST STUDY STORY -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -801,9 +808,7 @@ MODAL: POST STUDY STORY (24-HR DROP)
     </div>
 </div>
 
-<!-- =====================================================
-FULLSCREEN STORY VIEWER OVERLAY
-===================================================== -->
+<!-- FULLSCREEN STORY VIEWER -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
         <div>
@@ -834,7 +839,17 @@ FULLSCREEN STORY VIEWER OVERLAY
                 <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
                 <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
             </div>
-            <button class="vault-btn" onclick="saveStoryToVault()">💾 Save to Vault</button>
+            <button class="viewers-btn" id="btnShowViewers" onclick="toggleViewersSheet()">👁️ Viewers</button>
+            <button class="vault-btn" onclick="saveStoryToVault()">💾 Save</button>
+        </div>
+
+        <!-- Viewers Drawer Sheet -->
+        <div class="viewers-sheet" id="viewersDrawer">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Story Viewers (<span id="viewersCount">0</span>)</strong>
+                <span style="font-size:14px; cursor:pointer;" onclick="document.getElementById('viewersDrawer').style.display='none'">✕</span>
+            </div>
+            <div id="viewersListContainer">Loading viewers...</div>
         </div>
     </div>
 </div>
@@ -892,7 +907,7 @@ function switchTab(tab) {
 }
 
 /* =====================================================
-24-HOUR STUDY STORIES ENGINE (INSTA / SNAP MECHANICS)
+24-HOUR STUDY STORIES ENGINE + VIEWER LOGGING
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
@@ -951,6 +966,10 @@ document.getElementById('btnPublishStory').onclick = async () => {
 
     if (!name || !inst) return alert("Please fill Name and School/Coaching!");
 
+    // Save active student identity in localStorage for view recording
+    localStorage.setItem('student_name', name);
+    localStorage.setItem('student_inst', inst);
+
     const btn = document.getElementById('btnPublishStory');
     btn.disabled = true; btn.textContent = "Publishing Story...";
 
@@ -989,6 +1008,7 @@ function openStoryViewer(idx) {
     if (!activeStories[idx]) return;
     currentStoryIdx = idx;
     document.getElementById('storyViewer').style.display = 'flex';
+    document.getElementById('viewersDrawer').style.display = 'none';
     renderStorySlide();
 }
 
@@ -1024,6 +1044,14 @@ function renderStorySlide() {
         stickerCard.style.display = 'none';
     }
 
+    // Record View in Database
+    const viewerName = localStorage.getItem('student_name') || document.getElementById('studentName').value.trim() || 'Peer Student';
+    const viewerInst = localStorage.getItem('student_inst') || 'School';
+    fetch('/api/stories', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: viewerName, viewer_institution: viewerInst })
+    });
+
     // Progress Bar Fill
     const pContainer = document.getElementById('storyProgressContainer');
     pContainer.innerHTML = activeStories.map((_, i) => `
@@ -1045,6 +1073,42 @@ function renderStorySlide() {
 function closeStoryViewer() {
     clearTimeout(storyTimer);
     document.getElementById('storyViewer').style.display = 'none';
+}
+
+// VIEWERS DRAWER TOGGLE
+async function toggleViewersSheet() {
+    clearTimeout(storyTimer); // Pause story while viewing list
+    const drawer = document.getElementById('viewersDrawer');
+    if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        return;
+    }
+    drawer.style.display = 'block';
+    
+    const story = activeStories[currentStoryIdx];
+    const listEl = document.getElementById('viewersListContainer');
+    listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Fetching viewers...</div>';
+
+    try {
+        const res = await fetch(`/api/stories?action=get_viewers&story_id=${story.id}`);
+        const data = await res.json();
+        const viewers = data.viewers || [];
+        document.getElementById('viewersCount').textContent = viewers.length;
+
+        if (viewers.length === 0) {
+            listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No views recorded yet.</div>';
+            return;
+        }
+
+        listEl.innerHTML = viewers.map(v => `
+            <div class="viewer-item">
+                <span style="font-weight:700; color:#fff;">${escapeHTML(v.viewer_name)}</span>
+                <span style="color:var(--text-muted); font-size:12px;">${escapeHTML(v.viewer_institution)}</span>
+            </div>
+        `).join('');
+    } catch(e) {
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--accent-rose);">Failed to load viewers.</div>';
+    }
 }
 
 async function voteStorySticker(selectedOpt) {
@@ -1824,6 +1888,9 @@ document.getElementById('btnPublishPost').onclick = async () => {
 
     if (!name || !inst || !content) return alert("Please complete Name, School/Coaching, and Post Content.");
 
+    localStorage.setItem('student_name', name);
+    localStorage.setItem('student_inst', inst);
+
     const btn = document.getElementById('btnPublishPost');
     btn.disabled = true; btn.textContent = "Publishing...";
 
@@ -1898,8 +1965,8 @@ async function loadComments(postId) {
 async function addComment(postId) {
     const input = document.getElementById(`com-input-${postId}`);
     const content = input.value.trim();
-    const name = document.getElementById('feedAuthorName').value.trim() || 'Student';
-    const inst = document.getElementById('feedInstitution').value.trim() || 'School';
+    const name = document.getElementById('feedAuthorName').value.trim() || localStorage.getItem('student_name') || 'Student';
+    const inst = document.getElementById('feedInstitution').value.trim() || localStorage.getItem('student_inst') || 'School';
 
     if (!content) return alert("Please enter discussion text.");
 
