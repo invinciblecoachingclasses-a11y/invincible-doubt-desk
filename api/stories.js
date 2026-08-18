@@ -9,24 +9,49 @@ export default async function handler(req, res) {
         'Prefer': 'return=representation'
     };
 
-    // 1. GET ACTIVE 24-HOUR STORIES
+    // 1. GET ACTIVE 24-HOUR STORIES OR STORY VIEWERS
     if (req.method === 'GET') {
+        const { action, story_id } = req.query;
+
         try {
-            // Cutoff 24 hours ago
+            // Action: Get viewers for a specific story
+            if (action === 'get_viewers') {
+                const response = await fetch(`${supabaseUrl}/rest/v1/story_views?story_id=eq.${story_id}&order=viewed_at.desc`, { headers });
+                const viewers = await response.json();
+                return res.status(200).json({ viewers: Array.isArray(viewers) ? viewers : [] });
+            }
+
+            // Default: Get 24-hour active stories
             const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
             const response = await fetch(`${supabaseUrl}/rest/v1/study_stories?created_at=gt.${cutoff}&order=created_at.desc&limit=30`, { headers });
             const stories = await response.json();
             return res.status(200).json({ stories: Array.isArray(stories) ? stories : [] });
         } catch (err) {
-            return res.status(500).json({ error: 'Failed to load stories.' });
+            return res.status(500).json({ error: 'Failed to load stories data.' });
         }
     }
 
-    // 2. CREATE STORY / VOTE / REACT
+    // 2. CREATE STORY / VOTE / REACT / RECORD VIEW
     if (req.method === 'POST') {
-        const { action, author_name, institution, student_class, media_url, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type } = req.body;
+        const { action, author_name, institution, student_class, media_url, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type, viewer_name, viewer_institution } = req.body;
 
         try {
+            // Action: Record a Story View
+            if (action === 'record_view') {
+                if (!story_id || !viewer_name) return res.status(400).json({ error: 'Missing parameters.' });
+                
+                await fetch(`${supabaseUrl}/rest/v1/story_views`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        story_id: Number(story_id),
+                        viewer_name: viewer_name.slice(0, 30),
+                        viewer_institution: (viewer_institution || 'Student').slice(0, 40)
+                    })
+                });
+                return res.status(200).json({ success: true });
+            }
+
             // Action: Create Story
             if (action === 'create_story') {
                 if (!author_name || !institution) {
