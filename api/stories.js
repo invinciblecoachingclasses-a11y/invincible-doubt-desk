@@ -1,0 +1,97 @@
+export default async function handler(req, res) {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    const headers = { 
+        'apikey': supabaseKey, 
+        'Authorization': `Bearer ${supabaseKey}`, 
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    };
+
+    // 1. GET ACTIVE 24-HOUR STORIES
+    if (req.method === 'GET') {
+        try {
+            // Cutoff 24 hours ago
+            const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+            const response = await fetch(`${supabaseUrl}/rest/v1/study_stories?created_at=gt.${cutoff}&order=created_at.desc&limit=30`, { headers });
+            const stories = await response.json();
+            return res.status(200).json({ stories: Array.isArray(stories) ? stories : [] });
+        } catch (err) {
+            return res.status(500).json({ error: 'Failed to load stories.' });
+        }
+    }
+
+    // 2. CREATE STORY / VOTE / REACT
+    if (req.method === 'POST') {
+        const { action, author_name, institution, student_class, media_url, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type } = req.body;
+
+        try {
+            // Action: Create Story
+            if (action === 'create_story') {
+                if (!author_name || !institution) {
+                    return res.status(400).json({ error: 'Name and School/Coaching are required.' });
+                }
+
+                const insertRes = await fetch(`${supabaseUrl}/rest/v1/study_stories`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({
+                        author_name: author_name.slice(0, 30),
+                        institution: institution.slice(0, 40),
+                        student_class: student_class || '10',
+                        media_url: media_url || null,
+                        caption: (caption || '').slice(0, 300),
+                        sticker_question: sticker_question ? sticker_question.slice(0, 120) : null,
+                        sticker_opt_a: sticker_opt_a ? sticker_opt_a.slice(0, 50) : null,
+                        sticker_opt_b: sticker_opt_b ? sticker_opt_b.slice(0, 50) : null,
+                        sticker_correct_opt: Number(sticker_correct_opt) || 0,
+                        streak_count: Number(streak_count) || 1,
+                        is_topper: Number(streak_count) >= 5
+                    })
+                });
+                const story = await insertRes.json();
+                return res.status(200).json({ success: true, story: story[0] });
+            }
+
+            // Action: Vote on Story Sticker
+            if (action === 'vote_sticker') {
+                const fetchS = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, { headers });
+                const curr = await fetchS.json();
+                if (curr && curr.length > 0) {
+                    const updateField = vote_opt === 0 ? 'poll_votes_a' : 'poll_votes_b';
+                    const currentVal = curr[0][updateField] || 0;
+                    await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
+                        method: 'PATCH',
+                        headers,
+                        body: JSON.stringify({ [updateField]: currentVal + 1 })
+                    });
+                }
+                return res.status(200).json({ success: true });
+            }
+
+            // Action: React with Emoji
+            if (action === 'react') {
+                const fetchS = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, { headers });
+                const curr = await fetchS.json();
+                if (curr && curr.length > 0) {
+                    let field = 'reactions_fire';
+                    if (reaction_type === 'mind') field = 'reactions_mind';
+                    if (reaction_type === '100') field = 'reactions_100';
+
+                    const currentVal = curr[0][field] || 0;
+                    await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
+                        method: 'PATCH',
+                        headers,
+                        body: JSON.stringify({ [field]: currentVal + 1 })
+                    });
+                }
+                return res.status(200).json({ success: true });
+            }
+        } catch (err) {
+            return res.status(500).json({ error: 'Server error processing story.' });
+        }
+    }
+
+    return res.status(405).json({ error: 'Method not allowed' });
+}
