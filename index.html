@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Invincible 360 | Complete Academic Ecosystem</title>
-<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access instant doubt solving, weekly tests, and 1v1 Live Arena Battles.">
+<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access doubt solving, weekly tests, 1v1 Live Arena Battles, and peer student community feed.">
 
-<!-- CONFETTI LIBRARY FOR VISUAL DOPAMINE -->
+<!-- CONFETTI LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -44,51 +44,49 @@ box-shadow:0 20px 40px rgba(0,0,0,.4); border: 1px solid rgba(56, 189, 248, 0.2)
 .leaderboard-rank.third { background: #d97706; color: white; }
 .leaderboard-score { color: #34d399; font-weight: 900; }
 
-/* HEADER & MODE SWITCH */
+/* HEADER & MODE SWITCH (4 TABS) */
 .header{ text-align:center; margin-bottom:20px; }
 .header h1{ margin:0; font-size:32px; font-weight:900; color:white; }
 .header p{ margin-top:8px; color:#94a3b8; font-size:15px; }
 
-.mode-switch{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:20px; }
-.mode-btn{ padding:14px 5px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:14px; font-weight:800; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4); }
+.mode-switch{ display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:20px; }
+.mode-btn{ padding:12px 4px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:13px; font-weight:800; cursor:pointer; }
+.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; }
 .mode-btn.arena-btn { color: #f43f5e; border-color: #9f1239; }
-.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4); }
+.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; }
+.mode-btn.feed-btn { color: #c084fc; border-color: #7e22ce; }
+.mode-btn.feed-btn.active { background: linear-gradient(135deg, #9333ea, #7e22ce); border-color: #c084fc; color: white; }
 
 /* CARDS & INPUTS */
-.card{ background:#1e293b; padding:28px; border-radius:24px; box-shadow:0 15px 35px rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,0.05); }
-label{ display:block; font-size:16px; font-weight:700; margin-bottom:12px; color:#e2e8f0; }
+.card{ background:#1e293b; padding:24px; border-radius:24px; box-shadow:0 15px 35px rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,0.05); }
+label{ display:block; font-size:15px; font-weight:700; margin-bottom:10px; color:#e2e8f0; }
 
-.subjects{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:25px; }
-.subject{ padding:16px 8px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#38bdf8; font-size:15px; font-weight:700; cursor:pointer; }
+.subjects{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.subject{ padding:14px 8px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#38bdf8; font-size:14px; font-weight:700; cursor:pointer; }
 .subject.active{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; font-weight: 900; }
 
-textarea, input, select { width:100%; padding:16px; border:2px solid #334155; border-radius:14px; font-size:16px; background:#0f172a; color:white; outline:none; font-family:inherit; margin-bottom:14px;}
+textarea, input, select { width:100%; padding:14px; border:2px solid #334155; border-radius:14px; font-size:15px; background:#0f172a; color:white; outline:none; font-family:inherit; margin-bottom:12px;}
 textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
 
 .photo-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; }
-.photo-btn{ padding:16px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-size:15px; font-weight:700; cursor:pointer; }
-#imageInput{ display:none; }
-#imagePreview{ display:none; width:100%; max-height:260px; object-fit:contain; margin-top:15px; border-radius:14px; border:2px solid #334155; }
-#removeImage{ display:none; margin:10px auto 0; border:none; background:none; color:#ef4444; font-weight:700; cursor:pointer; }
+.photo-btn{ padding:14px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-size:14px; font-weight:700; cursor:pointer; }
 
-.ask-btn, .submit-test-btn, .generate-btn { width:100%; margin-top:10px; padding:18px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:18px; font-weight:900; cursor:pointer; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
-.generate-btn{ background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0f172a; box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3); }
+.ask-btn, .submit-test-btn, .generate-btn { width:100%; margin-top:8px; padding:16px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:16px; font-weight:900; cursor:pointer; }
+.generate-btn{ background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled{ opacity:.5; cursor:not-allowed; }
-.loading, .generator-loading{ display:none; text-align:center; padding:20px; font-weight:700; color:#38bdf8; }
 
 /* ANSWER & FEEDBACK */
 .answer-box{ display:none; margin-top:25px; padding:24px; background:#0f172a; border-radius:20px; border:2px solid #334155; }
-.logic-title{ font-size:24px; font-weight:900; color:#38bdf8; margin-bottom:15px; }
-.answer-text{ white-space:pre-wrap; font-size:17px; line-height:1.7; color:#cbd5e1; }
+.logic-title{ font-size:22px; font-weight:900; color:#38bdf8; margin-bottom:12px; }
+.answer-text{ white-space:pre-wrap; font-size:16px; line-height:1.7; color:#cbd5e1; }
 .feedback{ display:none; margin-top:20px; }
-.feedback-title{ font-size:15px; font-weight:700; margin-bottom:10px; color:#94a3b8; }
+.feedback-title{ font-size:14px; font-weight:700; margin-bottom:10px; color:#94a3b8; }
 .feedback-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.feedback-btn{ padding:14px 10px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#e2e8f0; font-weight:700; cursor:pointer; font-size:13px; }
+.feedback-btn{ padding:12px 10px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#e2e8f0; font-weight:700; cursor:pointer; font-size:13px; }
 .teacher-btn{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; }
 
 /* TEST FORM & GENERATOR */
-.test-info{ background:#0f172a; border:2px solid #334155; border-radius:16px; padding:16px; margin:18px 0; color:#cbd5e1; }
+.test-info{ background:#0f172a; border:2px solid #334155; border-radius:16px; padding:16px; margin:16px 0; color:#cbd5e1; }
 .test-info strong{ color:#38bdf8; }
 .notice{ margin-top:8px; color:#94a3b8; font-size:13px; line-height:1.5; }
 .generator-box{ margin-top:24px; padding-top:24px; border-top:2px solid #334155; }
@@ -98,73 +96,97 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
 .full{ grid-column:1/-1; }
 
 /* QUESTIONS & TIMER */
-.timer-box { font-size: 22px; font-weight: 900; color: #ef4444; text-align: center; padding: 12px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 18px; background: rgba(239, 68, 68, 0.1); }
+.timer-box { font-size: 20px; font-weight: 900; color: #ef4444; text-align: center; padding: 10px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 16px; background: rgba(239, 68, 68, 0.1); }
 .question-card{ border:2px solid #334155; border-radius:16px; padding:18px; margin:16px 0; background:#0f172a; }
 .question-number{ color:#38bdf8; font-weight:800; font-size:13px; margin-bottom:6px; text-transform: uppercase; }
-.question-text{ font-size:17px; font-weight:700; line-height:1.5; margin-bottom:14px; color:white; }
-.option{ display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:15px; line-height:1.4; background:#1e293b; color:#e2e8f0; }
+.question-text{ font-size:16px; font-weight:700; line-height:1.5; margin-bottom:14px; color:white; }
+.option{ display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:14px; line-height:1.4; background:#1e293b; color:#e2e8f0; }
 .option:hover{ background:#283548; border-color:#38bdf8; }
 .option input{ margin-top:2px; width:auto; }
 
-/* RESULT, BADGES & ANALYTICS */
+/* RESULT & BADGES */
 .test-result{ display:none; padding:25px 15px; margin-top:20px; background:#0f172a; border:2px solid #334155; border-radius:20px; }
 .score-box { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 20px; }
 .score{ font-size:42px; font-weight:900; color:#38bdf8; }
-.result-detail{ font-size:16px; line-height:1.7; margin-top:8px; color:#cbd5e1; }
-
-.badges-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0; }
-.badge { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.result-detail{ font-size:15px; line-height:1.7; margin-top:8px; color:#cbd5e1; }
+.badges-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+.badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; }
 .badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
 .badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
 .badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
 .badge.earlybird { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
 .badge.sharp { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid #fb7185; }
 
-.review-title { font-size: 20px; font-weight: 900; color: white; margin-bottom: 15px; text-align: center; }
+.review-title { font-size: 18px; font-weight: 900; color: white; margin-bottom: 15px; text-align: center; }
 .review-card { background: #1e293b; border: 2px solid #334155; border-radius: 14px; padding: 16px; margin-bottom: 15px; text-align: left; }
 .review-q-num { font-weight: 800; color: #94a3b8; font-size: 13px; margin-bottom: 6px; }
-.review-q-text { font-weight: 700; font-size: 16px; margin-bottom: 12px; color: white; }
-.review-item { margin-bottom: 6px; font-size: 14px; color: #cbd5e1; }
-.review-correct { color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.1); padding: 4px 8px; border-radius: 6px; display: inline-block; }
-.review-wrong { color: #f87171; font-weight: 800; background: rgba(248, 113, 113, 0.1); padding: 4px 8px; border-radius: 6px; display: inline-block; }
-.review-explanation { margin-top: 12px; padding: 12px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 6px; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
+.review-q-text { font-weight: 700; font-size: 15px; margin-bottom: 12px; color: white; }
+.review-item { margin-bottom: 6px; font-size: 13px; color: #cbd5e1; }
+.review-correct { color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
+.review-wrong { color: #f87171; font-weight: 800; background: rgba(248, 113, 113, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
+.review-explanation { margin-top: 10px; padding: 10px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 6px; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
 
-.restart-btn{ margin-top:15px; padding:16px 20px; border:2px solid #38bdf8; border-radius:14px; background:transparent; color:#38bdf8; font-weight:800; cursor:pointer; width: 100%; }
-.restart-btn:hover { background: rgba(56, 189, 248, 0.1); }
-.whatsapp-btn{ background:#25D366 !important; color:white !important; border: none !important; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
+.restart-btn{ margin-top:12px; padding:14px 20px; border:2px solid #38bdf8; border-radius:14px; background:transparent; color:#38bdf8; font-weight:800; cursor:pointer; width: 100%; }
+.whatsapp-btn{ background:#25D366 !important; color:white !important; border: none !important; }
 
-/* ARENA (1v1) MULTIPLAYER */
+/* ARENA (1v1) */
 .arena-header { text-align: center; margin-bottom: 20px; }
-.arena-title { font-size: 26px; font-weight: 900; color: #fb7185; }
-.arena-subtitle { font-size: 14px; color: #94a3b8; margin-top: 5px; }
-.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 2px solid #334155; }
-.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 18px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 16px;}
-.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 18px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 16px;}
-
-.lobby-box { text-align: center; padding: 30px 15px; background: #0f172a; border-radius: 16px; border: 2px dashed #fb7185; }
-.room-code-display { font-size: 44px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 15px 0; }
+.arena-title { font-size: 24px; font-weight: 900; color: #fb7185; }
+.arena-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; padding-top: 15px; border-top: 2px solid #334155; }
+.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
+.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
+.lobby-box { text-align: center; padding: 25px 15px; background: #0f172a; border-radius: 16px; border: 2px dashed #fb7185; }
+.room-code-display { font-size: 40px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 12px 0; }
 .pulse-text { animation: pulse 1.5s infinite; color: #38bdf8; font-weight: 700; }
 @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-
-.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 15px; border-radius: 14px; border: 2px solid #334155; margin-bottom: 20px; }
-.player-tag { font-size: 16px; font-weight: 800; display: flex; flex-direction: column; align-items: center; }
-.player-tag span { font-size: 22px; color: #38bdf8; }
-.vs-badge { background: #e11d48; color: white; font-weight: 900; padding: 5px 10px; border-radius: 8px; font-style: italic; }
-
-.arena-timer { font-size: 24px; font-weight: 900; color: #fb7185; text-align: center; margin-bottom: 15px; }
-.arena-option { display:block; padding:16px; border:2px solid #334155; border-radius:12px; margin:10px 0; cursor:pointer; font-size:16px; font-weight: 700; background:#1e293b; color:#e2e8f0; text-align: center; }
+.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 12px; border-radius: 14px; border: 2px solid #334155; margin-bottom: 16px; }
+.player-tag { font-size: 15px; font-weight: 800; display: flex; flex-direction: column; align-items: center; }
+.player-tag span { font-size: 20px; color: #38bdf8; }
+.vs-badge { background: #e11d48; color: white; font-weight: 900; padding: 4px 8px; border-radius: 8px; font-style: italic; font-size: 12px; }
+.arena-timer { font-size: 22px; font-weight: 900; color: #fb7185; text-align: center; margin-bottom: 12px; }
+.arena-option { display:block; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:15px; font-weight: 700; background:#1e293b; color:#e2e8f0; text-align: center; }
 .arena-option:hover { background:#283548; border-color:#38bdf8; }
+.result-box { text-align: center; padding: 15px; }
+.winner-text { font-size: 28px; font-weight: 900; color: #34d399; margin-bottom: 8px; }
+.loser-text { font-size: 28px; font-weight: 900; color: #fb7185; margin-bottom: 8px; }
 
-.result-box { text-align: center; padding: 20px; }
-.winner-text { font-size: 32px; font-weight: 900; color: #34d399; margin-bottom: 10px; }
-.loser-text { font-size: 32px; font-weight: 900; color: #fb7185; margin-bottom: 10px; }
+/* =====================================================
+4. COMMUNITY FEED (SOCIAL ACADEMIC FEED)
+===================================================== */
+.feed-header { text-align: center; margin-bottom: 15px; }
+.feed-title { font-size: 24px; font-weight: 900; color: #c084fc; margin:0; }
+.feed-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+
+.post-composer { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+.post-composer textarea { min-height: 80px; margin-bottom: 8px; }
+
+.feed-card { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+.feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.feed-author { font-size: 14px; font-weight: 800; color: #38bdf8; }
+.feed-school { font-size: 12px; color: #94a3b8; font-weight: normal; margin-top: 2px; }
+.feed-badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px; background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid #c084fc; }
+
+.feed-content { font-size: 15px; line-height: 1.5; color: #f1f5f9; margin-bottom: 12px; white-space: pre-wrap; }
+.feed-image { max-width: 100%; max-height: 280px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #334155; object-fit: contain; }
+
+.feed-actions { display: flex; gap: 15px; border-top: 1px solid #1e293b; padding-top: 10px; font-size: 13px; font-weight: 700; color: #94a3b8; }
+.action-btn { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.action-btn:hover { color: #38bdf8; }
+.action-btn.report:hover { color: #f87171; }
+
+.comments-drawer { display: none; margin-top: 12px; border-top: 1px dashed #334155; padding-top: 12px; }
+.comment-item { background: #1e293b; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+.comment-author { font-weight: 800; color: #38bdf8; font-size: 12px; margin-bottom: 2px; }
 
 .footer{ text-align:center; color:#64748b; margin:30px 0; font-size:13px; line-height:1.6; }
 .footer-brand{ font-weight:800; color:#94a3b8; }
+.hidden{ display:none!important; }
 
 @media(max-width:600px){
 .container{ width:95%; margin:12px auto; }
-.card{ padding:20px; }
+.card{ padding:16px; }
+.mode-switch{ grid-template-columns: 1fr 1fr; gap:6px; }
 .subjects{ grid-template-columns:1fr; }
 .photo-buttons{ grid-template-columns:1fr; }
 .generator-grid{ grid-template-columns:1fr; }
@@ -194,7 +216,7 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </div>
 
-<!-- WALL OF FAME (RESTORED) -->
+<!-- WALL OF FAME -->
 <div class="leaderboard-card" id="leaderboardBox" style="display:none;">
     <div class="leaderboard-title">🏆 Top Scorers (Wall of Fame)</div>
     <div id="leaderboardList"></div>
@@ -202,17 +224,19 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
 
 <div class="header">
     <h1>Student Hub</h1>
-    <p>Ask doubts, take timed exams, or battle a friend live.</p>
+    <p>Ask doubts, take timed exams, battle a peer, or share thoughts in the feed.</p>
 </div>
 
+<!-- 4 MAIN MODES -->
 <div class="mode-switch">
     <button type="button" class="mode-btn active" id="doubtModeBtn">DOUBT DESK</button>
     <button type="button" class="mode-btn" id="testModeBtn">TAKE A TEST</button>
     <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">ARENA (1v1)</button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">COMMUNITY FEED</button>
 </div>
 
 <!-- =====================================================
-1. DOUBT SECTION (FEEDBACK RESTORED)
+1. DOUBT SECTION
 ===================================================== -->
 <div class="card" id="doubtSection">
     <label>Select Subject</label>
@@ -223,7 +247,7 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your question here... You can ask in English or Hindi."></textarea>
+    <textarea id="question" placeholder="Type your question here... English or Hindi."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
     <div class="photo-buttons">
         <button type="button" class="photo-btn" id="cameraBtn">Take Photo</button>
@@ -249,7 +273,7 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
 </div>
 
 <!-- =====================================================
-2. TEST SECTION (CUSTOM GENERATOR RESTORED)
+2. TEST SECTION
 ===================================================== -->
 <div class="card hidden" id="testSection">
     <div id="testSetup">
@@ -288,7 +312,7 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
 
         <div class="generator-box">
             <div class="generator-title">Custom Test Generator</div>
-            <div class="generator-subtitle">Choose the class, subject and chapter. The system will create a fresh test automatically.</div>
+            <div class="generator-subtitle">Choose class, subject, and chapter to generate a customized practice test.</div>
             <div class="generator-grid">
                 <select id="genClass">
                     <option value="">Select Class</option>
@@ -354,7 +378,7 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
 </div>
 
 <!-- =====================================================
-3. ARENA SECTION (MULTIPLAYER 1v1)
+3. ARENA SECTION (1v1 MULTIPLAYER)
 ===================================================== -->
 <div class="card hidden" id="arenaSection">
     <div id="arenaSetup">
@@ -417,6 +441,67 @@ textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0
     </div>
 </div>
 
+<!-- =====================================================
+4. COMMUNITY FEED SECTION (INSTA / FB STYLE)
+===================================================== -->
+<div class="card hidden" id="feedSection">
+    <div class="feed-header">
+        <h2 class="feed-title">🌟 Invincible Community Feed</h2>
+        <div class="feed-subtitle">Share questions, discuss solutions, and connect with peers from other schools.</div>
+    </div>
+
+    <!-- Post Creator -->
+    <div class="post-composer">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
+            <input type="text" id="feedInstitution" placeholder="School / Coaching (e.g. DPS)" style="margin-bottom:0;">
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <select id="feedClass" style="margin-bottom:0;">
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+            <select id="feedSubject" style="margin-bottom:0;">
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
+                <option value="General">General Study Tip</option>
+            </select>
+        </div>
+        <textarea id="feedContent" placeholder="Drop a tricky question, share a shortcut, or ask your peers for advice..."></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+        <span style="font-weight:800; font-size:14px; color:#94a3b8;">Filter Feed:</span>
+        <div style="display:flex; gap:8px;">
+            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
+                <option value="All">All Classes</option>
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
+                <option value="All">All Subjects</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Posts Container -->
+    <div id="postsList">
+        <div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">Loading community posts...</div>
+    </div>
+</div>
+
 <div class="footer">
     <div class="footer-brand">Invincible 360 Ecosystem</div>
     Powered by Invincible Coaching Classes<br>
@@ -431,10 +516,7 @@ AUDIO SYNTHESIS ENGINE
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
-function initAudio() { 
-    if(!audioCtx) audioCtx = new AudioContext(); 
-    if(audioCtx.state === 'suspended') audioCtx.resume(); 
-}
+function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
 function playSound(type, freq, duration, vol=0.1) {
     try {
         initAudio();
@@ -453,18 +535,30 @@ function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('s
 function playSuccessSound() { playDing(); }
 
 /* =====================================================
-TAB SWITCHING
+TAB SWITCHING (4 MODES)
 ===================================================== */
-document.getElementById('doubtModeBtn').onclick = () => switchTab('doubt');
-document.getElementById('testModeBtn').onclick = () => switchTab('test');
-document.getElementById('arenaModeBtn').onclick = () => switchTab('arena');
+const doubtModeBtn = document.getElementById('doubtModeBtn');
+const testModeBtn = document.getElementById('testModeBtn');
+const arenaModeBtn = document.getElementById('arenaModeBtn');
+const feedModeBtn = document.getElementById('feedModeBtn');
+
+const doubtSection = document.getElementById('doubtSection');
+const testSection = document.getElementById('testSection');
+const arenaSection = document.getElementById('arenaSection');
+const feedSection = document.getElementById('feedSection');
+
+doubtModeBtn.onclick = () => switchTab('doubt');
+testModeBtn.onclick = () => switchTab('test');
+arenaModeBtn.onclick = () => switchTab('arena');
+feedModeBtn.onclick = () => { switchTab('feed'); loadFeedPosts(); };
 
 function switchTab(tab) {
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(tab + 'ModeBtn').classList.add('active');
-    document.getElementById('doubtSection').classList.add('hidden');
-    document.getElementById('testSection').classList.add('hidden');
-    document.getElementById('arenaSection').classList.add('hidden');
+    doubtSection.classList.add('hidden');
+    testSection.classList.add('hidden');
+    arenaSection.classList.add('hidden');
+    feedSection.classList.add('hidden');
     document.getElementById(tab + 'Section').classList.remove('hidden');
 }
 
@@ -596,7 +690,7 @@ puzzleToggleBtn.addEventListener("click", function(){
 });
 
 /* =====================================================
-TEST GENERATOR & TIMER LOGIC
+TEST GENERATOR & TIMER
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = "";
@@ -667,7 +761,6 @@ startTestBtn.addEventListener("click", function(){
     startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
-// CUSTOM TEST GENERATOR LAUNCHER
 const generateTestBtn = document.getElementById("generateTestBtn");
 const generatorLoading = document.getElementById("generatorLoading");
 
@@ -974,6 +1067,168 @@ function showArenaResult(room) {
         document.getElementById('arenaResultText').innerHTML = `<div class="winner-text" style="color:#facc15;">🤝 IT'S A TIE!</div>`;
     }
 }
+
+/* =====================================================
+COMMUNITY FEED JAVASCRIPT
+===================================================== */
+async function loadFeedPosts() {
+    const cls = document.getElementById('feedFilterClass').value;
+    const sub = document.getElementById('feedFilterSubject').value;
+    const list = document.getElementById('postsList');
+
+    try {
+        const res = await fetch(`/api/feed?student_class=${cls}&subject=${sub}`);
+        const data = await res.json();
+        
+        if (!data.posts || data.posts.length === 0) {
+            list.innerHTML = '<div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">No posts in this category yet. Be the first to drop a question!</div>';
+            return;
+        }
+
+        list.innerHTML = data.posts.map(p => `
+            <div class="feed-card" id="post-${p.id}">
+                <div class="feed-card-header">
+                    <div>
+                        <div class="feed-author">${escapeHTML(p.author_name)}</div>
+                        <div class="feed-school">${escapeHTML(p.institution)} • Class ${escapeHTML(p.student_class)}</div>
+                    </div>
+                    <span class="feed-badge">${escapeHTML(p.subject)}</span>
+                </div>
+                <div class="feed-content">${escapeHTML(p.content)}</div>
+                ${p.image_url ? `<img src="${p.image_url}" class="feed-image" alt="Question attachment">` : ''}
+                <div class="feed-actions">
+                    <div class="action-btn" onclick="likePost(${p.id})">❤️ <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
+                    <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
+                    <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
+                </div>
+
+                <!-- Comments Drawer -->
+                <div class="comments-drawer" id="comments-${p.id}">
+                    <div id="comments-list-${p.id}"><div style="color:#64748b; font-size:12px;">Loading discussion...</div></div>
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <input type="text" id="com-input-${p.id}" placeholder="Type your step-by-step solution or tip..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
+                        <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+    } catch(err) {
+        list.innerHTML = '<div style="text-align:center; color:#f87171; font-size:14px; padding:20px;">Failed to load feed.</div>';
+    }
+}
+
+document.getElementById('feedFilterClass').onchange = loadFeedPosts;
+document.getElementById('feedFilterSubject').onchange = loadFeedPosts;
+
+// Publish Post
+document.getElementById('btnPublishPost').onclick = async () => {
+    const name = document.getElementById('feedAuthorName').value.trim();
+    const inst = document.getElementById('feedInstitution').value.trim();
+    const cls = document.getElementById('feedClass').value;
+    const sub = document.getElementById('feedSubject').value;
+    const content = document.getElementById('feedContent').value.trim();
+
+    if (!name || !inst || !content) return alert("Please fill your Name, School/Coaching, and Question/Thought!");
+
+    const btn = document.getElementById('btnPublishPost');
+    btn.disabled = true; btn.textContent = "Posting...";
+
+    try {
+        const res = await fetch('/api/feed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'create_post', author_name: name, institution: inst, student_class: cls, subject: sub, content: content })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        document.getElementById('feedContent').value = '';
+        loadFeedPosts();
+    } catch(err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = "POST TO COMMUNITY";
+    }
+};
+
+// Like Post
+async function likePost(postId) {
+    const likesSpan = document.getElementById(`likes-${postId}`);
+    likesSpan.textContent = Number(likesSpan.textContent) + 1;
+    await fetch('/api/feed', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'like_post', post_id: postId })
+    });
+}
+
+// Report Post
+async function reportPost(postId) {
+    if (!confirm("Report this post for inappropriate content?")) return;
+    try {
+        const res = await fetch('/api/feed', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'report_post', post_id: postId })
+        });
+        const data = await res.json();
+        alert(data.message || "Reported.");
+        document.getElementById(`post-${postId}`).style.display = 'none';
+    } catch(e){}
+}
+
+// Toggle & Load Comments
+async function toggleComments(postId) {
+    const drawer = document.getElementById(`comments-${postId}`);
+    if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        return;
+    }
+    drawer.style.display = 'block';
+    loadComments(postId);
+}
+
+async function loadComments(postId) {
+    const container = document.getElementById(`comments-list-${postId}`);
+    try {
+        const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
+        const data = await res.json();
+        if (!data.comments || data.comments.length === 0) {
+            container.innerHTML = '<div style="color:#64748b; font-size:12px; margin-bottom:6px;">No solutions yet. Be the first to explain!</div>';
+            return;
+        }
+        container.innerHTML = data.comments.map(c => `
+            <div class="comment-item">
+                <div class="comment-author">${escapeHTML(c.author_name)} <span style="color:#94a3b8; font-weight:normal;">• ${escapeHTML(c.institution)}</span></div>
+                <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
+            </div>
+        `).join('');
+    } catch(e){}
+}
+
+// Add Comment
+async function addComment(postId) {
+    const input = document.getElementById(`com-input-${postId}`);
+    const content = input.value.trim();
+    const name = document.getElementById('feedAuthorName').value.trim() || 'Student';
+    const inst = document.getElementById('feedInstitution').value.trim() || 'School';
+
+    if (!content) return alert("Type your solution or explanation first!");
+
+    try {
+        const res = await fetch('/api/feed', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'add_comment', post_id: postId, author_name: name, institution: inst, content: content })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        input.value = '';
+        loadComments(postId);
+    } catch(err) {
+        alert(err.message);
+    }
+}
 </script>
+
 </body>
 </html>
