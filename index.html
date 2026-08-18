@@ -126,6 +126,14 @@ border-color: #f87171 !important;
 color: #f87171 !important;
 }
 
+.puzzle-actions-bar {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 12px;
+margin-top: 14px;
+}
+
 .puzzle-toggle-btn {
 background: #f59e0b;
 color: #0f172a;
@@ -135,6 +143,14 @@ border-radius: 10px;
 font-weight: 800;
 font-size: 13px;
 cursor: pointer;
+}
+
+#puzzleFeedback {
+font-size: 13px;
+font-weight: 800;
+line-height: 1.4;
+display: block;
+width: 100%;
 }
 
 .puzzle-solution {
@@ -337,10 +353,10 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
     <!-- Interactive Option Buttons -->
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+    <div class="puzzle-actions-bar">
         <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Teacher Logic</button>
-        <span id="puzzleFeedback" style="font-size: 13px; font-weight: 800;"></span>
     </div>
+    <div id="puzzleFeedback" style="margin-top: 10px;"></div>
 
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </div>
@@ -748,9 +764,46 @@ document.getElementById("askBtn").onclick = async () => {
     }
 };
 
+/* =====================================================
+ROBUST MATH FORMATTER & CLEANER
+===================================================== */
+function formatMathText(text) {
+    if (!text) return "";
+    
+    // Convert common superscripts
+    const superscripts = {
+        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+        '+': '⁺', '-': '⁻', '=': '⁼', '(': '⁽', ')': '⁾', 'n': 'ⁿ', 'x': 'ˣ'
+    };
+
+    return text
+        .replace(/#{1,6}\s?/g, "")
+        .replace(/\*\*/g, "")
+        .replace(/\*/g, "")
+        .replace(/\\text\{([^}]*)\}/g, "$1")
+        .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+        .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
+        .replace(/\\implies/g, " ➔ ")
+        .replace(/\\rightarrow/g, " ➔ ")
+        .replace(/\\times/g, " × ")
+        .replace(/\\div/g, " ÷ ")
+        .replace(/\\cdot/g, " · ")
+        .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+        .replace(/\\left/g, "")
+        .replace(/\\right/g, "")
+        .replace(/\\\[/g, "")
+        .replace(/\\\]/g, "")
+        .replace(/\$\$/g, "")
+        .replace(/\$/g, "")
+        .replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join(''))
+        .replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1)
+        .replace(/```[\s\S]*?```/g, "")
+        .trim();
+}
+
 function cleanAnswer(text){
-    if(!text) return "";
-    return text.replace(/#{1,6}\s?/g, "").replace(/\*\*/g, "").replace(/\*/g, "").replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\mathrm\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\times/g, "×").replace(/\\div/g, "÷").replace(/\\cdot/g, "×").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\\[/g, "").replace(/\\\]/g, "").replace(/\$\$/g, "").replace(/\$/g, "").replace(/```[\s\S]*?```/g, "").trim();
+    return formatMathText(text);
 }
 
 document.getElementById("againBtn").addEventListener("click", function(){
@@ -789,22 +842,31 @@ async function loadPlatformData(){
             });
         }
 
-        // UPGRADED BRAIN TEASER LOGIC & CLEAN MATH
+        // UPGRADED ROBUST BRAIN TEASER
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "block";
             
-            const rawQ = cleanAnswer(data.dailyPuzzle.question_text || "");
-            const parts = rawQ.split('/');
+            const rawQ = data.dailyPuzzle.question_text || "";
+            const formattedQ = formatMathText(rawQ);
             
-            document.getElementById("puzzleQuestionEn").textContent = parts[0] ? parts[0].trim() : rawQ;
-            document.getElementById("puzzleQuestionHi").textContent = parts[1] ? parts[1].trim() : "";
-            document.getElementById("puzzleSolution").textContent = cleanAnswer(data.dailyPuzzle.solution_text || "");
+            let enText = formattedQ;
+            let hiText = "";
+            
+            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) {
+                const parts = formattedQ.split(/\s\/\s/);
+                enText = parts[0] ? parts[0].trim() : formattedQ;
+                hiText = parts[1] ? parts[1].trim() : "";
+            }
 
-            // Generate 4 Interactive Quick Guess Buttons
+            document.getElementById("puzzleQuestionEn").innerHTML = enText;
+            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
+            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
+
+            // Interactive Options
             const optContainer = document.getElementById("puzzleOptionsContainer");
             optContainer.innerHTML = '';
             
-            const guessOptions = ['0', '1', '2', '100']; // Dynamic options
+            const guessOptions = ['0', '1', '2', '100'];
             guessOptions.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'puzzle-opt-btn';
@@ -830,7 +892,6 @@ loadPlatformData();
 function checkPuzzleGuess(selected, btn) {
     const feedback = document.getElementById("puzzleFeedback");
     
-    // Correct answer for (x + 1/x = 2 => x=1 => 1^100 + 1/1^100 = 2)
     if (selected === '2') {
         playWin();
         btn.classList.add('correct-pick');
