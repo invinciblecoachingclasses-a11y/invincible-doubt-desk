@@ -3,7 +3,7 @@ export default async function handler(req, res) {
 
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    const geminiKey = process.env.GEMINI_API_KEY; // Your existing Gemini Key
+    const geminiKey = process.env.GEMINI_API_KEY; 
     
     const { action, room_code, player_name, subject, class_name, player_num, total_score, is_finished } = req.body;
 
@@ -16,31 +16,43 @@ export default async function handler(req, res) {
 
     try {
         // ==========================================
-        // ACTION 1: CREATE ROOM & GENERATE AI QUESTIONS
+        // ACTION 1: CREATE ROOM (AI + DATABASE FALLBACK)
         // ==========================================
         if (action === 'create') {
             const code = Math.floor(1000 + Math.random() * 9000).toString(); 
-            
-            // Ask Gemini for 5 fresh, mind-bending questions
-            const prompt = `Generate exactly 5 highly engaging, fun, and technical "hook" multiple-choice questions for Class ${class_name} ${subject} students. The questions should be tricky or mind-bending but easy to answer if they think logically. 
-            Return strictly a JSON array of objects. Do not include markdown blocks like \`\`\`json.
-            Format exactly like this:
-            [{"question": "Question text here?", "options": ["Option A", "Option B", "Option C", "Option D"], "answer": 0, "explanation": "Short teacher logic here."}]`;
+            let finalQuestions = [];
 
-            const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
-            
-            const geminiData = await geminiRes.json();
-            let rawText = geminiData.candidates[0].content.parts[0].text;
-            
-            // Clean up any accidental markdown formatting from Gemini
-            rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-            const aiQuestions = JSON.parse(rawText);
+            try {
+                // Attempt 1: Try Gemini AI first
+                const prompt = `Generate exactly 5 highly engaging, fun, and technical "hook" multiple-choice questions for Class ${class_name} ${subject} students. The questions should be tricky or mind-bending but easy to answer if they think logically. 
+                Return strictly a JSON array of objects. Do not include markdown blocks like \`\`\`json.
+                Format exactly like this:
+                [{"question": "Question text here?", "options": ["Option A", "Option B", "Option C", "Option D"], "answer": 0, "explanation": "Short teacher logic here."}]`;
 
-            // Save the newly generated AI questions into the Supabase Arena Lobby
+                const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                
+                const geminiData = await geminiRes.json();
+                let rawText = geminiData.candidates[0].content.parts[0].text;
+                
+                // Clean up markdown
+                rawText = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+                finalQuestions = JSON.parse(rawText);
+
+                if (!Array.isArray(finalQuestions) || finalQuestions.length === 0) throw new Error("Bad AI format");
+
+            } catch (aiError) {
+                console.log("Gemini failed or formatting was weird. Falling back to Supabase DB!");
+                // Attempt 2: If AI fails, pull randomly from your Supabase question bank!
+                const qRes = await fetch(`${supabaseUrl}/rest/v1/weekly_tests?class_name=eq.${class_name}&subject=eq.${subject}&select=*`, { headers });
+                const allQuestions = await qRes.json();
+                finalQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 5);
+            }
+
+            // Save the room to DB
             await fetch(`${supabaseUrl}/rest/v1/arena_battles`, {
                 method: 'POST',
                 headers,
@@ -48,11 +60,11 @@ export default async function handler(req, res) {
                     room_code: code,
                     subject: subject,
                     player1_name: player_name,
-                    questions: JSON.stringify(aiQuestions), // Storing the AI questions
+                    questions: JSON.stringify(finalQuestions),
                     status: 'waiting'
                 })
             });
-            return res.status(200).json({ room_code: code, questions: aiQuestions });
+            return res.status(200).json({ room_code: code, questions: finalQuestions });
         }
 
         // ==========================================
@@ -77,7 +89,7 @@ export default async function handler(req, res) {
         }
 
         // ==========================================
-        // ACTION 3: SYNC / UPDATE SCORES LIVE
+        // ACTION 3: SYNC SCORES
         // ==========================================
         if (action === 'sync') {
             if (total_score !== undefined) {
@@ -99,6 +111,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Failed to generate AI questions or connect to Arena.' });
+        return res.status(500).json({ error: 'Server error. Please try again.' });
     }
 }
