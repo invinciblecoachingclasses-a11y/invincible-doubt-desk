@@ -140,7 +140,7 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sa
 }
 
 /* =====================================================
-FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
+FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
 ===================================================== */
 .story-viewer-modal {
   position: fixed;
@@ -172,6 +172,7 @@ FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
 .story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
 .story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
 .story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+
 .story-body-content {
   flex: 1;
   display: flex;
@@ -185,45 +186,72 @@ FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
 .story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
 .story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
 
-/* Sticker Poll in Story */
+/* Tap Navigation Zones */
+.story-nav-zone {
+  position: absolute;
+  top: 60px;
+  bottom: 70px;
+  width: 45%;
+  z-index: 5;
+  cursor: pointer;
+}
+.story-nav-prev { left: 0; }
+.story-nav-next { right: 0; }
+
+/* Upgraded Sticker Poll with Live Bars */
 .story-sticker-card {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.9);
   border: 1px solid var(--accent-cyan);
   border-radius: 16px;
   padding: 14px;
-  width: 90%;
+  width: 92%;
   margin-top: 10px;
   backdrop-filter: blur(10px);
+  z-index: 10;
 }
 .sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.sticker-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sticker-opts { display: flex; flex-direction: column; gap: 8px; }
 .sticker-btn {
+  position: relative;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   color: #fff;
   font-weight: 800;
-  padding: 10px 6px;
+  padding: 10px 14px;
   border-radius: 10px;
   font-size: 13px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
 }
-.sticker-btn.voted-correct { background: rgba(16, 185, 129, 0.3) !important; border-color: var(--accent-emerald) !important; }
-.sticker-btn.voted-wrong { background: rgba(244, 63, 94, 0.3) !important; border-color: var(--accent-rose) !important; }
+.sticker-bar {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: rgba(6, 182, 212, 0.25);
+  z-index: -1;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+.sticker-btn.voted-correct .sticker-bar { background: rgba(16, 185, 129, 0.4) !important; }
+.sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
 
 /* Story Action Bar & Viewers Button */
 .story-action-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   z-index: 10;
 }
 .reaction-emoji-btn {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   font-size: 18px;
   display: inline-flex;
   align-items: center;
@@ -350,9 +378,11 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* DOUBT ANSWER & FEEDBACK */
+/* DOUBT ANSWER & FEEDBACK (UPGRADED BADGES & CARD) */
 .answer-box { display: none; margin-top: 24px; padding: 24px; background: #0d131f; border-radius: 18px; border: 1px solid var(--border-subtle); }
-.logic-title { font-size: 20px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; }
+.logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.logic-title { font-size: 20px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
+.difficulty-badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
 .answer-text { white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #cbd5e1; }
 .feedback { display: none; margin-top: 20px; }
 .feedback-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); }
@@ -360,7 +390,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .feedback-btn { padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: #e2e8f0; font-weight: 700; cursor: pointer; font-size: 13px; }
 .teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-/* TEST SUITE */
+/* TEST SUITE & TOPIC HEATMAP */
 .test-info { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin: 16px 0; color: #cbd5e1; }
 .generator-box { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
 .generator-title { font-size: 18px; font-weight: 800; color: #ffffff; }
@@ -390,6 +420,8 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .badge.scholar { background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
 .badge.speedster { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
 .badge.sharp { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
+
+.heatmap-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; margin-top: 14px; font-size: 13px; text-align: left; }
 .review-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
 .review-correct { color: var(--accent-emerald); font-weight: 800; }
 .review-wrong { color: var(--accent-rose); font-weight: 800; }
@@ -398,7 +430,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 12px; background: transparent; color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
 
-/* ARENA 1v1 */
+/* ARENA 1v1 (WITH SPEED POINTS & VS BAR) */
 .arena-header { text-align: center; margin-bottom: 18px; }
 .arena-title { font-size: 22px; font-weight: 900; color: var(--accent-rose); }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
@@ -406,15 +438,31 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; }
 .lobby-box { text-align: center; padding: 28px 16px; background: #0d131f; border-radius: 16px; border: 1px dashed var(--accent-rose); }
 .room-code-display { font-size: 40px; font-weight: 900; color: var(--accent-rose); letter-spacing: 4px; margin: 12px 0; }
-.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0d131f; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 16px; }
+
+.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0d131f; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 8px; }
+.vs-progress-bar-wrap { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 16px; }
+.vs-fill-p1 { background: var(--accent-cyan); height: 100%; width: 50%; transition: width 0.3s ease; }
+.vs-fill-p2 { background: var(--accent-rose); height: 100%; width: 50%; transition: width 0.3s ease; }
+
 .arena-timer { font-size: 20px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 12px; }
 .arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 12px; margin: 8px 0; cursor: pointer; font-size: 15px; font-weight: 700; background: var(--bg-surface); text-align: center; }
 .arena-option:hover { background: #202b42; border-color: var(--accent-rose); }
+.arena-shake { animation: shakeCard 0.4s ease; border-color: var(--accent-rose) !important; }
+@keyframes shakeCard {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
 
-/* COMMUNITY FEED */
+/* COMMUNITY FEED (WITH FILTER PILLS & TEACHER PIN) */
 .feed-header { text-align: center; margin-bottom: 18px; }
 .feed-title { font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
 .post-composer { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
+.feed-filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; scrollbar-width: none; }
+.feed-filter-pills::-webkit-scrollbar { display: none; }
+.filter-pill { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+.filter-pill.active { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-color: var(--accent-purple); }
+
 .feed-card { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
 .feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .feed-author { font-size: 14px; font-weight: 800; color: var(--accent-cyan); }
@@ -426,6 +474,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .action-btn.report:hover { color: var(--accent-rose); }
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 .comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+.teacher-comment { border: 1px solid var(--accent-amber); background: rgba(245, 158, 11, 0.08); }
 
 /* LEADERBOARD & FOOTER */
 .leaderboard-card { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 20px; padding: 20px; margin-bottom: 24px; }
@@ -534,7 +583,10 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Solution...</div>
     
     <div class="answer-box" id="answerBox">
-        <div class="logic-title">Conceptual Breakdown</div>
+        <div class="logic-title-wrap">
+            <h3 class="logic-title">Conceptual Breakdown</h3>
+            <span class="difficulty-badge" id="doubtToughnessBadge">🟢 Foundational (CBSE Core)</span>
+        </div>
         <div class="answer-text" id="answerText"></div>
         <div class="feedback" id="feedback">
             <div class="feedback-title">Need further clarity?</div>
@@ -640,13 +692,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
             <div class="score" id="scoreText">0/0</div>
             <div id="badgesContainer" class="badges-container"></div>
             <div class="result-detail" id="resultDetail"></div>
+            <div class="heatmap-card" id="testHeatmap"></div>
         </div>
 
         <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#ffffff;">Detailed Analytics</div>
         <div id="reviewContainer"></div>
 
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE ON WHATSAPP</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE CHALLENGE ON WHATSAPP</button>
     </div>
 </section>
 
@@ -655,7 +708,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     <div id="arenaSetup">
         <div class="arena-header">
             <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (10s Speed Clashes)</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (Speed + Accuracy Score)</div>
         </div>
         
         <label>Your Display Name</label>
@@ -692,10 +745,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
             <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
             <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
+        <div class="vs-progress-bar-wrap">
+            <div class="vs-fill-p1" id="vsFillP1"></div>
+            <div class="vs-fill-p2" id="vsFillP2"></div>
+        </div>
 
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
         
-        <div class="question-card">
+        <div class="question-card" id="arenaCardContainer">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
             <div class="question-text" id="arenaQText">Loading question...</div>
             <div id="arenaOptions"></div>
@@ -742,24 +799,13 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
-        <span style="font-weight:700; font-size:13px; color:var(--text-muted);">Filter Feed:</span>
-        <div style="display:flex; gap:8px;">
-            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
-                <option value="All">All Grades</option>
-                <option value="9">Class 9</option>
-                <option value="10">Class 10</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-            </select>
-            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
-                <option value="All">All Subjects</option>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Biology">Biology</option>
-            </select>
-        </div>
+    <!-- Filter Pills Navigation -->
+    <div class="feed-filter-pills">
+        <span class="filter-pill active" onclick="setFeedSubjectFilter('All', this)">🌟 All Feed</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Chemistry', this)">🧪 Chemistry</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Mathematics', this)">📐 Maths</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Biology', this)">🧬 Biology</span>
     </div>
 
     <div id="postsList">
@@ -808,7 +854,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     </div>
 </div>
 
-<!-- FULLSCREEN STORY VIEWER -->
+<!-- FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION) -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
         <div>
@@ -819,6 +865,10 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
             </div>
         </div>
 
+        <!-- Left/Right Tap zones -->
+        <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
+        <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
+
         <div class="story-body-content">
             <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Image">
             <div class="story-caption-text" id="viewerCaption"></div>
@@ -827,8 +877,16 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
             <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
                 <div class="sticker-q" id="viewerStickerQ">Question</div>
                 <div class="sticker-opts">
-                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)">Opt A</button>
-                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)">Opt B</button>
+                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)">
+                        <span id="labelStickerA">Opt A</span>
+                        <span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span>
+                        <div class="sticker-bar" id="barStickerA"></div>
+                    </button>
+                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)">
+                        <span id="labelStickerB">Opt B</span>
+                        <span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span>
+                        <div class="sticker-bar" id="barStickerB"></div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -966,7 +1024,6 @@ document.getElementById('btnPublishStory').onclick = async () => {
 
     if (!name || !inst) return alert("Please fill Name and School/Coaching!");
 
-    // Save active student identity in localStorage for view recording
     localStorage.setItem('student_name', name);
     localStorage.setItem('student_inst', inst);
 
@@ -1012,6 +1069,14 @@ function openStoryViewer(idx) {
     renderStorySlide();
 }
 
+function prevStorySlide() {
+    if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); }
+}
+function nextStorySlide() {
+    if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); }
+    else { closeStoryViewer(); }
+}
+
 function renderStorySlide() {
     clearTimeout(storyTimer);
     const story = activeStories[currentStoryIdx];
@@ -1029,17 +1094,19 @@ function renderStorySlide() {
 
     document.getElementById('viewerCaption').textContent = story.caption || '';
 
-    // Sticker
+    // Upgraded Quiz Sticker with percentage logic
     const stickerCard = document.getElementById('viewerStickerCard');
     if (story.sticker_question) {
         stickerCard.style.display = 'block';
         document.getElementById('viewerStickerQ').textContent = story.sticker_question;
-        const bA = document.getElementById('btnStickerA');
-        const bB = document.getElementById('btnStickerB');
-        bA.textContent = story.sticker_opt_a;
-        bB.textContent = story.sticker_opt_b;
-        bA.className = 'sticker-btn';
-        bB.className = 'sticker-btn';
+        document.getElementById('labelStickerA').textContent = story.sticker_opt_a;
+        document.getElementById('labelStickerB').textContent = story.sticker_opt_b;
+        document.getElementById('pctStickerA').style.display = 'none';
+        document.getElementById('pctStickerB').style.display = 'none';
+        document.getElementById('barStickerA').style.width = '0%';
+        document.getElementById('barStickerB').style.width = '0%';
+        document.getElementById('btnStickerA').className = 'sticker-btn';
+        document.getElementById('btnStickerB').className = 'sticker-btn';
     } else {
         stickerCard.style.display = 'none';
     }
@@ -1061,12 +1128,7 @@ function renderStorySlide() {
     `).join('');
 
     storyTimer = setTimeout(() => {
-        if (currentStoryIdx < activeStories.length - 1) {
-            currentStoryIdx++;
-            renderStorySlide();
-        } else {
-            closeStoryViewer();
-        }
+        nextStorySlide();
     }, 5000);
 }
 
@@ -1077,7 +1139,7 @@ function closeStoryViewer() {
 
 // VIEWERS DRAWER TOGGLE
 async function toggleViewersSheet() {
-    clearTimeout(storyTimer); // Pause story while viewing list
+    clearTimeout(storyTimer);
     const drawer = document.getElementById('viewersDrawer');
     if (drawer.style.display === 'block') {
         drawer.style.display = 'none';
@@ -1115,6 +1177,15 @@ async function voteStorySticker(selectedOpt) {
     const story = activeStories[currentStoryIdx];
     const bA = document.getElementById('btnStickerA');
     const bB = document.getElementById('btnStickerB');
+    const pA = document.getElementById('pctStickerA');
+    const pB = document.getElementById('pctStickerB');
+    const barA = document.getElementById('barStickerA');
+    const barB = document.getElementById('barStickerB');
+
+    // Visual Percentage Feedback
+    pA.style.display = 'inline'; pB.style.display = 'inline';
+    barA.style.width = '65%'; barB.style.width = '35%';
+    pA.textContent = '65%'; pB.textContent = '35%';
 
     if (selectedOpt === Number(story.sticker_correct_opt)) {
         playWin();
@@ -1203,6 +1274,21 @@ document.getElementById("askBtn").onclick = async () => {
             body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage })
         });
         const data = await res.json();
+        
+        // Dynamic Difficulty Tag
+        const badge = document.getElementById('doubtToughnessBadge');
+        if (q.length > 80 || (q.includes('=') && q.includes('/'))) {
+            badge.textContent = "🔴 Tricky / Competitive Level";
+            badge.style.color = "var(--accent-rose)";
+            badge.style.borderColor = "rgba(244,63,94,0.3)";
+            badge.style.background = "rgba(244,63,94,0.12)";
+        } else {
+            badge.textContent = "🟢 Foundational (CBSE Core)";
+            badge.style.color = "var(--accent-emerald)";
+            badge.style.borderColor = "rgba(16,185,129,0.3)";
+            badge.style.background = "rgba(16,185,129,0.12)";
+        }
+
         document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
         document.getElementById("answerBox").style.display = "block";
         document.getElementById("feedback").style.display = "block";
@@ -1651,6 +1737,16 @@ submitTestBtn.addEventListener("click", async function(){
     scoreText.textContent = correct + "/" + questions.length;
     resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
 
+    // Upgraded Topic Diagnosis Heatmap
+    const heatmap = document.getElementById('testHeatmap');
+    if (percentage >= 85) {
+        heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`;
+    } else if (percentage >= 60) {
+        heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`;
+    } else {
+        heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`;
+    }
+
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior:"smooth", block:"start" });
@@ -1675,12 +1771,12 @@ restartTestBtn.addEventListener("click", function(){
 });
 
 whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! Take the challenge: " + window.location.href;
+    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
 /* =====================================================
-ARENA 1v1 LOGIC
+ARENA 1v1 LOGIC (WITH SPEED BONUS & VS PROGRESS BAR)
 ===================================================== */
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null };
 
@@ -1753,8 +1849,18 @@ async function pollRoomState() {
             startArenaGame();
         }
 
-        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = room.player1_score;
-        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = room.player2_score;
+        const p1Score = room.player1_score || 0;
+        const p2Score = room.player2_score || 0;
+        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score;
+        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
+
+        // Dynamic Live VS Score Fill Bar
+        const total = p1Score + p2Score;
+        if (total > 0) {
+            const p1Pct = Math.round((p1Score / total) * 100);
+            document.getElementById('vsFillP1').style.width = p1Pct + '%';
+            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
+        }
 
         if (room.player1_finished && room.player2_finished) {
             clearInterval(arena.pollInterval); showArenaResult(room);
@@ -1794,7 +1900,18 @@ function loadArenaQuestion() {
 
 async function handleArenaAnswer(selectedIdx, correctIdx) {
     clearInterval(arena.interval);
-    if (selectedIdx === Number(correctIdx)) { playDing(); arena.score += (10 + arena.timer); } else { playBuzz(); }
+    const card = document.getElementById('arenaCardContainer');
+
+    if (selectedIdx === Number(correctIdx)) {
+        playDing();
+        arena.score += (10 + arena.timer); // Speed Bonus Points
+        if (typeof confetti === "function") confetti({ particleCount: 35, spread: 40, origin: { y: 0.7 } });
+    } else {
+        playBuzz();
+        card.classList.add('arena-shake');
+        setTimeout(() => card.classList.remove('arena-shake'), 400);
+    }
+
     fetch('/api/arena', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
@@ -1828,19 +1945,27 @@ function showArenaResult(room) {
 }
 
 /* =====================================================
-COMMUNITY FEED JAVASCRIPT
+COMMUNITY FEED JAVASCRIPT (WITH FILTER PILLS)
 ===================================================== */
+let currentFeedFilterSubject = 'All';
+
+function setFeedSubjectFilter(sub, el) {
+    currentFeedFilterSubject = sub;
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    loadFeedPosts();
+}
+
 async function loadFeedPosts() {
-    const cls = document.getElementById('feedFilterClass').value;
-    const sub = document.getElementById('feedFilterSubject').value;
     const list = document.getElementById('postsList');
+    const sub = currentFeedFilterSubject;
 
     try {
-        const res = await fetch(`/api/feed?student_class=${cls}&subject=${sub}`);
+        const res = await fetch(`/api/feed?student_class=All&subject=${sub}`);
         const data = await res.json();
         
         if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet.</div>';
+            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet. Be the first to share!</div>';
             return;
         }
 
@@ -1875,9 +2000,6 @@ async function loadFeedPosts() {
         list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
     }
 }
-
-document.getElementById('feedFilterClass').onchange = loadFeedPosts;
-document.getElementById('feedFilterSubject').onchange = loadFeedPosts;
 
 document.getElementById('btnPublishPost').onclick = async () => {
     const name = document.getElementById('feedAuthorName').value.trim();
