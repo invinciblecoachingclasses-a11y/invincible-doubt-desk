@@ -970,7 +970,7 @@ function toggleLofiAudio() {
         lofiOsc = audioCtx.createOscillator();
         lofiGain = audioCtx.createGain();
         lofiOsc.type = 'triangle';
-        lofiOsc.frequency.setValueAtTime(108, audioCtx.currentTime); // 108Hz relaxing Alpha drone
+        lofiOsc.frequency.setValueAtTime(108, audioCtx.currentTime);
         lofiGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
         lofiOsc.connect(lofiGain);
         lofiGain.connect(audioCtx.destination);
@@ -1271,7 +1271,7 @@ function saveStoryToVault() {
 }
 
 /* =====================================================
-DOUBT DESK LOGIC (WITH TONE SWITCHER)
+DOUBT DESK LOGIC (WITH EXPLICIT TONE SWITCHER)
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
@@ -1320,25 +1320,32 @@ document.getElementById("askBtn").onclick = async () => {
     document.getElementById("answerBox").style.display = "none";
     document.getElementById("feedback").style.display = "none";
 
-    let tonePrompt = "";
-    if (currentTone === "tldr") tonePrompt = " [Provide ONLY the core formula and concise calculation in 3 lines]";
-    if (currentTone === "eli10") tonePrompt = " [Explain this using simple real-world analogies, zero technical jargon]";
-
     try {
         const res = await fetch("/api/ask", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ subject: selectedSubject, question: q + tonePrompt, image: selectedImage })
+            method: "POST", 
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ 
+                subject: selectedSubject, 
+                question: q, 
+                image: selectedImage,
+                tone: currentTone
+            })
         });
         const data = await res.json();
         
         const badge = document.getElementById('doubtToughnessBadge');
-        if (q.length > 80 || (q.includes('=') && q.includes('/'))) {
-            badge.textContent = "🔴 Tricky / Competitive Level";
-            badge.style.color = "var(--accent-rose)";
-            badge.style.borderColor = "rgba(244,63,94,0.3)";
-            badge.style.background = "rgba(244,63,94,0.12)";
+        if (currentTone === 'eli10') {
+            badge.textContent = "🐣 Simple Story Mode (ELI10)";
+            badge.style.color = "var(--accent-amber)";
+            badge.style.borderColor = "rgba(245,158,11,0.3)";
+            badge.style.background = "rgba(245,158,11,0.12)";
+        } else if (currentTone === 'tldr') {
+            badge.textContent = "⚡ Formula Snapshot";
+            badge.style.color = "var(--accent-cyan)";
+            badge.style.borderColor = "rgba(6,182,212,0.3)";
+            badge.style.background = "rgba(6,182,212,0.12)";
         } else {
-            badge.textContent = "🟢 Foundational (CBSE Core)";
+            badge.textContent = "🧠 Step-by-Step Breakdown";
             badge.style.color = "var(--accent-emerald)";
             badge.style.borderColor = "rgba(16,185,129,0.3)";
             badge.style.background = "rgba(16,185,129,0.12)";
