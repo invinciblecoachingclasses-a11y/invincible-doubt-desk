@@ -5,228 +5,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Invincible 360 | Complete Academic Ecosystem</title>
-<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access free AI doubt solving, Hinglish physics, chemistry, and mathematics weekly tests, and 1v1 Live Arena Battles.">
+<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access free AI doubt solving, weekly tests, and 1v1 Live Arena Battles.">
 
-<!-- CONFETTI LIBRARY FOR VISUAL DOPAMINE -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
-*{
-box-sizing:border-box;
-transition: all 0.2s ease-in-out;
-}
+*{ box-sizing:border-box; transition: all 0.2s ease-in-out; }
+body{ margin:0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background:#0f172a; color:#f8fafc; }
+.container{ width:min(760px, 94%); margin:25px auto; }
 
-body{
-margin:0;
-font-family: 'Inter', system-ui, -apple-system, sans-serif;
-background:#0f172a;
-color:#f8fafc;
-}
-
-.container{
-width:min(760px, 94%);
-margin:25px auto;
-}
-
-/* =====================================================
-MODERN BRAND BANNER (INVINCIBLE 360)
-===================================================== */
+/* BRAND BANNER */
 .brand-banner{
 background: linear-gradient(135deg, #1e293b, #0f172a);
-color:white;
-border-radius:24px;
-padding:28px 20px;
-text-align:center;
-margin-bottom:20px;
-box-shadow:0 20px 40px rgba(0,0,0,.4);
-border: 1px solid rgba(56, 189, 248, 0.2);
-position: relative;
-overflow: hidden;
+color:white; border-radius:24px; padding:28px 20px; text-align:center; margin-bottom:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.4); border: 1px solid rgba(56, 189, 248, 0.2); position: relative; overflow: hidden;
 }
+.brand-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #38bdf8, #6366f1, #ec4899); }
+.brand-name{ font-size:28px; font-weight:900; letter-spacing:1px; margin:0; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-tagline{ font-size:14px; font-style:italic; margin-top:6px; color:#94a3b8; }
+.brand-line{ height:1px; background:rgba(255,255,255,.1); margin:16px auto; width:80%; }
+.brand-subjects{ font-size:13px; font-weight:700; letter-spacing:.5px; color:#cbd5e1; }
 
-.brand-banner::before {
-content: '';
-position: absolute;
-top: 0; left: 0; right: 0; height: 4px;
-background: linear-gradient(90deg, #38bdf8, #6366f1, #ec4899);
-}
-
-.brand-name{
-font-size:28px;
-font-weight:900;
-letter-spacing:1px;
-margin:0;
-background: linear-gradient(90deg, #38bdf8, #818cf8);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-
-.brand-tagline{
-font-size:14px;
-font-style:italic;
-margin-top:6px;
-color:#94a3b8;
-}
-
-.brand-line{
-height:1px;
-background:rgba(255,255,255,.1);
-margin:16px auto;
-width:80%;
-}
-
-.brand-subjects{
-font-size:13px;
-font-weight:700;
-letter-spacing:.5px;
-color:#cbd5e1;
-}
-
-.brand-message{
-margin-top:10px;
-font-size:12px;
-color:#38bdf8;
-font-weight: 600;
-text-transform: uppercase;
-letter-spacing: 1px;
-}
-
-/* =====================================================
-DAILY PUZZLE & LEADERBOARD
-===================================================== */
-.puzzle-banner {
-background: linear-gradient(145deg, #1e293b, #111827);
-border: 2px solid #f59e0b;
-border-radius: 20px;
-padding: 20px;
-margin-bottom: 20px;
-box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15);
-}
-.puzzle-tag {
-color: #f59e0b; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
-}
-.puzzle-q { font-size: 17px; font-weight: 700; color: #f8fafc; line-height: 1.5; margin-bottom: 14px; }
-.puzzle-toggle-btn { background: #f59e0b; color: #0f172a; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
-.puzzle-solution { display: none; margin-top: 14px; padding: 14px; background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px dashed #f59e0b; font-size: 14px; line-height: 1.6; color: #e2e8f0; }
-
-.leaderboard-card { background: #1e293b; border: 2px solid #334155; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.leaderboard-title { font-size: 18px; font-weight: 900; color: #38bdf8; margin-bottom: 14px; text-align: center; letter-spacing: .5px; }
+/* DAILY PUZZLE & LEADERBOARD */
+.puzzle-banner { background: linear-gradient(145deg, #1e293b, #111827); border: 2px solid #f59e0b; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+.puzzle-tag { color: #f59e0b; font-weight: 900; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
+.puzzle-q { font-size: 17px; font-weight: 700; margin-bottom: 14px; }
+.puzzle-toggle-btn { background: #f59e0b; color: #0f172a; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+.puzzle-solution { display: none; margin-top: 14px; padding: 14px; background: rgba(15, 23, 42, 0.6); border-radius: 12px; border: 1px dashed #f59e0b; font-size: 14px; line-height: 1.6; }
+.leaderboard-card { background: #1e293b; border: 2px solid #334155; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+.leaderboard-title { font-size: 18px; font-weight: 900; color: #38bdf8; margin-bottom: 14px; text-align: center; }
 .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; background: #0f172a; border-radius: 12px; margin-bottom: 8px; font-size: 14px; font-weight: 700; border: 1px solid rgba(255,255,255,0.05); }
-.leaderboard-rank { background: #334155; color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 10px; }
+.leaderboard-rank { background: #334155; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 10px; }
 .leaderboard-rank.first { background: #eab308; color: #0f172a; }
-.leaderboard-rank.second { background: #94a3b8; color: #0f172a; }
-.leaderboard-rank.third { background: #d97706; color: white; }
 .leaderboard-score { color: #34d399; font-weight: 900; }
 
-/* =====================================================
-HEADER & MODE SWITCH
-===================================================== */
+/* HEADER & MODE SWITCH */
 .header{ text-align:center; margin-bottom:20px; }
-.header h1{ margin:0; font-size:32px; font-weight:900; color:white; }
+.header h1{ margin:0; font-size:32px; font-weight:900; }
 .header p{ margin-top:8px; color:#94a3b8; font-size:15px; }
-
 .mode-switch{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:20px; }
-.mode-btn{ padding:14px 5px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:14px; font-weight:800; cursor:pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4); }
+.mode-btn{ padding:14px 5px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:14px; font-weight:800; cursor:pointer; }
+.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; }
 .mode-btn.arena-btn { color: #f43f5e; border-color: #9f1239; }
-.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.4); }
+.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; }
 
-/* =====================================================
-CARDS & INPUTS
-===================================================== */
+/* CARDS & INPUTS */
 .card{ background:#1e293b; padding:28px; border-radius:24px; box-shadow:0 15px 35px rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,0.05); }
 label{ display:block; font-size:16px; font-weight:700; margin-bottom:12px; color:#e2e8f0; }
-
 .subjects{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:25px; }
 .subject{ padding:16px 8px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#38bdf8; font-size:15px; font-weight:700; cursor:pointer; }
-.subject.active{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; font-weight: 900; }
-
-textarea, input, select { width:100%; padding:16px; border:2px solid #334155; border-radius:14px; font-size:16px; background:#0f172a; color:white; outline:none; font-family:inherit; margin-bottom:14px;}
+.subject.active{ background:#38bdf8; color:#0f172a; font-weight: 900; }
+textarea, input, select { width:100%; padding:16px; border:2px solid #334155; border-radius:14px; font-size:16px; background:#0f172a; color:white; outline:none; margin-bottom: 14px; font-family: inherit;}
 textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+.ask-btn, .submit-btn { width:100%; margin-top:10px; padding:18px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:18px; font-weight:900; cursor:pointer; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
+.ask-btn:disabled, .submit-btn:disabled{ opacity:.5; cursor:not-allowed; }
+.hidden{ display:none!important; }
 
-.photo-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; }
-.photo-btn{ padding:16px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-size:15px; font-weight:700; cursor:pointer; }
-#imageInput{ display:none; }
-#imagePreview{ display:none; width:100%; max-height:260px; object-fit:contain; margin-top:15px; border-radius:14px; border:2px solid #334155; }
-#removeImage{ display:none; margin:10px auto 0; border:none; background:none; color:#ef4444; font-weight:700; cursor:pointer; }
-
-.ask-btn, .submit-test-btn, .generate-btn { width:100%; margin-top:10px; padding:18px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:18px; font-weight:900; cursor:pointer; box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3); }
-.generate-btn{ background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0f172a; box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3); }
-.ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled{ opacity:.5; cursor:not-allowed; }
-.loading, .generator-loading{ display:none; text-align:center; padding:20px; font-weight:700; color:#38bdf8; }
-
-/* =====================================================
-ANSWER & AI OUTPUT
-===================================================== */
-.answer-box{ display:none; margin-top:25px; padding:24px; background:#0f172a; border-radius:20px; border:2px solid #334155; }
-.logic-title{ font-size:24px; font-weight:900; color:#38bdf8; margin-bottom:15px; }
-.answer-text{ white-space:pre-wrap; font-size:17px; line-height:1.7; color:#cbd5e1; }
-.feedback{ display:none; margin-top:20px; }
-.feedback-title{ font-size:15px; font-weight:700; margin-bottom:10px; color:#94a3b8; }
-.feedback-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.feedback-btn{ padding:14px 10px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#e2e8f0; font-weight:700; cursor:pointer; font-size:13px; }
-.teacher-btn{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; }
-
-/* =====================================================
-TEST FORM & GENERATOR
-===================================================== */
-.test-info{ background:#0f172a; border:2px solid #334155; border-radius:16px; padding:16px; margin:18px 0; color:#cbd5e1; }
-.test-info strong{ color:#38bdf8; }
-.notice{ margin-top:8px; color:#94a3b8; font-size:13px; line-height:1.5; }
-.generator-box{ margin-top:24px; padding-top:24px; border-top:2px solid #334155; }
-.generator-title{ font-size:20px; font-weight:900; color:white; margin-bottom:6px; }
-.generator-subtitle{ font-size:13px; color:#94a3b8; line-height:1.5; margin-bottom:16px; }
-.generator-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.full{ grid-column:1/-1; }
-
-/* QUESTIONS & TIMER */
-.timer-box { font-size: 22px; font-weight: 900; color: #ef4444; text-align: center; padding: 12px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 18px; background: rgba(239, 68, 68, 0.1); }
-.question-card{ border:2px solid #334155; border-radius:16px; padding:18px; margin:16px 0; background:#0f172a; }
-.question-number{ color:#38bdf8; font-weight:800; font-size:13px; margin-bottom:6px; text-transform: uppercase; letter-spacing: .5px; }
-.question-text{ font-size:17px; font-weight:700; line-height:1.5; margin-bottom:14px; color:white; }
-.option{ display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:15px; line-height:1.4; background:#1e293b; color:#e2e8f0; }
-.option:hover{ background:#283548; border-color:#38bdf8; }
-.option input{ margin-top:2px; width:auto; }
-
-/* RESULT, BADGES & ANALYTICS */
-.test-result{ display:none; padding:25px 15px; margin-top:20px; background:#0f172a; border:2px solid #334155; border-radius:20px; }
-.score-box { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 20px; }
-.score{ font-size:42px; font-weight:900; color:#38bdf8; }
-.result-detail{ font-size:16px; line-height:1.7; margin-top:8px; color:#cbd5e1; }
-
-.badges-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0; }
-.badge { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-.badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
-.badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
-.badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
-.badge.earlybird { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
-.badge.sharp { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid #fb7185; }
-
-.review-title { font-size: 20px; font-weight: 900; color: white; margin-bottom: 15px; text-align: center; }
-.review-card { background: #1e293b; border: 2px solid #334155; border-radius: 14px; padding: 16px; margin-bottom: 15px; text-align: left; }
-.review-q-num { font-weight: 800; color: #94a3b8; font-size: 13px; margin-bottom: 6px; }
-.review-q-text { font-weight: 700; font-size: 16px; margin-bottom: 12px; color: white; }
-.review-item { margin-bottom: 6px; font-size: 14px; color: #cbd5e1; }
-.review-correct { color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.1); padding: 4px 8px; border-radius: 6px; display: inline-block; }
-.review-wrong { color: #f87171; font-weight: 800; background: rgba(248, 113, 113, 0.1); padding: 4px 8px; border-radius: 6px; display: inline-block; }
-.review-explanation { margin-top: 12px; padding: 12px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 6px; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
-
-.restart-btn{ margin-top:15px; padding:16px 20px; border:2px solid #38bdf8; border-radius:14px; background:transparent; color:#38bdf8; font-weight:800; cursor:pointer; width: 100%; }
-.restart-btn:hover { background: rgba(56, 189, 248, 0.1); }
-.whatsapp-btn{ background:#25D366 !important; color:white !important; border: none !important; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
-
-/* =====================================================
-ARENA (1v1) MULTIPLAYER
-===================================================== */
+/* ARENA 1v1 STYLES */
 .arena-header { text-align: center; margin-bottom: 20px; }
 .arena-title { font-size: 26px; font-weight: 900; color: #fb7185; }
 .arena-subtitle { font-size: 14px; color: #94a3b8; margin-top: 5px; }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 2px solid #334155; }
-.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3); }
-.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); }
+.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 18px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 16px;}
+.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 18px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 16px;}
 
 .lobby-box { text-align: center; padding: 30px 15px; background: #0f172a; border-radius: 16px; border: 2px dashed #fb7185; }
-.room-code-display { font-size: 42px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 15px 0; }
+.room-code-display { font-size: 44px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 15px 0; }
 .pulse-text { animation: pulse 1.5s infinite; color: #38bdf8; font-weight: 700; }
 @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
@@ -243,23 +87,26 @@ ARENA (1v1) MULTIPLAYER
 .winner-text { font-size: 32px; font-weight: 900; color: #34d399; margin-bottom: 10px; }
 .loser-text { font-size: 32px; font-weight: 900; color: #fb7185; margin-bottom: 10px; }
 
+/* DOUBT / TEST SPECIFIC */
+.photo-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;}
+.photo-btn{ padding:16px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-weight:700; cursor:pointer; }
+.answer-box{ display:none; margin-top:25px; padding:24px; background:#0f172a; border-radius:20px; border:2px solid #334155; }
+.logic-title{ font-size:24px; font-weight:900; color:#38bdf8; margin-bottom:15px; }
+.answer-text{ white-space:pre-wrap; font-size:17px; line-height:1.7; color:#cbd5e1; }
+.timer-box { font-size: 22px; font-weight: 900; color: #ef4444; text-align: center; padding: 12px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 18px; background: rgba(239, 68, 68, 0.1); }
+.question-card{ border:2px solid #334155; border-radius:16px; padding:18px; margin:16px 0; background:#0f172a; }
+.question-number{ color:#38bdf8; font-weight:800; font-size:13px; margin-bottom:6px; text-transform: uppercase; }
+.question-text{ font-size:17px; font-weight:700; margin-bottom:14px; }
+.test-radio { display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; background:#1e293b; }
+.test-result{ display:none; padding:25px 15px; margin-top:20px; background:#0f172a; border:2px solid #334155; border-radius:20px; text-align: center;}
+.badges-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 15px 0; }
+.badge { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 800; }
+.badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
+.badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
+.badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
+
 .footer{ text-align:center; color:#64748b; margin:30px 0; font-size:13px; line-height:1.6; }
 .footer-brand{ font-weight:800; color:#94a3b8; }
-.hidden{ display:none!important; }
-
-/* =====================================================
-MOBILE OPTIMIZATIONS
-===================================================== */
-@media(max-width:600px){
-.container{ width:95%; margin:12px auto; }
-.card{ padding:20px; }
-.subjects{ grid-template-columns:1fr; }
-.photo-buttons{ grid-template-columns:1fr; }
-.generator-grid{ grid-template-columns:1fr; }
-.full{ grid-column:auto; }
-.arena-grid { grid-template-columns: 1fr; }
-}
-
 </style>
 </head>
 
@@ -267,13 +114,11 @@ MOBILE OPTIMIZATIONS
 
 <div class="container">
 
-<!-- BRAND BANNER -->
 <div class="brand-banner">
     <div class="brand-name">INVINCIBLE 360</div>
     <div class="brand-tagline">Complete Academic & Competitive Intelligence Ecosystem</div>
     <div class="brand-line"></div>
     <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS &nbsp;•&nbsp; SCIENCE</div>
-    <div class="brand-message">AI Doubt Desk • Live Weekly Tests • Analytics • Daily Mastery</div>
 </div>
 
 <!-- DAILY BRAIN TEASER -->
@@ -284,7 +129,7 @@ MOBILE OPTIMIZATIONS
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </div>
 
-<!-- WALL OF FAME (LEADERBOARD) -->
+<!-- WALL OF FAME -->
 <div class="leaderboard-card" id="leaderboardBox" style="display:none;">
     <div class="leaderboard-title">🏆 Top Scorers (Wall of Fame)</div>
     <div id="leaderboardList"></div>
@@ -311,32 +156,20 @@ MOBILE OPTIMIZATIONS
         <button type="button" class="subject" data-subject="Physics">Physics</button>
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
     </div>
-
-    <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your question here... You can ask in English or Hindi."></textarea>
-    <input id="imageInput" type="file" accept="image/*">
-
+    <label>Your Question</label>
+    <textarea id="question" placeholder="Type your question here..."></textarea>
+    <input id="imageInput" type="file" accept="image/*" style="display:none;">
     <div class="photo-buttons">
         <button type="button" class="photo-btn" id="cameraBtn">Take Photo</button>
         <button type="button" class="photo-btn" id="uploadBtn">Upload Photo</button>
     </div>
-
-    <img id="imagePreview" alt="Selected question">
-    <button type="button" id="removeImage">Remove Photo</button>
+    <img id="imagePreview" alt="Selected question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:2px solid #334155;">
+    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:#ef4444; font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">ASK AI</button>
-
-    <div class="loading" id="loading">Thinking... Please wait.</div>
-
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:#38bdf8; margin-top:15px; font-weight:bold;">Thinking...</div>
     <div class="answer-box" id="answerBox">
         <div class="logic-title">Aao Logic Samjhate Hain</div>
         <div class="answer-text" id="answerText"></div>
-        <div class="feedback" id="feedback">
-            <div class="feedback-title">Still confused?</div>
-            <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Not Satisfied — Explain Again</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Help</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -346,109 +179,42 @@ MOBILE OPTIMIZATIONS
 <div class="card hidden" id="testSection">
     <div id="testSetup">
         <label>Take an Automated Test</label>
-        <div>
-            <input id="studentName" type="text" placeholder="Student Name">
-            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="Mobile Number">
-
-            <select id="testClass">
-                <option value="">Select Class</option>
-                <option value="9">Class 9</option>
-                <option value="10">Class 10</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-            </select>
-
-            <select id="testSubject">
-                <option value="">Select Subject</option>
-                <option value="Science">Science (Class 9-10)</option>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Mathematics">Mathematics</option>
-            </select>
-
-            <select id="testSelect">
-                <option value="">Select Test</option>
-            </select>
-        </div>
-
-        <div class="test-info">
-            <strong>Live Weekly Tests</strong>
-            <div class="notice">Select your class and subject to see available tests loaded securely from the database.</div>
-        </div>
-
-        <button type="button" class="submit-test-btn" id="startTestBtn">START TEST</button>
-
-        <div class="generator-box">
-            <div class="generator-title">AI Test Generator</div>
-            <div class="generator-subtitle">Choose the class, subject and chapter. AI will create a fresh test automatically.</div>
-            <div class="generator-grid">
-                <select id="aiClass">
-                    <option value="">Select Class</option>
-                    <option value="9">Class 9</option>
-                    <option value="10">Class 10</option>
-                    <option value="11">Class 11</option>
-                    <option value="12">Class 12</option>
-                </select>
-
-                <select id="aiSubject">
-                    <option value="">Select Subject</option>
-                    <option value="Science">Science</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Mathematics">Mathematics</option>
-                </select>
-
-                <input class="full" id="aiChapter" type="text" placeholder="Chapter name e.g. Light">
-
-                <select id="aiNumber">
-                    <option value="10">10 Questions</option>
-                    <option value="15">15 Questions</option>
-                    <option value="20" selected>20 Questions</option>
-                    <option value="25">25 Questions</option>
-                    <option value="30">30 Questions</option>
-                </select>
-
-                <select id="aiDifficulty">
-                    <option value="Easy">Easy</option>
-                    <option value="Moderate" selected>Moderate</option>
-                    <option value="Hard">Hard</option>
-                </select>
-
-                <select class="full" id="aiQuestionType">
-                    <option value="MCQ">MCQ</option>
-                </select>
-            </div>
-
-            <button type="button" class="generate-btn" id="generateTestBtn">GENERATE AI TEST</button>
-            <div class="generator-loading" id="generatorLoading">Creating your test... Please wait.</div>
-        </div>
+        <input id="testName" type="text" placeholder="Student Name">
+        <input id="testMobile" type="tel" placeholder="Mobile Number">
+        <select id="testClass">
+            <option value="">Select Class</option>
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+        </select>
+        <select id="testSubject">
+            <option value="">Select Subject</option>
+            <option value="Science">Science (9-10)</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Mathematics">Mathematics</option>
+        </select>
+        <select id="testSelect"><option value="">Select Test</option></select>
+        <button type="button" class="submit-btn" id="startTestBtn">START TEST</button>
     </div>
 
     <div id="testArea" class="hidden">
         <div class="timer-box" id="timerDisplay">⏳ 20:00</div>
-        <div class="test-info" id="testHeader"></div>
         <div id="questionsContainer"></div>
-        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT TEST</button>
+        <button type="button" class="submit-btn" id="submitTestBtn">SUBMIT TEST</button>
     </div>
 
     <div class="test-result" id="testResult">
-        <div class="score-box">
-            <div>Test Result</div>
-            <div class="score" id="scoreText">0/0</div>
-            <div id="badgesContainer" class="badges-container"></div>
-            <div class="result-detail" id="resultDetail"></div>
-        </div>
-
-        <div class="review-title">Detailed Analysis</div>
-        <div id="reviewContainer"></div>
-
-        <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn">SHARE SCORE ON WHATSAPP</button>
+        <div style="font-size:42px; font-weight:900; color:#38bdf8;" id="scoreText">0/0</div>
+        <div id="badgesContainer" class="badges-container"></div>
+        <div id="resultDetail" style="margin: 15px 0; color:#cbd5e1; font-size:16px;"></div>
+        <button type="button" class="submit-btn" onclick="location.reload()">HOME</button>
     </div>
 </div>
 
 <!-- =====================================================
-3. ARENA SECTION (MULTIPLAYER)
+3. ARENA SECTION (MULTIPLAYER 1v1)
 ===================================================== -->
 <div class="card hidden" id="arenaSection">
     
@@ -456,39 +222,37 @@ MOBILE OPTIMIZATIONS
     <div id="arenaSetup">
         <div class="arena-header">
             <div class="arena-title">⚔️ INVINCIBLE ARENA</div>
-            <div class="arena-subtitle">Battle your friends in a live rapid-fire quiz!</div>
+            <div class="arena-subtitle">10 Rapid-Fire Science & Math Teasers (5-10 Sec Clashes)</div>
         </div>
+        
+        <label>Your Name</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Your Name (e.g. Rahul)">
+        
+        <label>Your Class</label>
+        <select id="arenaClass" style="margin-bottom: 20px;">
+            <option value="9">Class 9 (Science & Mental Maths)</option>
+            <option value="10">Class 10 (Science & Mental Maths)</option>
+            <option value="11">Class 11 (Physics, Chem & Mental Maths)</option>
+            <option value="12">Class 12 (Physics, Chem & Mental Maths)</option>
+        </select>
         
         <div class="arena-grid">
             <div>
-                <select id="arenaClass" style="margin-bottom: 10px;">
-                    <option value="9">Class 9</option>
-                    <option value="10">Class 10</option>
-                    <option value="11">Class 11</option>
-                    <option value="12">Class 12</option>
-                </select>
-                <select id="arenaSubject">
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Science">Science (9-10)</option>
-                </select>
-                <button type="button" class="arena-btn-create" id="btnCreateRoom">Create Match</button>
+                <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button>
             </div>
             <div>
-                <input type="text" id="arenaJoinCode" placeholder="Enter 4-Digit Code" maxlength="4" style="text-align:center; font-weight:bold; letter-spacing:2px; height: 115px; font-size: 24px;">
-                <button type="button" class="arena-btn-join" id="btnJoinRoom">Join Match</button>
+                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 18px; margin-bottom: 10px;">
+                <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
     </div>
 
     <!-- Waiting Room -->
     <div id="arenaWaiting" class="hidden lobby-box">
-        <div style="font-size: 18px; color:#cbd5e1;">Your Room Code</div>
+        <div style="font-size: 18px; color:#cbd5e1;">Share This Room Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size: 14px; color:#94a3b8; margin-bottom:20px;">Send this code to your friend!</div>
-        <div class="pulse-text">Waiting for opponent to join...</div>
+        <div style="font-size: 14px; color:#94a3b8; margin-bottom:20px;">Tell your friend to enter this code in the Arena!</div>
+        <div class="pulse-text">AI is ready. Waiting for opponent to join...</div>
     </div>
 
     <!-- Active Battle -->
@@ -502,8 +266,8 @@ MOBILE OPTIMIZATIONS
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
         
         <div class="question-card">
-            <div class="question-number" id="arenaQNum">QUESTION 1/5</div>
-            <div class="question-text" id="arenaQText">Loading...</div>
+            <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
+            <div class="question-text" id="arenaQText">Generating...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
@@ -511,10 +275,10 @@ MOBILE OPTIMIZATIONS
     <!-- Battle Result -->
     <div id="arenaResult" class="hidden result-box">
         <div id="arenaResultText"></div>
-        <div style="margin-top: 20px; color:#cbd5e1; font-size: 18px; line-height: 1.8;">
+        <div style="margin: 20px 0; color:#cbd5e1; font-size: 18px; line-height: 1.8;">
             <span id="finalP1"></span> <br> <span id="finalP2"></span>
         </div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:20px;">LEAVE ARENA</button>
+        <button type="button" class="submit-btn" onclick="location.reload()" style="margin-top:10px;">PLAY ANOTHER MATCH</button>
     </div>
 
 </div>
@@ -551,450 +315,122 @@ function playSound(type, freq, duration, vol=0.1) {
         osc.start(); osc.stop(audioCtx.currentTime + duration);
     } catch(e){}
 }
-function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.3), 100); } // Arena Correct
-function playBuzz() { playSound('sawtooth', 150, 0.3, 0.2); } // Arena Wrong
-function playWin() { playSound('square', 440, 0.2); setTimeout(()=>playSound('square', 554, 0.2), 200); setTimeout(()=>playSound('square', 659, 0.4), 400); } // Arena Win
-function playSuccessSound() { playDing(); } // For Test Submissions >= 80%
+function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
+function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
+function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
 
 /* =====================================================
-MODE SWITCH LOGIC
+TAB SWITCHING
 ===================================================== */
-const doubtModeBtn = document.getElementById("doubtModeBtn");
-const testModeBtn = document.getElementById("testModeBtn");
-const arenaModeBtn = document.getElementById("arenaModeBtn");
-const doubtSection = document.getElementById("doubtSection");
-const testSection = document.getElementById("testSection");
-const arenaSection = document.getElementById("arenaSection");
+document.getElementById('doubtModeBtn').onclick = () => switchTab('doubt');
+document.getElementById('testModeBtn').onclick = () => switchTab('test');
+document.getElementById('arenaModeBtn').onclick = () => switchTab('arena');
 
-doubtModeBtn.addEventListener("click", function(){
-    doubtModeBtn.classList.add("active");
-    testModeBtn.classList.remove("active");
-    arenaModeBtn.classList.remove("active");
-    doubtSection.classList.remove("hidden");
-    testSection.classList.add("hidden");
-    arenaSection.classList.add("hidden");
-});
-
-testModeBtn.addEventListener("click", function(){
-    testModeBtn.classList.add("active");
-    doubtModeBtn.classList.remove("active");
-    arenaModeBtn.classList.remove("active");
-    testSection.classList.remove("hidden");
-    doubtSection.classList.add("hidden");
-    arenaSection.classList.add("hidden");
-});
-
-arenaModeBtn.addEventListener("click", function(){
-    arenaModeBtn.classList.add("active");
-    doubtModeBtn.classList.remove("active");
-    testModeBtn.classList.remove("active");
-    arenaSection.classList.remove("hidden");
-    doubtSection.classList.add("hidden");
-    testSection.classList.add("hidden");
-});
+function switchTab(tab) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab + 'ModeBtn').classList.add('active');
+    document.getElementById('doubtSection').classList.add('hidden');
+    document.getElementById('testSection').classList.add('hidden');
+    document.getElementById('arenaSection').classList.add('hidden');
+    document.getElementById(tab + 'Section').classList.remove('hidden');
+}
 
 /* =====================================================
-DOUBT DESK LOGIC
+DOUBT DESK
 ===================================================== */
-let selectedSubject="Mathematics";
-let selectedImage=null;
-
+let selectedSubject = "Mathematics";
+let selectedImage = null;
 const questionInput = document.getElementById("question");
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
 const removeImageButton = document.getElementById("removeImage");
-const askButton = document.getElementById("askBtn");
-const loading = document.getElementById("loading");
-const answerBox = document.getElementById("answerBox");
-const answerText = document.getElementById("answerText");
-const feedback = document.getElementById("feedback");
 
-document.querySelectorAll("#doubtSection .subject").forEach(function(button){
-    button.addEventListener("click", function(){
-        document.querySelectorAll("#doubtSection .subject").forEach(function(btn){
-            btn.classList.remove("active");
-        });
-        button.classList.add("active");
-        selectedSubject = button.getAttribute("data-subject");
-    });
+document.querySelectorAll("#doubtSection .subject").forEach(b => {
+    b.onclick = () => {
+        document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active'));
+        b.classList.add('active');
+        selectedSubject = b.getAttribute('data-subject');
+    };
 });
+document.getElementById("uploadBtn").onclick = () => imageInput.click();
+document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
 
-document.getElementById("uploadBtn").addEventListener("click", function(){ imageInput.removeAttribute("capture"); imageInput.click(); });
-document.getElementById("cameraBtn").addEventListener("click", function(){ imageInput.setAttribute("capture", "environment"); imageInput.click(); });
-
-imageInput.addEventListener("change", function(event){
-    const file = event.target.files[0];
+imageInput.onchange = e => {
+    const file = e.target.files[0];
     if(!file) return;
-    if(!file.type.startsWith("image/")){ alert("Please select an image."); return; }
     const reader = new FileReader();
-    reader.onload = function(){
-        const result = reader.result;
-        selectedImage = { data: result.split(",")[1], mimeType: file.type };
-        imagePreview.src = result;
+    reader.onload = () => {
+        selectedImage = { data: reader.result.split(",")[1], mimeType: file.type };
+        imagePreview.src = reader.result;
         imagePreview.style.display = "block";
         removeImageButton.style.display = "block";
     };
     reader.readAsDataURL(file);
-});
+};
+removeImageButton.onclick = () => {
+    selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none";
+};
 
-removeImageButton.addEventListener("click", function(){
-    selectedImage=null; imageInput.value=""; imagePreview.src=""; imagePreview.style.display="none"; removeImageButton.style.display="none";
-});
+document.getElementById("askBtn").onclick = async () => {
+    const q = questionInput.value.trim();
+    if(!q && !selectedImage) return alert("Please type a question or upload a photo.");
+    document.getElementById("loadingDoubt").classList.remove('hidden');
+    document.getElementById("answerBox").style.display = "none";
 
-askButton.addEventListener("click", async function(){
-    const question = questionInput.value.trim();
-    if(!question && !selectedImage){ alert("Please type a question or upload a photo."); return; }
-    askButton.disabled = true; loading.style.display = "block"; answerBox.style.display = "none"; feedback.style.display = "none";
-
-    try{
-        const response = await fetch("/api/ask", {
+    try {
+        const res = await fetch("/api/ask", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ subject: selectedSubject, question: question, image: selectedImage })
+            body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage })
         });
-        const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Unable to get answer.");
-
-        answerText.textContent = cleanAnswer(data.answer);
-        answerBox.style.display = "block"; feedback.style.display = "block";
-        answerBox.scrollIntoView({ behavior:"smooth", block:"start" });
-    }catch(error){
-        answerBox.style.display = "block"; answerText.textContent = "Sorry, answer nahi aa paaya.\n\n" + error.message;
-    }finally{
-        askButton.disabled = false; loading.style.display = "none";
+        const data = await res.json();
+        document.getElementById("answerText").textContent = data.answer || "No response.";
+        document.getElementById("answerBox").style.display = "block";
+    } catch(err) {
+        alert("Failed to reach AI.");
+    } finally {
+        document.getElementById("loadingDoubt").classList.add('hidden');
     }
-});
-
-function cleanAnswer(text){
-    if(!text) return "";
-    return text.replace(/#{1,6}\s?/g, "").replace(/\*\*/g, "").replace(/\*/g, "").replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\mathrm\{([^}]*)\}/g, "$1").replace(/\\times/g, "×").replace(/\\div/g, "÷").replace(/\\cdot/g, "×").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\\[/g, "").replace(/\\\]/g, "").replace(/\$\$/g, "").replace(/\$/g, "").replace(/```[\s\S]*?```/g, "").trim();
-}
-
-document.getElementById("againBtn").addEventListener("click", function(){
-    const oldQuestion = questionInput.value.trim();
-    questionInput.value = oldQuestion + "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
-    askButton.click();
-});
-
-document.getElementById("teacherBtn").addEventListener("click", function(){
-    const studentQuestion = questionInput.value.trim();
-    const aiExplanation = answerText.textContent.trim();
-    const whatsappMessage = "Hello Invincible 360 Teacher.\n\nI need personal help with this doubt.\n\nSubject: " + selectedSubject + "\n\nStudent Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\nAI Explanation:\n" + aiExplanation;
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
-});
+};
 
 /* =====================================================
-PLATFORM DATA (PUZZLE, LEADERBOARD, TESTS)
+ARENA 1v1 LOGIC (EXACTLY 10 GEMINI QUESTIONS)
 ===================================================== */
-let testBank = {};
+let arena = {
+    code: null,
+    playerNum: 1,
+    name: '',
+    score: 0,
+    questions: [],
+    currentQ: 0,
+    timer: 10,
+    interval: null,
+    pollInterval: null
+};
 
-async function loadPlatformData(){
-    try{
-        const response = await fetch('/api/get-questions');
-        const data = await response.json();
-
-        if(data && Array.isArray(data.questions)){
-            data.questions.forEach(function(q, index){
-                const key = q.class_name + "|" + q.subject;
-                if(!testBank[key]) testBank[key] = {};
-                if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
-                testBank[key][q.test_title].push({
-                    id: index + 1, question: q.question_text,
-                    options: [q.option_1, q.option_2, q.option_3, q.option_4],
-                    answer: q.correct_option, explanation: q.explanation
-                });
-            });
-        }
-
-        if(data && data.dailyPuzzle){
-            document.getElementById("puzzleBox").style.display = "block";
-            document.getElementById("puzzleQuestion").textContent = data.dailyPuzzle.question_text;
-            document.getElementById("puzzleSolution").textContent = data.dailyPuzzle.solution_text;
-        }
-
-        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
-            const list = document.getElementById("leaderboardList");
-            list.innerHTML = "";
-            data.leaderboard.forEach(function(item, idx){
-                let rankClass = idx === 0 ? "first" : (idx === 1 ? "second" : (idx === 2 ? "third" : ""));
-                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
-            });
-            document.getElementById("leaderboardBox").style.display = "block";
-        }
-    }catch(error){ console.error("Error loading platform data:", error); }
-}
-loadPlatformData();
-
-const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
-const puzzleSolution = document.getElementById("puzzleSolution");
-puzzleToggleBtn.addEventListener("click", function(){
-    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Logic"; }
-    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Logic"; }
-});
-
-/* =====================================================
-TEST GENERATOR & TIMER LOGIC
-===================================================== */
-let activeQuestions = [];
-let activeTestTitle = "";
-let activeTestClass = "";
-let activeTestSubject = "";
-let finalScoreData = {};
-
-let testTimerInterval = null;
-let totalTimeLimit = 1200; // 20 minutes
-let timeRemaining = 1200;
-
-const testClass = document.getElementById("testClass");
-const testSubject = document.getElementById("testSubject");
-const testSelect = document.getElementById("testSelect");
-const startTestBtn = document.getElementById("startTestBtn");
-const testSetup = document.getElementById("testSetup");
-const testArea = document.getElementById("testArea");
-const testHeader = document.getElementById("testHeader");
-const questionsContainer = document.getElementById("questionsContainer");
-const submitTestBtn = document.getElementById("submitTestBtn");
-const testResult = document.getElementById("testResult");
-const scoreText = document.getElementById("scoreText");
-const badgesContainer = document.getElementById("badgesContainer");
-const resultDetail = document.getElementById("resultDetail");
-const reviewContainer = document.getElementById("reviewContainer");
-const restartTestBtn = document.getElementById("restartTestBtn");
-const timerDisplay = document.getElementById("timerDisplay");
-const whatsappShareBtn = document.getElementById("whatsappShareBtn");
-
-function startTimer() {
-    clearInterval(testTimerInterval); timeRemaining = totalTimeLimit; updateTimerUI();
-    testTimerInterval = setInterval(function() {
-        timeRemaining--; updateTimerUI();
-        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("⏰ Time's up! Your test is automatically submitting."); submitTestBtn.click(); }
-    }, 1000);
-}
-
-function updateTimerUI() {
-    if (!timerDisplay) return;
-    const minutes = Math.floor(timeRemaining / 60); const seconds = timeRemaining % 60;
-    timerDisplay.textContent = "⏳ " + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-}
-
-function updateTestList(){
-    testSelect.innerHTML = '<option value="">Select Test</option>';
-    const key = testClass.value + "|" + testSubject.value;
-    if(testBank[key]){
-        Object.keys(testBank[key]).forEach(function(testName){
-            const option = document.createElement("option"); option.value = testName; option.textContent = testName; testSelect.appendChild(option);
-        });
-    }
-}
-testClass.addEventListener("change", updateTestList);
-testSubject.addEventListener("change", updateTestList);
-
-startTestBtn.addEventListener("click", function(){
-    const name = document.getElementById("studentName").value.trim();
-    const mobile = document.getElementById("studentMobile").value.trim();
-    const cls = testClass.value; const subject = testSubject.value; const test = testSelect.value;
-    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill Name, Mobile Number, Class, Subject and Test."); return; }
-    if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
-
-    let questions = null;
-    if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){ questions = testBank[cls+"|"+subject][test]; }
-    if(!questions || !questions.length){ alert("This test is not available yet."); return; }
-
-    activeTestClass = cls; activeTestSubject = subject;
-    startQuestions(questions, "Class " + cls + " " + subject, test);
-});
-
-const generateTestBtn = document.getElementById("generateTestBtn");
-const generatorLoading = document.getElementById("generatorLoading");
-
-generateTestBtn.addEventListener("click", async function(){
-    const cls = document.getElementById("aiClass").value; const subject = document.getElementById("aiSubject").value;
-    const chapter = document.getElementById("aiChapter").value.trim(); const numberOfQuestions = Number(document.getElementById("aiNumber").value);
-    const difficulty = document.getElementById("aiDifficulty").value; const questionType = document.getElementById("aiQuestionType").value;
-
-    if(!cls || !subject || !chapter){ alert("Please select Class, Subject and enter Chapter."); return; }
-
-    generateTestBtn.disabled = true; generatorLoading.style.display = "block";
-    try{
-        const response = await fetch("/api/generate-test", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" })
-        });
-        const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Unable to generate test.");
-        const generated = extractQuestions(data);
-        if(!generated.length) throw new Error("No questions were returned by AI.");
-        activeTestClass = cls; activeTestSubject = subject;
-        startQuestions(generated, "Class " + cls + " " + subject, "AI Test — " + chapter);
-    }catch(error){ alert("Test generation failed.\n\n" + error.message); }
-    finally{ generateTestBtn.disabled = false; generatorLoading.style.display = "none"; }
-});
-
-function extractQuestions(data){
-    let questions=[];
-    if(Array.isArray(data)) questions = data;
-    else if(data && Array.isArray(data.questions)) questions = data.questions;
-    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions;
-    else if(data && data.data && Array.isArray(data.data.questions)) questions = data.data.questions;
-
-    return questions.map(function(q,index){
-        let options = q.options || q.choices || []; let answer = q.answer;
-        if(answer===undefined || answer===null) answer = q.correctAnswer;
-        if(typeof answer==="string" && options.length){
-            const letter = answer.trim().toUpperCase();
-            if(letter==="A") answer=0; if(letter==="B") answer=1; if(letter==="C") answer=2; if(letter==="D") answer=3;
-            if(answer>=0 && answer<options.length) answer = Number(answer);
-        }
-        return { id: index+1, question: q.question || q.questionText || "Question " + (index+1), options: options, answer: Number(answer), explanation: q.explanation };
-    }).filter(function(q){ return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length); });
-}
-
-function startQuestions(questions, headerTitle, testTitle){
-    activeQuestions = questions; activeTestTitle = testTitle;
-    testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
-    reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions &nbsp; | &nbsp; " + questions.length + " Marks";
-    questionsContainer.innerHTML = "";
-
-    questions.forEach(function(q,index){
-        const card = document.createElement("div"); card.className = "question-card";
-        let optionsHTML="";
-        q.options.forEach(function(option, optionIndex){
-            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + escapeHTML(String(option)) + '</span></label>';
-        });
-        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + escapeHTML(String(q.question)) + '</div>' + optionsHTML;
-        questionsContainer.appendChild(card);
-    });
-    window.scrollTo({ top:0, behavior:"smooth" });
-    startTimer();
-}
-
-function escapeHTML(text){
-    if(!text) return "";
-    return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-/* SMART BADGES LOGIC */
-function generateBadges(percentage, timeSpentSeconds) {
-    let badgesHTML = ""; const hour = new Date().getHours();
-    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
-    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
-    else if (percentage >= 50) { badgesHTML += `<div class="badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; border:1px solid #38bdf8;">👍 Good Effort</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(148, 163, 184, 0.15); color:#94a3b8; border:1px solid #94a3b8;">🌱 Future Topper</div>`; }
-
-    if(timeSpentSeconds < 600 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Speedster</div>`; }
-
-    if(hour >= 23 || hour <= 4) { badgesHTML += `<div class="badge nightowl">🦉 Night Owl</div>`; } 
-    else if (hour >= 18 && hour < 23) { badgesHTML += `<div class="badge" style="background:rgba(249, 115, 22, 0.15); color:#f97316; border:1px solid #f97316;">🌙 Evening Grinder</div>`; } 
-    else if (hour >= 5 && hour <= 8) { badgesHTML += `<div class="badge earlybird">🌅 Early Bird</div>`; }
-
-    return badgesHTML;
-}
-
-submitTestBtn.addEventListener("click", async function(){
-    const timeSpent = totalTimeLimit - timeRemaining; clearInterval(testTimerInterval);
-    const questions = activeQuestions; if(!questions.length) return;
-
-    submitTestBtn.disabled = true; submitTestBtn.textContent = "SUBMITTING...";
-    let correct=0, attempted=0; const answers=[]; let reviewHTML = "";
-
-    questions.forEach(function(q,index){
-        const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
-        let selectedAnswer = null; let isCorrect = false;
-
-        if(selected){
-            attempted++; selectedAnswer = Number(selected.value);
-            if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
-        }
-        
-        answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
-
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect / Skipped</span>';
-        let studentPick = selectedAnswer !== null ? escapeHTML(q.options[selectedAnswer]) : "<em>Did not attempt</em>";
-        let correctPick = escapeHTML(q.options[q.answer]);
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Teacher\'s Logic:</strong> ' + escapeHTML(q.explanation) + '</div>' : '';
-
-        reviewHTML += `<div class="review-card"><div class="review-q-num">Q${index+1} ${statusBadge}</div><div class="review-q-text">${escapeHTML(q.question)}</div><div class="review-item"><strong>You answered:</strong> ${studentPick}</div><div class="review-item"><strong>Correct answer:</strong> ${correctPick}</div>${explanationBox}</div>`;
-    });
-
-    const wrong = attempted - correct; const unanswered = questions.length - attempted;
-    const percentage = Math.round((correct/questions.length)*100);
-
-    badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
-    if (percentage >= 80) {
-        playSuccessSound();
-        if (typeof confetti === "function") { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#38bdf8', '#facc15', '#ec4899', '#34d399'] }); }
-    }
-
-    finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
-    scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>Correct: " + correct + "<br>Wrong: " + wrong + "<br>Unanswered: " + unanswered + "<br><br><span id='saveStatus'>Saving your result...</span>";
-
-    reviewContainer.innerHTML = reviewHTML;
-    testArea.classList.add("hidden"); testResult.style.display = "block";
-    testResult.scrollIntoView({ behavior:"smooth", block:"start" });
-
-    const studentName = document.getElementById("studentName").value.trim();
-    const studentMobile = document.getElementById("studentMobile").value.trim();
-    let chapter = activeTestTitle ? (activeTestTitle.startsWith("AI Test —") ? activeTestTitle.replace("AI Test —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
-
-    try{
-        const response = await fetch("/api/save-test-attempt", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("AI Test") ? "AI" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
-        });
-        const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Unable to save test result.");
-        const saveStatus = document.getElementById("saveStatus");
-        if(saveStatus){ saveStatus.textContent = "✓ Result saved successfully."; saveStatus.style.fontWeight = "700"; saveStatus.style.color = "#34d399"; }
-    }catch(error){
-        const saveStatus = document.getElementById("saveStatus");
-        if(saveStatus){ saveStatus.textContent = "ERROR: " + error.message; saveStatus.style.color = "#f87171"; }
-    }finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT TEST"; }
-});
-
-restartTestBtn.addEventListener("click", function(){
-    testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
-    activeQuestions = []; activeTestTitle = ""; activeTestClass = ""; activeTestSubject = "";
-    window.scrollTo({ top:0, behavior:"smooth" });
-});
-
-whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + window.location.href;
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
-});
-
-/* =====================================================
-ARENA MULTIPLAYER LOGIC
-===================================================== */
-let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null };
-
-// 1. Create Room (With Error Handling)
+// 1. Create Room
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
-    if(!name) return alert("Enter your name first!");
-    
-    document.getElementById('btnCreateRoom').textContent = "Creating...";
-    
+    const className = document.getElementById('arenaClass').value;
+    if(!name) return alert("Please enter your name first!");
+
+    const btn = document.getElementById('btnCreateRoom');
+    btn.disabled = true;
+    btn.textContent = "AI Generating 10 Questions...";
+
     try {
         const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ 
-                action: 'create', 
-                player_name: name, 
-                class_name: document.getElementById('arenaClass').value, 
-                subject: document.getElementById('arenaSubject').value 
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                action: 'create',
+                player_name: name,
+                class_name: className
             })
         });
-        
+
         const data = await res.json();
-        
-        // IF BACKEND SENDS AN ERROR, STOP AND SHOW ALERT!
-        if (data.error) {
-            document.getElementById('btnCreateRoom').textContent = "Create Match";
-            return alert("Failed to create room: " + data.error);
-        }
-        
-        // If successful, proceed to waiting room
+        if(data.error) throw new Error(data.error);
+
         arena.code = data.room_code;
         arena.questions = data.questions;
         arena.name = name;
@@ -1004,12 +440,14 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
 
-        // Start polling to see if player 2 joined
+        // Poll for Player 2 joining
         arena.pollInterval = setInterval(pollRoomState, 2000);
-        
-    } catch (err) {
-        document.getElementById('btnCreateRoom').textContent = "Create Match";
-        alert("Connection failed. Please check your internet and try again.");
+
+    } catch(err) {
+        alert("Failed to create room: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "⚡ Create 1v1 Room";
     }
 };
 
@@ -1017,109 +455,125 @@ document.getElementById('btnCreateRoom').onclick = async () => {
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter name and code!");
+    if(!name || !code) return alert("Enter your name and 4-digit code!");
 
-    document.getElementById('btnJoinRoom').textContent = "Joining...";
+    const btn = document.getElementById('btnJoinRoom');
+    btn.disabled = true;
+    btn.textContent = "Joining...";
+
     try {
         const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'join', room_code: code, player_name: name })
         });
-        const data = await res.json();
-        if(data.error) { document.getElementById('btnJoinRoom').textContent = "Join Match"; return alert(data.error); }
 
-        arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+        const data = await res.json();
+        if(data.error) throw new Error(data.error);
+
+        arena.code = code;
+        arena.questions = data.questions;
+        arena.name = name;
+        arena.playerNum = 2;
+
         document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
         document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
 
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err){
-        document.getElementById('btnJoinRoom').textContent = "Join Match";
-        alert("Connection failed.");
+
+    } catch(err) {
+        alert("Could not join: " + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "🚀 Join Room";
     }
 };
 
-// 3. Poll Room State Live
+// 3. Poll Game State
 async function pollRoomState() {
     try {
         const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'sync', room_code: arena.code })
         });
         const data = await res.json();
         if(!data.room) return;
         const room = data.room;
 
-        // If P1 is waiting and P2 joined, start game!
-        if (arena.playerNum === 1 && room.status === 'playing' && document.getElementById('arenaWaiting').classList.contains('hidden') === false) {
+        // Start game for Player 1 when Player 2 joins
+        if (arena.playerNum === 1 && room.status === 'playing' && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
             document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`;
             document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
             startArenaGame();
         }
 
-        // Update live scores
-        if (document.getElementById('arenaBattle').classList.contains('hidden') === false || document.getElementById('arenaResult').classList.contains('hidden') === false) {
-            document.getElementById('uiP1Score').textContent = room.player1_score;
-            document.getElementById('uiP2Score').textContent = room.player2_score;
-        }
+        // Live score sync
+        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = room.player1_score;
+        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = room.player2_score;
 
-        // If both finished, show result
+        // End game when both finish
         if (room.player1_finished && room.player2_finished) {
             clearInterval(arena.pollInterval);
             showArenaResult(room);
         }
-    } catch (err) { console.log("Poll sync failed temporarily"); }
+    } catch(e){}
 }
 
-// 4. Start Game Loop
+// 4. Start Game
 function startArenaGame() {
     document.getElementById('arenaSetup').classList.add('hidden');
     document.getElementById('arenaWaiting').classList.add('hidden');
     document.getElementById('arenaBattle').classList.remove('hidden');
+    arena.currentQ = 0;
     loadArenaQuestion();
 }
 
 function loadArenaQuestion() {
-    if (arena.currentQ >= 5) { finishArenaGame(); return; }
+    if (arena.currentQ >= 10) { // EXACTLY 10 QUESTIONS
+        finishArenaGame();
+        return;
+    }
 
     const q = arena.questions[arena.currentQ];
-    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/5`;
+    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
     
     let optsHTML = '';
-    const opts = q.options ? q.options : [q.option_1, q.option_2, q.option_3, q.option_4];
+    const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
     opts.forEach((opt, idx) => {
         const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
         optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
     });
     document.getElementById('arenaOptions').innerHTML = optsHTML;
 
+    // 10 Second Rapid-Fire Countdown
     arena.timer = 10;
     document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
     clearInterval(arena.interval);
     arena.interval = setInterval(() => {
         arena.timer--;
         document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
-        if (arena.timer <= 0) handleArenaAnswer(-1, -1); // Auto wrong
+        if (arena.timer <= 0) handleArenaAnswer(-1, -1);
     }, 1000);
 }
 
-// 5. Handle Answer
+// 5. Handle Click / Answer
 async function handleArenaAnswer(selectedIdx, correctIdx) {
     clearInterval(arena.interval);
-    
-    // Rapid Fire Logic: Base 10 pts + 1 pt per second remaining
+
     if (selectedIdx === Number(correctIdx)) {
-        playDing(); // CORRECT SOUND
-        arena.score += (10 + arena.timer);
+        playDing();
+        arena.score += (10 + arena.timer); // Speed bonus
     } else {
-        playBuzz(); // WRONG SOUND
+        playBuzz();
     }
 
-    // Sync score immediately
+    // Sync score live
     fetch('/api/arena', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
     });
 
@@ -1127,20 +581,20 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
     loadArenaQuestion();
 }
 
-// 6. Finish & Wait for Opponent
-async function finishArenaGame() {
+// 6. Finish
+function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
     document.getElementById('arenaResultText').innerHTML = `<div class="pulse-text" style="font-size:20px;">Waiting for opponent to finish...</div>`;
     document.getElementById('arenaResult').classList.remove('hidden');
 
-    // Send finished flag
     fetch('/api/arena', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
     });
 }
 
-// 7. Show Final Winner
+// 7. Show Final Result
 function showArenaResult(room) {
     const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
     const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
@@ -1149,7 +603,7 @@ function showArenaResult(room) {
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
 
     if (myScore > opScore) {
-        playWin(); // WIN SOUND
+        playWin();
         document.getElementById('arenaResultText').innerHTML = `<div class="winner-text">🏆 YOU WIN!</div>`;
         if (typeof confetti === "function") confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     } else if (myScore < opScore) {
