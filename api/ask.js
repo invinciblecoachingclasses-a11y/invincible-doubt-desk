@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { subject, question, image } = req.body || {};
+    const { subject, question, image, tone } = req.body || {};
 
     if (!question && !image) {
       return res.status(400).json({
@@ -22,8 +22,41 @@ export default async function handler(req, res) {
       });
     }
 
-    // Gemini 3.5 Flash-Lite
+    // Gemini Model
     const model = "gemini-3.5-flash-lite";
+
+    // Dynamic Tone Instructions
+    let toneInstruction = "";
+    if (tone === "tldr") {
+      toneInstruction = `
+MODE: TL;DR FORMULA & RAPID ANSWER
+- Give ONLY the core formula/law in 1 line.
+- Show direct numeric substitution in 1 line.
+- State the final calculated answer with unit in 1 line.
+- Total response MUST be under 4 lines. No background lecture.`;
+    } else if (tone === "eli10") {
+      toneInstruction = `
+MODE: EXPLAIN LIKE I'M 10 YEARS OLD (ANALOGY MODE)
+- Explain the concept using simple, relatable real-world analogies (video games, water pipes, skateboards, pizza slices).
+- NO complex jargon. Use very friendly, simple Hinglish.
+- Break it into small, cheerful, bite-sized points.`;
+    } else {
+      // Default: Step-by-Step Board Explanation
+      toneInstruction = `
+MODE: STRUCTURED STEP-BY-STEP BOARD LOGIC
+For numerical questions use:
+Given:
+...
+Formula:
+...
+Putting values:
+...
+Final Answer:
+...
+
+For theory questions:
+Explain the concept in 3–5 short sentences.`;
+    }
 
     const prompt = `
 You are a friendly school teacher for Invincible Coaching Classes.
@@ -33,12 +66,14 @@ Subject: ${subject || "General"}
 Student Question:
 ${question || "Solve the question shown in the image."}
 
+Tone & Depth:
+${toneInstruction}
+
 Start every response exactly with:
 
 Aao Logic Samjhate Hain
 
 Teaching style:
-
 - Explain like a friendly school teacher.
 - Use simple Hinglish where helpful.
 - Keep the answer short.
@@ -48,25 +83,6 @@ Teaching style:
 - Do not give long lectures.
 - Do not repeat the question.
 - Do not overwhelm the student.
-
-For numerical questions use:
-
-Aao Logic Samjhate Hain
-
-Given:
-...
-
-Formula:
-...
-
-Putting values:
-...
-
-Final Answer:
-...
-
-For theory questions:
-Explain the concept in 3–5 short sentences.
 
 For Mathematics:
 Show only necessary calculation steps.
@@ -116,18 +132,15 @@ Make the response look like a teacher explaining on a classroom board.
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json"
         },
-
         body: JSON.stringify({
           contents: [
             {
               parts: parts
             }
           ],
-
           generationConfig: {
             temperature: 0.3,
             maxOutputTokens: 700
@@ -140,7 +153,6 @@ Make the response look like a teacher explaining on a classroom board.
 
     if (!response.ok) {
       console.error("Gemini error:", data);
-
       return res.status(response.status).json({
         error:
           data?.error?.message ||
@@ -194,7 +206,6 @@ Make the response look like a teacher explaining on a classroom board.
 
   } catch (error) {
     console.error("Server Error:", error);
-
     return res.status(500).json({
       error: "Something went wrong. Please try again."
     });
