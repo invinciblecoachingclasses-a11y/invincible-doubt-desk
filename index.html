@@ -4,386 +4,505 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Invincible 360 | Complete Academic Ecosystem</title>
-<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access doubt solving, weekly tests, 1v1 Live Arena Battles, and peer student community feed.">
+<!-- GOOGLE SEARCH CONSOLE SITE VERIFICATION -->
+<meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
-<!-- CONFETTI LIBRARY -->
+<!-- =====================================================
+SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
+===================================================== -->
+<title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
+<meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant AI doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
+<meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="author" content="Invincible Coaching Classes">
+<link rel="canonical" href="https://invincible-doubt-desk.vercel.app/">
+
+<!-- OPEN GRAPH -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Invincible 360 | Complete Academic Intelligence Hub">
+<meta property="og:description" content="Instant step-by-step doubt solving, custom weekly tests, 1v1 rapid-fire knowledge battles, and active CBSE peer discussion.">
+<meta property="og:url" content="https://invincible-doubt-desk.vercel.app/">
+<meta property="og:site_name" content="Invincible 360">
+
+<!-- FONTS & CONFETTI -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
-*{ box-sizing:border-box; transition: all 0.2s ease-in-out; }
-body{ margin:0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background:#0f172a; color:#f8fafc; }
-.container{ width:min(760px, 94%); margin:25px auto; }
+:root {
+  --bg-main: #0a0e17;
+  --bg-card: #111827;
+  --bg-surface: #1a2234;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-focus: #06b6d4;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --cyan-glow: rgba(6, 182, 212, 0.15);
+  --accent-cyan: #06b6d4;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-purple: #a855f7;
+  --accent-emerald: #10b981;
+}
+
+* { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.container { width: min(780px, 92%); margin: 28px auto 60px; }
 
 /* BRAND BANNER */
-.brand-banner{
-background: linear-gradient(135deg, #1e293b, #0f172a);
-color:white; border-radius:24px; padding:28px 20px; text-align:center; margin-bottom:20px;
-box-shadow:0 20px 40px rgba(0,0,0,.4); border: 1px solid rgba(56, 189, 248, 0.2); position: relative; overflow: hidden;
+.brand-banner {
+  background: radial-gradient(120% 120% at 50% 0%, #1e293b 0%, #0f172a 100%);
+  border: 1px solid var(--border-subtle); border-radius: 24px; padding: 32px 24px; text-align: center; margin-bottom: 24px;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6); position: relative; overflow: hidden;
 }
-.brand-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #38bdf8, #6366f1, #ec4899); }
-.brand-name{ font-size:28px; font-weight:900; letter-spacing:1px; margin:0; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.brand-tagline{ font-size:14px; font-style:italic; margin-top:6px; color:#94a3b8; }
-.brand-line{ height:1px; background:rgba(255,255,255,.1); margin:16px auto; width:80%; }
-.brand-subjects{ font-size:13px; font-weight:700; letter-spacing:.5px; color:#cbd5e1; }
-.brand-message{ margin-top:10px; font-size:12px; color:#38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.brand-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #06b6d4, #6366f1, #ec4899, #f59e0b); }
+.brand-badge-top { display: inline-block; background: var(--cyan-glow); color: var(--accent-cyan); font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; border: 1px solid rgba(6, 182, 212, 0.3); }
+.brand-name { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; margin: 0; background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-tagline { font-size: 14px; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
+.brand-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.brand-pill { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid var(--border-subtle); }
 
 /* =====================================================
-UPGRADED INTERACTIVE BRAIN TEASER CARD
+24-HOUR STUDY STORIES TRAY
 ===================================================== */
+.stories-tray-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 16px 14px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.stories-tray-container::-webkit-scrollbar { display: none; }
+
+.story-circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 68px;
+  text-align: center;
+}
+.story-avatar-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, #f43f5e, #f59e0b, #06b6d4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.story-avatar-wrap.topper { background: linear-gradient(45deg, #eab308, #f59e0b); }
+.story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
+.story-avatar-inner {
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  overflow: hidden;
+}
+.story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+.story-badge-flame {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #0f172a;
+  border-radius: 50%;
+  font-size: 11px;
+  padding: 2px;
+  line-height: 1;
+}
+.story-username {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =====================================================
+FULLSCREEN STORY VIEWER (INSTA / SNAP STYLE)
+===================================================== */
+.story-viewer-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+.story-card-view {
+  width: min(420px, 94%);
+  height: min(720px, 90vh);
+  background: #0f172a;
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+.story-progress-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.story-progress-seg {
+  height: 3px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.story-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #fff;
+}
+.story-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+.story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
+.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+.story-body-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  text-align: center;
+  position: relative;
+}
+.story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
+.story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
+
+/* Sticker Poll in Story */
+.story-sticker-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 16px;
+  padding: 14px;
+  width: 90%;
+  margin-top: 10px;
+  backdrop-filter: blur(10px);
+}
+.sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+.sticker-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.sticker-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 6px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sticker-btn.voted-correct { background: rgba(16, 185, 129, 0.3) !important; border-color: var(--accent-emerald) !important; }
+.sticker-btn.voted-wrong { background: rgba(244, 63, 94, 0.3) !important; border-color: var(--accent-rose) !important; }
+
+/* Story Action Bar (Reactions & Vault) */
+.story-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 10;
+}
+.reaction-emoji-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.reaction-emoji-btn:hover { transform: scale(1.2); }
+.vault-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-amber);
+  color: var(--accent-amber);
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Modal for Creating Story */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+.modal-card {
+  width: min(500px, 92%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* DAILY BRAIN TEASER */
 .puzzle-banner {
-background: linear-gradient(145deg, #1e293b, #111827);
-border: 2px solid #f59e0b;
-border-radius: 20px;
-padding: 22px;
-margin-bottom: 22px;
-box-shadow: 0 10px 30px rgba(245, 158, 11, 0.18);
-position: relative;
+  background: linear-gradient(145deg, #181d2a, #111827);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15);
+  position: relative;
 }
+.puzzle-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.puzzle-badge { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); font-weight: 800; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); letter-spacing: .5px; text-transform: uppercase; }
+.puzzle-streak { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); font-weight: 800; font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(6, 182, 212, 0.3); }
+.puzzle-q-en { font-size: 17px; font-weight: 700; color: #ffffff; line-height: 1.6; margin-bottom: 6px; }
+.puzzle-q-hi { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px; }
+.puzzle-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.puzzle-opt-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 16px; font-weight: 700; padding: 12px 6px; border-radius: 12px; cursor: pointer; text-align: center; }
+.puzzle-opt-btn:hover { border-color: var(--accent-amber); background: #232d42; transform: translateY(-2px); }
+.puzzle-opt-btn.correct-pick { background: rgba(16, 185, 129, 0.15) !important; border-color: var(--accent-emerald) !important; color: var(--accent-emerald) !important; }
+.puzzle-opt-btn.wrong-pick { background: rgba(244, 63, 94, 0.15) !important; border-color: var(--accent-rose) !important; color: var(--accent-rose) !important; }
+.puzzle-actions-bar { display: flex; align-items: center; gap: 12px; }
+.puzzle-toggle-btn { background: var(--accent-amber); color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
+.puzzle-solution { display: none; margin-top: 14px; padding: 16px; background: rgba(10, 14, 23, 0.8); border-radius: 12px; border-left: 3px solid var(--accent-amber); font-size: 14px; line-height: 1.6; color: #e2e8f0; }
 
-.puzzle-top-bar {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 12px;
+/* MODE SWITCH */
+.mode-switch {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; background: #0f1523; padding: 6px; border-radius: 18px; border: 1px solid var(--border-subtle); margin-bottom: 24px;
 }
-
-.puzzle-badge {
-background: rgba(245, 158, 11, 0.15);
-color: #f59e0b;
-font-weight: 900;
-font-size: 11px;
-padding: 5px 10px;
-border-radius: 20px;
-border: 1px solid #f59e0b;
-letter-spacing: .5px;
-text-transform: uppercase;
-display: inline-flex;
-align-items: center;
-gap: 5px;
-}
-
-.puzzle-streak {
-background: rgba(56, 189, 248, 0.15);
-color: #38bdf8;
-font-weight: 800;
-font-size: 12px;
-padding: 5px 10px;
-border-radius: 20px;
-border: 1px solid #38bdf8;
-}
-
-.puzzle-q-en {
-font-size: 18px;
-font-weight: 800;
-color: #ffffff;
-line-height: 1.5;
-margin-bottom: 6px;
-}
-
-.puzzle-q-hi {
-font-size: 14px;
-color: #94a3b8;
-line-height: 1.4;
-margin-bottom: 16px;
-}
-
-/* Quick-Tap Options Grid */
-.puzzle-options-grid {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 8px;
-margin-bottom: 14px;
-}
-
-.puzzle-opt-btn {
-background: #0f172a;
-border: 2px solid #334155;
-color: #f8fafc;
-font-size: 16px;
-font-weight: 800;
-padding: 12px 6px;
-border-radius: 12px;
-cursor: pointer;
-text-align: center;
-}
-
-.puzzle-opt-btn:hover {
-border-color: #f59e0b;
-background: #1e293b;
-transform: translateY(-2px);
-}
-
-.puzzle-opt-btn.correct-pick {
-background: rgba(52, 211, 153, 0.2) !important;
-border-color: #34d399 !important;
-color: #34d399 !important;
-}
-
-.puzzle-opt-btn.wrong-pick {
-background: rgba(248, 113, 113, 0.2) !important;
-border-color: #f87171 !important;
-color: #f87171 !important;
-}
-
-.puzzle-actions-bar {
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-gap: 12px;
-margin-top: 14px;
-}
-
-.puzzle-toggle-btn {
-background: #f59e0b;
-color: #0f172a;
-border: none;
-padding: 8px 16px;
-border-radius: 10px;
-font-weight: 800;
-font-size: 13px;
-cursor: pointer;
-}
-
-#puzzleFeedback {
-font-size: 13px;
-font-weight: 800;
-line-height: 1.4;
-display: block;
-width: 100%;
-}
-
-.puzzle-solution {
-display: none;
-margin-top: 14px;
-padding: 14px;
-background: rgba(15, 23, 42, 0.7);
-border-radius: 12px;
-border: 1px dashed #f59e0b;
-font-size: 14px;
-line-height: 1.6;
-color: #e2e8f0;
-}
-
-/* WALL OF FAME */
-.leaderboard-card { background: #1e293b; border: 2px solid #334155; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.leaderboard-title { font-size: 18px; font-weight: 900; color: #38bdf8; margin-bottom: 14px; text-align: center; letter-spacing: .5px; }
-.leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; background: #0f172a; border-radius: 12px; margin-bottom: 8px; font-size: 14px; font-weight: 700; border: 1px solid rgba(255,255,255,0.05); }
-.leaderboard-rank { background: #334155; color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 10px; }
-.leaderboard-rank.first { background: #eab308; color: #0f172a; }
-.leaderboard-rank.second { background: #94a3b8; color: #0f172a; }
-.leaderboard-rank.third { background: #d97706; color: white; }
-.leaderboard-score { color: #34d399; font-weight: 900; }
-
-/* HEADER & MODE SWITCH (4 TABS) */
-.header{ text-align:center; margin-bottom:20px; }
-.header h1{ margin:0; font-size:32px; font-weight:900; color:white; }
-.header p{ margin-top:8px; color:#94a3b8; font-size:15px; }
-
-.mode-switch{ display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:20px; }
-.mode-btn{ padding:12px 4px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:13px; font-weight:800; cursor:pointer; }
-.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; }
-.mode-btn.arena-btn { color: #f43f5e; border-color: #9f1239; }
-.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; }
-.mode-btn.feed-btn { color: #c084fc; border-color: #7e22ce; }
-.mode-btn.feed-btn.active { background: linear-gradient(135deg, #9333ea, #7e22ce); border-color: #c084fc; color: white; }
+.mode-btn { padding: 12px 6px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 700; cursor: pointer; text-align: center; }
+.mode-btn.active { background: var(--bg-surface); color: var(--accent-cyan); border-color: var(--border-focus); box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15); }
+.mode-btn.arena-btn.active { color: var(--accent-rose); border-color: var(--accent-rose); box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15); }
+.mode-btn.feed-btn.active { color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 4px 15px rgba(168, 85, 247, 0.15); }
 
 /* CARDS & INPUTS */
-.card{ background:#1e293b; padding:24px; border-radius:24px; box-shadow:0 15px 35px rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,0.05); }
-label{ display:block; font-size:15px; font-weight:700; margin-bottom:10px; color:#e2e8f0; }
+.card { background: var(--bg-card); padding: 28px; border-radius: 24px; border: 1px solid var(--border-subtle); box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5); }
+.section-h2 { font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #ffffff; }
+label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #cbd5e1; }
+.subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.subject { padding: 12px 8px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; }
+.subject.active { background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-.subjects{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
-.subject{ padding:14px 8px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#38bdf8; font-size:14px; font-weight:700; cursor:pointer; }
-.subject.active{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; font-weight: 900; }
+textarea, input:not([type="radio"]), select {
+  width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 12px; font-size: 15px; background: var(--bg-surface); color: #ffffff; outline: none; font-family: inherit; margin-bottom: 14px;
+}
+textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); }
 
-textarea, input, select { width:100%; padding:14px; border:2px solid #334155; border-radius:14px; font-size:15px; background:#0f172a; color:white; outline:none; font-family:inherit; margin-bottom:12px;}
-textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+.photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.photo-btn { padding: 12px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: #cbd5e1; font-size: 13px; font-weight: 700; cursor: pointer; }
 
-.photo-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; }
-.photo-btn{ padding:14px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-size:14px; font-weight:700; cursor:pointer; }
+.ask-btn, .submit-test-btn, .generate-btn {
+  width: 100%; margin-top: 8px; padding: 16px; border: none; border-radius: 14px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; font-size: 15px; font-weight: 800; cursor: pointer; letter-spacing: .5px;
+}
+.generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
+.ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-.ask-btn, .submit-test-btn, .generate-btn { width:100%; margin-top:8px; padding:16px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:16px; font-weight:900; cursor:pointer; }
-.generate-btn{ background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0f172a; }
-.ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled{ opacity:.5; cursor:not-allowed; }
+/* DOUBT ANSWER & FEEDBACK */
+.answer-box { display: none; margin-top: 24px; padding: 24px; background: #0d131f; border-radius: 18px; border: 1px solid var(--border-subtle); }
+.logic-title { font-size: 20px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; }
+.answer-text { white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #cbd5e1; }
+.feedback { display: none; margin-top: 20px; }
+.feedback-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); }
+.feedback-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.feedback-btn { padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: #e2e8f0; font-weight: 700; cursor: pointer; font-size: 13px; }
+.teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-/* ANSWER & FEEDBACK */
-.answer-box{ display:none; margin-top:25px; padding:24px; background:#0f172a; border-radius:20px; border:2px solid #334155; }
-.logic-title{ font-size:22px; font-weight:900; color:#38bdf8; margin-bottom:12px; }
-.answer-text{ white-space:pre-wrap; font-size:16px; line-height:1.7; color:#cbd5e1; }
-.feedback{ display:none; margin-top:20px; }
-.feedback-title{ font-size:14px; font-weight:700; margin-bottom:10px; color:#94a3b8; }
-.feedback-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.feedback-btn{ padding:12px 10px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#e2e8f0; font-weight:700; cursor:pointer; font-size:13px; }
-.teacher-btn{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; }
+/* TEST SUITE */
+.test-info { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin: 16px 0; color: #cbd5e1; }
+.generator-box { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
+.generator-title { font-size: 18px; font-weight: 800; color: #ffffff; }
+.generator-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.generator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.full { grid-column: 1 / -1; }
 
-/* TEST FORM & GENERATOR */
-.test-info{ background:#0f172a; border:2px solid #334155; border-radius:16px; padding:16px; margin:16px 0; color:#cbd5e1; }
-.test-info strong{ color:#38bdf8; }
-.notice{ margin-top:8px; color:#94a3b8; font-size:13px; line-height:1.5; }
-.generator-box{ margin-top:24px; padding-top:24px; border-top:2px solid #334155; }
-.generator-title{ font-size:20px; font-weight:900; color:white; margin-bottom:6px; }
-.generator-subtitle{ font-size:13px; color:#94a3b8; line-height:1.5; margin-bottom:16px; }
-.generator-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.full{ grid-column:1/-1; }
+.timer-box { font-size: 20px; font-weight: 900; color: var(--accent-rose); text-align: center; padding: 10px; border: 1px solid var(--accent-rose); border-radius: 12px; margin-bottom: 16px; background: rgba(244, 63, 94, 0.08); }
+.question-card { border: 1px solid var(--border-subtle); border-radius: 16px; padding: 20px; margin: 16px 0; background: var(--bg-surface); }
+.question-number { color: var(--accent-cyan); font-weight: 800; font-size: 12px; margin-bottom: 6px; text-transform: uppercase; }
+.question-text { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
 
-/* QUESTIONS & TIMER */
-.timer-box { font-size: 20px; font-weight: 900; color: #ef4444; text-align: center; padding: 10px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 16px; background: rgba(239, 68, 68, 0.1); }
-.question-card{ border:2px solid #334155; border-radius:16px; padding:18px; margin:16px 0; background:#0f172a; }
-.question-number{ color:#38bdf8; font-weight:800; font-size:13px; margin-bottom:6px; text-transform: uppercase; }
-.question-text{ font-size:16px; font-weight:700; line-height:1.5; margin-bottom:14px; color:white; }
-.option{ display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:14px; line-height:1.4; background:#1e293b; color:#e2e8f0; }
-.option:hover{ background:#283548; border-color:#38bdf8; }
-.option input{ margin-top:2px; width:auto; }
+.option {
+  display: flex !important; align-items: center !important; gap: 14px !important; padding: 14px 16px !important;
+  border: 1px solid var(--border-subtle) !important; border-radius: 12px !important; margin: 8px 0 !important;
+  cursor: pointer !important; font-size: 15px !important; background: #151c2c !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important;
+}
+.option input[type="radio"] { width: 20px !important; height: 20px !important; min-width: 20px !important; max-width: 20px !important; margin: 0 !important; padding: 0 !important; cursor: pointer !important; accent-color: var(--accent-cyan) !important; flex-shrink: 0 !important; }
+.option span { flex: 1 !important; text-align: left !important; line-height: 1.5 !important; color: #f1f5f9 !important; }
+.option:hover { background: #1c263c !important; border-color: var(--accent-cyan) !important; }
 
-/* RESULT & BADGES */
-.test-result{ display:none; padding:25px 15px; margin-top:20px; background:#0f172a; border:2px solid #334155; border-radius:20px; }
-.score-box { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 20px; }
-.score{ font-size:42px; font-weight:900; color:#38bdf8; }
-.result-detail{ font-size:15px; line-height:1.7; margin-top:8px; color:#cbd5e1; }
-.badges-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
-.badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; }
-.badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
-.badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
-.badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
-.badge.earlybird { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
-.badge.sharp { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid #fb7185; }
+.test-result { display: none; padding: 24px; margin-top: 20px; background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 20px; }
+.score-box { text-align: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px; margin-bottom: 20px; }
+.score { font-size: 44px; font-weight: 900; color: var(--accent-cyan); }
+.badges-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0; }
+.badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; }
+.badge.scholar { background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
+.badge.speedster { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
+.badge.sharp { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
+.review-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+.review-correct { color: var(--accent-emerald); font-weight: 800; }
+.review-wrong { color: var(--accent-rose); font-weight: 800; }
+.review-explanation { margin-top: 10px; padding: 12px; background: #0d131f; border-left: 3px solid var(--accent-cyan); border-radius: 6px; font-size: 13px; color: #e2e8f0; }
 
-.review-title { font-size: 18px; font-weight: 900; color: white; margin-bottom: 15px; text-align: center; }
-.review-card { background: #1e293b; border: 2px solid #334155; border-radius: 14px; padding: 16px; margin-bottom: 15px; text-align: left; }
-.review-q-num { font-weight: 800; color: #94a3b8; font-size: 13px; margin-bottom: 6px; }
-.review-q-text { font-weight: 700; font-size: 15px; margin-bottom: 12px; color: white; }
-.review-item { margin-bottom: 6px; font-size: 13px; color: #cbd5e1; }
-.review-correct { color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
-.review-wrong { color: #f87171; font-weight: 800; background: rgba(248, 113, 113, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
-.review-explanation { margin-top: 10px; padding: 10px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 6px; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
+.restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 12px; background: transparent; color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
+.whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
 
-.restart-btn{ margin-top:12px; padding:14px 20px; border:2px solid #38bdf8; border-radius:14px; background:transparent; color:#38bdf8; font-weight:800; cursor:pointer; width: 100%; }
-.whatsapp-btn{ background:#25D366 !important; color:white !important; border: none !important; }
-
-/* ARENA (1v1) */
-.arena-header { text-align: center; margin-bottom: 20px; }
-.arena-title { font-size: 24px; font-weight: 900; color: #fb7185; }
-.arena-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
-.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; padding-top: 15px; border-top: 2px solid #334155; }
-.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
-.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
-.lobby-box { text-align: center; padding: 25px 15px; background: #0f172a; border-radius: 16px; border: 2px dashed #fb7185; }
-.room-code-display { font-size: 40px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 12px 0; }
-.pulse-text { animation: pulse 1.5s infinite; color: #38bdf8; font-weight: 700; }
-@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 12px; border-radius: 14px; border: 2px solid #334155; margin-bottom: 16px; }
-.player-tag { font-size: 15px; font-weight: 800; display: flex; flex-direction: column; align-items: center; }
-.player-tag span { font-size: 20px; color: #38bdf8; }
-.vs-badge { background: #e11d48; color: white; font-weight: 900; padding: 4px 8px; border-radius: 8px; font-style: italic; font-size: 12px; }
-.arena-timer { font-size: 22px; font-weight: 900; color: #fb7185; text-align: center; margin-bottom: 12px; }
-.arena-option { display:block; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:15px; font-weight: 700; background:#1e293b; color:#e2e8f0; text-align: center; }
-.arena-option:hover { background:#283548; border-color:#38bdf8; }
-.result-box { text-align: center; padding: 15px; }
-.winner-text { font-size: 28px; font-weight: 900; color: #34d399; margin-bottom: 8px; }
-.loser-text { font-size: 28px; font-weight: 900; color: #fb7185; margin-bottom: 8px; }
+/* ARENA 1v1 */
+.arena-header { text-align: center; margin-bottom: 18px; }
+.arena-title { font-size: 22px; font-weight: 900; color: var(--accent-rose); }
+.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; }
+.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; }
+.lobby-box { text-align: center; padding: 28px 16px; background: #0d131f; border-radius: 16px; border: 1px dashed var(--accent-rose); }
+.room-code-display { font-size: 40px; font-weight: 900; color: var(--accent-rose); letter-spacing: 4px; margin: 12px 0; }
+.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0d131f; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 16px; }
+.arena-timer { font-size: 20px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 12px; }
+.arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 12px; margin: 8px 0; cursor: pointer; font-size: 15px; font-weight: 700; background: var(--bg-surface); text-align: center; }
+.arena-option:hover { background: #202b42; border-color: var(--accent-rose); }
 
 /* COMMUNITY FEED */
-.feed-header { text-align: center; margin-bottom: 15px; }
-.feed-title { font-size: 24px; font-weight: 900; color: #c084fc; margin:0; }
-.feed-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
-
-.post-composer { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 20px; }
-.post-composer textarea { min-height: 80px; margin-bottom: 8px; }
-
-.feed-card { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+.feed-header { text-align: center; margin-bottom: 18px; }
+.feed-title { font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
+.post-composer { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
+.feed-card { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
 .feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-.feed-author { font-size: 14px; font-weight: 800; color: #38bdf8; }
-.feed-school { font-size: 12px; color: #94a3b8; font-weight: normal; margin-top: 2px; }
-.feed-badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px; background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid #c084fc; }
-
-.feed-content { font-size: 15px; line-height: 1.5; color: #f1f5f9; margin-bottom: 12px; white-space: pre-wrap; }
-.feed-image { max-width: 100%; max-height: 280px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #334155; object-fit: contain; }
-
-.feed-actions { display: flex; gap: 15px; border-top: 1px solid #1e293b; padding-top: 10px; font-size: 13px; font-weight: 700; color: #94a3b8; }
+.feed-author { font-size: 14px; font-weight: 800; color: var(--accent-cyan); }
+.feed-school { font-size: 12px; color: var(--text-muted); }
+.feed-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+.feed-actions { display: flex; gap: 16px; border-top: 1px solid var(--border-subtle); padding-top: 10px; font-size: 13px; font-weight: 700; color: var(--text-muted); }
 .action-btn { cursor: pointer; display: flex; align-items: center; gap: 5px; }
-.action-btn:hover { color: #38bdf8; }
-.action-btn.report:hover { color: #f87171; }
+.action-btn:hover { color: var(--text-main); }
+.action-btn.report:hover { color: var(--accent-rose); }
+.comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
+.comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
 
-.comments-drawer { display: none; margin-top: 12px; border-top: 1px dashed #334155; padding-top: 12px; }
-.comment-item { background: #1e293b; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-.comment-author { font-weight: 800; color: #38bdf8; font-size: 12px; margin-bottom: 2px; }
+/* LEADERBOARD & FOOTER */
+.leaderboard-card { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 20px; padding: 20px; margin-bottom: 24px; }
+.leaderboard-title { font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; text-align: center; }
+.leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-surface); border-radius: 10px; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+.leaderboard-rank { background: rgba(255, 255, 255, 0.1); width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; margin-right: 8px; }
+.leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
+.leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
+.footer { text-align: center; color: #64748b; margin: 40px 0; font-size: 12px; line-height: 1.6; }
+.hidden { display: none !important; }
 
-.footer{ text-align:center; color:#64748b; margin:30px 0; font-size:13px; line-height:1.6; }
-.footer-brand{ font-weight:800; color:#94a3b8; }
-.hidden{ display:none!important; }
-
-@media(max-width:600px){
-.container{ width:95%; margin:12px auto; }
-.card{ padding:16px; }
-.mode-switch{ grid-template-columns: 1fr 1fr; gap:6px; }
-.subjects{ grid-template-columns:1fr; }
-.photo-buttons{ grid-template-columns:1fr; }
-.generator-grid{ grid-template-columns:1fr; }
-.full{ grid-column:auto; }
-.arena-grid { grid-template-columns: 1fr; }
-.puzzle-options-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 600px) {
+  .mode-switch { grid-template-columns: 1fr 1fr; }
+  .subjects { grid-template-columns: 1fr; }
+  .photo-buttons { grid-template-columns: 1fr; }
+  .generator-grid { grid-template-columns: 1fr; }
+  .arena-grid { grid-template-columns: 1fr; }
+  .puzzle-options-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<main class="container">
 
-<div class="brand-banner">
-    <div class="brand-name">INVINCIBLE 360</div>
-    <div class="brand-tagline">Complete Academic & Competitive Intelligence Ecosystem</div>
-    <div class="brand-line"></div>
-    <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS &nbsp;•&nbsp; BIOLOGY</div>
-    <div class="brand-message">Smart Doubt Desk • Live Weekly Tests • Analytics • Daily Mastery</div>
-</div>
+<!-- BRAND BANNER -->
+<header class="brand-banner">
+    <div class="brand-badge-top">Academic Platform</div>
+    <h1 class="brand-name">INVINCIBLE 360</h1>
+    <div class="brand-tagline">CBSE & Competitive Academic Intelligence Hub</div>
+    <div class="brand-pills">
+        <span class="brand-pill">Physics</span>
+        <span class="brand-pill">Chemistry</span>
+        <span class="brand-pill">Mathematics</span>
+        <span class="brand-pill">Biology</span>
+    </div>
+</header>
 
 <!-- =====================================================
-UPGRADED INTERACTIVE DAILY BRAIN TEASER
+24-HOUR STUDY STORIES TRAY (INSTA / SNAP STYLE)
 ===================================================== -->
-<div class="puzzle-banner" id="puzzleBox" style="display:none;">
+<div class="stories-tray-container" id="storiesTray">
+    <!-- Button to Add Story -->
+    <div class="story-circle-item" id="btnAddStory">
+        <div class="story-avatar-wrap add-story">
+            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div>
+        </div>
+        <div class="story-username">Your Drop</div>
+    </div>
+    <!-- Dynamic Story Circles Loaded Here -->
+    <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
+</div>
+
+<!-- DAILY BRAIN TEASER -->
+<section class="puzzle-banner" id="puzzleBox" style="display:none;" aria-label="Daily Academic Brain Teaser">
     <div class="puzzle-top-bar">
-        <div class="puzzle-badge">🔥 95% STUDENTS GET THIS WRONG</div>
-        <div class="puzzle-streak" id="puzzleStreak">⚡ 3-Day Streak</div>
+        <div class="puzzle-badge">🔥 95% Get This Wrong</div>
+        <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
     </div>
     
     <div class="puzzle-q-en" id="puzzleQuestionEn">Loading daily teaser...</div>
     <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
     
-    <!-- Interactive Option Buttons -->
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
 
     <div class="puzzle-actions-bar">
-        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Teacher Logic</button>
+        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
     </div>
     <div id="puzzleFeedback" style="margin-top: 10px;"></div>
-
     <div class="puzzle-solution" id="puzzleSolution"></div>
-</div>
+</section>
 
 <!-- WALL OF FAME -->
-<div class="leaderboard-card" id="leaderboardBox" style="display:none;">
-    <div class="leaderboard-title">🏆 Top Scorers (Wall of Fame)</div>
+<section class="leaderboard-card" id="leaderboardBox" style="display:none;" aria-label="Top Scorers Leaderboard">
+    <div class="leaderboard-title">🏆 Platform Top Scorers</div>
     <div id="leaderboardList"></div>
-</div>
+</section>
 
-<div class="header">
-    <h1>Student Hub</h1>
-    <p>Ask doubts, take timed exams, battle a peer, or share thoughts in the feed.</p>
-</div>
-
-<!-- 4 MAIN MODES -->
-<div class="mode-switch">
+<!-- 4 MODE SWITCH TABS -->
+<nav class="mode-switch" aria-label="Academic Navigation Modes">
     <button type="button" class="mode-btn active" id="doubtModeBtn">DOUBT DESK</button>
-    <button type="button" class="mode-btn" id="testModeBtn">TAKE A TEST</button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">ARENA (1v1)</button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">COMMUNITY FEED</button>
-</div>
+    <button type="button" class="mode-btn" id="testModeBtn">EXAM SUITE</button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">1v1 ARENA</button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">PEER FEED</button>
+</nav>
 
-<!-- =====================================================
-1. DOUBT SECTION
-===================================================== -->
-<div class="card" id="doubtSection">
+<!-- 1. DOUBT SECTION -->
+<section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
+    <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
     <label>Select Subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
@@ -392,40 +511,40 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your question here... English or Hindi."></textarea>
+    <textarea id="question" placeholder="Type your academic doubt here (English / Hindi)..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
+    
     <div class="photo-buttons">
-        <button type="button" class="photo-btn" id="cameraBtn">Take Photo</button>
-        <button type="button" class="photo-btn" id="uploadBtn">Upload Photo</button>
+        <button type="button" class="photo-btn" id="cameraBtn">📷 Take Photo</button>
+        <button type="button" class="photo-btn" id="uploadBtn">📁 Upload Image</button>
     </div>
-    <img id="imagePreview" alt="Selected question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:2px solid #334155;">
-    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:#ef4444; font-weight:bold; cursor:pointer;">Remove Photo</button>
+    <img id="imagePreview" alt="Preview of uploaded academic doubt question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
+    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">GET SOLUTION</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:#38bdf8; margin-top:15px; font-weight:bold;">Thinking...</div>
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Solution...</div>
     
     <div class="answer-box" id="answerBox">
-        <div class="logic-title">Aao Logic Samjhate Hain</div>
+        <div class="logic-title">Conceptual Breakdown</div>
         <div class="answer-text" id="answerText"></div>
         <div class="feedback" id="feedback">
-            <div class="feedback-title">Still confused?</div>
+            <div class="feedback-title">Need further clarity?</div>
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Not Satisfied — Explain Again</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Help</button>
+                <button type="button" class="feedback-btn" id="againBtn">Explain Simpler</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Assistance</button>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- =====================================================
-2. TEST SECTION
-===================================================== -->
-<div class="card hidden" id="testSection">
+<!-- 2. TEST SECTION -->
+<section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
+    <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
     <div id="testSetup">
-        <label>Take an Automated Test</label>
+        <label>Select Standard Test</label>
         <div>
             <input id="studentName" type="text" placeholder="Student Name">
-            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="Mobile Number">
+            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
 
             <select id="testClass">
                 <option value="">Select Class</option>
@@ -449,15 +568,15 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
         </div>
 
         <div class="test-info">
-            <strong>Live Weekly Tests</strong>
-            <div class="notice">Select your class and subject to see available tests loaded securely from the database.</div>
+            <strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your Class and Subject selection.</div>
         </div>
 
-        <button type="button" class="submit-test-btn" id="startTestBtn">START TEST</button>
+        <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
 
         <div class="generator-box">
-            <div class="generator-title">Custom Test Generator</div>
-            <div class="generator-subtitle">Choose class, subject, and chapter to generate a customized practice test.</div>
+            <div class="generator-title">Custom Practice Generator</div>
+            <div class="generator-subtitle">Configure class, subject, and chapter to generate a customized practice set.</div>
             <div class="generator-grid">
                 <select id="genClass">
                     <option value="">Select Class</option>
@@ -475,7 +594,7 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
                     <option value="Biology">Biology</option>
                 </select>
 
-                <input class="full" id="genChapter" type="text" placeholder="Chapter name e.g. Light">
+                <input class="full" id="genChapter" type="text" placeholder="Chapter Name (e.g. Thermodynamics, Optics)">
 
                 <select id="genNumber">
                     <option value="10">10 Questions</option>
@@ -484,58 +603,56 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
                 </select>
 
                 <select id="genDifficulty">
-                    <option value="Easy">Easy</option>
-                    <option value="Moderate" selected>Moderate</option>
+                    <option value="Easy" selected>Easy (Confidence Booster)</option>
+                    <option value="Moderate">Moderate</option>
                     <option value="Hard">Hard</option>
                 </select>
 
                 <select class="full" id="genQuestionType">
-                    <option value="MCQ">MCQ</option>
+                    <option value="MCQ">Multiple Choice Questions (MCQ)</option>
                 </select>
             </div>
 
-            <button type="button" class="generate-btn" id="generateTestBtn">GENERATE CUSTOM TEST</button>
-            <div class="generator-loading" id="generatorLoading">Creating your test... Please wait.</div>
+            <button type="button" class="generate-btn" id="generateTestBtn">BUILD PRACTICE SET</button>
+            <div class="generator-loading hidden" id="generatorLoading" style="text-align:center; color:var(--accent-cyan); margin-top:10px; font-weight:700;">Compiling questions...</div>
         </div>
     </div>
 
     <div id="testArea" class="hidden">
-        <div class="timer-box" id="timerDisplay">⏳ 20:00</div>
+        <div class="timer-box" id="timerDisplay">⏳ 10:00</div>
         <div class="test-info" id="testHeader"></div>
         <div id="questionsContainer"></div>
-        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT TEST</button>
+        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT ANSWERS</button>
     </div>
 
     <div class="test-result" id="testResult">
         <div class="score-box">
-            <div>Test Result</div>
+            <div style="font-size:14px; font-weight:700; color:var(--text-muted);">FINAL SCORE</div>
             <div class="score" id="scoreText">0/0</div>
             <div id="badgesContainer" class="badges-container"></div>
             <div class="result-detail" id="resultDetail"></div>
         </div>
 
-        <div class="review-title">Detailed Analysis</div>
+        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#ffffff;">Detailed Analytics</div>
         <div id="reviewContainer"></div>
 
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn">SHARE SCORE ON WHATSAPP</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE ON WHATSAPP</button>
     </div>
-</div>
+</section>
 
-<!-- =====================================================
-3. ARENA SECTION (1v1 MULTIPLAYER)
-===================================================== -->
-<div class="card hidden" id="arenaSection">
+<!-- 3. ARENA SECTION -->
+<section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
     <div id="arenaSetup">
         <div class="arena-header">
-            <div class="arena-title">⚔️ INVINCIBLE ARENA</div>
-            <div class="arena-subtitle">10 Rapid-Fire Science & Math Teasers (5-10 Sec Clashes)</div>
+            <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (10s Speed Clashes)</div>
         </div>
         
-        <label>Your Name</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Your Name (e.g. Rahul)">
+        <label>Your Display Name</label>
+        <input type="text" id="arenaPlayerName" placeholder="Enter Name (e.g. Rahul)">
         
-        <label>Your Class</label>
+        <label>Select Grade Level</label>
         <select id="arenaClass" style="margin-bottom: 20px;">
             <option value="9">Class 9 (Science & Mental Maths)</option>
             <option value="10">Class 10 (Science & Mental Maths)</option>
@@ -548,23 +665,22 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
                 <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button>
             </div>
             <div>
-                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 18px; margin-bottom: 10px;">
+                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
     </div>
 
     <div id="arenaWaiting" class="hidden lobby-box">
-        <div style="font-size: 18px; color:#cbd5e1;">Share This Room Code:</div>
+        <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size: 14px; color:#94a3b8; margin-bottom:20px;">Tell your friend to enter this code in the Arena!</div>
-        <div class="pulse-text">System is ready. Waiting for opponent to join...</div>
+        <div style="font-size: 13px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
     </div>
 
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
             <div class="player-tag" id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
-            <div class="vs-badge">VS</div>
+            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
             <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
 
@@ -572,33 +688,31 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
         
         <div class="question-card">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
-            <div class="question-text" id="arenaQText">Generating...</div>
+            <div class="question-text" id="arenaQText">Loading question...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
 
-    <div id="arenaResult" class="hidden result-box">
+    <div id="arenaResult" class="hidden" style="text-align:center; padding:20px;">
         <div id="arenaResultText"></div>
-        <div style="margin: 20px 0; color:#cbd5e1; font-size: 18px; line-height: 1.8;">
+        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;">
             <span id="finalP1"></span> <br> <span id="finalP2"></span>
         </div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">PLAY ANOTHER MATCH</button>
+        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">RETURN TO LOBBY</button>
     </div>
-</div>
+</section>
 
-<!-- =====================================================
-4. COMMUNITY FEED SECTION
-===================================================== -->
-<div class="card hidden" id="feedSection">
+<!-- 4. COMMUNITY FEED -->
+<section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
     <div class="feed-header">
-        <h2 class="feed-title">🌟 Invincible Community Feed</h2>
-        <div class="feed-subtitle">Share questions, discuss solutions, and connect with peers from other schools.</div>
+        <h2 class="feed-title">🌟 Academic Community Feed</h2>
+        <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Collaborate, share study notes, and solve tricky peer problems.</div>
     </div>
 
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
             <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
-            <input type="text" id="feedInstitution" placeholder="School / Coaching (e.g. DPS)" style="margin-bottom:0;">
+            <input type="text" id="feedInstitution" placeholder="School / Coaching Name" style="margin-bottom:0;">
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
             <select id="feedClass" style="margin-bottom:0;">
@@ -612,24 +726,24 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
                 <option value="Chemistry">Chemistry</option>
                 <option value="Mathematics">Mathematics</option>
                 <option value="Biology">Biology</option>
-                <option value="General">General Study Tip</option>
+                <option value="General">Study Tips / Strategy</option>
             </select>
         </div>
-        <textarea id="feedContent" placeholder="Drop a tricky question, share a shortcut, or ask your peers for advice..."></textarea>
+        <textarea id="feedContent" placeholder="Post a challenging problem or study insight..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
-        <span style="font-weight:800; font-size:14px; color:#94a3b8;">Filter Feed:</span>
+        <span style="font-weight:700; font-size:13px; color:var(--text-muted);">Filter Feed:</span>
         <div style="display:flex; gap:8px;">
-            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
-                <option value="All">All Classes</option>
+            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
+                <option value="All">All Grades</option>
                 <option value="9">Class 9</option>
                 <option value="10">Class 10</option>
                 <option value="11">Class 11</option>
                 <option value="12">Class 12</option>
             </select>
-            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
+            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
                 <option value="All">All Subjects</option>
                 <option value="Physics">Physics</option>
                 <option value="Chemistry">Chemistry</option>
@@ -640,16 +754,89 @@ UPGRADED INTERACTIVE DAILY BRAIN TEASER
     </div>
 
     <div id="postsList">
-        <div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">Loading community posts...</div>
+        <div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
+    Built for Academic Excellence &bull; CBSE Class 9, 10, 11 &amp; 12<br>
+    &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
+</footer>
+
+</main>
+
+<!-- =====================================================
+MODAL: POST STUDY STORY (24-HR DROP)
+===================================================== -->
+<div class="modal-overlay" id="storyModal">
+    <div class="modal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Drop a 24-Hr Study Story</h3>
+            <button type="button" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
+        </div>
+
+        <input type="text" id="storyAuthorName" placeholder="Your Name">
+        <input type="text" id="storyInstitution" placeholder="School / Coaching (e.g. DPS RK Puram)">
+        <textarea id="storyCaption" placeholder="What are you studying right now? Or drop a 1-line formula shortcut..."></textarea>
+        
+        <label>Upload Note Photo / Study Setup (Optional)</label>
+        <input type="file" id="storyImageInput" accept="image/*" style="margin-bottom:12px;">
+
+        <div style="border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:12px;">
+            <label style="color:var(--accent-amber);">💡 Add Interactive Quiz Sticker (Optional)</label>
+            <input type="text" id="storyStickerQ" placeholder="Quiz Question (e.g. Find unit of resistance?)">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <input type="text" id="storyStickerOptA" placeholder="Option A (e.g. Ohm)">
+                <input type="text" id="storyStickerOptB" placeholder="Option B (e.g. Farad)">
+            </div>
+            <select id="storyStickerCorrect" style="margin-bottom:14px;">
+                <option value="0">Option A is Correct</option>
+                <option value="1">Option B is Correct</option>
+            </select>
+        </div>
+
+        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE STORY (DISAPPEARS IN 24H)</button>
     </div>
 </div>
 
-<div class="footer">
-    <div class="footer-brand">Invincible 360 Ecosystem</div>
-    Powered by Invincible Coaching Classes<br>
-    © 2026 All Rights Reserved
-</div>
+<!-- =====================================================
+FULLSCREEN STORY VIEWER OVERLAY
+===================================================== -->
+<div class="story-viewer-modal" id="storyViewer">
+    <div class="story-card-view">
+        <div>
+            <div class="story-progress-bar" id="storyProgressContainer"></div>
+            <div class="story-view-header">
+                <div class="story-view-author" id="viewerAuthor">User Name</div>
+                <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
+            </div>
+        </div>
 
+        <div class="story-body-content">
+            <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Image">
+            <div class="story-caption-text" id="viewerCaption"></div>
+
+            <!-- Quiz Sticker -->
+            <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
+                <div class="sticker-q" id="viewerStickerQ">Question</div>
+                <div class="sticker-opts">
+                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)">Opt A</button>
+                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)">Opt B</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-action-bar">
+            <div style="display:flex; gap:6px;">
+                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
+                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
+                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
+            </div>
+            <button class="vault-btn" onclick="saveStoryToVault()">💾 Save to Vault</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -677,7 +864,7 @@ function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('s
 function playSuccessSound() { playDing(); }
 
 /* =====================================================
-TAB SWITCHING
+NAVIGATION LOGIC
 ===================================================== */
 const doubtModeBtn = document.getElementById('doubtModeBtn');
 const testModeBtn = document.getElementById('testModeBtn');
@@ -702,6 +889,205 @@ function switchTab(tab) {
     arenaSection.classList.add('hidden');
     feedSection.classList.add('hidden');
     document.getElementById(tab + 'Section').classList.remove('hidden');
+}
+
+/* =====================================================
+24-HOUR STUDY STORIES ENGINE (INSTA / SNAP MECHANICS)
+===================================================== */
+let activeStories = [];
+let currentStoryIdx = 0;
+let storyTimer = null;
+
+document.getElementById('btnAddStory').onclick = () => {
+    document.getElementById('storyModal').style.display = 'flex';
+};
+
+async function loadActiveStories() {
+    const container = document.getElementById('dynamicStoryCircles');
+    try {
+        const res = await fetch('/api/stories');
+        const data = await res.json();
+        activeStories = data.stories || [];
+
+        if (activeStories.length === 0) {
+            container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); align-self:center;">Be the first to drop a study note!</div>`;
+            return;
+        }
+
+        container.innerHTML = activeStories.map((s, idx) => `
+            <div class="story-circle-item" onclick="openStoryViewer(${idx})">
+                <div class="story-avatar-wrap ${s.is_topper ? 'topper' : ''}">
+                    <div class="story-avatar-inner">
+                        ${s.media_url ? `<img src="${s.media_url}" alt="Story">` : escapeHTML(s.author_name.charAt(0).toUpperCase())}
+                    </div>
+                    <span class="story-badge-flame">${s.is_topper ? '👑' : '🔥'}</span>
+                </div>
+                <div class="story-username">${escapeHTML(s.author_name)}</div>
+            </div>
+        `).join('');
+    } catch(e) {
+        container.innerHTML = '';
+    }
+}
+loadActiveStories();
+
+let storyImageData = null;
+document.getElementById('storyImageInput').onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { storyImageData = reader.result; };
+    reader.readAsDataURL(file);
+};
+
+document.getElementById('btnPublishStory').onclick = async () => {
+    const name = document.getElementById('storyAuthorName').value.trim();
+    const inst = document.getElementById('storyInstitution').value.trim();
+    const caption = document.getElementById('storyCaption').value.trim();
+    const stickerQ = document.getElementById('storyStickerQ').value.trim();
+    const optA = document.getElementById('storyStickerOptA').value.trim();
+    const optB = document.getElementById('storyStickerOptB').value.trim();
+    const correctOpt = document.getElementById('storyStickerCorrect').value;
+
+    if (!name || !inst) return alert("Please fill Name and School/Coaching!");
+
+    const btn = document.getElementById('btnPublishStory');
+    btn.disabled = true; btn.textContent = "Publishing Story...";
+
+    try {
+        const res = await fetch('/api/stories', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                action: 'create_story',
+                author_name: name,
+                institution: inst,
+                caption: caption,
+                media_url: storyImageData,
+                sticker_question: stickerQ || null,
+                sticker_opt_a: optA || null,
+                sticker_opt_b: optB || null,
+                sticker_correct_opt: correctOpt,
+                streak_count: Math.floor(Math.random() * 5) + 1
+            })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        document.getElementById('storyModal').style.display = 'none';
+        storyImageData = null;
+        loadActiveStories();
+        alert("🎉 Your study story is live for 24 hours!");
+    } catch(err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)";
+    }
+};
+
+function openStoryViewer(idx) {
+    if (!activeStories[idx]) return;
+    currentStoryIdx = idx;
+    document.getElementById('storyViewer').style.display = 'flex';
+    renderStorySlide();
+}
+
+function renderStorySlide() {
+    clearTimeout(storyTimer);
+    const story = activeStories[currentStoryIdx];
+    if (!story) { closeStoryViewer(); return; }
+
+    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution)}</span>`;
+    
+    const imgEl = document.getElementById('viewerImage');
+    if (story.media_url) {
+        imgEl.src = story.media_url;
+        imgEl.style.display = 'block';
+    } else {
+        imgEl.style.display = 'none';
+    }
+
+    document.getElementById('viewerCaption').textContent = story.caption || '';
+
+    // Sticker
+    const stickerCard = document.getElementById('viewerStickerCard');
+    if (story.sticker_question) {
+        stickerCard.style.display = 'block';
+        document.getElementById('viewerStickerQ').textContent = story.sticker_question;
+        const bA = document.getElementById('btnStickerA');
+        const bB = document.getElementById('btnStickerB');
+        bA.textContent = story.sticker_opt_a;
+        bB.textContent = story.sticker_opt_b;
+        bA.className = 'sticker-btn';
+        bB.className = 'sticker-btn';
+    } else {
+        stickerCard.style.display = 'none';
+    }
+
+    // Progress Bar Fill
+    const pContainer = document.getElementById('storyProgressContainer');
+    pContainer.innerHTML = activeStories.map((_, i) => `
+        <div class="story-progress-seg">
+            <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 5s linear;"></div>
+        </div>
+    `).join('');
+
+    storyTimer = setTimeout(() => {
+        if (currentStoryIdx < activeStories.length - 1) {
+            currentStoryIdx++;
+            renderStorySlide();
+        } else {
+            closeStoryViewer();
+        }
+    }, 5000);
+}
+
+function closeStoryViewer() {
+    clearTimeout(storyTimer);
+    document.getElementById('storyViewer').style.display = 'none';
+}
+
+async function voteStorySticker(selectedOpt) {
+    const story = activeStories[currentStoryIdx];
+    const bA = document.getElementById('btnStickerA');
+    const bB = document.getElementById('btnStickerB');
+
+    if (selectedOpt === Number(story.sticker_correct_opt)) {
+        playWin();
+        if (selectedOpt === 0) bA.classList.add('voted-correct');
+        else bB.classList.add('voted-correct');
+        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } });
+    } else {
+        playBuzz();
+        if (selectedOpt === 0) bA.classList.add('voted-wrong');
+        else bB.classList.add('voted-wrong');
+    }
+
+    fetch('/api/stories', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt })
+    });
+}
+
+function reactStory(type) {
+    playDing();
+    const story = activeStories[currentStoryIdx];
+    if (typeof confetti === 'function') {
+        confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+    }
+    fetch('/api/stories', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type })
+    });
+}
+
+function saveStoryToVault() {
+    const story = activeStories[currentStoryIdx];
+    let vault = JSON.parse(localStorage.getItem('study_vault') || '[]');
+    vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() });
+    localStorage.setItem('study_vault', JSON.stringify(vault));
+    playSuccessSound();
+    alert("💾 Saved to your personal Note Vault!");
 }
 
 /* =====================================================
@@ -742,7 +1128,7 @@ removeImageButton.onclick = () => {
 
 document.getElementById("askBtn").onclick = async () => {
     const q = questionInput.value.trim();
-    if(!q && !selectedImage) return alert("Please type a question or upload a photo.");
+    if(!q && !selectedImage) return alert("Please enter a question or upload an image.");
     document.getElementById("loadingDoubt").classList.remove('hidden');
     document.getElementById("answerBox").style.display = "none";
     document.getElementById("feedback").style.display = "none";
@@ -753,24 +1139,22 @@ document.getElementById("askBtn").onclick = async () => {
             body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage })
         });
         const data = await res.json();
-        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No response.");
+        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
         document.getElementById("answerBox").style.display = "block";
         document.getElementById("feedback").style.display = "block";
     } catch(err) {
         document.getElementById("answerBox").style.display = "block";
-        document.getElementById("answerText").textContent = "Failed to reach system. Please try again.";
+        document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection.";
     } finally {
         document.getElementById("loadingDoubt").classList.add('hidden');
     }
 };
 
 /* =====================================================
-ROBUST MATH FORMATTER & CLEANER
+MATH FORMATTER
 ===================================================== */
 function formatMathText(text) {
     if (!text) return "";
-    
-    // Convert common superscripts
     const superscripts = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
         '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
@@ -808,28 +1192,129 @@ function cleanAnswer(text){
 
 document.getElementById("againBtn").addEventListener("click", function(){
     const oldQuestion = questionInput.value.trim();
-    questionInput.value = oldQuestion + "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
+    questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example.";
     document.getElementById("askBtn").click();
 });
 
 document.getElementById("teacherBtn").addEventListener("click", function(){
     const studentQuestion = questionInput.value.trim();
     const explanation = document.getElementById("answerText").textContent.trim();
-    const whatsappMessage = "Hello Invincible 360 Teacher.\n\nI need personal help with this doubt.\n\nSubject: " + selectedSubject + "\n\nStudent Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\nSystem Explanation:\n" + explanation;
+    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
 });
 
 /* =====================================================
-TEST DATABASE LOADER & UPGRADED BRAIN TEASER
+DATABASE LOADER & QUESTION BANK PRE-POPULATION
 ===================================================== */
-let testBank = {};
+function generateBuiltinQuestionBank() {
+    const bank = {};
+    function setTest(cls, sub, title, qs) {
+        const key = cls + "|" + sub;
+        if (!bank[key]) bank[key] = {};
+        bank[key][title] = qs.map((q, idx) => ({
+            id: idx + 1,
+            question: q.q,
+            options: q.o,
+            answer: q.a,
+            explanation: q.e
+        }));
+    }
+
+    const qData = {
+        "9|Physics": {
+            title: "Motion (Chapter 1 Confidence Test)",
+            qs: [
+                {q:"What is the SI unit of distance?", o:["Meter (m)","Kilometer (km)","Centimeter (cm)","Millimeter (mm)"], a:0, e:"The standard international unit of distance and displacement is the meter (m)."},
+                {q:"Which quantity is a vector quantity?", o:["Distance","Speed","Displacement","Time"], a:2, e:"Displacement has both magnitude and a specific direction, making it a vector quantity."},
+                {q:"What is the SI unit of speed?", o:["m/s","m/s²","km/h","m·s"], a:0, e:"Speed is distance divided by time, hence its SI unit is meter per second (m/s)."},
+                {q:"The rate of change of displacement is called:", o:["Acceleration","Velocity","Speed","Force"], a:1, e:"Velocity is defined as the rate of change of displacement with time."},
+                {q:"What is the SI unit of acceleration?", o:["m/s","m/s²","km/h²","m·s²"], a:1, e:"Acceleration is velocity change per second, giving m/s²."},
+                {q:"If an object moves with constant speed, its acceleration is:", o:["Zero","Positive","Negative","Infinite"], a:0, e:"When speed/velocity does not change, acceleration is 0."},
+                {q:"Negative acceleration is also known as:", o:["Retardation","Velocity","Momentum","Speed"], a:0, e:"Deceleration or retardation refers to negative acceleration."},
+                {q:"The slope of a Distance-Time graph represents:", o:["Acceleration","Speed","Distance","Displacement"], a:1, e:"Slope = (Change in Distance)/(Change in Time) = Speed."},
+                {q:"The slope of a Velocity-Time graph gives:", o:["Distance","Displacement","Acceleration","Speed"], a:2, e:"Slope of v-t graph = (Change in Velocity)/(Time) = Acceleration."},
+                {q:"Area under a Velocity-Time graph represents:", o:["Displacement","Acceleration","Speed","Force"], a:0, e:"Area under v-t graph represents total distance or displacement."},
+                {q:"Which of the following is the first equation of motion?", o:["v = u + at","s = ut + ½at²","v² - u² = 2as","v = u - at"], a:0, e:"v = u + at relates initial velocity (u), final velocity (v), acceleration (a), and time (t)."},
+                {q:"In the equation s = ut + ½at², what does 's' represent?", o:["Speed","Displacement / Distance","Second","Surface"], a:1, e:"'s' stands for displacement or distance covered."},
+                {q:"An odometer in a car measures:", o:["Speed","Instantaneous speed","Distance","Acceleration"], a:2, e:"An odometer records total distance traveled by the vehicle."},
+                {q:"A speedometer measures:", o:["Average speed","Instantaneous speed","Total distance","Acceleration"], a:1, e:"A speedometer shows current or instantaneous speed."},
+                {q:"When an object travels equal distances in equal intervals of time, the motion is:", o:["Uniform","Non-uniform","Accelerated","Circular"], a:0, e:"This is the exact definition of uniform motion."},
+                {q:"Can displacement be zero even if distance is non-zero?", o:["Yes","No","Only in space","Never"], a:0, e:"Yes, returning to the starting point gives zero displacement but positive distance."},
+                {q:"What is the motion of the tip of the second hand of a watch?", o:["Uniform linear motion","Uniform circular motion","Non-uniform circular motion","Oscillatory motion"], a:1, e:"It moves with constant speed along a circular path."},
+                {q:"When a body starts from rest, its initial velocity (u) is:", o:["0 m/s","9.8 m/s","1 m/s","Infinite"], a:0, e:"'At rest' implies initial velocity u = 0."},
+                {q:"When brakes are applied to stop a car, final velocity (v) is:", o:["0 m/s","Positive","Negative","Equal to initial"], a:0, e:"When an object stops completely, final velocity v = 0."},
+                {q:"Distance is always:", o:["Positive or zero","Negative","Zero only","Always negative"], a:0, e:"Distance is a scalar quantity and cannot be negative."}
+            ]
+        },
+        "10|Physics": {
+            title: "Light - Reflection & Refraction (Chapter 1 Confidence Test)",
+            qs: [
+                {q:"The focal length of a plane mirror is:", o:["Zero","Infinity","25 cm","1 m"], a:1, e:"A plane mirror has no curvature, so its radius and focal length are infinite."},
+                {q:"The relation between focal length (f) and radius of curvature (R) of a spherical mirror is:", o:["f = R/2","f = 2R","f = R","f = 1/R"], a:0, e:"Focal length is half of the radius of curvature: f = R/2."},
+                {q:"An image formed by a plane mirror is always:", o:["Real and inverted","Virtual and erect","Real and erect","Virtual and inverted"], a:1, e:"Plane mirrors produce upright, virtual, laterally inverted images."},
+                {q:"What type of mirror is used as a rear-view mirror in vehicles?", o:["Convex mirror","Concave mirror","Plane mirror","Cylindrical mirror"], a:0, e:"Convex mirrors give an erect, diminished image with a wide field of view."},
+                {q:"The mirror formula is:", o:["1/v + 1/u = 1/f","1/v - 1/u = 1/f","v + u = f","1/f = u - v"], a:0, e:"The standard mirror equation is 1/v + 1/u = 1/f."},
+                {q:"The lens formula is:", o:["1/v - 1/u = 1/f","1/v + 1/u = 1/f","1/f = u/v","f = uv"], a:0, e:"The lens equation is 1/v - 1/u = 1/f."},
+                {q:"The SI unit of power of a lens is:", o:["Dioptre (D)","Meter","Centimeter","Watt"], a:0, e:"Lens power P = 1/f(m), measured in Dioptres (D)."},
+                {q:"The power of a convex lens of focal length 1 m is:", o:["+1 D","-1 D","+2 D","0 D"], a:0, e:"P = 1/f = 1/1 = +1 Dioptre."},
+                {q:"The speed of light in vacuum is:", o:["3 × 10⁸ m/s","3 × 10⁶ m/s","3 × 10⁸ km/s","3 × 10¹⁰ m/s"], a:0, e:"Light travels at 300,000 km/s or 3 × 10⁸ m/s in vacuum."},
+                {q:"Snell's Law of refraction is represented by:", o:["sin i / sin r = constant","sin i × sin r = constant","i = r","sin i + sin r = 1"], a:0, e:"Snell's law states sin i / sin r = refractive index (μ)."},
+                {q:"When light travels from an optically rarer to a denser medium, it bends:", o:["Towards the normal","Away from the normal","Does not bend","Reflects back"], a:0, e:"Light slows down in a denser medium, bending towards the normal."},
+                {q:"What type of mirror is used by dentists to see enlarged teeth?", o:["Concave mirror","Convex mirror","Plane mirror","Bifocal mirror"], a:0, e:"Dentists use concave mirrors when object is within focus to get an enlarged erect view."},
+                {q:"The magnification produced by a rear-view convex mirror is:", o:["Less than 1","Greater than 1","Equal to 1","Can be anything"], a:0, e:"Convex mirrors always form diminished images (m < 1)."},
+                {q:"A concave lens always forms an image that is:", o:["Virtual, erect and diminished","Real and inverted","Virtual and magnified","Real and enlarged"], a:0, e:"Concave lenses diverge rays, always producing virtual, upright, diminished images."},
+                {q:"The centre of the reflecting surface of a spherical mirror is called:", o:["Pole (P)","Focus (F)","Center of curvature (C)","Optical centre"], a:0, e:"The midpoint of the mirror's surface is its Pole."},
+                {q:"If a lens has power -2.0 D, its nature and focal length are:", o:["Concave, -0.5 m","Convex, +0.5 m","Concave, -2 m","Convex, +2 m"], a:0, e:"Negative power indicates a concave lens; f = 1/(-2) = -0.5 m."},
+                {q:"Refractive index of diamond is approx 2.42. This means light in diamond:", o:["Travels 2.42 times slower than in vacuum","Travels faster","Is absorbed","Scatters"], a:0, e:"n = c/v => speed in diamond is c/2.42."},
+                {q:"Where should an object be placed in front of a concave mirror to get an image of the same size?", o:["At Center of Curvature (C)","At Focus (F)","Between F and C","At Infinity"], a:0, e:"Object at C produces a real, inverted image of the same size at C."},
+                {q:"Law of reflection states that angle of incidence (i) is:", o:["Equal to angle of reflection (r)","Greater than r","Smaller than r","Always 90°"], a:0, e:"∠i = ∠r is the primary law of reflection."},
+                {q:"A ray passing through the optical centre of a thin lens:", o:["Goes undeviated","Bends by 90°","Reflects back","Disappears"], a:0, e:"Light rays through the optical centre pass without deviation."}
+            ]
+        },
+        "12|Physics": {
+            title: "Electric Charges and Fields (Chapter 1 Confidence Test)",
+            qs: [
+                {q:"What is the SI unit of electric charge?", o:["Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)"], a:0, e:"Electric charge is measured in Coulombs (C)."},
+                {q:"The charge of an electron is approximately:", o:["-1.6 × 10⁻¹⁹ C","+1.6 × 10⁻¹⁹ C","-1.6 × 10⁻²⁷ C","-9.1 × 10⁻³¹ C"], a:0, e:"Elementary fundamental charge e = 1.602 × 10⁻¹⁹ C."},
+                {q:"Quantization of electric charge is expressed as:", o:["q = ±ne","q = n/e","q = e/n","q = n²e"], a:0, e:"Charge exists in integral multiples of elementary charge e: q = ne."},
+                {q:"Coulomb's Law constant (1 / 4πε₀) in vacuum is equal to:", o:["9 × 10⁹ N·m²/C²","8.85 × 10⁻¹² N·m²/C²","9 × 10⁻⁹ N·m²/C²","3 × 10⁸ N·m²/C²"], a:0, e:"1/(4πε₀) ≈ 8.99 × 10⁹ ≈ 9 × 10⁹ N m²/C²."},
+                {q:"The SI unit of electric field intensity (E) is:", o:["N/C or V/m","N·m/C","J/C","C/m"], a:0, e:"E = F/q (Newton per Coulomb) or -dV/dr (Volt per meter)."},
+                {q:"The electric field inside a hollow charged spherical conductor is:", o:["Zero","Infinite","Uniform and non-zero","Decreasing towards center"], a:0, e:"Inside an electrostatic conductor, electric field E = 0."},
+                {q:"Electric field lines start from:", o:["Positive charge and end on negative charge","Negative and end on positive","Start from infinity always","Form closed loops"], a:0, e:"Electric lines of force diverge from positive and terminate at negative charges."},
+                {q:"Can two electric field lines intersect each other?", o:["No, because at intersection there would be two directions of field","Yes, always","Only in vacuum","Only for like charges"], a:0, e:"At an intersection point, tangent would indicate two contradictory directions."},
+                {q:"The SI unit of electric flux (Φ) is:", o:["N·m²/C or V·m","N/C","C/m²","Farad"], a:0, e:"Electric flux Φ = E·A = (N/C)·m² = N m²/C = V m."},
+                {q:"Gauss's Law states that total electric flux through a closed surface is:", o:["q_enclosed / ε₀","q_enclosed × ε₀","Zero always","q / 4πε₀"], a:0, e:"Gauss's law: ∮ E·dA = q_inside / ε₀."},
+                {q:"An electric dipole consists of:", o:["Two equal and opposite charges separated by small distance","Two like charges","Single positive charge","Three charges"], a:0, e:"Dipole = +q and -q separated by distance 2a."},
+                {q:"The SI unit of electric dipole moment (p = q × 2a) is:", o:["Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt·meter"], a:0, e:"Dipole moment has units of charge (C) × length (m) = C·m."},
+                {q:"The direction of an electric dipole moment is conventionally taken from:", o:["Negative charge to positive charge","Positive to negative","Random","North to south"], a:0, e:"By physics convention, dipole vector p points from -q to +q."},
+                {q:"Torque (τ) experienced by an electric dipole in uniform field E is:", o:["p × E (p E sin θ)","p · E","p / E","Zero always"], a:0, e:"τ = p × E = pE sin θ."},
+                {q:"A dipole in a uniform electric field experiences:", o:["Only torque, no net force","Both force and torque","Only force, no torque","Neither force nor torque"], a:0, e:"Net force is zero because equal and opposite forces act on +q and -q."},
+                {q:"Electric field due to a point charge q at distance r varies as:", o:["1/r²","1/r","1/r³","r"], a:0, e:"E = kq/r² (inversely proportional to r²)."},
+                {q:"Electric field on axial line of short dipole varies with distance as:", o:["1/r³","1/r²","1/r","1/r⁴"], a:0, e:"For short dipoles, E_axial = 2kp/r³ (varies as 1/r³)."},
+                {q:"Permittivity of free space (ε₀) has the value:", o:["8.854 × 10⁻¹² C²/N·m²","9 × 10⁹ C²/N·m²","1.6 × 10⁻¹⁹ C²/N·m²","6.67 × 10⁻¹¹ C²/N·m²"], a:0, e:"ε₀ = 8.854 × 10⁻¹² C² N⁻¹ m⁻²."},
+                {q:"Linear charge density (λ) has SI unit:", o:["C/m","C/m²","C/m³","C·m"], a:0, e:"λ = q/L (Coulombs per meter)."},
+                {q:"Surface charge density (σ) has SI unit:", o:["C/m²","C/m","C/m³","Coulomb"], a:0, e:"σ = q/A (Coulombs per square meter)."}
+            ]
+        }
+    };
+
+    Object.keys(qData).forEach(key => {
+        const [cls, sub] = key.split("|");
+        const item = qData[key];
+        setTest(cls, sub, item.title, item.qs);
+    });
+
+    return bank;
+}
+
+let testBank = generateBuiltinQuestionBank();
 
 async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        if(data && Array.isArray(data.questions)){
+        if(data && Array.isArray(data.questions) && data.questions.length > 0){
             data.questions.forEach(function(q, index){
                 const key = q.class_name + "|" + q.subject;
                 if(!testBank[key]) testBank[key] = {};
@@ -842,7 +1327,6 @@ async function loadPlatformData(){
             });
         }
 
-        // UPGRADED ROBUST BRAIN TEASER
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "block";
             
@@ -862,7 +1346,6 @@ async function loadPlatformData(){
             document.getElementById("puzzleQuestionHi").innerHTML = hiText;
             document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
 
-            // Interactive Options
             const optContainer = document.getElementById("puzzleOptionsContainer");
             optContainer.innerHTML = '';
             
@@ -880,12 +1363,12 @@ async function loadPlatformData(){
             const list = document.getElementById("leaderboardList");
             list.innerHTML = "";
             data.leaderboard.forEach(function(item, idx){
-                let rankClass = idx === 0 ? "first" : (idx === 1 ? "second" : (idx === 2 ? "third" : ""));
+                let rankClass = idx === 0 ? "first" : "";
                 list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
             });
             document.getElementById("leaderboardBox").style.display = "block";
         }
-    }catch(error){ console.error("Error loading platform data:", error); }
+    }catch(error){ console.error("Data load error:", error); }
 }
 loadPlatformData();
 
@@ -895,26 +1378,26 @@ function checkPuzzleGuess(selected, btn) {
     if (selected === '2') {
         playWin();
         btn.classList.add('correct-pick');
-        feedback.style.color = '#34d399';
-        feedback.textContent = '🎉 GENIUS! You nailed it in seconds!';
-        if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.3 } });
+        feedback.style.color = 'var(--accent-emerald)';
+        feedback.textContent = '🎉 Correct! Value is 2.';
+        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
     } else {
         playBuzz();
         btn.classList.add('wrong-pick');
-        feedback.style.color = '#f87171';
-        feedback.textContent = '❌ Tricked you! Check the logic below.';
+        feedback.style.color = 'var(--accent-rose)';
+        feedback.textContent = '❌ Incorrect. See explanation below.';
     }
 }
 
 const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
 const puzzleSolution = document.getElementById("puzzleSolution");
 puzzleToggleBtn.addEventListener("click", function(){
-    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Teacher Logic"; }
-    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Teacher Logic"; }
+    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Logic"; }
+    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Logic"; }
 });
 
 /* =====================================================
-TEST GENERATOR & TIMER
+TEST GENERATOR & TIMER LOGIC (10 MINUTE RAPID TEST)
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = "";
@@ -923,8 +1406,8 @@ let activeTestSubject = "";
 let finalScoreData = {};
 
 let testTimerInterval = null;
-let totalTimeLimit = 1200; 
-let timeRemaining = 1200;
+let totalTimeLimit = 600;
+let timeRemaining = 600;
 
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
@@ -948,7 +1431,7 @@ function startTimer() {
     clearInterval(testTimerInterval); timeRemaining = totalTimeLimit; updateTimerUI();
     testTimerInterval = setInterval(function() {
         timeRemaining--; updateTimerUI();
-        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("⏰ Time's up! Your test is automatically submitting."); submitTestBtn.click(); }
+        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("Time complete. Submitting test."); submitTestBtn.click(); }
     }, 1000);
 }
 
@@ -974,12 +1457,12 @@ startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
     const cls = testClass.value; const subject = testSubject.value; const test = testSelect.value;
-    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill Name, Mobile Number, Class, Subject and Test."); return; }
+    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
     if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
 
     let questions = null;
     if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){ questions = testBank[cls+"|"+subject][test]; }
-    if(!questions || !questions.length){ alert("This test is not available yet."); return; }
+    if(!questions || !questions.length){ alert("Selected test is currently unavailable."); return; }
 
     activeTestClass = cls; activeTestSubject = subject;
     startQuestions(questions, "Class " + cls + " " + subject, test);
@@ -993,22 +1476,22 @@ generateTestBtn.addEventListener("click", async function(){
     const chapter = document.getElementById("genChapter").value.trim(); const numberOfQuestions = Number(document.getElementById("genNumber").value);
     const difficulty = document.getElementById("genDifficulty").value; const questionType = document.getElementById("genQuestionType").value;
 
-    if(!cls || !subject || !chapter){ alert("Please select Class, Subject and enter Chapter."); return; }
+    if(!cls || !subject || !chapter){ alert("Please complete Class, Subject, and Chapter inputs."); return; }
 
-    generateTestBtn.disabled = true; generatorLoading.style.display = "block";
+    generateTestBtn.disabled = true; generatorLoading.classList.remove('hidden');
     try{
         const response = await fetch("/api/generate-test", {
             method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" })
         });
         const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Unable to generate test.");
+        if(!response.ok) throw new Error(data.error || "Generation error.");
         const generated = extractQuestions(data);
-        if(!generated.length) throw new Error("No questions were returned.");
+        if(!generated.length) throw new Error("No questions returned.");
         activeTestClass = cls; activeTestSubject = subject;
-        startQuestions(generated, "Class " + cls + " " + subject, "Custom Test — " + chapter);
-    }catch(error){ alert("Test generation failed.\n\n" + error.message); }
-    finally{ generateTestBtn.disabled = false; generatorLoading.style.display = "none"; }
+        startQuestions(generated, "Class " + cls + " " + subject, "Practice Set — " + chapter);
+    }catch(error){ alert("Test generation failed: " + error.message); }
+    finally{ generateTestBtn.disabled = false; generatorLoading.classList.add('hidden'); }
 });
 
 function extractQuestions(data){
@@ -1034,16 +1517,16 @@ function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions; activeTestTitle = testTitle;
     testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
     reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions &nbsp; | &nbsp; " + questions.length + " Marks";
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)";
     questionsContainer.innerHTML = "";
 
     questions.forEach(function(q,index){
         const card = document.createElement("div"); card.className = "question-card";
         let optionsHTML="";
         q.options.forEach(function(option, optionIndex){
-            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + escapeHTML(String(option)) + '</span></label>';
+            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>';
         });
-        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + escapeHTML(String(q.question)) + '</div>' + optionsHTML;
+        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
         questionsContainer.appendChild(card);
     });
     window.scrollTo({ top:0, behavior:"smooth" });
@@ -1056,18 +1539,12 @@ function escapeHTML(text){
 }
 
 function generateBadges(percentage, timeSpentSeconds) {
-    let badgesHTML = ""; const hour = new Date().getHours();
+    let badgesHTML = "";
     if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
     else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
-    else if (percentage >= 50) { badgesHTML += `<div class="badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; border:1px solid #38bdf8;">👍 Good Effort</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(148, 163, 184, 0.15); color:#94a3b8; border:1px solid #94a3b8;">🌱 Future Topper</div>`; }
+    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; }
 
-    if(timeSpentSeconds < 600 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Speedster</div>`; }
-
-    if(hour >= 23 || hour <= 4) { badgesHTML += `<div class="badge nightowl">🦉 Night Owl</div>`; } 
-    else if (hour >= 18 && hour < 23) { badgesHTML += `<div class="badge" style="background:rgba(249, 115, 22, 0.15); color:#f97316; border:1px solid #f97316;">🌙 Evening Grinder</div>`; } 
-    else if (hour >= 5 && hour <= 8) { badgesHTML += `<div class="badge earlybird">🌅 Early Bird</div>`; }
-
+    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; }
     return badgesHTML;
 }
 
@@ -1089,12 +1566,12 @@ submitTestBtn.addEventListener("click", async function(){
         
         answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
 
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect / Skipped</span>';
-        let studentPick = selectedAnswer !== null ? escapeHTML(q.options[selectedAnswer]) : "<em>Did not attempt</em>";
-        let correctPick = escapeHTML(q.options[q.answer]);
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Teacher\'s Logic:</strong> ' + escapeHTML(q.explanation) + '</div>' : '';
+        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
+        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>";
+        let correctPick = formatMathText(escapeHTML(q.options[q.answer]));
+        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
 
-        reviewHTML += `<div class="review-card"><div class="review-q-num">Q${index+1} ${statusBadge}</div><div class="review-q-text">${escapeHTML(q.question)}</div><div class="review-item"><strong>You answered:</strong> ${studentPick}</div><div class="review-item"><strong>Correct answer:</strong> ${correctPick}</div>${explanationBox}</div>`;
+        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
     });
 
     const wrong = attempted - correct; const unanswered = questions.length - attempted;
@@ -1103,12 +1580,12 @@ submitTestBtn.addEventListener("click", async function(){
     badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
     if (percentage >= 80) {
         playSuccessSound();
-        if (typeof confetti === "function") { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#38bdf8', '#facc15', '#ec4899', '#34d399'] }); }
+        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); }
     }
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>Correct: " + correct + "<br>Wrong: " + wrong + "<br>Unanswered: " + unanswered + "<br><br><span id='saveStatus'>Saving your result...</span>";
+    resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
 
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
@@ -1116,21 +1593,15 @@ submitTestBtn.addEventListener("click", async function(){
 
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
-    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Custom Test —") ? activeTestTitle.replace("Custom Test —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
+    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
 
     try{
-        const response = await fetch("/api/save-test-attempt", {
+        await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Custom Test") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
         });
-        const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Unable to save test result.");
-        const saveStatus = document.getElementById("saveStatus");
-        if(saveStatus){ saveStatus.textContent = "✓ Result saved successfully."; saveStatus.style.fontWeight = "700"; saveStatus.style.color = "#34d399"; }
-    }catch(error){
-        const saveStatus = document.getElementById("saveStatus");
-        if(saveStatus){ saveStatus.textContent = "ERROR: " + error.message; saveStatus.style.color = "#f87171"; }
-    }finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT TEST"; }
+    }catch(error){ console.error(error); }
+    finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
 });
 
 restartTestBtn.addEventListener("click", function(){
@@ -1140,7 +1611,7 @@ restartTestBtn.addEventListener("click", function(){
 });
 
 whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + window.location.href;
+    const rawMsg = "I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! Take the challenge: " + window.location.href;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
@@ -1152,10 +1623,10 @@ let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], curre
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
-    if(!name) return alert("Please enter your name first!");
+    if(!name) return alert("Please enter your name.");
 
     const btn = document.getElementById('btnCreateRoom');
-    btn.disabled = true; btn.textContent = "Generating 10 Questions...";
+    btn.disabled = true; btn.textContent = "Generating match...";
 
     try {
         const res = await fetch('/api/arena', {
@@ -1171,17 +1642,17 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Failed to create room: " + err.message); } 
+    } catch(err) { alert("Arena connection error: " + err.message); } 
     finally { btn.disabled = false; btn.textContent = "⚡ Create 1v1 Room"; }
 };
 
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter your name and 4-digit code!");
+    if(!name || !code) return alert("Enter name and 4-digit code.");
 
     const btn = document.getElementById('btnJoinRoom');
-    btn.disabled = true; btn.textContent = "Joining...";
+    btn.disabled = true; btn.textContent = "Connecting...";
 
     try {
         const res = await fetch('/api/arena', {
@@ -1198,7 +1669,7 @@ document.getElementById('btnJoinRoom').onclick = async () => {
 
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Could not join: " + err.message); } 
+    } catch(err) { alert("Unable to join: " + err.message); } 
     finally { btn.disabled = false; btn.textContent = "🚀 Join Room"; }
 };
 
@@ -1269,7 +1740,7 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
-    document.getElementById('arenaResultText').innerHTML = `<div class="pulse-text" style="font-size:20px;">Waiting for opponent to finish...</div>`;
+    document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
     document.getElementById('arenaResult').classList.remove('hidden');
     fetch('/api/arena', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -1283,12 +1754,12 @@ function showArenaResult(room) {
     document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
     if (myScore > opScore) {
-        playWin(); document.getElementById('arenaResultText').innerHTML = `<div class="winner-text">🏆 YOU WIN!</div>`;
-        if (typeof confetti === "function") confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
+        if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
     } else if (myScore < opScore) {
-        document.getElementById('arenaResultText').innerHTML = `<div class="loser-text">☠️ YOU LOST!</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div class="winner-text" style="color:#facc15;">🤝 IT'S A TIE!</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-amber);">🤝 DRAW</div>`;
     }
 }
 
@@ -1305,7 +1776,7 @@ async function loadFeedPosts() {
         const data = await res.json();
         
         if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">No posts in this category yet. Be the first to drop a question!</div>';
+            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet.</div>';
             return;
         }
 
@@ -1314,22 +1785,22 @@ async function loadFeedPosts() {
                 <div class="feed-card-header">
                     <div>
                         <div class="feed-author">${escapeHTML(p.author_name)}</div>
-                        <div class="feed-school">${escapeHTML(p.institution)} • Class ${escapeHTML(p.student_class)}</div>
+                        <div class="feed-school">${escapeHTML(p.institution)} &bull; Class ${escapeHTML(p.student_class)}</div>
                     </div>
                     <span class="feed-badge">${escapeHTML(p.subject)}</span>
                 </div>
-                <div class="feed-content">${escapeHTML(p.content)}</div>
-                ${p.image_url ? `<img src="${p.image_url}" class="feed-image" alt="Question attachment">` : ''}
+                <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
+                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment for post by ${escapeHTML(p.author_name)}">` : ''}
                 <div class="feed-actions">
-                    <div class="action-btn" onclick="likePost(${p.id})">❤️ <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
+                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
                     <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
                     <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
                 </div>
 
                 <div class="comments-drawer" id="comments-${p.id}">
-                    <div id="comments-list-${p.id}"><div style="color:#64748b; font-size:12px;">Loading discussion...</div></div>
+                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading comments...</div></div>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="com-input-${p.id}" placeholder="Type your step-by-step solution or tip..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
+                        <input type="text" id="com-input-${p.id}" placeholder="Type explanation or response..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
                         <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
                     </div>
                 </div>
@@ -1337,7 +1808,7 @@ async function loadFeedPosts() {
         `).join('');
 
     } catch(err) {
-        list.innerHTML = '<div style="text-align:center; color:#f87171; font-size:14px; padding:20px;">Failed to load feed.</div>';
+        list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
     }
 }
 
@@ -1351,10 +1822,10 @@ document.getElementById('btnPublishPost').onclick = async () => {
     const sub = document.getElementById('feedSubject').value;
     const content = document.getElementById('feedContent').value.trim();
 
-    if (!name || !inst || !content) return alert("Please fill your Name, School/Coaching, and Question/Thought!");
+    if (!name || !inst || !content) return alert("Please complete Name, School/Coaching, and Post Content.");
 
     const btn = document.getElementById('btnPublishPost');
-    btn.disabled = true; btn.textContent = "Posting...";
+    btn.disabled = true; btn.textContent = "Publishing...";
 
     try {
         const res = await fetch('/api/feed', {
@@ -1384,14 +1855,14 @@ async function likePost(postId) {
 }
 
 async function reportPost(postId) {
-    if (!confirm("Report this post for inappropriate content?")) return;
+    if (!confirm("Report post for academic review?")) return;
     try {
         const res = await fetch('/api/feed', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'report_post', post_id: postId })
         });
         const data = await res.json();
-        alert(data.message || "Reported.");
+        alert(data.message || "Report recorded.");
         document.getElementById(`post-${postId}`).style.display = 'none';
     } catch(e){}
 }
@@ -1412,12 +1883,12 @@ async function loadComments(postId) {
         const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
         const data = await res.json();
         if (!data.comments || data.comments.length === 0) {
-            container.innerHTML = '<div style="color:#64748b; font-size:12px; margin-bottom:6px;">No solutions yet. Be the first to explain!</div>';
+            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No discussions yet.</div>';
             return;
         }
         container.innerHTML = data.comments.map(c => `
             <div class="comment-item">
-                <div class="comment-author">${escapeHTML(c.author_name)} <span style="color:#94a3b8; font-weight:normal;">• ${escapeHTML(c.institution)}</span></div>
+                <div style="font-weight:800; color:var(--accent-cyan); font-size:12px; margin-bottom:2px;">${escapeHTML(c.author_name)} <span style="color:var(--text-muted); font-weight:normal;">&bull; ${escapeHTML(c.institution)}</span></div>
                 <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
             </div>
         `).join('');
@@ -1430,7 +1901,7 @@ async function addComment(postId) {
     const name = document.getElementById('feedAuthorName').value.trim() || 'Student';
     const inst = document.getElementById('feedInstitution').value.trim() || 'School';
 
-    if (!content) return alert("Type your solution or explanation first!");
+    if (!content) return alert("Please enter discussion text.");
 
     try {
         const res = await fetch('/api/feed', {
