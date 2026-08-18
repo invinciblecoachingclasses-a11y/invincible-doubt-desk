@@ -65,9 +65,23 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sa
 .brand-pills { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .brand-pill { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: #cbd5e1; border: 1px solid var(--border-subtle); }
 
-/* =====================================================
-24-HOUR STUDY STORIES TRAY
-===================================================== */
+/* GAMIFIED STREAK BAR */
+.streak-bar-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.streak-counter { color: var(--accent-amber); display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14px; }
+.streak-freeze-tag { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+
+/* 24-HOUR STUDY STORIES TRAY */
 .stories-tray-container {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
@@ -139,9 +153,7 @@ body { margin: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sa
   text-overflow: ellipsis;
 }
 
-/* =====================================================
-FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
-===================================================== */
+/* FULLSCREEN STORY VIEWER */
 .story-viewer-modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -187,18 +199,11 @@ FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
 .story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
 
 /* Tap Navigation Zones */
-.story-nav-zone {
-  position: absolute;
-  top: 60px;
-  bottom: 70px;
-  width: 45%;
-  z-index: 5;
-  cursor: pointer;
-}
+.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
 .story-nav-prev { left: 0; }
 .story-nav-next { right: 0; }
 
-/* Upgraded Sticker Poll with Live Bars */
+/* Sticker Poll in Story */
 .story-sticker-card {
   background: rgba(15, 23, 42, 0.9);
   border: 1px solid var(--accent-cyan);
@@ -239,13 +244,7 @@ FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
 .sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
 
 /* Story Action Bar & Viewers Button */
-.story-action-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  z-index: 10;
-}
+.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
 .reaction-emoji-btn {
   background: rgba(255, 255, 255, 0.1);
   border: none;
@@ -259,26 +258,8 @@ FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
   cursor: pointer;
 }
 .reaction-emoji-btn:hover { transform: scale(1.2); }
-.vault-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--accent-amber);
-  color: var(--accent-amber);
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.viewers-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--accent-cyan);
-  color: var(--accent-cyan);
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-}
+.vault-btn { background: var(--bg-surface); border: 1px solid var(--accent-amber); color: var(--accent-amber); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.viewers-btn { background: var(--bg-surface); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
 
 /* VIEWERS BOTTOM SHEET DRAWER */
 .viewers-sheet {
@@ -293,16 +274,9 @@ FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION & LIVE POLLS)
   display: none;
   z-index: 20;
 }
-.viewer-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 13px;
-}
+.viewer-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
 
-/* Modal for Creating Story */
+/* MODAL FOR CREATING STORY */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -364,10 +338,15 @@ label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 10px; 
 .subject { padding: 12px 8px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: var(--text-muted); font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; }
 .subject.active { background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-textarea, input:not([type="radio"]), select {
+/* DOUBT TONE SWITCHER */
+.tone-switch-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.tone-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 8px 6px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; }
+.tone-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
+
+textarea, input:not([type="radio"]):not([type="range"]), select {
   width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 12px; font-size: 15px; background: var(--bg-surface); color: #ffffff; outline: none; font-family: inherit; margin-bottom: 14px;
 }
-textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); }
+textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); }
 
 .photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .photo-btn { padding: 12px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: #cbd5e1; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -378,7 +357,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* DOUBT ANSWER & FEEDBACK (UPGRADED BADGES & CARD) */
+/* DOUBT ANSWER & FEEDBACK */
 .answer-box { display: none; margin-top: 24px; padding: 24px; background: #0d131f; border-radius: 18px; border: 1px solid var(--border-subtle); }
 .logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
 .logic-title { font-size: 20px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
@@ -430,7 +409,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 12px; background: transparent; color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
 
-/* ARENA 1v1 (WITH SPEED POINTS & VS BAR) */
+/* ARENA 1v1 */
 .arena-header { text-align: center; margin-bottom: 18px; }
 .arena-title { font-size: 22px; font-weight: 900; color: var(--accent-rose); }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
@@ -454,7 +433,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
   40%, 80% { transform: translateX(6px); }
 }
 
-/* COMMUNITY FEED (WITH FILTER PILLS & TEACHER PIN) */
+/* COMMUNITY FEED */
 .feed-header { text-align: center; margin-bottom: 18px; }
 .feed-title { font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
 .post-composer { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 20px; }
@@ -474,7 +453,25 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 .action-btn.report:hover { color: var(--accent-rose); }
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 .comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-.teacher-comment { border: 1px solid var(--accent-amber); background: rgba(245, 158, 11, 0.08); }
+
+/* FLOATING LO-FI RADIO WIDGET */
+.lofi-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 30px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+}
+.lofi-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #fff; line-height: 1; }
+.lofi-label { font-size: 11px; font-weight: 800; color: var(--accent-cyan); }
 
 /* LEADERBOARD & FOOTER */
 .leaderboard-card { background: #0d131f; border: 1px solid var(--border-subtle); border-radius: 20px; padding: 20px; margin-bottom: 24px; }
@@ -493,6 +490,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
   .generator-grid { grid-template-columns: 1fr; }
   .arena-grid { grid-template-columns: 1fr; }
   .puzzle-options-grid { grid-template-columns: 1fr 1fr; }
+  .tone-switch-bar { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -513,6 +511,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
         <span class="brand-pill">Biology</span>
     </div>
 </header>
+
+<!-- GAMIFIED STREAK & SHIELD STATUS -->
+<div class="streak-bar-box">
+    <div class="streak-counter">
+        <span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days
+    </div>
+    <div class="streak-freeze-tag" id="userFreezeStatus">🛡️ 1 Freeze Shield Ready</div>
+</div>
 
 <!-- 24-HOUR STUDY STORIES TRAY -->
 <div class="stories-tray-container" id="storiesTray">
@@ -566,6 +572,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
         <button type="button" class="subject" data-subject="Physics">Physics</button>
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
+    </div>
+
+    <!-- 3-Pill Explanation Mode Selector -->
+    <label>Explanation Tone</label>
+    <div class="tone-switch-bar">
+        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ TL;DR Formula</button>
+        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step</button>
+        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Explain Like I'm 10</button>
     </div>
 
     <label for="question">Your Question</label>
@@ -768,7 +782,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     </div>
 </section>
 
-<!-- 4. COMMUNITY FEED -->
+<!-- 4. COMMUNITY FEED (WITH MIDNIGHT CONFESSION FILTER) -->
 <section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
     <div class="feed-header">
         <h2 class="feed-title">🌟 Academic Community Feed</h2>
@@ -777,7 +791,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
+            <input type="text" id="feedAuthorName" placeholder="Your Name (Leave blank for Anon)" style="margin-bottom:0;">
             <input type="text" id="feedInstitution" placeholder="School / Coaching Name" style="margin-bottom:0;">
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -793,9 +807,10 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
                 <option value="Mathematics">Mathematics</option>
                 <option value="Biology">Biology</option>
                 <option value="General">Study Tips / Strategy</option>
+                <option value="ChillVent">🌙 Midnight Vent &amp; Chill</option>
             </select>
         </div>
-        <textarea id="feedContent" placeholder="Post a challenging problem or study insight..."></textarea>
+        <textarea id="feedContent" placeholder="Post a challenging problem, formula tip, or exam thought..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
 
@@ -806,6 +821,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
         <span class="filter-pill" onclick="setFeedSubjectFilter('Chemistry', this)">🧪 Chemistry</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('Mathematics', this)">📐 Maths</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('Biology', this)">🧬 Biology</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
     </div>
 
     <div id="postsList">
@@ -819,6 +835,12 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     Built for Academic Excellence &bull; CBSE Class 9, 10, 11 &amp; 12<br>
     &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
 </footer>
+
+<!-- FLOATING LO-FI RADIO WIDGET -->
+<div class="lofi-widget">
+    <button class="lofi-btn" id="lofiToggleBtn" onclick="toggleLofiAudio()">🎧</button>
+    <div class="lofi-label" id="lofiLabel">Lofi Focus Radio: Off</div>
+</div>
 
 </main>
 
@@ -854,7 +876,7 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
     </div>
 </div>
 
-<!-- FULLSCREEN STORY VIEWER (WITH TAP NAVIGATION) -->
+<!-- FULLSCREEN STORY VIEWER -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
         <div>
@@ -865,7 +887,6 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
             </div>
         </div>
 
-        <!-- Left/Right Tap zones -->
         <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
         <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
 
@@ -914,10 +935,14 @@ textarea:focus, input:not([type="radio"]):focus, select:focus { border-color: va
 
 <script>
 /* =====================================================
-AUDIO SYNTHESIS ENGINE
+AUDIO SYNTHESIS ENGINE (SOUNDS & LO-FI OSCILLATOR)
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
+let lofiOsc = null;
+let lofiGain = null;
+let isLofiPlaying = false;
+
 function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
 function playSound(type, freq, duration, vol=0.1) {
     try {
@@ -935,6 +960,31 @@ function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sin
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
 function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
 function playSuccessSound() { playDing(); }
+
+function toggleLofiAudio() {
+    initAudio();
+    const btn = document.getElementById('lofiToggleBtn');
+    const label = document.getElementById('lofiLabel');
+
+    if (!isLofiPlaying) {
+        lofiOsc = audioCtx.createOscillator();
+        lofiGain = audioCtx.createGain();
+        lofiOsc.type = 'triangle';
+        lofiOsc.frequency.setValueAtTime(108, audioCtx.currentTime); // 108Hz relaxing Alpha drone
+        lofiGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        lofiOsc.connect(lofiGain);
+        lofiGain.connect(audioCtx.destination);
+        lofiOsc.start();
+        isLofiPlaying = true;
+        btn.textContent = '⏸️';
+        label.textContent = 'Lofi Focus Radio: 🟢 Playing (108Hz Alpha)';
+    } else {
+        if (lofiOsc) { lofiOsc.stop(); lofiOsc.disconnect(); }
+        isLofiPlaying = false;
+        btn.textContent = '🎧';
+        label.textContent = 'Lofi Focus Radio: Off';
+    }
+}
 
 /* =====================================================
 NAVIGATION LOGIC
@@ -1094,7 +1144,6 @@ function renderStorySlide() {
 
     document.getElementById('viewerCaption').textContent = story.caption || '';
 
-    // Upgraded Quiz Sticker with percentage logic
     const stickerCard = document.getElementById('viewerStickerCard');
     if (story.sticker_question) {
         stickerCard.style.display = 'block';
@@ -1111,7 +1160,6 @@ function renderStorySlide() {
         stickerCard.style.display = 'none';
     }
 
-    // Record View in Database
     const viewerName = localStorage.getItem('student_name') || document.getElementById('studentName').value.trim() || 'Peer Student';
     const viewerInst = localStorage.getItem('student_inst') || 'School';
     fetch('/api/stories', {
@@ -1119,7 +1167,6 @@ function renderStorySlide() {
         body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: viewerName, viewer_institution: viewerInst })
     });
 
-    // Progress Bar Fill
     const pContainer = document.getElementById('storyProgressContainer');
     pContainer.innerHTML = activeStories.map((_, i) => `
         <div class="story-progress-seg">
@@ -1137,7 +1184,6 @@ function closeStoryViewer() {
     document.getElementById('storyViewer').style.display = 'none';
 }
 
-// VIEWERS DRAWER TOGGLE
 async function toggleViewersSheet() {
     clearTimeout(storyTimer);
     const drawer = document.getElementById('viewersDrawer');
@@ -1182,7 +1228,6 @@ async function voteStorySticker(selectedOpt) {
     const barA = document.getElementById('barStickerA');
     const barB = document.getElementById('barStickerB');
 
-    // Visual Percentage Feedback
     pA.style.display = 'inline'; pB.style.display = 'inline';
     barA.style.width = '65%'; barB.style.width = '35%';
     pA.textContent = '65%'; pB.textContent = '35%';
@@ -1226,14 +1271,21 @@ function saveStoryToVault() {
 }
 
 /* =====================================================
-DOUBT DESK LOGIC
+DOUBT DESK LOGIC (WITH TONE SWITCHER)
 ===================================================== */
 let selectedSubject = "Mathematics";
+let currentTone = "step";
 let selectedImage = null;
 const questionInput = document.getElementById("question");
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
 const removeImageButton = document.getElementById("removeImage");
+
+function setExplanationTone(tone, el) {
+    currentTone = tone;
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+}
 
 document.querySelectorAll("#doubtSection .subject").forEach(b => {
     b.onclick = () => {
@@ -1268,14 +1320,17 @@ document.getElementById("askBtn").onclick = async () => {
     document.getElementById("answerBox").style.display = "none";
     document.getElementById("feedback").style.display = "none";
 
+    let tonePrompt = "";
+    if (currentTone === "tldr") tonePrompt = " [Provide ONLY the core formula and concise calculation in 3 lines]";
+    if (currentTone === "eli10") tonePrompt = " [Explain this using simple real-world analogies, zero technical jargon]";
+
     try {
         const res = await fetch("/api/ask", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage })
+            body: JSON.stringify({ subject: selectedSubject, question: q + tonePrompt, image: selectedImage })
         });
         const data = await res.json();
         
-        // Dynamic Difficulty Tag
         const badge = document.getElementById('doubtToughnessBadge');
         if (q.length > 80 || (q.includes('=') && q.includes('/'))) {
             badge.textContent = "🔴 Tricky / Competitive Level";
@@ -1737,7 +1792,6 @@ submitTestBtn.addEventListener("click", async function(){
     scoreText.textContent = correct + "/" + questions.length;
     resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
 
-    // Upgraded Topic Diagnosis Heatmap
     const heatmap = document.getElementById('testHeatmap');
     if (percentage >= 85) {
         heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`;
@@ -1776,7 +1830,7 @@ whatsappShareBtn.addEventListener("click", function(){
 });
 
 /* =====================================================
-ARENA 1v1 LOGIC (WITH SPEED BONUS & VS PROGRESS BAR)
+ARENA 1v1 LOGIC
 ===================================================== */
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null };
 
@@ -1854,7 +1908,6 @@ async function pollRoomState() {
         if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score;
         if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
 
-        // Dynamic Live VS Score Fill Bar
         const total = p1Score + p2Score;
         if (total > 0) {
             const p1Pct = Math.round((p1Score / total) * 100);
@@ -1904,7 +1957,7 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
 
     if (selectedIdx === Number(correctIdx)) {
         playDing();
-        arena.score += (10 + arena.timer); // Speed Bonus Points
+        arena.score += (10 + arena.timer);
         if (typeof confetti === "function") confetti({ particleCount: 35, spread: 40, origin: { y: 0.7 } });
     } else {
         playBuzz();
@@ -1945,7 +1998,7 @@ function showArenaResult(room) {
 }
 
 /* =====================================================
-COMMUNITY FEED JAVASCRIPT (WITH FILTER PILLS)
+COMMUNITY FEED JAVASCRIPT
 ===================================================== */
 let currentFeedFilterSubject = 'All';
 
@@ -1973,8 +2026,8 @@ async function loadFeedPosts() {
             <div class="feed-card" id="post-${p.id}">
                 <div class="feed-card-header">
                     <div>
-                        <div class="feed-author">${escapeHTML(p.author_name)}</div>
-                        <div class="feed-school">${escapeHTML(p.institution)} &bull; Class ${escapeHTML(p.student_class)}</div>
+                        <div class="feed-author">${escapeHTML(p.author_name || 'Anonymous Student')}</div>
+                        <div class="feed-school">${escapeHTML(p.institution || 'CBSE School')} &bull; Class ${escapeHTML(p.student_class)}</div>
                     </div>
                     <span class="feed-badge">${escapeHTML(p.subject)}</span>
                 </div>
@@ -2002,13 +2055,15 @@ async function loadFeedPosts() {
 }
 
 document.getElementById('btnPublishPost').onclick = async () => {
-    const name = document.getElementById('feedAuthorName').value.trim();
-    const inst = document.getElementById('feedInstitution').value.trim();
+    let name = document.getElementById('feedAuthorName').value.trim();
+    let inst = document.getElementById('feedInstitution').value.trim();
     const cls = document.getElementById('feedClass').value;
     const sub = document.getElementById('feedSubject').value;
     const content = document.getElementById('feedContent').value.trim();
 
-    if (!name || !inst || !content) return alert("Please complete Name, School/Coaching, and Post Content.");
+    if (!content) return alert("Please enter post content.");
+    if (!name) name = "Anonymous Peer";
+    if (!inst) inst = "CBSE School";
 
     localStorage.setItem('student_name', name);
     localStorage.setItem('student_inst', inst);
