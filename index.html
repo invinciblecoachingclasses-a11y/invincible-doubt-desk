@@ -103,6 +103,17 @@ GAMIFIED PLAYER HUD HEADER
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+.help-guide-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.help-guide-badge:hover { background: rgba(245, 158, 11, 0.25); transform: translateY(-1px); }
 .live-ping {
   display: inline-flex; align-items: center; gap: 5px;
   background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);
@@ -353,6 +364,63 @@ GAMIFIED PLAYER HUD HEADER
   overflow-y: auto;
 }
 
+/* =====================================================
+NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
+===================================================== */
+.quest-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(4, 7, 14, 0.9);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+}
+.quest-modal-card {
+  width: min(520px, 94%);
+  background: linear-gradient(145deg, #0d1527, #070b14);
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
+  border-radius: 28px;
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+}
+.quest-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
+.quest-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+.quest-options-grid { display: flex; flex-direction: column; gap: 12px; }
+.quest-choice-btn {
+  background: #111a2e;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+.quest-choice-btn:hover { background: #18243e; border-color: var(--accent-cyan); transform: translateY(-2px); }
+.quest-choice-icon { font-size: 26px; }
+.quest-choice-heading { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.quest-choice-desc { font-size: 11px; color: var(--text-muted); }
+
+/* In-Tab Visual Mini-Guides for Beginners */
+.feature-mini-guide {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px dashed rgba(6, 182, 212, 0.3);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.feature-mini-guide strong { color: var(--accent-cyan); font-weight: 800; }
+
 /* DAILY BRAIN TEASER (QUEST CARD) */
 .puzzle-banner {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
@@ -393,25 +461,29 @@ GAMIFIED PLAYER HUD HEADER
 .leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
 .leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
 
-/* GAME MODE SWITCH (BENTO STYLE) */
+/* GAME MODE SWITCH WITH SUB-LABELS */
 .mode-switch {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;
 }
 .mode-btn {
-  padding: 14px 6px;
+  padding: 12px 6px;
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   background: rgba(15, 23, 42, 0.6);
   color: var(--text-muted);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 800;
   cursor: pointer;
   text-align: center;
   backdrop-filter: blur(8px);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+.mode-btn-title { font-size: 13px; font-weight: 800; }
+.mode-btn-sub { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
 .mode-btn:hover { background: var(--bg-surface); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
 .mode-btn.active {
   background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9));
@@ -419,18 +491,21 @@ GAMIFIED PLAYER HUD HEADER
   border-color: var(--accent-cyan);
   box-shadow: 0 0 20px var(--cyan-glow);
 }
+.mode-btn.active .mode-btn-sub { color: #cbd5e1; }
 .mode-btn.arena-btn.active {
   background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9));
   color: var(--accent-rose);
   border-color: var(--accent-rose);
   box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
 }
+.mode-btn.arena-btn.active .mode-btn-sub { color: #fecdd3; }
 .mode-btn.feed-btn.active {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9));
   color: var(--accent-purple);
   border-color: var(--accent-purple);
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
 }
+.mode-btn.feed-btn.active .mode-btn-sub { color: #e9d5ff; }
 
 /* CARDS & INPUTS */
 .card {
@@ -661,6 +736,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <div style="font-size:12px; color:var(--text-muted); font-weight:700;">Cyber Academic Battleground</div>
         </div>
         <div class="hud-status-badges">
+            <span class="help-guide-badge" onclick="document.getElementById('onboardingModal').style.display='flex'">❓ Help Guide</span>
             <span class="level-badge" id="hudPlayerLvl">LVL 12 &bull; PRO</span>
             <div class="live-ping"><span class="ping-dot"></span> LIVE 24/7</div>
         </div>
@@ -717,16 +793,33 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div id="leaderboardList"></div>
 </section>
 
-<!-- 4 MODE SWITCH TABS (BENTO GAMING HUBS) -->
+<!-- 4 MODE SWITCH TABS (WITH SUB-LABELS) -->
 <nav class="mode-switch" aria-label="Academic Navigation Modes">
-    <button type="button" class="mode-btn active" id="doubtModeBtn">⚡ QUEST DESK</button>
-    <button type="button" class="mode-btn" id="testModeBtn">⏱ TIME ATTACK</button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">⚔️ 1v1 PVP</button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">🌟 CLAN FEED</button>
+    <button type="button" class="mode-btn active" id="doubtModeBtn">
+        <span class="mode-btn-title">⚡ QUEST DESK</span>
+        <span class="mode-btn-sub">AI Doubt Solver</span>
+    </button>
+    <button type="button" class="mode-btn" id="testModeBtn">
+        <span class="mode-btn-title">⏱ TIME ATTACK</span>
+        <span class="mode-btn-sub">10-Min Tests</span>
+    </button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">
+        <span class="mode-btn-title">⚔️ 1v1 PVP</span>
+        <span class="mode-btn-sub">Match Rivals</span>
+    </button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">
+        <span class="mode-btn-title">🌟 CLAN FEED</span>
+        <span class="mode-btn-sub">Notes &amp; Vent</span>
+    </button>
 </nav>
 
 <!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
+    <div class="feature-mini-guide">
+        <span>💡</span>
+        <span><strong>Quick Guide:</strong> Type or upload a photo of your problem &bull; Pick an explanation tone &bull; Get instant step-by-step logic.</span>
+    </div>
+
     <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
     <label>Select Subject</label>
     <div class="subjects">
@@ -775,6 +868,11 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 2. TEST SECTION -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
+    <div class="feature-mini-guide">
+        <span>⏱️</span>
+        <span><strong>Quick Guide:</strong> Pick standard test or generate chapter questions &bull; Complete in 10 minutes &bull; Get instant score &amp; weak area diagnosis.</span>
+    </div>
+
     <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
     <div id="testSetup">
         <label>Select Standard Test</label>
@@ -880,6 +978,11 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 3. ARENA SECTION -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
+    <div class="feature-mini-guide">
+        <span>⚔️</span>
+        <span><strong>Quick Guide:</strong> Create a room and share 4-digit code OR tap Solo Bot &bull; 10s per question &bull; Fast correct picks win.</span>
+    </div>
+
     <div id="arenaSetup">
         <div class="arena-header">
             <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
@@ -906,6 +1009,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
+
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Solo Mode: Practice vs. Invincible Bot</button>
     </div>
 
     <div id="arenaWaiting" class="hidden lobby-box">
@@ -945,6 +1050,11 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 4. COMMUNITY FEED -->
 <section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
+    <div class="feature-mini-guide">
+        <span>🌟</span>
+        <span><strong>Quick Guide:</strong> Share study notes or questions &bull; Use Midnight Vent for casual peer chat &bull; Upvote &amp; discuss solutions.</span>
+    </div>
+
     <div class="feed-header">
         <h2 class="feed-title">🌟 Academic Community Feed</h2>
         <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Collaborate, share study notes, and solve tricky peer problems.</div>
@@ -1004,6 +1114,41 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 </div>
 
 </main>
+
+<!-- ONBOARDING QUEST POPUP -->
+<div class="quest-modal-overlay" id="onboardingModal">
+    <div class="quest-modal-card">
+        <h2 class="quest-title">🎮 CHOOSE YOUR STARTING QUEST</h2>
+        <div class="quest-subtitle">Welcome to Invincible 360. What do you want to accomplish right now?</div>
+
+        <div class="quest-options-grid">
+            <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
+                <div class="quest-choice-icon">⚡</div>
+                <div>
+                    <div class="quest-choice-heading">I'm Stuck on a Homework Question</div>
+                    <div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div>
+                </div>
+            </div>
+
+            <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
+                <div class="quest-choice-icon">⚔️</div>
+                <div>
+                    <div class="quest-choice-heading">I Want to Battle a Friend / Bot</div>
+                    <div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div>
+                </div>
+            </div>
+
+            <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
+                <div class="quest-choice-icon">⏱️</div>
+                <div>
+                    <div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div>
+                    <div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Skip &amp; Explore on My Own</button>
+    </div>
+</div>
 
 <!-- MODAL: POST STUDY STORY -->
 <div class="modal-overlay" id="storyModal">
@@ -1174,6 +1319,21 @@ function switchTab(tab) {
     feedSection.classList.add('hidden');
     document.getElementById(tab + 'Section').classList.remove('hidden');
 }
+
+/* =====================================================
+ONBOARDING QUEST CONTROLLER
+===================================================== */
+function checkOnboarding() {
+    if (!localStorage.getItem('invincible_onboarded')) {
+        document.getElementById('onboardingModal').style.display = 'flex';
+    }
+}
+function selectStartingQuest(quest) {
+    localStorage.setItem('invincible_onboarded', 'true');
+    document.getElementById('onboardingModal').style.display = 'none';
+    switchTab(quest);
+}
+setTimeout(checkOnboarding, 800);
 
 /* =====================================================
 24-HOUR STUDY STORIES ENGINE + VIEWER LOGGING
@@ -1998,9 +2158,29 @@ whatsappShareBtn.addEventListener("click", function(){
 });
 
 /* =====================================================
-ARENA 1v1 LOGIC
+ARENA 1v1 LOGIC (WITH SOLO BOT PRACTICE ENGINE)
 ===================================================== */
-let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null };
+let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
+
+function startBotMatch() {
+    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
+    const cls = document.getElementById('arenaClass').value || '10';
+
+    let sampleBank = testBank[cls + "|Physics"] || testBank["10|Physics"];
+    let firstTestKey = Object.keys(sampleBank)[0];
+    let questions = sampleBank[firstTestKey] || [];
+
+    arena.isBotMatch = true;
+    arena.name = name;
+    arena.playerNum = 1;
+    arena.score = 0;
+    arena.botScore = 0;
+    arena.questions = questions.slice(0, 10);
+
+    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`;
+    document.getElementById('uiP2Name').innerHTML = `🤖 Invincible Bot <span id="uiP2Score">0</span>`;
+    startArenaGame();
+}
 
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
@@ -2018,7 +2198,7 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
+        arena.isBotMatch = false; arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
 
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
@@ -2044,7 +2224,7 @@ document.getElementById('btnJoinRoom').onclick = async () => {
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+        arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
 
         document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
         document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
@@ -2056,6 +2236,7 @@ document.getElementById('btnJoinRoom').onclick = async () => {
 };
 
 async function pollRoomState() {
+    if (arena.isBotMatch) return;
     try {
         const res = await fetch('/api/arena', {
             method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -2133,21 +2314,38 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
         setTimeout(() => card.classList.remove('arena-shake'), 400);
     }
 
-    fetch('/api/arena', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
-    });
+    if (arena.isBotMatch) {
+        if (Math.random() > 0.3) { arena.botScore += (10 + Math.floor(Math.random() * 8)); }
+        document.getElementById('uiP1Score').textContent = arena.score;
+        document.getElementById('uiP2Score').textContent = arena.botScore;
+        const total = arena.score + arena.botScore;
+        if (total > 0) {
+            const p1Pct = Math.round((arena.score / total) * 100);
+            document.getElementById('vsFillP1').style.width = p1Pct + '%';
+            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
+        }
+    } else {
+        fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
+        });
+    }
+
     arena.currentQ++; loadArenaQuestion();
 }
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
-    document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
-    document.getElementById('arenaResult').classList.remove('hidden');
-    fetch('/api/arena', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
-    });
+    if (arena.isBotMatch) {
+        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible Bot", player2_score: arena.botScore });
+    } else {
+        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
+        document.getElementById('arenaResult').classList.remove('hidden');
+        fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
+        });
+    }
 }
 
 function showArenaResult(room) {
@@ -2155,6 +2353,8 @@ function showArenaResult(room) {
     const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
     document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
+    document.getElementById('arenaResult').classList.remove('hidden');
+
     if (myScore > opScore) {
         playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
         if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
