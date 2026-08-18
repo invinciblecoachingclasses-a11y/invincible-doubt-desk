@@ -4,986 +4,386 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- GOOGLE SEARCH CONSOLE SITE VERIFICATION -->
-<meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
+<title>Invincible 360 | Complete Academic Ecosystem</title>
+<meta name="description" content="Prepare for CBSE Board exams with Invincible 360. Access doubt solving, weekly tests, 1v1 Live Arena Battles, and peer student community feed.">
 
-<!-- =====================================================
-SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
-===================================================== -->
-<title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
-<meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant AI doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
-<meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-<meta name="author" content="Invincible Coaching Classes">
-<link rel="canonical" href="https://invincible-doubt-desk.vercel.app/">
-
-<!-- OPEN GRAPH (FACEBOOK, LINKEDIN, WHATSAPP PREVIEWS) -->
-<meta property="og:locale" content="en_US">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Invincible 360 | Complete Academic Intelligence Hub">
-<meta property="og:description" content="Instant step-by-step doubt solving, custom weekly tests, 1v1 rapid-fire knowledge battles, and active CBSE peer discussion.">
-<meta property="og:url" content="https://invincible-doubt-desk.vercel.app/">
-<meta property="og:site_name" content="Invincible 360">
-<meta property="og:image" content="https://invincible-doubt-desk.vercel.app/assets/og-preview.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Invincible 360 Academic Intelligence Platform">
-
-<!-- TWITTER CARD -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Invincible 360 | CBSE Board Exam Preparation & Doubt Solver">
-<meta name="twitter:description" content="Instant doubt solver, chapter mock tests, 1v1 Arena battles, and peer feed for CBSE Class 9-12.">
-<meta name="twitter:image" content="https://invincible-doubt-desk.vercel.app/assets/og-preview.jpg">
-
-<!-- STRUCTURED DATA: SCHEMA.ORG JSON-LD FOR GOOGLE RICH SNIPPETS -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "EducationalOrganization",
-      "@id": "https://invincible-doubt-desk.vercel.app/#organization",
-      "name": "Invincible Coaching Classes",
-      "url": "https://invincible-doubt-desk.vercel.app/",
-      "logo": "https://invincible-doubt-desk.vercel.app/assets/logo.png",
-      "description": "Comprehensive academic intelligence hub providing doubt solving, mock testing, and peer learning for CBSE students."
-    },
-    {
-      "@type": "WebApplication",
-      "@id": "https://invincible-doubt-desk.vercel.app/#webapp",
-      "name": "Invincible 360",
-      "url": "https://invincible-doubt-desk.vercel.app/",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "All",
-      "description": "Online academic intelligence app with live doubt breakdown, chapter test generator, and 1v1 battle arena.",
-      "publisher": {
-        "@id": "https://invincible-doubt-desk.vercel.app/#organization"
-      }
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://invincible-doubt-desk.vercel.app/#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "How does Invincible 360 help in CBSE exam preparation?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Invincible 360 provides instant step-by-step solutions to science and math doubts, automated customized practice mock tests for Classes 9-12, competitive 1v1 Live Arena battles, and a collaborative peer feed."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I solve academic doubts using photo uploads?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, you can snap a photo or upload an image of your Physics, Chemistry, Biology, or Mathematics question directly to the Doubt Desk for instant conceptual breakdowns."
-          }
-        }
-      ]
-    }
-  ]
-}
-</script>
-
-<!-- FONTS & CONFETTI -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- CONFETTI LIBRARY -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
-:root {
-  --bg-main: #0a0e17;
-  --bg-card: #111827;
-  --bg-surface: #1a2234;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: #06b6d4;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --cyan-glow: rgba(6, 182, 212, 0.15);
-  --accent-cyan: #06b6d4;
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
-  --accent-purple: #a855f7;
-  --accent-emerald: #10b981;
-}
+*{ box-sizing:border-box; transition: all 0.2s ease-in-out; }
+body{ margin:0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background:#0f172a; color:#f8fafc; }
+.container{ width:min(760px, 94%); margin:25px auto; }
 
-* {
-  box-sizing: border-box;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+/* BRAND BANNER */
+.brand-banner{
+background: linear-gradient(135deg, #1e293b, #0f172a);
+color:white; border-radius:24px; padding:28px 20px; text-align:center; margin-bottom:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.4); border: 1px solid rgba(56, 189, 248, 0.2); position: relative; overflow: hidden;
 }
-
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-.container {
-  width: min(780px, 92%);
-  margin: 28px auto 60px;
-}
+.brand-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #38bdf8, #6366f1, #ec4899); }
+.brand-name{ font-size:28px; font-weight:900; letter-spacing:1px; margin:0; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.brand-tagline{ font-size:14px; font-style:italic; margin-top:6px; color:#94a3b8; }
+.brand-line{ height:1px; background:rgba(255,255,255,.1); margin:16px auto; width:80%; }
+.brand-subjects{ font-size:13px; font-weight:700; letter-spacing:.5px; color:#cbd5e1; }
+.brand-message{ margin-top:10px; font-size:12px; color:#38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
 /* =====================================================
-BRAND HEADER (AUTHENTIC & PREMIUM)
-===================================================== */
-.brand-banner {
-  background: radial-gradient(120% 120% at 50% 0%, #1e293b 0%, #0f172a 100%);
-  border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 32px 24px;
-  text-align: center;
-  margin-bottom: 24px;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
-  position: relative;
-  overflow: hidden;
-}
-
-.brand-banner::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #06b6d4, #6366f1, #ec4899, #f59e0b);
-}
-
-.brand-badge-top {
-  display: inline-block;
-  background: var(--cyan-glow);
-  color: var(--accent-cyan);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 10px;
-  border: 1px solid rgba(6, 182, 212, 0.3);
-}
-
-.brand-name {
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-tagline {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-top: 6px;
-  font-weight: 500;
-}
-
-.brand-pills {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 18px;
-}
-
-.brand-pill {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #cbd5e1;
-  border: 1px solid var(--border-subtle);
-}
-
-/* =====================================================
-DAILY BRAIN TEASER CARD
+UPGRADED INTERACTIVE BRAIN TEASER CARD
 ===================================================== */
 .puzzle-banner {
-  background: linear-gradient(145deg, #181d2a, #111827);
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15);
-  position: relative;
+background: linear-gradient(145deg, #1e293b, #111827);
+border: 2px solid #f59e0b;
+border-radius: 20px;
+padding: 22px;
+margin-bottom: 22px;
+box-shadow: 0 10px 30px rgba(245, 158, 11, 0.18);
+position: relative;
 }
 
 .puzzle-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 12px;
 }
 
 .puzzle-badge {
-  background: rgba(245, 158, 11, 0.12);
-  color: var(--accent-amber);
-  font-weight: 800;
-  font-size: 11px;
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  letter-spacing: .5px;
-  text-transform: uppercase;
+background: rgba(245, 158, 11, 0.15);
+color: #f59e0b;
+font-weight: 900;
+font-size: 11px;
+padding: 5px 10px;
+border-radius: 20px;
+border: 1px solid #f59e0b;
+letter-spacing: .5px;
+text-transform: uppercase;
+display: inline-flex;
+align-items: center;
+gap: 5px;
 }
 
 .puzzle-streak {
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--accent-cyan);
-  font-weight: 800;
-  font-size: 12px;
-  padding: 5px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(6, 182, 212, 0.3);
+background: rgba(56, 189, 248, 0.15);
+color: #38bdf8;
+font-weight: 800;
+font-size: 12px;
+padding: 5px 10px;
+border-radius: 20px;
+border: 1px solid #38bdf8;
 }
 
 .puzzle-q-en {
-  font-size: 17px;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.6;
-  margin-bottom: 6px;
+font-size: 18px;
+font-weight: 800;
+color: #ffffff;
+line-height: 1.5;
+margin-bottom: 6px;
 }
 
 .puzzle-q-hi {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 18px;
+font-size: 14px;
+color: #94a3b8;
+line-height: 1.4;
+margin-bottom: 16px;
 }
 
+/* Quick-Tap Options Grid */
 .puzzle-options-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 16px;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 8px;
+margin-bottom: 14px;
 }
 
 .puzzle-opt-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-main);
-  font-size: 16px;
-  font-weight: 700;
-  padding: 12px 6px;
-  border-radius: 12px;
-  cursor: pointer;
-  text-align: center;
+background: #0f172a;
+border: 2px solid #334155;
+color: #f8fafc;
+font-size: 16px;
+font-weight: 800;
+padding: 12px 6px;
+border-radius: 12px;
+cursor: pointer;
+text-align: center;
 }
 
 .puzzle-opt-btn:hover {
-  border-color: var(--accent-amber);
-  background: #232d42;
-  transform: translateY(-2px);
+border-color: #f59e0b;
+background: #1e293b;
+transform: translateY(-2px);
 }
 
 .puzzle-opt-btn.correct-pick {
-  background: rgba(16, 185, 129, 0.15) !important;
-  border-color: var(--accent-emerald) !important;
-  color: var(--accent-emerald) !important;
+background: rgba(52, 211, 153, 0.2) !important;
+border-color: #34d399 !important;
+color: #34d399 !important;
 }
 
 .puzzle-opt-btn.wrong-pick {
-  background: rgba(244, 63, 94, 0.15) !important;
-  border-color: var(--accent-rose) !important;
-  color: var(--accent-rose) !important;
+background: rgba(248, 113, 113, 0.2) !important;
+border-color: #f87171 !important;
+color: #f87171 !important;
 }
 
 .puzzle-actions-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 12px;
+margin-top: 14px;
 }
 
 .puzzle-toggle-btn {
-  background: var(--accent-amber);
-  color: #0f172a;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 13px;
-  cursor: pointer;
+background: #f59e0b;
+color: #0f172a;
+border: none;
+padding: 8px 16px;
+border-radius: 10px;
+font-weight: 800;
+font-size: 13px;
+cursor: pointer;
+}
+
+#puzzleFeedback {
+font-size: 13px;
+font-weight: 800;
+line-height: 1.4;
+display: block;
+width: 100%;
 }
 
 .puzzle-solution {
-  display: none;
-  margin-top: 14px;
-  padding: 16px;
-  background: rgba(10, 14, 23, 0.8);
-  border-radius: 12px;
-  border-left: 3px solid var(--accent-amber);
-  font-size: 14px;
-  line-height: 1.6;
-  color: #e2e8f0;
+display: none;
+margin-top: 14px;
+padding: 14px;
+background: rgba(15, 23, 42, 0.7);
+border-radius: 12px;
+border: 1px dashed #f59e0b;
+font-size: 14px;
+line-height: 1.6;
+color: #e2e8f0;
 }
 
-/* =====================================================
-NAVIGATION BAR / MODE SWITCH DOCK
-===================================================== */
-.mode-switch {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  background: #0f1523;
-  padding: 6px;
-  border-radius: 18px;
-  border: 1px solid var(--border-subtle);
-  margin-bottom: 24px;
-}
-
-.mode-btn {
-  padding: 12px 6px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-}
-
-.mode-btn.active {
-  background: var(--bg-surface);
-  color: var(--accent-cyan);
-  border-color: var(--border-focus);
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15);
-}
-
-.mode-btn.arena-btn.active {
-  color: var(--accent-rose);
-  border-color: var(--accent-rose);
-  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
-}
-
-.mode-btn.feed-btn.active {
-  color: var(--accent-purple);
-  border-color: var(--accent-purple);
-  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.15);
-}
-
-/* =====================================================
-CARDS & FORM CONTROLS
-===================================================== */
-.card {
-  background: var(--bg-card);
-  padding: 28px;
-  border-radius: 24px;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5);
-}
-
-.section-h2 {
-  font-size: 20px;
-  font-weight: 800;
-  margin: 0 0 14px 0;
-  color: #ffffff;
-}
-
-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #cbd5e1;
-}
-
-.subjects {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.subject {
-  padding: 12px 8px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-surface);
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-}
-
-.subject.active {
-  background: rgba(6, 182, 212, 0.1);
-  color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-}
-
-textarea, input, select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  font-size: 15px;
-  background: var(--bg-surface);
-  color: #ffffff;
-  outline: none;
-  font-family: inherit;
-  margin-bottom: 14px;
-}
-
-textarea:focus, input:focus, select:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--cyan-glow);
-}
-
-.photo-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.photo-btn {
-  padding: 12px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-surface);
-  color: #cbd5e1;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.ask-btn, .submit-test-btn, .generate-btn {
-  width: 100%;
-  margin-top: 8px;
-  padding: 16px;
-  border: none;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  letter-spacing: .5px;
-}
-
-.generate-btn {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: #0f172a;
-}
-
-.ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-/* =====================================================
-OUTPUT & FEEDBACK
-===================================================== */
-.answer-box {
-  display: none;
-  margin-top: 24px;
-  padding: 24px;
-  background: #0d131f;
-  border-radius: 18px;
-  border: 1px solid var(--border-subtle);
-}
-
-.logic-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--accent-cyan);
-  margin-bottom: 12px;
-}
-
-.answer-text {
-  white-space: pre-wrap;
-  font-size: 15px;
-  line-height: 1.7;
-  color: #cbd5e1;
-}
-
-.feedback {
-  display: none;
-  margin-top: 20px;
-}
-
-.feedback-title {
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: var(--text-muted);
-}
-
-.feedback-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.feedback-btn {
-  padding: 12px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
-  color: #e2e8f0;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.teacher-btn {
-  background: var(--cyan-glow);
-  color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-}
-
-/* =====================================================
-TEST GENERATOR & EXAM ROOM
-===================================================== */
-.test-info {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 16px;
-  margin: 16px 0;
-  color: #cbd5e1;
-}
-
-.generator-box {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.generator-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.generator-subtitle {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-
-.generator-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.full { grid-column: 1 / -1; }
-
-.timer-box {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--accent-rose);
-  text-align: center;
-  padding: 10px;
-  border: 1px solid var(--accent-rose);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  background: rgba(244, 63, 94, 0.08);
-}
-
-.question-card {
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 20px;
-  margin: 16px 0;
-  background: var(--bg-surface);
-}
-
-.question-number {
-  color: var(--accent-cyan);
-  font-weight: 800;
-  font-size: 12px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-
-.question-text {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 16px;
-}
-
-.option {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  margin: 8px 0;
-  cursor: pointer;
-  font-size: 14px;
-  background: #151c2c;
-}
-
-.option:hover {
-  background: #1c263c;
-  border-color: var(--accent-cyan);
-}
-
-.test-result {
-  display: none;
-  padding: 24px;
-  margin-top: 20px;
-  background: #0d131f;
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-}
-
-.score-box {
-  text-align: center;
-  border-bottom: 1px solid var(--border-subtle);
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-}
-
-.score {
-  font-size: 44px;
-  font-weight: 900;
-  color: var(--accent-cyan);
-}
-
-.badges-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin: 14px 0;
-}
-
-.badge {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.badge.scholar { background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
-.badge.speedster { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
-.badge.sharp { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
-
-.review-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 14px;
-}
-
-.review-correct { color: var(--accent-emerald); font-weight: 800; }
-.review-wrong { color: var(--accent-rose); font-weight: 800; }
-
-.review-explanation {
-  margin-top: 10px;
-  padding: 12px;
-  background: #0d131f;
-  border-left: 3px solid var(--accent-cyan);
-  border-radius: 6px;
-  font-size: 13px;
-  color: #e2e8f0;
-}
-
-.restart-btn {
-  margin-top: 10px;
-  padding: 14px;
-  border: 1px solid var(--accent-cyan);
-  border-radius: 12px;
-  background: transparent;
-  color: var(--accent-cyan);
-  font-weight: 800;
-  cursor: pointer;
-  width: 100%;
-}
-
-.whatsapp-btn {
-  background: #25D366 !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-
-/* =====================================================
-ARENA (1v1)
-===================================================== */
-.arena-header { text-align: center; margin-bottom: 18px; }
-.arena-title { font-size: 22px; font-weight: 900; color: var(--accent-rose); }
-.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-
-.arena-btn-create {
-  background: linear-gradient(135deg, #e11d48, #be123c);
-  color: #ffffff;
-  padding: 16px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  width: 100%;
-}
-
-.arena-btn-join {
-  background: linear-gradient(135deg, #059669, #047857);
-  color: #ffffff;
-  padding: 16px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  width: 100%;
-}
-
-.lobby-box {
-  text-align: center;
-  padding: 28px 16px;
-  background: #0d131f;
-  border-radius: 16px;
-  border: 1px dashed var(--accent-rose);
-}
-
-.room-code-display {
-  font-size: 40px;
-  font-weight: 900;
-  color: var(--accent-rose);
-  letter-spacing: 4px;
-  margin: 12px 0;
-}
-
-.vs-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0d131f;
-  padding: 14px 20px;
-  border-radius: 14px;
-  border: 1px solid var(--border-subtle);
-  margin-bottom: 16px;
-}
-
-.arena-timer {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--accent-rose);
-  text-align: center;
-  margin-bottom: 12px;
-}
-
-.arena-option {
-  display: block;
-  padding: 14px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  margin: 8px 0;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
-  background: var(--bg-surface);
-  text-align: center;
-}
-
-.arena-option:hover {
-  background: #202b42;
-  border-color: var(--accent-rose);
-}
-
-/* =====================================================
-COMMUNITY FEED
-===================================================== */
-.feed-header { text-align: center; margin-bottom: 18px; }
-.feed-title { font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
-
-.post-composer {
-  background: #0d131f;
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 18px;
-  margin-bottom: 20px;
-}
-
-.feed-card {
-  background: #0d131f;
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 18px;
-  margin-bottom: 14px;
-}
-
-.feed-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
-.feed-author { font-size: 14px; font-weight: 800; color: var(--accent-cyan); }
-.feed-school { font-size: 12px; color: var(--text-muted); }
-.feed-badge {
-  font-size: 11px;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: rgba(168, 85, 247, 0.12);
-  color: var(--accent-purple);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.feed-actions {
-  display: flex;
-  gap: 16px;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
+/* WALL OF FAME */
+.leaderboard-card { background: #1e293b; border: 2px solid #334155; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.leaderboard-title { font-size: 18px; font-weight: 900; color: #38bdf8; margin-bottom: 14px; text-align: center; letter-spacing: .5px; }
+.leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 11px 14px; background: #0f172a; border-radius: 12px; margin-bottom: 8px; font-size: 14px; font-weight: 700; border: 1px solid rgba(255,255,255,0.05); }
+.leaderboard-rank { background: #334155; color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 10px; }
+.leaderboard-rank.first { background: #eab308; color: #0f172a; }
+.leaderboard-rank.second { background: #94a3b8; color: #0f172a; }
+.leaderboard-rank.third { background: #d97706; color: white; }
+.leaderboard-score { color: #34d399; font-weight: 900; }
+
+/* HEADER & MODE SWITCH (4 TABS) */
+.header{ text-align:center; margin-bottom:20px; }
+.header h1{ margin:0; font-size:32px; font-weight:900; color:white; }
+.header p{ margin-top:8px; color:#94a3b8; font-size:15px; }
+
+.mode-switch{ display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; margin-bottom:20px; }
+.mode-btn{ padding:12px 4px; border:2px solid #334155; border-radius:14px; background:#1e293b; color:#38bdf8; font-size:13px; font-weight:800; cursor:pointer; }
+.mode-btn.active{ background: linear-gradient(135deg, #0284c7, #0369a1); color:white; border-color:#38bdf8; }
+.mode-btn.arena-btn { color: #f43f5e; border-color: #9f1239; }
+.mode-btn.arena-btn.active { background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #fb7185; color: white; }
+.mode-btn.feed-btn { color: #c084fc; border-color: #7e22ce; }
+.mode-btn.feed-btn.active { background: linear-gradient(135deg, #9333ea, #7e22ce); border-color: #c084fc; color: white; }
+
+/* CARDS & INPUTS */
+.card{ background:#1e293b; padding:24px; border-radius:24px; box-shadow:0 15px 35px rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,0.05); }
+label{ display:block; font-size:15px; font-weight:700; margin-bottom:10px; color:#e2e8f0; }
+
+.subjects{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.subject{ padding:14px 8px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#38bdf8; font-size:14px; font-weight:700; cursor:pointer; }
+.subject.active{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; font-weight: 900; }
+
+textarea, input, select { width:100%; padding:14px; border:2px solid #334155; border-radius:14px; font-size:15px; background:#0f172a; color:white; outline:none; font-family:inherit; margin-bottom:12px;}
+textarea:focus, input:focus, select:focus{ border-color:#38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+
+.photo-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px; }
+.photo-btn{ padding:14px 10px; border:2px solid #334155; border-radius:14px; background:#0f172a; color:#e2e8f0; font-size:14px; font-weight:700; cursor:pointer; }
+
+.ask-btn, .submit-test-btn, .generate-btn { width:100%; margin-top:8px; padding:16px; border:none; border-radius:16px; background: linear-gradient(135deg, #f97316, #ea580c); color:white; font-size:16px; font-weight:900; cursor:pointer; }
+.generate-btn{ background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0f172a; }
+.ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+/* ANSWER & FEEDBACK */
+.answer-box{ display:none; margin-top:25px; padding:24px; background:#0f172a; border-radius:20px; border:2px solid #334155; }
+.logic-title{ font-size:22px; font-weight:900; color:#38bdf8; margin-bottom:12px; }
+.answer-text{ white-space:pre-wrap; font-size:16px; line-height:1.7; color:#cbd5e1; }
+.feedback{ display:none; margin-top:20px; }
+.feedback-title{ font-size:14px; font-weight:700; margin-bottom:10px; color:#94a3b8; }
+.feedback-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.feedback-btn{ padding:12px 10px; border-radius:12px; border:2px solid #334155; background:#1e293b; color:#e2e8f0; font-weight:700; cursor:pointer; font-size:13px; }
+.teacher-btn{ background:#38bdf8; color:#0f172a; border-color:#38bdf8; }
+
+/* TEST FORM & GENERATOR */
+.test-info{ background:#0f172a; border:2px solid #334155; border-radius:16px; padding:16px; margin:16px 0; color:#cbd5e1; }
+.test-info strong{ color:#38bdf8; }
+.notice{ margin-top:8px; color:#94a3b8; font-size:13px; line-height:1.5; }
+.generator-box{ margin-top:24px; padding-top:24px; border-top:2px solid #334155; }
+.generator-title{ font-size:20px; font-weight:900; color:white; margin-bottom:6px; }
+.generator-subtitle{ font-size:13px; color:#94a3b8; line-height:1.5; margin-bottom:16px; }
+.generator-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.full{ grid-column:1/-1; }
+
+/* QUESTIONS & TIMER */
+.timer-box { font-size: 20px; font-weight: 900; color: #ef4444; text-align: center; padding: 10px; border: 2px solid #ef4444; border-radius: 14px; margin-bottom: 16px; background: rgba(239, 68, 68, 0.1); }
+.question-card{ border:2px solid #334155; border-radius:16px; padding:18px; margin:16px 0; background:#0f172a; }
+.question-number{ color:#38bdf8; font-weight:800; font-size:13px; margin-bottom:6px; text-transform: uppercase; }
+.question-text{ font-size:16px; font-weight:700; line-height:1.5; margin-bottom:14px; color:white; }
+.option{ display:flex; align-items:flex-start; gap:10px; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:14px; line-height:1.4; background:#1e293b; color:#e2e8f0; }
+.option:hover{ background:#283548; border-color:#38bdf8; }
+.option input{ margin-top:2px; width:auto; }
+
+/* RESULT & BADGES */
+.test-result{ display:none; padding:25px 15px; margin-top:20px; background:#0f172a; border:2px solid #334155; border-radius:20px; }
+.score-box { text-align: center; border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 20px; }
+.score{ font-size:42px; font-weight:900; color:#38bdf8; }
+.result-detail{ font-size:15px; line-height:1.7; margin-top:8px; color:#cbd5e1; }
+.badges-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 15px 0; }
+.badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; }
+.badge.scholar { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid #34d399; }
+.badge.speedster { background: rgba(250, 204, 21, 0.15); color: #facc15; border: 1px solid #facc15; }
+.badge.nightowl { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #c084fc; }
+.badge.earlybird { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
+.badge.sharp { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid #fb7185; }
+
+.review-title { font-size: 18px; font-weight: 900; color: white; margin-bottom: 15px; text-align: center; }
+.review-card { background: #1e293b; border: 2px solid #334155; border-radius: 14px; padding: 16px; margin-bottom: 15px; text-align: left; }
+.review-q-num { font-weight: 800; color: #94a3b8; font-size: 13px; margin-bottom: 6px; }
+.review-q-text { font-weight: 700; font-size: 15px; margin-bottom: 12px; color: white; }
+.review-item { margin-bottom: 6px; font-size: 13px; color: #cbd5e1; }
+.review-correct { color: #34d399; font-weight: 800; background: rgba(52, 211, 153, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
+.review-wrong { color: #f87171; font-weight: 800; background: rgba(248, 113, 113, 0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; }
+.review-explanation { margin-top: 10px; padding: 10px; background: #0f172a; border-left: 4px solid #38bdf8; border-radius: 6px; font-size: 13px; line-height: 1.5; color: #e2e8f0; }
+
+.restart-btn{ margin-top:12px; padding:14px 20px; border:2px solid #38bdf8; border-radius:14px; background:transparent; color:#38bdf8; font-weight:800; cursor:pointer; width: 100%; }
+.whatsapp-btn{ background:#25D366 !important; color:white !important; border: none !important; }
+
+/* ARENA (1v1) */
+.arena-header { text-align: center; margin-bottom: 20px; }
+.arena-title { font-size: 24px; font-weight: 900; color: #fb7185; }
+.arena-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; padding-top: 15px; border-top: 2px solid #334155; }
+.arena-btn-create { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
+.arena-btn-join { background: linear-gradient(135deg, #10b981, #047857); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; width: 100%; font-size: 15px;}
+.lobby-box { text-align: center; padding: 25px 15px; background: #0f172a; border-radius: 16px; border: 2px dashed #fb7185; }
+.room-code-display { font-size: 40px; font-weight: 900; color: #fb7185; letter-spacing: 4px; margin: 12px 0; }
+.pulse-text { animation: pulse 1.5s infinite; color: #38bdf8; font-weight: 700; }
+@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+.vs-header { display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 12px; border-radius: 14px; border: 2px solid #334155; margin-bottom: 16px; }
+.player-tag { font-size: 15px; font-weight: 800; display: flex; flex-direction: column; align-items: center; }
+.player-tag span { font-size: 20px; color: #38bdf8; }
+.vs-badge { background: #e11d48; color: white; font-weight: 900; padding: 4px 8px; border-radius: 8px; font-style: italic; font-size: 12px; }
+.arena-timer { font-size: 22px; font-weight: 900; color: #fb7185; text-align: center; margin-bottom: 12px; }
+.arena-option { display:block; padding:14px; border:2px solid #334155; border-radius:12px; margin:8px 0; cursor:pointer; font-size:15px; font-weight: 700; background:#1e293b; color:#e2e8f0; text-align: center; }
+.arena-option:hover { background:#283548; border-color:#38bdf8; }
+.result-box { text-align: center; padding: 15px; }
+.winner-text { font-size: 28px; font-weight: 900; color: #34d399; margin-bottom: 8px; }
+.loser-text { font-size: 28px; font-weight: 900; color: #fb7185; margin-bottom: 8px; }
+
+/* COMMUNITY FEED */
+.feed-header { text-align: center; margin-bottom: 15px; }
+.feed-title { font-size: 24px; font-weight: 900; color: #c084fc; margin:0; }
+.feed-subtitle { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+
+.post-composer { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 20px; }
+.post-composer textarea { min-height: 80px; margin-bottom: 8px; }
+
+.feed-card { background: #0f172a; border: 2px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+.feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.feed-author { font-size: 14px; font-weight: 800; color: #38bdf8; }
+.feed-school { font-size: 12px; color: #94a3b8; font-weight: normal; margin-top: 2px; }
+.feed-badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px; background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid #c084fc; }
+
+.feed-content { font-size: 15px; line-height: 1.5; color: #f1f5f9; margin-bottom: 12px; white-space: pre-wrap; }
+.feed-image { max-width: 100%; max-height: 280px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #334155; object-fit: contain; }
+
+.feed-actions { display: flex; gap: 15px; border-top: 1px solid #1e293b; padding-top: 10px; font-size: 13px; font-weight: 700; color: #94a3b8; }
 .action-btn { cursor: pointer; display: flex; align-items: center; gap: 5px; }
-.action-btn:hover { color: var(--text-main); }
-.action-btn.report:hover { color: var(--accent-rose); }
+.action-btn:hover { color: #38bdf8; }
+.action-btn.report:hover { color: #f87171; }
 
-.comments-drawer {
-  display: none;
-  margin-top: 14px;
-  border-top: 1px dashed var(--border-subtle);
-  padding-top: 14px;
-}
+.comments-drawer { display: none; margin-top: 12px; border-top: 1px dashed #334155; padding-top: 12px; }
+.comment-item { background: #1e293b; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
+.comment-author { font-weight: 800; color: #38bdf8; font-size: 12px; margin-bottom: 2px; }
 
-.comment-item {
-  background: var(--bg-surface);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  font-size: 13px;
-}
+.footer{ text-align:center; color:#64748b; margin:30px 0; font-size:13px; line-height:1.6; }
+.footer-brand{ font-weight:800; color:#94a3b8; }
+.hidden{ display:none!important; }
 
-/* =====================================================
-LEADERBOARD & FOOTER
-===================================================== */
-.leaderboard-card {
-  background: #0d131f;
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
-
-.leaderboard-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--accent-cyan);
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.leaderboard-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 14px;
-  background: var(--bg-surface);
-  border-radius: 10px;
-  margin-bottom: 6px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.leaderboard-rank {
-  background: rgba(255, 255, 255, 0.1);
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 800;
-  margin-right: 8px;
-}
-
-.leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
-.leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
-
-.footer {
-  text-align: center;
-  color: #64748b;
-  margin: 40px 0;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.hidden { display: none !important; }
-
-@media (max-width: 600px) {
-  .mode-switch { grid-template-columns: 1fr 1fr; }
-  .subjects { grid-template-columns: 1fr; }
-  .photo-buttons { grid-template-columns: 1fr; }
-  .generator-grid { grid-template-columns: 1fr; }
-  .arena-grid { grid-template-columns: 1fr; }
-  .puzzle-options-grid { grid-template-columns: 1fr 1fr; }
+@media(max-width:600px){
+.container{ width:95%; margin:12px auto; }
+.card{ padding:16px; }
+.mode-switch{ grid-template-columns: 1fr 1fr; gap:6px; }
+.subjects{ grid-template-columns:1fr; }
+.photo-buttons{ grid-template-columns:1fr; }
+.generator-grid{ grid-template-columns:1fr; }
+.full{ grid-column:auto; }
+.arena-grid { grid-template-columns: 1fr; }
+.puzzle-options-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 
 <body>
 
-<main class="container">
+<div class="container">
 
-<!-- BRAND BANNER / PRIMARY H1 -->
-<header class="brand-banner">
-    <div class="brand-badge-top">Academic Platform</div>
-    <h1 class="brand-name">INVINCIBLE 360</h1>
-    <div class="brand-tagline">CBSE & Competitive Academic Intelligence Hub</div>
-    <div class="brand-pills">
-        <span class="brand-pill">Physics</span>
-        <span class="brand-pill">Chemistry</span>
-        <span class="brand-pill">Mathematics</span>
-        <span class="brand-pill">Biology</span>
-    </div>
-</header>
+<div class="brand-banner">
+    <div class="brand-name">INVINCIBLE 360</div>
+    <div class="brand-tagline">Complete Academic & Competitive Intelligence Ecosystem</div>
+    <div class="brand-line"></div>
+    <div class="brand-subjects">PHYSICS &nbsp;•&nbsp; CHEMISTRY &nbsp;•&nbsp; MATHEMATICS &nbsp;•&nbsp; BIOLOGY</div>
+    <div class="brand-message">Smart Doubt Desk • Live Weekly Tests • Analytics • Daily Mastery</div>
+</div>
 
-<!-- UPGRADED DAILY BRAIN TEASER -->
-<section class="puzzle-banner" id="puzzleBox" style="display:none;" aria-label="Daily Academic Brain Teaser">
+<!-- =====================================================
+UPGRADED INTERACTIVE DAILY BRAIN TEASER
+===================================================== -->
+<div class="puzzle-banner" id="puzzleBox" style="display:none;">
     <div class="puzzle-top-bar">
-        <div class="puzzle-badge">🔥 95% Get This Wrong</div>
-        <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
+        <div class="puzzle-badge">🔥 95% STUDENTS GET THIS WRONG</div>
+        <div class="puzzle-streak" id="puzzleStreak">⚡ 3-Day Streak</div>
     </div>
     
     <div class="puzzle-q-en" id="puzzleQuestionEn">Loading daily teaser...</div>
     <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
     
+    <!-- Interactive Option Buttons -->
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
 
     <div class="puzzle-actions-bar">
-        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
+        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Teacher Logic</button>
     </div>
     <div id="puzzleFeedback" style="margin-top: 10px;"></div>
+
     <div class="puzzle-solution" id="puzzleSolution"></div>
-</section>
+</div>
 
-<!-- WALL OF FAME (TOP SCORERS) -->
-<section class="leaderboard-card" id="leaderboardBox" style="display:none;" aria-label="Top Scorers Leaderboard">
-    <div class="leaderboard-title">🏆 Platform Top Scorers</div>
+<!-- WALL OF FAME -->
+<div class="leaderboard-card" id="leaderboardBox" style="display:none;">
+    <div class="leaderboard-title">🏆 Top Scorers (Wall of Fame)</div>
     <div id="leaderboardList"></div>
-</section>
+</div>
 
-<!-- 4 MODE SWITCH TABS -->
-<nav class="mode-switch" aria-label="Academic Navigation Modes">
+<div class="header">
+    <h1>Student Hub</h1>
+    <p>Ask doubts, take timed exams, battle a peer, or share thoughts in the feed.</p>
+</div>
+
+<!-- 4 MAIN MODES -->
+<div class="mode-switch">
     <button type="button" class="mode-btn active" id="doubtModeBtn">DOUBT DESK</button>
-    <button type="button" class="mode-btn" id="testModeBtn">EXAM SUITE</button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">1v1 ARENA</button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">PEER FEED</button>
-</nav>
+    <button type="button" class="mode-btn" id="testModeBtn">TAKE A TEST</button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">ARENA (1v1)</button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">COMMUNITY FEED</button>
+</div>
 
 <!-- =====================================================
 1. DOUBT SECTION
 ===================================================== -->
-<section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
-    <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
+<div class="card" id="doubtSection">
     <label>Select Subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
@@ -992,42 +392,40 @@ LEADERBOARD & FOOTER
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your academic doubt here (English / Hindi)..."></textarea>
+    <textarea id="question" placeholder="Type your question here... English or Hindi."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
-    
     <div class="photo-buttons">
-        <button type="button" class="photo-btn" id="cameraBtn">📷 Take Photo</button>
-        <button type="button" class="photo-btn" id="uploadBtn">📁 Upload Image</button>
+        <button type="button" class="photo-btn" id="cameraBtn">Take Photo</button>
+        <button type="button" class="photo-btn" id="uploadBtn">Upload Photo</button>
     </div>
-    <img id="imagePreview" alt="Preview of uploaded academic doubt question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
-    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
+    <img id="imagePreview" alt="Selected question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:2px solid #334155;">
+    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:#ef4444; font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">GET SOLUTION</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Solution...</div>
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:#38bdf8; margin-top:15px; font-weight:bold;">Thinking...</div>
     
     <div class="answer-box" id="answerBox">
-        <div class="logic-title">Conceptual Breakdown</div>
+        <div class="logic-title">Aao Logic Samjhate Hain</div>
         <div class="answer-text" id="answerText"></div>
         <div class="feedback" id="feedback">
-            <div class="feedback-title">Need further clarity?</div>
+            <div class="feedback-title">Still confused?</div>
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Explain Simpler</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Assistance</button>
+                <button type="button" class="feedback-btn" id="againBtn">Not Satisfied — Explain Again</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Help</button>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 <!-- =====================================================
 2. TEST SECTION
 ===================================================== -->
-<section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-    <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
+<div class="card hidden" id="testSection">
     <div id="testSetup">
-        <label>Select Standard Test</label>
+        <label>Take an Automated Test</label>
         <div>
             <input id="studentName" type="text" placeholder="Student Name">
-            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
+            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="Mobile Number">
 
             <select id="testClass">
                 <option value="">Select Class</option>
@@ -1051,15 +449,15 @@ LEADERBOARD & FOOTER
         </div>
 
         <div class="test-info">
-            <strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your Class and Subject selection.</div>
+            <strong>Live Weekly Tests</strong>
+            <div class="notice">Select your class and subject to see available tests loaded securely from the database.</div>
         </div>
 
-        <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
+        <button type="button" class="submit-test-btn" id="startTestBtn">START TEST</button>
 
         <div class="generator-box">
-            <div class="generator-title">Custom Practice Generator</div>
-            <div class="generator-subtitle">Configure class, subject, and chapter to generate a customized practice set.</div>
+            <div class="generator-title">Custom Test Generator</div>
+            <div class="generator-subtitle">Choose class, subject, and chapter to generate a customized practice test.</div>
             <div class="generator-grid">
                 <select id="genClass">
                     <option value="">Select Class</option>
@@ -1077,7 +475,7 @@ LEADERBOARD & FOOTER
                     <option value="Biology">Biology</option>
                 </select>
 
-                <input class="full" id="genChapter" type="text" placeholder="Chapter Name (e.g. Thermodynamics, Optics)">
+                <input class="full" id="genChapter" type="text" placeholder="Chapter name e.g. Light">
 
                 <select id="genNumber">
                     <option value="10">10 Questions</option>
@@ -1086,58 +484,58 @@ LEADERBOARD & FOOTER
                 </select>
 
                 <select id="genDifficulty">
-                    <option value="Easy" selected>Easy (Confidence Booster)</option>
-                    <option value="Moderate">Moderate</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Moderate" selected>Moderate</option>
                     <option value="Hard">Hard</option>
                 </select>
 
                 <select class="full" id="genQuestionType">
-                    <option value="MCQ">Multiple Choice Questions (MCQ)</option>
+                    <option value="MCQ">MCQ</option>
                 </select>
             </div>
 
-            <button type="button" class="generate-btn" id="generateTestBtn">BUILD PRACTICE SET</button>
-            <div class="generator-loading hidden" id="generatorLoading" style="text-align:center; color:var(--accent-cyan); margin-top:10px; font-weight:700;">Compiling questions...</div>
+            <button type="button" class="generate-btn" id="generateTestBtn">GENERATE CUSTOM TEST</button>
+            <div class="generator-loading" id="generatorLoading">Creating your test... Please wait.</div>
         </div>
     </div>
 
     <div id="testArea" class="hidden">
-        <div class="timer-box" id="timerDisplay">⏳ 10:00</div>
+        <div class="timer-box" id="timerDisplay">⏳ 20:00</div>
         <div class="test-info" id="testHeader"></div>
         <div id="questionsContainer"></div>
-        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT ANSWERS</button>
+        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT TEST</button>
     </div>
 
     <div class="test-result" id="testResult">
         <div class="score-box">
-            <div style="font-size:14px; font-weight:700; color:var(--text-muted);">FINAL SCORE</div>
+            <div>Test Result</div>
             <div class="score" id="scoreText">0/0</div>
             <div id="badgesContainer" class="badges-container"></div>
             <div class="result-detail" id="resultDetail"></div>
         </div>
 
-        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#ffffff;">Detailed Analytics</div>
+        <div class="review-title">Detailed Analysis</div>
         <div id="reviewContainer"></div>
 
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE ON WHATSAPP</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn">SHARE SCORE ON WHATSAPP</button>
     </div>
-</section>
+</div>
 
 <!-- =====================================================
-3. ARENA SECTION (1v1 RAPID BATTLE)
+3. ARENA SECTION (1v1 MULTIPLAYER)
 ===================================================== -->
-<section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
+<div class="card hidden" id="arenaSection">
     <div id="arenaSetup">
         <div class="arena-header">
-            <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (10s Speed Clashes)</div>
+            <div class="arena-title">⚔️ INVINCIBLE ARENA</div>
+            <div class="arena-subtitle">10 Rapid-Fire Science & Math Teasers (5-10 Sec Clashes)</div>
         </div>
         
-        <label>Your Display Name</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Name (e.g. Rahul)">
+        <label>Your Name</label>
+        <input type="text" id="arenaPlayerName" placeholder="Enter Your Name (e.g. Rahul)">
         
-        <label>Select Grade Level</label>
+        <label>Your Class</label>
         <select id="arenaClass" style="margin-bottom: 20px;">
             <option value="9">Class 9 (Science & Mental Maths)</option>
             <option value="10">Class 10 (Science & Mental Maths)</option>
@@ -1150,22 +548,23 @@ LEADERBOARD & FOOTER
                 <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button>
             </div>
             <div>
-                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
+                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 18px; margin-bottom: 10px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
     </div>
 
     <div id="arenaWaiting" class="hidden lobby-box">
-        <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
+        <div style="font-size: 18px; color:#cbd5e1;">Share This Room Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size: 13px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
+        <div style="font-size: 14px; color:#94a3b8; margin-bottom:20px;">Tell your friend to enter this code in the Arena!</div>
+        <div class="pulse-text">System is ready. Waiting for opponent to join...</div>
     </div>
 
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
             <div class="player-tag" id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
-            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
+            <div class="vs-badge">VS</div>
             <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
 
@@ -1173,33 +572,33 @@ LEADERBOARD & FOOTER
         
         <div class="question-card">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
-            <div class="question-text" id="arenaQText">Loading question...</div>
+            <div class="question-text" id="arenaQText">Generating...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
 
-    <div id="arenaResult" class="hidden" style="text-align:center; padding:20px;">
+    <div id="arenaResult" class="hidden result-box">
         <div id="arenaResultText"></div>
-        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;">
+        <div style="margin: 20px 0; color:#cbd5e1; font-size: 18px; line-height: 1.8;">
             <span id="finalP1"></span> <br> <span id="finalP2"></span>
         </div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">RETURN TO LOBBY</button>
+        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">PLAY ANOTHER MATCH</button>
     </div>
-</section>
+</div>
 
 <!-- =====================================================
 4. COMMUNITY FEED SECTION
 ===================================================== -->
-<section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
+<div class="card hidden" id="feedSection">
     <div class="feed-header">
-        <h2 class="feed-title">🌟 Academic Community Feed</h2>
-        <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Collaborate, share study notes, and solve tricky peer problems.</div>
+        <h2 class="feed-title">🌟 Invincible Community Feed</h2>
+        <div class="feed-subtitle">Share questions, discuss solutions, and connect with peers from other schools.</div>
     </div>
 
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
             <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
-            <input type="text" id="feedInstitution" placeholder="School / Coaching Name" style="margin-bottom:0;">
+            <input type="text" id="feedInstitution" placeholder="School / Coaching (e.g. DPS)" style="margin-bottom:0;">
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
             <select id="feedClass" style="margin-bottom:0;">
@@ -1213,24 +612,24 @@ LEADERBOARD & FOOTER
                 <option value="Chemistry">Chemistry</option>
                 <option value="Mathematics">Mathematics</option>
                 <option value="Biology">Biology</option>
-                <option value="General">Study Tips / Strategy</option>
+                <option value="General">General Study Tip</option>
             </select>
         </div>
-        <textarea id="feedContent" placeholder="Post a challenging problem or study insight..."></textarea>
+        <textarea id="feedContent" placeholder="Drop a tricky question, share a shortcut, or ask your peers for advice..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
-        <span style="font-weight:700; font-size:13px; color:var(--text-muted);">Filter Feed:</span>
+        <span style="font-weight:800; font-size:14px; color:#94a3b8;">Filter Feed:</span>
         <div style="display:flex; gap:8px;">
-            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
-                <option value="All">All Grades</option>
+            <select id="feedFilterClass" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
+                <option value="All">All Classes</option>
                 <option value="9">Class 9</option>
                 <option value="10">Class 10</option>
                 <option value="11">Class 11</option>
                 <option value="12">Class 12</option>
             </select>
-            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:6px 12px; font-size:13px;">
+            <select id="feedFilterSubject" style="width:auto; margin-bottom:0; padding:8px 12px; font-size:13px;">
                 <option value="All">All Subjects</option>
                 <option value="Physics">Physics</option>
                 <option value="Chemistry">Chemistry</option>
@@ -1241,18 +640,17 @@ LEADERBOARD & FOOTER
     </div>
 
     <div id="postsList">
-        <div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div>
+        <div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">Loading community posts...</div>
     </div>
-</section>
+</div>
 
-<!-- FOOTER -->
-<footer class="footer">
-    <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
-    Built for Academic Excellence &bull; CBSE Class 9, 10, 11 &amp; 12<br>
-    &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
-</footer>
+<div class="footer">
+    <div class="footer-brand">Invincible 360 Ecosystem</div>
+    Powered by Invincible Coaching Classes<br>
+    © 2026 All Rights Reserved
+</div>
 
-</main>
+</div>
 
 <script>
 /* =====================================================
@@ -1279,7 +677,7 @@ function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('s
 function playSuccessSound() { playDing(); }
 
 /* =====================================================
-NAVIGATION LOGIC
+TAB SWITCHING
 ===================================================== */
 const doubtModeBtn = document.getElementById('doubtModeBtn');
 const testModeBtn = document.getElementById('testModeBtn');
@@ -1344,7 +742,7 @@ removeImageButton.onclick = () => {
 
 document.getElementById("askBtn").onclick = async () => {
     const q = questionInput.value.trim();
-    if(!q && !selectedImage) return alert("Please enter a question or upload an image.");
+    if(!q && !selectedImage) return alert("Please type a question or upload a photo.");
     document.getElementById("loadingDoubt").classList.remove('hidden');
     document.getElementById("answerBox").style.display = "none";
     document.getElementById("feedback").style.display = "none";
@@ -1355,22 +753,24 @@ document.getElementById("askBtn").onclick = async () => {
             body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage })
         });
         const data = await res.json();
-        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
+        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No response.");
         document.getElementById("answerBox").style.display = "block";
         document.getElementById("feedback").style.display = "block";
     } catch(err) {
         document.getElementById("answerBox").style.display = "block";
-        document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection.";
+        document.getElementById("answerText").textContent = "Failed to reach system. Please try again.";
     } finally {
         document.getElementById("loadingDoubt").classList.add('hidden');
     }
 };
 
 /* =====================================================
-MATH FORMATTER
+ROBUST MATH FORMATTER & CLEANER
 ===================================================== */
 function formatMathText(text) {
     if (!text) return "";
+    
+    // Convert common superscripts
     const superscripts = {
         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
         '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
@@ -1408,458 +808,28 @@ function cleanAnswer(text){
 
 document.getElementById("againBtn").addEventListener("click", function(){
     const oldQuestion = questionInput.value.trim();
-    questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example.";
+    questionInput.value = oldQuestion + "\n\nExplain this again in an even simpler way. Use a small example if helpful.";
     document.getElementById("askBtn").click();
 });
 
 document.getElementById("teacherBtn").addEventListener("click", function(){
     const studentQuestion = questionInput.value.trim();
     const explanation = document.getElementById("answerText").textContent.trim();
-    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation;
+    const whatsappMessage = "Hello Invincible 360 Teacher.\n\nI need personal help with this doubt.\n\nSubject: " + selectedSubject + "\n\nStudent Question:\n" + (studentQuestion || "Question from uploaded image") + "\n\nSystem Explanation:\n" + explanation;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
 });
 
 /* =====================================================
-DATABASE LOADER & PRE-POPULATED 20-Q WEEKLY QUESTION BANK
+TEST DATABASE LOADER & UPGRADED BRAIN TEASER
 ===================================================== */
-function generateBuiltinQuestionBank() {
-    const bank = {};
-    function setTest(cls, sub, title, qs) {
-        const key = cls + "|" + sub;
-        if (!bank[key]) bank[key] = {};
-        bank[key][title] = qs.map((q, idx) => ({
-            id: idx + 1,
-            question: q.q,
-            options: q.o,
-            answer: q.a,
-            explanation: q.e
-        }));
-    }
-
-    // Helper for fast, clean, confident 20 MCQs per subject
-    const qData = {
-        "9|Physics": {
-            title: "Motion (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"What is the SI unit of distance?", o:["Meter (m)","Kilometer (km)","Centimeter (cm)","Millimeter (mm)"], a:0, e:"The standard international unit of distance and displacement is the meter (m)."},
-                {q:"Which quantity is a vector quantity?", o:["Distance","Speed","Displacement","Time"], a:2, e:"Displacement has both magnitude and a specific direction, making it a vector quantity."},
-                {q:"What is the SI unit of speed?", o:["m/s","m/s²","km/h","m·s"], a:0, e:"Speed is distance divided by time, hence its SI unit is meter per second (m/s)."},
-                {q:"The rate of change of displacement is called:", o:["Acceleration","Velocity","Speed","Force"], a:1, e:"Velocity is defined as the rate of change of displacement with time."},
-                {q:"What is the SI unit of acceleration?", o:["m/s","m/s²","km/h²","m·s²"], a:1, e:"Acceleration is velocity change per second, giving m/s²."},
-                {q:"If an object moves with constant speed, its acceleration is:", o:["Zero","Positive","Negative","Infinite"], a:0, e:"When speed/velocity does not change, acceleration is 0."},
-                {q:"Negative acceleration is also known as:", o:["Retardation","Velocity","Momentum","Speed"], a:0, e:"Deceleration or retardation refers to negative acceleration."},
-                {q:"The slope of a Distance-Time graph represents:", o:["Acceleration","Speed","Distance","Displacement"], a:1, e:"Slope = (Change in Distance)/(Change in Time) = Speed."},
-                {q:"The slope of a Velocity-Time graph gives:", o:["Distance","Displacement","Acceleration","Speed"], a:2, e:"Slope of v-t graph = (Change in Velocity)/(Time) = Acceleration."},
-                {q:"Area under a Velocity-Time graph represents:", o:["Displacement","Acceleration","Speed","Force"], a:0, e:"Area under v-t graph represents total distance or displacement."},
-                {q:"Which of the following is the first equation of motion?", o:["v = u + at","s = ut + ½at²","v² - u² = 2as","v = u - at"], a:0, e:"v = u + at relates initial velocity (u), final velocity (v), acceleration (a), and time (t)."},
-                {q:"In the equation s = ut + ½at², what does 's' represent?", o:["Speed","Displacement / Distance","Second","Surface"], a:1, e:"'s' stands for displacement or distance covered."},
-                {q:"An odometer in a car measures:", o:["Speed","Instantaneous speed","Distance","Acceleration"], a:2, e:"An odometer records total distance traveled by the vehicle."},
-                {q:"A speedometer measures:", o:["Average speed","Instantaneous speed","Total distance","Acceleration"], a:1, e:"A speedometer shows current or instantaneous speed."},
-                {q:"When an object travels equal distances in equal intervals of time, the motion is:", o:["Uniform","Non-uniform","Accelerated","Circular"], a:0, e:"This is the exact definition of uniform motion."},
-                {q:"Can displacement be zero even if distance is non-zero?", o:["Yes","No","Only in space","Never"], a:0, e:"Yes, returning to the starting point gives zero displacement but positive distance."},
-                {q:"What is the motion of the tip of the second hand of a watch?", o:["Uniform linear motion","Uniform circular motion","Non-uniform circular motion","Oscillatory motion"], a:1, e:"It moves with constant speed along a circular path."},
-                {q:"When a body starts from rest, its initial velocity (u) is:", o:["0 m/s","9.8 m/s","1 m/s","Infinite"], a:0, e:"'At rest' implies initial velocity u = 0."},
-                {q:"When brakes are applied to stop a car, final velocity (v) is:", o:["0 m/s","Positive","Negative","Equal to initial"], a:0, e:"When an object stops completely, final velocity v = 0."},
-                {q:"Distance is always:", o:["Positive or zero","Negative","Zero only","Always negative"], a:0, e:"Distance is a scalar quantity and cannot be negative."}
-            ]
-        },
-        "9|Chemistry": {
-            title: "Matter in Our Surroundings (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Which of the following is matter?", o:["Love","Chair","Thought","Smell of perfume (feeling)"], a:1, e:"A chair has mass and occupies space, fitting the definition of matter."},
-                {q:"The physical state of water at 100°C is:", o:["Solid","Gas / Vapor","Liquid","Plasma"], a:1, e:"100°C is the boiling point of water where it turns to vapor."},
-                {q:"The process of conversion of solid directly into gas is:", o:["Sublimation","Evaporation","Condensation","Fusion"], a:0, e:"Sublimation is direct solid to gas transition (e.g., Camphor)."},
-                {q:"The SI unit of temperature is:", o:["Celsius","Kelvin","Fahrenheit","Joule"], a:1, e:"The standard SI unit of temperature is Kelvin (K)."},
-                {q:"0°C is equal to how many Kelvin?", o:["273 K","373 K","100 K","0 K"], a:0, e:"0°C + 273.15 = 273.15 K (approx 273 K)."},
-                {q:"Which state of matter has a fixed volume but no fixed shape?", o:["Solid","Liquid","Gas","Plasma"], a:1, e:"Liquids take the shape of the container while maintaining a constant volume."},
-                {q:"The intermixing of particles of two different types of matter on their own is:", o:["Diffusion","Osmosis","Fusion","Vaporization"], a:0, e:"Diffusion is the natural spontaneous mixing of particles."},
-                {q:"Which state of matter has maximum compressibility?", o:["Solid","Liquid","Gas","All equal"], a:2, e:"Gases have large intermolecular spaces and compress most easily."},
-                {q:"Dry ice is chemically known as:", o:["Solid water","Solid CO₂","Liquid CO₂","Solid nitrogen"], a:1, e:"Dry ice is solid carbon dioxide."},
-                {q:"Evaporation causes:", o:["Cooling","Heating","Solidification","Expansion"], a:0, e:"Evaporation absorbs latent heat from surroundings, producing cooling."},
-                {q:"Rate of evaporation increases with:", o:["Increase in surface area","Decrease in temperature","Increase in humidity","Decrease in wind speed"], a:0, e:"Greater surface area exposes more particles to escape into vapor."},
-                {q:"Particles of matter possess:", o:["Potential energy only","Kinetic energy","Sound energy","No energy"], a:1, e:"Continuous movement of particles gives them kinetic energy."},
-                {q:"Force of attraction between particles is maximum in:", o:["Solids","Liquids","Gases","Vacuum"], a:0, e:"Solid particles are tightly packed with strongest intermolecular attraction."},
-                {q:"What happens to the kinetic energy of particles on heating?", o:["Decreases","Increases","Remains same","Becomes zero"], a:1, e:"Heating supplies thermal energy which increases particle kinetic energy."},
-                {q:"The temperature at which a solid melts into a liquid at atmospheric pressure is its:", o:["Boiling point","Melting point","Freezing point","Critical point"], a:1, e:"This defines the melting point."},
-                {q:"During phase change, temperature remains constant due to:", o:["Specific heat","Latent heat","Kinetic energy","Radiation"], a:1, e:"Latent heat is utilized to overcome intermolecular bonds without raising temperature."},
-                {q:"Which gas is used compressed in domestic cooking cylinders?", o:["LPG","CNG","Oxygen","Helium"], a:0, e:"Liquefied Petroleum Gas (LPG) is standard domestic cooking fuel."},
-                {q:"Water droplets form on the outer surface of a glass containing ice-cold water due to:", o:["Evaporation","Condensation","Sublimation","Boiling"], a:1, e:"Atmospheric water vapor cools and condenses upon contact with the cold surface."},
-                {q:"The SI unit of pressure is:", o:["Pascal (Pa)","Atmosphere","Bar","Newton"], a:0, e:"The standard SI unit of pressure is Pascal (N/m²)."},
-                {q:"Why do we wear cotton clothes in summer?", o:["They absorb sweat and evaporate quickly","They trap heat","They are heavy","They block light"], a:0, e:"Cotton absorbs sweat, facilitating evaporation and cooling the body."}
-            ]
-        },
-        "9|Biology": {
-            title: "The Fundamental Unit of Life (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Who discovered cells for the first time in 1665?", o:["Robert Hooke","Robert Brown","Leeuwenhoek","Schleiden"], a:0, e:"Robert Hooke observed dead cork cells under a simple microscope in 1665."},
-                {q:"Which organelle is called the 'Powerhouse of the cell'?", o:["Golgi body","Mitochondria","Ribosome","Lysosome"], a:1, e:"Mitochondria generate ATP, the cell's energy currency."},
-                {q:"The 'Suicide Bags' of a cell are known as:", o:["Lysosomes","Vacuoles","Plastids","Ribosomes"], a:0, e:"Lysosomes contain strong digestive enzymes that can digest their own damaged cell."},
-                {q:"Which organelle is responsible for photosynthesis in plant cells?", o:["Chloroplast","Mitochondria","Ribosome","Centrosome"], a:0, e:"Chloroplasts contain chlorophyll to perform photosynthesis."},
-                {q:"The cell wall of plant cells is mainly composed of:", o:["Protein","Cellulose","Lipid","Glycogen"], a:1, e:"Plant cell walls are made of complex cellulose providing structural rigidity."},
-                {q:"Nucleus was discovered by:", o:["Robert Hooke","Robert Brown","Purkinje","Schwann"], a:1, e:"Robert Brown discovered the cell nucleus in 1831."},
-                {q:"Which organelle is known as the protein factory of the cell?", o:["Ribosome","Lysosome","Mitochondria","Vacuole"], a:0, e:"Ribosomes synthesize proteins necessary for cellular functions."},
-                {q:"Plasma membrane is composed of:", o:["Lipids and Proteins","Cellulose only","Proteins only","DNA only"], a:0, e:"Cell membranes have a phospholipid bilayer embedded with proteins."},
-                {q:"Movement of water molecules across a selectively permeable membrane is:", o:["Diffusion","Osmosis","Plasmolysis","Active transport"], a:1, e:"Water diffusion through a semi-permeable membrane is osmosis."},
-                {q:"A cell placed in a hypotonic solution will:", o:["Shrink","Swell up","Remain unchanged","Burst immediately"], a:1, e:"Water enters the cell via endosmosis, causing it to swell."},
-                {q:"A cell placed in a hypertonic solution will:", o:["Shrink","Swell","Stay same","Divide"], a:0, e:"Water moves out through exosmosis, causing the cell to shrink."},
-                {q:"Which organelle packages and dispatches materials inside the cell?", o:["Golgi apparatus","Ribosome","Lysosome","Plastid"], a:0, e:"Golgi apparatus modifies, sorts, and packages biochemicals."},
-                {q:"Which organelle possesses its own DNA and ribosomes?", o:["Mitochondria & Plastids","Lysosomes","Golgi body","Vacuole"], a:0, e:"Mitochondria and plastids are semi-autonomous organelles with their own DNA."},
-                {q:"The jelly-like fluid inside the plasma membrane is:", o:["Nucleoplasm","Cytoplasm","Protoplasm","Ectoplasm"], a:1, e:"Cytoplasm fills the interior cellular space surrounding organelles."},
-                {q:"Amoeba acquires its food through a process called:", o:["Exocytosis","Endocytosis / Phagocytosis","Plasmolysis","Diffusion"], a:1, e:"Amoeba engulfs food using flexible pseudopodia via endocytosis."},
-                {q:"Chromosomes are made of:", o:["DNA and Protein","RNA only","Lipids only","Carbohydrates"], a:0, e:"Chromosomes consist of tightly wound DNA strands and histone proteins."},
-                {q:"Functional segments of DNA are called:", o:["Genes","Chromosomes","Chromatin","Ribosomes"], a:0, e:"Genes are hereditary functional units within DNA."},
-                {q:"Organelle that stores water, waste, and nutrients in plant cells is:", o:["Vacuole","Lysosome","Centriole","Plastid"], a:0, e:"Large central vacuoles store water and maintain plant cell turgidity."},
-                {q:"Prokaryotic cells lack:", o:["Membrane-bound nucleus and organelles","Ribosomes","Plasma membrane","DNA"], a:0, e:"Prokaryotes (like bacteria) lack a well-defined membrane-bound nucleus."},
-                {q:"Cell theory was proposed by:", o:["Schleiden and Schwann","Watson and Crick","Hooke and Brown","Mendel"], a:0, e:"Schleiden and Schwann formulated the classical Cell Theory."}
-            ]
-        },
-        "9|Mathematics": {
-            title: "Number Systems (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Which of the following is a rational number?", o:["√2","√3","0","π"], a:2, e:"0 can be written as 0/1 (p/q form where q ≠ 0)."},
-                {q:"The value of √9 is:", o:["3","9","√3","81"], a:0, e:"√9 = 3 (a rational number)."},
-                {q:"Every natural number is a:", o:["Whole number","Negative integer","Fraction only","Irrational number"], a:0, e:"Natural numbers {1,2,3...} are all contained within Whole numbers {0,1,2,3...}."},
-                {q:"The decimal expansion of an irrational number is:", o:["Terminating","Non-terminating recurring","Non-terminating non-recurring","None"], a:2, e:"Irrational numbers never terminate and never repeat patterns."},
-                {q:"Which of the following is irrational?", o:["√4","√16","√5","√25"], a:2, e:"√5 cannot be simplified into an exact integer or fraction."},
-                {q:"What is the value of 2⁰?", o:["0","1","2","Infinity"], a:1, e:"Any non-zero base raised to the power 0 equals 1."},
-                {q:"Simplify: (√3 + √2)(√3 - √2)", o:["1","5","√6","0"], a:0, e:"Using (a+b)(a-b) = a² - b² = (√3)² - (√2)² = 3 - 2 = 1."},
-                {q:"What is the rationalising factor of 1/√2?", o:["√2","2","1/2","4"], a:0, e:"Multiply numerator and denominator by √2 to get √2/2."},
-                {q:"The value of (64)^(1/2) is:", o:["8","4","16","32"], a:0, e:"64^(1/2) = √64 = 8."},
-                {q:"The value of (32)^(1/5) is:", o:["2","4","8","16"], a:0, e:"2⁵ = 32, hence 32^(1/5) = 2."},
-                {q:"Is π rational or irrational?", o:["Rational","Irrational","Integer","Natural number"], a:1, e:"π is an irrational number."},
-                {q:"Between any two distinct rational numbers, there are:", o:["Infinitely many rational numbers","Only 1 rational number","No rational numbers","10 numbers"], a:0, e:"The set of rational numbers is dense; infinitely many exist between any two."},
-                {q:"Write 0.333... in p/q form:", o:["1/3","3/10","1/9","3/1"], a:0, e:"Let x = 0.333..., 10x = 3.333... => 9x = 3 => x = 1/3."},
-                {q:"Simplify: 2³ × 2²", o:["2⁵ (32)","2⁶ (64)","4⁵","2¹"], a:0, e:"aᵐ × aⁿ = aᵐ⁺ⁿ => 2³⁺² = 2⁵ = 32."},
-                {q:"Simplify: 5⁴ / 5²", o:["5² (25)","5⁶","5⁸","1"], a:0, e:"aᵐ / aⁿ = aᵐ⁻ⁿ => 5⁴⁻² = 5² = 25."},
-                {q:"Which of the following is an integer?", o:["-5","2.5","√7","3/4"], a:0, e:"-5 is a negative integer."},
-                {q:"The sum of a rational number and an irrational number is always:", o:["Irrational","Rational","Zero","Integer"], a:0, e:"Rational + Irrational = Irrational."},
-                {q:"What is the value of (2³)²?", o:["2⁶ (64)","2⁵ (32)","2⁹","8"], a:0, e:"(aᵐ)ⁿ = aᵐⁿ => 2⁶ = 64."},
-                {q:"Which number is neither prime nor composite?", o:["1","2","0","3"], a:0, e:"1 has only one factor (itself), so it is neither prime nor composite."},
-                {q:"The product of √2 and √2 is:", o:["2","4","√4","Both A and C (which equals 2)"], a:3, e:"√2 × √2 = 2."}
-            ]
-        },
-
-        "10|Physics": {
-            title: "Light - Reflection & Refraction (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"The focal length of a plane mirror is:", o:["Zero","Infinity","25 cm","1 m"], a:1, e:"A plane mirror has no curvature, so its radius and focal length are infinite."},
-                {q:"The relation between focal length (f) and radius of curvature (R) of a spherical mirror is:", o:["f = R/2","f = 2R","f = R","f = 1/R"], a:0, e:"Focal length is half of the radius of curvature: f = R/2."},
-                {q:"An image formed by a plane mirror is always:", o:["Real and inverted","Virtual and erect","Real and erect","Virtual and inverted"], a:1, e:"Plane mirrors produce upright, virtual, laterally inverted images."},
-                {q:"What type of mirror is used as a rear-view mirror in vehicles?", o:["Convex mirror","Concave mirror","Plane mirror","Cylindrical mirror"], a:0, e:"Convex mirrors give an erect, diminished image with a wide field of view."},
-                {q:"The mirror formula is:", o:["1/v + 1/u = 1/f","1/v - 1/u = 1/f","v + u = f","1/f = u - v"], a:0, e:"The standard mirror equation is 1/v + 1/u = 1/f."},
-                {q:"The lens formula is:", o:["1/v - 1/u = 1/f","1/v + 1/u = 1/f","1/f = u/v","f = uv"], a:0, e:"The lens equation is 1/v - 1/u = 1/f."},
-                {q:"The SI unit of power of a lens is:", o:["Dioptre (D)","Meter","Centimeter","Watt"], a:0, e:"Lens power P = 1/f(m), measured in Dioptres (D)."},
-                {q:"The power of a convex lens of focal length 1 m is:", o:["+1 D","-1 D","+2 D","0 D"], a:0, e:"P = 1/f = 1/1 = +1 Dioptre."},
-                {q:"The speed of light in vacuum is:", o:["3 × 10⁸ m/s","3 × 10⁶ m/s","3 × 10⁸ km/s","3 × 10¹⁰ m/s"], a:0, e:"Light travels at 300,000 km/s or 3 × 10⁸ m/s in vacuum."},
-                {q:"Snell's Law of refraction is represented by:", o:["sin i / sin r = constant","sin i × sin r = constant","i = r","sin i + sin r = 1"], a:0, e:"Snell's law states sin i / sin r = refractive index (μ)."},
-                {q:"When light travels from an optically rarer to a denser medium, it bends:", o:["Towards the normal","Away from the normal","Does not bend","Reflects back"], a:0, e:"Light slows down in a denser medium, bending towards the normal."},
-                {q:"What type of mirror is used by dentists to see enlarged teeth?", o:["Concave mirror","Convex mirror","Plane mirror","Bifocal mirror"], a:0, e:"Dentists use concave mirrors when object is within focus to get an enlarged erect view."},
-                {q:"The magnification produced by a rear-view convex mirror is:", o:["Less than 1","Greater than 1","Equal to 1","Can be anything"], a:0, e:"Convex mirrors always form diminished images (m < 1)."},
-                {q:"A concave lens always forms an image that is:", o:["Virtual, erect and diminished","Real and inverted","Virtual and magnified","Real and enlarged"], a:0, e:"Concave lenses diverge rays, always producing virtual, upright, diminished images."},
-                {q:"The centre of the reflecting surface of a spherical mirror is called:", o:["Pole (P)","Focus (F)","Center of curvature (C)","Optical centre"], a:0, e:"The midpoint of the mirror's surface is its Pole."},
-                {q:"If a lens has power -2.0 D, its nature and focal length are:", o:["Concave, -0.5 m","Convex, +0.5 m","Concave, -2 m","Convex, +2 m"], a:0, e:"Negative power indicates a concave lens; f = 1/(-2) = -0.5 m."},
-                {q:"Refractive index of diamond is approx 2.42. This means light in diamond:", o:["Travels 2.42 times slower than in vacuum","Travels faster","Is absorbed","Scatters"], a:0, e:"n = c/v => speed in diamond is c/2.42."},
-                {q:"Where should an object be placed in front of a concave mirror to get an image of the same size?", o:["At Center of Curvature (C)","At Focus (F)","Between F and C","At Infinity"], a:0, e:"Object at C produces a real, inverted image of the same size at C."},
-                {q:"Law of reflection states that angle of incidence (i) is:", o:["Equal to angle of reflection (r)","Greater than r","Smaller than r","Always 90°"], a:0, e:"∠i = ∠r is the primary law of reflection."},
-                {q:"A ray passing through the optical centre of a thin lens:", o:["Goes undeviated","Bends by 90°","Reflects back","Disappears"], a:0, e:"Light rays through the optical centre pass without deviation."}
-            ]
-        },
-        "10|Chemistry": {
-            title: "Chemical Reactions and Equations (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Which of the following is a balanced equation for the burning of magnesium ribbon?", o:["2Mg + O₂ → 2MgO","Mg + O₂ → MgO","Mg + O → MgO","2Mg + O → 2MgO"], a:0, e:"2Mg + O₂ → 2MgO balances both Mg and O atoms."},
-                {q:"The chemical formula of quicklime is:", o:["CaO","Ca(OH)₂","CaCO₃","CaCl₂"], a:0, e:"Quicklime is Calcium Oxide (CaO)."},
-                {q:"The chemical formula of slaked lime is:", o:["Ca(OH)₂","CaO","CaCO₃","CaSO₄"], a:0, e:"Slaked lime is Calcium Hydroxide Ca(OH)₂."},
-                {q:"The reaction CaO + H₂O → Ca(OH)₂ + Heat is an example of:", o:["Combination and Exothermic","Decomposition","Displacement","Endothermic"], a:0, e:"Two reactants combine into one while releasing heat."},
-                {q:"Rusting of iron is an example of:", o:["Oxidation / Corrosion","Reduction only","Decomposition","Displacement"], a:0, e:"Iron reacts with oxygen and moisture to form hydrated ferric oxide."},
-                {q:"When lead nitrate powder is heated, brown fumes emitted are of:", o:["Nitrogen dioxide (NO₂)","Oxygen (O₂)","Lead oxide","Nitrogen gas"], a:0, e:"2Pb(NO₃)₂ → 2PbO + 4NO₂↑ (brown fumes) + O₂↑."},
-                {q:"A substance that gains oxygen during a reaction is said to be:", o:["Oxidized","Reduced","Precipitated","Neutralized"], a:0, e:"Gain of oxygen (or loss of electrons) is oxidation."},
-                {q:"A substance that loses oxygen in a reaction is said to be:", o:["Reduced","Oxidized","Displaced","Corroded"], a:0, e:"Loss of oxygen is reduction."},
-                {q:"When zinc reacts with dilute sulfuric acid, which gas is evolved?", o:["Hydrogen (H₂)","Oxygen (O₂)","Sulfur dioxide","Carbon dioxide"], a:0, e:"Zn + H₂SO₄ → ZnSO₄ + H₂↑ (pops with flame)."},
-                {q:"Reaction: Fe + CuSO₄ → FeSO₄ + Cu is a:", o:["Displacement reaction","Double displacement","Decomposition","Combination"], a:0, e:"More reactive Iron displaces Copper from its blue sulfate solution."},
-                {q:"The color change when Iron nails are placed in copper sulfate solution is:", o:["Blue to light green","Green to blue","Colorless to pink","No change"], a:0, e:"CuSO₄ (blue) changes to FeSO₄ (light green)."},
-                {q:"Precipitation reactions always produce:", o:["An insoluble solid","A gas","Heat absorption only","Water only"], a:0, e:"Precipitates are insoluble solid products."},
-                {q:"Respiration is considered an:", o:["Exothermic process","Endothermic process","Neutral process","Decomposition only"], a:0, e:"Glucose breakdown releases cellular energy (ATP) + heat."},
-                {q:"Chips packets are flushed with which gas to prevent rancidity?", o:["Nitrogen (N₂)","Oxygen (O₂)","Hydrogen (H₂)","Chlorine"], a:0, e:"Nitrogen is an unreactive inert antioxidant barrier."},
-                {q:"Electrolysis of water is a decomposition reaction where volume ratio of H₂ to O₂ is:", o:["2:1","1:2","1:1","2:3"], a:0, e:"H₂O decomposes into 2 volumes of H₂ and 1 volume of O₂."},
-                {q:"Decomposition of silver chloride in sunlight is used in:", o:["Black and white photography","Bleaching","Welding","Disinfecting"], a:0, e:"2AgCl (white) → 2Ag (grey) + Cl₂ under sunlight."},
-                {q:"What is the formula of Marble / Limestone?", o:["CaCO₃","CaO","Ca(OH)₂","CaSO₄"], a:0, e:"Calcium Carbonate (CaCO₃) forms marble, chalk, and limestone."},
-                {q:"Oxidation of fats and oils leading to bad smell and taste is called:", o:["Rancidity","Corrosion","Rusting","Fermentation"], a:0, e:"Aerial oxidation of fats produces rancid taste and odor."},
-                {q:"In the reaction: CuO + H₂ → Cu + H₂O, the oxidizing agent is:", o:["CuO","H₂","Cu","H₂O"], a:0, e:"CuO provides oxygen (gets reduced) so it is the oxidizing agent."},
-                {q:"Why must chemical equations be balanced?", o:["To satisfy Law of Conservation of Mass","To make them look neat","To follow Newton's law","No need"], a:0, e:"Matter can neither be created nor destroyed in a chemical reaction."}
-            ]
-        },
-        "10|Biology": {
-            title: "Life Processes (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Which mode of nutrition is found in green plants?", o:["Autotrophic","Heterotrophic","Saprotrophic","Parasitic"], a:0, e:"Plants synthesize their own food using photosynthesis (Autotrophic)."},
-                {q:"The site of photosynthesis in plant cells is:", o:["Chloroplast","Mitochondria","Ribosome","Vacuole"], a:0, e:"Chloroplasts contain chlorophyll where light and dark reactions occur."},
-                {q:"Tiny pores present on the surface of leaves for gas exchange are:", o:["Stomata","Lenticels","Chloroplasts","Guard cells"], a:0, e:"Stomata regulate gas exchange and transpiration."},
-                {q:"The enzyme present in human saliva that breaks down starch is:", o:["Salivary amylase","Pepsin","Trypsin","Lipase"], a:0, e:"Salivary amylase (ptyalin) converts starch into maltose."},
-                {q:"Which acid is secreted in the human stomach?", o:["Hydrochloric acid (HCl)","Sulfuric acid","Nitric acid","Acetic acid"], a:0, e:"HCl creates an acidic medium for pepsin activation and kills bacteria."},
-                {q:"Bile juice is produced by which organ?", o:["Liver","Pancreas","Stomach","Gallbladder"], a:0, e:"Liver secretes bile, which is stored in the gallbladder."},
-                {q:"The primary function of bile juice is:", o:["Emulsification of fats","Digestion of proteins","Digestion of starch","Absorption of water"], a:0, e:"Bile salts break large fat globules into smaller droplets (emulsification)."},
-                {q:"Absorption of digested food occurs mainly in the:", o:["Small intestine (Villi)","Stomach","Large intestine","Mouth"], a:0, e:"Finger-like villi in the small intestine maximize surface area for nutrient absorption."},
-                {q:"The breakdown of glucose into pyruvate takes place in the:", o:["Cytoplasm","Mitochondria","Nucleus","Chloroplast"], a:0, e:"Glycolysis occurs in the cytoplasm yielding 2 pyruvate molecules."},
-                {q:"In yeast, anaerobic respiration produces:", o:["Ethanol + CO₂ + Energy","Lactic acid + Energy","CO₂ + H₂O + Energy","Pyruvate only"], a:0, e:"Fermentation in yeast yields ethanol and carbon dioxide."},
-                {q:"Accumulation of which substance causes muscle cramps during heavy exercise?", o:["Lactic acid","Ethanol","Urea","Pyruvate"], a:0, e:"Anaerobic respiration in human muscles produces lactic acid."},
-                {q:"The respiratory pigment in human blood is:", o:["Hemoglobin","Chlorophyll","Plasma","Platelets"], a:0, e:"Hemoglobin in RBCs has high affinity for oxygen."},
-                {q:"Normal blood pressure in healthy humans is:", o:["120/80 mm Hg","140/90 mm Hg","100/60 mm Hg","80/120 mm Hg"], a:0, e:"Systolic 120 mm Hg / Diastolic 80 mm Hg."},
-                {q:"Which blood vessels carry oxygenated blood from lungs to the heart?", o:["Pulmonary vein","Pulmonary artery","Aorta","Vena cava"], a:0, e:"Pulmonary veins uniquely carry oxygen-rich blood to the left atrium."},
-                {q:"The structural and functional unit of human kidneys is:", o:["Nephron","Neuron","Alveoli","Villi"], a:0, e:"Nephrons filter blood and produce urine."},
-                {q:"Xylem tissue in plants is responsible for transport of:", o:["Water and minerals","Food / Sucrose","Amino acids","Oxygen"], a:0, e:"Xylem transports water unidirectionally from roots to leaves."},
-                {q:"Phloem tissue is responsible for transport of:", o:["Food (Photosynthates)","Water only","Minerals only","Air"], a:0, e:"Phloem translocates sucrose and nutrients bidirectionally."},
-                {q:"The exchange of gases in human lungs occurs in:", o:["Alveoli","Bronchi","Trachea","Nose"], a:0, e:"Balloon-like alveoli provide a large vascular surface for O₂/CO₂ exchange."},
-                {q:"Heart is enclosed in a protective double membrane called:", o:["Pericardium","Pleura","Meninges","Peritoneum"], a:0, e:"The pericardium encloses and lubricates the heart."},
-                {q:"Artificial removal of nitrogenous waste from blood in kidney failure is called:", o:["Dialysis (Hemodialysis)","Transpiration","Emulsification","Filtration"], a:0, e:"Dialysis acts as an artificial kidney to filter metabolic waste."}
-            ]
-        },
-        "10|Mathematics": {
-            title: "Real Numbers (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Euclid's division lemma states that for positive integers a and b, a = bq + r where r satisfies:", o:["0 ≤ r < b","0 < r ≤ b","r > b","r = b"], a:0, e:"Remainder r is always non-negative and strictly less than divisor b."},
-                {q:"The HCF of 24 and 36 is:", o:["12","6","18","24"], a:0, e:"Factors of 24 and 36 give highest common factor 12."},
-                {q:"The LCM of two co-prime numbers a and b is:", o:["a × b","a / b","1","a + b"], a:0, e:"Co-prime numbers have HCF = 1, so LCM = a × b."},
-                {q:"The product of HCF and LCM of two numbers is equal to:", o:["Product of the two numbers","Sum of the numbers","Difference of the numbers","Quotient of the numbers"], a:0, e:"HCF(a, b) × LCM(a, b) = a × b."},
-                {q:"If HCF(a, b) = 4 and a × b = 96, then LCM(a, b) is:", o:["24","16","48","12"], a:0, e:"LCM = (a × b) / HCF = 96 / 4 = 24."},
-                {q:"Which of the following is an irrational number?", o:["√2","√4","3.5","7/9"], a:0, e:"√2 cannot be written in p/q form with integers."},
-                {q:"Every composite number can be uniquely expressed as a product of:", o:["Prime numbers","Odd numbers","Even numbers","Integers"], a:0, e:"This is the Fundamental Theorem of Arithmetic."},
-                {q:"The decimal expansion of 7/80 will:", o:["Terminate","Non-terminate repeating","Non-terminate non-repeating","None"], a:0, e:"Denominator 80 = 2⁴ × 5¹, which has only 2 and 5 as prime factors (Terminating)."},
-                {q:"The exponent of 2 in prime factorization of 144 is:", o:["4","3","2","5"], a:0, e:"144 = 2⁴ × 3², so exponent of 2 is 4."},
-                {q:"The total number of prime factors of 60 is:", o:["4 (2 × 2 × 3 × 5)","3","5","2"], a:0, e:"60 = 2² × 3 × 5, consisting of 4 total prime factors."},
-                {q:"Is (3 + √5) rational or irrational?", o:["Irrational","Rational","Integer","Whole number"], a:0, e:"Rational + Irrational = Irrational."},
-                {q:"What is the HCF of two consecutive natural numbers?", o:["1","2","0","Product of numbers"], a:0, e:"Consecutive integers (e.g. 14, 15) are always co-prime with HCF = 1."},
-                {q:"What is the HCF of two consecutive even natural numbers?", o:["2","1","4","Even"], a:0, e:"Consecutive even numbers (e.g. 4, 6) always share a maximum common factor of 2."},
-                {q:"The smallest prime number is:", o:["2","1","3","0"], a:0, e:"2 is the smallest and only even prime number."},
-                {q:"The smallest composite number is:", o:["4","2","1","6"], a:0, e:"4 has factors 1, 2, 4, making it the smallest composite number."},
-                {q:"The HCF of smallest prime number and smallest composite number is:", o:["2","1","4","8"], a:0, e:"HCF(2, 4) = 2."},
-                {q:"If p is prime, √p is always:", o:["Irrational","Rational","Integer","Natural"], a:0, e:"Square root of any prime number is irrational."},
-                {q:"The sum of two irrational numbers √3 and -√3 is:", o:["0 (Rational)","√6","Irrational","2√3"], a:0, e:"√3 + (-√3) = 0, which is rational."},
-                {q:"Decimal representation of 1/7 is:", o:["Non-terminating recurring","Terminating","Terminating after 7 places","Integer"], a:0, e:"Denominator 7 has factors other than 2 and 5."},
-                {q:"If a = 2³ × 3² and b = 2² × 3³, then HCF(a, b) is:", o:["2² × 3² = 36","2³ × 3³ = 216","6","12"], a:0, e:"HCF takes lowest powers of common prime factors: 2² × 3² = 36."}
-            ]
-        },
-
-        "11|Physics": {
-            title: "Units and Measurements (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"How many base SI units are there?", o:["7","5","6","9"], a:0, e:"There are 7 fundamental SI units: m, kg, s, A, K, mol, cd."},
-                {q:"Which of the following is a supplementary unit?", o:["Radian","Joule","Newton","Pascal"], a:0, e:"Radian (plane angle) and Steradian (solid angle) are supplementary units."},
-                {q:"Dimensional formula of velocity is:", o:["[M⁰ L¹ T⁻¹]","[M¹ L¹ T⁻¹]","[M⁰ L¹ T⁻²]","[M⁰ L² T⁻¹]"], a:0, e:"Velocity = Distance/Time = L/T = [M⁰ L¹ T⁻¹]."},
-                {q:"Dimensional formula of force is:", o:["[M¹ L¹ T⁻²]","[M¹ L² T⁻²]","[M¹ L¹ T⁻¹]","[M⁰ L¹ T⁻²]"], a:0, e:"Force = Mass × Acceleration = M × LT⁻² = [M¹ L¹ T⁻²]."},
-                {q:"Dimensional formula of work / energy is:", o:["[M¹ L² T⁻²]","[M¹ L¹ T⁻²]","[M¹ L² T⁻¹]","[M⁰ L² T⁻²]"], a:0, e:"Work = Force × Displacement = MLT⁻² × L = [M¹ L² T⁻²]."},
-                {q:"Light year is a unit of:", o:["Distance","Time","Speed","Light intensity"], a:0, e:"A light year is the distance light travels in vacuum in one year."},
-                {q:"Number of significant figures in 0.0025 is:", o:["2","4","5","3"], a:0, e:"Leading zeros before non-zero digits are not significant (digits '2' and '5')."},
-                {q:"Number of significant figures in 20.00 is:", o:["4","2","1","3"], a:0, e:"Trailing zeros after a decimal point are significant."},
-                {q:"1 Astronomical Unit (AU) is approximately:", o:["1.496 × 10¹¹ m","9.46 × 10¹⁵ m","3.08 × 10¹⁶ m","1.5 × 10⁸ m"], a:0, e:"1 AU is the average distance from Earth to Sun (~1.496 × 10¹¹ m)."},
-                {q:"The dimensional formula of pressure is:", o:["[M¹ L⁻¹ T⁻²]","[M¹ L¹ T⁻²]","[M¹ L² T⁻²]","[M⁰ L⁻¹ T⁻²]"], a:0, e:"Pressure = Force / Area = MLT⁻² / L² = [M¹ L⁻¹ T⁻²]."},
-                {q:"Which of the following physical quantities is dimensionless?", o:["Refractive index","Velocity","Acceleration","Force"], a:0, e:"Refractive index is a ratio of speeds (c/v), hence dimensionless."},
-                {q:"Strain has the unit of:", o:["No unit (Dimensionless)","N/m²","N/m","Pascal"], a:0, e:"Strain = Change in dimension / Original dimension (unitless)."},
-                {q:"1 Parsec is equal to approximately:", o:["3.26 light years","1 light year","10 light years","0.5 light years"], a:0, e:"1 Parsec ≈ 3.08 × 10¹⁶ m ≈ 3.26 light years."},
-                {q:"The principle of homogeneity states that:", o:["Dimensions of all terms on both sides of an equation must be same","Units must be SI only","Constants must be zero","Variables must be scalars"], a:0, e:"Terms added, subtracted, or equated must share identical dimensions."},
-                {q:"Universal Gravitational Constant (G) has the dimensions:", o:["[M⁻¹ L³ T⁻²]","[M¹ L³ T⁻²]","[M⁻¹ L² T⁻²]","[M⁰ L³ T⁻²]"], a:0, e:"From F = Gm₁m₂/r² => G = Fr²/m² => [M⁻¹ L³ T⁻²]."},
-                {q:"Plank's constant (h) has the dimensions of:", o:["Angular momentum [M L² T⁻¹]","Energy","Force","Linear momentum"], a:0, e:"E = hν => h = E/ν = ML²T⁻² / T⁻¹ = [M L² T⁻¹], same as angular momentum."},
-                {q:"Which instrument has highest precision for measuring length?", o:["Screw gauge","Vernier calipers","Meter scale","Measuring tape"], a:0, e:"Screw gauge has the smallest least count (~0.01 mm)."},
-                {q:"Relative error is defined as:", o:["Δa / a_mean","Δa × 100","a_mean / Δa","Δa + a_mean"], a:0, e:"Relative error is the ratio of mean absolute error to mean value."},
-                {q:"Percentage error is:", o:["Relative error × 100%","Absolute error × 100","Mean error","Fractional error"], a:0, e:"Percentage error = (Δa / a_mean) × 100%."},
-                {q:"Which of the following is NOT a fundamental quantity?", o:["Speed","Mass","Length","Time"], a:0, e:"Speed is derived from Length and Time."}
-            ]
-        },
-        "11|Chemistry": {
-            title: "Some Basic Concepts of Chemistry (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"What is the value of Avogadro's number (N_A)?", o:["6.022 × 10²³","6.022 × 10²²","6.022 × 10²⁴","1.66 × 10⁻²⁴"], a:0, e:"Avogadro's constant is 6.02214 × 10²³ particles/mol."},
-                {q:"The molar mass of water (H₂O) is:", o:["18 g/mol","16 g/mol","20 g/mol","10 g/mol"], a:0, e:"2(1.008) + 16 = 18 g/mol."},
-                {q:"The number of moles in 44 g of CO₂ is:", o:["1 mol","2 mol","0.5 mol","44 mol"], a:0, e:"Molar mass of CO₂ = 12 + 32 = 44 g/mol. Moles = 44/44 = 1 mol."},
-                {q:"Molarity (M) of a solution is defined as:", o:["Moles of solute per liter of solution","Moles of solute per kg of solvent","Grams of solute per liter","Moles of solvent per liter"], a:0, e:"Molarity = (moles of solute) / (volume of solution in liters)."},
-                {q:"Molality (m) is defined as:", o:["Moles of solute per kg of solvent","Moles of solute per liter of solution","Mass of solute / total mass","Volume of solute / total volume"], a:0, e:"Molality = (moles of solute) / (mass of solvent in kg)."},
-                {q:"Which concentration term is independent of temperature?", o:["Molality & Mole fraction","Molarity","Normality","Volume percentage"], a:0, e:"Mass does not change with temperature, making molality temperature-independent."},
-                {q:"The volume occupied by 1 mole of any ideal gas at STP is:", o:["22.4 L","24.4 L","11.2 L","1.0 L"], a:0, e:"At STP (0°C, 1 atm), 1 mol gas = 22.4 dm³ (liters)."},
-                {q:"Law of Conservation of Mass was given by:", o:["Antoine Lavoisier","John Dalton","Joseph Proust","Avogadro"], a:0, e:"Lavoisier established mass conservation in chemical reactions in 1789."},
-                {q:"The empirical formula of Glucose (C₆H₁₂O₆) is:", o:["CH₂O","C₂H₄O₂","CHO","C₆H₁₂O₆"], a:0, e:"Dividing subscripts by 6 gives simplest whole-number ratio CH₂O."},
-                {q:"The reactant that gets completely consumed first in a reaction is called:", o:["Limiting reagent","Excess reagent","Catalyst","Product"], a:0, e:"The limiting reagent limits the maximum amount of product formed."},
-                {q:"The sum of mole fractions of all components in a solution is always:", o:["1","100","0","Greater than 1"], a:0, e:"Sum of mole fractions x_A + x_B + ... = 1."},
-                {q:"Number of significant figures in 0.0050 is:", o:["2","4","3","1"], a:0, e:"Leading zeros don't count; '5' and trailing '0' count (2 figures)."},
-                {q:"Mass of 1 molecule of O₂ gas is approx:", o:["5.31 × 10⁻²³ g","32 g","16 g","6.022 × 10²³ g"], a:0, e:"32 g / (6.022 × 10²³) ≈ 5.31 × 10⁻²³ g."},
-                {q:"What is the percentage of Oxygen in pure water (H₂O)?", o:["88.89%","11.11%","50%","16%"], a:0, e:"(16 / 18) × 100% ≈ 88.89%."},
-                {q:"Law of Definite Proportions was given by:", o:["Joseph Proust","Dalton","Gay-Lussac","Rutherford"], a:0, e:"Proust stated a compound always contains elements in fixed mass ratio."},
-                {q:"The SI unit of amount of substance is:", o:["Mole (mol)","Gram","Kilogram","Liter"], a:0, e:"The standard unit of amount of substance is the mole."},
-                {q:"1 atomic mass unit (amu or u) is equal to:", o:["1.66 × 10⁻²⁴ g","1.66 × 10⁻²⁷ g","1.0 g","6.022 × 10²³ g"], a:0, e:"1 u = 1/12 mass of C-12 atom = 1.6605 × 10⁻²⁴ g."},
-                {q:"Equal volumes of all gases under same temperature and pressure contain equal number of molecules. This is:", o:["Avogadro's Law","Boyle's Law","Charles's Law","Gay-Lussac's Law"], a:0, e:"This is Avogadro's hypothesis/law."},
-                {q:"How many atoms are present in 1 mole of O₂ molecules?", o:["2 × 6.022 × 10²³","6.022 × 10²³","32","2"], a:0, e:"Each O₂ molecule has 2 atoms, so 1 mol contains 2 × N_A atoms."},
-                {q:"Mass percent of solute is given by:", o:["(Mass of solute / Mass of solution) × 100","(Mass of solute / Volume of solution) × 100","(Moles / Volume) × 100","None"], a:0, e:"Mass % = (Mass of Solute / Total Mass of Solution) × 100."}
-            ]
-        },
-        "11|Biology": {
-            title: "The Living World (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Who is known as the 'Father of Taxonomy'?", o:["Carl Linnaeus","Aristotle","Darwin","Whittaker"], a:0, e:"Carl Linnaeus introduced binomial nomenclature and modern taxonomy."},
-                {q:"Binomial nomenclature consists of which two names?", o:["Genus and Species","Family and Genus","Order and Class","Kingdom and Phylum"], a:0, e:"Scientific names format: Genus (capitalized) + species (lowercase)."},
-                {q:"The scientific name of Mango is:", o:["Mangifera indica","Homo sapiens","Solanum tuberosum","Panthera leo"], a:0, e:"Mangifera indica L. is the correct botanical binomial name."},
-                {q:"Which of the following is a defining feature of all living organisms?", o:["Cellular organization & Consciousness","Growth only","Movement only","Reproduction only"], a:0, e:"Consciousness and cellular organization are universal defining characteristics."},
-                {q:"In taxonomy, what is the basic, lowest unit of classification?", o:["Species","Genus","Order","Family"], a:0, e:"Species is the fundamental lowest taxonomic category."},
-                {q:"The correct hierarchical sequence of taxonomic categories is:", o:["Kingdom → Phylum → Class → Order → Family → Genus → Species","Kingdom → Class → Order → Phylum → Species","Species → Genus → Order → Family → Class","Kingdom → Order → Class → Family → Species"], a:0, e:"King Philip Came Over For Good Soup (K-P-C-O-F-G-S)."},
-                {q:"ICBN stands for:", o:["International Code of Botanical Nomenclature","International Council of Biology Names","Indian Code of Botanical Names","International Centre of Botany"], a:0, e:"ICBN provides rules for botanical naming."},
-                {q:"ICZN stands for:", o:["International Code of Zoological Nomenclature","Indian Council of Zoology Names","International Centre of Animals","None"], a:0, e:"ICZN establishes rules for scientific naming of animals."},
-                {q:"Scientific names are generally derived from which language?", o:["Latin","English","Greek","French"], a:0, e:"Latin is used because it is a dead, unchanging language."},
-                {q:"A collection of preserved plant specimens dried, pressed, and mounted on sheets is called:", o:["Herbarium","Botanical garden","Museum","Zoological park"], a:0, e:"A herbarium houses dried and pressed voucher plant sheets."},
-                {q:"Which of the following contains living plant collections for reference?", o:["Botanical Garden","Herbarium","Museum","Taxonomic key"], a:0, e:"Botanical gardens grow living plants labeled with botanical names."},
-                {q:"The largest botanical garden in the world is located at:", o:["Kew (England)","Kolkata (India)","Paris","New York"], a:0, e:"Royal Botanic Gardens, Kew, London is the largest."},
-                {q:"A taxonomic key used for identification is based on contrasting characters called a:", o:["Couplet","Lead","Taxon","Monograph"], a:0, e:"A pair of contrasting statements in a key is a couplet."},
-                {q:"Each statement in a taxonomic key is called a:", o:["Lead","Couplet","Taxon","Manual"], a:0, e:"Each individual statement within a couplet is called a lead."},
-                {q:"A book containing information on any one taxon is a:", o:["Monograph","Flora","Manual","Catalogue"], a:0, e:"Monographs provide comprehensive accounts of a single taxon."},
-                {q:"Book containing actual account of habitat and distribution of plants of a given area is:", o:["Flora","Fauna","Manual","Herbarium"], a:0, e:"Flora contains species habitat and distribution index of a region."},
-                {q:"The term 'Systematics' is derived from the Latin word 'systema', meaning:", o:["Systematic arrangement of organisms","Random grouping","Naming only","Evolution only"], a:0, e:"Systema means orderly systematic arrangement."},
-                {q:"Systema Naturae was written by:", o:["Carl Linnaeus","Charles Darwin","Lamarck","Ernst Mayr"], a:0, e:"Linnaeus authored Systema Naturae in 1735."},
-                {q:"Taxon represents:", o:["A taxonomic group of any rank","A species only","A kingdom only","A book"], a:0, e:"Taxon (plural: taxa) refers to a unit at any taxonomic level."},
-                {q:"Tigers, lions, and leopards belong to the genus:", o:["Panthera","Felis","Canis","Homo"], a:0, e:"Panthera tigris (tiger), Panthera leo (lion), Panthera pardus (leopard)."}
-            ]
-        },
-        "11|Mathematics": {
-            title: "Sets (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"A set is defined as:", o:["A well-defined collection of objects","Any collection of objects","A group of numbers only","An ordered list"], a:0, e:"A set is a well-defined collection of distinct items."},
-                {q:"The number of subsets of a set containing n elements is:", o:["2ⁿ","2n","n²","2^(n-1)"], a:0, e:"Power set size = 2ⁿ."},
-                {q:"If set A = {1, 2, 3}, how many subsets does A have?", o:["8 (2³ = 8)","6","3","9"], a:0, e:"2³ = 8 subsets (including ∅ and A)."},
-                {q:"A set with no elements is called:", o:["Null set / Empty set (∅)","Singleton set","Universal set","Infinite set"], a:0, e:"The empty set or null set has cardinality 0."},
-                {q:"A set having only one element is called a:", o:["Singleton set","Empty set","Finite set","Pair set"], a:0, e:"A singleton set contains exactly one element, e.g., {5}."},
-                {q:"If A = {1, 2} and B = {2, 3}, what is A ∪ B (Union)?", o:["{1, 2, 3}","{2}","{1, 3}","∅"], a:0, e:"Union combines all distinct elements: {1, 2, 3}."},
-                {q:"If A = {1, 2, 3} and B = {2, 3, 4}, what is A ∩ B (Intersection)?", o:["{2, 3}","{1, 4}","{1, 2, 3, 4}","∅"], a:0, e:"Intersection contains common elements: {2, 3}."},
-                {q:"Two sets A and B are disjoint if:", o:["A ∩ B = ∅","A ∪ B = ∅","A = B","A ⊂ B"], a:0, e:"Disjoint sets share no common elements (A ∩ B = ∅)."},
-                {q:"If A = {1, 2, 3} and B = {2, 3}, what is A - B?", o:["{1}","{2, 3}","{1, 2}","∅"], a:0, e:"Elements in A but not in B = {1}."},
-                {q:"The complement of universal set (U') is:", o:["∅ (Empty set)","U","A","A'"], a:0, e:"U' = U - U = ∅."},
-                {q:"The complement of empty set (∅') is:", o:["U (Universal set)","∅","A","0"], a:0, e:"∅' = U - ∅ = U."},
-                {q:"De Morgan's Law states that (A ∪ B)' equals:", o:["A' ∩ B'","A' ∪ B'","A ∩ B","(A ∩ B)'"], a:0, e:"(A ∪ B)' = A' ∩ B'."},
-                {q:"De Morgan's Law states that (A ∩ B)' equals:", o:["A' ∪ B'","A' ∩ B'","A ∪ B","U"], a:0, e:"(A ∩ B)' = A' ∪ B'."},
-                {q:"If n(A) = 5, n(B) = 6, and n(A ∩ B) = 2, find n(A ∪ B):", o:["9","11","7","8"], a:0, e:"n(A ∪ B) = n(A) + n(B) - n(A ∩ B) = 5 + 6 - 2 = 9."},
-                {q:"Representing sets in curly brackets listing every element is called:", o:["Roster / Tabular form","Set-builder form","Venn diagram","Rule form"], a:0, e:"Listing elements individually is Roster/Tabular form."},
-                {q:"Writing {x : x is an even natural number < 10} is in:", o:["Set-builder form","Roster form","Tabular form","Coordinate form"], a:0, e:"Defining properties using variables is Set-builder form."},
-                {q:"Is {x : x² = 4, x is odd} an empty set?", o:["Yes","No","Contains 2","Contains -2"], a:0, e:"x² = 4 gives x = ±2 (both are even), so no odd number exists (Empty set)."},
-                {q:"The cardinality of the power set of ∅ (empty set) is:", o:["1 (since 2⁰ = 1)","0","2","Infinity"], a:0, e:"Power set P(∅) = {∅}, which has 1 element (2⁰ = 1)."},
-                {q:"If A ⊆ B, then A ∩ B is equal to:", o:["A","B","∅","U"], a:0, e:"When A is a subset of B, their common intersection is set A itself."},
-                {q:"If A ⊆ B, then A ∪ B is equal to:", o:["B","A","∅","U"], a:0, e:"When A is completely inside B, their combined union is set B."}
-            ]
-        },
-
-        "12|Physics": {
-            title: "Electric Charges and Fields (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"What is the SI unit of electric charge?", o:["Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)"], a:0, e:"Electric charge is measured in Coulombs (C)."},
-                {q:"The charge of an electron is approximately:", o:["-1.6 × 10⁻¹⁹ C","+1.6 × 10⁻¹⁹ C","-1.6 × 10⁻²⁷ C","-9.1 × 10⁻³¹ C"], a:0, e:"Elementary fundamental charge e = 1.602 × 10⁻¹⁹ C."},
-                {q:"Quantization of electric charge is expressed as:", o:["q = ±ne","q = n/e","q = e/n","q = n²e"], a:0, e:"Charge exists in integral multiples of elementary charge e: q = ne."},
-                {q:"Coulomb's Law constant (1 / 4πε₀) in vacuum is equal to:", o:["9 × 10⁹ N·m²/C²","8.85 × 10⁻¹² N·m²/C²","9 × 10⁻⁹ N·m²/C²","3 × 10⁸ N·m²/C²"], a:0, e:"1/(4πε₀) ≈ 8.99 × 10⁹ ≈ 9 × 10⁹ N m²/C²."},
-                {q:"The SI unit of electric field intensity (E) is:", o:["N/C or V/m","N·m/C","J/C","C/m"], a:0, e:"E = F/q (Newton per Coulomb) or -dV/dr (Volt per meter)."},
-                {q:"The electric field inside a hollow charged spherical conductor is:", o:["Zero","Infinite","Uniform and non-zero","Decreasing towards center"], a:0, e:"Inside an electrostatic conductor, electric field E = 0."},
-                {q:"Electric field lines start from:", o:["Positive charge and end on negative charge","Negative and end on positive","Start from infinity always","Form closed loops"], a:0, e:"Electric lines of force diverge from positive and terminate at negative charges."},
-                {q:"Can two electric field lines intersect each other?", o:["No, because at intersection there would be two directions of field","Yes, always","Only in vacuum","Only for like charges"], a:0, e:"At an intersection point, tangent would indicate two contradictory directions."},
-                {q:"The SI unit of electric flux (Φ) is:", o:["N·m²/C or V·m","N/C","C/m²","Farad"], a:0, e:"Electric flux Φ = E·A = (N/C)·m² = N m²/C = V m."},
-                {q:"Gauss's Law states that total electric flux through a closed surface is:", o:["q_enclosed / ε₀","q_enclosed × ε₀","Zero always","q / 4πε₀"], a:0, e:"Gauss's law: ∮ E·dA = q_inside / ε₀."},
-                {q:"An electric dipole consists of:", o:["Two equal and opposite charges separated by small distance","Two like charges","Single positive charge","Three charges"], a:0, e:"Dipole = +q and -q separated by distance 2a."},
-                {q:"The SI unit of electric dipole moment (p = q × 2a) is:", o:["Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt·meter"], a:0, e:"Dipole moment has units of charge (C) × length (m) = C·m."},
-                {q:"The direction of an electric dipole moment is conventionally taken from:", o:["Negative charge to positive charge","Positive to negative","Random","North to south"], a:0, e:"By physics convention, dipole vector p points from -q to +q."},
-                {q:"Torque (τ) experienced by an electric dipole in uniform field E is:", o:["p × E (p E sin θ)","p · E","p / E","Zero always"], a:0, e:"τ = p × E = pE sin θ."},
-                {q:"A dipole in a uniform electric field experiences:", o:["Only torque, no net force","Both force and torque","Only force, no torque","Neither force nor torque"], a:0, e:"Net force is zero because equal and opposite forces act on +q and -q."},
-                {q:"Electric field due to a point charge q at distance r varies as:", o:["1/r²","1/r","1/r³","r"], a:0, e:"E = kq/r² (inversely proportional to r²)."},
-                {q:"Electric field on axial line of short dipole varies with distance as:", o:["1/r³","1/r²","1/r","1/r⁴"], a:0, e:"For short dipoles, E_axial = 2kp/r³ (varies as 1/r³)."},
-                {q:"Permittivity of free space (ε₀) has the value:", o:["8.854 × 10⁻¹² C²/N·m²","9 × 10⁹ C²/N·m²","1.6 × 10⁻¹⁹ C²/N·m²","6.67 × 10⁻¹¹ C²/N·m²"], a:0, e:"ε₀ = 8.854 × 10⁻¹² C² N⁻¹ m⁻²."},
-                {q:"Linear charge density (λ) has SI unit:", o:["C/m","C/m²","C/m³","C·m"], a:0, e:"λ = q/L (Coulombs per meter)."},
-                {q:"Surface charge density (σ) has SI unit:", o:["C/m²","C/m","C/m³","Coulomb"], a:0, e:"σ = q/A (Coulombs per square meter)."}
-            ]
-        },
-        "12|Chemistry": {
-            title: "Solutions (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"Molarity of pure water (density = 1 g/mL) at 4°C is:", o:["55.55 M","18 M","100 M","1 M"], a:0, e:"1000 g / 18 g/mol = 55.55 M."},
-                {q:"Henry's Law relates solubility of a gas in liquid with:", o:["Partial pressure of gas over solution","Temperature only","Volume of liquid","Density of gas"], a:0, e:"Henry's law: p = K_H × x (gas solubility is proportional to partial pressure)."},
-                {q:"With increase in temperature, solubility of gases in liquids generally:", o:["Decreases","Increases","Remains constant","First increases then decreases"], a:0, e:"Dissolution of gas is exothermic; heating expels dissolved gas."},
-                {q:"Raoult's Law states that for volatile liquids, partial vapor pressure is proportional to:", o:["Mole fraction of the component in solution","Molarity","Molality","Volume fraction"], a:0, e:"p_A = p°_A × x_A."},
-                {q:"An ideal solution is one which:", o:["Obeys Raoult's law over entire concentration range with ΔH_mix=0, ΔV_mix=0","Has non-zero ΔH_mix","Forms azeotropes","Deviates from Raoult's law"], a:0, e:"Ideal solutions obey Raoult's Law with zero enthalpy and volume change on mixing."},
-                {q:"Which of the following mixtures forms an ideal solution?", o:["n-Hexane + n-Heptane","Ethanol + Acetone","Chloroform + Acetone","Water + Nitric acid"], a:0, e:"n-Hexane and n-Heptane have similar molecular sizes and interactions."},
-                {q:"A mixture of Chloroform and Acetone shows:", o:["Negative deviation from Raoult's law (H-bonding)","Positive deviation","Ideal behavior","No deviation"], a:0, e:"Strong intermolecular hydrogen bonding forms between chloroform and acetone."},
-                {q:"A mixture of Ethanol and Acetone shows:", o:["Positive deviation from Raoult's law","Negative deviation","Ideal solution","Zero vapor pressure"], a:0, e:"Acetone molecules disrupt ethanol H-bonding, increasing vapor pressure (Positive deviation)."},
-                {q:"Which of the following is a colligative property?", o:["Osmotic pressure","Viscosity","Surface tension","Refractive index"], a:0, e:"Colligative properties depend only on number of solute particles: Osmotic pressure, ΔT_b, ΔT_f, ΔP/P°."},
-                {q:"Relative lowering of vapor pressure is equal to:", o:["Mole fraction of solute (x_solute)","Mole fraction of solvent","Molarity","Molality"], a:0, e:"(p° - p) / p° = x_B (Raoult's law for non-volatile solutes)."},
-                {q:"The SI unit of molal elevation constant (K_b) is:", o:["K·kg/mol","K/mol","mol/kg","K·mol/kg"], a:0, e:"ΔT_b = K_b × m => K_b = K / (mol/kg) = K kg mol⁻¹."},
-                {q:"The formula for Osmotic Pressure (π) is:", o:["π = CRT","π = C/RT","π = nRT","π = RT/C"], a:0, e:"van 't Hoff equation: π = CRT = (n/V)RT."},
-                {q:"Two solutions having the same osmotic pressure at the same temperature are called:", o:["Isotonic solutions","Hypertonic solutions","Hypotonic solutions","Saturated solutions"], a:0, e:"Isotonic solutions have equal osmotic pressure."},
-                {q:"The van 't Hoff factor (i) for complete dissociation of NaCl is:", o:["2 (Na⁺ + Cl⁻)","1","3","0"], a:0, e:"NaCl dissociates into 2 ions: i = 2."},
-                {q:"The van 't Hoff factor (i) for complete dissociation of CaCl₂ is:", o:["3 (Ca²⁺ + 2Cl⁻)","2","1","4"], a:0, e:"CaCl₂ produces 1 Ca²⁺ and 2 Cl⁻ ions (total 3 ions)."},
-                {q:"When acetic acid associates as a dimer in benzene, its van 't Hoff factor (i) is approx:", o:["0.5 (1/2)","2","1","0"], a:0, e:"2CH₃COOH ⇌ (CH₃COOH)₂, so i = 1/2 = 0.5."},
-                {q:"Which of the following 0.1 M aqueous solutions has highest boiling point?", o:["0.1 M Al₂(SO₄)₃ (i=5)","0.1 M BaCl₂ (i=3)","0.1 M NaCl (i=2)","0.1 M Glucose (i=1)"], a:0, e:"Al₂(SO₄)₃ produces 5 ions, giving largest elevation in boiling point."},
-                {q:"Reverse osmosis is used in:", o:["Desalination of sea water / Water purifiers","Boilers","Refrigerators","Batteries"], a:0, e:"Applying pressure higher than osmotic pressure forces water through semi-permeable membrane."},
-                {q:"Azeotropic mixtures are:", o:["Constant boiling binary mixtures having same composition in liquid and vapor","Ideal solutions","Suspensions","Solid solutions"], a:0, e:"Azeotropes boil at constant temperature without change in composition."},
-                {q:"Ethylene glycol is added to car radiators in cold countries as an:", o:["Antifreeze (depresses freezing point of water)","Oxidizing agent","Fuel","Lubricant"], a:0, e:"Ethylene glycol lowers the freezing point of water prevent freezing in engines."}
-            ]
-        },
-        "12|Biology": {
-            title: "Sexual Reproduction in Flowering Plants (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"The male reproductive organ of a flower is the:", o:["Stamen (Androecium)","Carpel (Gynoecium)","Petal","Sepal"], a:0, e:"Stamens produce pollen grains containing male gametes."},
-                {q:"The female reproductive organ of a flower is the:", o:["Pistil / Carpel (Gynoecium)","Stamen","Anther","Filament"], a:0, e:"Carpel consists of stigma, style, and ovary."},
-                {q:"A typical angiosperm anther is:", o:["Bilobed and Dithecous","Monolobed","Tetralobed","Athecous"], a:0, e:"Anther has two lobes, each with 2 thecae (Dithecous)."},
-                {q:"The innermost wall layer of microsporangium that nourishes developing pollen grains is:", o:["Tapetum","Endothecium","Epidermis","Middle layer"], a:0, e:"Tapetum provides nutrients to developing microspores."},
-                {q:"The outer hard layer of a pollen grain (exine) is made of:", o:["Sporopollenin","Cellulose","Pectin","Lignin"], a:0, e:"Sporopollenin is one of the most resistant organic materials known."},
-                {q:"A typical mature female gametophyte (embryo sac) of angiosperms is:", o:["7-celled, 8-nucleate","8-celled, 8-nucleate","7-celled, 7-nucleate","6-celled, 8-nucleate"], a:0, e:"Standard Polygonum-type embryo sac has 7 cells and 8 nuclei."},
-                {q:"Transfer of pollen grains from anther to stigma of the same flower is called:", o:["Autogamy","Geitonogamy","Xenogamy","Cleistogamy"], a:0, e:"Autogamy is true self-pollination within the same flower."},
-                {q:"Transfer of pollen from anther to stigma of another flower on the same plant is:", o:["Geitonogamy","Autogamy","Xenogamy","Allogamy"], a:0, e:"Geitonogamy is functionally cross-pollination but genetically self-pollination."},
-                {q:"Flowers that never open and ensure self-pollination are called:", o:["Cleistogamous flowers","Chasmogamous flowers","Wind flowers","Water flowers"], a:0, e:"Cleistogamous flowers remain closed, guaranteeing seed set without pollinators."},
-                {q:"Pollination by wind is termed:", o:["Anemophily","Hydrophily","Entomophily","Ornithophily"], a:0, e:"Wind pollination is Anemophily."},
-                {q:"Pollination by insects is called:", o:["Entomophily","Anemophily","Hydrophily","Chiropterophily"], a:0, e:"Insect pollination is Entomophily."},
-                {q:"Double fertilization is a unique characteristic of:", o:["Angiosperms (Flowering plants)","Gymnosperms","Pteridophytes","Bryophytes"], a:0, e:"Double fertilization involves syngamy and triple fusion exclusively in angiosperms."},
-                {q:"Triple fusion leads to the development of:", o:["Primary Endosperm Nucleus (PEN - 3n)","Zygote (2n)","Embryo (2n)","Seed coat"], a:0, e:"Fusion of 1 male gamete (n) with 2 polar nuclei (2n) forms triploid endosperm (3n)."},
-                {q:"Ploidy level of Endosperm in typical angiosperms is:", o:["Triploid (3n)","Diploid (2n)","Haploid (n)","Tetraploid (4n)"], a:0, e:"Endosperm is 3n resulting from triple fusion."},
-                {q:"In a fertilized ovule, the zygote develops into:", o:["Embryo","Endosperm","Seed coat","Fruit"], a:0, e:"Zygote divides to form the embryo."},
-                {q:"The seed coat develops from:", o:["Integuments of ovule","Ovary wall","Nucellus","Funicle"], a:0, e:"Outer and inner integuments become testa and tegmen."},
-                {q:"A fruit developed exclusively from the ovary without other floral parts is a:", o:["True fruit","False fruit","Parthenocarpic fruit","Aggregate fruit"], a:0, e:"True fruits develop solely from the fertilized ovary."},
-                {q:"Apple and strawberry are examples of false fruits because:", o:["Thalamus also contributes to fruit formation","They have no seeds","They form without pollination","Ovary does not enlarge"], a:0, e:"Edible fleshy part of apple is the enlarged thalamus."},
-                {q:"Development of fruit without fertilization is called:", o:["Parthenocarpy (e.g. Banana)","Apomixis","Parthenogenesis","Polyembryony"], a:0, e:"Seedless fruits like banana develop via parthenocarpy."},
-                {q:"Production of seeds without fertilization mimicking sexual reproduction is:", o:["Apomixis","Parthenocarpy","Polyembryony","Amphimixis"], a:0, e:"Apomixis is asexual formation of seed without syngamy."}
-            ]
-        },
-        "12|Mathematics": {
-            title: "Relations and Functions (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"A relation R on set A is reflexive if:", o:["(a, a) ∈ R for every a ∈ A","(a, b) ∈ R ⇒ (b, a) ∈ R","(a, b), (b, c) ∈ R ⇒ (a, c) ∈ R","R is empty"], a:0, e:"Reflexive means every element relates to itself."},
-                {q:"A relation R is symmetric if:", o:["(a, b) ∈ R implies (b, a) ∈ R","(a, a) ∈ R","(a, b) and (b, c) in R implies (a, c) in R","a = b always"], a:0, e:"Symmetry means (a, b) ∈ R ⇔ (b, a) ∈ R."},
-                {q:"A relation R is transitive if:", o:["(a, b) ∈ R and (b, c) ∈ R implies (a, c) ∈ R","(a, b) implies (b, a)","(a, a) ∈ R","a = b = c"], a:0, e:"Transitivity connects chained relations."},
-                {q:"A relation that is Reflexive, Symmetric, and Transitive is called an:", o:["Equivalence relation","Universal relation","Identity relation","Inverse relation"], a:0, e:"An equivalence relation satisfies all three core conditions."},
-                {q:"The relation 'is equal to' (=) on the set of real numbers is:", o:["An Equivalence relation","Symmetric only","Reflexive only","Not transitive"], a:0, e:"a=a (reflexive), a=b => b=a (symmetric), a=b and b=c => a=c (transitive)."},
-                {q:"A function f: A → B is one-one (injective) if:", o:["f(x₁) = f(x₂) implies x₁ = x₂","f(x₁) = f(x₂) for different x","Range = Codomain","Every element has two images"], a:0, e:"Distinct domain elements map to distinct images."},
-                {q:"A function f: A → B is onto (surjective) if:", o:["Range of f = Codomain B","Range ⊂ Codomain B","One-one only","f(x) is constant"], a:0, e:"Every element in codomain B has at least one pre-image in domain A."},
-                {q:"A function that is both One-One and Onto is called:", o:["Bijective (Invertible)","Injective only","Surjective only","Constant"], a:0, e:"A bijection is simultaneously injective and surjective."},
-                {q:"If f: R → R is defined by f(x) = 2x + 3, then f is:", o:["Bijective (One-One and Onto)","One-one but not onto","Onto but not one-one","Neither"], a:0, e:"Linear functions on ℝ are strictly monotonic and cover all real values."},
-                {q:"If f: R → R is defined by f(x) = x², then f is:", o:["Neither one-one nor onto","One-one and onto","One-one only","Onto only"], a:0, e:"f(-2) = f(2) = 4 (not 1-1); negative reals have no pre-images (not onto)."},
-                {q:"If f: N → N is defined by f(x) = 2x, then f is:", o:["One-one but not onto","Onto only","Bijective","Neither"], a:0, e:"Distinct naturals give distinct evens (1-1), but odd naturals have no pre-images in ℕ (not onto)."},
-                {q:"If set A has 3 elements and set B has 2 elements, total number of relations from A to B is:", o:["2^(3×2) = 2⁶ = 64","6","5","12"], a:0, e:"Total relations = 2^(|A| × |B|) = 2⁶ = 64."},
-                {q:"If set A has n elements, total number of relations on A is:", o:["2^(n²)","2ⁿ","n²","2n"], a:0, e:"Number of subsets of A × A is 2^(n²)."},
-                {q:"The identity function I_A on set A is defined as:", o:["I_A(x) = x for all x ∈ A","I_A(x) = 1","I_A(x) = 0","I_A(x) = x²"], a:0, e:"Identity map returns the element itself."},
-                {q:"If f(x) = x + 2 and g(x) = 3x, find composite function (g ∘ f)(x):", o:["3x + 6","3x + 2","x + 6","3x² + 6"], a:0, e:"g(f(x)) = g(x + 2) = 3(x + 2) = 3x + 6."},
-                {q:"If f(x) = 2x + 1, find inverse function f⁻¹(x):", o:["(x - 1) / 2","(x + 1) / 2","2x - 1","x / 2"], a:0, e:"Let y = 2x + 1 => 2x = y - 1 => x = (y - 1)/2 => f⁻¹(x) = (x - 1)/2."},
-                {q:"Let R be a relation on {1, 2, 3} given by R = {(1,1), (2,2), (3,3), (1,2)}. R is:", o:["Reflexive and Transitive, but not Symmetric","Equivalence","Symmetric only","Not reflexive"], a:0, e:"Contains (1,1),(2,2),(3,3) => reflexive; (1,2) present but (2,1) missing => not symmetric; transitive holds."},
-                {q:"Smallest equivalence relation on set A = {1, 2, 3} is:", o:["{(1,1), (2,2), (3,3)}","∅","A × A","{(1,2)}"], a:0, e:"The diagonal/identity relation is the minimal equivalence relation."},
-                {q:"Largest equivalence relation on set A is:", o:["Universal relation A × A","Identity relation","Empty relation","None"], a:0, e:"The full Cartesian product A × A is the largest equivalence relation."},
-                {q:"Let f: R → R, f(x) = cos x. Then f is:", o:["Neither one-one nor onto","One-one and onto","One-one only","Onto only"], a:0, e:"cos(0) = cos(2π) = 1 (not 1-1); Range is [-1, 1] ≠ ℝ (not onto)."}
-            ]
-        }
-    };
-
-    Object.keys(qData).forEach(key => {
-        const [cls, sub] = key.split("|");
-        const item = qData[key];
-        setTest(cls, sub, item.title, item.qs);
-    });
-
-    return bank;
-}
-
-let testBank = generateBuiltinQuestionBank();
+let testBank = {};
 
 async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        if(data && Array.isArray(data.questions) && data.questions.length > 0){
+        if(data && Array.isArray(data.questions)){
             data.questions.forEach(function(q, index){
                 const key = q.class_name + "|" + q.subject;
                 if(!testBank[key]) testBank[key] = {};
@@ -1872,6 +842,7 @@ async function loadPlatformData(){
             });
         }
 
+        // UPGRADED ROBUST BRAIN TEASER
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "block";
             
@@ -1891,6 +862,7 @@ async function loadPlatformData(){
             document.getElementById("puzzleQuestionHi").innerHTML = hiText;
             document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
 
+            // Interactive Options
             const optContainer = document.getElementById("puzzleOptionsContainer");
             optContainer.innerHTML = '';
             
@@ -1908,12 +880,12 @@ async function loadPlatformData(){
             const list = document.getElementById("leaderboardList");
             list.innerHTML = "";
             data.leaderboard.forEach(function(item, idx){
-                let rankClass = idx === 0 ? "first" : "";
+                let rankClass = idx === 0 ? "first" : (idx === 1 ? "second" : (idx === 2 ? "third" : ""));
                 list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
             });
             document.getElementById("leaderboardBox").style.display = "block";
         }
-    }catch(error){ console.error("Data load error:", error); }
+    }catch(error){ console.error("Error loading platform data:", error); }
 }
 loadPlatformData();
 
@@ -1923,26 +895,26 @@ function checkPuzzleGuess(selected, btn) {
     if (selected === '2') {
         playWin();
         btn.classList.add('correct-pick');
-        feedback.style.color = 'var(--accent-emerald)';
-        feedback.textContent = '🎉 Correct! Value is 2.';
-        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
+        feedback.style.color = '#34d399';
+        feedback.textContent = '🎉 GENIUS! You nailed it in seconds!';
+        if (typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.3 } });
     } else {
         playBuzz();
         btn.classList.add('wrong-pick');
-        feedback.style.color = 'var(--accent-rose)';
-        feedback.textContent = '❌ Incorrect. See explanation below.';
+        feedback.style.color = '#f87171';
+        feedback.textContent = '❌ Tricked you! Check the logic below.';
     }
 }
 
 const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
 const puzzleSolution = document.getElementById("puzzleSolution");
 puzzleToggleBtn.addEventListener("click", function(){
-    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Logic"; }
-    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Logic"; }
+    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Teacher Logic"; }
+    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Teacher Logic"; }
 });
 
 /* =====================================================
-TEST GENERATOR & TIMER LOGIC (10 MINUTE RAPID TEST)
+TEST GENERATOR & TIMER
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = "";
@@ -1951,8 +923,8 @@ let activeTestSubject = "";
 let finalScoreData = {};
 
 let testTimerInterval = null;
-let totalTimeLimit = 600; // 10 Minutes (600 Seconds)
-let timeRemaining = 600;
+let totalTimeLimit = 1200; 
+let timeRemaining = 1200;
 
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
@@ -1976,7 +948,7 @@ function startTimer() {
     clearInterval(testTimerInterval); timeRemaining = totalTimeLimit; updateTimerUI();
     testTimerInterval = setInterval(function() {
         timeRemaining--; updateTimerUI();
-        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("Time complete. Submitting test."); submitTestBtn.click(); }
+        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("⏰ Time's up! Your test is automatically submitting."); submitTestBtn.click(); }
     }, 1000);
 }
 
@@ -2002,12 +974,12 @@ startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
     const cls = testClass.value; const subject = testSubject.value; const test = testSelect.value;
-    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
+    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill Name, Mobile Number, Class, Subject and Test."); return; }
     if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
 
     let questions = null;
     if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){ questions = testBank[cls+"|"+subject][test]; }
-    if(!questions || !questions.length){ alert("Selected test is currently unavailable."); return; }
+    if(!questions || !questions.length){ alert("This test is not available yet."); return; }
 
     activeTestClass = cls; activeTestSubject = subject;
     startQuestions(questions, "Class " + cls + " " + subject, test);
@@ -2021,22 +993,22 @@ generateTestBtn.addEventListener("click", async function(){
     const chapter = document.getElementById("genChapter").value.trim(); const numberOfQuestions = Number(document.getElementById("genNumber").value);
     const difficulty = document.getElementById("genDifficulty").value; const questionType = document.getElementById("genQuestionType").value;
 
-    if(!cls || !subject || !chapter){ alert("Please complete Class, Subject, and Chapter inputs."); return; }
+    if(!cls || !subject || !chapter){ alert("Please select Class, Subject and enter Chapter."); return; }
 
-    generateTestBtn.disabled = true; generatorLoading.classList.remove('hidden');
+    generateTestBtn.disabled = true; generatorLoading.style.display = "block";
     try{
         const response = await fetch("/api/generate-test", {
             method: "POST", headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" })
         });
         const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Generation error.");
+        if(!response.ok) throw new Error(data.error || "Unable to generate test.");
         const generated = extractQuestions(data);
-        if(!generated.length) throw new Error("No questions returned.");
+        if(!generated.length) throw new Error("No questions were returned.");
         activeTestClass = cls; activeTestSubject = subject;
-        startQuestions(generated, "Class " + cls + " " + subject, "Practice Set — " + chapter);
-    }catch(error){ alert("Test generation failed: " + error.message); }
-    finally{ generateTestBtn.disabled = false; generatorLoading.classList.add('hidden'); }
+        startQuestions(generated, "Class " + cls + " " + subject, "Custom Test — " + chapter);
+    }catch(error){ alert("Test generation failed.\n\n" + error.message); }
+    finally{ generateTestBtn.disabled = false; generatorLoading.style.display = "none"; }
 });
 
 function extractQuestions(data){
@@ -2062,7 +1034,7 @@ function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions; activeTestTitle = testTitle;
     testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
     reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)";
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions &nbsp; | &nbsp; " + questions.length + " Marks";
     questionsContainer.innerHTML = "";
 
     questions.forEach(function(q,index){
@@ -2087,9 +1059,15 @@ function generateBadges(percentage, timeSpentSeconds) {
     let badgesHTML = ""; const hour = new Date().getHours();
     if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
     else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; }
+    else if (percentage >= 50) { badgesHTML += `<div class="badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; border:1px solid #38bdf8;">👍 Good Effort</div>`; } 
+    else { badgesHTML += `<div class="badge" style="background:rgba(148, 163, 184, 0.15); color:#94a3b8; border:1px solid #94a3b8;">🌱 Future Topper</div>`; }
 
-    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; }
+    if(timeSpentSeconds < 600 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Speedster</div>`; }
+
+    if(hour >= 23 || hour <= 4) { badgesHTML += `<div class="badge nightowl">🦉 Night Owl</div>`; } 
+    else if (hour >= 18 && hour < 23) { badgesHTML += `<div class="badge" style="background:rgba(249, 115, 22, 0.15); color:#f97316; border:1px solid #f97316;">🌙 Evening Grinder</div>`; } 
+    else if (hour >= 5 && hour <= 8) { badgesHTML += `<div class="badge earlybird">🌅 Early Bird</div>`; }
+
     return badgesHTML;
 }
 
@@ -2111,12 +1089,12 @@ submitTestBtn.addEventListener("click", async function(){
         
         answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
 
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
-        let studentPick = selectedAnswer !== null ? escapeHTML(q.options[selectedAnswer]) : "<em>Unattempted</em>";
+        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect / Skipped</span>';
+        let studentPick = selectedAnswer !== null ? escapeHTML(q.options[selectedAnswer]) : "<em>Did not attempt</em>";
         let correctPick = escapeHTML(q.options[q.answer]);
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + escapeHTML(q.explanation) + '</div>' : '';
+        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Teacher\'s Logic:</strong> ' + escapeHTML(q.explanation) + '</div>' : '';
 
-        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${escapeHTML(q.question)}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
+        reviewHTML += `<div class="review-card"><div class="review-q-num">Q${index+1} ${statusBadge}</div><div class="review-q-text">${escapeHTML(q.question)}</div><div class="review-item"><strong>You answered:</strong> ${studentPick}</div><div class="review-item"><strong>Correct answer:</strong> ${correctPick}</div>${explanationBox}</div>`;
     });
 
     const wrong = attempted - correct; const unanswered = questions.length - attempted;
@@ -2125,12 +1103,12 @@ submitTestBtn.addEventListener("click", async function(){
     badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
     if (percentage >= 80) {
         playSuccessSound();
-        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); }
+        if (typeof confetti === "function") { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#38bdf8', '#facc15', '#ec4899', '#34d399'] }); }
     }
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
+    resultDetail.innerHTML = "<strong>" + percentage + "%</strong><br>Correct: " + correct + "<br>Wrong: " + wrong + "<br>Unanswered: " + unanswered + "<br><br><span id='saveStatus'>Saving your result...</span>";
 
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
@@ -2138,15 +1116,21 @@ submitTestBtn.addEventListener("click", async function(){
 
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
-    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
+    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Custom Test —") ? activeTestTitle.replace("Custom Test —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
 
     try{
-        await fetch("/api/save-test-attempt", {
+        const response = await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Custom Test") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
         });
-    }catch(error){ console.error(error); }
-    finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
+        const data = await response.json();
+        if(!response.ok) throw new Error(data.error || "Unable to save test result.");
+        const saveStatus = document.getElementById("saveStatus");
+        if(saveStatus){ saveStatus.textContent = "✓ Result saved successfully."; saveStatus.style.fontWeight = "700"; saveStatus.style.color = "#34d399"; }
+    }catch(error){
+        const saveStatus = document.getElementById("saveStatus");
+        if(saveStatus){ saveStatus.textContent = "ERROR: " + error.message; saveStatus.style.color = "#f87171"; }
+    }finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT TEST"; }
 });
 
 restartTestBtn.addEventListener("click", function(){
@@ -2156,7 +1140,7 @@ restartTestBtn.addEventListener("click", function(){
 });
 
 whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! Take the challenge: " + window.location.href;
+    const rawMsg = "I just scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on the " + finalScoreData.testName + " test at Invincible 360! 🏆\n\nThink you can beat my score? Take the challenge here:\n" + window.location.href;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
@@ -2168,10 +1152,10 @@ let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], curre
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
-    if(!name) return alert("Please enter your name.");
+    if(!name) return alert("Please enter your name first!");
 
     const btn = document.getElementById('btnCreateRoom');
-    btn.disabled = true; btn.textContent = "Generating match...";
+    btn.disabled = true; btn.textContent = "Generating 10 Questions...";
 
     try {
         const res = await fetch('/api/arena', {
@@ -2187,17 +1171,17 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Arena connection error: " + err.message); } 
+    } catch(err) { alert("Failed to create room: " + err.message); } 
     finally { btn.disabled = false; btn.textContent = "⚡ Create 1v1 Room"; }
 };
 
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter name and 4-digit code.");
+    if(!name || !code) return alert("Enter your name and 4-digit code!");
 
     const btn = document.getElementById('btnJoinRoom');
-    btn.disabled = true; btn.textContent = "Connecting...";
+    btn.disabled = true; btn.textContent = "Joining...";
 
     try {
         const res = await fetch('/api/arena', {
@@ -2214,7 +1198,7 @@ document.getElementById('btnJoinRoom').onclick = async () => {
 
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Unable to join: " + err.message); } 
+    } catch(err) { alert("Could not join: " + err.message); } 
     finally { btn.disabled = false; btn.textContent = "🚀 Join Room"; }
 };
 
@@ -2285,7 +1269,7 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
-    document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
+    document.getElementById('arenaResultText').innerHTML = `<div class="pulse-text" style="font-size:20px;">Waiting for opponent to finish...</div>`;
     document.getElementById('arenaResult').classList.remove('hidden');
     fetch('/api/arena', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -2299,12 +1283,12 @@ function showArenaResult(room) {
     document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
     if (myScore > opScore) {
-        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
-        if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+        playWin(); document.getElementById('arenaResultText').innerHTML = `<div class="winner-text">🏆 YOU WIN!</div>`;
+        if (typeof confetti === "function") confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     } else if (myScore < opScore) {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div class="loser-text">☠️ YOU LOST!</div>`;
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-amber);">🤝 DRAW</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div class="winner-text" style="color:#facc15;">🤝 IT'S A TIE!</div>`;
     }
 }
 
@@ -2321,7 +1305,7 @@ async function loadFeedPosts() {
         const data = await res.json();
         
         if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet.</div>';
+            list.innerHTML = '<div style="text-align:center; color:#64748b; font-size:14px; padding:20px;">No posts in this category yet. Be the first to drop a question!</div>';
             return;
         }
 
@@ -2330,22 +1314,22 @@ async function loadFeedPosts() {
                 <div class="feed-card-header">
                     <div>
                         <div class="feed-author">${escapeHTML(p.author_name)}</div>
-                        <div class="feed-school">${escapeHTML(p.institution)} &bull; Class ${escapeHTML(p.student_class)}</div>
+                        <div class="feed-school">${escapeHTML(p.institution)} • Class ${escapeHTML(p.student_class)}</div>
                     </div>
                     <span class="feed-badge">${escapeHTML(p.subject)}</span>
                 </div>
-                <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
-                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment for post by ${escapeHTML(p.author_name)}">` : ''}
+                <div class="feed-content">${escapeHTML(p.content)}</div>
+                ${p.image_url ? `<img src="${p.image_url}" class="feed-image" alt="Question attachment">` : ''}
                 <div class="feed-actions">
-                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
+                    <div class="action-btn" onclick="likePost(${p.id})">❤️ <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
                     <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
                     <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
                 </div>
 
                 <div class="comments-drawer" id="comments-${p.id}">
-                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading comments...</div></div>
+                    <div id="comments-list-${p.id}"><div style="color:#64748b; font-size:12px;">Loading discussion...</div></div>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="com-input-${p.id}" placeholder="Type explanation or response..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
+                        <input type="text" id="com-input-${p.id}" placeholder="Type your step-by-step solution or tip..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
                         <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
                     </div>
                 </div>
@@ -2353,7 +1337,7 @@ async function loadFeedPosts() {
         `).join('');
 
     } catch(err) {
-        list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
+        list.innerHTML = '<div style="text-align:center; color:#f87171; font-size:14px; padding:20px;">Failed to load feed.</div>';
     }
 }
 
@@ -2367,10 +1351,10 @@ document.getElementById('btnPublishPost').onclick = async () => {
     const sub = document.getElementById('feedSubject').value;
     const content = document.getElementById('feedContent').value.trim();
 
-    if (!name || !inst || !content) return alert("Please complete Name, School/Coaching, and Post Content.");
+    if (!name || !inst || !content) return alert("Please fill your Name, School/Coaching, and Question/Thought!");
 
     const btn = document.getElementById('btnPublishPost');
-    btn.disabled = true; btn.textContent = "Publishing...";
+    btn.disabled = true; btn.textContent = "Posting...";
 
     try {
         const res = await fetch('/api/feed', {
@@ -2400,14 +1384,14 @@ async function likePost(postId) {
 }
 
 async function reportPost(postId) {
-    if (!confirm("Report post for academic review?")) return;
+    if (!confirm("Report this post for inappropriate content?")) return;
     try {
         const res = await fetch('/api/feed', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'report_post', post_id: postId })
         });
         const data = await res.json();
-        alert(data.message || "Report recorded.");
+        alert(data.message || "Reported.");
         document.getElementById(`post-${postId}`).style.display = 'none';
     } catch(e){}
 }
@@ -2428,12 +1412,12 @@ async function loadComments(postId) {
         const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
         const data = await res.json();
         if (!data.comments || data.comments.length === 0) {
-            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No discussions yet.</div>';
+            container.innerHTML = '<div style="color:#64748b; font-size:12px; margin-bottom:6px;">No solutions yet. Be the first to explain!</div>';
             return;
         }
         container.innerHTML = data.comments.map(c => `
             <div class="comment-item">
-                <div style="font-weight:800; color:var(--accent-cyan); font-size:12px; margin-bottom:2px;">${escapeHTML(c.author_name)} <span style="color:var(--text-muted); font-weight:normal;">&bull; ${escapeHTML(c.institution)}</span></div>
+                <div class="comment-author">${escapeHTML(c.author_name)} <span style="color:#94a3b8; font-weight:normal;">• ${escapeHTML(c.institution)}</span></div>
                 <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
             </div>
         `).join('');
@@ -2446,7 +1430,7 @@ async function addComment(postId) {
     const name = document.getElementById('feedAuthorName').value.trim() || 'Student';
     const inst = document.getElementById('feedInstitution').value.trim() || 'School';
 
-    if (!content) return alert("Please enter discussion text.");
+    if (!content) return alert("Type your solution or explanation first!");
 
     try {
         const res = await fetch('/api/feed', {
