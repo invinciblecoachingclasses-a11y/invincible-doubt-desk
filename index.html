@@ -7,6 +7,9 @@
 <!-- GOOGLE SEARCH CONSOLE SITE VERIFICATION -->
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
+<!-- =====================================================
+SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
+===================================================== -->
 <title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
 <meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant AI doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
 <meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
@@ -60,7 +63,9 @@ body {
 }
 .container { width: min(840px, 92%); margin: 20px auto 60px; }
 
-/* HUD HEADER */
+/* =====================================================
+GAMIFIED PLAYER HUD HEADER
+===================================================== */
 .player-hud-card {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
   border: 1px solid rgba(6, 182, 212, 0.3);
@@ -140,7 +145,7 @@ body {
 .streak-counter { color: var(--accent-amber); display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14px; }
 .streak-freeze-tag { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; }
 
-/* STORIES TRAY */
+/* 24-HOUR STUDY STORIES TRAY */
 .stories-tray-container {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-subtle);
@@ -155,126 +160,436 @@ body {
   backdrop-filter: blur(10px);
 }
 .stories-tray-container::-webkit-scrollbar { display: none; }
-.story-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; width: 70px; text-align: center; }
+
+.story-circle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 70px;
+  text-align: center;
+}
 .story-circle-item:hover .story-avatar-wrap { transform: scale(1.08); }
 .story-avatar-wrap {
-  width: 58px; height: 58px; border-radius: 50%; padding: 3px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  padding: 3px;
   background: linear-gradient(45deg, #f43f5e, #f59e0b, #06b6d4);
-  display: flex; align-items: center; justify-content: center; position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 .story-avatar-wrap.topper { background: linear-gradient(45deg, #eab308, #f59e0b); }
 .story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
-.story-avatar-inner { width: 100%; height: 100%; background: #090e1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; overflow: hidden; }
+.story-avatar-inner {
+  width: 100%;
+  height: 100%;
+  background: #090e1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  overflow: hidden;
+}
 .story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
-.story-badge-flame { position: absolute; bottom: -2px; right: -2px; background: #090e1a; border-radius: 50%; font-size: 11px; padding: 2px; line-height: 1; }
-.story-username { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.story-badge-flame {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #090e1a;
+  border-radius: 50%;
+  font-size: 11px;
+  padding: 2px;
+  line-height: 1;
+}
+.story-username {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 /* FULLSCREEN STORY VIEWER */
-.story-viewer-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.94); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-.story-card-view { width: min(420px, 94%); height: min(720px, 90vh); background: #0b1120; border-radius: 24px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); }
+.story-viewer-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+.story-card-view {
+  width: min(420px, 94%);
+  height: min(720px, 90vh);
+  background: #0b1120;
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
+}
 .story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
 .story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
 .story-progress-fill { height: 100%; width: 0%; background: #fff; }
 .story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
 .story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
 .story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-.story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; text-align: center; position: relative; }
+
+.story-body-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+  text-align: center;
+  position: relative;
+}
 .story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
 .story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
+
+/* Tap Navigation Zones */
 .story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
-.story-nav-prev { left: 0; } .story-nav-next { right: 0; }
-.story-sticker-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-cyan); border-radius: 16px; padding: 14px; width: 92%; margin-top: 10px; backdrop-filter: blur(10px); z-index: 10; }
+.story-nav-prev { left: 0; }
+.story-nav-next { right: 0; }
+
+/* Sticker Poll in Story */
+.story-sticker-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 16px;
+  padding: 14px;
+  width: 92%;
+  margin-top: 10px;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
 .sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
 .sticker-opts { display: flex; flex-direction: column; gap: 8px; }
-.sticker-btn { position: relative; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: #fff; font-weight: 800; padding: 10px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; overflow: hidden; z-index: 1; }
-.sticker-bar { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(6, 182, 212, 0.25); z-index: -1; width: 0%; transition: width 0.4s ease; }
+.sticker-btn {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+}
+.sticker-bar {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  background: rgba(6, 182, 212, 0.25);
+  z-index: -1;
+  width: 0%;
+  transition: width 0.4s ease;
+}
 .sticker-btn.voted-correct .sticker-bar { background: rgba(16, 185, 129, 0.4) !important; }
 .sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
+
+/* Story Action Bar */
 .story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
-.reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.reaction-emoji-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 .reaction-emoji-btn:hover { transform: scale(1.2); }
 .vault-btn { background: var(--bg-surface); border: 1px solid var(--accent-amber); color: var(--accent-amber); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
 .viewers-btn { background: var(--bg-surface); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
-.viewers-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: #0b0f19; border-top: 2px solid var(--accent-cyan); border-radius: 20px 20px 0 0; padding: 18px; max-height: 280px; overflow-y: auto; display: none; z-index: 20; }
+
+/* VIEWERS BOTTOM SHEET */
+.viewers-sheet {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #0b0f19;
+  border-top: 2px solid var(--accent-cyan);
+  border-radius: 20px 20px 0 0;
+  padding: 18px;
+  max-height: 280px;
+  overflow-y: auto;
+  display: none;
+  z-index: 20;
+}
 .viewer-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
 
-/* MODALS */
-.modal-overlay, .quest-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(4, 7, 14, 0.9); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
-.modal-card { width: min(500px, 92%); background: #0f172a; border: 1px solid var(--border-subtle); border-radius: 24px; padding: 24px; max-height: 90vh; overflow-y: auto; }
-.quest-modal-card { width: min(520px, 94%); background: linear-gradient(145deg, #0d1527, #070b14); border: 1px solid var(--accent-cyan); box-shadow: 0 0 35px rgba(6, 182, 212, 0.3); border-radius: 28px; padding: 28px 24px; text-align: center; }
+/* MODAL OVERLAY */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-card {
+  width: min(500px, 92%);
+  background: #0f172a;
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* =====================================================
+NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
+===================================================== */
+.quest-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(4, 7, 14, 0.9);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+}
+.quest-modal-card {
+  width: min(520px, 94%);
+  background: linear-gradient(145deg, #0d1527, #070b14);
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
+  border-radius: 28px;
+  padding: 28px 24px;
+  text-align: center;
+  position: relative;
+}
 .quest-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
 .quest-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
 .quest-options-grid { display: flex; flex-direction: column; gap: 12px; }
-.quest-choice-btn { background: #111a2e; border: 1px solid var(--border-subtle); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left; }
+.quest-choice-btn {
+  background: #111a2e;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  text-align: left;
+}
 .quest-choice-btn:hover { background: #18243e; border-color: var(--accent-cyan); transform: translateY(-2px); }
 .quest-choice-icon { font-size: 26px; }
 .quest-choice-heading { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .quest-choice-desc { font-size: 11px; color: var(--text-muted); }
 
-.feature-mini-guide { background: rgba(6, 182, 212, 0.08); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 12px 16px; margin-bottom: 18px; font-size: 12px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; }
+/* In-Tab Visual Mini-Guides for Beginners */
+.feature-mini-guide {
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px dashed rgba(6, 182, 212, 0.3);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .feature-mini-guide strong { color: var(--accent-cyan); font-weight: 800; }
 
-/* DAILY BRAIN TEASER */
-.puzzle-banner { background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 22px; padding: 22px; margin-bottom: 24px; box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15); backdrop-filter: blur(10px); }
+/* DAILY BRAIN TEASER (QUEST CARD) */
+.puzzle-banner {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15);
+  position: relative;
+  backdrop-filter: blur(10px);
+}
 .puzzle-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.puzzle-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); font-weight: 900; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); }
+.puzzle-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); font-weight: 900; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); letter-spacing: 0.5px; }
 .puzzle-streak { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); font-weight: 800; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(6, 182, 212, 0.3); }
-.puzzle-q-en { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 6px; }
+.puzzle-q-en { font-size: 16px; font-weight: 700; color: #ffffff; line-height: 1.5; margin-bottom: 6px; }
+.puzzle-q-hi { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 16px; }
 .puzzle-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
 .puzzle-opt-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 15px; font-weight: 800; padding: 12px 6px; border-radius: 12px; cursor: pointer; text-align: center; }
-.puzzle-opt-btn:hover { border-color: var(--accent-amber); background: var(--bg-surface-hover); }
+.puzzle-opt-btn:hover { border-color: var(--accent-amber); background: var(--bg-surface-hover); transform: translateY(-2px); }
 .puzzle-opt-btn.correct-pick { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--accent-emerald) !important; color: var(--accent-emerald) !important; }
 .puzzle-opt-btn.wrong-pick { background: rgba(244, 63, 94, 0.2) !important; border-color: var(--accent-rose) !important; color: var(--accent-rose) !important; }
+.puzzle-actions-bar { display: flex; align-items: center; gap: 12px; }
 .puzzle-toggle-btn { background: var(--accent-amber); color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 900; font-size: 12px; cursor: pointer; }
-.puzzle-solution { display: none; margin-top: 14px; padding: 16px; background: rgba(10, 14, 23, 0.9); border-radius: 12px; border-left: 3px solid var(--accent-amber); font-size: 14px; color: #e2e8f0; }
+.puzzle-solution { display: none; margin-top: 14px; padding: 16px; background: rgba(10, 14, 23, 0.9); border-radius: 12px; border-left: 3px solid var(--accent-amber); font-size: 14px; line-height: 1.6; color: #e2e8f0; }
 
 /* WALL OF FAME */
-.leaderboard-card { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 18px; margin-bottom: 24px; backdrop-filter: blur(8px); }
+.leaderboard-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
 .leaderboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; text-align: center; }
 .leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-surface); border-radius: 12px; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
 .leaderboard-rank { background: rgba(255, 255, 255, 0.1); width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; margin-right: 8px; }
 .leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
 .leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
 
-/* MODE SWITCH TABS */
-.mode-switch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
-.mode-btn { padding: 12px 6px; border: 1px solid var(--border-subtle); border-radius: 16px; background: rgba(15, 23, 42, 0.6); color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; cursor: pointer; text-align: center; backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* GAME MODE SWITCH WITH SUB-LABELS */
+.mode-switch {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;
+}
+.mode-btn {
+  padding: 12px 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text-muted);
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .mode-btn-title { font-size: 13px; font-weight: 800; }
 .mode-btn-sub { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
 .mode-btn:hover { background: var(--bg-surface); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
-.mode-btn.active { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 20px var(--cyan-glow); }
+.mode-btn.active {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9));
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
 .mode-btn.active .mode-btn-sub { color: #cbd5e1; }
-.mode-btn.arena-btn.active { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-rose); border-color: var(--accent-rose); box-shadow: 0 0 20px rgba(244, 63, 94, 0.25); }
+.mode-btn.arena-btn.active {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9));
+  color: var(--accent-rose);
+  border-color: var(--accent-rose);
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
+}
 .mode-btn.arena-btn.active .mode-btn-sub { color: #fecdd3; }
-.mode-btn.feed-btn.active { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(168, 85, 247, 0.25); }
+.mode-btn.feed-btn.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9));
+  color: var(--accent-purple);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
+}
+.mode-btn.feed-btn.active .mode-btn-sub { color: #e9d5ff; }
 
 /* CARDS & INPUTS */
-.card { background: rgba(15, 23, 42, 0.75); padding: 26px; border-radius: 24px; border: 1px solid var(--border-subtle); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); }
-.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #fff; }
+.card {
+  background: rgba(15, 23, 42, 0.75);
+  padding: 26px;
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+}
+.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #ffffff; }
 label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
 .subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-.subject { padding: 12px 8px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: var(--text-muted); font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; }
+.subject {
+  padding: 12px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+}
 .subject:hover { background: var(--bg-surface-hover); color: #fff; }
 .subject.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
+/* DOUBT TONE SWITCHER */
 .tone-switch-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-.tone-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 10px 6px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
+.tone-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 10px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: center;
+}
 .tone-btn:hover { background: var(--bg-surface-hover); }
 .tone-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-textarea, input:not([type="radio"]):not([type="range"]), select { width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 14px; font-size: 14px; background: #090e1a; color: #fff; outline: none; font-family: inherit; margin-bottom: 14px; }
-textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); }
+textarea, input:not([type="radio"]):not([type="range"]), select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  font-size: 14px;
+  background: #090e1a;
+  color: #ffffff;
+  outline: none;
+  font-family: inherit;
+  margin-bottom: 14px;
+}
+textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--cyan-glow);
+}
 
 .photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .photo-btn { padding: 12px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: #cbd5e1; font-size: 13px; font-weight: 800; cursor: pointer; }
 .photo-btn:hover { background: var(--bg-surface-hover); color: #fff; }
 
-.ask-btn, .submit-test-btn, .generate-btn { width: 100%; margin-top: 8px; padding: 16px; border: none; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); }
+.ask-btn, .submit-test-btn, .generate-btn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+}
 .ask-btn:hover, .submit-test-btn:hover, .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4); }
 .generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
+/* DOUBT ANSWER & FEEDBACK */
 .answer-box { display: none; margin-top: 24px; padding: 22px; background: #090e1a; border-radius: 18px; border: 1px solid var(--border-subtle); }
 .logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
 .logic-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
@@ -287,9 +602,10 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .feedback-btn:hover { background: var(--bg-surface-hover); }
 .teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
+/* TEST SUITE & TOPIC HEATMAP */
 .test-info { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin: 16px 0; color: #cbd5e1; font-size: 13px; }
 .generator-box { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
-.generator-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: #fff; }
+.generator-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; }
 .generator-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
 .generator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .full { grid-column: 1 / -1; }
@@ -299,7 +615,11 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .question-number { color: var(--accent-cyan); font-weight: 900; font-size: 12px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 .question-text { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
 
-.option { display: flex !important; align-items: center !important; gap: 14px !important; padding: 14px 16px !important; border: 1px solid var(--border-subtle) !important; border-radius: 14px !important; margin: 8px 0 !important; cursor: pointer !important; font-size: 15px !important; background: #090e1a !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important; }
+.option {
+  display: flex !important; align-items: center !important; gap: 14px !important; padding: 14px 16px !important;
+  border: 1px solid var(--border-subtle) !important; border-radius: 14px !important; margin: 8px 0 !important;
+  cursor: pointer !important; font-size: 15px !important; background: #090e1a !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important;
+}
 .option input[type="radio"] { width: 20px !important; height: 20px !important; min-width: 20px !important; max-width: 20px !important; margin: 0 !important; padding: 0 !important; cursor: pointer !important; accent-color: var(--accent-cyan) !important; flex-shrink: 0 !important; }
 .option span { flex: 1 !important; text-align: left !important; line-height: 1.5 !important; color: #f1f5f9 !important; }
 .option:hover { background: #131c30 !important; border-color: var(--accent-cyan) !important; }
@@ -321,14 +641,14 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 14px; background: transparent; color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .restart-btn:hover { background: rgba(6, 182, 212, 0.1); }
-.whatsapp-btn { background: #25D366 !important; color: #fff !important; border: none !important; }
+.whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
 
 /* ARENA 1v1 */
 .arena-header { text-align: center; margin-bottom: 18px; }
 .arena-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; padding: 16px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3); }
-.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #fff; padding: 16px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3); }
+.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3); }
+.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3); }
 .lobby-box { text-align: center; padding: 28px 16px; background: #090e1a; border-radius: 20px; border: 1px dashed var(--accent-rose); }
 .room-code-display { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent-rose); letter-spacing: 6px; margin: 12px 0; }
 
@@ -369,27 +689,43 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 .comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
 
-/* LO-FI RADIO WIDGET */
+/* FLOATING LO-FI RADIO WIDGET */
 .lofi-widget {
-  position: fixed; bottom: 20px; right: 20px; background: rgba(15, 23, 42, 0.92);
-  border: 1px solid var(--accent-cyan); border-radius: 30px; padding: 8px 14px;
-  display: flex; align-items: center; gap: 10px; z-index: 999; backdrop-filter: blur(8px);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid var(--accent-cyan);
+  border-radius: 30px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 999;
+  backdrop-filter: blur(8px);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
 }
 .lofi-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #fff; line-height: 1; }
 .lofi-label { font-size: 11px; font-weight: 800; color: var(--accent-cyan); }
 
+/* FOOTER */
 .footer { text-align: center; color: #64748b; margin: 40px 0; font-size: 12px; line-height: 1.6; }
 .hidden { display: none !important; }
 
 @media (max-width: 600px) {
   .mode-switch { grid-template-columns: 1fr 1fr; }
-  .subjects, .tone-switch-bar, .arena-grid, .photo-buttons { grid-template-columns: 1fr; }
+  .subjects { grid-template-columns: 1fr; }
+  .photo-buttons { grid-template-columns: 1fr; }
+  .generator-grid { grid-template-columns: 1fr; }
+  .arena-grid { grid-template-columns: 1fr; }
+  .puzzle-options-grid { grid-template-columns: 1fr 1fr; }
+  .tone-switch-bar { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 
 <body>
+
 <main class="container">
 
 <!-- GAMIFIED PLAYER HUD HEADER -->
@@ -405,6 +741,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <div class="live-ping"><span class="ping-dot"></span> LIVE 24/7</div>
         </div>
     </div>
+    
     <div class="hud-xp-row">
         <span class="xp-label">XP: 680 / 1000</span>
         <div class="xp-track"><div class="xp-fill"></div></div>
@@ -412,27 +749,37 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </header>
 
+<!-- GAMIFIED STREAK & SHIELD STATUS -->
 <div class="streak-bar-box">
-    <div class="streak-counter"><span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days</div>
+    <div class="streak-counter">
+        <span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days
+    </div>
     <div class="streak-freeze-tag" id="userFreezeStatus">🛡️ 1 Freeze Shield Ready</div>
 </div>
 
+<!-- 24-HOUR STUDY STORIES TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
-        <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div></div>
+        <div class="story-avatar-wrap add-story">
+            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div>
+        </div>
         <div class="story-username">Your Drop</div>
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
+<!-- DAILY BRAIN TEASER -->
 <section class="puzzle-banner" id="puzzleBox" style="display:none;" aria-label="Daily Academic Brain Teaser">
     <div class="puzzle-top-bar">
         <div class="puzzle-badge">🔥 95% Get This Wrong</div>
         <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
     </div>
+    
     <div class="puzzle-q-en" id="puzzleQuestionEn">Loading daily teaser...</div>
     <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
+    
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
+
     <div class="puzzle-actions-bar">
         <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
     </div>
@@ -440,24 +787,40 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </section>
 
+<!-- WALL OF FAME -->
 <section class="leaderboard-card" id="leaderboardBox" style="display:none;" aria-label="Top Scorers Leaderboard">
     <div class="leaderboard-title">🏆 Platform Top Scorers</div>
     <div id="leaderboardList"></div>
 </section>
 
-<!-- NAVIGATION MODES -->
+<!-- 4 MODE SWITCH TABS (WITH SUB-LABELS) -->
 <nav class="mode-switch" aria-label="Academic Navigation Modes">
-    <button type="button" class="mode-btn active" id="doubtModeBtn"><span class="mode-btn-title">⚡ QUEST DESK</span><span class="mode-btn-sub">AI Doubt Solver</span></button>
-    <button type="button" class="mode-btn" id="testModeBtn"><span class="mode-btn-title">⏱ TIME ATTACK</span><span class="mode-btn-sub">10-Min Tests</span></button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn"><span class="mode-btn-title">⚔️ 1v1 PVP</span><span class="mode-btn-sub">Match Rivals</span></button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn"><span class="mode-btn-title">🌟 CLAN FEED</span><span class="mode-btn-sub">Notes &amp; Vent</span></button>
+    <button type="button" class="mode-btn active" id="doubtModeBtn">
+        <span class="mode-btn-title">⚡ QUEST DESK</span>
+        <span class="mode-btn-sub">AI Doubt Solver</span>
+    </button>
+    <button type="button" class="mode-btn" id="testModeBtn">
+        <span class="mode-btn-title">⏱ TIME ATTACK</span>
+        <span class="mode-btn-sub">10-Min Tests</span>
+    </button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">
+        <span class="mode-btn-title">⚔️ 1v1 PVP</span>
+        <span class="mode-btn-sub">Match Rivals</span>
+    </button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">
+        <span class="mode-btn-title">🌟 CLAN FEED</span>
+        <span class="mode-btn-sub">Notes &amp; Vent</span>
+    </button>
 </nav>
 
 <!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
-    <div class="feature-mini-guide"><span>💡</span><span><strong>Quick Guide:</strong> Type or upload a photo &bull; Pick tone &bull; Get step-by-step logic.</span></div>
+    <div class="feature-mini-guide">
+        <span>💡</span>
+        <span><strong>Quick Guide:</strong> Type or upload a photo of your problem &bull; Pick an explanation tone &bull; Get instant step-by-step logic.</span>
+    </div>
+
     <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
-    
     <label>Select Subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
@@ -465,6 +828,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
     </div>
 
+    <!-- 3-Pill Explanation Mode Selector -->
     <label>Explanation Tone</label>
     <div class="tone-switch-bar">
         <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ TL;DR Formula</button>
@@ -473,13 +837,14 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your academic doubt here..."></textarea>
+    <textarea id="question" placeholder="Type your academic doubt here (English / Hindi)..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
+    
     <div class="photo-buttons">
         <button type="button" class="photo-btn" id="cameraBtn">📷 Take Photo</button>
         <button type="button" class="photo-btn" id="uploadBtn">📁 Upload Image</button>
     </div>
-    <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
+    <img id="imagePreview" alt="Preview of uploaded academic doubt question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
     <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">GET SOLUTION</button>
     
@@ -488,7 +853,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div class="answer-box" id="answerBox">
         <div class="logic-title-wrap">
             <h3 class="logic-title">Conceptual Breakdown</h3>
-            <span class="difficulty-badge" id="doubtToughnessBadge">🟢 Foundational</span>
+            <span class="difficulty-badge" id="doubtToughnessBadge">🟢 Foundational (CBSE Core)</span>
         </div>
         <div class="answer-text" id="answerText"></div>
         <div class="feedback" id="feedback">
@@ -501,11 +866,14 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </section>
 
-<!-- 2. TEST SECTION -->
+<!-- 2. TEST SECTION (EXHAUSTIVE SCHOOL LIST) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-    <div class="feature-mini-guide"><span>⏱️</span><span><strong>Quick Guide:</strong> Pick standard test &bull; Complete in 10 minutes &bull; Get instant score.</span></div>
+    <div class="feature-mini-guide">
+        <span>⏱️</span>
+        <span><strong>Quick Guide:</strong> Pick standard test or generate chapter questions &bull; Complete in 10 minutes &bull; Get instant score &amp; weak area diagnosis.</span>
+    </div>
+
     <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
-    
     <div id="testSetup">
         <label>Select Standard Test</label>
         <div>
@@ -553,10 +921,60 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <option value="Biology">Biology</option>
             </select>
 
-            <select id="testSelect"><option value="">Select Test</option></select>
+            <select id="testSelect">
+                <option value="">Select Test</option>
+            </select>
+        </div>
+
+        <div class="test-info">
+            <strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your School, Class, and Subject selection.</div>
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
+
+        <div class="generator-box">
+            <div class="generator-title">Custom Practice Generator</div>
+            <div class="generator-subtitle">Configure class, subject, and chapter to generate a customized practice set.</div>
+            <div class="generator-grid">
+                <select id="genClass">
+                    <option value="">Select Class</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                </select>
+
+                <select id="genSubject">
+                    <option value="">Select Subject</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Biology">Biology</option>
+                </select>
+
+                <input class="full" id="genChapter" type="text" placeholder="Chapter Name (e.g. Thermodynamics, Optics)">
+
+                <select id="genNumber">
+                    <option value="10">10 Questions</option>
+                    <option value="15">15 Questions</option>
+                    <option value="20" selected>20 Questions</option>
+                </select>
+
+                <select id="genDifficulty">
+                    <option value="Easy" selected>Easy (Confidence Booster)</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="Hard">Hard</option>
+                </select>
+
+                <select class="full" id="genQuestionType">
+                    <option value="MCQ">Multiple Choice Questions (MCQ)</option>
+                </select>
+            </div>
+
+            <button type="button" class="generate-btn" id="generateTestBtn">BUILD PRACTICE SET</button>
+            <div class="generator-loading hidden" id="generatorLoading" style="text-align:center; color:var(--accent-cyan); margin-top:10px; font-weight:700;">Compiling questions...</div>
+        </div>
     </div>
 
     <div id="testArea" class="hidden">
@@ -574,8 +992,10 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <div class="result-detail" id="resultDetail"></div>
             <div class="heatmap-card" id="testHeatmap"></div>
         </div>
-        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#fff;">Detailed Analytics</div>
+
+        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#ffffff;">Detailed Analytics</div>
         <div id="reviewContainer"></div>
+
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
         <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE CHALLENGE ON WHATSAPP</button>
     </div>
@@ -583,70 +1003,126 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 3. ARENA SECTION -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
-    <div class="feature-mini-guide"><span>⚔️</span><span><strong>Quick Guide:</strong> Create room & share code OR tap Solo Bot &bull; Fast correct picks win.</span></div>
+    <div class="feature-mini-guide">
+        <span>⚔️</span>
+        <span><strong>Quick Guide:</strong> Create a room and share 4-digit code OR tap Solo Bot &bull; 10s per question &bull; Fast correct picks win.</span>
+    </div>
+
     <div id="arenaSetup">
-        <div class="arena-header"><h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2></div>
+        <div class="arena-header">
+            <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (Speed + Accuracy Score)</div>
+        </div>
+        
         <label>Your Display Name</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Name">
+        <input type="text" id="arenaPlayerName" placeholder="Enter Name (e.g. Rahul)">
+        
         <label>Select Grade Level</label>
-        <select id="arenaClass" style="margin-bottom: 20px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+        <select id="arenaClass" style="margin-bottom: 20px;">
+            <option value="9">Class 9 (Science & Mental Maths)</option>
+            <option value="10">Class 10 (Science & Mental Maths)</option>
+            <option value="11">Class 11 (Science & Mental Maths)</option>
+            <option value="12">Class 12 (Science & Mental Maths)</option>
+        </select>
+        
         <div class="arena-grid">
-            <div><button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button></div>
+            <div>
+                <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button>
+            </div>
             <div>
                 <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
+
         <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Solo Mode: Practice vs. Invincible Bot</button>
     </div>
+
     <div id="arenaWaiting" class="hidden lobby-box">
         <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
         <div style="font-size: 13px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
     </div>
+
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
             <div class="player-tag" id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
             <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
             <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
-        <div class="vs-progress-bar-wrap"><div class="vs-fill-p1" id="vsFillP1"></div><div class="vs-fill-p2" id="vsFillP2"></div></div>
+        <div class="vs-progress-bar-wrap">
+            <div class="vs-fill-p1" id="vsFillP1"></div>
+            <div class="vs-fill-p2" id="vsFillP2"></div>
+        </div>
+
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
+        
         <div class="question-card" id="arenaCardContainer">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
             <div class="question-text" id="arenaQText">Loading question...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
+
     <div id="arenaResult" class="hidden" style="text-align:center; padding:20px;">
         <div id="arenaResultText"></div>
-        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;"><span id="finalP1"></span> <br> <span id="finalP2"></span></div>
+        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;">
+            <span id="finalP1"></span> <br> <span id="finalP2"></span>
+        </div>
         <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">RETURN TO LOBBY</button>
     </div>
 </section>
 
 <!-- 4. COMMUNITY FEED -->
 <section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
-    <div class="feature-mini-guide"><span>🌟</span><span><strong>Quick Guide:</strong> Share notes &bull; Use Midnight Vent for casual chat.</span></div>
-    <div class="feed-header"><h2 class="feed-title">🌟 Academic Community Feed</h2></div>
+    <div class="feature-mini-guide">
+        <span>🌟</span>
+        <span><strong>Quick Guide:</strong> Share study notes or questions &bull; Use Midnight Vent for casual peer chat &bull; Upvote &amp; discuss solutions.</span>
+    </div>
+
+    <div class="feed-header">
+        <h2 class="feed-title">🌟 Academic Community Feed</h2>
+        <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Collaborate, share study notes, and solve tricky peer problems.</div>
+    </div>
+
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
-            <input type="text" id="feedInstitution" placeholder="School Name" style="margin-bottom:0;">
+            <input type="text" id="feedAuthorName" placeholder="Your Name (Leave blank for Anon)" style="margin-bottom:0;">
+            <input type="text" id="feedInstitution" placeholder="School / Coaching Name" style="margin-bottom:0;">
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <select id="feedClass" style="margin-bottom:0;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
-            <select id="feedSubject" style="margin-bottom:0;"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="General">Study Tips</option><option value="ChillVent">🌙 Midnight Vent</option></select>
+            <select id="feedClass" style="margin-bottom:0;">
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+            <select id="feedSubject" style="margin-bottom:0;">
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
+                <option value="General">Study Tips / Strategy</option>
+                <option value="ChillVent">🌙 Midnight Vent &amp; Chill</option>
+            </select>
         </div>
-        <textarea id="feedContent" placeholder="Post a challenging problem..."></textarea>
+        <textarea id="feedContent" placeholder="Post a challenging problem, formula tip, or exam thought..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
+
+    <!-- Filter Pills Navigation -->
     <div class="feed-filter-pills">
         <span class="filter-pill active" onclick="setFeedSubjectFilter('All', this)">🌟 All Feed</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Chemistry', this)">🧪 Chemistry</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Mathematics', this)">📐 Maths</span>
+        <span class="filter-pill" onclick="setFeedSubjectFilter('Biology', this)">🧬 Biology</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
     </div>
-    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div></div>
+
+    <div id="postsList">
+        <div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div>
+    </div>
 </section>
 
 <!-- FOOTER -->
@@ -656,7 +1132,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
 </footer>
 
-<!-- LO-FI RADIO WIDGET -->
+<!-- FLOATING LO-FI RADIO WIDGET -->
 <div class="lofi-widget">
     <button class="lofi-btn" id="lofiToggleBtn" onclick="toggleLofiAudio()">🎧</button>
     <div class="lofi-label" id="lofiLabel">Lofi Focus Radio: Off</div>
@@ -669,18 +1145,30 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div class="quest-modal-card">
         <h2 class="quest-title">🎮 CHOOSE YOUR STARTING QUEST</h2>
         <div class="quest-subtitle">Welcome to Invincible 360. What do you want to accomplish right now?</div>
+
         <div class="quest-options-grid">
             <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
                 <div class="quest-choice-icon">⚡</div>
-                <div><div class="quest-choice-heading">I'm Stuck on a Homework Question</div><div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div></div>
+                <div>
+                    <div class="quest-choice-heading">I'm Stuck on a Homework Question</div>
+                    <div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div>
+                </div>
             </div>
+
             <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
                 <div class="quest-choice-icon">⚔️</div>
-                <div><div class="quest-choice-heading">I Want to Battle a Friend / Bot</div><div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div></div>
+                <div>
+                    <div class="quest-choice-heading">I Want to Battle a Friend / Bot</div>
+                    <div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div>
+                </div>
             </div>
+
             <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
                 <div class="quest-choice-icon">⏱️</div>
-                <div><div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div><div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div></div>
+                <div>
+                    <div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div>
+                    <div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div>
+                </div>
             </div>
         </div>
         <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Skip &amp; Explore on My Own</button>
@@ -694,11 +1182,27 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Drop a 24-Hr Study Story</h3>
             <button type="button" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
         </div>
+
         <input type="text" id="storyAuthorName" placeholder="Your Name">
-        <input type="text" id="storyInstitution" placeholder="School / Coaching Name">
-        <textarea id="storyCaption" placeholder="What are you studying right now?"></textarea>
+        <input type="text" id="storyInstitution" placeholder="School / Coaching (e.g. DPS RK Puram)">
+        <textarea id="storyCaption" placeholder="What are you studying right now? Or drop a 1-line formula shortcut..."></textarea>
+        
         <label>Upload Note Photo / Study Setup (Optional)</label>
         <input type="file" id="storyImageInput" accept="image/*" style="margin-bottom:12px;">
+
+        <div style="border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:12px;">
+            <label style="color:var(--accent-amber);">💡 Add Interactive Quiz Sticker (Optional)</label>
+            <input type="text" id="storyStickerQ" placeholder="Quiz Question (e.g. Find unit of resistance?)">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                <input type="text" id="storyStickerOptA" placeholder="Option A (e.g. Ohm)">
+                <input type="text" id="storyStickerOptB" placeholder="Option B (e.g. Farad)">
+            </div>
+            <select id="storyStickerCorrect" style="margin-bottom:14px;">
+                <option value="0">Option A is Correct</option>
+                <option value="1">Option B is Correct</option>
+            </select>
+        </div>
+
         <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE STORY (DISAPPEARS IN 24H)</button>
     </div>
 </div>
@@ -713,19 +1217,32 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
             </div>
         </div>
+
         <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
         <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
+
         <div class="story-body-content">
             <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Image">
             <div class="story-caption-text" id="viewerCaption"></div>
+
+            <!-- Quiz Sticker -->
             <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
                 <div class="sticker-q" id="viewerStickerQ">Question</div>
                 <div class="sticker-opts">
-                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)"><span id="labelStickerA">Opt A</span><span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span><div class="sticker-bar" id="barStickerA"></div></button>
-                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)"><span id="labelStickerB">Opt B</span><span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span><div class="sticker-bar" id="barStickerB"></div></button>
+                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)">
+                        <span id="labelStickerA">Opt A</span>
+                        <span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span>
+                        <div class="sticker-bar" id="barStickerA"></div>
+                    </button>
+                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)">
+                        <span id="labelStickerB">Opt B</span>
+                        <span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span>
+                        <div class="sticker-bar" id="barStickerB"></div>
+                    </button>
                 </div>
             </div>
         </div>
+
         <div class="story-action-bar">
             <div style="display:flex; gap:6px;">
                 <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
@@ -735,6 +1252,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <button class="viewers-btn" id="btnShowViewers" onclick="toggleViewersSheet()">👁️ Viewers</button>
             <button class="vault-btn" onclick="saveStoryToVault()">💾 Save</button>
         </div>
+
+        <!-- Viewers Drawer Sheet -->
         <div class="viewers-sheet" id="viewersDrawer">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Story Viewers (<span id="viewersCount">0</span>)</strong>
@@ -744,18 +1263,20 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         </div>
     </div>
 </div>
-
 <script>
 /* =====================================================
-AUDIO SYNTHESIS ENGINE & LO-FI RADIO
+AUDIO SYNTHESIS ENGINE (SOUNDS & LO-FI OSCILLATOR)
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
-let lofiOsc = null;
-let lofiGain = null;
-let isLofiPlaying = false;
+let currentLofiMode = 0; 
+let activeLofiNodes = [];
 
-function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
+function initAudio() { 
+    if(!audioCtx) audioCtx = new AudioContext(); 
+    if(audioCtx.state === 'suspended') audioCtx.resume(); 
+}
+
 function playSound(type, freq, duration, vol=0.1) {
     try {
         initAudio();
@@ -768,33 +1289,48 @@ function playSound(type, freq, duration, vol=0.1) {
         osc.start(); osc.stop(audioCtx.currentTime + duration);
     } catch(e){}
 }
+
 function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
 function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
 function playSuccessSound() { playDing(); }
 
+function stopLofiAudio() {
+    activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
+    activeLofiNodes = [];
+}
+
 function toggleLofiAudio() {
-    initAudio();
-    const btn = document.getElementById('lofiToggleBtn');
+    initAudio(); stopLofiAudio();
+    currentLofiMode = (currentLofiMode + 1) % 5;
+    const btn = document.getElementById('lofiToggleBtn'); 
     const label = document.getElementById('lofiLabel');
 
-    if (!isLofiPlaying) {
-        lofiOsc = audioCtx.createOscillator();
-        lofiGain = audioCtx.createGain();
-        lofiOsc.type = 'triangle';
-        lofiOsc.frequency.setValueAtTime(108, audioCtx.currentTime);
-        lofiGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        lofiOsc.connect(lofiGain);
-        lofiGain.connect(audioCtx.destination);
-        lofiOsc.start();
-        isLofiPlaying = true;
-        btn.textContent = '⏸️';
-        label.textContent = 'Lofi Focus Radio: 🟢 Playing (108Hz Alpha)';
-    } else {
-        if (lofiOsc) { lofiOsc.stop(); lofiOsc.disconnect(); }
-        isLofiPlaying = false;
-        btn.textContent = '🎧';
-        label.textContent = 'Lofi Focus Radio: Off';
+    if (currentLofiMode === 0) { btn.textContent = '🎧'; label.textContent = 'Lofi Focus Radio: Off'; return; }
+    btn.textContent = '⏸️'; 
+    let gainNode = audioCtx.createGain(); gainNode.connect(audioCtx.destination);
+
+    if (currentLofiMode === 1) {
+        label.textContent = 'Radio: Alpha Focus (108Hz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 108;
+        let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 112;
+        gainNode.gain.value = 0.05; osc.connect(gainNode); osc2.connect(gainNode); osc.start(); osc2.start();
+        activeLofiNodes.push(osc, osc2);
+    } else if (currentLofiMode === 2) {
+        label.textContent = 'Radio: Theta Calm (432Hz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 432;
+        gainNode.gain.value = 0.03; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
+    } else if (currentLofiMode === 3 || currentLofiMode === 4) {
+        label.textContent = currentLofiMode === 3 ? 'Radio: Deep Brown Noise' : 'Radio: Soft Pink Noise';
+        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let output = buffer.getChannelData(0); let lastOut = 0;
+        for (let i = 0; i < bufferSize; i++) {
+            let white = Math.random() * 2 - 1;
+            if(currentLofiMode === 3) { output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5; } 
+            else { output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2; }
+        }
+        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+        gainNode.gain.value = 0.08; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
     }
 }
 
@@ -839,22 +1375,20 @@ function selectStartingQuest(quest) {
 setTimeout(checkOnboarding, 800);
 
 /* =====================================================
-STORIES ENGINE
+24-HOUR STUDY STORIES ENGINE + VIEWER LOGGING
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
 let storyTimer = null;
 
-document.getElementById('btnAddStory').onclick = () => {
-    document.getElementById('storyModal').style.display = 'flex';
-};
+document.getElementById('btnAddStory').onclick = () => { document.getElementById('storyModal').style.display = 'flex'; };
 
 async function loadActiveStories() {
     const container = document.getElementById('dynamicStoryCircles');
     try {
         const res = await fetch('/api/stories');
         const data = await res.json();
-        activeStories = data.stories || [];
+        const dbStories = data.stories || [];
 
         const welcomeStory = {
             id: 'welcome-tour',
@@ -869,7 +1403,7 @@ async function loadActiveStories() {
             is_topper: true
         };
 
-        activeStories.unshift(welcomeStory);
+        activeStories = [welcomeStory, ...dbStories];
 
         container.innerHTML = activeStories.map((s, idx) => `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
@@ -879,12 +1413,10 @@ async function loadActiveStories() {
                     </div>
                     <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
                 </div>
-                <div class="story-username">${escapeHTML(s.author_name)}</div>
+                <div class="story-username">${s.id === 'welcome-tour' ? 'Start Here' : escapeHTML(s.author_name)}</div>
             </div>
         `).join('');
-    } catch(e) {
-        container.innerHTML = '';
-    }
+    } catch(e) { container.innerHTML = ''; }
 }
 loadActiveStories();
 
@@ -901,6 +1433,10 @@ document.getElementById('btnPublishStory').onclick = async () => {
     const name = document.getElementById('storyAuthorName').value.trim();
     const inst = document.getElementById('storyInstitution').value.trim();
     const caption = document.getElementById('storyCaption').value.trim();
+    const stickerQ = document.getElementById('storyStickerQ').value.trim();
+    const optA = document.getElementById('storyStickerOptA').value.trim();
+    const optB = document.getElementById('storyStickerOptB').value.trim();
+    const correctOpt = document.getElementById('storyStickerCorrect').value;
 
     if (!name || !inst) return alert("Please fill Name and School/Coaching!");
 
@@ -915,12 +1451,8 @@ document.getElementById('btnPublishStory').onclick = async () => {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                action: 'create_story',
-                author_name: name,
-                institution: inst,
-                caption: caption,
-                media_url: storyImageData,
-                streak_count: 1
+                action: 'create_story', author_name: name, institution: inst, caption: caption, media_url: storyImageData,
+                sticker_question: stickerQ || null, sticker_opt_a: optA || null, sticker_opt_b: optB || null, sticker_correct_opt: correctOpt, streak_count: Math.floor(Math.random() * 5) + 1
             })
         });
         const data = await res.json();
@@ -930,11 +1462,8 @@ document.getElementById('btnPublishStory').onclick = async () => {
         storyImageData = null;
         loadActiveStories();
         alert("🎉 Your study story is live for 24 hours!");
-    } catch(err) {
-        alert(err.message);
-    } finally {
-        btn.disabled = false; btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)";
-    }
+    } catch(err) { alert(err.message); } 
+    finally { btn.disabled = false; btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)"; }
 };
 
 function openStoryViewer(idx) {
@@ -953,7 +1482,7 @@ function renderStorySlide() {
     const story = activeStories[currentStoryIdx];
     if (!story) { closeStoryViewer(); return; }
 
-    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution)}</span>`;
+    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution || 'Platform')}</span>`;
     
     const imgEl = document.getElementById('viewerImage');
     if (story.media_url) { imgEl.src = story.media_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
@@ -965,6 +1494,9 @@ function renderStorySlide() {
         document.getElementById('viewerStickerQ').textContent = story.sticker_question;
         document.getElementById('labelStickerA').textContent = story.sticker_opt_a;
         document.getElementById('labelStickerB').textContent = story.sticker_opt_b;
+        document.getElementById('pctStickerA').style.display = 'none'; document.getElementById('pctStickerB').style.display = 'none';
+        document.getElementById('barStickerA').style.width = '0%'; document.getElementById('barStickerB').style.width = '0%';
+        document.getElementById('btnStickerA').className = 'sticker-btn'; document.getElementById('btnStickerB').className = 'sticker-btn';
     } else {
         stickerCard.style.display = 'none';
     }
@@ -1012,25 +1544,42 @@ async function toggleViewersSheet() {
 
 async function voteStorySticker(selectedOpt) {
     const story = activeStories[currentStoryIdx];
-    playWin();
-    fetch('/api/stories', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt })
-    });
+    const bA = document.getElementById('btnStickerA'); const bB = document.getElementById('btnStickerB');
+    const pA = document.getElementById('pctStickerA'); const pB = document.getElementById('pctStickerB');
+    const barA = document.getElementById('barStickerA'); const barB = document.getElementById('barStickerB');
+
+    pA.style.display = 'inline'; pB.style.display = 'inline';
+    
+    if (story.id === 'welcome-tour') {
+        barA.style.width = '74%'; barB.style.width = '26%'; pA.textContent = '74%'; pB.textContent = '26%';
+        playWin(); if (selectedOpt === 0) bA.classList.add('voted-correct'); else bB.classList.add('voted-correct');
+        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 50, origin: { y: 0.5 } }); return; 
+    }
+
+    barA.style.width = '65%'; barB.style.width = '35%'; pA.textContent = '65%'; pB.textContent = '35%';
+
+    if (selectedOpt === Number(story.sticker_correct_opt)) {
+        playWin(); if (selectedOpt === 0) bA.classList.add('voted-correct'); else bB.classList.add('voted-correct');
+        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } });
+    } else {
+        playBuzz(); if (selectedOpt === 0) bA.classList.add('voted-wrong'); else bB.classList.add('voted-wrong');
+    }
+
+    fetch('/api/stories', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt }) });
 }
 
 function reactStory(type) {
     playDing();
+    const story = activeStories[currentStoryIdx];
     if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+    if (story.id !== 'welcome-tour') { fetch('/api/stories', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type }) }); }
 }
 
 function saveStoryToVault() {
     const story = activeStories[currentStoryIdx];
     let vault = JSON.parse(localStorage.getItem('study_vault') || '[]');
     vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() });
-    localStorage.setItem('study_vault', JSON.stringify(vault));
-    playSuccessSound();
-    alert("💾 Saved to Note Vault!");
+    localStorage.setItem('study_vault', JSON.stringify(vault)); playSuccessSound(); alert("💾 Saved to Note Vault!");
 }
 
 /* =====================================================
@@ -1045,43 +1594,30 @@ const imagePreview = document.getElementById("imagePreview");
 const removeImageButton = document.getElementById("removeImage");
 
 function setExplanationTone(tone, el) {
-    currentTone = tone;
-    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
+    currentTone = tone; document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); el.classList.add('active');
 }
 
 document.querySelectorAll("#doubtSection .subject").forEach(b => {
-    b.onclick = () => {
-        document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active'));
-        b.classList.add('active');
-        selectedSubject = b.getAttribute('data-subject');
-    };
+    b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); };
 });
 document.getElementById("uploadBtn").onclick = () => imageInput.click();
 document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
 
 imageInput.onchange = e => {
-    const file = e.target.files[0];
-    if(!file) return;
+    const file = e.target.files[0]; if(!file) return;
     const reader = new FileReader();
     reader.onload = () => {
         selectedImage = { data: reader.result.split(",")[1], mimeType: file.type };
-        imagePreview.src = reader.result;
-        imagePreview.style.display = "block";
-        removeImageButton.style.display = "block";
+        imagePreview.src = reader.result; imagePreview.style.display = "block"; removeImageButton.style.display = "block";
     };
     reader.readAsDataURL(file);
 };
-removeImageButton.onclick = () => {
-    selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none";
-};
+removeImageButton.onclick = () => { selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none"; };
 
 document.getElementById("askBtn").onclick = async () => {
     const q = questionInput.value.trim();
     if(!q && !selectedImage) return alert("Please enter a question or upload an image.");
-    document.getElementById("loadingDoubt").classList.remove('hidden');
-    document.getElementById("answerBox").style.display = "none";
-    document.getElementById("feedback").style.display = "none";
+    document.getElementById("loadingDoubt").classList.remove('hidden'); document.getElementById("answerBox").style.display = "none"; document.getElementById("feedback").style.display = "none";
 
     try {
         const res = await fetch("/api/ask", {
@@ -1089,57 +1625,350 @@ document.getElementById("askBtn").onclick = async () => {
             body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage, tone: currentTone })
         });
         const data = await res.json();
-        document.getElementById("answerText").textContent = data.answer || "No solution returned.";
-        document.getElementById("answerBox").style.display = "block";
-        document.getElementById("feedback").style.display = "block";
+        
+        const badge = document.getElementById('doubtToughnessBadge');
+        if (currentTone === 'eli10') { badge.textContent = "🐣 Simple Story Mode (ELI10)"; badge.style.color = "var(--accent-amber)"; badge.style.borderColor = "rgba(245,158,11,0.3)"; badge.style.background = "rgba(245,158,11,0.12)"; } 
+        else if (currentTone === 'tldr') { badge.textContent = "⚡ Formula Snapshot"; badge.style.color = "var(--accent-cyan)"; badge.style.borderColor = "rgba(6,182,212,0.3)"; badge.style.background = "rgba(6,182,212,0.12)"; } 
+        else { badge.textContent = "🧠 Step-by-Step Breakdown"; badge.style.color = "var(--accent-emerald)"; badge.style.borderColor = "rgba(16,185,129,0.3)"; badge.style.background = "rgba(16,185,129,0.12)"; }
+
+        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
+        document.getElementById("answerBox").style.display = "block"; document.getElementById("feedback").style.display = "block";
     } catch(err) {
-        document.getElementById("answerBox").style.display = "block";
-        document.getElementById("answerText").textContent = "Unable to fetch solution.";
-    } finally {
-        document.getElementById("loadingDoubt").classList.add('hidden');
-    }
+        document.getElementById("answerBox").style.display = "block"; document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection.";
+    } finally { document.getElementById("loadingDoubt").classList.add('hidden'); }
 };
 
-function formatMathText(text) { return text ? text.replace(/\*\*/g, "").replace(/\*/g, "") : ""; }
+function formatMathText(text) {
+    if (!text) return "";
+    const superscripts = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','x':'ˣ' };
+    return text.replace(/#{1,6}\s?/g, "").replace(/\*\*/g, "").replace(/\*/g, "").replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\mathrm\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\implies/g, " ➔ ").replace(/\\rightarrow/g, " ➔ ").replace(/\\times/g, " × ").replace(/\\div/g, " ÷ ").replace(/\\cdot/g, " · ").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\\[/g, "").replace(/\\\]/g, "").replace(/\$\$/g, "").replace(/\$/g, "").replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join('')).replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1).replace(/```[\s\S]*?```/g, "").trim();
+}
+function cleanAnswer(text){ return formatMathText(text); }
+
+document.getElementById("againBtn").addEventListener("click", function(){ const oldQuestion = questionInput.value.trim(); questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example."; document.getElementById("askBtn").click(); });
+document.getElementById("teacherBtn").addEventListener("click", function(){ const studentQuestion = questionInput.value.trim(); const explanation = document.getElementById("answerText").textContent.trim(); const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); });
 
 /* =====================================================
-TEST ENGINE & QUESTION BANK
+DATABASE LOADER & FULL 240-QUESTION BANK PRE-POPULATION
 ===================================================== */
 function generateBuiltinQuestionBank() {
     const bank = {};
+    const o = "Other School";
+    
     function setTest(org, cls, sub, title, qs) {
         const key = org + "|" + cls + "|" + sub;
         if (!bank[key]) bank[key] = {};
-        bank[key][title] = qs.map((q, idx) => ({ id: idx + 1, question: q.q, options: q.o, answer: q.a, explanation: q.e }));
+        bank[key][title] = qs.map((q, idx) => ({ id: idx + 1, question: q[0], options: [q[1], q[2], q[3], q[4]], answer: q[5], explanation: q[6] }));
     }
 
-    const defaultQs = [
-        {q:"What is the fundamental starting concept of this chapter?", o:["Concept A", "Concept B", "Concept C", "Concept D"], a:0, e:"Review core notes."},
-        {q:"Which formula applies directly to this topic?", o:["Formula 1", "Formula 2", "Formula 3", "Formula 4"], a:0, e:"Standard textbook formula."},
-        {q:"What is the standard SI measurement unit?", o:["Unit A", "Unit B", "Unit C", "Unit D"], a:0, e:"Standard unit definition."},
-        {q:"Which property governs this reaction/phenomenon?", o:["Property 1", "Property 2", "Property 3", "Property 4"], a:0, e:"Governing physical/chemical principle."},
-        {q:"Identify the correct statement:", o:["Statement A", "Statement B", "Statement C", "Statement D"], a:0, e:"Accurate textbook statement."}
+    const c9Sci = [
+        ["Which state of matter has a definite volume but no definite shape?","Solid","Liquid","Gas","Plasma",1,"Liquids take the shape of their container while keeping volume fixed."],
+        ["What is the SI unit of temperature?","Celsius","Fahrenheit","Kelvin","Pascal",2,"Kelvin is the standard international unit of temperature."],
+        ["The process of a solid changing directly into a gas is called:","Melting","Evaporation","Sublimation","Condensation",2,"Sublimation bypasses the liquid phase entirely (e.g., dry ice)."],
+        ["What is the boiling point of water in Kelvin?","273 K","373 K","100 K","0 K",1,"100°C equals 373.15 Kelvin."],
+        ["Which factor does NOT affect evaporation?","Temperature","Surface Area","Wind Speed","Colour of liquid",3,"Colour has no effect on the rate of evaporation."],
+        ["The state of matter with the highest kinetic energy is:","Solid","Liquid","Gas","Bose-Einstein Condensate",2,"Gas particles move freely and rapidly due to high kinetic energy."],
+        ["What happens to the kinetic energy of particles as temperature increases?","Decreases","Increases","Remains same","Becomes zero",1,"Heat causes particles to move faster, increasing kinetic energy."],
+        ["Dry ice is the solid form of:","Water","Carbon Monoxide","Carbon Dioxide","Nitrogen",2,"Solid carbon dioxide is commonly called dry ice."],
+        ["Which property of gas allows it to be filled into small cylinders easily?","High density","High compressibility","Rigidity","Definite shape",1,"Gases have large spaces between particles and can be compressed heavily."],
+        ["The phenomenon of spontaneous mixing of particles of two different types is:","Diffusion","Osmosis","Sublimation","Melting",0,"Diffusion is the natural mixing of particles down a concentration gradient."],
+        ["Which has the strongest intermolecular forces of attraction?","Water","Oxygen","Iron","Alcohol",2,"Solids like iron have the strongest bonds."],
+        ["During evaporation, particles escape from the:","Bottom","Bulk of liquid","Surface","Sides",2,"Evaporation is strictly a surface phenomenon."],
+        ["Latent heat of fusion is the heat required to change:","Liquid to Gas","Solid to Gas","Solid to Liquid","Liquid to Solid",2,"Fusion means melting a solid into a liquid at its melting point."],
+        ["The melting point of ice is:","273.15 K","373.15 K","100 K","0 K",0,"0°C is equal to 273.15 K."],
+        ["Evaporation causes:","Heating","Cooling","No change","Boiling",1,"Evaporating particles absorb latent heat from the surroundings, causing cooling."],
+        ["Which of the following is NOT considered matter?","Air","Water","Love","Dust",2,"Feelings and emotions are not matter as they have no mass or volume."],
+        ["Gases exert pressure on the walls of the container because:","They have high mass","Particles collide with walls","They are light","They are cool",1,"Continuous collisions of gas particles create an outward force (pressure)."],
+        ["The physical state of water at 250°C is:","Solid","Liquid","Gas","Plasma",2,"Above 100°C, water exists as a gas (steam)."],
+        ["What is the term for gas turning into a liquid?","Freezing","Condensation","Sublimation","Melting",1,"Cooling a gas condenses it into a liquid state."],
+        ["Plasma consists of:","Super-cooled particles","Super-energetic ionized particles","Neutral atoms","Solid crystals",1,"Plasma is a hot ionized gas consisting of charged ions and electrons."]
     ];
 
-    // Populate standard confidence test banks for classes 9-12
-    ["9", "10", "11", "12"].forEach(cls => {
-        ["Physics", "Chemistry", "Mathematics", "Biology"].forEach(sub => {
-            setTest("Other School", cls, sub, "TEST 1", defaultQs);
-        });
-    });
+    const c9Mat = [
+        ["Every rational number is a:","Natural number","Integer","Real number","Whole number",2,"Rational and irrational numbers together make up the set of Real numbers."],
+        ["Which of the following is an irrational number?","√4","√9","√2","√16",2,"√2 has a non-terminating and non-repeating decimal expansion."],
+        ["The decimal expansion of a rational number is:","Terminating","Non-terminating recurring","Either A or B","Non-terminating non-recurring",2,"Rational numbers either terminate or loop infinitely."],
+        ["Between any two rational numbers, there are:","Exactly one","Exactly two","No rational number","Infinitely many",3,"There are infinite rational numbers between any two given numbers."],
+        ["What is the value of 2^0?","2","0","1","Undefined",2,"Any non-zero base raised to the power of 0 equals 1."],
+        ["Which is equivalent to (a^m)^n?","a^(m+n)","a^(m-n)","a^(mn)","a^(m/n)",2,"A power raised to another power means you multiply the exponents."],
+        ["√3 × √3 equals:","√6","3","9","√9",1,"The square root of a number multiplied by itself yields the original number."],
+        ["What is the sum of a rational and an irrational number?","Always rational","Always irrational","Sometimes rational","Zero",1,"Adding a non-repeating decimal to a repeating/terminating one results in an irrational."],
+        ["Can we write 0 in the form p/q?","Yes","No","Only as 0/0","Sometimes",0,"Yes, 0 can be written as 0/1, where p=0 and q=1."],
+        ["Which number is neither prime nor composite?","0","1","2","3",1,"1 only has one factor, so it does not fit the definition of prime or composite."],
+        ["pi (π) is:","Rational","Integer","Irrational","Whole number",2,"Pi's decimal representation never terminates or repeats."],
+        ["Value of (64)^(1/2) is:","4","8","16","32",1,"The power of 1/2 is the same as square root. √64 = 8."],
+        ["Which of the following is equal to x^3 × x^4?","x^12","x^7","x^1","x^34",1,"When multiplying terms with the same base, you add the exponents: 3+4=7."],
+        ["What is the simplest form of √50?","5","5√2","10","5√5",1,"√50 = √(25 * 2) = 5√2."],
+        ["The value of 5^(-2) is:","25","-25","1/25","-1/25",2,"A negative exponent indicates the reciprocal: 1/(5^2) = 1/25."],
+        ["Are integers considered rational numbers?","Yes","No","Only positive ones","Only negative ones",0,"Any integer 'x' can be expressed as x/1."],
+        ["Which of these is a terminating decimal?","1/3","1/7","1/2","1/9",2,"1/2 equals exactly 0.5."],
+        ["What is the decimal form of 1/4?","0.25","0.50","0.75","0.14",0,"1 divided by 4 is 0.25."],
+        ["A number is strictly irrational if its decimal is:","Terminating","Repeating","Non-terminating and non-repeating","Finite",2,"Irrational decimals never end and never form a repeating pattern."],
+        ["What is √16 + √9?","7","5","25","12",0,"√16 is 4, and √9 is 3. 4 + 3 = 7."]
+    ];
+
+    const c10Sci = [
+        ["The reaction Fe2O3 + 2Al -> Al2O3 + 2Fe is an example of a:","Combination reaction","Double displacement reaction","Decomposition reaction","Displacement reaction",3,"Aluminium is more reactive and displaces iron from its oxide."],
+        ["Burning of a magnesium ribbon in air is what type of reaction?","Endothermic","Exothermic","Displacement","Double displacement",1,"Burning releases a large amount of heat and light energy."],
+        ["What gas is produced when an acid reacts with a metal?","Oxygen","Carbon dioxide","Hydrogen","Nitrogen",2,"Metals generally displace hydrogen from acids, releasing H2 gas."],
+        ["Rancidity of food is caused by:","Reduction","Oxidation","Neutralization","Precipitation",1,"Fats and oils oxidize when exposed to air, changing their taste and smell."],
+        ["To prevent potato chips from getting oxidized, bags are flushed with:","Oxygen","Nitrogen","Hydrogen","Chlorine",1,"Nitrogen acts as an inert gas preservative, preventing oxidation."],
+        ["Which of these is a chemical change?","Melting ice","Boiling water","Digestion of food","Breaking glass",2,"Digestion breaks down complex molecules into completely new, simpler substances."],
+        ["A reaction where heat is absorbed is called:","Exothermic","Endothermic","Combination","Displacement",1,"Endothermic reactions require energy (heat) input to proceed."],
+        ["CaO + H2O -> Ca(OH)2 is a:","Decomposition","Combination","Displacement","Redox",1,"Two reactants combine to form a single product."],
+        ["What color is hydrated copper sulphate crystal?","Green","Blue","White","Red",1,"Copper sulphate pentahydrate forms bright blue crystals."],
+        ["Rusting of iron is a specific form of:","Corrosion","Reduction","Sublimation","Melting",0,"Iron oxidizes in the presence of moisture to form rust."],
+        ["In the reaction CuO + H2 -> Cu + H2O, which substance is reduced?","H2","CuO","Cu","H2O",1,"Copper oxide (CuO) loses its oxygen to become Cu, hence it is reduced."],
+        ["Respiration is considered an:","Endothermic reaction","Exothermic reaction","Displacement reaction","Precipitation reaction",1,"It releases energy (ATP) in our cells by breaking down glucose."],
+        ["When Ag is exposed to air, it gets a black coating of:","AgNO3","Ag2S","Ag2O","AgCl",1,"Silver reacts with sulphur compounds in the air to form black Silver Sulphide."],
+        ["Which compound is used for whitewashing walls?","CaO","Ca(OH)2","CaCO3","CaCl2",1,"Slaked lime, Ca(OH)2, is applied to walls and slowly reacts with CO2 to form shiny CaCO3."],
+        ["What precipitate is formed when barium chloride reacts with sodium sulphate?","White","Yellow","Black","Green",0,"Barium sulphate is an insoluble white solid precipitate."],
+        ["A balanced chemical equation satisfies the law of:","Conservation of momentum","Conservation of mass","Multiple proportions","Definite proportions",1,"Mass cannot be created or destroyed in a chemical reaction."],
+        ["Heating of limestone produces:","CO and Ca","CO2 and CaO","O2 and Ca","H2 and CaO",1,"Calcium carbonate (CaCO3) decomposes to quicklime (CaO) and carbon dioxide."],
+        ["Which of the following is an example of a photochemical reaction?","Rusting","Digestion","Photosynthesis","Combustion",2,"Photosynthesis strictly requires sunlight to proceed."],
+        ["A substance that oxidizes another is the:","Reducing agent","Catalyst","Oxidizing agent","Precipitate",2,"An oxidizing agent causes oxidation by taking electrons or giving oxygen."],
+        ["The colour of solid magnesium ribbon is:","Black","Silvery white","Red","Yellow",1,"Pure magnesium is a shiny, silvery-white metal."]
+    ];
+
+    const c10Mat = [
+        ["Euclid's division lemma states a = bq + r, where r must satisfy:","1 < r < b","0 ≤ r < b","0 < r ≤ b","r > b",1,"Remainder must be 0 or greater, but less than divisor."],
+        ["The HCF of 4 and 6 is:","1","2","4","12",1,"2 is the highest common factor."],
+        ["The LCM of 4 and 6 is:","2","10","12","24",2,"12 is the lowest common multiple."],
+        ["For any two positive integers a and b, HCF(a,b) × LCM(a,b) = ?","a + b","a - b","a × b","a / b",2,"Product of numbers equals product of HCF and LCM."],
+        ["Every composite number can be expressed as a product of:","Primes","Evens","Odds","Fractions",0,"Fundamental Theorem of Arithmetic."],
+        ["π is a:","Rational number","Irrational number","Integer","Prime number",1,"Pi does not terminate or repeat."],
+        ["The decimal expansion of 7/8 is:","Non-terminating","Terminating","Non-terminating non-repeating","Integer",1,"Denominator is 8 (2^3), so it terminates exactly at 0.875."],
+        ["Which of the following is terminating?","1/3","3/8","2/7","5/11",1,"Denominator 8 has only prime factor 2."],
+        ["If p is a prime and divides a^2, then p also divides:","a","2a","a/2","a^3",0,"Standard theorem in Real Numbers."],
+        ["What is the HCF of two consecutive even numbers?","1","2","4","8",1,"Even numbers are always divisible by 2."],
+        ["What is the HCF of two consecutive prime numbers?","1","2","0","Undefined",0,"Primes have no common factors other than 1."],
+        ["√(p) is irrational if p is:","A perfect square","A prime number","An even number","Zero",1,"Root of any prime is irrational."],
+        ["Is √144 rational or irrational?","Rational","Irrational","Imaginary","Complex",0,"√144 = 12, which is rational."],
+        ["The sum of a rational and an irrational number is:","Always rational","Always irrational","Sometimes rational","Zero",1,"Rational + Irrational = Irrational."],
+        ["What is the LCM of 2, 3, and 5?","6","15","30","60",2,"2×3×5 = 30."],
+        ["Which number has no reciprocal?","1","-1","0","100",2,"Division by zero is undefined."],
+        ["The number 1 is:","Prime","Composite","Neither prime nor composite","Irrational",2,"1 only has one factor (itself)."],
+        ["Express 140 as product of primes:","2^2 × 5 × 7","2^3 × 5 × 7","2 × 5 × 14","4 × 35",0,"140 = 4 × 35 = 2^2 × 5 × 7."],
+        ["If HCF(26, 91) = 13, LCM is:","104","182","260","364",1,"(26×91)/13 = 182."],
+        ["The product of three consecutive positive integers is always divisible by:","4","5","6","10",2,"One is a multiple of 2, one is a multiple of 3."]
+    ];
+
+    const c11Phy = [
+        ["The dimensional formula of Force is:","[MLT-1]","[MLT-2]","[ML2T-2]","[M2LT-2]",1,"F = ma = kg * m/s2 = MLT-2."],
+        ["Which of the following is NOT a fundamental SI unit?","Meter","Kilogram","Newton","Ampere",2,"Newton is a derived unit (kg m/s2)."],
+        ["Light year is a unit of:","Time","Speed","Distance","Luminosity",2,"It is the distance light travels in one year."],
+        ["1 parsec is approximately equal to:","3.26 light years","1.5 light years","10 light years","100 AU",0,"Standard astronomical constant."],
+        ["Dimensional formula for work/energy is:","[MLT-2]","[ML2T-2]","[ML2T-3]","[M2L2T-2]",1,"Work = Force × Distance = ML2T-2."],
+        ["Which quantity has no dimensions?","Angle","Velocity","Momentum","Density",0,"Angle = arc/radius (L/L = 1)."],
+        ["Significant figures in 0.00502 are:","2","3","5","6",1,"Leading zeros are not significant; 5,0,2 are."],
+        ["The SI unit of solid angle is:","Radian","Degree","Steradian","Minute",2,"Steradian is used for 3D solid angles."],
+        ["Error in measurement is the difference between:","True and measured value","Two measured values","True and expected value","Zero and true value",0,"Error = |True - Measured|."],
+        ["Dimensions of universal gravitational constant (G) are:","[M-1L3T-2]","[ML3T-2]","[M-1L2T-2]","[ML2T-2]",0,"F=Gmm/r2 -> G=Fr2/m2."],
+        ["The number of base SI units is:","5","6","7","8",2,"Length, mass, time, current, temp, amount, luminosity."],
+        ["Prefix 'nano' stands for:","10^-6","10^-9","10^-12","10^9",1,"Nano = one billionth."],
+        ["1 Angstrom (AU) is the distance between:","Earth and Moon","Earth and Sun","Sun and Pluto","Earth and Mars",1,"Mean distance from Earth to Sun."],
+        ["Precision of a measurement depends on:","Least count of instrument","True value","Formula used","Environment",0,"Smaller least count = higher precision."],
+        ["Dimensions of Pressure are same as:","Force","Energy","Stress","Power",2,"Pressure and stress are both Force/Area."],
+        ["If error in radius is 2%, error in volume of a sphere is:","2%","4%","6%","8%",2,"V ~ r^3, so error is 3 * 2% = 6%."],
+        ["Which instrument is most precise?","Meter scale","Vernier caliper","Screw gauge","Measuring tape",2,"Screw gauge usually has least count of 0.001 cm."],
+        ["Light year measures what physical quantity?","Time","Mass","Length","Velocity",2,"It measures vast astronomical lengths."],
+        ["Which pair has identical dimensions?","Force and Work","Momentum and Impulse","Power and Energy","Velocity and Acceleration",1,"Impulse = Change in momentum."],
+        ["Order of magnitude of Earth's radius (6400 km) in meters is:","10^6","10^7","10^5","10^8",1,"6.4 x 10^6 m ~ 10^7 m order."]
+    ];
+
+    const c11Che = [
+        ["What is the number of moles in 18g of water?","1","2","18","0.5",0,"Molar mass of H2O is 18g/mol. 18/18 = 1."],
+        ["Avogadro's number is:","6.022 x 10^23","6.022 x 10^22","6.022 x 10^24","6.022",0,"Standard constant for particles in a mole."],
+        ["Which has the highest mass?","1 mole of H2","1 mole of O2","1 mole of H2O","1 mole of CO2",3,"CO2 is 44g/mol."],
+        ["Empirical formula of C6H12O6 is:","C6H12O6","CH2O","CHO","C2H4O2",1,"Divide by common factor 6."],
+        ["Law of definite proportions was given by:","Dalton","Proust","Lavoisier","Bohr",1,"Joseph Proust formulated it."],
+        ["Volume occupied by 1 mole of gas at STP is:","22.4 L","24.2 L","11.2 L","44.8 L",0,"Standard molar volume."],
+        ["SI unit of amount of substance is:","Gram","Kilogram","Mole","Liter",2,"Mole is the base SI unit."],
+        ["How many atoms are in 1 mole of Helium?","6.022 x 10^23","12.044 x 10^23","3.011 x 10^23","1",0,"Helium is monoatomic."],
+        ["Molarity is defined as moles of solute per:","Kg of solvent","Liter of solution","Liter of solvent","Kg of solution",1,"Molarity = moles / Vol in Liters."],
+        ["Mole fraction is independent of:","Mass","Volume","Temperature","Both Volume and Temp",3,"It uses only mass/moles, not volume."],
+        ["What is the molar mass of NaCl?","58.5 g/mol","23 g/mol","35.5 g/mol","40 g/mol",0,"23 (Na) + 35.5 (Cl) = 58.5."],
+        ["Which law states mass is neither created nor destroyed?","Law of Multiple Proportions","Law of Conservation of Mass","Law of Definite Proportions","Avogadro's Law",1,"Antoine Lavoisier's law."],
+        ["A limiting reagent is the reactant that is:","Left over","Consumed entirely","Produces most product","Has highest mass",1,"It dictates when the reaction stops."],
+        ["How many significant figures in 0.0025?","1","2","4","5",1,"Only 2 and 5 are significant."],
+        ["Calculate moles in 44g of CO2:","0.5","1","2","44",1,"Molar mass is 44g/mol, so 44/44 = 1 mole."],
+        ["Mass percentage of H in H2O is approx:","11.1%","88.9%","20%","50%",0,"2 / 18 * 100 = 11.11%."],
+        ["Unit of molality is:","mol/L","mol/kg","g/L","kg/mol",1,"Moles per kilogram of solvent."],
+        ["1 amu (atomic mass unit) is equal to:","1/12 mass of C-12","1/16 mass of O-16","1/1 mass of H-1","1g",0,"Standard definition of amu/Dalton."],
+        ["Which prefix means 10^-3?","Deci","Centi","Milli","Micro",2,"Milli stands for one-thousandth."],
+        ["The chemical formula for rust is:","Fe2O3","FeO","Fe3O4","Fe2O3.xH2O",3,"Hydrated iron(III) oxide."]
+    ];
+
+    const c11Mat = [
+        ["If a set has n elements, how many subsets does it have?","n","n^2","2^n","2n",2,"The formula for total subsets is 2^n."],
+        ["A set with no elements is called:","Singleton set","Infinite set","Empty set/Null set","Universal set",2,"Also denoted by { } or Ø."],
+        ["The set of all natural numbers is an:","Empty set","Finite set","Infinite set","Singleton set",2,"Natural numbers go on forever."],
+        ["If A = {1, 2} and B = {2, 3}, what is A ∩ B?","{1, 2, 3}","{2}","{1, 3}","Ø",1,"Intersection means common elements."],
+        ["If A = {1, 2} and B = {2, 3}, what is A ∪ B?","{1, 2, 3}","{2}","{1, 3}","Ø",0,"Union merges both sets."],
+        ["Two sets are disjoint if their intersection is:","Universal set","Empty set","Singleton set","Infinite",1,"Disjoint means no common elements."],
+        ["A - B means elements that are in:","Both A and B","A but not B","B but not A","Neither",1,"Set difference."],
+        ["Power set of a set A is the set of all:","Elements of A","Subsets of A","Supersets of A","Intersections",1,"Power set contains all possible subsets."],
+        ["If A is a subset of B, then A ∪ B = ?","A","B","Ø","A ∩ B",1,"Since B contains A, uniting them just gives B."],
+        ["If A is a subset of B, then A ∩ B = ?","A","B","Ø","A ∪ B",0,"The common elements are exactly set A."],
+        ["De Morgan's Law states (A ∪ B)' = ?","A' ∪ B'","A' ∩ B'","A ∩ B","A' - B'",1,"The complement of a union is the intersection of complements."],
+        ["In a set, the order of elements:","Must be ascending","Must be descending","Does not matter","Matters",2,"Sets are unordered collections."],
+        ["Repetition of elements in a set is:","Required","Not allowed / ignored","Encouraged","Only for numbers",1,"Sets only care about distinct elements."],
+        ["Number of elements in power set of empty set Ø is:","0","1","2","Undefined",1,"The only subset is Ø itself. 2^0 = 1."],
+        ["Universal set is usually denoted by:","U","Ø","N","R",0,"U stands for Universal set."],
+        ["If n(A)=3 and n(B)=4 and they are disjoint, n(A ∪ B) = ?","3","4","7","12",2,"3 + 4 = 7."],
+        ["Set of all vowels in English alphabet is:","Finite","Infinite","Empty","Null",0,"It has exactly 5 elements."],
+        ["A' (Complement of A) equals:","A - U","U - A","A ∩ U","Ø",1,"Everything in the Universal set except A."],
+        ["Which is an empty set?","Set of even prime numbers","Set of odd numbers divisible by 2","Set of negative integers","Set of real numbers",1,"No odd number is divisible by 2."],
+        ["Set {x: x is an integer, x^2 = 4} is:","{2}","{-2}","{2, -2}","Ø",2,"Both 2 and -2 square to 4."]
+    ];
+
+    const c11Bio = [
+        ["The system of binomial nomenclature was given by:","Charles Darwin","Carolus Linnaeus","Gregor Mendel","Aristotle",1,"Linnaeus developed the two-part naming system."],
+        ["The basic/lowest unit of classification is:","Phylum","Class","Genus","Species",3,"Species is the fundamental taxonomic rank."],
+        ["Which of the following is a defining characteristic of living organisms?","Growth","Reproduction","Response to stimuli","Increase in mass",2,"Non-living things can 'grow' by accumulation, but consciousness is defining."],
+        ["ICBN stands for:","International Code of Botanical Nomenclature","Indian Code of Biological Naming","International Congress of Botany","Internal Code of Biology",0,"Rules for naming plants."],
+        ["A group of related genera is classified as a:","Family","Order","Class","Phylum",0,"Family groups similar genera."],
+        ["In Mangifera indica, the word Mangifera represents:","Species","Genus","Family","Order",1,"The first word is the Genus."],
+        ["Herbarium is a collection of:","Live plants","Dried, pressed plant specimens","Live animals","Fossils",1,"Used for reference in botany."],
+        ["Which taxonomic aid uses analytical keys for identification?","Museum","Herbarium","Botanical Garden","Taxonomic Key",3,"Keys use contrasting characters for ID."],
+        ["Metabolism is the sum total of all:","Chemical reactions in a cell","Physical movements","Reproductive acts","Growth phases",0,"Defines all internal cellular chemistry."],
+        ["Taxonomy deals with:","Identification","Nomenclature","Classification","All of the above",3,"It encompasses all three."],
+        ["Highest category in taxonomy is:","Phylum","Kingdom","Domain/Kingdom","Class",2,"Kingdom (or Domain) is the highest."],
+        ["Binomial name has how many parts?","One","Two","Three","Many",1,"Genus and Species epithet."],
+        ["When hand-written, scientific names should be:","Bolded","Capitalized entirely","Underlined separately","Ignored",2,"Genus and species must be underlined separately."],
+        ["Taxon is a:","Process of naming","Unit of classification","Herbarium sheet","Book",1,"A taxonomic group of any rank."],
+        ["Systema Naturae was written by:","Darwin","Lamarck","Linnaeus","Wallace",2,"Linnaeus's famous taxonomy book."],
+        ["Which is the correct sequence?","Species -> Genus -> Family -> Order","Genus -> Species -> Order -> Family","Family -> Genus -> Species -> Class","Order -> Family -> Species -> Genus",0,"Ascending hierarchy."],
+        ["A zoological park is meant for:","Preserving dead animals","Ex situ conservation of animals","Growing plants","Fossil study",1,"Live animals kept outside natural habitat."],
+        ["Can non-living objects exhibit metabolism?","Yes","No","Only crystals","Only viruses",1,"Metabolism requires a cellular structure."],
+        ["Phylogeny refers to:","Naming process","Evolutionary history","Habitats","Cell structure",1,"Evolutionary relationship of organisms."],
+        ["The word 'biology' means study of:","Chemicals","Life/Living things","Rocks","Stars",1,"Bios = life, logos = study."]
+    ];
+
+    const c12Phy = [
+        ["The SI unit of Electric Flux is:","N/C","V m","C/m","Farad",1,"Flux = E.A = (V/m)*m2 = V.m"],
+        ["What is the SI unit of electric charge?","Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)",0,"Electric charge is measured in Coulombs."],
+        ["The charge of an electron is approximately:","-1.6 × 10^-19 C","+1.6 × 10^-19 C","-1.6 × 10^-27 C","-9.1 × 10^-31 C",0,"Elementary fundamental charge e."],
+        ["Quantization of electric charge is expressed as:","q = ±ne","q = n/e","q = e/n","q = n^2e",0,"Charge exists in integral multiples of e."],
+        ["Coulomb's Law constant (1/4πε0) in vacuum is equal to:","9 × 10^9","8.85 × 10^-12","9 × 10^-9","3 × 10^8",0,"Value is approx 9 x 10^9 N m2/C2."],
+        ["The electric field inside a hollow charged spherical conductor is:","Zero","Infinite","Uniform and non-zero","Decreasing",0,"Inside an electrostatic conductor, E = 0."],
+        ["Electric field lines start from:","Positive and end on negative","Negative and end on positive","Infinity always","Closed loops",0,"Diverge from +, terminate at -."],
+        ["Can two electric field lines intersect each other?","No","Yes","Only in vacuum","Only for like charges",0,"Intersection would mean two directions of field."],
+        ["Gauss's Law states that total electric flux through a closed surface is:","q_enc / ε0","q_enc × ε0","Zero","q / 4πε0",0,"Gauss's law formula."],
+        ["An electric dipole consists of:","Two equal and opposite charges","Two like charges","Single charge","Three charges",0,"Separated by a small distance."],
+        ["The SI unit of electric dipole moment is:","Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt",0,"p = q × 2a."],
+        ["The direction of an electric dipole moment is conventionally from:","Negative to positive","Positive to negative","Random","North to south",0,"Physics convention is -q to +q."],
+        ["Torque experienced by an electric dipole in uniform field E is:","p × E","p · E","p / E","Zero",0,"Cross product pE sin θ."],
+        ["A dipole in a uniform electric field experiences:","Only torque, no net force","Both force and torque","Only force","Neither",0,"Net force is zero (F = qE - qE = 0)."],
+        ["Electric field due to a point charge q at distance r varies as:","1/r^2","1/r","1/r^3","r",0,"Coulomb field is inverse-square."],
+        ["Electric field on axial line of short dipole varies with distance as:","1/r^3","1/r^2","1/r","1/r^4",0,"Dipole field drops off faster than point charge."],
+        ["Permittivity of free space (ε0) has the value:","8.854 × 10^-12","9 × 10^9","1.6 × 10^-19","6.67 × 10^-11",0,"Standard constant ε0."],
+        ["Linear charge density (λ) has SI unit:","C/m","C/m^2","C/m^3","C.m",0,"Charge per unit length."],
+        ["Surface charge density (σ) has SI unit:","C/m^2","C/m","C/m^3","Coulomb",0,"Charge per unit area."],
+        ["If a glass rod is rubbed with silk, it acquires:","Positive charge","Negative charge","No charge","Infinite charge",0,"Glass loses electrons to silk."]
+    ];
+
+    const c12Che = [
+        ["Which of the following is independent of temperature?","Molarity","Molality","Normality","Formality",1,"Molality depends on mass of solvent, not volume."],
+        ["Molarity is defined as moles of solute per:","Litre of solution","Kg of solvent","Litre of solvent","Kg of solution",0,"Moles / Volume in L."],
+        ["Colligative properties depend on:","Nature of solute","Number of solute particles","Nature of solvent","Colour of solution",1,"They depend strictly on quantity/number."],
+        ["Which of the following is a colligative property?","Boiling point","Freezing point","Osmotic pressure","Vapour pressure",2,"Relative lowering of VP, elevation of BP, depression of FP, and Osmotic Pressure."],
+        ["Raoult's law states relative lowering of vapour pressure is equal to:","Mole fraction of solvent","Mole fraction of solute","Molarity","Molality",1,"Standard Raoult definition."],
+        ["The unit of ebullioscopic constant (Kb) is:","K kg mol-1","K mol kg-1","K L mol-1","mol L-1",0,"Unit for boiling point elevation constant."],
+        ["Isotonic solutions have the same:","Density","Osmotic pressure","Temperature","Viscosity",1,"Iso = same, tonic = pressure."],
+        ["Adding a non-volatile solute to a solvent:","Lowers boiling point","Raises vapour pressure","Lowers freezing point","Increases freezing point",2,"Freezing point depression."],
+        ["Van't Hoff factor (i) for NaCl is approximately:","1","2","3","0.5",1,"NaCl dissociates into 2 ions (Na+ and Cl-)."],
+        ["Henry's Law is related to:","Solubility of gas in liquid","Boiling point elevation","Freezing point depression","Solid in solid",0,"Gas pressure correlates with concentration in liquid."],
+        ["A solution which obeys Raoult's law strictly is called:","Ideal solution","Non-ideal solution","Azeotrope","Saturated",0,"Ideal solutions have no change in enthalpy/volume on mixing."],
+        ["Positive deviation from Raoult's law means interactions are:","Stronger than pure components","Weaker than pure components","Equal to pure components","Zero",1,"Weak bonds cause particles to escape easily, raising VP."],
+        ["A mixture of ethanol and acetone shows:","Positive deviation","Negative deviation","Ideal behavior","No vapor pressure",0,"Hydrogen bonds are broken."],
+        ["Azeotropes boil at:","A constant temperature","Varying temperatures","0°C","100°C",0,"They act like pure liquids."],
+        ["The semi-permeable membrane allows passage of:","Solute particles only","Solvent molecules only","Both solute and solvent","Neither",1,"Used in osmosis."],
+        ["Osmotic pressure (Pi) is given by formula:","Pi = CRT","Pi = C/RT","Pi = RT/C","Pi = C+R+T",0,"Derived from ideal gas law."],
+        ["If Van't Hoff factor i < 1, the solute undergoes:","Dissociation","Association","No change","Evaporation",1,"Particles combine, reducing total number."],
+        ["Cryoscopic constant is related to:","Boiling point","Freezing point","Osmosis","Vapour pressure",1,"Depression of freezing point."],
+        ["Molality is preferred over Molarity because:","Easier to measure","Volume changes with temp","Mass changes with temp","It sounds better",1,"Mass is unaffected by temperature."],
+        ["Brass is an example of which type of solution?","Liquid in liquid","Solid in liquid","Solid in solid","Gas in solid",2,"Alloy of copper and zinc."]
+    ];
+
+    const c12Mat = [
+        ["A relation which is reflexive, symmetric and transitive is known as:","Universal relation","Equivalence relation","Void relation","Identity relation",1,"This is the exact definition of an Equivalence relation."],
+        ["A relation R on set A is reflexive if:","(a,b) in R","(a,a) in R for all a in A","(a,b) and (b,a) in R","(a,b) and (b,c) implies (a,c)",1,"Every element must relate to itself."],
+        ["A relation is symmetric if:","(a,b) in R => (b,a) in R","(a,a) in R","(a,b) in R => (a,c) in R","It is empty",0,"The relation works in both directions."],
+        ["A relation is transitive if (a,b) in R and (b,c) in R implies:","(c,a) in R","(b,a) in R","(a,c) in R","(a,a) in R",2,"Chain logic."],
+        ["The universal relation on a set A is:","Ø","A x A","A","Identity",1,"Every element relates to every element."],
+        ["A function f: X -> Y is one-one (injective) if:","f(x1)=f(x2) implies x1=x2","f(x)=y for all y","Range = Codomain","It is a straight line",0,"Every input maps to a unique output."],
+        ["A function is onto (surjective) if:","Domain = Range","Range = Codomain","It is one-one","It is linear",1,"Every output in Y has a preimage in X."],
+        ["A function that is both one-one and onto is called:","Bijective","Reflexive","Symmetric","Constant",0,"Bijective functions have inverses."],
+        ["The relation R = {(1,1), (2,2), (3,3)} on set {1,2,3} is:","Only reflexive","Only symmetric","Only transitive","Equivalence relation",3,"It satisfies all three conditions trivially."],
+        ["If f(x) = x^2, f: R -> R, is it one-one?","Yes","No","Only for positive x","Only for negative x",1,"f(2) = 4 and f(-2) = 4. Not unique."],
+        ["Composition of functions f and g is denoted by:","f+g","f-g","fog","f/g",2,"f(g(x)) = fog(x)."],
+        ["For an inverse function f^-1 to exist, f must be:","One-one","Onto","Bijective","Constant",2,"Only bijections are invertible."],
+        ["If R is a relation from A to B, then R is a subset of:","A","B","A x B","A U B",2,"Relations are subsets of the Cartesian product."],
+        ["Number of relations from a set with 2 elements to a set with 3 elements is:","6","2^5","2^6","64",2,"Number of elements in A x B = 6. Power set size = 2^6."],
+        ["Identity relation on set A is:","{(x,y): x != y}","{(x,x): x in A}","Ø","A x A",1,"Every element maps only to itself."],
+        ["If f(x) = 2x + 3, what is f^-1(x)?","(x-3)/2","(x+3)/2","2x-3","1/(2x+3)",0,"y = 2x+3 -> x = (y-3)/2."],
+        ["Let A={1,2}. How many equivalence relations are possible on A?","1","2","3","4",1,"The identity and the universal relation."],
+        ["If range is a proper subset of codomain, function is:","Onto","Into","Bijective","One-one",1,"It does not cover the whole codomain."],
+        ["Void relation is:","Reflexive","Symmetric and Transitive","Equivalence","Universal",1,"Vacuously true for symmetric and transitive."],
+        ["Greatest integer function f(x) = [x] is:","One-one","Onto","Bijective","Neither one-one nor onto",3,"Maps multiple reals to one integer."]
+    ];
+
+    const c12Bio = [
+        ["Which type of reproduction produces clones?","Sexual reproduction","Asexual reproduction","Both a and b","None of the above",1,"Asexual reproduction produces genetically identical offspring."],
+        ["Binary fission is observed in:","Amoeba","Hydra","Sponge","Fern",0,"Amoeba divides into two equal halves."],
+        ["Budding is a common method of asexual reproduction in:","Yeast","Human","Mosquito","Frog",0,"Yeast grows a bud that detaches."],
+        ["Vegetative propagation in potatoes is by:","Leaves","Stem tubers (Eyes)","Roots","Flowers",1,"The 'eyes' are axillary buds on the stem."],
+        ["Which plant propagates through leaf buds?","Potato","Ginger","Bryophyllum","Onion",2,"Bryophyllum forms plantlets on leaf margins."],
+        ["Water hyacinth (Terror of Bengal) is:","Eichhornia","Lotus","Hydrilla","Pistia",0,"Eichhornia crassipes drains oxygen from water."],
+        ["Oestrous cycle occurs in:","Primates","Non-primate mammals","Birds","Reptiles",1,"Cows, dogs, sheep exhibit oestrous."],
+        ["Menstrual cycle occurs in:","Primates (Monkeys, Humans)","Amphibians","Insects","Fish",0,"Unique to primates."],
+        ["Hermaphrodites are animals that are:","Unisexual","Bisexual","Asexual","Sterile",1,"They possess both male and female organs."],
+        ["Which is an example of a hermaphrodite?","Cockroach","Earthworm","Dog","Human",1,"Earthworms have both organs."],
+        ["Syngamy refers to:","Cell division","Fusion of gametes","Formation of spores","Death of cell",1,"Fertilization / fusion of male and female gametes."],
+        ["Parthenogenesis is the development of an organism:","Without fertilization","With double fertilization","From vegetative parts","From pollen",0,"Unfertilized egg develops into adult."],
+        ["External fertilization takes place in:","Humans","Birds","Frogs (Amphibians)","Reptiles",2,"Eggs and sperm are released in water."],
+        ["Which reproduction ensures genetic variation?","Vegetative","Asexual","Cloning","Sexual",3,"Mixing of two genomes causes variation."],
+        ["Lifespan of a crow is approximately:","1-2 years","15 years","140 years","400 years",1,"Parrot is 140, crow is 15."],
+        ["Zoospores are:","Motile sexual spores","Motile asexual spores","Non-motile spores","Seeds",1,"Flagellated asexual spores in algae/fungi."],
+        ["Conidia are asexual reproductive structures in:","Amoeba","Penicillium (Fungi)","Hydra","Yeast",1,"Non-motile spores produced externally."],
+        ["Offset is a vegetative propagule found in:","Water hyacinth","Agave","Mint","Potato",0,"Horizontal stem running over water."],
+        ["The vital link that ensures continuity of species between generations is:","Sperm","Egg","Zygote","Embryo",2,"Zygote is the single-cell origin of the new generation."],
+        ["Post-fertilization events include:","Gametogenesis","Embryogenesis","Pollination","Meiosis",1,"Development of embryo from zygote."]
+    ];
+
+    setTest(o, "9", "Science", "TEST 1", c9Sci);
+    setTest(o, "9", "Mathematics", "TEST 1", c9Mat);
+    setTest(o, "10", "Science", "TEST 1", c10Sci);
+    setTest(o, "10", "Mathematics", "TEST 1", c10Mat);
+    setTest(o, "11", "Physics", "TEST 1", c11Phy);
+    setTest(o, "11", "Chemistry", "TEST 1", c11Che);
+    setTest(o, "11", "Mathematics", "TEST 1", c11Mat);
+    setTest(o, "11", "Biology", "TEST 1", c11Bio);
+    setTest(o, "12", "Physics", "TEST 1", c12Phy);
+    setTest(o, "12", "Chemistry", "TEST 1", c12Che);
+    setTest(o, "12", "Mathematics", "TEST 1", c12Mat);
+    setTest(o, "12", "Biology", "TEST 1", c12Bio);
 
     return bank;
 }
 
 let testBank = generateBuiltinQuestionBank();
 
+function getRoutingOrg(orgName) {
+    const specific = ["Modern DAV Public School", "Horizon public school", "Invincible Coaching Classes"];
+    if (specific.includes(orgName)) return orgName;
+    return "Other School";
+}
+
 async function loadPlatformData(){
-    try {
+    try{
         const response = await fetch('/api/get-questions');
         const data = await response.json();
+
         if(data && Array.isArray(data.questions) && data.questions.length > 0){
             data.questions.forEach(function(q, index){
-                const org = q.organization || "Other School";
+                const org = getRoutingOrg(q.organization || "Other School");
                 const key = org + "|" + q.class_name + "|" + q.subject;
                 if(!testBank[key]) testBank[key] = {};
                 if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
@@ -1150,24 +1979,108 @@ async function loadPlatformData(){
                 });
             });
         }
-    } catch(error){ console.error("Data load error:", error); }
-}
-window.addEventListener('DOMContentLoaded', loadPlatformData);
 
+        if(data && data.dailyPuzzle){
+            document.getElementById("puzzleBox").style.display = "block";
+            const rawQ = data.dailyPuzzle.question_text || "";
+            const formattedQ = formatMathText(rawQ);
+            let enText = formattedQ, hiText = "";
+            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) {
+                const parts = formattedQ.split(/\s\/\s/);
+                enText = parts[0] ? parts[0].trim() : formattedQ;
+                hiText = parts[1] ? parts[1].trim() : "";
+            }
+            document.getElementById("puzzleQuestionEn").innerHTML = enText;
+            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
+            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
+
+            const optContainer = document.getElementById("puzzleOptionsContainer");
+            optContainer.innerHTML = '';
+            const guessOptions = ['0', '1', '2', '100'];
+            guessOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'puzzle-opt-btn'; btn.textContent = opt;
+                btn.onclick = () => checkPuzzleGuess(opt, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
+            const list = document.getElementById("leaderboardList");
+            list.innerHTML = "";
+            data.leaderboard.forEach(function(item, idx){
+                let rankClass = idx === 0 ? "first" : "";
+                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
+            });
+            document.getElementById("leaderboardBox").style.display = "block";
+        }
+    }catch(error){ console.error("Data load error:", error); }
+}
+
+window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { loadPlatformData(); }, 300); });
+
+function checkPuzzleGuess(selected, btn) {
+    const feedback = document.getElementById("puzzleFeedback");
+    if (selected === '2') {
+        playWin(); btn.classList.add('correct-pick'); feedback.style.color = 'var(--accent-emerald)'; feedback.textContent = '🎉 Correct! Value is 2.';
+        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
+    } else {
+        playBuzz(); btn.classList.add('wrong-pick'); feedback.style.color = 'var(--accent-rose)'; feedback.textContent = '❌ Incorrect. See explanation below.';
+    }
+}
+
+const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
+const puzzleSolution = document.getElementById("puzzleSolution");
+puzzleToggleBtn.addEventListener("click", function(){
+    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Logic"; }
+    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Logic"; }
+});
+
+/* =====================================================
+TEST GENERATOR & TIMER LOGIC (10 MINUTE RAPID TEST)
+===================================================== */
 let activeQuestions = [];
-let testTimerInterval = null;
-let timeRemaining = 600;
+let activeTestTitle = ""; let activeTestClass = ""; let activeTestSubject = ""; let finalScoreData = {};
+let testTimerInterval = null; let totalTimeLimit = 600; let timeRemaining = 600;
 
 const testOrg = document.getElementById("testOrg");
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
 const testSelect = document.getElementById("testSelect");
+const startTestBtn = document.getElementById("startTestBtn");
+const testSetup = document.getElementById("testSetup");
+const testArea = document.getElementById("testArea");
+const testHeader = document.getElementById("testHeader");
+const questionsContainer = document.getElementById("questionsContainer");
+const submitTestBtn = document.getElementById("submitTestBtn");
+const testResult = document.getElementById("testResult");
+const scoreText = document.getElementById("scoreText");
+const badgesContainer = document.getElementById("badgesContainer");
+const resultDetail = document.getElementById("resultDetail");
+const reviewContainer = document.getElementById("reviewContainer");
+const restartTestBtn = document.getElementById("restartTestBtn");
+const timerDisplay = document.getElementById("timerDisplay");
+const whatsappShareBtn = document.getElementById("whatsappShareBtn");
+
+function startTimer() {
+    clearInterval(testTimerInterval); timeRemaining = totalTimeLimit; updateTimerUI();
+    testTimerInterval = setInterval(function() {
+        timeRemaining--; updateTimerUI();
+        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("Time complete. Submitting test."); submitTestBtn.click(); }
+    }, 1000);
+}
+
+function updateTimerUI() {
+    if (!timerDisplay) return;
+    const minutes = Math.floor(timeRemaining / 60); const seconds = timeRemaining % 60;
+    timerDisplay.textContent = "⏳ " + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+}
 
 function updateTestList(){
     testSelect.innerHTML = '<option value="">Select Test</option>';
     const org = testOrg.value, cls = testClass.value, sub = testSubject.value;
     if(!org || !cls || !sub) return;
-    const key = org + "|" + cls + "|" + sub;
+    const key = getRoutingOrg(org) + "|" + cls + "|" + sub;
     if(testBank[key]){
         Object.keys(testBank[key]).forEach(function(testName){
             const option = document.createElement("option"); option.value = testName; option.textContent = testName; testSelect.appendChild(option);
@@ -1178,100 +2091,279 @@ testOrg.addEventListener("change", updateTestList);
 testClass.addEventListener("change", updateTestList);
 testSubject.addEventListener("change", updateTestList);
 
-document.getElementById("startTestBtn").addEventListener("click", function(){
+startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
     const org = testOrg.value, cls = testClass.value, subject = testSubject.value, test = testSelect.value;
-    if(!name || !mobile || !org || !cls || !subject || !test) return alert("Fill all details.");
+    if(!name || !mobile || !org || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
+    if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
 
-    const key = org + "|" + cls + "|" + subject;
-    activeQuestions = testBank[key] && testBank[key][test] ? testBank[key][test] : [];
-    if(!activeQuestions.length) return alert("Test unavailable.");
+    let questions = null;
+    const key = getRoutingOrg(org) + "|" + cls + "|" + subject;
+    if (testBank[key] && testBank[key][test]){ questions = testBank[key][test]; }
+    if(!questions || !questions.length){ alert("Selected test is currently unavailable."); return; }
 
-    document.getElementById("testSetup").classList.add("hidden");
-    document.getElementById("testArea").classList.remove("hidden");
-    const container = document.getElementById("questionsContainer");
-    container.innerHTML = "";
-
-    activeQuestions.forEach((q, index) => {
-        container.innerHTML += `<div class="question-card"><div class="question-number">QUESTION ${index+1}</div><div class="question-text">${q.question}</div>${q.options.map((opt, i) => `<label class="option"><input type="radio" name="q${q.id}" value="${i}"><span>${opt}</span></label>`).join('')}</div>`;
-    });
-
-    timeRemaining = 600;
-    clearInterval(testTimerInterval);
-    testTimerInterval = setInterval(() => {
-        timeRemaining--;
-        document.getElementById("timerDisplay").textContent = `⏳ ${Math.floor(timeRemaining/60)}:${(timeRemaining%60).toString().padStart(2,'0')}`;
-        if(timeRemaining <= 0) document.getElementById("submitTestBtn").click();
-    }, 1000);
+    activeTestClass = cls; activeTestSubject = subject;
+    startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
-document.getElementById("submitTestBtn").addEventListener("click", () => {
-    clearInterval(testTimerInterval);
-    let correct = 0;
-    activeQuestions.forEach(q => {
-        const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
-        if(sel && Number(sel.value) === q.answer) correct++;
-    });
-    document.getElementById("scoreText").textContent = `${correct}/${activeQuestions.length}`;
-    document.getElementById("testArea").classList.add("hidden");
-    document.getElementById("testResult").style.display = "block";
-    playWin();
-    if(typeof confetti === "function") confetti();
+const generateTestBtn = document.getElementById("generateTestBtn");
+const generatorLoading = document.getElementById("generatorLoading");
+
+generateTestBtn.addEventListener("click", async function(){
+    const cls = document.getElementById("genClass").value; const subject = document.getElementById("genSubject").value;
+    const chapter = document.getElementById("genChapter").value.trim(); const numberOfQuestions = Number(document.getElementById("genNumber").value);
+    const difficulty = document.getElementById("genDifficulty").value; const questionType = document.getElementById("genQuestionType").value;
+
+    if(!cls || !subject || !chapter){ alert("Please complete Class, Subject, and Chapter inputs."); return; }
+
+    generateTestBtn.disabled = true; generatorLoading.classList.remove('hidden');
+    try{
+        const response = await fetch("/api/generate-test", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" })
+        });
+        const data = await response.json();
+        if(!response.ok) throw new Error(data.error || "Generation error.");
+        const generated = extractQuestions(data);
+        if(!generated.length) throw new Error("No questions returned.");
+        activeTestClass = cls; activeTestSubject = subject;
+        startQuestions(generated, "Class " + cls + " " + subject, "Practice Set — " + chapter);
+    }catch(error){ alert("Test generation failed: " + error.message); }
+    finally{ generateTestBtn.disabled = false; generatorLoading.classList.add('hidden'); }
 });
 
-document.getElementById("restartTestBtn").addEventListener("click", () => {
-    document.getElementById("testResult").style.display = "none";
-    document.getElementById("testSetup").classList.remove("hidden");
+function extractQuestions(data){
+    let questions=[];
+    if(Array.isArray(data)) questions = data;
+    else if(data && Array.isArray(data.questions)) questions = data.questions;
+    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions;
+    else if(data && data.data && Array.isArray(data.data.questions)) questions = data.data.questions;
+
+    return questions.map(function(q,index){
+        let options = q.options || q.choices || []; let answer = q.answer;
+        if(answer===undefined || answer===null) answer = q.correctAnswer;
+        if(typeof answer==="string" && options.length){
+            const letter = answer.trim().toUpperCase();
+            if(letter==="A") answer=0; if(letter==="B") answer=1; if(letter==="C") answer=2; if(letter==="D") answer=3;
+            if(answer>=0 && answer<options.length) answer = Number(answer);
+        }
+        return { id: index+1, question: q.question || q.questionText || "Question " + (index+1), options: options, answer: Number(answer), explanation: q.explanation };
+    }).filter(function(q){ return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length); });
+}
+
+function startQuestions(questions, headerTitle, testTitle){
+    activeQuestions = questions; activeTestTitle = testTitle;
+    testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
+    reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)";
+    questionsContainer.innerHTML = "";
+
+    questions.forEach(function(q,index){
+        const card = document.createElement("div"); card.className = "question-card";
+        let optionsHTML="";
+        q.options.forEach(function(option, optionIndex){
+            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>';
+        });
+        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
+        questionsContainer.appendChild(card);
+    });
+    window.scrollTo({ top:0, behavior:"smooth" });
+    startTimer();
+}
+
+function generateBadges(percentage, timeSpentSeconds) {
+    let badgesHTML = "";
+    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
+    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
+    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; }
+    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; }
+    return badgesHTML;
+}
+
+submitTestBtn.addEventListener("click", async function(){
+    const timeSpent = totalTimeLimit - timeRemaining; clearInterval(testTimerInterval);
+    const questions = activeQuestions; if(!questions.length) return;
+
+    submitTestBtn.disabled = true; submitTestBtn.textContent = "SUBMITTING...";
+    let correct=0, attempted=0; const answers=[]; let reviewHTML = "";
+
+    questions.forEach(function(q,index){
+        const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
+        let selectedAnswer = null; let isCorrect = false;
+
+        if(selected){
+            attempted++; selectedAnswer = Number(selected.value);
+            if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
+        }
+        
+        answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
+
+        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
+        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>";
+        let correctPick = formatMathText(escapeHTML(q.options[q.answer]));
+        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
+
+        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
+    });
+
+    const wrong = attempted - correct; const unanswered = questions.length - attempted;
+    const percentage = Math.round((correct/questions.length)*100);
+
+    badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
+    if (percentage >= 80) { playSuccessSound(); if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); } }
+
+    finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
+    scoreText.textContent = correct + "/" + questions.length;
+    resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
+
+    const heatmap = document.getElementById('testHeatmap');
+    if (percentage >= 85) { heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`; } 
+    else if (percentage >= 60) { heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`; } 
+    else { heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`; }
+
+    reviewContainer.innerHTML = reviewHTML;
+    testArea.classList.add("hidden"); testResult.style.display = "block";
+    testResult.scrollIntoView({ behavior:"smooth", block:"start" });
+
+    const studentName = document.getElementById("studentName").value.trim();
+    const studentMobile = document.getElementById("studentMobile").value.trim();
+    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
+    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
+
+    try{
+        await fetch("/api/save-test-attempt", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+        });
+    }catch(error){ console.error(error); }
+    finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
+});
+
+restartTestBtn.addEventListener("click", function(){
+    testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
+    activeQuestions = []; activeTestTitle = ""; activeTestClass = ""; activeTestSubject = "";
+    window.scrollTo({ top:0, behavior:"smooth" });
+});
+
+whatsappShareBtn.addEventListener("click", function(){
+    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href;
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
 /* =====================================================
-ARENA 1v1 BOT & ROOM MATCHMAKING
+ARENA 1v1 LOGIC (WITH SOLO BOT PRACTICE ENGINE)
 ===================================================== */
-let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, isBotMatch: false, botScore: 0 };
+let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
 
 function startBotMatch() {
     const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
     const cls = document.getElementById('arenaClass').value || '10';
-    let sampleBank = testBank["Other School|" + cls + "|Physics"] || Object.values(testBank)[0];
-    let firstTestKey = Object.keys(sampleBank)[0];
-    arena.questions = (sampleBank[firstTestKey] || []).slice(0, 10);
 
-    arena.isBotMatch = true; arena.name = name; arena.score = 0; arena.botScore = 0; arena.currentQ = 0;
-    document.getElementById('arenaSetup').classList.add('hidden');
-    document.getElementById('arenaBattle').classList.remove('hidden');
+    let sampleBank = testBank["Other School|" + cls + "|Science"] || testBank["Other School|10|Science"] || Object.values(testBank)[0];
+    let firstTestKey = Object.keys(sampleBank)[0];
+    let questions = sampleBank[firstTestKey] || [];
+
+    arena.isBotMatch = true;
+    arena.name = name;
+    arena.playerNum = 1;
+    arena.score = 0;
+    arena.botScore = 0;
+    arena.questions = questions.slice(0, 10);
+
     document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`;
-    document.getElementById('uiP2Name').innerHTML = `🤖 Bot <span id="uiP2Score">0</span>`;
-    loadArenaQuestion();
+    document.getElementById('uiP2Name').innerHTML = `🤖 Invincible Bot <span id="uiP2Score">0</span>`;
+    startArenaGame();
 }
 
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
-    if(!name) return alert("Enter name.");
+    if(!name) return alert("Please enter your name.");
+
+    const btn = document.getElementById('btnCreateRoom');
+    btn.disabled = true; btn.textContent = "Generating match...";
+
     try {
-        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) });
+        const res = await fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'create', player_name: name, class_name: className })
+        });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
-        arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
+
+        arena.isBotMatch = false; arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
+
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
-    } catch(err) { alert(err.message); }
+        arena.pollInterval = setInterval(pollRoomState, 2000);
+    } catch(err) { alert("Arena connection error: " + err.message); } 
+    finally { btn.disabled = false; btn.textContent = "⚡ Create 1v1 Room"; }
 };
 
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter name and code.");
+    if(!name || !code) return alert("Enter name and 4-digit code.");
+
+    const btn = document.getElementById('btnJoinRoom');
+    btn.disabled = true; btn.textContent = "Connecting...";
+
     try {
-        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) });
+        const res = await fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'join', room_code: code, player_name: name })
+        });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
-        arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+
+        arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+
+        document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
+        document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
+
         startArenaGame();
-    } catch(err) { alert(err.message); }
+        arena.pollInterval = setInterval(pollRoomState, 2000);
+    } catch(err) { alert("Unable to join: " + err.message); } 
+    finally { btn.disabled = false; btn.textContent = "🚀 Join Room"; }
 };
+
+async function pollRoomState() {
+    if (arena.isBotMatch) return;
+    try {
+        const res = await fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'sync', room_code: arena.code })
+        });
+        const data = await res.json();
+        if(!data.room) return;
+        const room = data.room;
+
+        // Start game for Player 1 automatically as soon as player 2 joins
+        if (arena.playerNum === 1 && room.player2_name && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
+            document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`;
+            document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
+            startArenaGame();
+        }
+
+        const p1Score = room.player1_score || 0;
+        const p2Score = room.player2_score || 0;
+        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score;
+        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
+
+        const total = p1Score + p2Score;
+        if (total > 0) {
+            const p1Pct = Math.round((p1Score / total) * 100);
+            document.getElementById('vsFillP1').style.width = p1Pct + '%';
+            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
+        }
+
+        if (room.player1_finished && room.player2_finished) {
+            clearInterval(arena.pollInterval); showArenaResult(room);
+        }
+    } catch(e){}
+}
 
 function startArenaGame() {
     document.getElementById('arenaSetup').classList.add('hidden');
@@ -1281,74 +2373,255 @@ function startArenaGame() {
 }
 
 function loadArenaQuestion() {
-    if (arena.currentQ >= 10) {
-        document.getElementById('arenaBattle').classList.add('hidden');
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:24px; font-weight:900; color:var(--accent-emerald);">MATCH OVER</div>`;
-        document.getElementById('finalP1').innerHTML = `Score: ${arena.score}`;
-        document.getElementById('arenaResult').classList.remove('hidden');
-        return;
-    }
+    if (arena.currentQ >= 10) { finishArenaGame(); return; }
     const q = arena.questions[arena.currentQ];
     document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
+    
+    let optsHTML = '';
     const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
-    const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
-    document.getElementById('arenaOptions').innerHTML = opts.map((opt, idx) => `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`).join('');
+    opts.forEach((opt, idx) => {
+        const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
+        optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
+    });
+    document.getElementById('arenaOptions').innerHTML = optsHTML;
+
     arena.timer = 10;
+    document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+    clearInterval(arena.interval);
     arena.interval = setInterval(() => {
-        arena.timer--;
-        document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
-        if(arena.timer <= 0) handleArenaAnswer(-1, -1);
+        arena.timer--; document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+        if (arena.timer <= 0) handleArenaAnswer(-1, -1);
     }, 1000);
 }
 
-function handleArenaAnswer(sel, cor) {
+async function handleArenaAnswer(selectedIdx, correctIdx) {
     clearInterval(arena.interval);
-    if(sel === Number(cor)) { playDing(); arena.score += (10 + arena.timer); if(typeof confetti === "function") confetti(); } else { playBuzz(); }
-    if(arena.isBotMatch && Math.random() > 0.3) arena.botScore += 12;
-    document.getElementById('uiP1Score').textContent = arena.score;
-    if(arena.isBotMatch) document.getElementById('uiP2Score').textContent = arena.botScore;
+    const card = document.getElementById('arenaCardContainer');
+
+    if (selectedIdx === Number(correctIdx)) {
+        playDing();
+        arena.score += (10 + arena.timer);
+        if (typeof confetti === "function") confetti({ particleCount: 35, spread: 40, origin: { y: 0.7 } });
+    } else {
+        playBuzz();
+        card.classList.add('arena-shake');
+        setTimeout(() => card.classList.remove('arena-shake'), 400);
+    }
+
+    if (arena.isBotMatch) {
+        if (Math.random() > 0.3) { arena.botScore += (10 + Math.floor(Math.random() * 8)); }
+        document.getElementById('uiP1Score').textContent = arena.score;
+        document.getElementById('uiP2Score').textContent = arena.botScore;
+        const total = arena.score + arena.botScore;
+        if (total > 0) {
+            const p1Pct = Math.round((arena.score / total) * 100);
+            document.getElementById('vsFillP1').style.width = p1Pct + '%';
+            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
+        }
+    } else {
+        fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
+        });
+    }
+
     arena.currentQ++; loadArenaQuestion();
 }
 
+function finishArenaGame() {
+    document.getElementById('arenaBattle').classList.add('hidden');
+    if (arena.isBotMatch) {
+        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible Bot", player2_score: arena.botScore });
+    } else {
+        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
+        document.getElementById('arenaResult').classList.remove('hidden');
+        fetch('/api/arena', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
+        });
+    }
+}
+
+function showArenaResult(room) {
+    const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
+    const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
+    document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
+    document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
+    document.getElementById('arenaResult').classList.remove('hidden');
+
+    if (myScore > opScore) {
+        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
+        if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+    } else if (myScore < opScore) {
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
+    } else {
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-amber);">🤝 DRAW</div>`;
+    }
+}
+
 /* =====================================================
-COMMUNITY FEED
+COMMUNITY FEED JAVASCRIPT
 ===================================================== */
+let currentFeedFilterSubject = 'All';
+
+function setFeedSubjectFilter(sub, el) {
+    currentFeedFilterSubject = sub;
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    loadFeedPosts();
+}
+
 async function loadFeedPosts() {
     const list = document.getElementById('postsList');
+    const sub = currentFeedFilterSubject;
+
     try {
-        const res = await fetch(`/api/feed?student_class=All&subject=All`);
+        const res = await fetch(`/api/feed?student_class=All&subject=${sub}`);
         const data = await res.json();
-        if(!data.posts || data.posts.length === 0) { list.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px;">No posts yet. Be the first!</div>'; return; }
+        
+        if (!data.posts || data.posts.length === 0) {
+            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet. Be the first to share!</div>';
+            return;
+        }
+
         list.innerHTML = data.posts.map(p => `
-            <div class="feed-card">
-                <div class="feed-author">${escapeHTML(p.author_name)} <span style="font-weight:normal; color:var(--text-muted);">(${escapeHTML(p.institution)})</span></div>
-                <div style="font-size:15px; margin:10px 0; color:#f8fafc;">${escapeHTML(p.content)}</div>
+            <div class="feed-card" id="post-${p.id}">
+                <div class="feed-card-header">
+                    <div>
+                        <div class="feed-author">${escapeHTML(p.author_name || 'Anonymous Student')}</div>
+                        <div class="feed-school">${escapeHTML(p.institution || 'CBSE School')} &bull; Class ${escapeHTML(p.student_class)}</div>
+                    </div>
+                    <span class="feed-badge">${escapeHTML(p.subject)}</span>
+                </div>
+                <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
+                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment for post">` : ''}
+                <div class="feed-actions">
+                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
+                    <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
+                    <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
+                </div>
+
+                <div class="comments-drawer" id="comments-${p.id}">
+                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading comments...</div></div>
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <input type="text" id="com-input-${p.id}" placeholder="Type explanation or response..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
+                        <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
+                    </div>
+                </div>
             </div>
         `).join('');
-    } catch(err){ list.innerHTML = '<div style="text-align:center; color:var(--accent-rose);">Feed error.</div>'; }
+
+    } catch(err) {
+        list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
+    }
 }
 
 document.getElementById('btnPublishPost').onclick = async () => {
-    const content = document.getElementById('feedContent').value.trim();
-    const name = document.getElementById('feedAuthorName').value.trim() || 'Anonymous';
-    const inst = document.getElementById('feedInstitution').value.trim() || 'CBSE School';
+    let name = document.getElementById('feedAuthorName').value.trim();
+    let inst = document.getElementById('feedInstitution').value.trim();
     const cls = document.getElementById('feedClass').value;
     const sub = document.getElementById('feedSubject').value;
+    const content = document.getElementById('feedContent').value.trim();
 
-    if(!content) return alert("Write something to post.");
+    if (!content) return alert("Please enter post content.");
+    if (!name) name = "Anonymous Peer";
+    if (!inst) inst = "CBSE School";
+
+    localStorage.setItem('student_name', name);
+    localStorage.setItem('student_inst', inst);
+
+    const btn = document.getElementById('btnPublishPost');
+    btn.disabled = true; btn.textContent = "Publishing...";
+
     try {
-        await fetch('/api/feed', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
+        const res = await fetch('/api/feed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'create_post', author_name: name, institution: inst, student_class: cls, subject: sub, content: content })
         });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
         document.getElementById('feedContent').value = '';
         loadFeedPosts();
-    } catch(err){ alert("Posting failed."); }
+    } catch(err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = "POST TO COMMUNITY";
+    }
 };
 
-function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
-</script>
+async function likePost(postId) {
+    const likesSpan = document.getElementById(`likes-${postId}`);
+    likesSpan.textContent = Number(likesSpan.textContent) + 1;
+    await fetch('/api/feed', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'like_post', post_id: postId })
+    });
+}
 
-</body>
-</html>
+async function reportPost(postId) {
+    if (!confirm("Report post for academic review?")) return;
+    try {
+        const res = await fetch('/api/feed', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'report_post', post_id: postId })
+        });
+        const data = await res.json();
+        alert(data.message || "Report recorded.");
+        document.getElementById(`post-${postId}`).style.display = 'none';
+    } catch(e){}
+}
+
+async function toggleComments(postId) {
+    const drawer = document.getElementById(`comments-${postId}`);
+    if (drawer.style.display === 'block') {
+        drawer.style.display = 'none';
+        return;
+    }
+    drawer.style.display = 'block';
+    loadComments(postId);
+}
+
+async function loadComments(postId) {
+    const container = document.getElementById(`comments-list-${postId}`);
+    try {
+        const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
+        const data = await res.json();
+        if (!data.comments || data.comments.length === 0) {
+            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No discussions yet.</div>';
+            return;
+        }
+        container.innerHTML = data.comments.map(c => `
+            <div class="comment-item">
+                <div style="font-weight:800; color:var(--accent-cyan); font-size:12px; margin-bottom:2px;">${escapeHTML(c.author_name)} <span style="color:var(--text-muted); font-weight:normal;">&bull; ${escapeHTML(c.institution)}</span></div>
+                <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
+            </div>
+        `).join('');
+    } catch(e){}
+}
+
+async function addComment(postId) {
+    const input = document.getElementById(`com-input-${postId}`);
+    const content = input.value.trim();
+    const name = document.getElementById('feedAuthorName').value.trim() || localStorage.getItem('student_name') || 'Student';
+    const inst = document.getElementById('feedInstitution').value.trim() || localStorage.getItem('student_inst') || 'School';
+
+    if (!content) return alert("Please enter discussion text.");
+
+    try {
+        const res = await fetch('/api/feed', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'add_comment', post_id: postId, author_name: name, institution: inst, content: content })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        input.value = '';
+        loadComments(postId);
+    } catch(err) {
+        alert(err.message);
+    }
+}
+</script>
