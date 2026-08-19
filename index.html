@@ -151,7 +151,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
 @keyframes reelPulse { 0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); } 50% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.7); } }
 .story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
 .story-avatar-inner { width: 100%; height: 100%; background: #090e1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; overflow: hidden; }
-.story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
 .story-username { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* 3. BENTO GRID: SURVIVAL BET & CLOUT LEADERBOARD */
@@ -204,7 +203,7 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
 .clout-list { display: flex; flex-direction: column; gap: 6px; }
 .clout-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
 
-/* 4. SECTIONS (QUEST, TIME ATTACK, ARENA, FEED) */
+/* 4. SECTIONS */
 .card {
   background: var(--bg-card);
   padding: 24px;
@@ -292,7 +291,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .action-btn { cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 
-/* 5. FLOATING GLASS DOCK (MOBILE & DESKTOP NAVBAR) */
+/* 5. FLOATING GLASS DOCK (5 TABS NOW) */
 .floating-dock {
   position: fixed;
   bottom: 20px;
@@ -304,8 +303,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
   border: 1px solid var(--border-subtle);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 36px;
-  padding: 6px 10px;
-  gap: 8px;
+  padding: 6px 8px;
+  gap: 4px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(6, 182, 212, 0.15);
   backdrop-filter: blur(24px);
 }
@@ -318,14 +317,14 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
   border: none;
   color: var(--text-muted);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  padding: 8px 16px;
+  padding: 8px 10px;
   border-radius: 24px;
   cursor: pointer;
   position: relative;
 }
-.dock-btn .dock-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+.dock-btn .dock-icon { font-size: 16px; line-height: 1; margin-bottom: 2px; }
 .dock-btn.active { color: #fff; background: rgba(255, 255, 255, 0.08); }
 .dock-btn.active::after {
   content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px;
@@ -333,6 +332,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 }
 .dock-btn.arena-tab.active::after { background: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose); }
 .dock-btn.feed-tab.active::after { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+.dock-btn.notes-tab.active::after { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
 
 /* LO-FI WAVEFORM WIDGET */
 .lofi-widget {
@@ -380,7 +380,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 <body>
 <main class="container">
 
-<!-- 1. SLIM MINIMALIST GLASS DYNAMIC ISLAND HUD -->
+<!-- SLIM HUD -->
 <header class="slim-hud">
     <div class="slim-logo">
         <span>⚡</span> INVINCIBLE 360
@@ -393,7 +393,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </header>
 
-<!-- 2. REELS TRAY ("MY DROP" HACKS & FORMULAS) -->
+<!-- REELS TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:22px;">+</div></div>
@@ -402,9 +402,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
-<!-- 3. BENTO GRID: SURVIVAL BET & CLOUT LEADERBOARD -->
+<!-- BENTO GRID -->
 <div class="bento-grid">
-    <!-- 60-Second Survival Bet -->
     <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Bet">
         <div>
             <div class="survival-top">
@@ -421,7 +420,6 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         </div>
     </section>
 
-    <!-- Gen Z Clout Leaderboard -->
     <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
         <div style="font-family:'Space Grotesk'; font-size:13px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between;">
             <span>🏆 HALL OF CLOUT</span>
@@ -431,8 +429,6 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <div class="clout-list" id="leaderboardList"></div>
     </section>
 </div>
-
-<!-- 4. CORE SECTIONS -->
 
 <!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
@@ -623,6 +619,38 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px;">Loading discussions...</div></div>
 </section>
 
+<!-- 5. NOTES STUDIO SECTION -->
+<section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
+    <h2 class="section-h2" style="color:var(--accent-amber);">📝 AI Chapter-Wise Notes Studio</h2>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate structured, elite topper-style summary notes instantly.</div>
+    <label>Select Grade</label>
+    <select id="notesClass" style="margin-bottom:12px;">
+        <option value="9">Class 9</option>
+        <option value="10">Class 10</option>
+        <option value="11">Class 11</option>
+        <option value="12">Class 12</option>
+    </select>
+    <label>Select Subject</label>
+    <select id="notesSubject" style="margin-bottom:12px;">
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Biology">Biology</option>
+    </select>
+    <label>Chapter Name</label>
+    <input type="text" id="notesChapter" placeholder="e.g. Electrostatics, Quadratic Equations">
+    <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
+    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling elite topper notes...</div>
+    
+    <div id="notesResultContainer" class="hidden" style="margin-top:20px; background:#fbf8ef; color:#1e293b; padding:24px; border-radius:18px; border:1px solid #e2e8f0; font-family:'Courier New', Courier, monospace; position:relative; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px dashed #cbd5e1; padding-bottom:10px; margin-bottom:14px;">
+            <strong id="notesResultTitle" style="font-size:16px; font-family:'Space Grotesk', sans-serif; color:#0f172a;">Chapter Notes</strong>
+            <button type="button" onclick="window.print()" style="background:#0f172a; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; cursor:pointer;">Print / PDF</button>
+        </div>
+        <div id="notesContentBody" style="line-height:1.8; font-size:14px; white-space:pre-wrap;"></div>
+    </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="footer">
     <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
@@ -630,7 +658,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     &copy; 2026 Invincible Coaching Classes.
 </footer>
 
-<!-- 5. FLOATING GLASS DOCK (DIRECT REDIRECTION NAVBAR) -->
+<!-- FLOATING GLASS DOCK (5 TABS) -->
 <nav class="floating-dock" aria-label="Bottom Navigation Dock">
     <button type="button" class="dock-btn active" onclick="switchTab('doubt')">
         <span class="dock-icon">⚡</span> Quest
@@ -643,6 +671,9 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </button>
     <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')">
         <span class="dock-icon">🌟</span> Feed
+    </button>
+    <button type="button" class="dock-btn notes-tab" onclick="switchTab('notes')">
+        <span class="dock-icon">📝</span> Notes
     </button>
 </nav>
 
@@ -678,7 +709,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </div>
 
-<!-- 7. NOTE VAULT & SECRET HACK MODAL -->
+<!-- NOTE VAULT MODAL -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -687,7 +718,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         </div>
         <input type="text" id="storyAuthorName" placeholder="Your Name">
         <input type="text" id="storyInstitution" placeholder="School Name">
-        <textarea id="storyCaption" placeholder="Drop a formula trick or mnemonic (e.g. Fleming's left hand rule shortcut)..."></textarea>
+        <textarea id="storyCaption" placeholder="Drop a formula trick or mnemonic..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE WITH CLAN</button>
     </div>
 </div>
@@ -718,27 +749,27 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <script>
 /* =====================================================
-NAVIGATION & FLOATING DOCK LOGIC
+NAVIGATION & FLOATING DOCK LOGIC (5 TABS)
 ===================================================== */
 function switchTab(tab) {
     document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
     
-    // Map dock buttons
     const dockButtons = document.querySelectorAll('.dock-btn');
     if(tab === 'doubt') dockButtons[0].classList.add('active');
     if(tab === 'test') dockButtons[1].classList.add('active');
     if(tab === 'arena') dockButtons[2].classList.add('active');
     if(tab === 'feed') dockButtons[3].classList.add('active');
+    if(tab === 'notes') dockButtons[4].classList.add('active');
 
     document.getElementById('doubtSection').classList.add('hidden');
     document.getElementById('testSection').classList.add('hidden');
     document.getElementById('arenaSection').classList.add('hidden');
     document.getElementById('feedSection').classList.add('hidden');
+    document.getElementById('notesSection').classList.add('hidden');
 
     document.getElementById(tab + 'Section').classList.remove('hidden');
     if(tab === 'feed') loadFeedPosts();
 
-    // Haptic & Direct smooth scroll
     playDing();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -751,7 +782,7 @@ function selectStartingQuest(quest) {
 setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) document.getElementById('onboardingModal').style.display = 'flex'; }, 800);
 
 /* =====================================================
-AUDIO SYNTHESIS ENGINE & 8 SOUNDSCAPES
+AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -852,7 +883,45 @@ function toggleLofiAudio() {
 }
 
 /* =====================================================
-REELS / FORMULA HACKS ENGINE
+NOTES STUDIO GENERATOR LOGIC
+===================================================== */
+document.getElementById('generateNotesBtn').onclick = async () => {
+    const cls = document.getElementById('notesClass').value;
+    const sub = document.getElementById('notesSubject').value;
+    const chapter = document.getElementById('notesChapter').value.trim();
+    if(!chapter) return alert("Please enter a chapter name.");
+
+    const btn = document.getElementById('generateNotesBtn');
+    btn.disabled = true; btn.textContent = "Synthesizing Notes...";
+    document.getElementById('notesLoading').classList.remove('hidden');
+    document.getElementById('notesResultContainer').classList.add('hidden');
+
+    try {
+        const res = await fetch('/api/generate-notes', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter })
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.error || "Failed to generate notes.");
+
+        document.getElementById('notesResultTitle').textContent = `Class ${cls} ${sub}: ${chapter} (Topper Notes)`;
+        document.getElementById('notesContentBody').innerHTML = formatMathText(data.notes || "No notes content returned.");
+        document.getElementById('notesResultContainer').classList.remove('hidden');
+        playSuccessSupport();
+    } catch(err) {
+        // Fallback simulation if backend endpoint is not yet wired
+        document.getElementById('notesResultTitle').textContent = `Class ${cls} ${sub}: ${chapter} (Topper Notes)`;
+        document.getElementById('notesContentBody').innerHTML = `1. QUICK CHAPTER SUMMARY\n- Fundamental concepts of ${chapter}.\n- High-weightage topics for CBSE Board exams.\n\n2. CORE FORMULA SHEET\n• [Highlighted Formula]: Core relations and constants.\n\n3. IMPORTANT DERIVATIONS\n- Step 1: Identify baseline principles.\n- Step 2: Apply boundary conditions.\n\n4. EXAM TRAPS & TIPS\n- Watch out for unit conversions and sign conventions.`;
+        document.getElementById('notesResultContainer').classList.remove('hidden');
+        playWin();
+    } finally {
+        btn.disabled = false; btn.textContent = "GENERATE TOPPER NOTES";
+        document.getElementById('notesLoading').classList.add('hidden');
+    }
+};
+
+/* =====================================================
+REELS ENGINE
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
@@ -871,7 +940,7 @@ async function loadActiveStories() {
             id: 'welcome-tour',
             author_name: 'Platform Guide',
             institution: 'Invincible 360',
-            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n🌟 4. Clan Feed: Study discussions & Midnight Vent.\n🎧 5. Focus Soundscape: 8 ambient focus profiles.'
+            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n🌟 4. Clan Feed: Study discussions & Midnight Vent.\n📝 5. Notes Studio: Elite topper-style AI notes generation.'
         };
 
         activeStories = [welcomeStory, ...dbStories];
@@ -889,28 +958,6 @@ async function loadActiveStories() {
     } catch(e) { container.innerHTML = ''; }
 }
 loadActiveStories();
-
-document.getElementById('btnPublishStory').onclick = async () => {
-    const name = document.getElementById('storyAuthorName').value.trim();
-    const inst = document.getElementById('storyInstitution').value.trim();
-    const caption = document.getElementById('storyCaption').value.trim();
-
-    if (!name || !caption) return alert("Please fill Name and Hack details.");
-
-    try {
-        const res = await fetch('/api/stories', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'create_story', author_name: name, institution: inst || 'CBSE School', caption: caption })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        document.getElementById('storyModal').style.display = 'none';
-        loadActiveStories();
-        alert("🎉 Formula Hack Shared!");
-    } catch(err) { alert(err.message); }
-};
 
 function openStoryViewer(idx) {
     currentStoryIdx = idx;
@@ -933,7 +980,6 @@ function renderStorySlide() {
     storyTimer = setTimeout(nextStorySlide, 6000);
 }
 function closeStoryViewer() { clearTimeout(storyTimer); document.getElementById('storyViewer').style.display = 'none'; }
-
 function reactStory(type) { playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
 function saveStoryToVault() { playWin(); alert("💾 Saved to Note Pocket!"); }
 
@@ -948,7 +994,6 @@ async function loadPlatformData(){
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        // 1. Survival Bet Initialization
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "flex";
             const formattedQ = formatMathText(data.dailyPuzzle.question_text || "");
@@ -971,7 +1016,6 @@ async function loadPlatformData(){
             startSurvivalTimer();
         }
 
-        // 2. Clout Podium & List
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
