@@ -150,7 +150,8 @@
       display.innerHTML = `<p class="status-text">Compiling topper notes for <strong>${chapter}</strong>...</p>`;
 
       try {
-        const res = await fetch('/api/notes', {
+        const res = await fetch('/api/generate-notes', {
+
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ classLevel, subject, chapter })
