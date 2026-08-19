@@ -5,20 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
-<title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
-<meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
-<meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
+<title>Invincible 360 | CBSE Exam Engine, Doubt Solver & 1v1 Battle Arena</title>
+<meta name="description" content="Ace Class 9-12 CBSE Board & competitive exams. Instant doubt solver, chapter mock tests, 1v1 Arena battles, and student community.">
+<meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Invincible Coaching Classes">
 <link rel="canonical" href="https://invincible-doubt-desk.vercel.app/">
 
+<!-- OPEN GRAPH -->
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Invincible 360 | Complete Academic Intelligence Hub">
-<meta property="og:description" content="Instant step-by-step doubt solving, custom weekly tests, 1v1 rapid-fire knowledge battles, and active CBSE peer discussion.">
+<meta property="og:title" content="Invincible 360 | Complete Academic Engine">
+<meta property="og:description" content="Step-by-step doubt resolution, rapid timed tests, 1v1 knowledge clashes, and CBSE peer community.">
 <meta property="og:url" content="https://invincible-doubt-desk.vercel.app/">
 <meta property="og:site_name" content="Invincible 360">
 
+<!-- FONTS & CONFETTI -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
@@ -26,87 +28,111 @@
 
 <style>
 :root {
-  --bg-main: #060911;
-  --bg-card: rgba(15, 23, 42, 0.45);
-  --bg-surface: rgba(17, 26, 46, 0.7);
-  --bg-surface-hover: rgba(24, 36, 62, 0.9);
+  --bg-main: #070a13;
+  --bg-card: rgba(13, 18, 36, 0.6);
+  --bg-surface: rgba(22, 30, 58, 0.7);
+  --bg-surface-hover: rgba(30, 42, 80, 0.9);
   --border-subtle: rgba(255, 255, 255, 0.1);
   --border-focus: #06b6d4;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --cyan-glow: rgba(6, 182, 212, 0.25);
   --accent-cyan: #06b6d4;
-  --accent-amber: #f59e0b;
+  --accent-purple: #8b5cf6;
   --accent-rose: #f43f5e;
-  --accent-purple: #a855f7;
   --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --cyan-glow: rgba(6, 182, 212, 0.25);
+  --purple-glow: rgba(139, 92, 246, 0.25);
 }
 
-* { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+* { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-main);
-  background-image: radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), radial-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 32px 32px;
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Midnight Vent Mode Trigger */
 body.midnight-vent-active {
   background-color: #030308;
-  background-image: radial-gradient(rgba(168, 85, 247, 0.12) 1px, transparent 1px);
+  background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
 }
 
-.container { width: min(840px, 92%); margin: 20px auto 100px; }
+.container { width: min(860px, 92%); margin: 16px auto 110px; }
 
-/* HAPTIC TAP ANIMATIONS */
+/* HAPTICS */
 button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active {
   transform: scale(0.96) !important;
 }
 
-/* HUD HEADER - GLASSMORPHISM 2.0 */
-.player-hud-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.6), rgba(30, 41, 59, 0.4));
-  border: 1px solid rgba(6, 182, 212, 0.3);
+/* 1. SLIM MINIMALIST GLASS DYNAMIC ISLAND HUD */
+.slim-hud {
+  position: sticky;
+  top: 12px;
+  z-index: 990;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(13, 18, 36, 0.75);
+  border: 1px solid var(--border-subtle);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 24px;
-  padding: 20px 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.1);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(16px);
+  border-radius: 40px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.1);
+  backdrop-filter: blur(20px);
 }
-.player-hud-card::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899, #f59e0b);
+.slim-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.hud-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-.brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin: 0; background: linear-gradient(135deg, #ffffff 40%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hud-status-badges { display: flex; align-items: center; gap: 8px; }
-.level-badge { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
-.help-guide-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
-.live-ping { display: inline-flex; align-items: center; gap: 5px; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
-.ping-dot { width: 7px; height: 7px; background: var(--accent-emerald); border-radius: 50%; animation: pulsePing 1.5s infinite; }
-@keyframes pulsePing { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
+.slim-right { display: flex; align-items: center; gap: 12px; }
+.slim-xp-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+}
+.slim-guide-btn {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+}
 
-.hud-xp-row { display: flex; align-items: center; gap: 12px; }
-.xp-track { flex: 1; height: 8px; background: rgba(0,0,0,0.5); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); }
-.xp-fill { width: 68%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); border-radius: 6px; }
-.xp-label { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
-
-/* STORIES TRAY */
+/* 2. REELS TRAY */
 .stories-tray-container {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 16px;
-  margin-bottom: 24px;
+  border-radius: 22px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -115,302 +141,301 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   backdrop-filter: blur(16px);
 }
 .stories-tray-container::-webkit-scrollbar { display: none; }
-.story-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; width: 70px; text-align: center; }
+.story-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; width: 68px; text-align: center; }
 .story-avatar-wrap {
-  width: 58px; height: 58px; border-radius: 50%; padding: 3px;
-  background: linear-gradient(45deg, #f43f5e, #f59e0b, #06b6d4);
+  width: 56px; height: 56px; border-radius: 50%; padding: 2px;
+  background: linear-gradient(45deg, var(--accent-rose), var(--accent-amber), var(--accent-cyan));
   display: flex; align-items: center; justify-content: center; position: relative;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
-.story-avatar-wrap.topper { background: linear-gradient(45deg, #eab308, #f59e0b); }
+.story-avatar-wrap.pulse-glow { animation: reelPulse 2s infinite ease-in-out; }
+@keyframes reelPulse { 0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); } 50% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.7); } }
 .story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
 .story-avatar-inner { width: 100%; height: 100%; background: #090e1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; overflow: hidden; }
 .story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
-.story-badge-flame { position: absolute; bottom: -2px; right: -2px; background: #090e1a; border-radius: 50%; font-size: 11px; padding: 2px; line-height: 1; }
 .story-username { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* FULLSCREEN STORY VIEWER */
-.story-viewer-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.94); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(12px); }
-.story-card-view { width: min(420px, 94%); height: min(720px, 90vh); background: #0b1120; border-radius: 24px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); }
-.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
-.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
-.story-progress-fill { height: 100%; width: 0%; background: #fff; }
-.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-.story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
-.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-.story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; text-align: center; position: relative; }
-.story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
-.story-caption-text { font-size: 15px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.5; padding: 0 10px; text-align: left; }
-.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
-.story-nav-prev { left: 0; } .story-nav-next { right: 0; }
-.story-sticker-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-cyan); border-radius: 16px; padding: 14px; width: 92%; margin-top: 10px; backdrop-filter: blur(10px); z-index: 10; }
-.sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.sticker-opts { display: flex; flex-direction: column; gap: 8px; }
-.sticker-btn { position: relative; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: #fff; font-weight: 800; padding: 10px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; overflow: hidden; z-index: 1; }
-.sticker-bar { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(6, 182, 212, 0.25); z-index: -1; width: 0%; transition: width 0.4s ease; }
-.sticker-btn.voted-correct .sticker-bar { background: rgba(16, 185, 129, 0.4) !important; }
-.sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
-.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
-.reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-.vault-btn { background: var(--bg-surface); border: 1px solid var(--accent-amber); color: var(--accent-amber); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
-.viewers-btn { background: var(--bg-surface); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
-.viewers-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: #0b0f19; border-top: 2px solid var(--accent-cyan); border-radius: 20px 20px 0 0; padding: 18px; max-height: 280px; overflow-y: auto; display: none; z-index: 20; }
-.viewer-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
-
-/* BENTO GRID (DESKTOP) */
-.bento-wrapper {
+/* 3. BENTO GRID: SURVIVAL BET & CLOUT LEADERBOARD */
+.bento-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
+@media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } }
 
-/* DAILY BRAIN TEASER */
-.puzzle-banner { background: var(--bg-card); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 22px; padding: 22px; box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15); backdrop-filter: blur(16px); }
-.puzzle-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.puzzle-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); font-weight: 900; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); }
-.puzzle-streak { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); font-weight: 800; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(6, 182, 212, 0.3); }
-.puzzle-q-en { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 6px; }
-.puzzle-options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
-.puzzle-opt-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 14px; font-weight: 800; padding: 12px 6px; border-radius: 12px; cursor: pointer; text-align: center; }
-.puzzle-opt-btn:hover { border-color: var(--accent-amber); background: var(--bg-surface-hover); }
-.puzzle-opt-btn.correct-pick { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--accent-emerald) !important; color: var(--accent-emerald) !important; }
-.puzzle-opt-btn.wrong-pick { background: rgba(244, 63, 94, 0.2) !important; border-color: var(--accent-rose) !important; color: var(--accent-rose) !important; }
-.puzzle-toggle-btn { background: var(--accent-amber); color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 900; font-size: 12px; cursor: pointer; }
-.puzzle-solution { display: none; margin-top: 14px; padding: 16px; background: rgba(10, 14, 23, 0.9); border-radius: 12px; border-left: 3px solid var(--accent-amber); font-size: 14px; color: #e2e8f0; }
-
-/* WALL OF FAME */
-.leaderboard-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 22px; padding: 22px; backdrop-filter: blur(16px); }
-.leaderboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 16px; text-align: center; letter-spacing: 0.5px; }
-.leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-surface); border-radius: 12px; margin-bottom: 8px; font-size: 13px; font-weight: 600; border: 1px solid rgba(255,255,255,0.03); }
-.leaderboard-rank { background: rgba(255, 255, 255, 0.1); width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; margin-right: 8px; }
-.leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
-.leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
-
-/* MODE SWITCH TABS */
-.mode-switch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-.mode-btn { padding: 14px 6px; border: 1px solid var(--border-subtle); border-radius: 18px; background: var(--bg-card); color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; cursor: pointer; text-align: center; backdrop-filter: blur(16px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.mode-btn-title { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; }
-.mode-btn-sub { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 4px; }
-.mode-btn:hover { background: var(--bg-surface); border-color: rgba(255, 255, 255, 0.2); }
-.mode-btn.active { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.6)); color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 20px var(--cyan-glow); }
-.mode-btn.active .mode-btn-sub { color: #cbd5e1; }
-.mode-btn.arena-btn.active { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.6)); color: var(--accent-rose); border-color: var(--accent-rose); box-shadow: 0 0 20px rgba(244, 63, 94, 0.25); }
-.mode-btn.arena-btn.active .mode-btn-sub { color: #fecdd3; }
-.mode-btn.feed-btn.active { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.6)); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(168, 85, 247, 0.25); }
-
-/* MOBILE BOTTOM NAV */
-@media (max-width: 768px) {
-  .mode-switch {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9990;
-    background: rgba(10, 15, 30, 0.85); backdrop-filter: blur(24px);
-    margin: 0; padding: 12px 6px 20px 6px; border-top: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px 24px 0 0; gap: 6px; box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
-  }
-  .mode-btn { border-radius: 14px; padding: 10px 4px; border: 1px solid transparent; background: transparent; box-shadow: none; }
-  .mode-btn.active { background: rgba(255,255,255,0.08); border-bottom: 2px solid var(--accent-cyan); box-shadow: none; border-radius: 14px; }
-  .lofi-widget { bottom: 95px !important; }
+.survival-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: 24px;
+  padding: 20px;
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+.survival-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.survival-timer-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-bottom: 12px; }
+.survival-timer-fill { height: 100%; width: 100%; background: var(--accent-rose); transition: width 1s linear; }
+.survival-q { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.4; margin-bottom: 12px; }
+.survival-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.survival-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: #fff; font-size: 13px; font-weight: 800; padding: 10px; border-radius: 12px; cursor: pointer; text-align: center; }
+.survival-btn:hover { border-color: var(--accent-cyan); background: var(--bg-surface-hover); }
 
-/* CARDS & INPUTS */
-.card { background: var(--bg-card); padding: 26px; border-radius: 24px; border: 1px solid var(--border-subtle); border-top: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7); backdrop-filter: blur(16px); position: relative; overflow: hidden; }
-.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 16px 0; color: #fff; }
-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
+/* PODIUM LEADERBOARD */
+.clout-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 20px;
+  backdrop-filter: blur(16px);
+}
+.podium-row { display: flex; justify-content: space-around; align-items: flex-end; margin-bottom: 14px; padding-top: 10px; }
+.podium-item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.podium-avatar { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; margin-bottom: 6px; font-size: 14px; }
+.podium-1 { order: 2; transform: translateY(-8px); }
+.podium-1 .podium-avatar { border-color: var(--accent-amber); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); width: 52px; height: 52px; font-size: 18px; }
+.podium-2 { order: 1; }
+.podium-2 .podium-avatar { border-color: #cbd5e1; }
+.podium-3 { order: 3; }
+.podium-3 .podium-avatar { border-color: #d97706; }
+.podium-name { font-size: 11px; font-weight: 800; max-width: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.podium-score { font-size: 10px; font-weight: 800; color: var(--accent-emerald); }
 
-/* Pill Selectors */
-.subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-.subject { padding: 12px 8px; border: 1px solid var(--border-subtle); border-radius: 16px; background: rgba(255,255,255,0.03); color: var(--text-muted); font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; }
-.subject:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.clout-list { display: flex; flex-direction: column; gap: 6px; }
+.clout-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+
+/* 4. SECTIONS (QUEST, TIME ATTACK, ARENA, FEED) */
+.card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #fff; }
+label { display: block; font-size: 12px; font-weight: 800; margin-bottom: 8px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.subject { padding: 10px 6px; border: 1px solid var(--border-subtle); border-radius: 14px; background: rgba(255,255,255,0.03); color: var(--text-muted); font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; }
 .subject.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(6,182,212,0.15); }
 
 .tone-switch-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-.tone-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 10px 6px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
+.tone-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 10px 6px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
 .tone-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-textarea, input:not([type="radio"]):not([type="range"]), select { width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 16px; font-size: 14px; background: rgba(0,0,0,0.4); color: #fff; outline: none; font-family: inherit; margin-bottom: 14px; transition: 0.3s; }
-textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); background: rgba(0,0,0,0.6); }
+textarea, input:not([type="radio"]):not([type="range"]), select {
+  width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 16px;
+  font-size: 14px; background: rgba(0,0,0,0.4); color: #fff; outline: none; font-family: inherit; margin-bottom: 12px;
+}
+textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus {
+  border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow);
+}
 
-.photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
 .photo-btn { padding: 12px; border: 1px solid var(--border-subtle); border-radius: 14px; background: rgba(255,255,255,0.05); color: #cbd5e1; font-size: 13px; font-weight: 800; cursor: pointer; }
 
-.ask-btn, .submit-test-btn { width: 100%; margin-top: 8px; padding: 16px; border: none; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); border-top: 1px solid rgba(255,255,255,0.2); }
-.ask-btn:disabled, .submit-test-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.ask-btn, .submit-test-btn {
+  width: 100%; padding: 16px; border: none; border-radius: 16px;
+  background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff;
+  font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 900;
+  cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
+}
 
-.answer-box { display: none; margin-top: 24px; padding: 22px; background: rgba(0,0,0,0.5); border-radius: 18px; border: 1px solid var(--border-subtle); }
-.logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.answer-box { display: none; margin-top: 20px; padding: 20px; background: rgba(0,0,0,0.5); border-radius: 18px; border: 1px solid var(--border-subtle); }
 .logic-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
-.difficulty-badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
 .answer-text { white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #cbd5e1; }
-.feedback { display: none; margin-top: 20px; }
-.feedback-title { font-size: 13px; font-weight: 800; margin-bottom: 10px; color: var(--text-muted); }
-.feedback-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.feedback-btn { padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: #e2e8f0; font-weight: 800; cursor: pointer; font-size: 13px; }
+.feedback { display: none; margin-top: 16px; }
+.feedback-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.feedback-btn { padding: 12px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: #e2e8f0; font-weight: 800; cursor: pointer; font-size: 13px; }
 .teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-.test-info { background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; margin: 16px 0; color: #cbd5e1; font-size: 13px; }
-
-.timer-box { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); text-align: center; padding: 12px; border: 1px solid var(--accent-rose); border-radius: 14px; margin-bottom: 16px; background: rgba(244, 63, 94, 0.08); }
-.question-card { border: 1px solid var(--border-subtle); border-radius: 20px; padding: 22px; margin: 16px 0; background: rgba(0,0,0,0.4); }
-.question-number { color: var(--accent-cyan); font-weight: 900; font-size: 12px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-.question-text { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
-
-.option { display: flex !important; align-items: center !important; gap: 14px !important; padding: 16px !important; border: 1px solid var(--border-subtle) !important; border-radius: 16px !important; margin: 10px 0 !important; cursor: pointer !important; font-size: 15px !important; background: rgba(255,255,255,0.02) !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important; transition: 0.2s !important; }
-.option input[type="radio"] { width: 20px !important; height: 20px !important; min-width: 20px !important; max-width: 20px !important; margin: 0 !important; padding: 0 !important; cursor: pointer !important; accent-color: var(--accent-cyan) !important; flex-shrink: 0 !important; }
-.option span { flex: 1 !important; text-align: left !important; line-height: 1.5 !important; color: #f1f5f9 !important; }
+/* TEST AREA */
+.timer-box { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 900; color: var(--accent-rose); text-align: center; padding: 10px; border: 1px solid var(--accent-rose); border-radius: 14px; margin-bottom: 16px; background: rgba(244, 63, 94, 0.08); }
+.question-card { border: 1px solid var(--border-subtle); border-radius: 18px; padding: 18px; margin: 14px 0; background: rgba(0,0,0,0.4); }
+.option { display: flex !important; align-items: center !important; gap: 12px !important; padding: 14px !important; border: 1px solid var(--border-subtle) !important; border-radius: 14px !important; margin: 8px 0 !important; cursor: pointer !important; font-size: 14px !important; background: rgba(255,255,255,0.02) !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important; }
+.option input[type="radio"] { width: 18px !important; height: 18px !important; margin: 0 !important; cursor: pointer !important; accent-color: var(--accent-cyan) !important; }
 .option:hover { background: rgba(255,255,255,0.06) !important; border-color: var(--accent-cyan) !important; }
 
-.test-result { display: none; padding: 24px; margin-top: 20px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: 20px; }
-.score-box { text-align: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px; margin-bottom: 20px; }
-.score { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 900; color: var(--accent-cyan); text-shadow: 0 0 20px var(--cyan-glow); }
-.badges-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0; }
-.badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; }
-.badge.scholar { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
-.badge.speedster { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
-.badge.sharp { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
-
-.heatmap-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 16px; margin-top: 14px; font-size: 13px; text-align: left; }
-.review-card { background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 18px; margin-bottom: 14px; }
-.review-correct { color: var(--accent-emerald); font-weight: 800; }
-.review-wrong { color: var(--accent-rose); font-weight: 800; }
-.review-explanation { margin-top: 12px; padding: 14px; background: rgba(0,0,0,0.5); border-left: 3px solid var(--accent-cyan); border-radius: 8px; font-size: 13px; color: #e2e8f0; }
-
-.restart-btn { margin-top: 10px; padding: 16px; border: 1px solid var(--accent-cyan); border-radius: 16px; background: rgba(6, 182, 212, 0.05); color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; letter-spacing: 0.5px; }
-.whatsapp-btn { background: #25D366 !important; color: #fff !important; border: none !important; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+.test-result { display: none; padding: 20px; margin-top: 16px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); border-radius: 20px; }
+.score { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent-cyan); }
+.review-card { background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+.restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 14px; background: rgba(6, 182, 212, 0.05); color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
+.whatsapp-btn { background: #25D366 !important; color: #fff !important; border: none !important; }
 
 /* ARENA 1v1 */
-.arena-header { text-align: center; margin-bottom: 18px; }
-.arena-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); text-shadow: 0 0 15px rgba(244,63,94,0.3); }
-.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; padding: 16px; border: none; border-radius: 16px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3); border-top: 1px solid rgba(255,255,255,0.2); }
-.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #fff; padding: 16px; border: none; border-radius: 16px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3); border-top: 1px solid rgba(255,255,255,0.2); }
-.lobby-box { text-align: center; padding: 28px 16px; background: rgba(0,0,0,0.4); border-radius: 20px; border: 1px dashed var(--accent-rose); }
-.room-code-display { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent-rose); letter-spacing: 6px; margin: 12px 0; }
-
-.vs-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 14px 20px; border-radius: 16px; border: 1px solid var(--border-subtle); margin-bottom: 8px; }
-.vs-progress-bar-wrap { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 16px; }
-.vs-fill-p1 { background: var(--accent-cyan); height: 100%; width: 50%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-cyan); }
-.vs-fill-p2 { background: var(--accent-rose); height: 100%; width: 50%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-rose); }
-
-.arena-timer { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 12px; text-shadow: 0 0 10px rgba(244,63,94,0.5); }
-.arena-option { display: block; padding: 16px; border: 1px solid var(--border-subtle); border-radius: 16px; margin: 10px 0; cursor: pointer; font-size: 15px; font-weight: 800; background: rgba(255,255,255,0.03); text-align: center; transition: 0.2s; }
+.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; padding: 14px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; }
+.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #fff; padding: 14px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; }
+.lobby-box { text-align: center; padding: 24px 16px; background: rgba(0,0,0,0.4); border-radius: 20px; border: 1px dashed var(--accent-rose); }
+.room-code-display { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 900; color: var(--accent-rose); letter-spacing: 6px; margin: 8px 0; }
+.vs-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 16px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 8px; }
+.vs-progress-bar-wrap { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 12px; }
+.vs-fill-p1 { background: var(--accent-cyan); height: 100%; width: 50%; }
+.vs-fill-p2 { background: var(--accent-rose); height: 100%; width: 50%; }
+.arena-timer { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 10px; }
+.arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 14px; margin: 8px 0; cursor: pointer; font-size: 14px; font-weight: 800; background: rgba(255,255,255,0.03); text-align: center; }
 .arena-option:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-rose); }
 .arena-shake { animation: shakeCard 0.4s ease; border-color: var(--accent-rose) !important; }
+@keyframes shakeCard { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 
 /* COMMUNITY FEED */
-.feed-header { text-align: center; margin-bottom: 18px; transition: 0.3s; }
-.feed-header.vent-mode .feed-title { color: var(--accent-purple); text-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
-.feed-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
-.post-composer { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-.feed-filter-pills { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px; scrollbar-width: none; }
-.feed-filter-pills::-webkit-scrollbar { display: none; }
-.filter-pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 13px; font-weight: 800; padding: 8px 16px; border-radius: 24px; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-.filter-pill.active { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 15px rgba(168,85,247,0.2); }
+.post-composer { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 16px; margin-bottom: 16px; }
+.feed-filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; }
+.filter-pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
+.filter-pill.active { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border-color: var(--accent-purple); }
+.feed-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+.feed-actions { display: flex; gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 10px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+.action-btn { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 
-.feed-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 20px; padding: 20px; margin-bottom: 16px; }
-.feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-.feed-author { font-size: 14px; font-weight: 800; color: var(--accent-cyan); }
-.feed-school { font-size: 12px; color: var(--text-muted); }
-.feed-badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
-.feed-actions { display: flex; gap: 16px; border-top: 1px solid var(--border-subtle); padding-top: 12px; font-size: 13px; font-weight: 700; color: var(--text-muted); }
-.action-btn { cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
-.action-btn:hover { color: var(--text-main); transform: scale(1.05); }
-.action-btn.report:hover { color: var(--accent-rose); }
-.comments-drawer { display: none; margin-top: 16px; border-top: 1px dashed var(--border-subtle); padding-top: 16px; }
-.comment-item { background: rgba(255,255,255,0.03); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 13px; }
-
-/* ANIMATED WAVEFORM LO-FI WIDGET */
-.lofi-widget {
-  position: fixed; bottom: 20px; right: 20px; background: rgba(15, 23, 42, 0.85);
-  border: 1px solid var(--accent-cyan); border-radius: 30px; padding: 10px 16px;
-  display: flex; align-items: center; gap: 12px; z-index: 999; backdrop-filter: blur(16px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(6,182,212,0.2);
+/* 5. FLOATING GLASS DOCK (MOBILE & DESKTOP NAVBAR) */
+.floating-dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9990;
+  display: flex;
+  background: rgba(13, 18, 36, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 36px;
+  padding: 6px 10px;
+  gap: 8px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(6, 182, 212, 0.15);
+  backdrop-filter: blur(24px);
 }
-.lofi-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #fff; line-height: 1; padding: 0; }
-.lofi-label { font-size: 11px; font-weight: 800; color: var(--accent-cyan); white-space: nowrap; }
+.dock-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 24px;
+  cursor: pointer;
+  position: relative;
+}
+.dock-btn .dock-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+.dock-btn.active { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.dock-btn.active::after {
+  content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px;
+  background: var(--accent-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--accent-cyan);
+}
+.dock-btn.arena-tab.active::after { background: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose); }
+.dock-btn.feed-tab.active::after { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
 
-.lofi-waveform { display: flex; align-items: center; gap: 3px; height: 16px; margin: 0 5px; }
+/* LO-FI WAVEFORM WIDGET */
+.lofi-widget {
+  position: fixed; bottom: 85px; right: 20px; background: rgba(13, 18, 36, 0.85);
+  border: 1px solid var(--accent-cyan); border-radius: 30px; padding: 8px 14px;
+  display: flex; align-items: center; gap: 8px; z-index: 990; backdrop-filter: blur(16px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+.lofi-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #fff; line-height: 1; padding: 0; }
+.lofi-label { font-size: 11px; font-weight: 800; color: var(--accent-cyan); white-space: nowrap; }
+.lofi-waveform { display: flex; align-items: center; gap: 3px; height: 14px; }
 .lofi-waveform .bar { width: 3px; background: var(--accent-cyan); border-radius: 2px; animation: wave 1s infinite ease-in-out; }
 .lofi-waveform .bar:nth-child(1) { height: 40%; animation-delay: 0s; }
 .lofi-waveform .bar:nth-child(2) { height: 80%; animation-delay: 0.2s; }
 .lofi-waveform .bar:nth-child(3) { height: 60%; animation-delay: 0.4s; }
 .lofi-waveform .bar:nth-child(4) { height: 100%; animation-delay: 0.6s; }
-@keyframes wave { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+@keyframes wave { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
 
-.footer { text-align: center; color: rgba(255,255,255,0.4); margin: 40px 0; font-size: 12px; line-height: 1.6; }
+.footer { text-align: center; color: rgba(255,255,255,0.4); margin: 30px 0 60px; font-size: 11px; }
 .hidden { display: none !important; }
 
-@media (max-width: 768px) {
-  .bento-wrapper { grid-template-columns: 1fr; }
-  .subjects, .tone-switch-bar, .arena-grid, .photo-buttons { grid-template-columns: 1fr; }
-}
+/* MODALS */
+.modal-overlay, .quest-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(4, 7, 14, 0.9); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(16px); }
+.modal-card { width: min(480px, 92%); background: #0d1224; border: 1px solid var(--border-subtle); border-radius: 24px; padding: 22px; max-height: 90vh; overflow-y: auto; }
+.quest-modal-card { width: min(500px, 94%); background: linear-gradient(145deg, #0d1527, #070b14); border: 1px solid var(--accent-cyan); box-shadow: 0 0 35px rgba(6, 182, 212, 0.3); border-radius: 24px; padding: 24px; text-align: center; }
+.quest-choice-btn { background: #111a2e; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; margin-bottom: 8px; }
+
+/* FULLSCREEN REELS VIEWER */
+.story-viewer-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.94); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(16px); }
+.story-card-view { width: min(420px, 94%); height: min(700px, 90vh); background: #0b1120; border-radius: 24px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; overflow: hidden; }
+.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
+.story-progress-fill { height: 100%; width: 0%; background: #fff; }
+.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+.story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+.story-caption-text { font-size: 15px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.5; text-align: left; }
+.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
+.story-nav-prev { left: 0; } .story-nav-next { right: 0; }
+.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
+.reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 </style>
 </head>
 
 <body>
 <main class="container">
 
-<!-- HUD HEADER -->
-<header class="player-hud-card">
-    <div class="hud-top-row">
-        <div>
-            <h1 class="brand-name">INVINCIBLE 360</h1>
-            <div style="font-size:12px; color:var(--text-muted); font-weight:700;">Academic Preparation &amp; Assessment Platform</div>
-        </div>
-        <div class="hud-status-badges">
-            <span class="help-guide-badge" onclick="document.getElementById('onboardingModal').style.display='flex'">❓ Guide</span>
-            <span class="level-badge" id="hudPlayerLvl">PRO</span>
-            <div class="live-ping"><span class="ping-dot"></span> 24/7 ACTIVE</div>
-        </div>
+<!-- 1. SLIM MINIMALIST GLASS DYNAMIC ISLAND HUD -->
+<header class="slim-hud">
+    <div class="slim-logo">
+        <span>⚡</span> INVINCIBLE 360
     </div>
-    <div class="hud-xp-row">
-        <span class="xp-label">XP: <span id="xpCounter">680</span> / 1000</span>
-        <div class="xp-track"><div class="xp-fill" style="width: 68%;"></div></div>
-        <span class="xp-label" style="color:var(--accent-cyan);">RANK #4</span>
+    <div class="slim-right">
+        <div class="slim-xp-pill">
+            <span>✨</span> <span id="xpCounter">680</span> XP
+        </div>
+        <span class="slim-guide-btn" onclick="document.getElementById('onboardingModal').style.display='flex'">Guide</span>
     </div>
 </header>
 
+<!-- 2. REELS TRAY ("MY DROP" HACKS & FORMULAS) -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
-        <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div></div>
-        <div class="story-username">My Drop</div>
+        <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:22px;">+</div></div>
+        <div class="story-username">Drop Hack</div>
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
-<!-- BENTO GRID FOR PUZZLE & LEADERBOARD -->
-<div class="bento-wrapper">
-    <section class="puzzle-banner" id="puzzleBox" style="display:none; margin-bottom:0;" aria-label="Daily Academic Brain Teaser">
-        <div class="puzzle-top-bar">
-            <div class="puzzle-badge">🔥 Question of the Day</div>
-            <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
+<!-- 3. BENTO GRID: SURVIVAL BET & CLOUT LEADERBOARD -->
+<div class="bento-grid">
+    <!-- 60-Second Survival Bet -->
+    <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Bet">
+        <div>
+            <div class="survival-top">
+                <span style="font-size:11px; font-weight:900; color:var(--accent-rose); letter-spacing:0.5px;">🔥 SURVIVAL BET (15s)</span>
+                <span id="survivalTimerNum" style="font-size:12px; font-weight:900; color:#fff;">15s</span>
+            </div>
+            <div class="survival-timer-track"><div class="survival-timer-fill" id="survivalTimerBar"></div></div>
+            <div class="survival-q" id="puzzleQuestionEn">Loading challenge question...</div>
+            <div class="survival-q" id="puzzleQuestionHi" style="font-size:12px; color:var(--text-muted);"></div>
         </div>
-        <div class="puzzle-q-en" id="puzzleQuestionEn">Loading challenge question...</div>
-        <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
-        <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
-        <div class="puzzle-actions-bar">
-            <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Solution</button>
+        <div>
+            <div class="survival-options" id="puzzleOptionsContainer"></div>
+            <div id="puzzleFeedback" style="font-size:11px; font-weight:800; margin-top:8px;"></div>
         </div>
-        <div id="puzzleFeedback" style="margin-top: 10px;"></div>
-        <div class="puzzle-solution" id="puzzleSolution"></div>
     </section>
 
-    <section class="leaderboard-card" id="leaderboardBox" style="display:none; margin-bottom:0;" aria-label="Top Scorers Leaderboard">
-        <div class="leaderboard-title">🏆 Top Performers Leaderboard</div>
-        <div id="leaderboardList"></div>
+    <!-- Gen Z Clout Leaderboard -->
+    <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
+        <div style="font-family:'Space Grotesk'; font-size:13px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between;">
+            <span>🏆 HALL OF CLOUT</span>
+            <span style="color:var(--accent-emerald);">LIVE</span>
+        </div>
+        <div class="podium-row" id="podiumContainer"></div>
+        <div class="clout-list" id="leaderboardList"></div>
     </section>
 </div>
 
-<!-- NAVIGATION MODES -->
-<nav class="mode-switch" aria-label="Academic Navigation Modes">
-    <button type="button" class="mode-btn active" id="doubtModeBtn"><span class="mode-btn-title">⚡ QUEST DESK</span><span class="mode-btn-sub">Doubt Resolution</span></button>
-    <button type="button" class="mode-btn" id="testModeBtn"><span class="mode-btn-title">⏱ TIME ATTACK</span><span class="mode-btn-sub">10-Min Tests</span></button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn"><span class="mode-btn-title">⚔️ 1v1 PVP</span><span class="mode-btn-sub">Live Matches</span></button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn"><span class="mode-btn-title">🌟 CLAN FEED</span><span class="mode-btn-sub">Discussion Board</span></button>
-</nav>
+<!-- 4. CORE SECTIONS -->
 
 <!-- 1. DOUBT SECTION -->
-<section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
-    <div class="feature-mini-guide"><span>💡</span><span><strong>Quick Guide:</strong> Type or upload a photo &bull; Pick explanation style &bull; Get detailed step-by-step logic.</span></div>
+<section class="card" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
     <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
     
     <label>Select Subject</label>
@@ -422,35 +447,31 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
     <label>Explanation Mode</label>
     <div class="tone-switch-bar">
-        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ Key Formulas &amp; Summary</button>
-        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step Solution</button>
-        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Conceptual Overview</button>
+        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ Key Formulas</button>
+        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step</button>
+        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Conceptual</button>
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your academic problem or question here..."></textarea>
+    <textarea id="question" placeholder="Type your academic problem or paste text here..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
     <div class="photo-buttons">
         <button type="button" class="photo-btn" id="cameraBtn">📷 Capture Image</button>
         <button type="button" class="photo-btn" id="uploadBtn">📁 Select Image</button>
     </div>
-    <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
-    <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
+    <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:240px; object-fit:contain; margin-bottom:12px; border-radius:14px; border:1px solid var(--border-subtle);">
+    <button type="button" id="removeImage" style="display:none; margin:0 auto 12px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Detailed Solution...</div>
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:12px; font-weight:bold; font-size:13px;">Processing Detailed Solution...</div>
     
     <div class="answer-box" id="answerBox">
-        <div class="logic-title-wrap">
-            <h3 class="logic-title">Solution &amp; Analysis</h3>
-            <span class="difficulty-badge" id="doubtToughnessBadge">🟢 Foundational</span>
-        </div>
-        <div class="answer-text" id="answerText"></div>
+        <div class="logic-title">Solution &amp; Analysis</div>
+        <div class="answer-text" id="answerText" style="margin-top:10px;"></div>
         <div class="feedback" id="feedback">
-            <div class="feedback-title">Need further clarity?</div>
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Explain in Simpler Terms</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Ask Teacher Directly</button>
+                <button type="button" class="feedback-btn" id="againBtn">Explain Simpler</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Ask Teacher</button>
             </div>
         </div>
     </div>
@@ -458,7 +479,6 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 2. TEST SECTION -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-    <div class="feature-mini-guide"><span>⏱️</span><span><strong>Quick Guide:</strong> Select school, class, subject &amp; optional chapter &bull; Complete 20 questions in 10 minutes &bull; View instant score and leaderboard standing.</span></div>
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
     <div id="testSetup">
@@ -509,216 +529,229 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <option value="Science">Science</option>
             </select>
 
-            <input id="testChapter" type="text" placeholder="Chapter Name (Optional, e.g. Thermodynamics, Reflection)">
+            <input id="testChapter" type="text" placeholder="Chapter Name (Optional, e.g. Optics, Thermodynamics)">
         </div>
 
-        <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
+        <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
     </div>
 
     <div id="testArea" class="hidden">
         <div class="timer-box" id="timerDisplay">⏳ 10:00</div>
-        <div class="test-info" id="testHeader"></div>
+        <div id="testHeader" style="font-size:13px; color:var(--text-muted); margin-bottom:12px;"></div>
         <div id="questionsContainer"></div>
         <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT ANSWERS</button>
     </div>
 
     <div class="test-result" id="testResult">
-        <div class="score-box">
-            <div style="font-size:14px; font-weight:700; color:var(--text-muted);">ASSESSMENT SCORE</div>
+        <div style="text-align:center; padding-bottom:16px; border-bottom:1px solid var(--border-subtle); margin-bottom:16px;">
+            <div style="font-size:12px; font-weight:800; color:var(--text-muted);">FINAL ASSESSMENT SCORE</div>
             <div class="score" id="scoreText">0/0</div>
-            <div id="badgesContainer" class="badges-container"></div>
-            <div class="result-detail" id="resultDetail"></div>
-            <div class="heatmap-card" id="testHeatmap"></div>
+            <div id="badgesContainer" style="display:flex; justify-content:center; gap:6px; margin:10px 0;"></div>
+            <div id="resultDetail" style="font-size:13px;"></div>
         </div>
-        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#fff;">Detailed Answer Key &amp; Explanations</div>
         <div id="reviewContainer"></div>
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE SCORE ON WHATSAPP</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE ON WHATSAPP</button>
     </div>
 </section>
 
 <!-- 3. ARENA SECTION -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
-    <div class="feature-mini-guide"><span>⚔️</span><span><strong>Quick Guide:</strong> Create a room and share code OR challenge the practice bot &bull; 10s timer per question.</span></div>
+    <div style="text-align:center; margin-bottom:16px;">
+        <h2 class="section-h2" style="color:var(--accent-rose); margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
+    </div>
     <div id="arenaSetup">
-        <div class="arena-header"><h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2></div>
         <label>Your Display Name</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Name">
         <label>Select Grade Level</label>
-        <select id="arenaClass" style="margin-bottom: 20px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+        <select id="arenaClass" style="margin-bottom:16px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
         <div class="arena-grid">
-            <div><button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create Match Room</button></div>
+            <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create Match</button>
             <div>
-                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
+                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; margin-bottom:8px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Practice vs. Invincible Bot</button>
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:12px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Practice vs. Invincible Bot</button>
     </div>
     <div id="arenaWaiting" class="hidden lobby-box">
-        <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
+        <div style="font-size:13px; color:var(--text-muted);">Share Match Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size: 13px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
+        <div style="font-size:12px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
     </div>
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
-            <div class="player-tag" id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
-            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
-            <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
+            <div id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
+            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:2px 6px; border-radius:4px; font-size:10px;">VS</div>
+            <div id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
         <div class="vs-progress-bar-wrap"><div class="vs-fill-p1" id="vsFillP1"></div><div class="vs-fill-p2" id="vsFillP2"></div></div>
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
         <div class="question-card" id="arenaCardContainer">
-            <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
-            <div class="question-text" id="arenaQText">Loading challenge...</div>
+            <div style="color:var(--accent-cyan); font-size:11px; font-weight:900;" id="arenaQNum">QUESTION 1/10</div>
+            <div style="font-size:15px; font-weight:700; margin:10px 0;" id="arenaQText">Loading...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
-    <div id="arenaResult" class="hidden" style="text-align:center; padding:20px;">
+    <div id="arenaResult" class="hidden" style="text-align:center; padding:16px;">
         <div id="arenaResultText"></div>
-        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;"><span id="finalP1"></span> <br> <span id="finalP2"></span></div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">RETURN TO LOBBY</button>
+        <div style="margin:16px 0; color:#cbd5e1; font-size:15px;"><span id="finalP1"></span> <br> <span id="finalP2"></span></div>
+        <button type="button" class="submit-test-btn" onclick="location.reload()">RETURN TO LOBBY</button>
     </div>
 </section>
 
 <!-- 4. COMMUNITY FEED -->
-<section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
-    <div class="feature-mini-guide"><span>🌟</span><span><strong>Quick Guide:</strong> Share notes, questions, and discuss solutions with peers.</span></div>
-    <div class="feed-header" id="feedHeaderBox"><h2 class="feed-title">🌟 Academic Community Feed</h2></div>
+<section class="card hidden" id="feedSection" aria-label="Discussion Feed">
+    <h2 class="section-h2" style="color:var(--accent-purple);">🌟 Academic Clan Feed</h2>
     <div class="post-composer">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
             <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
             <input type="text" id="feedInstitution" placeholder="School Name" style="margin-bottom:0;">
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
             <select id="feedClass" style="margin-bottom:0;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
             <select id="feedSubject" style="margin-bottom:0;"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="General">Study Tips</option><option value="ChillVent">🌙 Midnight Vent</option></select>
         </div>
-        <textarea id="feedContent" placeholder="Post a formula, question, or study discussion..."></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
+        <textarea id="feedContent" placeholder="Post a formula, question, or midnight thought..."></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishPost">POST TO CLAN</button>
     </div>
     <div class="feed-filter-pills">
         <span class="filter-pill active" onclick="setFeedSubjectFilter('All', this)">🌟 All Feed</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
     </div>
-    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading community discussions...</div></div>
+    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px;">Loading discussions...</div></div>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
     <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
-    Academic Assessment &amp; Guidance Platform &bull; CBSE Class 9, 10, 11 &amp; 12<br>
-    &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
+    Academic Assessment Platform &bull; CBSE Class 9 to 12<br>
+    &copy; 2026 Invincible Coaching Classes.
 </footer>
 
-<!-- ANIMATED LO-FI RADIO WIDGET -->
+<!-- 5. FLOATING GLASS DOCK (DIRECT REDIRECTION NAVBAR) -->
+<nav class="floating-dock" aria-label="Bottom Navigation Dock">
+    <button type="button" class="dock-btn active" onclick="switchTab('doubt')">
+        <span class="dock-icon">⚡</span> Quest
+    </button>
+    <button type="button" class="dock-btn" onclick="switchTab('test')">
+        <span class="dock-icon">⏱️</span> Tests
+    </button>
+    <button type="button" class="dock-btn arena-tab" onclick="switchTab('arena')">
+        <span class="dock-icon">⚔️</span> Arena
+    </button>
+    <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')">
+        <span class="dock-icon">🌟</span> Feed
+    </button>
+</nav>
+
+<!-- LO-FI WAVEFORM WIDGET -->
 <div class="lofi-widget">
     <button class="lofi-btn" id="lofiToggleBtn" onclick="toggleLofiAudio()">🎧</button>
     <div class="lofi-waveform" id="lofiWaveform" style="display:none;">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </div>
-    <div class="lofi-label" id="lofiLabel">Focus Soundscape: Off</div>
+    <div class="lofi-label" id="lofiLabel">Soundscape: Off</div>
 </div>
 
 </main>
 
-<!-- ONBOARDING QUEST POPUP -->
+<!-- ONBOARDING MODAL -->
 <div class="quest-modal-overlay" id="onboardingModal">
     <div class="quest-modal-card">
-        <h2 class="quest-title">🎮 WELCOME TO INVINCIBLE 360</h2>
-        <div class="quest-subtitle">Select what you would like to explore first:</div>
-        <div class="quest-options-grid">
-            <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
-                <div class="quest-choice-icon">⚡</div>
-                <div><div class="quest-choice-heading">Doubt Resolution Desk</div><div class="quest-choice-desc">Type or snap questions for step-by-step solutions.</div></div>
-            </div>
-            <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
-                <div class="quest-choice-icon">⚔️</div>
-                <div><div class="quest-choice-heading">1v1 Knowledge Match</div><div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash against friends or bot.</div></div>
-            </div>
-            <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
-                <div class="quest-choice-icon">⏱️</div>
-                <div><div class="quest-choice-heading">10-Minute Timed Assessment</div><div class="quest-choice-desc">Subject &amp; chapter tests with immediate diagnosis.</div></div>
-            </div>
+        <h2 style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:0 0 8px 0;">🎮 WELCOME TO INVINCIBLE 360</h2>
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">What would you like to explore?</div>
+        <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
+            <span style="font-size:20px;">⚡</span>
+            <div><strong style="color:#fff; font-size:13px;">Doubt Resolution</strong><div style="font-size:11px; color:var(--text-muted);">Step-by-step problem solver.</div></div>
         </div>
-        <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
+        <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
+            <span style="font-size:20px;">⚔️</span>
+            <div><strong style="color:#fff; font-size:13px;">1v1 Match Arena</strong><div style="font-size:11px; color:var(--text-muted);">Rapid-fire 10s speed clash.</div></div>
+        </div>
+        <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
+            <span style="font-size:20px;">⏱️</span>
+            <div><strong style="color:#fff; font-size:13px;">Timed Tests</strong><div style="font-size:11px; color:var(--text-muted);">Chapter &amp; syllabus practice.</div></div>
+        </div>
+        <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
 </div>
 
-<!-- MODAL: POST STUDY STORY -->
+<!-- 7. NOTE VAULT & SECRET HACK MODAL -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Share 24-Hr Study Update</h3>
-            <button type="button" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="margin:0; font-size:16px; color:var(--accent-cyan);">⚡ Drop 1-Line Secret Hack / Formula</h3>
+            <button type="button" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
         </div>
         <input type="text" id="storyAuthorName" placeholder="Your Name">
-        <input type="text" id="storyInstitution" placeholder="School / Coaching Name">
-        <textarea id="storyCaption" placeholder="Share a formula tip, note summary, or study question..."></textarea>
-        <label>Upload Note Photo / Study Setup (Optional)</label>
-        <input type="file" id="storyImageInput" accept="image/*" style="margin-bottom:12px;">
-        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE UPDATE (24H)</button>
+        <input type="text" id="storyInstitution" placeholder="School Name">
+        <textarea id="storyCaption" placeholder="Drop a formula trick or mnemonic (e.g. Fleming's left hand rule shortcut)..."></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE WITH CLAN</button>
     </div>
 </div>
 
-<!-- FULLSCREEN STORY VIEWER -->
+<!-- FULLSCREEN REELS VIEWER -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
         <div>
             <div class="story-progress-bar" id="storyProgressContainer"></div>
             <div class="story-view-header">
-                <div class="story-view-author" id="viewerAuthor">User Name</div>
+                <div id="viewerAuthor" style="font-size:13px; font-weight:800; color:#fff;">Author</div>
                 <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
             </div>
         </div>
         <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
         <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
         <div class="story-body-content">
-            <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Media">
-            <div class="story-caption-text" id="viewerCaption"></div>
-            <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
-                <div class="sticker-q" id="viewerStickerQ">Question</div>
-                <div class="sticker-opts">
-                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)"><span id="labelStickerA">Opt A</span><span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span><div class="sticker-bar" id="barStickerA"></div></button>
-                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)"><span id="labelStickerB">Opt B</span><span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span><div class="sticker-bar" id="barStickerB"></div></button>
-                </div>
-            </div>
+            <div id="viewerCaption" class="story-caption-text"></div>
         </div>
         <div class="story-action-bar">
-            <div style="display:flex; gap:6px;">
-                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
-                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
-                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
-            </div>
-            <button class="viewers-btn" id="btnShowViewers" onclick="toggleViewersSheet()">👁️ Viewers</button>
-            <button class="vault-btn" onclick="saveStoryToVault()">💾 Save</button>
-        </div>
-        <div class="viewers-sheet" id="viewersDrawer">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Viewers (<span id="viewersCount">0</span>)</strong>
-                <span style="font-size:14px; cursor:pointer;" onclick="document.getElementById('viewersDrawer').style.display='none'">✕</span>
-            </div>
-            <div id="viewersListContainer">Loading viewers...</div>
+            <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
+            <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
+            <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
+            <button type="button" class="restart-btn" style="width:auto; margin:0; padding:6px 12px; font-size:11px;" onclick="saveStoryToVault()">💾 Save</button>
         </div>
     </div>
 </div>
 
 <script>
-function animateXP() {
-    let xp = 0;
-    const target = 680;
-    const el = document.getElementById('xpCounter');
-    const timer = setInterval(() => {
-        xp += 15;
-        if(xp >= target) { xp = target; clearInterval(timer); }
-        el.textContent = xp;
-    }, 20);
+/* =====================================================
+NAVIGATION & FLOATING DOCK LOGIC
+===================================================== */
+function switchTab(tab) {
+    document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
+    
+    // Map dock buttons
+    const dockButtons = document.querySelectorAll('.dock-btn');
+    if(tab === 'doubt') dockButtons[0].classList.add('active');
+    if(tab === 'test') dockButtons[1].classList.add('active');
+    if(tab === 'arena') dockButtons[2].classList.add('active');
+    if(tab === 'feed') dockButtons[3].classList.add('active');
+
+    document.getElementById('doubtSection').classList.add('hidden');
+    document.getElementById('testSection').classList.add('hidden');
+    document.getElementById('arenaSection').classList.add('hidden');
+    document.getElementById('feedSection').classList.add('hidden');
+
+    document.getElementById(tab + 'Section').classList.remove('hidden');
+    if(tab === 'feed') loadFeedPosts();
+
+    // Haptic & Direct smooth scroll
+    playDing();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-setTimeout(animateXP, 500);
+
+function selectStartingQuest(quest) {
+    localStorage.setItem('invincible_onboarded', 'true');
+    document.getElementById('onboardingModal').style.display = 'none';
+    switchTab(quest);
+}
+setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) document.getElementById('onboardingModal').style.display = 'flex'; }, 800);
 
 /* =====================================================
-AUDIO SYNTHESIS ENGINE & 8 FOCUS SOUNDSCAPES
+AUDIO SYNTHESIS ENGINE & 8 SOUNDSCAPES
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -746,7 +779,6 @@ function playSound(type, freq, duration, vol=0.1) {
 function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
 function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
-function playSuccessSound() { playDing(); }
 
 function stopLofiAudio() {
     activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
@@ -762,7 +794,7 @@ function toggleLofiAudio() {
 
     if (currentLofiMode === 0) { 
         btn.textContent = '🎧'; 
-        label.textContent = 'Focus Soundscape: Off'; 
+        label.textContent = 'Soundscape: Off'; 
         waveform.style.display = 'none';
         return; 
     }
@@ -772,99 +804,55 @@ function toggleLofiAudio() {
     let gainNode = audioCtx.createGain(); 
     gainNode.connect(audioCtx.destination);
 
+    const soundNames = [
+        "", "1. Alpha Focus (108Hz)", "2. Theta Calm (432Hz)", "3. Brown Noise (Study)",
+        "4. Pink Noise (Chill)", "5. Rain Ambiance", "6. Clarity Pulse (528Hz)",
+        "7. Deep Drone (60Hz)", "8. Spark Wave (10kHz)"
+    ];
+    label.textContent = soundNames[currentLofiMode];
+
     if (currentLofiMode === 1) {
-        label.textContent = '1. Alpha Focus Waves (108Hz)';
-        let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 108;
-        let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 112;
-        gainNode.gain.value = 0.05; osc.connect(gainNode); osc2.connect(gainNode); osc.start(); osc2.start();
-        activeLofiNodes.push(osc, osc2);
+        let o1 = audioCtx.createOscillator(); o1.type = 'sine'; o1.frequency.value = 108;
+        let o2 = audioCtx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 112;
+        gainNode.gain.value = 0.05; o1.connect(gainNode); o2.connect(gainNode); o1.start(); o2.start();
+        activeLofiNodes.push(o1, o2);
     } else if (currentLofiMode === 2) {
-        label.textContent = '2. Deep Theta Flow (432Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 432;
         gainNode.gain.value = 0.03; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
-    } else if (currentLofiMode === 3) {
-        label.textContent = '3. Deep Brown Noise (Study)';
+    } else if (currentLofiMode === 3 || currentLofiMode === 4 || currentLofiMode === 5) {
         let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         let output = buffer.getChannelData(0); let lastOut = 0;
-        for (let i = 0; i < bufferSize; i++) { let white = Math.random() * 2 - 1; output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5; }
+        for (let i = 0; i < bufferSize; i++) {
+            let white = Math.random() * 2 - 1;
+            if(currentLofiMode === 3) { output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5; }
+            else if(currentLofiMode === 4) { output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2; }
+            else { output[i] = white * 0.15; }
+        }
         let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
-        gainNode.gain.value = 0.08; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
-    } else if (currentLofiMode === 4) {
-        label.textContent = '4. Soft Pink Noise (Calm)';
-        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        let output = buffer.getChannelData(0); let lastOut = 0;
-        for (let i = 0; i < bufferSize; i++) { let white = Math.random() * 2 - 1; output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2; }
-        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
-        gainNode.gain.value = 0.06; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
-    } else if (currentLofiMode === 5) {
-        label.textContent = '5. Gentle Rain Ambiance';
-        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        let output = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) { output[i] = (Math.random() * 2 - 1) * 0.12; }
-        let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 850;
-        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
-        gainNode.gain.value = 0.07; noise.connect(filter); filter.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
+        if(currentLofiMode === 5) {
+            let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 800;
+            gainNode.gain.value = 0.06; noise.connect(filter); filter.connect(gainNode);
+        } else {
+            gainNode.gain.value = 0.06; noise.connect(gainNode);
+        }
+        noise.start(); activeLofiNodes.push(noise);
     } else if (currentLofiMode === 6) {
-        label.textContent = '6. Binaural Clarity Pulse (528Hz)';
-        let osc1 = audioCtx.createOscillator(); osc1.type = 'sine'; osc1.frequency.value = 528;
-        let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 534;
-        gainNode.gain.value = 0.035; osc1.connect(gainNode); osc2.connect(gainNode); osc1.start(); osc2.start();
-        activeLofiNodes.push(osc1, osc2);
+        let o1 = audioCtx.createOscillator(); o1.type = 'sine'; o1.frequency.value = 528;
+        let o2 = audioCtx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 534;
+        gainNode.gain.value = 0.03; o1.connect(gainNode); o2.connect(gainNode); o1.start(); o2.start();
+        activeLofiNodes.push(o1, o2);
     } else if (currentLofiMode === 7) {
-        label.textContent = '7. Deep Drone Resonator (60Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.value = 60;
         let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 140;
         gainNode.gain.value = 0.06; osc.connect(filter); filter.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
     } else if (currentLofiMode === 8) {
-        label.textContent = '8. High-Frequency Spark (10kHz)';
         let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 10000;
         gainNode.gain.value = 0.008; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
     }
 }
 
 /* =====================================================
-NAVIGATION LOGIC
-===================================================== */
-const doubtModeBtn = document.getElementById('doubtModeBtn');
-const testModeBtn = document.getElementById('testModeBtn');
-const arenaModeBtn = document.getElementById('arenaModeBtn');
-const feedModeBtn = document.getElementById('feedModeBtn');
-
-const doubtSection = document.getElementById('doubtSection');
-const testSection = document.getElementById('testSection');
-const arenaSection = document.getElementById('arenaSection');
-const feedSection = document.getElementById('feedSection');
-
-doubtModeBtn.onclick = () => switchTab('doubt');
-testModeBtn.onclick = () => switchTab('test');
-arenaModeBtn.onclick = () => switchTab('arena');
-feedModeBtn.onclick = () => { switchTab('feed'); loadFeedPosts(); };
-
-function switchTab(tab) {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tab + 'ModeBtn').classList.add('active');
-    doubtSection.classList.add('hidden');
-    testSection.classList.add('hidden');
-    arenaSection.classList.add('hidden');
-    feedSection.classList.add('hidden');
-    document.getElementById(tab + 'Section').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function checkOnboarding() {
-    if (!localStorage.getItem('invincible_onboarded')) {
-        document.getElementById('onboardingModal').style.display = 'flex';
-    }
-}
-function selectStartingQuest(quest) {
-    localStorage.setItem('invincible_onboarded', 'true');
-    document.getElementById('onboardingModal').style.display = 'none';
-    switchTab(quest);
-}
-setTimeout(checkOnboarding, 800);
-
-/* =====================================================
-STORIES ENGINE
+REELS / FORMULA HACKS ENGINE
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
@@ -882,82 +870,53 @@ async function loadActiveStories() {
         const welcomeStory = {
             id: 'welcome-tour',
             author_name: 'Platform Guide',
-            institution: 'Invincible 360 Ecosystem',
-            media_url: null,
-            caption: '🌟 Platform Overview & Core Features:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework & exam problems.\n⏱️ 2. Time Attack: 10-minute subject & chapter mock assessments.\n⚔️ 3. 1v1 Arena: Real-time 10s speed matches with friends or solo bot.\n🌟 4. Community Feed: Collaborative notes, discussions & Midnight Vent.\n🎧 5. Soundscape: 8 distinct focus & concentration audio profiles.',
-            sticker_question: '💡 Which section do you want to explore first?',
-            sticker_opt_a: '⚡ Doubt Resolution',
-            sticker_opt_b: '⏱️ Timed Tests / Arena',
-            sticker_correct_opt: 0,
-            is_topper: true
+            institution: 'Invincible 360',
+            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n🌟 4. Clan Feed: Study discussions & Midnight Vent.\n🎧 5. Focus Soundscape: 8 ambient focus profiles.'
         };
 
         activeStories = [welcomeStory, ...dbStories];
 
         container.innerHTML = activeStories.map((s, idx) => `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
-                <div class="story-avatar-wrap ${s.is_topper ? 'topper' : ''}">
+                <div class="story-avatar-wrap ${idx === 0 ? 'pulse-glow' : ''}">
                     <div class="story-avatar-inner">
-                        ${s.media_url ? `<img src="${s.media_url}" alt="Story">` : (s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase()))}
+                        ${s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase())}
                     </div>
-                    <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
                 </div>
-                <div class="story-username">${s.id === 'welcome-tour' ? 'Features' : escapeHTML(s.author_name)}</div>
+                <div class="story-username">${s.id === 'welcome-tour' ? 'Guide' : escapeHTML(s.author_name)}</div>
             </div>
         `).join('');
     } catch(e) { container.innerHTML = ''; }
 }
 loadActiveStories();
 
-let storyImageData = null;
-document.getElementById('storyImageInput').onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => { storyImageData = reader.result; };
-    reader.readAsDataURL(file);
-};
-
 document.getElementById('btnPublishStory').onclick = async () => {
     const name = document.getElementById('storyAuthorName').value.trim();
     const inst = document.getElementById('storyInstitution').value.trim();
     const caption = document.getElementById('storyCaption').value.trim();
 
-    if (!name || !inst) return alert("Please enter your Name and School/Coaching.");
-
-    localStorage.setItem('student_name', name);
-    localStorage.setItem('student_inst', inst);
-
-    const btn = document.getElementById('btnPublishStory');
-    btn.disabled = true; btn.textContent = "Publishing...";
+    if (!name || !caption) return alert("Please fill Name and Hack details.");
 
     try {
         const res = await fetch('/api/stories', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                action: 'create_story', author_name: name, institution: inst, caption: caption, media_url: storyImageData, streak_count: 1
-            })
+            body: JSON.stringify({ action: 'create_story', author_name: name, institution: inst || 'CBSE School', caption: caption })
         });
         const data = await res.json();
         if (data.error) throw new Error(data.error);
 
         document.getElementById('storyModal').style.display = 'none';
-        storyImageData = null;
         loadActiveStories();
-        alert("🎉 Your update is live for 24 hours!");
-    } catch(err) { alert(err.message); } 
-    finally { btn.disabled = false; btn.textContent = "SHARE UPDATE (24H)"; }
+        alert("🎉 Formula Hack Shared!");
+    } catch(err) { alert(err.message); }
 };
 
 function openStoryViewer(idx) {
-    if (!activeStories[idx]) return;
     currentStoryIdx = idx;
     document.getElementById('storyViewer').style.display = 'flex';
-    document.getElementById('viewersDrawer').style.display = 'none';
     renderStorySlide();
 }
-
 function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
 function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
 
@@ -966,81 +925,107 @@ function renderStorySlide() {
     const story = activeStories[currentStoryIdx];
     if (!story) { closeStoryViewer(); return; }
 
-    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution || 'Platform')}</span>`;
-    
-    const imgEl = document.getElementById('viewerImage');
-    if (story.media_url) { imgEl.src = story.media_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
+    document.getElementById('viewerAuthor').textContent = `${story.author_name} (${story.institution || 'Platform'})`;
     document.getElementById('viewerCaption').textContent = story.caption || '';
-
-    const stickerCard = document.getElementById('viewerStickerCard');
-    if (story.sticker_question) {
-        stickerCard.style.display = 'block';
-        document.getElementById('viewerStickerQ').textContent = story.sticker_question;
-        document.getElementById('labelStickerA').textContent = story.sticker_opt_a;
-        document.getElementById('labelStickerB').textContent = story.sticker_opt_b;
-    } else {
-        stickerCard.style.display = 'none';
-    }
-
-    if (story.id !== 'welcome-tour') {
-        fetch('/api/stories', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: localStorage.getItem('student_name') || 'Peer', viewer_institution: localStorage.getItem('student_inst') || 'School' })
-        });
-    }
 
     const pContainer = document.getElementById('storyProgressContainer');
     pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
-
-    storyTimer = setTimeout(() => { nextStorySlide(); }, 6000);
+    storyTimer = setTimeout(nextStorySlide, 6000);
 }
-
 function closeStoryViewer() { clearTimeout(storyTimer); document.getElementById('storyViewer').style.display = 'none'; }
 
-async function toggleViewersSheet() {
-    clearTimeout(storyTimer);
-    const drawer = document.getElementById('viewersDrawer');
-    if (drawer.style.display === 'block') { drawer.style.display = 'none'; return; }
-    drawer.style.display = 'block';
-    
-    const story = activeStories[currentStoryIdx];
-    const listEl = document.getElementById('viewersListContainer');
+function reactStory(type) { playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
+function saveStoryToVault() { playWin(); alert("💾 Saved to Note Pocket!"); }
 
-    if (story.id === 'welcome-tour') {
-        document.getElementById('viewersCount').textContent = '∞';
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform feature guide viewed by all active members.</div>';
-        return;
+/* =====================================================
+SURVIVAL BET & CLOUT LEADERBOARD SYNC
+===================================================== */
+let survivalTimer = 15;
+let survivalInterval = null;
+
+async function loadPlatformData(){
+    try{
+        const response = await fetch('/api/get-questions');
+        const data = await response.json();
+
+        // 1. Survival Bet Initialization
+        if(data && data.dailyPuzzle){
+            document.getElementById("puzzleBox").style.display = "flex";
+            const formattedQ = formatMathText(data.dailyPuzzle.question_text || "");
+            let enText = formattedQ, hiText = "";
+            if (formattedQ.includes(" / ")) {
+                const parts = formattedQ.split(/\s\/\s/);
+                enText = parts[0]; hiText = parts[1] || "";
+            }
+            document.getElementById("puzzleQuestionEn").innerHTML = enText;
+            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
+
+            const optContainer = document.getElementById("puzzleOptionsContainer");
+            optContainer.innerHTML = '';
+            ['0', '1', '2', '100'].forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'survival-btn'; btn.textContent = opt;
+                btn.onclick = () => checkSurvivalBet(opt, btn);
+                optContainer.appendChild(btn);
+            });
+            startSurvivalTimer();
+        }
+
+        // 2. Clout Podium & List
+        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
+            const top3 = data.leaderboard.slice(0, 3);
+            const rest = data.leaderboard.slice(3, 7);
+
+            const podiumEl = document.getElementById("podiumContainer");
+            podiumEl.innerHTML = top3.map((item, idx) => `
+                <div class="podium-item podium-${idx+1}">
+                    <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
+                    <div class="podium-name">${escapeHTML(item.student_name)}</div>
+                    <div class="podium-score">${item.percentage}%</div>
+                </div>
+            `).join('');
+
+            const listEl = document.getElementById("leaderboardList");
+            listEl.innerHTML = rest.map((item, idx) => `
+                <div class="clout-row">
+                    <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(Class ${item.student_class})</span></span>
+                    <span style="color:var(--accent-emerald);">${item.percentage}%</span>
+                </div>
+            `).join('');
+
+            document.getElementById("leaderboardBox").style.display = "block";
+        }
+    }catch(error){ console.error(error); }
+}
+window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
+
+function startSurvivalTimer() {
+    survivalTimer = 15;
+    const bar = document.getElementById("survivalTimerBar");
+    const num = document.getElementById("survivalTimerNum");
+    clearInterval(survivalInterval);
+    survivalInterval = setInterval(() => {
+        survivalTimer--;
+        num.textContent = survivalTimer + "s";
+        bar.style.width = (survivalTimer / 15 * 100) + "%";
+        if(survivalTimer <= 0) {
+            clearInterval(survivalInterval);
+            document.getElementById("puzzleFeedback").innerHTML = "<span style='color:var(--accent-rose);'>⏱️ Time up! Bet closed.</span>";
+        }
+    }, 1000);
+}
+
+function checkSurvivalBet(selected, btn) {
+    clearInterval(survivalInterval);
+    const feedback = document.getElementById("puzzleFeedback");
+    if(selected === '2') {
+        playWin(); btn.style.background = "rgba(16,185,129,0.3)"; btn.style.borderColor = "var(--accent-emerald)";
+        feedback.innerHTML = "<span style='color:var(--accent-emerald);'>🎉 Won Bet! +50 Clout XP</span>";
+        confetti({ particleCount: 60, spread: 50, origin: { y: 0.4 } });
+    } else {
+        playBuzz(); btn.style.background = "rgba(244,63,94,0.3)"; btn.style.borderColor = "var(--accent-rose)";
+        feedback.innerHTML = "<span style='color:var(--accent-rose);'>❌ Trap triggered! Correct was 2.</span>";
     }
-
-    listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Fetching viewers...</div>';
-    try {
-        const res = await fetch(`/api/stories?action=get_viewers&story_id=${story.id}`);
-        const data = await res.json();
-        const viewers = data.viewers || [];
-        document.getElementById('viewersCount').textContent = viewers.length;
-        if (viewers.length === 0) { listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No views yet.</div>'; return; }
-        listEl.innerHTML = viewers.map(v => `<div class="viewer-item"><span style="font-weight:700; color:#fff;">${escapeHTML(v.viewer_name)}</span><span style="color:var(--text-muted); font-size:12px;">${escapeHTML(v.viewer_institution)}</span></div>`).join('');
-    } catch(e) { listEl.innerHTML = '<div style="font-size:12px; color:var(--accent-rose);">Failed to load viewers.</div>'; }
-}
-
-async function voteStorySticker(selectedOpt) {
-    playWin();
-    fetch('/api/stories', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'vote_sticker', story_id: activeStories[currentStoryIdx].id, vote_opt: selectedOpt })
-    });
-}
-
-function reactStory(type) {
-    playDing();
-    if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
-}
-
-function saveStoryToVault() {
-    const story = activeStories[currentStoryIdx];
-    let vault = JSON.parse(localStorage.getItem('study_vault') || '[]');
-    vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() });
-    localStorage.setItem('study_vault', JSON.stringify(vault)); playSuccessSound(); alert("💾 Saved to Note Vault!");
 }
 
 /* =====================================================
@@ -1057,7 +1042,6 @@ const removeImageButton = document.getElementById("removeImage");
 function setExplanationTone(tone, el) {
     currentTone = tone; document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); el.classList.add('active');
 }
-
 document.querySelectorAll("#doubtSection .subject").forEach(b => {
     b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); };
 });
@@ -1086,16 +1070,10 @@ document.getElementById("askBtn").onclick = async () => {
             body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage, tone: currentTone })
         });
         const data = await res.json();
-        
-        const badge = document.getElementById('doubtToughnessBadge');
-        if (currentTone === 'eli10') { badge.textContent = "🐣 Conceptual Overview"; badge.style.color = "var(--accent-amber)"; badge.style.borderColor = "rgba(245,158,11,0.3)"; badge.style.background = "rgba(245,158,11,0.12)"; } 
-        else if (currentTone === 'tldr') { badge.textContent = "⚡ Key Formulas"; badge.style.color = "var(--accent-cyan)"; badge.style.borderColor = "rgba(6,182,212,0.3)"; badge.style.background = "rgba(6,182,212,0.12)"; } 
-        else { badge.textContent = "🧠 Detailed Steps"; badge.style.color = "var(--accent-emerald)"; badge.style.borderColor = "rgba(16,185,129,0.3)"; badge.style.background = "rgba(16,185,129,0.12)"; }
-
         document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
         document.getElementById("answerBox").style.display = "block"; document.getElementById("feedback").style.display = "block";
     } catch(err) {
-        document.getElementById("answerBox").style.display = "block"; document.getElementById("answerText").textContent = "Unable to connect to the resolution system. Please verify your connection.";
+        document.getElementById("answerBox").style.display = "block"; document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection.";
     } finally { document.getElementById("loadingDoubt").classList.add('hidden'); }
 };
 
@@ -1108,70 +1086,6 @@ function cleanAnswer(text){ return formatMathText(text); }
 
 document.getElementById("againBtn").addEventListener("click", function(){ const oldQuestion = questionInput.value.trim(); questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example."; document.getElementById("askBtn").click(); });
 document.getElementById("teacherBtn").addEventListener("click", function(){ const studentQuestion = questionInput.value.trim(); const explanation = document.getElementById("answerText").textContent.trim(); const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); });
-
-/* =====================================================
-PLATFORM DATA & LEADERBOARD SYNC
-===================================================== */
-async function loadPlatformData(){
-    try{
-        const response = await fetch('/api/get-questions');
-        const data = await response.json();
-
-        if(data && data.dailyPuzzle){
-            document.getElementById("puzzleBox").style.display = "block";
-            const rawQ = data.dailyPuzzle.question_text || "";
-            const formattedQ = formatMathText(rawQ);
-            let enText = formattedQ, hiText = "";
-            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) {
-                const parts = formattedQ.split(/\s\/\s/);
-                enText = parts[0] ? parts[0].trim() : formattedQ;
-                hiText = parts[1] ? parts[1].trim() : "";
-            }
-            document.getElementById("puzzleQuestionEn").innerHTML = enText;
-            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
-            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
-
-            const optContainer = document.getElementById("puzzleOptionsContainer");
-            optContainer.innerHTML = '';
-            const guessOptions = ['0', '1', '2', '100'];
-            guessOptions.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'puzzle-opt-btn'; btn.textContent = opt;
-                btn.onclick = () => checkPuzzleGuess(opt, btn);
-                optContainer.appendChild(btn);
-            });
-        }
-
-        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
-            const list = document.getElementById("leaderboardList");
-            list.innerHTML = "";
-            data.leaderboard.forEach(function(item, idx){
-                let rankClass = idx === 0 ? "first" : "";
-                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:11px;">(Class ${item.student_class} ${item.subject})</span></div><div class="leaderboard-score">${item.percentage}%</div></div>`;
-            });
-            document.getElementById("leaderboardBox").style.display = "block";
-        }
-    }catch(error){ console.error("Data load error:", error); }
-}
-
-window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { loadPlatformData(); }, 300); });
-
-function checkPuzzleGuess(selected, btn) {
-    const feedback = document.getElementById("puzzleFeedback");
-    if (selected === '2') {
-        playWin(); btn.classList.add('correct-pick'); feedback.style.color = 'var(--accent-emerald)'; feedback.textContent = '🎉 Correct solution!';
-        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
-    } else {
-        playBuzz(); btn.classList.add('wrong-pick'); feedback.style.color = 'var(--accent-rose)'; feedback.textContent = '❌ Incorrect. See explanation below.';
-    }
-}
-
-const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
-const puzzleSolution = document.getElementById("puzzleSolution");
-puzzleToggleBtn.addEventListener("click", function(){
-    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Solution"; }
-    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Solution"; }
-});
 
 /* =====================================================
 TEST GENERATOR & TIME ATTACK ENGINE
@@ -1219,54 +1133,31 @@ startTestBtn.addEventListener("click", async function(){
     const org = testOrg.value;
     const cls = testClass.value; 
     const subject = testSubject.value; 
-    const chapter = testChapter.value.trim() || "Complete Syllabus Overview";
+    const chapter = testChapter.value.trim() || "Full Syllabus Overview";
 
-    if(!name || !mobile || !org || !cls || !subject){ 
-        return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); 
-    }
-    if(!/^[0-9]{10}$/.test(mobile)){ 
-        return alert("Please enter a valid 10-digit mobile number."); 
-    }
+    if(!name || !mobile || !org || !cls || !subject){ return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); }
+    if(!/^[0-9]{10}$/.test(mobile)){ return alert("Please enter a valid 10-digit mobile number."); }
 
     const btn = document.getElementById("startTestBtn");
     const originalText = btn.textContent;
-    btn.disabled = true; 
-    btn.textContent = "⚙️ Compiling Assessment... Please wait (10s)";
+    btn.disabled = true; btn.textContent = "⚙️ Compiling Assessment... (10s)";
 
     try {
         const response = await fetch("/api/generate-test", {
-            method: "POST", 
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ 
-                className: cls, 
-                subject: subject, 
-                chapter: chapter, 
-                numberOfQuestions: 20, 
-                difficulty: "Easy", 
-                questionType: "MCQ",
-                language: "English and Pure Devanagari Hindi"
-            })
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: 20, difficulty: "Easy", questionType: "MCQ", language: "English and Pure Devanagari Hindi" })
         });
-        
         const data = await response.json();
         if(!response.ok) throw new Error(data.error || "Preparation error.");
         
         const generated = extractQuestions(data);
-        if(!generated || !generated.length) {
-            throw new Error("Unable to load questions. Please check connection.");
-        }
+        if(!generated || !generated.length) throw new Error("Unable to load questions.");
 
-        activeTestClass = cls; 
-        activeTestSubject = subject;
+        activeTestClass = cls; activeTestSubject = subject;
         activeTestTitle = `${subject}: ${chapter}`;
         startQuestions(generated, `Class ${cls} ${subject}`, chapter);
-        
-    } catch(error) { 
-        alert("Assessment System: " + error.message);
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = originalText; 
-    }
+    } catch(error) { alert("Assessment System: " + error.message); }
+    finally { btn.disabled = false; btn.textContent = originalText; }
 });
 
 function extractQuestions(data){
@@ -1280,157 +1171,78 @@ function extractQuestions(data){
         let answer = q.answer !== undefined ? q.answer : q.correctAnswer;
         if(typeof answer === "string" && options.length){
             const letter = answer.trim().toUpperCase();
-            if(letter === "A") answer = 0;
-            if(letter === "B") answer = 1;
-            if(letter === "C") answer = 2;
-            if(letter === "D") answer = 3;
+            if(letter === "A") answer = 0; if(letter === "B") answer = 1; if(letter === "C") answer = 2; if(letter === "D") answer = 3;
         }
-        return { 
-            id: index + 1, 
-            question: q.question || q.questionText || ("Question " + (index + 1)), 
-            options: options, 
-            answer: Number(answer), 
-            explanation: q.explanation || "Review textbook definitions and concepts." 
-        };
+        return { id: index + 1, question: q.question || q.questionText || ("Question " + (index + 1)), options: options, answer: Number(answer), explanation: q.explanation || "Review fundamental formulas." };
     }).filter(q => q.question && q.options.length >= 2 && Number.isFinite(q.answer));
 }
 
 function startQuestions(questions, headerTitle, testTitle){
-    activeQuestions = questions; 
-    activeTestTitle = testTitle;
-    testSetup.classList.add("hidden"); 
-    testArea.classList.remove("hidden"); 
-    testResult.style.display = "none";
-    reviewContainer.innerHTML = ""; 
-    badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10-Minute Assessment)";
+    activeQuestions = questions; activeTestTitle = testTitle;
+    testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
+    reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
     questionsContainer.innerHTML = "";
 
     questions.forEach(function(q, index){
-        const card = document.createElement("div"); 
-        card.className = "question-card";
+        const card = document.createElement("div"); card.className = "question-card";
         let optionsHTML = "";
         q.options.forEach(function(option, optionIndex){
             optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>';
         });
-        card.innerHTML = '<div class="question-number">QUESTION ' + (index + 1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
+        card.innerHTML = '<div style="color:var(--accent-cyan); font-size:11px; font-weight:900;">QUESTION ' + (index + 1) + '</div><div style="font-size:15px; font-weight:700; margin:8px 0;">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
         questionsContainer.appendChild(card);
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
     startTimer();
 }
 
-function generateBadges(percentage, timeSpentSeconds) {
-    let badgesHTML = "";
-    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 High Distinction</div>`; } 
-    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Proficient</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Completed</div>`; }
-    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Rapid Accuracy</div>`; }
-    return badgesHTML;
-}
-
 submitTestBtn.addEventListener("click", async function(){
-    const timeSpent = totalTimeLimit - timeRemaining; 
     clearInterval(testTimerInterval);
-    const questions = activeQuestions; 
-    if(!questions.length) return;
+    const questions = activeQuestions; if(!questions.length) return;
 
-    submitTestBtn.disabled = true; 
-    submitTestBtn.textContent = "RECORDING SCORE...";
-    let correct = 0, attempted = 0; 
-    const answers = []; 
-    let reviewHTML = "";
+    submitTestBtn.disabled = true; submitTestBtn.textContent = "RECORDING SCORE...";
+    let correct = 0, attempted = 0; const answers = []; let reviewHTML = "";
 
     questions.forEach(function(q, index){
         const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
-        let selectedAnswer = null; 
-        let isCorrect = false;
-
+        let selectedAnswer = null; let isCorrect = false;
         if(selected){
-            attempted++; 
-            selectedAnswer = Number(selected.value);
-            if(selectedAnswer === Number(q.answer)){ 
-                correct++; 
-                isCorrect = true; 
-            }
+            attempted++; selectedAnswer = Number(selected.value);
+            if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
         }
-        
         answers.push({ questionNumber: index + 1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
-
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
-        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>";
-        let correctPick = formatMathText(escapeHTML(q.options[q.answer]));
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Concept Analysis:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
-
-        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Response: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
+        let statusBadge = isCorrect ? '<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct</span>' : '<span style="color:var(--accent-rose); font-weight:800;">✗ Incorrect</span>';
+        reviewHTML += `<div class="review-card"><div style="font-size:11px; font-weight:800; color:var(--text-muted);">Q${index+1} &bull; ${statusBadge}</div><div style="font-size:14px; font-weight:700; margin:6px 0;">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:12px;">Correct: <strong>${formatMathText(escapeHTML(q.options[q.answer]))}</strong></div></div>`;
     });
 
-    const wrong = attempted - correct; 
-    const unanswered = questions.length - attempted;
     const percentage = Math.round((correct / questions.length) * 100);
-
-    badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
-    if (percentage >= 80) { 
-        playSuccessSound(); 
-        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); } 
-    }
+    if (percentage >= 80) { playWin(); confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } }); }
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = "<strong>" + percentage + "% Score</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
-
-    const heatmap = document.getElementById('testHeatmap');
-    if (percentage >= 85) { heatmap.innerHTML = `<strong>🔥 Assessment Diagnosis:</strong> Excellent conceptual retention. Ready for advanced numericals.`; } 
-    else if (percentage >= 60) { heatmap.innerHTML = `<strong>⚡ Assessment Diagnosis:</strong> Good baseline understanding. Revise key formulas and review marked solutions below.`; } 
-    else { heatmap.innerHTML = `<strong>⚠️ Assessment Diagnosis:</strong> Core revision recommended. Study the chapter breakdown in the review section below.`; }
-
+    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
     reviewContainer.innerHTML = reviewHTML;
-    testArea.classList.add("hidden"); 
-    testResult.style.display = "block";
+    testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
 
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
-    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
+    const org = document.getElementById("testOrg").value || "Other School";
     const chapterName = testChapter.value.trim() || "Chapter Assessment";
 
     try {
         await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ 
-                studentName: studentName, 
-                studentMobile: studentMobile, 
-                organization: org, 
-                studentClass: activeTestClass || testClass.value, 
-                subject: activeTestSubject || testSubject.value, 
-                chapter: chapterName, 
-                testTitle: activeTestTitle, 
-                testType: "Algorithmic Generation", 
-                totalQuestions: questions.length, 
-                attempted: attempted, 
-                correct: correct, 
-                wrong: wrong, 
-                unanswered: unanswered, 
-                percentage: percentage, 
-                answers: answers 
-            })
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapterName, testTitle: activeTestTitle, testType: "Algorithmic Generation", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: attempted - correct, unanswered: questions.length - attempted, percentage: percentage, answers: answers })
         });
         loadPlatformData();
-    } catch(error){ console.error(error); }
-    finally { 
-        submitTestBtn.disabled = false; 
-        submitTestBtn.textContent = "SUBMIT ANSWERS"; 
-    }
+    } catch(e){}
+    finally { submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
 });
 
 restartTestBtn.addEventListener("click", function(){
-    testResult.style.display = "none"; 
-    testSetup.classList.remove("hidden"); 
-    testArea.classList.add("hidden");
-    activeQuestions = []; 
-    activeTestTitle = ""; 
-    activeTestClass = ""; 
-    activeTestSubject = "";
+    testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
@@ -1440,34 +1252,20 @@ whatsappShareBtn.addEventListener("click", function(){
 });
 
 /* =====================================================
-ARENA 1v1 LOGIC (WITH SOLO BOT PRACTICE ENGINE)
+ARENA 1v1 LOGIC
 ===================================================== */
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
 
 function startBotMatch() {
     const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
-    const cls = document.getElementById('arenaClass').value || '10';
-
-    arena.isBotMatch = true;
-    arena.name = name;
-    arena.playerNum = 1;
-    arena.score = 0;
-    arena.botScore = 0;
+    arena.isBotMatch = true; arena.name = name; arena.playerNum = 1; arena.score = 0; arena.botScore = 0;
     arena.questions = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0 },
         { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2 },
-        { question_text: "What is the chemical formula of water? / जल का रासायनिक सूत्र क्या है?", options: ["H2O", "CO2", "NaCl", "CH4"], correct_option: 0 },
-        { question_text: "Value of acceleration due to gravity on Earth is approx: / पृथ्वी पर गुरुत्वीय त्वरण का मान लगभग है:", options: ["9.8 m/s²", "10.8 m/s²", "8.9 m/s²", "12 m/s²"], correct_option: 0 },
-        { question_text: "Which gas is vital for human respiration? / मानव श्वसन के लिए कौन सी गैस आवश्यक है?", options: ["Nitrogen (नाइट्रोजन)", "Oxygen (ऑक्सीजन)", "Helium (हीलियम)", "Hydrogen (हाइड्रोजन)"], correct_option: 1 },
-        { question_text: "Light year is a unit of: / प्रकाश वर्ष किसका मात्रक है?", options: ["Time (समय)", "Distance (दूरी)", "Speed (गति)", "Intensity (तीव्रता)"], correct_option: 1 },
-        { question_text: "What is the chemical symbol for Gold? / सोने का रासायनिक प्रतीक क्या है?", options: ["Ag", "Au", "Fe", "Cu"], correct_option: 1 },
-        { question_text: "Number of chromosomes in human cells: / मानव कोशिका में गुणसूत्रों की संख्या होती है:", options: ["46", "23", "48", "44"], correct_option: 0 },
-        { question_text: "Power of a convex lens is always: / उत्तल लेंस की क्षमता सदैव होती है:", options: ["Positive (धनात्मक)", "Negative (ऋणात्मक)", "Zero (शून्य)", "Infinite (अनंत)"], correct_option: 0 },
-        { question_text: "Formula for kinetic energy is: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 }
+        { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 }
     ];
-
-    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`;
-    document.getElementById('uiP2Name').innerHTML = `🤖 Invincible Bot <span id="uiP2Score">0</span>`;
+    document.getElementById('uiP1Name').innerHTML = `${name} <span id="uiP1Score">0</span>`;
+    document.getElementById('uiP2Name').innerHTML = `🤖 Bot <span id="uiP2Score">0</span>`;
     startArenaGame();
 }
 
@@ -1476,108 +1274,53 @@ document.getElementById('btnCreateRoom').onclick = async () => {
     const className = document.getElementById('arenaClass').value;
     if(!name) return alert("Please enter your name.");
 
-    const btn = document.getElementById('btnCreateRoom');
-    btn.disabled = true; 
-    btn.textContent = "Generating room...";
-
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'create', player_name: name, class_name: className })
-        });
+        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; 
-        arena.code = data.room_code; 
-        arena.questions = data.questions; 
-        arena.name = name; 
-        arena.playerNum = 1;
-
+        arena.isBotMatch = false; arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { 
-        alert("Arena Connection: " + err.message); 
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = "⚡ Create Match Room"; 
-    }
+    } catch(err) { alert("Arena: " + err.message); }
 };
 
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter name and 4-digit code.");
-
-    const btn = document.getElementById('btnJoinRoom');
-    btn.disabled = true; 
-    btn.textContent = "Connecting...";
+    if(!name || !code) return alert("Enter name and code.");
 
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'join', room_code: code, player_name: name })
-        });
+        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; 
-        arena.code = code; 
-        arena.questions = data.questions; 
-        arena.name = name; 
-        arena.playerNum = 2;
-
+        arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
         document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
-        document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
-
+        document.getElementById('uiP2Name').innerHTML = `${name} <span id="uiP2Score">0</span>`;
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { 
-        alert("Match Joining: " + err.message); 
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = "🚀 Join Room"; 
-    }
+    } catch(err) { alert("Join Error: " + err.message); }
 };
 
 async function pollRoomState() {
     if (arena.isBotMatch) return;
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code })
-        });
+        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'sync', room_code: arena.code }) });
         const data = await res.json();
         if(!data.room) return;
         const room = data.room;
 
         if (arena.playerNum === 1 && room.player2_name && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
-            document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`;
+            document.getElementById('uiP1Name').innerHTML = `${arena.name} <span id="uiP1Score">0</span>`;
             document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
             startArenaGame();
         }
-
-        const p1Score = room.player1_score || 0;
-        const p2Score = room.player2_score || 0;
-        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score;
-        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
-
-        const total = p1Score + p2Score;
-        if (total > 0) {
-            const p1Pct = Math.round((p1Score / total) * 100);
-            document.getElementById('vsFillP1').style.width = p1Pct + '%';
-            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
-        }
-
-        if (room.player1_finished && room.player2_finished) {
-            clearInterval(arena.pollInterval); 
-            showArenaResult(room);
-        }
+        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = room.player1_score || 0;
+        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = room.player2_score || 0;
+        if (room.player1_finished && room.player2_finished) { clearInterval(arena.pollInterval); showArenaResult(room); }
     } catch(e){}
 }
 
@@ -1585,17 +1328,13 @@ function startArenaGame() {
     document.getElementById('arenaSetup').classList.add('hidden');
     document.getElementById('arenaWaiting').classList.add('hidden');
     document.getElementById('arenaBattle').classList.remove('hidden');
-    arena.currentQ = 0; 
-    loadArenaQuestion();
+    arena.currentQ = 0; loadArenaQuestion();
 }
 
 function loadArenaQuestion() {
-    if (arena.currentQ >= 10) { 
-        finishArenaGame(); 
-        return; 
-    }
+    if (arena.currentQ >= arena.questions.length) { finishArenaGame(); return; }
     const q = arena.questions[arena.currentQ];
-    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`;
+    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/${arena.questions.length}`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
     
     let optsHTML = '';
@@ -1605,65 +1344,43 @@ function loadArenaQuestion() {
         optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
     });
     document.getElementById('arenaOptions').innerHTML = optsHTML;
-
     arena.timer = 10;
     document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
     clearInterval(arena.interval);
     arena.interval = setInterval(() => {
-        arena.timer--; 
-        document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+        arena.timer--; document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
         if (arena.timer <= 0) handleArenaAnswer(-1, -1);
     }, 1000);
 }
 
 async function handleArenaAnswer(selectedIdx, correctIdx) {
     clearInterval(arena.interval);
-    const card = document.getElementById('arenaCardContainer');
-
     if (selectedIdx === Number(correctIdx)) {
-        playDing();
-        arena.score += (10 + arena.timer);
-        if (typeof confetti === "function") confetti({ particleCount: 35, spread: 40, origin: { y: 0.7 } });
+        playDing(); arena.score += (10 + arena.timer);
     } else {
         playBuzz();
-        card.classList.add('arena-shake');
-        setTimeout(() => card.classList.remove('arena-shake'), 400);
+        document.getElementById('arenaCardContainer').classList.add('arena-shake');
+        setTimeout(() => document.getElementById('arenaCardContainer').classList.remove('arena-shake'), 400);
     }
 
     if (arena.isBotMatch) {
-        if (Math.random() > 0.3) { arena.botScore += (10 + Math.floor(Math.random() * 8)); }
+        if (Math.random() > 0.3) arena.botScore += (10 + Math.floor(Math.random() * 8));
         document.getElementById('uiP1Score').textContent = arena.score;
         document.getElementById('uiP2Score').textContent = arena.botScore;
-        const total = arena.score + arena.botScore;
-        if (total > 0) {
-            const p1Pct = Math.round((arena.score / total) * 100);
-            document.getElementById('vsFillP1').style.width = p1Pct + '%';
-            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
-        }
     } else {
-        fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
-        });
+        fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score }) });
     }
-
-    arena.currentQ++; 
-    loadArenaQuestion();
+    arena.currentQ++; loadArenaQuestion();
 }
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
     if (arena.isBotMatch) {
-        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible Bot", player2_score: arena.botScore });
+        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Bot", player2_score: arena.botScore });
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent...</div>`;
         document.getElementById('arenaResult').classList.remove('hidden');
-        fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
-        });
+        fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true }) });
     }
 }
 
@@ -1673,15 +1390,11 @@ function showArenaResult(room) {
     document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
     document.getElementById('arenaResult').classList.remove('hidden');
-
     if (myScore > opScore) {
-        playWin(); 
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
-        if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-    } else if (myScore < opScore) {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
+        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:22px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
+        confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } });
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-amber);">🤝 DRAW</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:22px; font-weight:900; color:var(--accent-rose);">MATCH COMPLETE</div>`;
     }
 }
 
@@ -1694,179 +1407,69 @@ function setFeedSubjectFilter(sub, el) {
     currentFeedFilterSubject = sub;
     document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
     el.classList.add('active');
-    
-    if(sub === 'ChillVent') {
-        document.body.classList.add('midnight-vent-active');
-        document.getElementById('feedHeaderBox').classList.add('vent-mode');
-    } else {
-        document.body.classList.remove('midnight-vent-active');
-        document.getElementById('feedHeaderBox').classList.remove('vent-mode');
-    }
-
+    if(sub === 'ChillVent') document.body.classList.add('midnight-vent-active');
+    else document.body.classList.remove('midnight-vent-active');
     loadFeedPosts();
 }
 
 async function loadFeedPosts() {
     const list = document.getElementById('postsList');
-    const sub = currentFeedFilterSubject;
-
     try {
-        const res = await fetch(`/api/feed?student_class=All&subject=${sub}`);
+        const res = await fetch(`/api/feed?student_class=All&subject=${currentFeedFilterSubject}`);
         const data = await res.json();
-        
         if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No discussions in this category yet. Be the first to share!</div>';
+            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px;">No discussions here yet.</div>';
             return;
         }
-
         list.innerHTML = data.posts.map(p => `
-            <div class="feed-card" id="post-${p.id}">
-                <div class="feed-card-header">
-                    <div>
-                        <div class="feed-author">${escapeHTML(p.author_name || 'Student')}</div>
-                        <div class="feed-school">${escapeHTML(p.institution || 'CBSE School')} &bull; Class ${escapeHTML(p.student_class)}</div>
-                    </div>
-                    <span class="feed-badge">${escapeHTML(p.subject)}</span>
+            <div class="feed-card">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div><strong style="color:var(--accent-cyan); font-size:13px;">${escapeHTML(p.author_name)}</strong> <span style="color:var(--text-muted); font-size:11px;">&bull; ${escapeHTML(p.institution)}</span></div>
+                    <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; background:rgba(139,92,246,0.15); color:var(--accent-purple);">${escapeHTML(p.subject)}</span>
                 </div>
-                <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
-                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment">` : ''}
+                <div style="font-size:14px; color:#f1f5f9; line-height:1.4; margin-bottom:10px;">${escapeHTML(p.content)}</div>
                 <div class="feed-actions">
-                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
-                    <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
-                    <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
-                </div>
-
-                <div class="comments-drawer" id="comments-${p.id}">
-                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading discussions...</div></div>
-                    <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="com-input-${p.id}" placeholder="Type solution or reply..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
-                        <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
-                    </div>
+                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span></div>
+                    <div class="action-btn" onclick="reportPost(${p.id})">🚩 Report</div>
                 </div>
             </div>
         `).join('');
-
-    } catch(err) {
-        list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
-    }
+    } catch(err) { list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:13px;">Feed sync failed.</div>'; }
 }
 
 document.getElementById('btnPublishPost').onclick = async () => {
-    let name = document.getElementById('feedAuthorName').value.trim();
-    let inst = document.getElementById('feedInstitution').value.trim();
+    let name = document.getElementById('feedAuthorName').value.trim() || "Student";
+    let inst = document.getElementById('feedInstitution').value.trim() || "CBSE School";
     const cls = document.getElementById('feedClass').value;
     const sub = document.getElementById('feedSubject').value;
     const content = document.getElementById('feedContent').value.trim();
-
     if (!content) return alert("Please enter discussion content.");
-    if (!name) name = "Student";
-    if (!inst) inst = "CBSE School";
-
-    localStorage.setItem('student_name', name);
-    localStorage.setItem('student_inst', inst);
-
-    const btn = document.getElementById('btnPublishPost');
-    btn.disabled = true; 
-    btn.textContent = "Publishing...";
 
     try {
         const res = await fetch('/api/feed', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'create_post', author_name: name, institution: inst, student_class: cls, subject: sub, content: content })
         });
         const data = await res.json();
         if (data.error) throw new Error(data.error);
-
         document.getElementById('feedContent').value = '';
         loadFeedPosts();
-    } catch(err) {
-        alert(err.message);
-    } finally {
-        btn.disabled = false; 
-        btn.textContent = "POST TO COMMUNITY";
-    }
+    } catch(err) { alert(err.message); }
 };
 
 async function likePost(postId) {
-    const likesSpan = document.getElementById(`likes-${postId}`);
-    likesSpan.textContent = Number(likesSpan.textContent) + 1;
-    await fetch('/api/feed', {
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'like_post', post_id: postId })
-    });
+    const el = document.getElementById(`likes-${postId}`);
+    el.textContent = Number(el.textContent) + 1;
+    await fetch('/api/feed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'like_post', post_id: postId }) });
 }
 
 async function reportPost(postId) {
-    if (!confirm("Report discussion for academic review?")) return;
-    try {
-        const res = await fetch('/api/feed', {
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'report_post', post_id: postId })
-        });
-        const data = await res.json();
-        alert(data.message || "Report recorded.");
-        document.getElementById(`post-${postId}`).style.display = 'none';
-    } catch(e){}
+    if (!confirm("Report post for academic review?")) return;
+    await fetch('/api/feed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'report_post', post_id: postId }) });
+    alert("Report recorded.");
 }
 
-async function toggleComments(postId) {
-    const drawer = document.getElementById(`comments-${postId}`);
-    if (drawer.style.display === 'block') {
-        drawer.style.display = 'none';
-        return;
-    }
-    drawer.style.display = 'block';
-    loadComments(postId);
-}
-
-async function loadComments(postId) {
-    const container = document.getElementById(`comments-list-${postId}`);
-    try {
-        const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
-        const data = await res.json();
-        if (!data.comments || data.comments.length === 0) {
-            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No replies yet.</div>';
-            return;
-        }
-        container.innerHTML = data.comments.map(c => `
-            <div class="comment-item">
-                <div style="font-weight:800; color:var(--accent-cyan); font-size:12px; margin-bottom:2px;">${escapeHTML(c.author_name)} <span style="color:var(--text-muted); font-weight:normal;">&bull; ${escapeHTML(c.institution)}</span></div>
-                <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
-            </div>
-        `).join('');
-    } catch(e){}
-}
-
-async function addComment(postId) {
-    const input = document.getElementById(`com-input-${postId}`);
-    const content = input.value.trim();
-    const name = document.getElementById('feedAuthorName').value.trim() || localStorage.getItem('student_name') || 'Student';
-    const inst = document.getElementById('feedInstitution').value.trim() || localStorage.getItem('student_inst') || 'School';
-
-    if (!content) return alert("Please enter discussion text.");
-
-    try {
-        const res = await fetch('/api/feed', {
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'add_comment', post_id: postId, author_name: name, institution: inst, content: content })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        input.value = '';
-        loadComments(postId);
-    } catch(err) {
-        alert(err.message);
-    }
-}
-
-function escapeHTML(str){ 
-    return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; 
-}
+function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
 </script>
 </body>
 </html>
