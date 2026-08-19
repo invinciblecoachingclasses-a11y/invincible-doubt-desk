@@ -13,10 +13,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { classLevel, subject, chapter } = req.body;
+  // Accept both className and classLevel
+  const cls = req.body.className || req.body.classLevel;
+  const sub = req.body.subject;
+  const chapter = req.body.chapter;
+  const customStructure = req.body.structure;
 
-  if (!classLevel || !subject || !chapter) {
-    return res.status(400).json({ error: 'Missing classLevel, subject, or chapter' });
+  if (!cls || !sub || !chapter) {
+    return res.status(400).json({ error: 'Missing class, subject, or chapter' });
   }
 
   const cleanChapter = chapter.trim().toLowerCase();
@@ -26,15 +30,14 @@ export default async function handler(req, res) {
     const { data: cachedNote } = await supabase
       .from('topper_notes')
       .select('content_markdown')
-      .eq('class_level', classLevel)
-      .eq('subject', subject)
+      .eq('class_level', String(cls))
+      .eq('subject', sub)
       .ilike('chapter', cleanChapter)
       .maybeSingle();
 
     if (cachedNote && cachedNote.content_markdown) {
       return res.status(200).json({
-        source: 'cache',
-        notesMarkdown: cachedNote.content_markdown
+        notes: cachedNote.content_markdown
       });
     }
 
@@ -43,36 +46,28 @@ export default async function handler(req, res) {
       model: 'gemini-1.5-flash'
     });
 
-    const prompt = `Generate comprehensive revision notes ("Topper Notes") for Class ${classLevel}, Subject: ${subject}, Chapter: ${chapter}.
-Include:
-1. 📌 Chapter Overview
-2. 🧠 Core Concepts & Definitions
-3. 📐 Formulas, Reactions & Laws (in LaTeX format)
-4. ⭐ Must-Remember Points
-5. ⚠️ Common Mistakes & Exam Pitfalls
-6. 🎯 Board Exam Focus (Top 3 questions with answers)
-7. ⚡ 60-Second Revision Checklist`;
+    const prompt = customStructure || `Act as an expert CBSE teacher and school topper. Generate complete revision notes for Class ${cls} ${sub}, Chapter: ${chapter}. Include key definitions, formulas in LaTeX format, exam traps, and quick revision points.`;
 
     const result = await model.generateContent(prompt);
-    const markdown = result.response.text();
+    const generatedContent = result.response.text();
 
-    // 3. Save to Supabase
+    // 3. Save to Supabase cache
     await supabase.from('topper_notes').insert([
       {
-        class_level: classLevel,
-        subject: subject,
+        class_level: String(cls),
+        subject: sub,
         chapter: cleanChapter,
-        content_markdown: markdown
+        content_markdown: generatedContent
       }
     ]);
 
+    // Return under the exact 'notes' property index.html expects
     return res.status(200).json({
-      source: 'gemini',
-      notesMarkdown: markdown
+      notes: generatedContent
     });
 
   } catch (error) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Failed to compile notes. Please check internet connection.' });
+    console.error('API Generation error:', error);
+    return res.status(500).json({ error: 'Failed to generate notes.' });
   }
 }
