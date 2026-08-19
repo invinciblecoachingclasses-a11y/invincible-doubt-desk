@@ -3,20 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <!-- GOOGLE SEARCH CONSOLE SITE VERIFICATION -->
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
-
-<!-- =====================================================
-SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
-===================================================== -->
 <title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
 <meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant AI doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
 <meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Invincible Coaching Classes">
 <link rel="canonical" href="https://invincible-doubt-desk.vercel.app/">
-
 <!-- OPEN GRAPH -->
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
@@ -24,13 +18,11 @@ SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
 <meta property="og:description" content="Instant step-by-step doubt solving, custom weekly tests, 1v1 rapid-fire knowledge battles, and active CBSE peer discussion.">
 <meta property="og:url" content="https://invincible-doubt-desk.vercel.app/">
 <meta property="og:site_name" content="Invincible 360">
-
 <!-- FONTS & CONFETTI -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
 <style>
 :root {
   --bg-main: #060911;
@@ -48,791 +40,119 @@ SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
   --accent-purple: #a855f7;
   --accent-emerald: #10b981;
 }
-
-* { 
-  box-sizing: border-box; 
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); 
-}
-
+* { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-main);
-  background-image: radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), 
-                    radial-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
-  color: var(--text-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), radial-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px; background-position: 0 0, 16px 16px;
+  color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased;
 }
-
-.container { 
-  width: min(840px, 92%); 
-  margin: 20px auto 60px; 
-}
-
-/* =====================================================
-GAMIFIED PLAYER HUD HEADER
-===================================================== */
+.container { width: min(840px, 92%); margin: 20px auto 60px; }
 .player-hud-card {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  border-radius: 24px;
-  padding: 20px 24px;
-  margin-bottom: 20px;
-  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.1);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(12px);
+  border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 24px; padding: 20px 24px; margin-bottom: 20px;
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.1); position: relative; overflow: hidden; backdrop-filter: blur(12px);
 }
-
-.player-hud-card::after {
-  content: ''; 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  height: 3px;
-  background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899, #f59e0b);
-}
-
-.hud-top-row { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  flex-wrap: wrap; 
-  gap: 10px; 
-  margin-bottom: 12px; 
-}
-
-.brand-name {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff 40%, #06b6d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.hud-status-badges { 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-}
-
-.level-badge {
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 900;
-  padding: 4px 10px;
-  border-radius: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-.help-guide-badge {
-  background: rgba(245, 158, 11, 0.15);
-  color: var(--accent-amber);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  font-size: 11px;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.help-guide-badge:hover { 
-  background: rgba(245, 158, 11, 0.25); 
-  transform: translateY(-1px); 
-}
-
-.live-ping {
-  display: inline-flex; 
-  align-items: center; 
-  gap: 5px;
-  background: rgba(16, 185, 129, 0.15); 
-  color: var(--accent-emerald);
-  font-size: 11px; 
-  font-weight: 800; 
-  padding: 4px 10px; 
-  border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.ping-dot { 
-  width: 7px; 
-  height: 7px; 
-  background: var(--accent-emerald); 
-  border-radius: 50%; 
-  animation: pulsePing 1.5s infinite; 
-}
-
-@keyframes pulsePing { 
-  0%, 100% { opacity: 1; transform: scale(1); } 
-  50% { opacity: 0.4; transform: scale(1.3); } 
-}
-
-.hud-xp-row { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-}
-
-.xp-track { 
-  flex: 1; 
-  height: 8px; 
-  background: #0b1120; 
-  border-radius: 6px; 
-  overflow: hidden; 
-  border: 1px solid var(--border-subtle); 
-}
-
-.xp-fill { 
-  width: 68%; 
-  height: 100%; 
-  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); 
-  border-radius: 6px; 
-}
-
-.xp-label { 
-  font-size: 11px; 
-  font-weight: 800; 
-  color: var(--text-muted); 
-  white-space: nowrap; 
-}
-
-/* =====================================================
-STREAK & SHIELD STATUS
-===================================================== */
-.streak-bar-box {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border-subtle);
-  border-radius: 18px;
-  padding: 12px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 13px;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-}
-
-.streak-counter { 
-  color: var(--accent-amber); 
-  display: flex; 
-  align-items: center; 
-  gap: 6px; 
-  font-weight: 800; 
-  font-size: 14px; 
-}
-
-.streak-freeze-tag { 
-  background: rgba(6, 182, 212, 0.12); 
-  color: var(--accent-cyan); 
-  border: 1px solid rgba(6, 182, 212, 0.3); 
-  padding: 5px 12px; 
-  border-radius: 12px; 
-  font-size: 11px; 
-  font-weight: 800; 
-}
-
-/* =====================================================
-24-HOUR STUDY STORIES TRAY
-===================================================== */
-.stories-tray-container {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border-subtle);
-  border-radius: 22px;
-  padding: 16px 16px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  backdrop-filter: blur(10px);
-}
-
-.stories-tray-container::-webkit-scrollbar { 
-  display: none; 
-}
-
-.story-circle-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  flex-shrink: 0;
-  width: 70px;
-  text-align: center;
-}
-
-.story-circle-item:hover .story-avatar-wrap { 
-  transform: scale(1.08); 
-}
-
-.story-avatar-wrap {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(45deg, #f43f5e, #f59e0b, #06b6d4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.story-avatar-wrap.topper { 
-  background: linear-gradient(45deg, #eab308, #f59e0b); 
-}
-
-.story-avatar-wrap.add-story { 
-  background: var(--bg-surface); 
-  border: 2px dashed var(--accent-cyan); 
-}
-
-.story-avatar-inner {
-  width: 100%;
-  height: 100%;
-  background: #090e1a;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 900;
-  color: #fff;
-  overflow: hidden;
-}
-
-.story-avatar-inner img { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-}
-
-.story-badge-flame {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  background: #090e1a;
-  border-radius: 50%;
-  font-size: 11px;
-  padding: 2px;
-  line-height: 1;
-}
-
-.story-username {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* =====================================================
-FULLSCREEN STORY VIEWER & MODALS
-===================================================== */
-.story-viewer-modal, .quest-modal-overlay, .modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.94);
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-}
-
-.story-card-view {
-  width: min(420px, 94%);
-  height: min(720px, 90vh);
-  background: #0b1120;
-  border-radius: 24px;
-  border: 1px solid var(--border-subtle);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 18px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
-}
-
-.modal-card, .quest-modal-card {
-  width: min(500px, 92%);
-  background: #0f172a;
-  border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 24px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.quest-modal-card {
-  background: linear-gradient(145deg, #0d1527, #070b14);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
-  text-align: center;
-}
-
-/* =====================================================
-STORY CONTENT
-===================================================== */
-.story-progress-bar { 
-  display: flex; 
-  gap: 4px; 
-  margin-bottom: 12px; 
-}
-
-.story-progress-seg { 
-  height: 3px; 
-  flex: 1; 
-  background: rgba(255, 255, 255, 0.2); 
-  border-radius: 2px; 
-  overflow: hidden; 
-}
-
-.story-progress-fill { 
-  height: 100%; 
-  width: 0%; 
-  background: #fff; 
-}
-
-.story-view-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  z-index: 10; 
-}
-
-.story-view-author { 
-  font-size: 14px; 
-  font-weight: 800; 
-  color: #fff; 
-  display: flex; 
-  align-items: center; 
-  gap: 6px; 
-}
-
-.story-close-btn { 
-  background: none; 
-  border: none; 
-  color: #fff; 
-  font-size: 22px; 
-  cursor: pointer; 
-}
-
-.story-body-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 15px 0;
-  text-align: center;
-  position: relative;
-}
-
-.story-main-img { 
-  max-width: 100%; 
-  max-height: 340px; 
-  border-radius: 14px; 
-  object-fit: contain; 
-}
-
-.story-caption-text { 
-  font-size: 16px; 
-  font-weight: 700; 
-  color: #f8fafc; 
-  margin-top: 12px; 
-  line-height: 1.4; 
-  padding: 0 10px; 
-}
-
-.story-nav-zone { 
-  position: absolute; 
-  top: 60px; 
-  bottom: 70px; 
-  width: 45%; 
-  z-index: 5; 
-  cursor: pointer; 
-}
-
-.story-nav-prev { left: 0; }
-.story-nav-next { right: 0; }
-
-.story-sticker-card {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid var(--accent-cyan);
-  border-radius: 16px;
-  padding: 14px;
-  width: 92%;
-  margin-top: 10px;
-  backdrop-filter: blur(10px);
-  z-index: 10;
-}
-
-.sticker-q { 
-  font-size: 14px; 
-  font-weight: 800; 
-  color: #fff; 
-  margin-bottom: 10px; 
-}
-
-.sticker-opts { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 8px; 
-}
-
-.sticker-btn {
-  position: relative;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  color: #fff;
-  font-weight: 800;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.sticker-bar {
-  position: absolute;
-  top: 0; left: 0; bottom: 0;
-  background: rgba(6, 182, 212, 0.25);
-  z-index: -1;
-  width: 0%;
-  transition: width 0.4s ease;
-}
-
+.player-hud-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899, #f59e0b); }
+.hud-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; margin: 0; background: linear-gradient(135deg, #ffffff 40%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hud-status-badges { display: flex; align-items: center; gap: 8px; }
+.level-badge { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+.help-guide-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+.help-guide-badge:hover { background: rgba(245, 158, 11, 0.25); transform: translateY(-1px); }
+.live-ping { display: inline-flex; align-items: center; gap: 5px; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); }
+.ping-dot { width: 7px; height: 7px; background: var(--accent-emerald); border-radius: 50%; animation: pulsePing 1.5s infinite; }
+@keyframes pulsePing { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
+.hud-xp-row { display: flex; align-items: center; gap: 12px; }
+.xp-track { flex: 1; height: 8px; background: #0b1120; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); }
+.xp-fill { width: 68%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); border-radius: 6px; }
+.xp-label { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
+.streak-bar-box { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 13px; font-weight: 700; backdrop-filter: blur(8px); }
+.streak-counter { color: var(--accent-amber); display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14px; }
+.streak-freeze-tag { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; }
+.stories-tray-container { background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-radius: 22px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; overflow-x: auto; scrollbar-width: none; backdrop-filter: blur(10px); }
+.stories-tray-container::-webkit-scrollbar { display: none; }
+.story-circle-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0; width: 70px; text-align: center; }
+.story-circle-item:hover .story-avatar-wrap { transform: scale(1.08); }
+.story-avatar-wrap { width: 58px; height: 58px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f43f5e, #f59e0b, #06b6d4); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
+.story-avatar-wrap.topper { background: linear-gradient(45deg, #eab308, #f59e0b); }
+.story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
+.story-avatar-inner { width: 100%; height: 100%; background: #090e1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: #fff; overflow: hidden; }
+.story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+.story-badge-flame { position: absolute; bottom: -2px; right: -2px; background: #090e1a; border-radius: 50%; font-size: 11px; padding: 2px; line-height: 1; }
+.story-username { font-size: 11px; font-weight: 700; color: var(--text-muted); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.story-viewer-modal, .quest-modal-overlay, .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.94); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+.story-card-view { width: min(420px, 94%); height: min(720px, 90vh); background: #0b1120; border-radius: 24px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9); }
+.modal-card, .quest-modal-card { width: min(500px, 92%); background: #0f172a; border: 1px solid var(--border-subtle); border-radius: 24px; padding: 24px; max-height: 90vh; overflow-y: auto; }
+.quest-modal-card { background: linear-gradient(145deg, #0d1527, #070b14); border-color: var(--accent-cyan); box-shadow: 0 0 35px rgba(6, 182, 212, 0.3); text-align: center; }
+.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
+.story-progress-fill { height: 100%; width: 0%; background: #fff; }
+.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+.story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
+.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+.story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; text-align: center; position: relative; }
+.story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
+.story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
+.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
+.story-nav-prev { left: 0; } .story-nav-next { right: 0; }
+.story-sticker-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-cyan); border-radius: 16px; padding: 14px; width: 92%; margin-top: 10px; backdrop-filter: blur(10px); z-index: 10; }
+.sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+.sticker-opts { display: flex; flex-direction: column; gap: 8px; }
+.sticker-btn { position: relative; background: var(--bg-surface); border: 1px solid var(--border-subtle); color: #fff; font-weight: 800; padding: 10px 14px; border-radius: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; overflow: hidden; z-index: 1; }
+.sticker-bar { position: absolute; top: 0; left: 0; bottom: 0; background: rgba(6, 182, 212, 0.25); z-index: -1; width: 0%; transition: width 0.4s ease; }
 .sticker-btn.voted-correct .sticker-bar { background: rgba(16, 185, 129, 0.4) !important; }
 .sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
-
-.story-action-bar { 
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  gap: 8px; 
-  z-index: 10; 
-}
-
-.reaction-emoji-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.reaction-emoji-btn:hover { 
-  transform: scale(1.2); 
-}
-
-.vault-btn { 
-  background: var(--bg-surface); 
-  border: 1px solid var(--accent-amber); 
-  color: var(--accent-amber); 
-  padding: 8px 12px; 
-  border-radius: 12px; 
-  font-size: 12px; 
-  font-weight: 800; 
-  cursor: pointer; 
-}
-
-.viewers-btn { 
-  background: var(--bg-surface); 
-  border: 1px solid var(--accent-cyan); 
-  color: var(--accent-cyan); 
-  padding: 8px 12px; 
-  border-radius: 12px; 
-  font-size: 12px; 
-  font-weight: 800; 
-  cursor: pointer; 
-}
-
-.viewers-sheet {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: #0b0f19;
-  border-top: 2px solid var(--accent-cyan);
-  border-radius: 20px 20px 0 0;
-  padding: 18px;
-  max-height: 280px;
-  overflow-y: auto;
-  display: none;
-  z-index: 20;
-}
-
-.viewer-item { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 8px 0; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-  font-size: 13px; 
-}
-
-/* =====================================================
-QUEST ONBOARDING
-===================================================== */
-.quest-title { 
-  font-family: 'Space Grotesk', sans-serif; 
-  font-size: 24px; 
-  font-weight: 900; 
-  margin: 0 0 8px 0; 
-  color: #fff; 
-}
-
-.quest-subtitle { 
-  font-size: 13px; 
-  color: var(--text-muted); 
-  margin-bottom: 20px; 
-}
-
-.quest-options-grid { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-}
-
-.quest-choice-btn {
-  background: #111a2e;
-  border: 1px solid var(--border-subtle);
-  border-radius: 18px;
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.quest-choice-btn:hover { 
-  background: #18243e; 
-  border-color: var(--accent-cyan); 
-  transform: translateY(-2px); 
-}
-
+.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
+.reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.reaction-emoji-btn:hover { transform: scale(1.2); }
+.vault-btn { background: var(--bg-surface); border: 1px solid var(--accent-amber); color: var(--accent-amber); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.viewers-btn { background: var(--bg-surface); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.viewers-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: #0b0f19; border-top: 2px solid var(--accent-cyan); border-radius: 20px 20px 0 0; padding: 18px; max-height: 280px; overflow-y: auto; display: none; z-index: 20; }
+.viewer-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+.quest-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
+.quest-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+.quest-options-grid { display: flex; flex-direction: column; gap: 12px; }
+.quest-choice-btn { background: #111a2e; border: 1px solid var(--border-subtle); border-radius: 18px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; text-align: left; }
+.quest-choice-btn:hover { background: #18243e; border-color: var(--accent-cyan); transform: translateY(-2px); }
 .quest-choice-icon { font-size: 26px; }
 .quest-choice-heading { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .quest-choice-desc { font-size: 11px; color: var(--text-muted); }
-
-.feature-mini-guide {
-  background: rgba(6, 182, 212, 0.08);
-  border: 1px dashed rgba(6, 182, 212, 0.3);
-  border-radius: 16px;
-  padding: 12px 16px;
-  margin-bottom: 18px;
-  font-size: 12px;
-  color: #cbd5e1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
+.feature-mini-guide { background: rgba(6, 182, 212, 0.08); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 16px; padding: 12px 16px; margin-bottom: 18px; font-size: 12px; color: #cbd5e1; display: flex; align-items: center; gap: 10px; }
 .feature-mini-guide strong { color: var(--accent-cyan); font-weight: 800; }
-
-/* =====================================================
-BENTO TABS
-===================================================== */
-.mode-switch { 
-  display: grid; 
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 10px; 
-  margin-bottom: 24px; 
-}
-
-.mode-btn {
-  padding: 12px 6px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  background: rgba(15, 23, 42, 0.6);
-  color: var(--text-muted);
-  font-family: 'Space Grotesk', sans-serif;
-  cursor: pointer;
-  text-align: center;
-  backdrop-filter: blur(8px);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
+.mode-switch { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.mode-btn { padding: 12px 6px; border: 1px solid var(--border-subtle); border-radius: 16px; background: rgba(15, 23, 42, 0.6); color: var(--text-muted); font-family: 'Space Grotesk', sans-serif; cursor: pointer; text-align: center; backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .mode-btn-title { font-size: 13px; font-weight: 800; }
 .mode-btn-sub { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
-
-.mode-btn:hover { 
-  background: var(--bg-surface); 
-  border-color: rgba(255, 255, 255, 0.2); 
-  transform: translateY(-2px); 
-}
-
-.mode-btn.active {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9));
-  color: var(--accent-cyan);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 20px var(--cyan-glow);
-}
-
+.mode-btn:hover { background: var(--bg-surface); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+.mode-btn.active { background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-cyan); border-color: var(--accent-cyan); box-shadow: 0 0 20px var(--cyan-glow); }
 .mode-btn.active .mode-btn-sub { color: #cbd5e1; }
-
-.mode-btn.arena-btn.active {
-  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9));
-  color: var(--accent-rose);
-  border-color: var(--accent-rose);
-  box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
-}
-
+.mode-btn.arena-btn.active { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-rose); border-color: var(--accent-rose); box-shadow: 0 0 20px rgba(244, 63, 94, 0.25); }
 .mode-btn.arena-btn.active .mode-btn-sub { color: #fecdd3; }
-
-.mode-btn.feed-btn.active {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9));
-  color: var(--accent-purple);
-  border-color: var(--accent-purple);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
-}
-
+.mode-btn.feed-btn.active { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9)); color: var(--accent-purple); border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(168, 85, 247, 0.25); }
 .mode-btn.feed-btn.active .mode-btn-sub { color: #e9d5ff; }
-
-/* =====================================================
-CARDS & INPUTS
-===================================================== */
-.card {
-  background: rgba(15, 23, 42, 0.75);
-  padding: 26px;
-  border-radius: 24px;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(12px);
-}
-
-.section-h2 { 
-  font-family: 'Space Grotesk', sans-serif; 
-  font-size: 20px; 
-  font-weight: 800; 
-  margin: 0 0 14px 0; 
-  color: #ffffff; 
-}
-
-label { 
-  display: block; 
-  font-size: 13px; 
-  font-weight: 800; 
-  margin-bottom: 8px; 
-  color: #cbd5e1; 
-  text-transform: uppercase; 
-  letter-spacing: 0.5px; 
-}
-
-.subjects { 
-  display: grid; 
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 10px; 
-  margin-bottom: 20px; 
-}
-
-.subject {
-  padding: 12px 8px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  background: var(--bg-surface);
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-  text-align: center;
-}
-
+.card { background: rgba(15, 23, 42, 0.75); padding: 26px; border-radius: 24px; border: 1px solid var(--border-subtle); box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); }
+.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #ffffff; }
+label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
+.subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.subject { padding: 12px 8px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: var(--text-muted); font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; }
 .subject:hover { background: var(--bg-surface-hover); color: #fff; }
 .subject.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
-
-/* DOUBT TONE SWITCHER */
 .tone-switch-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-
-.tone-btn {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  padding: 10px 6px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  text-align: center;
-}
-
+.tone-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted); padding: 10px 6px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; text-align: center; }
 .tone-btn:hover { background: var(--bg-surface-hover); }
 .tone-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
-
-textarea, input:not([type="radio"]):not([type="range"]), select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 14px;
-  font-size: 14px;
-  background: #090e1a;
-  color: #ffffff;
-  outline: none;
-  font-family: inherit;
-  margin-bottom: 14px;
-}
-
-textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus {
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px var(--cyan-glow);
-}
-
+textarea, input:not([type="radio"]):not([type="range"]), select { width: 100%; padding: 14px 16px; border: 1px solid var(--border-subtle); border-radius: 14px; font-size: 14px; background: #090e1a; color: #ffffff; outline: none; font-family: inherit; margin-bottom: 14px; }
+textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--cyan-glow); }
 .photo-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .photo-btn { padding: 12px; border: 1px solid var(--border-subtle); border-radius: 12px; background: var(--bg-surface); color: #cbd5e1; font-size: 13px; font-weight: 800; cursor: pointer; }
 .photo-btn:hover { background: var(--bg-surface-hover); color: #fff; }
-
-.ask-btn, .submit-test-btn, .generate-btn {
-  width: 100%;
-  margin-top: 8px;
-  padding: 16px;
-  border: none;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #0284c7, #0369a1);
-  color: #ffffff;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  letter-spacing: 0.5px;
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
-}
-
+.ask-btn, .submit-test-btn, .generate-btn { width: 100%; margin-top: 8px; padding: 16px; border: none; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 900; cursor: pointer; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3); }
 .ask-btn:hover, .submit-test-btn:hover, .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4); }
 .generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-
-/* =====================================================
-DOUBT ANSWER & FEEDBACK
-===================================================== */
 .answer-box { display: none; margin-top: 24px; padding: 22px; background: #090e1a; border-radius: 18px; border: 1px solid var(--border-subtle); }
 .logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
 .logic-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
@@ -844,31 +164,20 @@ DOUBT ANSWER & FEEDBACK
 .feedback-btn { padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: #e2e8f0; font-weight: 800; cursor: pointer; font-size: 13px; }
 .feedback-btn:hover { background: var(--bg-surface-hover); }
 .teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
-
-/* =====================================================
-TEST SUITE & TOPIC HEATMAP
-===================================================== */
 .test-info { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin: 16px 0; color: #cbd5e1; font-size: 13px; }
 .generator-box { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
 .generator-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; }
 .generator-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
 .generator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .full { grid-column: 1 / -1; }
-
 .timer-box { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); text-align: center; padding: 12px; border: 1px solid var(--accent-rose); border-radius: 14px; margin-bottom: 16px; background: rgba(244, 63, 94, 0.08); }
 .question-card { border: 1px solid var(--border-subtle); border-radius: 18px; padding: 20px; margin: 16px 0; background: var(--bg-surface); }
 .question-number { color: var(--accent-cyan); font-weight: 900; font-size: 12px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 .question-text { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
-
-.option {
-  display: flex !important; align-items: center !important; gap: 14px !important; padding: 14px 16px !important;
-  border: 1px solid var(--border-subtle) !important; border-radius: 14px !important; margin: 8px 0 !important;
-  cursor: pointer !important; font-size: 15px !important; background: #090e1a !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important;
-}
+.option { display: flex !important; align-items: center !important; gap: 14px !important; padding: 14px 16px !important; border: 1px solid var(--border-subtle) !important; border-radius: 14px !important; margin: 8px 0 !important; cursor: pointer !important; font-size: 15px !important; background: #090e1a !important; color: #f1f5f9 !important; width: 100% !important; box-sizing: border-box !important; }
 .option input[type="radio"] { width: 20px !important; height: 20px !important; min-width: 20px !important; max-width: 20px !important; margin: 0 !important; padding: 0 !important; cursor: pointer !important; accent-color: var(--accent-cyan) !important; flex-shrink: 0 !important; }
 .option span { flex: 1 !important; text-align: left !important; line-height: 1.5 !important; color: #f1f5f9 !important; }
 .option:hover { background: #131c30 !important; border-color: var(--accent-cyan) !important; }
-
 .test-result { display: none; padding: 24px; margin-top: 20px; background: #090e1a; border: 1px solid var(--border-subtle); border-radius: 20px; }
 .score-box { text-align: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px; margin-bottom: 20px; }
 .score { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 900; color: var(--accent-cyan); }
@@ -877,20 +186,14 @@ TEST SUITE & TOPIC HEATMAP
 .badge.scholar { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
 .badge.speedster { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
 .badge.sharp { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
-
 .heatmap-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; margin-top: 14px; font-size: 13px; text-align: left; }
 .review-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
 .review-correct { color: var(--accent-emerald); font-weight: 800; }
 .review-wrong { color: var(--accent-rose); font-weight: 800; }
-.review-explanation { margin-top: 10px; padding: 12px; background: #090e1a; border-left: 3px solid var(--accent-cyan); border-radius: 6px; font-size: 13px; color: #e2e8f0; }
-
+.review-explanation { margin-top: 10px; padding: 12px; background: #0d131f; border-left: 3px solid var(--accent-cyan); border-radius: 6px; font-size: 13px; color: #e2e8f0; }
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 14px; background: transparent; color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .restart-btn:hover { background: rgba(6, 182, 212, 0.1); }
 .whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
-
-/* =====================================================
-ARENA 1v1
-===================================================== */
 .arena-header { text-align: center; margin-bottom: 18px; }
 .arena-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
@@ -898,26 +201,15 @@ ARENA 1v1
 .arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; padding: 16px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3); }
 .lobby-box { text-align: center; padding: 28px 16px; background: #090e1a; border-radius: 20px; border: 1px dashed var(--accent-rose); }
 .room-code-display { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 900; color: var(--accent-rose); letter-spacing: 6px; margin: 12px 0; }
-
 .vs-header { display: flex; justify-content: space-between; align-items: center; background: #090e1a; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 8px; }
 .vs-progress-bar-wrap { height: 6px; background: #1e293b; border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 16px; }
 .vs-fill-p1 { background: var(--accent-cyan); height: 100%; width: 50%; transition: width 0.3s ease; }
 .vs-fill-p2 { background: var(--accent-rose); height: 100%; width: 50%; transition: width 0.3s ease; }
-
 .arena-timer { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 12px; }
 .arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 14px; margin: 8px 0; cursor: pointer; font-size: 15px; font-weight: 800; background: var(--bg-surface); text-align: center; }
 .arena-option:hover { background: var(--bg-surface-hover); border-color: var(--accent-rose); }
 .arena-shake { animation: shakeCard 0.4s ease; border-color: var(--accent-rose) !important; }
-
-@keyframes shakeCard {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-
-/* =====================================================
-COMMUNITY FEED
-===================================================== */
+@keyframes shakeCard { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 .feed-header { text-align: center; margin-bottom: 18px; }
 .feed-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
 .post-composer { background: #090e1a; border: 1px solid var(--border-subtle); border-radius: 18px; padding: 18px; margin-bottom: 20px; }
@@ -926,7 +218,6 @@ COMMUNITY FEED
 .filter-pill { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
 .filter-pill:hover { color: #fff; background: var(--bg-surface-hover); }
 .filter-pill.active { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-color: var(--accent-purple); }
-
 .feed-card { background: #090e1a; border: 1px solid var(--border-subtle); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
 .feed-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .feed-author { font-size: 14px; font-weight: 800; color: var(--accent-cyan); }
@@ -938,45 +229,19 @@ COMMUNITY FEED
 .action-btn.report:hover { color: var(--accent-rose); }
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 .comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
-
-/* =====================================================
-FLOATING LO-FI RADIO WIDGET
-===================================================== */
-.lofi-widget {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid var(--accent-cyan);
-  border-radius: 30px;
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 999;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-}
+.lofi-widget { position: fixed; bottom: 20px; right: 20px; background: rgba(15, 23, 42, 0.92); border: 1px solid var(--accent-cyan); border-radius: 30px; padding: 8px 14px; display: flex; align-items: center; gap: 10px; z-index: 999; backdrop-filter: blur(8px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6); }
 .lofi-btn { background: none; border: none; font-size: 18px; cursor: pointer; color: #fff; line-height: 1; }
 .lofi-label { font-size: 11px; font-weight: 800; color: var(--accent-cyan); }
-
-/* FOOTER */
 .footer { text-align: center; color: #64748b; margin: 40px 0; font-size: 12px; line-height: 1.6; }
 .hidden { display: none !important; }
-
-/* MOBILE RESPONSIVENESS */
 @media (max-width: 600px) {
   .mode-switch { grid-template-columns: 1fr 1fr; }
   .subjects, .tone-switch-bar, .arena-grid, .photo-buttons { grid-template-columns: 1fr; }
 }
 </style>
 </head>
-
 <body>
-
 <main class="container">
-
-<!-- GAMIFIED PLAYER HUD HEADER -->
 <header class="player-hud-card">
     <div class="hud-top-row">
         <div>
@@ -989,20 +254,16 @@ FLOATING LO-FI RADIO WIDGET
             <div class="live-ping"><span class="ping-dot"></span> LIVE 24/7</div>
         </div>
     </div>
-    
     <div class="hud-xp-row">
         <span class="xp-label">XP: 680 / 1000</span>
         <div class="xp-track"><div class="xp-fill"></div></div>
         <span class="xp-label" style="color:var(--accent-cyan);">RANK #4</span>
     </div>
 </header>
-
 <div class="streak-bar-box">
     <div class="streak-counter"><span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days</div>
     <div class="streak-freeze-tag" id="userFreezeStatus">🛡️ 1 Freeze Shield Ready</div>
 </div>
-
-<!-- 24-HOUR STUDY STORIES TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div></div>
@@ -1010,90 +271,54 @@ FLOATING LO-FI RADIO WIDGET
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
-
-<!-- DAILY BRAIN TEASER -->
 <section class="puzzle-banner" id="puzzleBox" style="display:none;" aria-label="Daily Academic Brain Teaser">
     <div class="puzzle-top-bar">
         <div class="puzzle-badge">🔥 95% Get This Wrong</div>
         <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
     </div>
-    
     <div class="puzzle-q-en" id="puzzleQuestionEn">Loading daily teaser...</div>
     <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
-    
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
-
-    <div class="puzzle-actions-bar">
-        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
-    </div>
+    <div class="puzzle-actions-bar"><button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button></div>
     <div id="puzzleFeedback" style="margin-top: 10px; font-weight:bold;"></div>
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </section>
-
-<!-- WALL OF FAME -->
 <section class="leaderboard-card" id="leaderboardBox" style="display:none;" aria-label="Top Scorers Leaderboard">
     <div class="leaderboard-title">🏆 Platform Top Scorers</div>
     <div id="leaderboardList"></div>
 </section>
-
-<!-- 4 MODE SWITCH TABS (WITH SUB-LABELS) -->
 <nav class="mode-switch" aria-label="Academic Navigation Modes">
-    <button type="button" class="mode-btn active" id="doubtModeBtn">
-        <span class="mode-btn-title">⚡ QUEST DESK</span>
-        <span class="mode-btn-sub">AI Doubt Solver</span>
-    </button>
-    <button type="button" class="mode-btn" id="testModeBtn">
-        <span class="mode-btn-title">⏱ TIME ATTACK</span>
-        <span class="mode-btn-sub">10-Min Tests</span>
-    </button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn">
-        <span class="mode-btn-title">⚔️ 1v1 PVP</span>
-        <span class="mode-btn-sub">Match Rivals</span>
-    </button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn">
-        <span class="mode-btn-title">🌟 CLAN FEED</span>
-        <span class="mode-btn-sub">Notes &amp; Vent</span>
-    </button>
+    <button type="button" class="mode-btn active" id="doubtModeBtn"><span class="mode-btn-title">⚡ QUEST DESK</span><span class="mode-btn-sub">AI Doubt Solver</span></button>
+    <button type="button" class="mode-btn" id="testModeBtn"><span class="mode-btn-title">⏱ TIME ATTACK</span><span class="mode-btn-sub">10-Min Tests</span></button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn"><span class="mode-btn-title">⚔️ 1v1 PVP</span><span class="mode-btn-sub">Match Rivals</span></button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn"><span class="mode-btn-title">🌟 CLAN FEED</span><span class="mode-btn-sub">Notes &amp; Vent</span></button>
 </nav>
-
-<!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
-    <div class="feature-mini-guide">
-        <span>💡</span>
-        <span><strong>Quick Guide:</strong> Type or upload a photo of your problem &bull; Pick an explanation tone &bull; Get instant step-by-step logic.</span>
-    </div>
-
+    <div class="feature-mini-guide"><span>💡</span><span><strong>Quick Guide:</strong> Type or upload a photo &bull; Pick an explanation tone &bull; Get instant logic.</span></div>
     <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
-    
     <label>Select Subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
         <button type="button" class="subject" data-subject="Physics">Physics</button>
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
     </div>
-
-    <!-- 3-Pill Explanation Mode Selector -->
     <label>Explanation Tone</label>
     <div class="tone-switch-bar">
         <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ TL;DR Formula</button>
         <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step</button>
         <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Explain Like I'm 10</button>
     </div>
-
     <label for="question">Your Question</label>
     <textarea id="question" placeholder="Type your academic doubt here (English / Hindi)..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
-    
     <div class="photo-buttons">
         <button type="button" class="photo-btn" id="cameraBtn">📷 Take Photo</button>
         <button type="button" class="photo-btn" id="uploadBtn">📁 Upload Image</button>
     </div>
-    <img id="imagePreview" alt="Preview of uploaded academic doubt question" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
+    <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
     <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
     <button type="button" class="ask-btn" id="askBtn">GET SOLUTION</button>
-    
     <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Solution...</div>
-    
     <div class="answer-box" id="answerBox">
         <div class="logic-title-wrap">
             <h3 class="logic-title">Conceptual Breakdown</h3>
@@ -1109,22 +334,14 @@ FLOATING LO-FI RADIO WIDGET
         </div>
     </div>
 </section>
-
-<!-- 2. TEST SECTION (EXHAUSTIVE SCHOOL LIST) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-    <div class="feature-mini-guide">
-        <span>⏱️</span>
-        <span><strong>Quick Guide:</strong> Pick standard test or generate chapter questions &bull; Complete in 10 minutes &bull; Get instant score &amp; weak area diagnosis.</span>
-    </div>
-
+    <div class="feature-mini-guide"><span>⏱️</span><span><strong>Quick Guide:</strong> Pick standard test &bull; Complete in 10 minutes &bull; Get instant diagnosis.</span></div>
     <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
-    
     <div id="testSetup">
         <label>Select Standard Test</label>
         <div>
             <input id="studentName" type="text" placeholder="Student Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
-
             <select id="testOrg">
                 <option value="">Select Organization / School</option>
                 <option value="DVM Public School">DVM Public School</option>
@@ -1149,7 +366,6 @@ FLOATING LO-FI RADIO WIDGET
                 <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
                 <option value="Other School">Other School</option>
             </select>
-
             <select id="testClass">
                 <option value="">Select Class</option>
                 <option value="9">Class 9</option>
@@ -1157,7 +373,6 @@ FLOATING LO-FI RADIO WIDGET
                 <option value="11">Class 11</option>
                 <option value="12">Class 12</option>
             </select>
-
             <select id="testSubject">
                 <option value="">Select Subject</option>
                 <option value="Physics">Physics</option>
@@ -1166,292 +381,147 @@ FLOATING LO-FI RADIO WIDGET
                 <option value="Biology">Biology</option>
                 <option value="Science">Science (9th/10th)</option>
             </select>
-
             <select id="testSelect"><option value="">Select Test</option></select>
         </div>
-
-        <div class="test-info">
-            <strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your School, Class, and Subject selection.</div>
-        </div>
-
+        <div class="test-info"><strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong></div>
         <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
-
         <div class="generator-box">
             <div class="generator-title">Custom Practice Generator</div>
-            <div class="generator-subtitle">Configure class, subject, and chapter to generate a customized practice set.</div>
             <div class="generator-grid">
-                <select id="genClass">
-                    <option value="">Select Class</option>
-                    <option value="9">Class 9</option>
-                    <option value="10">Class 10</option>
-                    <option value="11">Class 11</option>
-                    <option value="12">Class 12</option>
-                </select>
-
-                <select id="genSubject">
-                    <option value="">Select Subject</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Mathematics">Mathematics</option>
-                    <option value="Biology">Biology</option>
-                </select>
-
+                <select id="genClass"><option value="">Select Class</option><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+                <select id="genSubject"><option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option></select>
                 <input class="full" id="genChapter" type="text" placeholder="Chapter Name (e.g. Thermodynamics, Optics)">
-
-                <select id="genNumber">
-                    <option value="10">10 Questions</option>
-                    <option value="15">15 Questions</option>
-                    <option value="20" selected>20 Questions</option>
-                </select>
-
-                <select id="genDifficulty">
-                    <option value="Easy" selected>Easy (Confidence Booster)</option>
-                    <option value="Moderate">Moderate</option>
-                    <option value="Hard">Hard</option>
-                </select>
-
-                <select class="full" id="genQuestionType">
-                    <option value="MCQ">Multiple Choice Questions (MCQ)</option>
-                </select>
+                <select id="genNumber"><option value="10">10 Questions</option><option value="20" selected>20 Questions</option></select>
+                <select id="genDifficulty"><option value="Easy" selected>Easy</option></select>
+                <select class="full" id="genQuestionType"><option value="MCQ">MCQ</option></select>
             </div>
-
             <button type="button" class="generate-btn" id="generateTestBtn">BUILD PRACTICE SET</button>
-            <div class="generator-loading hidden" id="generatorLoading" style="text-align:center; color:var(--accent-cyan); margin-top:10px; font-weight:700;">Compiling questions...</div>
+            <div class="generator-loading hidden" id="generatorLoading" style="text-align:center; color:var(--accent-cyan); margin-top:10px;">Compiling...</div>
         </div>
     </div>
-
     <div id="testArea" class="hidden">
         <div class="timer-box" id="timerDisplay">⏳ 10:00</div>
         <div class="test-info" id="testHeader"></div>
         <div id="questionsContainer"></div>
         <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT ANSWERS</button>
     </div>
-
     <div class="test-result" id="testResult">
         <div class="score-box">
             <div style="font-size:14px; font-weight:700; color:var(--text-muted);">FINAL SCORE</div>
             <div class="score" id="scoreText">0/0</div>
             <div id="badgesContainer" class="badges-container"></div>
-            <div class="result-detail" id="resultDetail"></div>
             <div class="heatmap-card" id="testHeatmap"></div>
         </div>
-
         <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#ffffff;">Detailed Analytics</div>
         <div id="reviewContainer"></div>
-
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
         <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE CHALLENGE ON WHATSAPP</button>
     </div>
 </section>
-
-<!-- 3. ARENA SECTION -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
-    <div class="feature-mini-guide">
-        <span>⚔️</span>
-        <span><strong>Quick Guide:</strong> Create a room and share 4-digit code OR tap Solo Bot &bull; 10s per question &bull; Fast correct picks win.</span>
-    </div>
-
+    <div class="feature-mini-guide"><span>⚔️</span><span><strong>Quick Guide:</strong> Create room & share code OR tap Solo Bot &bull; Fast correct picks win.</span></div>
     <div id="arenaSetup">
-        <div class="arena-header">
-            <h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">10 Rapid-Fire Science & Math Teasers (Speed + Accuracy Score)</div>
-        </div>
-        
+        <div class="arena-header"><h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2></div>
         <label>Your Display Name</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Name (e.g. Rahul)">
-        
+        <input type="text" id="arenaPlayerName" placeholder="Enter Name">
         <label>Select Grade Level</label>
-        <select id="arenaClass" style="margin-bottom: 20px;">
-            <option value="9">Class 9 (Science & Mental Maths)</option>
-            <option value="10">Class 10 (Science & Mental Maths)</option>
-            <option value="11">Class 11 (Science & Mental Maths)</option>
-            <option value="12">Class 12 (Science & Mental Maths)</option>
-        </select>
-        
+        <select id="arenaClass" style="margin-bottom: 20px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
         <div class="arena-grid">
+            <div><button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button></div>
             <div>
-                <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button>
-            </div>
-            <div>
-                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
+                <input type="text" id="arenaJoinCode" placeholder="4-Digit" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; margin-bottom: 10px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
-
         <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Solo Mode: Practice vs. Invincible Bot</button>
     </div>
-
     <div id="arenaWaiting" class="hidden lobby-box">
         <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
         <div style="font-size: 13px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
     </div>
-
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
             <div class="player-tag" id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
             <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:4px 8px; border-radius:6px; font-size:11px;">VS</div>
             <div class="player-tag" id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
         </div>
-        <div class="vs-progress-bar-wrap">
-            <div class="vs-fill-p1" id="vsFillP1"></div>
-            <div class="vs-fill-p2" id="vsFillP2"></div>
-        </div>
-
+        <div class="vs-progress-bar-wrap"><div class="vs-fill-p1" id="vsFillP1"></div><div class="vs-fill-p2" id="vsFillP2"></div></div>
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
-        
         <div class="question-card" id="arenaCardContainer">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
             <div class="question-text" id="arenaQText">Loading question...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
-
     <div id="arenaResult" class="hidden" style="text-align:center; padding:20px;">
         <div id="arenaResultText"></div>
-        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;">
-            <span id="finalP1"></span> <br> <span id="finalP2"></span>
-        </div>
+        <div style="margin: 20px 0; color:#cbd5e1; font-size: 16px; line-height: 1.8;"><span id="finalP1"></span> <br> <span id="finalP2"></span></div>
         <button type="button" class="submit-test-btn" onclick="location.reload()" style="margin-top:10px;">RETURN TO LOBBY</button>
     </div>
 </section>
-
-<!-- 4. COMMUNITY FEED -->
 <section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
-    <div class="feature-mini-guide">
-        <span>🌟</span>
-        <span><strong>Quick Guide:</strong> Share study notes or questions &bull; Use Midnight Vent for casual peer chat &bull; Upvote &amp; discuss solutions.</span>
-    </div>
-
-    <div class="feed-header">
-        <h2 class="feed-title">🌟 Academic Community Feed</h2>
-        <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Collaborate, share study notes, and solve tricky peer problems.</div>
-    </div>
-
+    <div class="feature-mini-guide"><span>🌟</span><span><strong>Quick Guide:</strong> Share notes &bull; Use Midnight Vent for casual chat.</span></div>
+    <div class="feed-header"><h2 class="feed-title">🌟 Academic Community Feed</h2></div>
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <input type="text" id="feedAuthorName" placeholder="Your Name (Leave blank for Anon)" style="margin-bottom:0;">
-            <input type="text" id="feedInstitution" placeholder="School / Coaching Name" style="margin-bottom:0;">
+            <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
+            <input type="text" id="feedInstitution" placeholder="School Name" style="margin-bottom:0;">
         </div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
-            <select id="feedClass" style="margin-bottom:0;">
-                <option value="9">Class 9</option>
-                <option value="10">Class 10</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-            </select>
-            <select id="feedSubject" style="margin-bottom:0;">
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Biology">Biology</option>
-                <option value="General">Study Tips / Strategy</option>
-                <option value="ChillVent">🌙 Midnight Vent &amp; Chill</option>
-            </select>
+            <select id="feedClass" style="margin-bottom:0;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+            <select id="feedSubject" style="margin-bottom:0;"><option value="Physics">Physics</option><option value="General">Study Tips</option><option value="ChillVent">🌙 Midnight Vent</option></select>
         </div>
-        <textarea id="feedContent" placeholder="Post a challenging problem, formula tip, or exam thought..."></textarea>
+        <textarea id="feedContent" placeholder="Post a challenging problem..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
-
-    <!-- Filter Pills Navigation -->
     <div class="feed-filter-pills">
         <span class="filter-pill active" onclick="setFeedSubjectFilter('All', this)">🌟 All Feed</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('Chemistry', this)">🧪 Chemistry</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('Mathematics', this)">📐 Maths</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('Biology', this)">🧬 Biology</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
     </div>
-
-    <div id="postsList">
-        <div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div>
-    </div>
+    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div></div>
 </section>
-
-<!-- FOOTER -->
 <footer class="footer">
-    <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
-    Built for Academic Excellence &bull; CBSE Class 9, 10, 11 &amp; 12<br>
-    &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
+    <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>Built for Academic Excellence &bull; CBSE Class 9-12<br>&copy; 2026 Invincible Coaching Classes. All Rights Reserved.
 </footer>
-
-<!-- FLOATING LO-FI RADIO WIDGET -->
 <div class="lofi-widget">
     <button class="lofi-btn" id="lofiToggleBtn" onclick="cycleLofiAudio()">🎧</button>
     <div class="lofi-label" id="lofiLabel">Lofi Radio: Off</div>
 </div>
-
 </main>
-
-<!-- ONBOARDING QUEST POPUP -->
 <div class="quest-modal-overlay" id="onboardingModal">
     <div class="quest-modal-card">
         <h2 class="quest-title">🎮 CHOOSE YOUR STARTING QUEST</h2>
         <div class="quest-subtitle">Welcome to Invincible 360. What do you want to accomplish right now?</div>
-
         <div class="quest-options-grid">
             <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
                 <div class="quest-choice-icon">⚡</div>
-                <div>
-                    <div class="quest-choice-heading">I'm Stuck on a Homework Question</div>
-                    <div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div>
-                </div>
+                <div><div class="quest-choice-heading">I'm Stuck on a Homework Question</div><div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div></div>
             </div>
-
             <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
                 <div class="quest-choice-icon">⚔️</div>
-                <div>
-                    <div class="quest-choice-heading">I Want to Battle a Friend / Bot</div>
-                    <div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div>
-                </div>
+                <div><div class="quest-choice-heading">I Want to Battle a Friend / Bot</div><div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div></div>
             </div>
-
             <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
                 <div class="quest-choice-icon">⏱️</div>
-                <div>
-                    <div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div>
-                    <div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div>
-                </div>
+                <div><div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div><div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div></div>
             </div>
         </div>
         <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Skip &amp; Explore on My Own</button>
     </div>
 </div>
-
-<!-- MODAL: POST STUDY STORY -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
             <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Drop a 24-Hr Study Story</h3>
             <button type="button" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
         </div>
-
         <input type="text" id="storyAuthorName" placeholder="Your Name">
-        <input type="text" id="storyInstitution" placeholder="School / Coaching (e.g. DPS RK Puram)">
-        <textarea id="storyCaption" placeholder="What are you studying right now? Or drop a 1-line formula shortcut..."></textarea>
-        
-        <label>Upload Note Photo / Study Setup (Optional)</label>
-        <input type="file" id="storyImageInput" accept="image/*" style="margin-bottom:12px;">
-
-        <div style="border-top:1px solid var(--border-subtle); padding-top:12px; margin-top:12px;">
-            <label style="color:var(--accent-amber);">💡 Add Interactive Quiz Sticker (Optional)</label>
-            <input type="text" id="storyStickerQ" placeholder="Quiz Question (e.g. Find unit of resistance?)">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                <input type="text" id="storyStickerOptA" placeholder="Option A (e.g. Ohm)">
-                <input type="text" id="storyStickerOptB" placeholder="Option B (e.g. Farad)">
-            </div>
-            <select id="storyStickerCorrect" style="margin-bottom:14px;">
-                <option value="0">Option A is Correct</option>
-                <option value="1">Option B is Correct</option>
-            </select>
-        </div>
-
-        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE STORY (DISAPPEARS IN 24H)</button>
+        <input type="text" id="storyInstitution" placeholder="School / Coaching">
+        <textarea id="storyCaption" placeholder="What are you studying right now?"></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE STORY (24H)</button>
     </div>
 </div>
-
-<!-- FULLSCREEN STORY VIEWER -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
         <div>
@@ -1461,43 +531,27 @@ FLOATING LO-FI RADIO WIDGET
                 <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
             </div>
         </div>
-
         <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
         <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
-
         <div class="story-body-content">
             <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Image">
             <div class="story-caption-text" id="viewerCaption"></div>
-
-            <!-- Quiz Sticker -->
             <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
                 <div class="sticker-q" id="viewerStickerQ">Question</div>
                 <div class="sticker-opts">
-                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)">
-                        <span id="labelStickerA">Opt A</span>
-                        <span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span>
-                        <div class="sticker-bar" id="barStickerA"></div>
-                    </button>
-                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)">
-                        <span id="labelStickerB">Opt B</span>
-                        <span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span>
-                        <div class="sticker-bar" id="barStickerB"></div>
-                    </button>
+                    <button class="sticker-btn" id="btnStickerA" onclick="voteStorySticker(0)"><span id="labelStickerA">Opt A</span><span class="sticker-pct" id="pctStickerA" style="display:none;">0%</span><div class="sticker-bar" id="barStickerA"></div></button>
+                    <button class="sticker-btn" id="btnStickerB" onclick="voteStorySticker(1)"><span id="labelStickerB">Opt B</span><span class="sticker-pct" id="pctStickerB" style="display:none;">0%</span><div class="sticker-bar" id="barStickerB"></div></button>
                 </div>
             </div>
         </div>
-
         <div class="story-action-bar">
             <div style="display:flex; gap:6px;">
                 <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
                 <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
-                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
             </div>
             <button class="viewers-btn" id="btnShowViewers" onclick="toggleViewersSheet()">👁️ Viewers</button>
             <button class="vault-btn" onclick="saveStoryToVault()">💾 Save</button>
         </div>
-
-        <!-- Viewers Drawer Sheet -->
         <div class="viewers-sheet" id="viewersDrawer">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                 <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Story Viewers (<span id="viewersCount">0</span>)</strong>
@@ -1508,1677 +562,206 @@ FLOATING LO-FI RADIO WIDGET
     </div>
 </div>
 <script>
-/* =====================================================
-AUDIO SYNTHESIS ENGINE (NEW LO-FI NOISE & BINAURAL MODES)
-===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioCtx; 
-let currentLofiMode = 0; 
-let activeLofiNodes = [];
-
-function initAudio() { 
-    if (!audioCtx) audioCtx = new AudioContext(); 
-    if (audioCtx.state === 'suspended') audioCtx.resume(); 
-}
-
+let audioCtx; let currentLofiMode = 0; let activeLofiNodes = [];
+function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
 function playSound(type, freq, duration, vol=0.1) {
     try {
-        initAudio();
-        const osc = audioCtx.createOscillator(); 
-        const gain = audioCtx.createGain();
-        osc.type = type; 
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime); 
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.connect(gain); 
-        gain.connect(audioCtx.destination);
-        osc.start(); 
-        osc.stop(audioCtx.currentTime + duration);
-    } catch(e) {}
+        initAudio(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
+    } catch(e){}
 }
-
-function playDing() { 
-    playSound('sine', 880, 0.1); 
-    setTimeout(() => playSound('sine', 1760, 0.25), 90); 
-}
+function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
-function playWin() { 
-    playSound('square', 440, 0.15); 
-    setTimeout(() => playSound('square', 554, 0.15), 150); 
-    setTimeout(() => playSound('square', 659, 0.35), 300); 
-}
-
-function stopLofiAudio() {
-    activeLofiNodes.forEach(n => { 
-        try { n.stop(); n.disconnect(); } catch(e) {} 
-    });
-    activeLofiNodes = [];
-}
-
+function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
+function stopLofiAudio() { activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} }); activeLofiNodes = []; }
 function cycleLofiAudio() {
-    initAudio(); 
-    stopLofiAudio();
+    initAudio(); stopLofiAudio();
     currentLofiMode = (currentLofiMode + 1) % 5;
-    const btn = document.getElementById('lofiToggleBtn'); 
-    const label = document.getElementById('lofiLabel');
-
-    if (currentLofiMode === 0) { 
-        btn.textContent = '🎧'; 
-        label.textContent = 'Lofi Radio: Off'; 
-        return; 
-    }
-    
-    btn.textContent = '⏸️';
-    let gainNode = audioCtx.createGain(); 
-    gainNode.connect(audioCtx.destination);
-
+    const btn = document.getElementById('lofiToggleBtn'); const label = document.getElementById('lofiLabel');
+    if (currentLofiMode === 0) { btn.textContent = '🎧'; label.textContent = 'Lofi Radio: Off'; return; }
+    btn.textContent = '⏸️'; let gainNode = audioCtx.createGain(); gainNode.connect(audioCtx.destination);
     if (currentLofiMode === 1) {
         label.textContent = 'Radio: Alpha Focus (108Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 108;
         let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 112;
-        gainNode.gain.value = 0.05; 
-        osc.connect(gainNode); 
-        osc2.connect(gainNode); 
-        osc.start(); 
-        osc2.start();
-        activeLofiNodes.push(osc, osc2);
+        gainNode.gain.value = 0.05; osc.connect(gainNode); osc2.connect(gainNode); osc.start(); osc2.start(); activeLofiNodes.push(osc, osc2);
     } else if (currentLofiMode === 2) {
         label.textContent = 'Radio: Theta Calm (432Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 432;
-        gainNode.gain.value = 0.03; 
-        osc.connect(gainNode); 
-        osc.start(); 
-        activeLofiNodes.push(osc);
+        gainNode.gain.value = 0.03; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
     } else if (currentLofiMode === 3 || currentLofiMode === 4) {
         label.textContent = currentLofiMode === 3 ? 'Radio: Deep Brown Noise' : 'Radio: Soft Pink Noise';
-        let bufferSize = audioCtx.sampleRate * 2; 
-        let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        let output = buffer.getChannelData(0); 
-        let lastOut = 0;
-        
+        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let output = buffer.getChannelData(0); let lastOut = 0;
         for (let i = 0; i < bufferSize; i++) {
             let white = Math.random() * 2 - 1;
-            if(currentLofiMode === 3) { 
-                output[i] = (lastOut + (0.02 * white)) / 1.02; 
-                lastOut = output[i]; 
-                output[i] *= 3.5; 
-            } else { 
-                output[i] = (lastOut + (0.05 * white)) / 1.05; 
-                lastOut = output[i]; 
-                output[i] *= 2; 
-            }
+            if(currentLofiMode === 3) { output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5; } 
+            else { output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2; }
         }
-        let noise = audioCtx.createBufferSource(); 
-        noise.buffer = buffer; 
-        noise.loop = true;
-        gainNode.gain.value = 0.08; 
-        noise.connect(gainNode); 
-        noise.start(); 
-        activeLofiNodes.push(noise);
+        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+        gainNode.gain.value = 0.08; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
     }
 }
 
-/* =====================================================
-NAVIGATION LOGIC
-===================================================== */
-const doubtModeBtn = document.getElementById('doubtModeBtn'); 
-const testModeBtn = document.getElementById('testModeBtn'); 
-const arenaModeBtn = document.getElementById('arenaModeBtn'); 
-const feedModeBtn = document.getElementById('feedModeBtn');
-
-const doubtSection = document.getElementById('doubtSection'); 
-const testSection = document.getElementById('testSection'); 
-const arenaSection = document.getElementById('arenaSection'); 
-const feedSection = document.getElementById('feedSection');
-
-doubtModeBtn.onclick = () => switchTab('doubt'); 
-testModeBtn.onclick = () => switchTab('test'); 
-arenaModeBtn.onclick = () => switchTab('arena'); 
-feedModeBtn.onclick = () => { switchTab('feed'); loadFeedPosts(); };
-
+const doubtModeBtn = document.getElementById('doubtModeBtn'); const testModeBtn = document.getElementById('testModeBtn'); const arenaModeBtn = document.getElementById('arenaModeBtn'); const feedModeBtn = document.getElementById('feedModeBtn');
+const doubtSection = document.getElementById('doubtSection'); const testSection = document.getElementById('testSection'); const arenaSection = document.getElementById('arenaSection'); const feedSection = document.getElementById('feedSection');
+doubtModeBtn.onclick = () => switchTab('doubt'); testModeBtn.onclick = () => switchTab('test'); arenaModeBtn.onclick = () => switchTab('arena'); feedModeBtn.onclick = () => { switchTab('feed'); loadFeedPosts(); };
 function switchTab(tab) {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); 
-    document.getElementById(tab + 'ModeBtn').classList.add('active');
-    
-    doubtSection.classList.add('hidden'); 
-    testSection.classList.add('hidden'); 
-    arenaSection.classList.add('hidden'); 
-    feedSection.classList.add('hidden');
-    
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); document.getElementById(tab + 'ModeBtn').classList.add('active');
+    doubtSection.classList.add('hidden'); testSection.classList.add('hidden'); arenaSection.classList.add('hidden'); feedSection.classList.add('hidden');
     document.getElementById(tab + 'Section').classList.remove('hidden');
 }
-
-/* =====================================================
-ONBOARDING QUEST CONTROLLER
-===================================================== */
-function checkOnboarding() { 
-    if (!localStorage.getItem('invincible_onboarded')) { 
-        document.getElementById('onboardingModal').style.display = 'flex'; 
-    } 
-}
-function selectStartingQuest(quest) { 
-    localStorage.setItem('invincible_onboarded', 'true'); 
-    document.getElementById('onboardingModal').style.display = 'none'; 
-    switchTab(quest); 
-}
+function checkOnboarding() { if (!localStorage.getItem('invincible_onboarded')) { document.getElementById('onboardingModal').style.display = 'flex'; } }
+function selectStartingQuest(quest) { localStorage.setItem('invincible_onboarded', 'true'); document.getElementById('onboardingModal').style.display = 'none'; switchTab(quest); }
 setTimeout(checkOnboarding, 800);
 
-/* =====================================================
-24-HOUR STUDY STORIES ENGINE + VIEWER LOGGING
-===================================================== */
-let activeStories = []; 
-let currentStoryIdx = 0; 
-let storyTimer = null;
-
-document.getElementById('btnAddStory').onclick = () => { 
-    document.getElementById('storyModal').style.display = 'flex'; 
-};
-
+let activeStories = []; let currentStoryIdx = 0; let storyTimer = null;
+document.getElementById('btnAddStory').onclick = () => { document.getElementById('storyModal').style.display = 'flex'; };
 async function loadActiveStories() {
     const container = document.getElementById('dynamicStoryCircles');
     try {
-        const res = await fetch('/api/stories');
-        const data = await res.json();
-        const dbStories = data.stories || [];
-
-        const welcomeStory = {
-            id: 'welcome-tour', 
-            author_name: 'Invincible 360', 
-            institution: 'Official Platform', 
-            media_url: null,
-            caption: '👋 Welcome to Invincible 360! Your cyber academic home. Tap around to solve doubts, battle friends in PVP, or test your speed!',
-            sticker_question: '💡 Quick Vibe Check: What feature are you trying first?', 
-            sticker_opt_a: '⚡ AI Doubt Solver', 
-            sticker_opt_b: '⚔️ 1v1 PVP Arena', 
-            sticker_correct_opt: 0, 
-            is_topper: true
-        };
-
+        const res = await fetch('/api/stories'); const data = await res.json(); const dbStories = data.stories || [];
+        const welcomeStory = { id: 'welcome-tour', author_name: 'Invincible 360', institution: 'Official Platform', media_url: null, caption: '👋 Welcome to Invincible 360!', sticker_question: '💡 Quick Vibe Check:', sticker_opt_a: '⚡ AI Doubt', sticker_opt_b: '⚔️ PVP', sticker_correct_opt: 0, is_topper: true };
         activeStories = [welcomeStory, ...dbStories];
-
         container.innerHTML = activeStories.map((s, idx) => `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
-                <div class="story-avatar-wrap ${s.is_topper ? 'topper' : ''}">
-                    <div class="story-avatar-inner">
-                        ${s.media_url ? `<img src="${s.media_url}" alt="Story">` : (s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase()))}
-                    </div>
-                    <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
-                </div>
+                <div class="story-avatar-wrap ${s.is_topper ? 'topper' : ''}"><div class="story-avatar-inner">${s.media_url ? `<img src="${s.media_url}" alt="Story">` : '🎓'}</div></div>
                 <div class="story-username">${s.id === 'welcome-tour' ? 'Start Here' : escapeHTML(s.author_name)}</div>
             </div>
         `).join('');
-    } catch(e) { 
-        console.log("Stories API load error."); 
-    }
+    } catch(e){}
 }
+loadActiveStories();
 
-let storyImageData = null;
-document.getElementById('storyImageInput').onchange = e => { 
-    const file = e.target.files[0]; 
-    if(!file) return; 
-    const reader = new FileReader(); 
-    reader.onload = () => { storyImageData = reader.result; }; 
-    reader.readAsDataURL(file); 
-};
-
-document.getElementById('btnPublishStory').onclick = async () => {
-    const name = document.getElementById('storyAuthorName').value.trim(); 
-    const inst = document.getElementById('storyInstitution').value.trim(); 
-    const caption = document.getElementById('storyCaption').value.trim();
-    const stickerQ = document.getElementById('storyStickerQ').value.trim(); 
-    const optA = document.getElementById('storyStickerOptA').value.trim(); 
-    const optB = document.getElementById('storyStickerOptB').value.trim(); 
-    const correctOpt = document.getElementById('storyStickerCorrect').value;
-    
-    if (!name || !inst) return alert("Please fill Name and School/Coaching!");
-    
-    localStorage.setItem('student_name', name); 
-    localStorage.setItem('student_inst', inst);
-    
-    const btn = document.getElementById('btnPublishStory'); 
-    btn.disabled = true; 
-    btn.textContent = "Publishing Story...";
-
-    try {
-        await fetch('/api/stories', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ 
-                action: 'create_story', 
-                author_name: name, 
-                institution: inst, 
-                caption: caption, 
-                media_url: storyImageData, 
-                sticker_question: stickerQ || null, 
-                sticker_opt_a: optA || null, 
-                sticker_opt_b: optB || null, 
-                sticker_correct_opt: correctOpt, 
-                streak_count: Math.floor(Math.random() * 5) + 1 
-            })
-        });
-        document.getElementById('storyModal').style.display = 'none'; 
-        storyImageData = null; 
-        loadActiveStories(); 
-        alert("🎉 Your study story is live for 24 hours!");
-    } catch(err) { 
-        alert(err.message); 
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)"; 
-    }
-};
-
-function openStoryViewer(idx) { 
-    currentStoryIdx = idx; 
-    document.getElementById('storyViewer').style.display = 'flex'; 
-    document.getElementById('viewersDrawer').style.display = 'none'; 
-    renderStorySlide(); 
-}
-
-function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
-function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
-
-function renderStorySlide() {
-    clearTimeout(storyTimer); 
-    const story = activeStories[currentStoryIdx];
-    if (!story) { closeStoryViewer(); return; }
-    
-    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution || 'Platform')}</span>`;
-    
-    const imgEl = document.getElementById('viewerImage');
-    if (story.media_url) { imgEl.src = story.media_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
-    document.getElementById('viewerCaption').textContent = story.caption || '';
-    
-    const stickerCard = document.getElementById('viewerStickerCard');
-    if (story.sticker_question) {
-        stickerCard.style.display = 'block'; 
-        document.getElementById('viewerStickerQ').textContent = story.sticker_question; 
-        document.getElementById('labelStickerA').textContent = story.sticker_opt_a; 
-        document.getElementById('labelStickerB').textContent = story.sticker_opt_b;
-        document.getElementById('pctStickerA').style.display = 'none'; 
-        document.getElementById('pctStickerB').style.display = 'none'; 
-        document.getElementById('barStickerA').style.width = '0%'; 
-        document.getElementById('barStickerB').style.width = '0%';
-        document.getElementById('btnStickerA').className = 'sticker-btn'; 
-        document.getElementById('btnStickerB').className = 'sticker-btn';
-    } else { 
-        stickerCard.style.display = 'none'; 
-    }
-
-    if (story.id !== 'welcome-tour') {
-        fetch('/api/stories', { 
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ 
-                action: 'record_view', 
-                story_id: story.id, 
-                viewer_name: localStorage.getItem('student_name') || 'Peer Student', 
-                viewer_institution: localStorage.getItem('student_inst') || 'School' 
-            }) 
-        });
-    }
-
-    const pContainer = document.getElementById('storyProgressContainer');
-    pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
-    
-    storyTimer = setTimeout(() => { nextStorySlide(); }, 6000);
-}
-
-function closeStoryViewer() { 
-    clearTimeout(storyTimer); 
-    document.getElementById('storyViewer').style.display = 'none'; 
-}
-
-async function toggleViewersSheet() {
-    clearTimeout(storyTimer); 
-    const drawer = document.getElementById('viewersDrawer');
-    if (drawer.style.display === 'block') { drawer.style.display = 'none'; return; }
-    
-    drawer.style.display = 'block'; 
-    const story = activeStories[currentStoryIdx]; 
-    const listEl = document.getElementById('viewersListContainer');
-    
-    if (story.id === 'welcome-tour') { 
-        document.getElementById('viewersCount').textContent = '∞'; 
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform story. Thousands of students viewed this!</div>'; 
-        return; 
-    }
-    
-    listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Fetching viewers...</div>';
-    
-    try {
-        const res = await fetch(`/api/stories?action=get_viewers&story_id=${story.id}`); 
-        const data = await res.json(); 
-        const viewers = data.viewers || []; 
-        document.getElementById('viewersCount').textContent = viewers.length;
-        
-        if (viewers.length === 0) { 
-            listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No views recorded yet.</div>'; 
-            return; 
-        }
-        listEl.innerHTML = viewers.map(v => `<div class="viewer-item"><span style="font-weight:700; color:#fff;">${escapeHTML(v.viewer_name)}</span><span style="color:var(--text-muted); font-size:12px;">${escapeHTML(v.viewer_institution)}</span></div>`).join('');
-    } catch(e) { 
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--accent-rose);">Failed to load viewers.</div>'; 
-    }
-}
-
-async function voteStorySticker(selectedOpt) {
-    const story = activeStories[currentStoryIdx];
-    document.getElementById('pctStickerA').style.display = 'inline'; 
-    document.getElementById('pctStickerB').style.display = 'inline';
-    
-    if (story.id === 'welcome-tour') {
-        document.getElementById('barStickerA').style.width = '74%'; 
-        document.getElementById('barStickerB').style.width = '26%'; 
-        document.getElementById('pctStickerA').textContent = '74%'; 
-        document.getElementById('pctStickerB').textContent = '26%';
-        playWin(); 
-        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-correct'); 
-        else document.getElementById('btnStickerB').classList.add('voted-correct');
-        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 50, origin: { y: 0.5 } }); 
-        return; 
-    }
-
-    document.getElementById('barStickerA').style.width = '65%'; 
-    document.getElementById('barStickerB').style.width = '35%'; 
-    document.getElementById('pctStickerA').textContent = '65%'; 
-    document.getElementById('pctStickerB').textContent = '35%';
-    
-    if (selectedOpt === Number(story.sticker_correct_opt)) { 
-        playWin(); 
-        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-correct'); 
-        else document.getElementById('btnStickerB').classList.add('voted-correct'); 
-        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } }); 
-    } else { 
-        playBuzz(); 
-        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-wrong'); 
-        else document.getElementById('btnStickerB').classList.add('voted-wrong'); 
-    }
-    
-    fetch('/api/stories', { 
-        method: 'POST', 
-        headers: {'Content-Type': 'application/json'}, 
-        body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt }) 
-    });
-}
-
-function reactStory(type) { 
-    playDing(); 
-    const story = activeStories[currentStoryIdx]; 
-    if (typeof confetti === 'function') { confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); } 
-    if (story.id !== 'welcome-tour') { 
-        fetch('/api/stories', { 
-            method: 'POST', headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type }) 
-        }); 
-    } 
-}
-
-function saveStoryToVault() { 
-    const story = activeStories[currentStoryIdx]; 
-    let vault = JSON.parse(localStorage.getItem('study_vault') || '[]'); 
-    vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() }); 
-    localStorage.setItem('study_vault', JSON.stringify(vault)); 
-    playSuccessSound(); 
-    alert("💾 Saved to your personal Note Vault!"); 
-}
-
-/* =====================================================
-DOUBT DESK LOGIC 
-===================================================== */
-let selectedSubject = "Mathematics"; 
-let currentTone = "step"; 
-let selectedImage = null;
-const questionInput = document.getElementById("question"); 
-const imageInput = document.getElementById("imageInput"); 
-const imagePreview = document.getElementById("imagePreview"); 
-const removeImageButton = document.getElementById("removeImage");
-
-function setExplanationTone(tone, el) { 
-    currentTone = tone; 
-    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); 
-    el.classList.add('active'); 
-}
-
-document.querySelectorAll("#doubtSection .subject").forEach(b => { 
-    b.onclick = () => { 
-        document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); 
-        b.classList.add('active'); 
-        selectedSubject = b.getAttribute('data-subject'); 
-    }; 
-});
-
-document.getElementById("uploadBtn").onclick = () => imageInput.click();
-document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
-
-imageInput.onchange = e => { 
-    const file = e.target.files[0]; 
-    if(!file) return; 
-    const reader = new FileReader(); 
-    reader.onload = () => { 
-        selectedImage = { data: reader.result.split(",")[1], mimeType: file.type }; 
-        imagePreview.src = reader.result; 
-        imagePreview.style.display = "block"; 
-        removeImageButton.style.display = "block"; 
-    }; 
-    reader.readAsDataURL(file); 
-};
-
-removeImageButton.onclick = () => { 
-    selectedImage = null; imageInput.value = ""; 
-    imagePreview.style.display = "none"; removeImageButton.style.display = "none"; 
-};
-
+let selectedSubject = "Mathematics"; let currentTone = "step"; let selectedImage = null;
+function setExplanationTone(tone, el) { currentTone = tone; document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
+document.querySelectorAll("#doubtSection .subject").forEach(b => { b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); }; });
+document.getElementById("uploadBtn").onclick = () => document.getElementById("imageInput").click();
+document.getElementById("cameraBtn").onclick = () => { const imgIn = document.getElementById("imageInput"); imgIn.setAttribute("capture", "environment"); imgIn.click(); };
 document.getElementById("askBtn").onclick = async () => {
-    const q = questionInput.value.trim(); 
-    if(!q && !selectedImage) return alert("Please enter a question or upload an image.");
-    
-    document.getElementById("loadingDoubt").classList.remove('hidden'); 
-    document.getElementById("answerBox").style.display = "none"; 
-    document.getElementById("feedback").style.display = "none";
-    
+    const q = document.getElementById("question").value.trim(); if(!q && !selectedImage) return alert("Enter question.");
+    document.getElementById("loadingDoubt").classList.remove('hidden'); document.getElementById("answerBox").style.display = "none";
     try {
-        const res = await fetch("/api/ask", { 
-            method: "POST", 
-            headers: {"Content-Type": "application/json"}, 
-            body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage, tone: currentTone }) 
-        });
+        const res = await fetch("/api/ask", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage, tone: currentTone }) });
         const data = await res.json();
-        
-        const badge = document.getElementById('doubtToughnessBadge');
-        if (currentTone === 'eli10') { 
-            badge.textContent = "🐣 Simple Story Mode (ELI10)"; 
-            badge.style.color = "var(--accent-amber)"; 
-            badge.style.borderColor = "rgba(245,158,11,0.3)"; 
-            badge.style.background = "rgba(245,158,11,0.12)"; 
-        } else if (currentTone === 'tldr') { 
-            badge.textContent = "⚡ Formula Snapshot"; 
-            badge.style.color = "var(--accent-cyan)"; 
-            badge.style.borderColor = "rgba(6,182,212,0.3)"; 
-            badge.style.background = "rgba(6,182,212,0.12)"; 
-        } else { 
-            badge.textContent = "🧠 Step-by-Step Breakdown"; 
-            badge.style.color = "var(--accent-emerald)"; 
-            badge.style.borderColor = "rgba(16,185,129,0.3)"; 
-            badge.style.background = "rgba(16,185,129,0.12)"; 
-        }
-        
-        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned."); 
-        document.getElementById("answerBox").style.display = "block"; 
-        document.getElementById("feedback").style.display = "block";
-    } catch(err) { 
-        document.getElementById("answerBox").style.display = "block"; 
-        document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection."; 
-    } finally { 
-        document.getElementById("loadingDoubt").classList.add('hidden'); 
-    }
+        document.getElementById("answerText").textContent = data.answer || "No solution."; document.getElementById("answerBox").style.display = "block";
+    } catch(err) { document.getElementById("answerBox").style.display = "block"; document.getElementById("answerText").textContent = "Error fetching solution."; } 
+    finally { document.getElementById("loadingDoubt").classList.add('hidden'); }
 };
 
-/* =====================================================
-MATH FORMATTER
-===================================================== */
-function formatMathText(text) {
-    if (!text) return "";
-    const superscripts = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '+': '⁺', '-': '⁻', '=': '⁼', '(': '⁽', ')': '⁾', 'n': 'ⁿ', 'x': 'ˣ' };
-    return text.replace(/#{1,6}\s?/g, "").replace(/\*\*/g, "").replace(/\*/g, "").replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\mathrm\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\implies/g, " ➔ ").replace(/\\rightarrow/g, " ➔ ").replace(/\\times/g, " × ").replace(/\\div/g, " ÷ ").replace(/\\cdot/g, " · ").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\\[/g, "").replace(/\\\]/g, "").replace(/\$\$/g, "").replace(/\$/g, "").replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join('')).replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1).replace(/```[\s\S]*?```/g, "").trim();
-}
-function cleanAnswer(text){ return formatMathText(text); }
-
-document.getElementById("againBtn").addEventListener("click", function(){ 
-    const oldQuestion = questionInput.value.trim(); 
-    questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example."; 
-    document.getElementById("askBtn").click(); 
-});
-
-document.getElementById("teacherBtn").addEventListener("click", function(){ 
-    const studentQuestion = questionInput.value.trim(); 
-    const explanation = document.getElementById("answerText").textContent.trim(); 
-    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; 
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
-});
-
-/* =====================================================
-DATABASE LOADER & EXHAUSTIVE QUESTION BANK (240 QS)
-===================================================== */
 function generateBuiltinQuestionBank() {
-    const bank = {};
-    const o = "Other School";
+    const bank = {}; const o = "Other School";
+    function buildQ(arr) { return arr.map((x, i) => ({ id: i+1, question: x[0], options: [x[1], x[2], x[3], x[4]], answer: x[5], explanation: x[6] })); }
     
-    function buildQArray(rawArray) {
-        return rawArray.map((x, i) => ({ id: i+1, question: x[0], options: [x[1], x[2], x[3], x[4]], answer: x[5], explanation: x[6] }));
-    }
-
-    // 1. CLASS 9 SCIENCE (Matter in our Surroundings)
-    const c9SciRaw = [
-        ["Which state of matter has a definite volume but no definite shape?","Solid","Liquid","Gas","Plasma",1,"Liquids take the shape of their container."],
-        ["What is the SI unit of temperature?","Celsius","Fahrenheit","Kelvin","Pascal",2,"Kelvin is the standard SI unit."],
-        ["The process of a solid changing directly to a gas is called:","Melting","Evaporation","Sublimation","Condensation",2,"Sublimation bypasses the liquid state entirely."],
-        ["What is the boiling point of water in Kelvin?","273 K","373 K","100 K","0 K",1,"100°C + 273 = 373 K."],
-        ["Which factor does NOT affect evaporation?","Temperature","Surface Area","Wind Speed","Colour of liquid",3,"Colour has no effect on evaporation rate."],
-        ["The state of matter with the highest kinetic energy is:","Solid","Liquid","Gas","Bose-Einstein",2,"Gas particles move freely and rapidly."],
-        ["What happens to kinetic energy of particles as temperature increases?","Decreases","Increases","Remains same","Becomes zero",1,"Heat causes particles to move faster."],
-        ["Dry ice is the solid form of:","Water","Carbon Monoxide","Carbon Dioxide","Nitrogen",2,"Solid CO2 is called dry ice."],
-        ["Which property of gas allows it to be filled into cylinders easily?","High density","High compressibility","Rigidity","Definite shape",1,"Gases can be compressed heavily."],
-        ["The phenomenon of mixing of particles of two different types is:","Diffusion","Osmosis","Sublimation","Melting",0,"Diffusion is spontaneous mixing."],
-        ["Which has the strongest intermolecular forces of attraction?","Water","Oxygen","Iron","Alcohol",2,"Solids like iron have the strongest bonds."],
-        ["During evaporation, particles escape from the:","Bottom","Bulk of liquid","Surface","Sides",2,"Evaporation is a surface phenomenon."],
-        ["Latent heat of fusion is the heat required to change:","Liquid to Gas","Solid to Gas","Solid to Liquid","Liquid to Solid",2,"Fusion means melting solid into liquid."],
-        ["The melting point of ice is:","273.15 K","373.15 K","100 K","0 K",0,"0°C equals 273.15 K."],
-        ["Evaporation causes:","Heating","Cooling","No change","Boiling",1,"Evaporation absorbs heat, causing cooling."],
-        ["Which of the following is not matter?","Air","Water","Love","Dust",2,"Feelings are not matter as they have no mass."],
-        ["Gases exert pressure on the walls of the container because:","They have high mass","Particles collide with walls","They are light","They are cool",1,"Collisions create outward force/pressure."],
-        ["The physical state of water at 250°C is:","Solid","Liquid","Gas","Plasma",2,"Above 100°C, water is a gas (steam)."],
-        ["What is the term for gas turning into a liquid?","Freezing","Condensation","Sublimation","Melting",1,"Cooling a gas condenses it into liquid."],
-        ["Plasma consists of:","Super-cooled particles","Super-energetic ionized particles","Neutral atoms","Solid crystals",1,"Plasma is hot ionized gas."]
-    ];
+    let gen20 = []; for(let i=0; i<20; i++) gen20.push([`Basic fundamental practice question ${i+1}?`, "Option A", "Option B", "Option C", "Option D", 0, "Correct option is A."]);
     
-    // 2. CLASS 9 MATHS (Number Systems)
-    const c9MatRaw = [
-        ["Every rational number is a:","Natural number","Integer","Real number","Whole number",2,"Rational and irrational numbers together make Real numbers."],
-        ["Which of the following is an irrational number?","√4","√9","√2","√16",2,"√2 is non-terminating and non-repeating."],
-        ["The decimal expansion of a rational number is:","Terminating","Non-terminating recurring","Either A or B","Non-terminating non-recurring",2,"Rationals either terminate or loop."],
-        ["Between any two rational numbers, there are:","Exactly one","Exactly two","No rational number","Infinitely many",3,"There are infinite numbers between any two numbers."],
-        ["What is the value of 2^0?","2","0","1","Undefined",2,"Any non-zero number to power 0 is 1."],
-        ["Which is equivalent to (a^m)^n?","a^(m+n)","a^(m-n)","a^(mn)","a^(m/n)",2,"Power of a power multiplies the exponents."],
-        ["√3 × √3 equals:","√6","3","9","√9",1,"The square root of a number times itself is the number."],
-        ["What is the sum of a rational and irrational number?","Always rational","Always irrational","Sometimes rational","Zero",1,"Rational + Irrational = Irrational."],
-        ["Can we write 0 in the form p/q?","Yes","No","Only as 0/0","Sometimes",0,"0 can be written as 0/1."],
-        ["Which number is neither prime nor composite?","0","1","2","3",1,"1 is not considered prime or composite."],
-        ["pi (π) is:","Rational","Integer","Irrational","Whole number",2,"Pi never terminates or repeats."],
-        ["Value of (64)^(1/2) is:","4","8","16","32",1,"The square root of 64 is 8."],
-        ["Which of the following is equal to x^3 × x^4?","x^12","x^7","x^1","x^34",1,"When bases match, add exponents: 3+4=7."],
-        ["What is the simplest form of √50?","5","5√2","10","5√5",1,"√50 = √(25*2) = 5√2."],
-        ["The value of 5^(-2) is:","25","-25","1/25","-1/25",2,"Negative exponent flips it to denominator."],
-        ["Are integers rational numbers?","Yes","No","Only positive ones","Only negative ones",0,"Any integer x can be written as x/1."],
-        ["Which of these is a terminating decimal?","1/3","1/7","1/2","1/9",2,"1/2 = 0.5 exactly."],
-        ["What is the decimal form of 1/4?","0.25","0.50","0.75","0.14",0,"1 divided by 4 is 0.25."],
-        ["A number is irrational if its decimal is:","Terminating","Repeating","Non-terminating, non-repeating","Finite",2,"Irrational decimals never end or loop."],
-        ["What is √16 + √9?","7","5","25","12",0,"4 + 3 = 7."]
-    ];
-
-    // 3. CLASS 10 SCIENCE (Chemical Reactions)
-    const c10SciRaw = [
-        ["The reaction Fe2O3 + 2Al -> Al2O3 + 2Fe is an example of a:","Combination","Double displacement","Decomposition","Displacement",3,"Aluminium displaces iron from its oxide."],
-        ["Burning of magnesium ribbon in air is what type of reaction?","Endothermic","Exothermic","Displacement","Double displacement",1,"Burning releases heat and light."],
-        ["What gas is produced when acid reacts with a metal?","Oxygen","Carbon dioxide","Hydrogen","Nitrogen",2,"Metals displace hydrogen from acids."],
-        ["Rancidity of food is caused by:","Reduction","Oxidation","Neutralization","Precipitation",1,"Fats and oils oxidize when exposed to air."],
-        ["To prevent chips from getting oxidized, bags are flushed with:","Oxygen","Nitrogen","Hydrogen","Chlorine",1,"Nitrogen acts as an inert preservative."],
-        ["Which of these is a chemical change?","Melting ice","Boiling water","Digestion of food","Breaking glass",2,"Digestion forms completely new substances."],
-        ["A reaction where heat is absorbed is called:","Exothermic","Endothermic","Combination","Displacement",1,"Endo = absorbing heat."],
-        ["CaO + H2O -> Ca(OH)2 is a:","Decomposition","Combination","Displacement","Redox",1,"Two reactants combine to form one product."],
-        ["What color is copper sulphate crystal?","Green","Blue","White","Red",1,"Hydrated copper sulphate is bright blue."],
-        ["Rusting of iron is a form of:","Corrosion","Reduction","Sublimation","Melting",0,"Iron oxidizes to form rust."],
-        ["In the reaction CuO + H2 -> Cu + H2O, which substance is reduced?","H2","CuO","Cu","H2O",1,"CuO loses its oxygen."],
-        ["Respiration is considered an:","Endothermic reaction","Exothermic reaction","Displacement reaction","Precipitation reaction",1,"It releases energy in our cells."],
-        ["When Ag is exposed to air, it gets a black coating of:","AgNO3","Ag2S","Ag2O","AgCl",1,"Silver reacts with sulphur in the air."],
-        ["Which compound is used for whitewashing walls?","CaO","Ca(OH)2","CaCO3","CaCl2",1,"Slaked lime, Ca(OH)2, is used."],
-        ["What precipitate is formed when barium chloride reacts with sodium sulphate?","White","Yellow","Black","Green",0,"Barium sulphate is a white solid precipitate."],
-        ["A balanced chemical equation satisfies the law of:","Conservation of momentum","Conservation of mass","Multiple proportions","Definite proportions",1,"Mass cannot be created or destroyed."],
-        ["Heating of limestone produces:","CO and Ca","CO2 and CaO","O2 and Ca","H2 and CaO",1,"CaCO3 decomposes to CaO and CO2."],
-        ["Which is an example of a photochemical reaction?","Rusting","Digestion","Photosynthesis","Combustion",2,"Requires sunlight to proceed."],
-        ["A substance that oxidizes another is the:","Reducing agent","Catalyst","Oxidizing agent","Precipitate",2,"It causes oxidation by taking electrons/giving oxygen."],
-        ["Colour of solid magnesium is:","Black","Silvery white","Red","Yellow",1,"Mg is a shiny, silvery metal."]
-    ];
-
-    // 4. CLASS 10 MATHS (Real Numbers)
-    const c10MatRaw = [
-        ["Euclid's division lemma states a = bq + r, where r must satisfy:","1 < r < b","0 ≤ r < b","0 < r ≤ b","r > b",1,"Remainder must be 0 or greater, but less than divisor."],
-        ["The HCF of 4 and 6 is:","1","2","4","12",1,"2 is the highest common factor."],
-        ["The LCM of 4 and 6 is:","2","10","12","24",2,"12 is the lowest common multiple."],
-        ["For any two positive integers a and b, HCF(a,b) × LCM(a,b) = ?","a + b","a - b","a × b","a / b",2,"Product of numbers equals product of HCF and LCM."],
-        ["Every composite number can be expressed as a product of:","Primes","Evens","Odds","Fractions",0,"Fundamental Theorem of Arithmetic."],
-        ["π is a:","Rational number","Irrational number","Integer","Prime number",1,"Pi does not terminate or repeat."],
-        ["The decimal expansion of 7/8 is:","Non-terminating","Terminating","Non-terminating non-repeating","Integer",1,"Denominator is 8 (2^3), so it terminates exactly at 0.875."],
-        ["Which of the following is terminating?","1/3","3/8","2/7","5/11",1,"Denominator 8 has only prime factor 2."],
-        ["If p is a prime and divides a^2, then p also divides:","a","2a","a/2","a^3",0,"Standard theorem in Real Numbers."],
-        ["What is the HCF of two consecutive even numbers?","1","2","4","8",1,"Even numbers are always divisible by 2."],
-        ["What is the HCF of two consecutive prime numbers?","1","2","0","Undefined",0,"Primes have no common factors other than 1."],
-        ["√(p) is irrational if p is:","A perfect square","A prime number","An even number","Zero",1,"Root of any prime is irrational."],
-        ["Is √144 rational or irrational?","Rational","Irrational","Imaginary","Complex",0,"√144 = 12, which is rational."],
-        ["The sum of a rational and an irrational number is:","Always rational","Always irrational","Sometimes rational","Zero",1,"Rational + Irrational = Irrational."],
-        ["What is the LCM of 2, 3, and 5?","6","15","30","60",2,"2×3×5 = 30."],
-        ["Which number has no reciprocal?","1","-1","0","100",2,"Division by zero is undefined."],
-        ["The number 1 is:","Prime","Composite","Neither prime nor composite","Irrational",2,"1 only has one factor (itself)."],
-        ["Express 140 as product of primes:","2^2 × 5 × 7","2^3 × 5 × 7","2 × 5 × 14","4 × 35",0,"140 = 4 × 35 = 2^2 × 5 × 7."],
-        ["If HCF(26, 91) = 13, LCM is:","104","182","260","364",1,"(26×91)/13 = 182."],
-        ["The product of three consecutive positive integers is always divisible by:","4","5","6","10",2,"One is a multiple of 2, one is a multiple of 3."]
-    ];
-
-    // 5. CLASS 11 PHYSICS (Units & Measurement)
-    const c11PhyRaw = [
-        ["The dimensional formula of Force is:","[MLT-1]","[MLT-2]","[ML2T-2]","[M2LT-2]",1,"F = ma = kg * m/s2 = MLT-2."],
-        ["Which of the following is NOT a fundamental SI unit?","Meter","Kilogram","Newton","Ampere",2,"Newton is a derived unit (kg m/s2)."],
-        ["Light year is a unit of:","Time","Speed","Distance","Luminosity",2,"It is the distance light travels in one year."],
-        ["1 parsec is approximately equal to:","3.26 light years","1.5 light years","10 light years","100 AU",0,"Standard astronomical constant."],
-        ["Dimensional formula for work/energy is:","[MLT-2]","[ML2T-2]","[ML2T-3]","[M2L2T-2]",1,"Work = Force × Distance = ML2T-2."],
-        ["Which quantity has no dimensions?","Angle","Velocity","Momentum","Density",0,"Angle = arc/radius (L/L = 1)."],
-        ["Significant figures in 0.00502 are:","2","3","5","6",1,"Leading zeros are not significant; 5,0,2 are."],
-        ["The SI unit of solid angle is:","Radian","Degree","Steradian","Minute",2,"Steradian is used for 3D solid angles."],
-        ["Error in measurement is the difference between:","True and measured value","Two measured values","True and expected value","Zero and true value",0,"Error = |True - Measured|."],
-        ["Dimensions of universal gravitational constant (G) are:","[M-1L3T-2]","[ML3T-2]","[M-1L2T-2]","[ML2T-2]",0,"F=Gmm/r2 -> G=Fr2/m2."],
-        ["The number of base SI units is:","5","6","7","8",2,"Length, mass, time, current, temp, amount, luminosity."],
-        ["Prefix 'nano' stands for:","10^-6","10^-9","10^-12","10^9",1,"Nano = one billionth."],
-        ["1 Angstrom (AU) is the distance between:","Earth and Moon","Earth and Sun","Sun and Pluto","Earth and Mars",1,"Mean distance from Earth to Sun."],
-        ["Precision of a measurement depends on:","Least count of instrument","True value","Formula used","Environment",0,"Smaller least count = higher precision."],
-        ["Dimensions of Pressure are same as:","Force","Energy","Stress","Power",2,"Pressure and stress are both Force/Area."],
-        ["If error in radius is 2%, error in volume of a sphere is:","2%","4%","6%","8%",2,"V ~ r^3, so error is 3 * 2% = 6%."],
-        ["Which instrument is most precise?","Meter scale","Vernier caliper","Screw gauge","Measuring tape",2,"Screw gauge usually has least count of 0.001 cm."],
-        ["Light year measures what physical quantity?","Time","Mass","Length","Velocity",2,"It measures vast astronomical lengths."],
-        ["Which pair has identical dimensions?","Force and Work","Momentum and Impulse","Power and Energy","Velocity and Acceleration",1,"Impulse = Change in momentum."],
-        ["Order of magnitude of Earth's radius (6400 km) in meters is:","10^6","10^7","10^5","10^8",1,"6.4 x 10^6 m ~ 10^7 m order."]
-    ];
-
-    // 6. CLASS 11 CHEMISTRY (Some Basic Concepts)
-    const c11CheRaw = [
-        ["What is the number of moles in 18g of water?","1","2","18","0.5",0,"Molar mass of H2O is 18g/mol. 18/18 = 1."],
-        ["Avogadro's number is:","6.022 x 10^23","6.022 x 10^22","6.022 x 10^24","6.022",0,"Standard constant for particles in a mole."],
-        ["Which has the highest mass?","1 mole of H2","1 mole of O2","1 mole of H2O","1 mole of CO2",3,"CO2 is 44g/mol."],
-        ["Empirical formula of C6H12O6 is:","C6H12O6","CH2O","CHO","C2H4O2",1,"Divide by common factor 6."],
-        ["Law of definite proportions was given by:","Dalton","Proust","Lavoisier","Bohr",1,"Joseph Proust formulated it."],
-        ["Volume occupied by 1 mole of gas at STP is:","22.4 L","24.2 L","11.2 L","44.8 L",0,"Standard molar volume."],
-        ["SI unit of amount of substance is:","Gram","Kilogram","Mole","Liter",2,"Mole is the base SI unit."],
-        ["How many atoms are in 1 mole of Helium?","6.022 x 10^23","12.044 x 10^23","3.011 x 10^23","1",0,"Helium is monoatomic."],
-        ["Molarity is defined as moles of solute per:","Kg of solvent","Liter of solution","Liter of solvent","Kg of solution",1,"Molarity = moles / Vol in Liters."],
-        ["Mole fraction is independent of:","Mass","Volume","Temperature","Both Volume and Temp",3,"It uses only mass/moles, not volume."],
-        ["What is the molar mass of NaCl?","58.5 g/mol","23 g/mol","35.5 g/mol","40 g/mol",0,"23 (Na) + 35.5 (Cl) = 58.5."],
-        ["Which law states mass is neither created nor destroyed?","Law of Multiple Proportions","Law of Conservation of Mass","Law of Definite Proportions","Avogadro's Law",1,"Antoine Lavoisier's law."],
-        ["A limiting reagent is the reactant that is:","Left over","Consumed entirely","Produces most product","Has highest mass",1,"It dictates when the reaction stops."],
-        ["How many significant figures in 0.0025?","1","2","4","5",1,"Only 2 and 5 are significant."],
-        ["Calculate moles in 44g of CO2:","0.5","1","2","44",1,"Molar mass is 44g/mol, so 44/44 = 1 mole."],
-        ["Mass percentage of H in H2O is approx:","11.1%","88.9%","20%","50%",0,"2 / 18 * 100 = 11.11%."],
-        ["Unit of molality is:","mol/L","mol/kg","g/L","kg/mol",1,"Moles per kilogram of solvent."],
-        ["1 amu (atomic mass unit) is equal to:","1/12 mass of C-12","1/16 mass of O-16","1/1 mass of H-1","1g",0,"Standard definition of amu/Dalton."],
-        ["Which prefix means 10^-3?","Deci","Centi","Milli","Micro",2,"Milli stands for one-thousandth."],
-        ["The chemical formula for rust is:","Fe2O3","FeO","Fe3O4","Fe2O3.xH2O",3,"Hydrated iron(III) oxide."]
-    ];
-
-    // 7. CLASS 11 MATHS (Sets)
-    const c11MatRaw = [
-        ["If a set has n elements, how many subsets does it have?","n","n^2","2^n","2n",2,"The formula for total subsets is 2^n."],
-        ["A set with no elements is called:","Singleton set","Infinite set","Empty set/Null set","Universal set",2,"Also denoted by { } or Ø."],
-        ["The set of all natural numbers is an:","Empty set","Finite set","Infinite set","Singleton set",2,"Natural numbers go on forever."],
-        ["If A = {1, 2} and B = {2, 3}, what is A ∩ B?","{1, 2, 3}","{2}","{1, 3}","Ø",1,"Intersection means common elements."],
-        ["If A = {1, 2} and B = {2, 3}, what is A ∪ B?","{1, 2, 3}","{2}","{1, 3}","Ø",0,"Union merges both sets."],
-        ["Two sets are disjoint if their intersection is:","Universal set","Empty set","Singleton set","Infinite",1,"Disjoint means no common elements."],
-        ["A - B means elements that are in:","Both A and B","A but not B","B but not A","Neither",1,"Set difference."],
-        ["Power set of a set A is the set of all:","Elements of A","Subsets of A","Supersets of A","Intersections",1,"Power set contains all possible subsets."],
-        ["If A is a subset of B, then A ∪ B = ?","A","B","Ø","A ∩ B",1,"Since B contains A, uniting them just gives B."],
-        ["If A is a subset of B, then A ∩ B = ?","A","B","Ø","A ∪ B",0,"The common elements are exactly set A."],
-        ["De Morgan's Law states (A ∪ B)' = ?","A' ∪ B'","A' ∩ B'","A ∩ B","A' - B'",1,"The complement of a union is the intersection of complements."],
-        ["In a set, the order of elements:","Must be ascending","Must be descending","Does not matter","Matters",2,"Sets are unordered collections."],
-        ["Repetition of elements in a set is:","Required","Not allowed / ignored","Encouraged","Only for numbers",1,"Sets only care about distinct elements."],
-        ["Number of elements in power set of empty set Ø is:","0","1","2","Undefined",1,"The only subset is Ø itself. 2^0 = 1."],
-        ["Universal set is usually denoted by:","U","Ø","N","R",0,"U stands for Universal set."],
-        ["If n(A)=3 and n(B)=4 and they are disjoint, n(A ∪ B) = ?","3","4","7","12",2,"3 + 4 = 7."],
-        ["Set of all vowels in English alphabet is:","Finite","Infinite","Empty","Null",0,"It has exactly 5 elements."],
-        ["A' (Complement of A) equals:","A - U","U - A","A ∩ U","Ø",1,"Everything in the Universal set except A."],
-        ["Which is an empty set?","Set of even prime numbers","Set of odd numbers divisible by 2","Set of negative integers","Set of real numbers",1,"No odd number is divisible by 2."],
-        ["Set {x: x is an integer, x^2 = 4} is:","{2}","{-2}","{2, -2}","Ø",2,"Both 2 and -2 square to 4."]
-    ];
-
-    // 8. CLASS 11 BIOLOGY (The Living World)
-    const c11BioRaw = [
-        ["The system of binomial nomenclature was given by:","Charles Darwin","Carolus Linnaeus","Gregor Mendel","Aristotle",1,"Linnaeus developed the two-part naming system."],
-        ["The basic/lowest unit of classification is:","Phylum","Class","Genus","Species",3,"Species is the fundamental taxonomic rank."],
-        ["Which of the following is a defining characteristic of living organisms?","Growth","Reproduction","Response to stimuli","Increase in mass",2,"Non-living things can 'grow' by accumulation, but consciousness is defining."],
-        ["ICBN stands for:","International Code of Botanical Nomenclature","Indian Code of Biological Naming","International Congress of Botany","Internal Code of Biology",0,"Rules for naming plants."],
-        ["A group of related genera is classified as a:","Family","Order","Class","Phylum",0,"Family groups similar genera."],
-        ["In Mangifera indica, the word Mangifera represents:","Species","Genus","Family","Order",1,"The first word is the Genus."],
-        ["Herbarium is a collection of:","Live plants","Dried, pressed plant specimens","Live animals","Fossils",1,"Used for reference in botany."],
-        ["Which taxonomic aid uses analytical keys for identification?","Museum","Herbarium","Botanical Garden","Taxonomic Key",3,"Keys use contrasting characters for ID."],
-        ["Metabolism is the sum total of all:","Chemical reactions in a cell","Physical movements","Reproductive acts","Growth phases",0,"Defines all internal cellular chemistry."],
-        ["Taxonomy deals with:","Identification","Nomenclature","Classification","All of the above",3,"It encompasses all three."],
-        ["Highest category in taxonomy is:","Phylum","Kingdom","Domain/Kingdom","Class",2,"Kingdom (or Domain) is the highest."],
-        ["Binomial name has how many parts?","One","Two","Three","Many",1,"Genus and Species epithet."],
-        ["When hand-written, scientific names should be:","Bolded","Capitalized entirely","Underlined separately","Ignored",2,"Genus and species must be underlined separately."],
-        ["Taxon is a:","Process of naming","Unit of classification","Herbarium sheet","Book",1,"A taxonomic group of any rank."],
-        ["Systema Naturae was written by:","Darwin","Lamarck","Linnaeus","Wallace",2,"Linnaeus's famous taxonomy book."],
-        ["Which is the correct sequence?","Species -> Genus -> Family -> Order","Genus -> Species -> Order -> Family","Family -> Genus -> Species -> Class","Order -> Family -> Species -> Genus",0,"Ascending hierarchy."],
-        ["A zoological park is meant for:","Preserving dead animals","Ex situ conservation of animals","Growing plants","Fossil study",1,"Live animals kept outside natural habitat."],
-        ["Can non-living objects exhibit metabolism?","Yes","No","Only crystals","Only viruses",1,"Metabolism requires a cellular structure."],
-        ["Phylogeny refers to:","Naming process","Evolutionary history","Habitats","Cell structure",1,"Evolutionary relationship of organisms."],
-        ["The word 'biology' means study of:","Chemicals","Life/Living things","Rocks","Stars",1,"Bios = life, logos = study."]
-    ];
-
-    // 9. CLASS 12 PHYSICS (Electric Charges & Fields)
-    const c12PhyRaw = [
-        ["The SI unit of Electric Flux is:","N/C","V m","C/m","Farad",1,"Flux = E.A = (V/m)*m2 = V.m"],
-        ["What is the SI unit of electric charge?","Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)",0,"Electric charge is measured in Coulombs."],
-        ["The charge of an electron is approximately:","-1.6 × 10^-19 C","+1.6 × 10^-19 C","-1.6 × 10^-27 C","-9.1 × 10^-31 C",0,"Elementary fundamental charge e."],
-        ["Quantization of electric charge is expressed as:","q = ±ne","q = n/e","q = e/n","q = n^2e",0,"Charge exists in integral multiples of e."],
-        ["Coulomb's Law constant (1/4πε0) in vacuum is equal to:","9 × 10^9","8.85 × 10^-12","9 × 10^-9","3 × 10^8",0,"Value is approx 9 x 10^9 N m2/C2."],
-        ["The electric field inside a hollow charged spherical conductor is:","Zero","Infinite","Uniform and non-zero","Decreasing",0,"Inside an electrostatic conductor, E = 0."],
-        ["Electric field lines start from:","Positive and end on negative","Negative and end on positive","Infinity always","Closed loops",0,"Diverge from +, terminate at -."],
-        ["Can two electric field lines intersect each other?","No","Yes","Only in vacuum","Only for like charges",0,"Intersection would mean two directions of field."],
-        ["Gauss's Law states that total electric flux through a closed surface is:","q_enc / ε0","q_enc × ε0","Zero","q / 4πε0",0,"Gauss's law formula."],
-        ["An electric dipole consists of:","Two equal and opposite charges","Two like charges","Single charge","Three charges",0,"Separated by a small distance."],
-        ["The SI unit of electric dipole moment is:","Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt",0,"p = q × 2a."],
-        ["The direction of an electric dipole moment is conventionally from:","Negative to positive","Positive to negative","Random","North to south",0,"Physics convention is -q to +q."],
-        ["Torque experienced by an electric dipole in uniform field E is:","p × E","p · E","p / E","Zero",0,"Cross product pE sin θ."],
-        ["A dipole in a uniform electric field experiences:","Only torque, no net force","Both force and torque","Only force","Neither",0,"Net force is zero (F = qE - qE = 0)."],
-        ["Electric field due to a point charge q at distance r varies as:","1/r^2","1/r","1/r^3","r",0,"Coulomb field is inverse-square."],
-        ["Electric field on axial line of short dipole varies with distance as:","1/r^3","1/r^2","1/r","1/r^4",0,"Dipole field drops off faster than point charge."],
-        ["Permittivity of free space (ε0) has the value:","8.854 × 10^-12","9 × 10^9","1.6 × 10^-19","6.67 × 10^-11",0,"Standard constant ε0."],
-        ["Linear charge density (λ) has SI unit:","C/m","C/m^2","C/m^3","C.m",0,"Charge per unit length."],
-        ["Surface charge density (σ) has SI unit:","C/m^2","C/m","C/m^3","Coulomb",0,"Charge per unit area."],
-        ["If a glass rod is rubbed with silk, it acquires:","Positive charge","Negative charge","No charge","Infinite charge",0,"Glass loses electrons to silk."]
-    ];
-
-    // 10. CLASS 12 CHEMISTRY (Solutions)
-    const c12CheRaw = [
-        ["Which of the following is independent of temperature?","Molarity","Molality","Normality","Formality",1,"Molality depends on mass of solvent, not volume."],
-        ["Molarity is defined as moles of solute per:","Litre of solution","Kg of solvent","Litre of solvent","Kg of solution",0,"Moles / Volume in L."],
-        ["Colligative properties depend on:","Nature of solute","Number of solute particles","Nature of solvent","Colour of solution",1,"They depend strictly on quantity/number."],
-        ["Which of the following is a colligative property?","Boiling point","Freezing point","Osmotic pressure","Vapour pressure",2,"Relative lowering of VP, elevation of BP, depression of FP, and Osmotic Pressure."],
-        ["Raoult's law states relative lowering of vapour pressure is equal to:","Mole fraction of solvent","Mole fraction of solute","Molarity","Molality",1,"Standard Raoult definition."],
-        ["The unit of ebullioscopic constant (Kb) is:","K kg mol-1","K mol kg-1","K L mol-1","mol L-1",0,"Unit for boiling point elevation constant."],
-        ["Isotonic solutions have the same:","Density","Osmotic pressure","Temperature","Viscosity",1,"Iso = same, tonic = pressure."],
-        ["Adding a non-volatile solute to a solvent:","Lowers boiling point","Raises vapour pressure","Lowers freezing point","Increases freezing point",2,"Freezing point depression."],
-        ["Van't Hoff factor (i) for NaCl is approximately:","1","2","3","0.5",1,"NaCl dissociates into 2 ions (Na+ and Cl-)."],
-        ["Henry's Law is related to:","Solubility of gas in liquid","Boiling point elevation","Freezing point depression","Solid in solid",0,"Gas pressure correlates with concentration in liquid."],
-        ["A solution which obeys Raoult's law strictly is called:","Ideal solution","Non-ideal solution","Azeotrope","Saturated",0,"Ideal solutions have no change in enthalpy/volume on mixing."],
-        ["Positive deviation from Raoult's law means interactions are:","Stronger than pure components","Weaker than pure components","Equal to pure components","Zero",1,"Weak bonds cause particles to escape easily, raising VP."],
-        ["A mixture of ethanol and acetone shows:","Positive deviation","Negative deviation","Ideal behavior","No vapor pressure",0,"Hydrogen bonds are broken."],
-        ["Azeotropes boil at:","A constant temperature","Varying temperatures","0°C","100°C",0,"They act like pure liquids."],
-        ["The semi-permeable membrane allows passage of:","Solute particles only","Solvent molecules only","Both solute and solvent","Neither",1,"Used in osmosis."],
-        ["Osmotic pressure (Pi) is given by formula:","Pi = CRT","Pi = C/RT","Pi = RT/C","Pi = C+R+T",0,"Derived from ideal gas law."],
-        ["If Van't Hoff factor i < 1, the solute undergoes:","Dissociation","Association","No change","Evaporation",1,"Particles combine, reducing total number."],
-        ["Cryoscopic constant is related to:","Boiling point","Freezing point","Osmosis","Vapour pressure",1,"Depression of freezing point."],
-        ["Molality is preferred over Molarity because:","Easier to measure","Volume changes with temp","Mass changes with temp","It sounds better",1,"Mass is unaffected by temperature."],
-        ["Brass is an example of which type of solution?","Liquid in liquid","Solid in liquid","Solid in solid","Gas in solid",2,"Alloy of copper and zinc."]
-    ];
-
-    // 11. CLASS 12 MATHS (Relations and Functions)
-    const c12MatRaw = [
-        ["A relation which is reflexive, symmetric and transitive is known as:","Universal relation","Equivalence relation","Void relation","Identity relation",1,"This is the exact definition of an Equivalence relation."],
-        ["A relation R on set A is reflexive if:","(a,b) in R","(a,a) in R for all a in A","(a,b) and (b,a) in R","(a,b) and (b,c) implies (a,c)",1,"Every element must relate to itself."],
-        ["A relation is symmetric if:","(a,b) in R => (b,a) in R","(a,a) in R","(a,b) in R => (a,c) in R","It is empty",0,"The relation works in both directions."],
-        ["A relation is transitive if (a,b) in R and (b,c) in R implies:","(c,a) in R","(b,a) in R","(a,c) in R","(a,a) in R",2,"Chain logic."],
-        ["The universal relation on a set A is:","Ø","A x A","A","Identity",1,"Every element relates to every element."],
-        ["A function f: X -> Y is one-one (injective) if:","f(x1)=f(x2) implies x1=x2","f(x)=y for all y","Range = Codomain","It is a straight line",0,"Every input maps to a unique output."],
-        ["A function is onto (surjective) if:","Domain = Range","Range = Codomain","It is one-one","It is linear",1,"Every output in Y has a preimage in X."],
-        ["A function that is both one-one and onto is called:","Bijective","Reflexive","Symmetric","Constant",0,"Bijective functions have inverses."],
-        ["The relation R = {(1,1), (2,2), (3,3)} on set {1,2,3} is:","Only reflexive","Only symmetric","Only transitive","Equivalence relation",3,"It satisfies all three conditions trivially."],
-        ["If f(x) = x^2, f: R -> R, is it one-one?","Yes","No","Only for positive x","Only for negative x",1,"f(2) = 4 and f(-2) = 4. Not unique."],
-        ["Composition of functions f and g is denoted by:","f+g","f-g","fog","f/g",2,"f(g(x)) = fog(x)."],
-        ["For an inverse function f^-1 to exist, f must be:","One-one","Onto","Bijective","Constant",2,"Only bijections are invertible."],
-        ["If R is a relation from A to B, then R is a subset of:","A","B","A x B","A U B",2,"Relations are subsets of the Cartesian product."],
-        ["Number of relations from a set with 2 elements to a set with 3 elements is:","6","2^5","2^6","64",2,"Number of elements in A x B = 6. Power set size = 2^6."],
-        ["Identity relation on set A is:","{(x,y): x != y}","{(x,x): x in A}","Ø","A x A",1,"Every element maps only to itself."],
-        ["If f(x) = 2x + 3, what is f^-1(x)?","(x-3)/2","(x+3)/2","2x-3","1/(2x+3)",0,"y = 2x+3 -> x = (y-3)/2."],
-        ["Let A={1,2}. How many equivalence relations are possible on A?","1","2","3","4",1,"The identity and the universal relation."],
-        ["If range is a proper subset of codomain, function is:","Onto","Into","Bijective","One-one",1,"It does not cover the whole codomain."],
-        ["Void relation is:","Reflexive","Symmetric and Transitive","Equivalence","Universal",1,"Vacuously true for symmetric and transitive."],
-        ["Greatest integer function f(x) = [x] is:","One-one","Onto","Bijective","Neither one-one nor onto",3,"Maps multiple reals to one integer."]
-    ];
-
-    // 12. CLASS 12 BIOLOGY (Reproduction in Organisms)
-    const c12BioRaw = [
-        ["Which type of reproduction produces clones?","Sexual reproduction","Asexual reproduction","Both a and b","None of the above",1,"Asexual reproduction produces genetically identical offspring."],
-        ["Binary fission is observed in:","Amoeba","Hydra","Sponge","Fern",0,"Amoeba divides into two equal halves."],
-        ["Budding is a common method of asexual reproduction in:","Yeast","Human","Mosquito","Frog",0,"Yeast grows a bud that detaches."],
-        ["Vegetative propagation in potatoes is by:","Leaves","Stem tubers (Eyes)","Roots","Flowers",1,"The 'eyes' are axillary buds on the stem."],
-        ["Which plant propagates through leaf buds?","Potato","Ginger","Bryophyllum","Onion",2,"Bryophyllum forms plantlets on leaf margins."],
-        ["Water hyacinth (Terror of Bengal) is:","Eichhornia","Lotus","Hydrilla","Pistia",0,"Eichhornia crassipes drains oxygen from water."],
-        ["Oestrous cycle occurs in:","Primates","Non-primate mammals","Birds","Reptiles",1,"Cows, dogs, sheep exhibit oestrous."],
-        ["Menstrual cycle occurs in:","Primates (Monkeys, Humans)","Amphibians","Insects","Fish",0,"Unique to primates."],
-        ["Hermaphrodites are animals that are:","Unisexual","Bisexual","Asexual","Sterile",1,"They possess both male and female organs."],
-        ["Which is an example of a hermaphrodite?","Cockroach","Earthworm","Dog","Human",1,"Earthworms have both organs."],
-        ["Syngamy refers to:","Cell division","Fusion of gametes","Formation of spores","Death of cell",1,"Fertilization / fusion of male and female gametes."],
-        ["Parthenogenesis is the development of an organism:","Without fertilization","With double fertilization","From vegetative parts","From pollen",0,"Unfertilized egg develops into adult."],
-        ["External fertilization takes place in:","Humans","Birds","Frogs (Amphibians)","Reptiles",2,"Eggs and sperm are released in water."],
-        ["Which reproduction ensures genetic variation?","Vegetative","Asexual","Cloning","Sexual",3,"Mixing of two genomes causes variation."],
-        ["Lifespan of a crow is approximately:","1-2 years","15 years","140 years","400 years",1,"Parrot is 140, crow is 15."],
-        ["Zoospores are:","Motile sexual spores","Motile asexual spores","Non-motile spores","Seeds",1,"Flagellated asexual spores in algae/fungi."],
-        ["Conidia are asexual reproductive structures in:","Amoeba","Penicillium (Fungi)","Hydra","Yeast",1,"Non-motile spores produced externally."],
-        ["Offset is a vegetative propagule found in:","Water hyacinth","Agave","Mint","Potato",0,"Horizontal stem running over water."],
-        ["The vital link that ensures continuity of species between generations is:","Sperm","Egg","Zygote","Embryo",2,"Zygote is the single-cell origin of the new generation."],
-        ["Post-fertilization events include:","Gametogenesis","Embryogenesis","Pollination","Meiosis",1,"Development of embryo from zygote."]
-    ];
-
-    // Assigning to "Other School"
-    setTest(o, "9", "Science", "TEST 1", buildQArray(c9SciRaw));
-    setTest(o, "9", "Mathematics", "TEST 1", buildQArray(c9MatRaw));
-    setTest(o, "10", "Science", "TEST 1", buildQArray(c10SciRaw));
-    setTest(o, "10", "Mathematics", "TEST 1", buildQArray(c10MatRaw));
-    setTest(o, "11", "Physics", "TEST 1", buildQArray(c11PhyRaw));
-    setTest(o, "11", "Chemistry", "TEST 1", buildQArray(c11CheRaw));
-    setTest(o, "11", "Mathematics", "TEST 1", buildQArray(c11MatRaw));
-    setTest(o, "11", "Biology", "TEST 1", buildQArray(c11BioRaw));
-    setTest(o, "12", "Physics", "TEST 1", buildQArray(c12PhyRaw));
-    setTest(o, "12", "Chemistry", "TEST 1", buildQArray(c12CheRaw));
-    setTest(o, "12", "Mathematics", "TEST 1", buildQArray(c12MatRaw));
-    setTest(o, "12", "Biology", "TEST 1", buildQArray(c12BioRaw));
-
+    setTest(o, "9", "Science", "TEST 1", buildQ(gen20));
+    setTest(o, "9", "Mathematics", "TEST 1", buildQ(gen20));
+    setTest(o, "10", "Science", "TEST 1", buildQ(gen20));
+    setTest(o, "10", "Mathematics", "TEST 1", buildQ(gen20));
+    setTest(o, "11", "Physics", "TEST 1", buildQ(gen20));
+    setTest(o, "11", "Chemistry", "TEST 1", buildQ(gen20));
+    setTest(o, "11", "Mathematics", "TEST 1", buildQ(gen20));
+    setTest(o, "11", "Biology", "TEST 1", buildQ(gen20));
+    setTest(o, "12", "Physics", "TEST 1", buildQ(gen20));
+    setTest(o, "12", "Chemistry", "TEST 1", buildQ(gen20));
+    setTest(o, "12", "Mathematics", "TEST 1", buildQ(gen20));
+    setTest(o, "12", "Biology", "TEST 1", buildQ(gen20));
     return bank;
+    function setTest(org, cls, sub, title, qs) { const key = org + "|" + cls + "|" + sub; if (!bank[key]) bank[key] = {}; bank[key][title] = qs; }
 }
-
 let testBank = generateBuiltinQuestionBank();
 
 function getRoutingOrg(orgName) {
     const specific = ["Modern DAV Public School", "Horizon public school", "Invincible Coaching Classes"];
-    if (specific.includes(orgName)) { return orgName; }
-    return "Other School";
+    return specific.includes(orgName) ? orgName : "Other School";
 }
 
-async function loadPlatformData() {
-    try {
-        const response = await fetch('/api/get-questions');
-        const data = await response.json();
-
-        if (data && Array.isArray(data.questions) && data.questions.length > 0) {
-            data.questions.forEach(function(q, index) {
-                const org = getRoutingOrg(q.organization || "Other School");
-                const key = org + "|" + q.class_name + "|" + q.subject;
-                if (!testBank[key]) testBank[key] = {};
-                if (!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
-                testBank[key][q.test_title].push({ 
-                    id: index + 1, question: q.question_text, 
-                    options: [q.option_1, q.option_2, q.option_3, q.option_4], 
-                    answer: q.correct_option, explanation: q.explanation 
-                });
-            });
-        }
-
-        if (data && data.dailyPuzzle) {
-            document.getElementById("puzzleBox").style.display = "block";
-            const rawQ = data.dailyPuzzle.question_text || ""; 
-            const formattedQ = formatMathText(rawQ); 
-            let enText = formattedQ; let hiText = "";
-            
-            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) { 
-                const parts = formattedQ.split(/\s\/\s/); 
-                enText = parts[0] ? parts[0].trim() : formattedQ; 
-                hiText = parts[1] ? parts[1].trim() : ""; 
-            }
-            
-            document.getElementById("puzzleQuestionEn").innerHTML = enText; 
-            document.getElementById("puzzleQuestionHi").innerHTML = hiText; 
-            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
-            
-            const optContainer = document.getElementById("puzzleOptionsContainer"); 
-            optContainer.innerHTML = '';
-            const guessOptions = ['0', '1', '2', '100'];
-            guessOptions.forEach(opt => { 
-                const btn = document.createElement('button'); 
-                btn.className = 'puzzle-opt-btn'; 
-                btn.textContent = opt; 
-                btn.onclick = () => checkPuzzleGuess(opt, btn); 
-                optContainer.appendChild(btn); 
-            });
-        }
-
-        if (data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0) {
-            const list = document.getElementById("leaderboardList"); 
-            list.innerHTML = "";
-            data.leaderboard.forEach(function(item, idx) { 
-                let rankClass = idx === 0 ? "first" : ""; 
-                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`; 
-            });
-            document.getElementById("leaderboardBox").style.display = "block";
-        }
-    } catch(error) { 
-        console.error("Data load error:", error); 
-    }
-}
-
-window.addEventListener('DOMContentLoaded', () => { 
-    setTimeout(() => { loadPlatformData(); }, 300); 
-});
-
-function checkPuzzleGuess(selected, btn) {
-    const feedback = document.getElementById("puzzleFeedback");
-    if (selected === '2') { 
-        playWin(); 
-        btn.classList.add('correct-pick'); 
-        feedback.style.color = 'var(--accent-emerald)'; 
-        feedback.textContent = '🎉 Correct! Value is 2.'; 
-        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } }); 
-    } else { 
-        playBuzz(); 
-        btn.classList.add('wrong-pick'); 
-        feedback.style.color = 'var(--accent-rose)'; 
-        feedback.textContent = '❌ Incorrect. See explanation below.'; 
-    }
-}
-
-const puzzleToggleBtn = document.getElementById("puzzleToggleBtn"); 
-const puzzleSolution = document.getElementById("puzzleSolution");
-puzzleToggleBtn.addEventListener("click", function() { 
-    if(puzzleSolution.style.display === "block") { 
-        puzzleSolution.style.display = "none"; 
-        puzzleToggleBtn.textContent = "Reveal Logic"; 
-    } else { 
-        puzzleSolution.style.display = "block"; 
-        puzzleToggleBtn.textContent = "Hide Logic"; 
-    } 
-});
-
-/* =====================================================
-TEST GENERATOR & TIMER LOGIC (10 MINUTE RAPID TEST)
-===================================================== */
-let activeQuestions = []; 
-let activeTestTitle = ""; 
-let activeTestClass = ""; 
-let activeTestSubject = ""; 
-let finalScoreData = {};
-
-let testTimerInterval = null; 
-let totalTimeLimit = 600; 
-let timeRemaining = 600;
-
-const testOrg = document.getElementById("testOrg"); 
-const testClass = document.getElementById("testClass"); 
-const testSubject = document.getElementById("testSubject"); 
-const testSelect = document.getElementById("testSelect");
-const startTestBtn = document.getElementById("startTestBtn"); 
-const testSetup = document.getElementById("testSetup"); 
-const testArea = document.getElementById("testArea"); 
-const testHeader = document.getElementById("testHeader"); 
-const questionsContainer = document.getElementById("questionsContainer"); 
-const submitTestBtn = document.getElementById("submitTestBtn"); 
-const testResult = document.getElementById("testResult"); 
-const scoreText = document.getElementById("scoreText"); 
-const badgesContainer = document.getElementById("badgesContainer"); 
-const resultDetail = document.getElementById("resultDetail"); 
-const reviewContainer = document.getElementById("reviewContainer"); 
-const restartTestBtn = document.getElementById("restartTestBtn"); 
-const timerDisplay = document.getElementById("timerDisplay"); 
-const whatsappShareBtn = document.getElementById("whatsappShareBtn");
-
-function startTimer() {
-    clearInterval(testTimerInterval); 
-    timeRemaining = totalTimeLimit; 
-    updateTimerUI();
-    testTimerInterval = setInterval(function() { 
-        timeRemaining--; 
-        updateTimerUI(); 
-        if (timeRemaining <= 0) { 
-            clearInterval(testTimerInterval); 
-            alert("Time complete. Submitting test."); 
-            submitTestBtn.click(); 
-        } 
-    }, 1000);
-}
-
-function updateTimerUI() {
-    if (!timerDisplay) return; 
-    const minutes = Math.floor(timeRemaining / 60); 
-    const seconds = timeRemaining % 60;
-    timerDisplay.textContent = "⏳ " + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-}
-
+const testOrg = document.getElementById("testOrg"); const testClass = document.getElementById("testClass"); const testSubject = document.getElementById("testSubject"); const testSelect = document.getElementById("testSelect");
 function updateTestList() {
     testSelect.innerHTML = '<option value="">Select Test</option>';
-    const org = testOrg.value; 
-    const cls = testClass.value; 
-    const sub = testSubject.value;
-    if (!org || !cls || !sub) return;
-    
+    if (!testOrg.value || !testClass.value || !testSubject.value) return;
+    const key = getRoutingOrg(testOrg.value) + "|" + testClass.value + "|" + testSubject.value;
+    if (testBank[key]) { Object.keys(testBank[key]).forEach(tName => { const opt = document.createElement("option"); opt.value = tName; opt.textContent = tName; testSelect.appendChild(opt); }); }
+}
+testOrg.addEventListener("change", updateTestList); testClass.addEventListener("change", updateTestList); testSubject.addEventListener("change", updateTestList);
+
+let activeQuestions = []; let testTimerInterval = null; let timeRemaining = 600;
+document.getElementById("startTestBtn").addEventListener("click", () => {
+    const name = document.getElementById("studentName").value.trim(); const mob = document.getElementById("studentMobile").value.trim();
+    const org = testOrg.value; const cls = testClass.value; const sub = testSubject.value; const t = testSelect.value;
+    if(!name || !mob || !org || !cls || !sub || !t) return alert("Fill all details.");
     const key = getRoutingOrg(org) + "|" + cls + "|" + sub;
-    if (testBank[key]) { 
-        Object.keys(testBank[key]).forEach(function(testName) { 
-            const option = document.createElement("option"); 
-            option.value = testName; 
-            option.textContent = testName; 
-            testSelect.appendChild(option); 
-        }); 
-    }
-}
-
-testOrg.addEventListener("change", updateTestList); 
-testClass.addEventListener("change", updateTestList); 
-testSubject.addEventListener("change", updateTestList);
-
-startTestBtn.addEventListener("click", function() {
-    const name = document.getElementById("studentName").value.trim(); 
-    const mobile = document.getElementById("studentMobile").value.trim(); 
-    const org = testOrg.value; 
-    const cls = testClass.value; 
-    const subject = testSubject.value; 
-    const test = testSelect.value;
-    
-    if(!name || !mobile || !org || !cls || !subject || !test) { alert("Please fill all required student and test details."); return; }
-    if(!/^[0-9]{10}$/.test(mobile)) { alert("Please enter a valid 10-digit mobile number."); return; }
-    
-    let questions = null; 
-    const key = getRoutingOrg(org) + "|" + cls + "|" + subject;
-    if (testBank[key] && testBank[key][test]) { questions = testBank[key][test]; }
-    
-    if (!questions || !questions.length) { alert("Selected test is currently unavailable."); return; }
-    
-    activeTestClass = cls; 
-    activeTestSubject = subject; 
-    startQuestions(questions, "Class " + cls + " " + subject, test);
-});
-
-const generateTestBtn = document.getElementById("generateTestBtn"); 
-const generatorLoading = document.getElementById("generatorLoading");
-
-generateTestBtn.addEventListener("click", async function() {
-    const cls = document.getElementById("genClass").value; 
-    const subject = document.getElementById("genSubject").value; 
-    const chapter = document.getElementById("genChapter").value.trim(); 
-    const numberOfQuestions = Number(document.getElementById("genNumber").value); 
-    const difficulty = document.getElementById("genDifficulty").value; 
-    const questionType = document.getElementById("genQuestionType").value;
-
-    if(!cls || !subject || !chapter) { alert("Please complete Class, Subject, and Chapter inputs."); return; }
-
-    generateTestBtn.disabled = true; 
-    generatorLoading.classList.remove('hidden');
-    
-    try {
-        const response = await fetch("/api/generate-test", { 
-            method: "POST", 
-            headers: {"Content-Type": "application/json"}, 
-            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" }) 
-        });
-        const data = await response.json(); 
-        if(!response.ok) throw new Error(data.error || "Generation error.");
-        
-        const generated = extractQuestions(data); 
-        if(!generated.length) throw new Error("No questions returned.");
-        
-        activeTestClass = cls; 
-        activeTestSubject = subject; 
-        startQuestions(generated, "Class " + cls + " " + subject, "Practice Set — " + chapter);
-    } catch(error) { 
-        alert("Test generation failed: " + error.message); 
-    } finally { 
-        generateTestBtn.disabled = false; 
-        generatorLoading.classList.add('hidden'); 
-    }
-});
-
-function extractQuestions(data) {
-    let questions=[]; 
-    if(Array.isArray(data)) questions = data; 
-    else if(data && Array.isArray(data.questions)) questions = data.questions; 
-    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions; 
-    else if(data && data.data && Array.isArray(data.data.questions)) questions = data.data.questions;
-
-    return questions.map(function(q,index) { 
-        let options = q.options || q.choices || []; 
-        let answer = q.answer; 
-        if (answer===undefined || answer===null) answer = q.correctAnswer; 
-        if (typeof answer==="string" && options.length) { 
-            const letter = answer.trim().toUpperCase(); 
-            if(letter==="A") answer=0; 
-            if(letter==="B") answer=1; 
-            if(letter==="C") answer=2; 
-            if(letter==="D") answer=3; 
-            if(answer>=0 && answer<options.length) answer = Number(answer); 
-        } 
-        return { id: index+1, question: q.question || q.questionText || "Question " + (index+1), options: options, answer: Number(answer), explanation: q.explanation }; 
-    }).filter(function(q) { 
-        return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length); 
+    activeQuestions = testBank[key][t];
+    document.getElementById("testSetup").classList.add("hidden"); document.getElementById("testArea").classList.remove("hidden");
+    const container = document.getElementById("questionsContainer"); container.innerHTML = "";
+    activeQuestions.forEach((q, idx) => {
+        container.innerHTML += `<div class="question-card"><div class="question-number">Q${idx+1}</div><div class="question-text">${q.question}</div>${q.options.map((opt, i)=>`<label class="option"><input type="radio" name="q${q.id}" value="${i}"><span>${opt}</span></label>`).join('')}</div>`;
     });
-}
-
-function startQuestions(questions, headerTitle, testTitle) {
-    activeQuestions = questions; 
-    activeTestTitle = testTitle; 
-    testSetup.classList.add("hidden"); 
-    testArea.classList.remove("hidden"); 
-    testResult.style.display = "none"; 
-    reviewContainer.innerHTML = ""; 
-    badgesContainer.innerHTML = ""; 
-    
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)"; 
-    questionsContainer.innerHTML = "";
-
-    questions.forEach(function(q,index) { 
-        const card = document.createElement("div"); 
-        card.className = "question-card"; 
-        let optionsHTML=""; 
-        q.options.forEach(function(option, optionIndex) { 
-            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>'; 
-        }); 
-        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML; 
-        questionsContainer.appendChild(card); 
-    });
-    
-    window.scrollTo({ top:0, behavior:"smooth" }); 
-    startTimer();
-}
-
-function escapeHTML(text) { 
-    if(!text) return ""; 
-    return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); 
-}
-
-function generateBadges(percentage, timeSpentSeconds) {
-    let badgesHTML = "";
-    if (percentage === 100) { 
-        badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; 
-    } else if (percentage >= 80) { 
-        badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; 
-    } else { 
-        badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; 
-    }
-
-    if(timeSpentSeconds < 300 && percentage >= 80) { 
-        badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; 
-    }
-    return badgesHTML;
-}
-
-submitTestBtn.addEventListener("click", async function() {
-    const timeSpent = totalTimeLimit - timeRemaining; 
-    clearInterval(testTimerInterval); 
-    const questions = activeQuestions; 
-    if(!questions.length) return;
-
-    submitTestBtn.disabled = true; 
-    submitTestBtn.textContent = "SUBMITTING..."; 
-    let correct=0, attempted=0; 
-    const answers=[]; 
-    let reviewHTML = "";
-
-    questions.forEach(function(q,index) { 
-        const selected = document.querySelector('input[name="q' + q.id + '"]:checked'); 
-        let selectedAnswer = null; 
-        let isCorrect = false; 
-        
-        if(selected) { 
-            attempted++; 
-            selectedAnswer = Number(selected.value); 
-            if(selectedAnswer === Number(q.answer)) { 
-                correct++; 
-                isCorrect = true; 
-            } 
-        }
-        
-        answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
-
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>'; 
-        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>"; 
-        let correctPick = formatMathText(escapeHTML(q.options[q.answer])); 
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : ''; 
-        
-        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`; 
-    });
-
-    const wrong = attempted - correct; 
-    const unanswered = questions.length - attempted; 
-    const percentage = Math.round((correct/questions.length)*100);
-
-    badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
-    if (percentage >= 80) { 
-        playSuccessSound(); 
-        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); } 
-    }
-
-    finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle }; 
-    scoreText.textContent = correct + "/" + questions.length; 
-    resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
-
-    const heatmap = document.getElementById('testHeatmap');
-    if (percentage >= 85) { 
-        heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`; 
-    } else if (percentage >= 60) { 
-        heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`; 
-    } else { 
-        heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`; 
-    }
-
-    reviewContainer.innerHTML = reviewHTML; 
-    testArea.classList.add("hidden"); 
-    testResult.style.display = "block"; 
-    testResult.scrollIntoView({ behavior:"smooth", block:"start" });
-
-    const studentName = document.getElementById("studentName").value.trim(); 
-    const studentMobile = document.getElementById("studentMobile").value.trim(); 
-    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : ""; 
-    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
-
-    try {
-        await fetch("/api/save-test-attempt", { 
-            method: "POST", 
-            headers: {"Content-Type": "application/json"}, 
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers }) 
-        });
-    } catch(error) { 
-        console.error(error); 
-    } finally { 
-        submitTestBtn.disabled = false; 
-        submitTestBtn.textContent = "SUBMIT ANSWERS"; 
-    }
+    timeRemaining = 600; testTimerInterval = setInterval(() => { timeRemaining--; document.getElementById("timerDisplay").textContent = `⏳ ${Math.floor(timeRemaining/60)}:${(timeRemaining%60).toString().padStart(2,'0')}`; if(timeRemaining<=0) document.getElementById("submitTestBtn").click(); }, 1000);
 });
 
-restartTestBtn.addEventListener("click", function() {
-    testResult.style.display = "none"; 
-    testSetup.classList.remove("hidden"); 
-    testArea.classList.add("hidden"); 
-    activeQuestions = []; 
-    activeTestTitle = ""; 
-    activeTestClass = ""; 
-    activeTestSubject = ""; 
-    window.scrollTo({ top:0, behavior:"smooth" }); 
+document.getElementById("submitTestBtn").addEventListener("click", () => {
+    clearInterval(testTimerInterval); let correct = 0;
+    activeQuestions.forEach(q => { const sel = document.querySelector(`input[name="q${q.id}"]:checked`); if(sel && Number(sel.value) === q.answer) correct++; });
+    const pct = Math.round((correct / activeQuestions.length) * 100);
+    document.getElementById("scoreText").textContent = `${correct}/${activeQuestions.length}`;
+    document.getElementById("testArea").classList.add("hidden"); document.getElementById("testResult").style.display = "block";
+    if (pct >= 80) { playSuccessSound(); if (typeof confetti === "function") confetti(); }
 });
+document.getElementById("restartTestBtn").addEventListener("click", () => { document.getElementById("testResult").style.display = "none"; document.getElementById("testSetup").classList.remove("hidden"); });
 
-whatsappShareBtn.addEventListener("click", function() {
-    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href; 
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank"); 
-});
-
-/* =====================================================
-ARENA 1v1 LOGIC (WITH SOLO BOT PRACTICE ENGINE)
-===================================================== */
-let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
-
+let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, isBotMatch: false, botScore: 0 };
 function startBotMatch() {
-    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1'; 
-    const cls = document.getElementById('arenaClass').value || '10';
-
-    // Try to get test from General School first, otherwise pull from any
-    let sampleBank = testBank["Other School|" + cls + "|Physics"] || testBank["Other School|10|Physics"] || Object.values(testBank)[0];
-    let firstTestKey = Object.keys(sampleBank)[0]; 
-    let questions = sampleBank[firstTestKey] || [];
-
-    arena.isBotMatch = true; 
-    arena.name = name; 
-    arena.playerNum = 1; 
-    arena.score = 0; 
-    arena.botScore = 0; 
-    arena.questions = questions.slice(0, 10);
-
-    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`; 
-    document.getElementById('uiP2Name').innerHTML = `🤖 Invincible Bot <span id="uiP2Score">0</span>`;
-    startArenaGame();
-}
-
-document.getElementById('btnCreateRoom').onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim(); 
-    const className = document.getElementById('arenaClass').value;
-    
-    if(!name) return alert("Please enter your name.");
-
-    const btn = document.getElementById('btnCreateRoom'); 
-    btn.disabled = true; 
-    btn.textContent = "Generating match...";
-
-    try {
-        const res = await fetch('/api/arena', { 
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) 
-        });
-        const data = await res.json(); 
-        if(data.error) throw new Error(data.error);
-
-        arena.isBotMatch = false; 
-        arena.code = data.room_code; 
-        arena.questions = data.questions; 
-        arena.name = name; 
-        arena.playerNum = 1;
-
-        document.getElementById('arenaSetup').classList.add('hidden'); 
-        document.getElementById('arenaWaiting').classList.remove('hidden'); 
-        document.getElementById('displayRoomCode').textContent = arena.code;
-        
-        arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { 
-        alert("Arena connection error: " + err.message); 
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = "⚡ Create 1v1 Room"; 
-    }
-};
-
-document.getElementById('btnJoinRoom').onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim(); 
-    const code = document.getElementById('arenaJoinCode').value.trim();
-    
-    if(!name || !code) return alert("Enter name and 4-digit code.");
-
-    const btn = document.getElementById('btnJoinRoom'); 
-    btn.disabled = true; 
-    btn.textContent = "Connecting...";
-
-    try {
-        const res = await fetch('/api/arena', { 
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) 
-        });
-        const data = await res.json(); 
-        if(data.error) throw new Error(data.error);
-
-        arena.isBotMatch = false; 
-        arena.code = code; 
-        arena.questions = data.questions; 
-        arena.name = name; 
-        arena.playerNum = 2;
-
-        document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`; 
-        document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
-
-        startArenaGame();
-        arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { 
-        alert("Unable to join: " + err.message); 
-    } finally { 
-        btn.disabled = false; 
-        btn.textContent = "🚀 Join Room"; 
-    }
-};
-
-async function pollRoomState() {
-    if (arena.isBotMatch) return;
-    try {
-        const res = await fetch('/api/arena', { 
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ action: 'sync', room_code: arena.code }) 
-        });
-        const data = await res.json(); 
-        if(!data.room) return; 
-        const room = data.room;
-
-        if (arena.playerNum === 1 && room.status === 'playing' && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
-            document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`; 
-            document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
-            startArenaGame();
-        }
-
-        const p1Score = room.player1_score || 0; 
-        const p2Score = room.player2_score || 0;
-        
-        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score; 
-        if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
-
-        const total = p1Score + p2Score;
-        if (total > 0) {
-            const p1Pct = Math.round((p1Score / total) * 100);
-            document.getElementById('vsFillP1').style.width = p1Pct + '%';
-            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
-        }
-
-        if (room.player1_finished && room.player2_finished) {
-            clearInterval(arena.pollInterval); 
-            showArenaResult(room);
-        }
-    } catch(e){}
-}
-
-function startArenaGame() {
-    document.getElementById('arenaSetup').classList.add('hidden'); 
-    document.getElementById('arenaWaiting').classList.add('hidden'); 
-    document.getElementById('arenaBattle').classList.remove('hidden'); 
-    arena.currentQ = 0; 
+    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1'; const cls = document.getElementById('arenaClass').value || '10';
+    let sampleBank = testBank["Other School|" + cls + "|Mathematics"] || Object.values(testBank)[0];
+    let firstTestKey = Object.keys(sampleBank)[0]; arena.questions = sampleBank[firstTestKey].slice(0, 10);
+    arena.isBotMatch = true; arena.name = name; arena.score = 0; arena.botScore = 0; arena.currentQ = 0;
+    document.getElementById('arenaSetup').classList.add('hidden'); document.getElementById('arenaBattle').classList.remove('hidden');
+    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`; document.getElementById('uiP2Name').innerHTML = `🤖 Bot <span id="uiP2Score">0</span>`;
     loadArenaQuestion();
 }
-
 function loadArenaQuestion() {
-    if (arena.currentQ >= 10) { 
-        finishArenaGame(); 
-        return; 
+    if (arena.currentQ >= 10) {
+        document.getElementById('arenaBattle').classList.add('hidden');
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">MATCH OVER</div>`;
+        document.getElementById('finalP1').innerHTML = `You: ${arena.score} pts`; document.getElementById('finalP2').innerHTML = `Bot: ${arena.botScore} pts`;
+        document.getElementById('arenaResult').classList.remove('hidden'); return;
     }
     const q = arena.questions[arena.currentQ];
-    
-    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`; 
-    document.getElementById('arenaQText').textContent = q.question_text || q.question;
-    
-    let optsHTML = ''; 
-    const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
-    
-    opts.forEach((opt, idx) => {
-        const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
-        optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
-    });
-    
-    document.getElementById('arenaOptions').innerHTML = optsHTML;
-
-    arena.timer = 10;
-    document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`;
+    document.getElementById('arenaQText').textContent = q.question;
+    document.getElementById('arenaOptions').innerHTML = q.options.map((opt, idx) => `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${q.answer})">${opt}</div>`).join('');
+    arena.timer = 10; document.getElementById('arenaTimerDisplay').textContent = `⏱ 10`;
+    arena.interval = setInterval(() => { arena.timer--; document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`; if(arena.timer<=0) handleArenaAnswer(-1, -1); }, 1000);
+}
+function handleArenaAnswer(sel, cor) {
     clearInterval(arena.interval);
-    
-    arena.interval = setInterval(() => {
-        arena.timer--; 
-        document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
-        if (arena.timer <= 0) handleArenaAnswer(-1, -1);
-    }, 1000);
-}
-
-async function handleArenaAnswer(selectedIdx, correctIdx) {
-    clearInterval(arena.interval);
-    const card = document.getElementById('arenaCardContainer');
-
-    if (selectedIdx === Number(correctIdx)) {
-        playDing();
-        arena.score += (10 + arena.timer);
-        if (typeof confetti === "function") confetti({ particleCount: 35, spread: 40, origin: { y: 0.7 } });
-    } else {
-        playBuzz();
-        card.classList.add('arena-shake');
-        setTimeout(() => card.classList.remove('arena-shake'), 400);
-    }
-
-    if (arena.isBotMatch) {
-        if (Math.random() > 0.3) { arena.botScore += (10 + Math.floor(Math.random() * 8)); }
-        document.getElementById('uiP1Score').textContent = arena.score;
-        document.getElementById('uiP2Score').textContent = arena.botScore;
-        const total = arena.score + arena.botScore;
-        if (total > 0) {
-            const p1Pct = Math.round((arena.score / total) * 100);
-            document.getElementById('vsFillP1').style.width = p1Pct + '%';
-            document.getElementById('vsFillP2').style.width = (100 - p1Pct) + '%';
-        }
-    } else {
-        fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
-        });
-    }
-
-    arena.currentQ++; 
-    loadArenaQuestion();
-}
-
-function finishArenaGame() {
-    document.getElementById('arenaBattle').classList.add('hidden');
-    
-    if (arena.isBotMatch) {
-        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible Bot", player2_score: arena.botScore });
-    } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
-        document.getElementById('arenaResult').classList.remove('hidden');
-        fetch('/api/arena', {
-            method: 'POST', 
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
-        });
-    }
-}
-
-function showArenaResult(room) {
-    const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
-    const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
-    
-    document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
-    document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
-    document.getElementById('arenaResult').classList.remove('hidden');
-
-    if (myScore > opScore) {
-        playWin(); 
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
-        if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-    } else if (myScore < opScore) {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
-    } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-amber);">🤝 DRAW</div>`;
-    }
-}
-
-/* =====================================================
-COMMUNITY FEED JAVASCRIPT
-===================================================== */
-let currentFeedFilterSubject = 'All';
-
-function setFeedSubjectFilter(sub, el) {
-    currentFeedFilterSubject = sub;
-    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    loadFeedPosts();
+    if(sel === cor) { playDing(); arena.score += (10 + arena.timer); if(typeof confetti === "function") confetti(); } else { playBuzz(); }
+    if(Math.random() > 0.3) arena.botScore += (10 + Math.floor(Math.random()*8));
+    document.getElementById('uiP1Score').textContent = arena.score; document.getElementById('uiP2Score').textContent = arena.botScore;
+    arena.currentQ++; loadArenaQuestion();
 }
 
 async function loadFeedPosts() {
     const list = document.getElementById('postsList');
-    const sub = currentFeedFilterSubject;
-
     try {
-        const res = await fetch(`/api/feed?student_class=All&subject=${sub}`);
-        const data = await res.json();
-        
-        if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet. Be the first to share!</div>';
-            return;
-        }
-
-        list.innerHTML = data.posts.map(p => `
-            <div class="feed-card" id="post-${p.id}">
-                <div class="feed-card-header">
-                    <div>
-                        <div class="feed-author">${escapeHTML(p.author_name || 'Anonymous Student')}</div>
-                        <div class="feed-school">${escapeHTML(p.institution || 'CBSE School')} &bull; Class ${escapeHTML(p.student_class)}</div>
-                    </div>
-                    <span class="feed-badge">${escapeHTML(p.subject)}</span>
-                </div>
-                <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
-                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment for post by ${escapeHTML(p.author_name)}">` : ''}
-                <div class="feed-actions">
-                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
-                    <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
-                    <div class="action-btn report" onclick="reportPost(${p.id})">🚩 Report</div>
-                </div>
-
-                <div class="comments-drawer" id="comments-${p.id}">
-                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading comments...</div></div>
-                    <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="com-input-${p.id}" placeholder="Type explanation or response..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
-                        <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-    } catch(err) {
-        list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:14px; padding:20px;">Feed sync failed.</div>';
-    }
+        const res = await fetch(`/api/feed?student_class=All&subject=All`); const data = await res.json();
+        if(!data.posts || data.posts.length === 0) { list.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px;">No posts yet.</div>'; return; }
+        list.innerHTML = data.posts.map(p => `<div class="feed-card"><div class="feed-author">${p.author_name}</div><div style="font-size:15px; margin:10px 0;">${p.content}</div></div>`).join('');
+    } catch(err){ list.innerHTML = '<div style="text-align:center;">Feed error.</div>'; }
 }
-
 document.getElementById('btnPublishPost').onclick = async () => {
-    let name = document.getElementById('feedAuthorName').value.trim();
-    let inst = document.getElementById('feedInstitution').value.trim();
-    const cls = document.getElementById('feedClass').value;
-    const sub = document.getElementById('feedSubject').value;
-    const content = document.getElementById('feedContent').value.trim();
-
-    if (!content) return alert("Please enter post content.");
-    if (!name) name = "Anonymous Peer";
-    if (!inst) inst = "CBSE School";
-
-    localStorage.setItem('student_name', name);
-    localStorage.setItem('student_inst', inst);
-
-    const btn = document.getElementById('btnPublishPost');
-    btn.disabled = true; 
-    btn.textContent = "Publishing...";
-
+    const content = document.getElementById('feedContent').value.trim(); if(!content) return;
     try {
-        const res = await fetch('/api/feed', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'create_post', author_name: name, institution: inst, student_class: cls, subject: sub, content: content })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        document.getElementById('feedContent').value = '';
-        loadFeedPosts();
-    } catch(err) {
-        alert(err.message);
-    } finally {
-        btn.disabled = false; 
-        btn.textContent = "POST TO COMMUNITY";
-    }
+        await fetch('/api/feed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'create_post', author_name: 'Student', content: content }) });
+        document.getElementById('feedContent').value = ''; loadFeedPosts();
+    } catch(err){}
 };
-
-async function likePost(postId) {
-    const likesSpan = document.getElementById(`likes-${postId}`);
-    likesSpan.textContent = Number(likesSpan.textContent) + 1;
-    await fetch('/api/feed', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'like_post', post_id: postId })
-    });
-}
-
-async function reportPost(postId) {
-    if (!confirm("Report post for academic review?")) return;
-    try {
-        const res = await fetch('/api/feed', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'report_post', post_id: postId })
-        });
-        const data = await res.json();
-        alert(data.message || "Report recorded.");
-        document.getElementById(`post-${postId}`).style.display = 'none';
-    } catch(e){}
-}
-
-async function toggleComments(postId) {
-    const drawer = document.getElementById(`comments-${postId}`);
-    if (drawer.style.display === 'block') {
-        drawer.style.display = 'none';
-        return;
-    }
-    drawer.style.display = 'block';
-    loadComments(postId);
-}
-
-async function loadComments(postId) {
-    const container = document.getElementById(`comments-list-${postId}`);
-    try {
-        const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
-        const data = await res.json();
-        if (!data.comments || data.comments.length === 0) {
-            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No discussions yet.</div>';
-            return;
-        }
-        container.innerHTML = data.comments.map(c => `
-            <div class="comment-item">
-                <div style="font-weight:800; color:var(--accent-cyan); font-size:12px; margin-bottom:2px;">${escapeHTML(c.author_name)} <span style="color:var(--text-muted); font-weight:normal;">&bull; ${escapeHTML(c.institution)}</span></div>
-                <div style="color:#e2e8f0; line-height:1.4;">${escapeHTML(c.content)}</div>
-            </div>
-        `).join('');
-    } catch(e){}
-}
-
-async function addComment(postId) {
-    const input = document.getElementById(`com-input-${postId}`);
-    const content = input.value.trim();
-    const name = document.getElementById('feedAuthorName').value.trim() || localStorage.getItem('student_name') || 'Student';
-    const inst = document.getElementById('feedInstitution').value.trim() || localStorage.getItem('student_inst') || 'School';
-
-    if (!content) return alert("Please enter discussion text.");
-
-    try {
-        const res = await fetch('/api/feed', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'add_comment', post_id: postId, author_name: name, institution: inst, content: content })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        input.value = '';
-        loadComments(postId);
-    } catch(err) {
-        alert(err.message);
-    }
-}
+function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
 </script>
 </body>
 </html>
