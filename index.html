@@ -866,7 +866,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </section>
 
-<!-- 2. TEST SECTION (UPDATED WITH ORGANIZATION DROPDOWN) -->
+<!-- 2. TEST SECTION (UPDATED WITH EXHAUSTIVE ORGANIZATION DROPDOWN) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <div class="feature-mini-guide">
         <span>⏱️</span>
@@ -880,13 +880,28 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <input id="studentName" type="text" placeholder="Student Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
 
-            <!-- ORGANIZATION DROPDOWN ADDED HERE -->
             <select id="testOrg">
                 <option value="">Select Organization / School</option>
-                <option value="Modern DAV SCHOOL">Modern DAV SCHOOL</option>
-                <option value="Horizon public school">Horizon public school</option>
-                <option value="Invincible coaching classes">Invincible coaching classes</option>
-                <option value="General for all other organisation or school Coaching’s">General for all other organisation or school Coaching’s</option>
+                <option value="DVM Public School">DVM Public School</option>
+                <option value="Pt. Salagram Junior High School">Pt. Salagram Junior High School</option>
+                <option value="Arya Kamal Public School">Arya Kamal Public School</option>
+                <option value="Greater Noida Public School">Greater Noida Public School</option>
+                <option value="The Ideal Public School">The Ideal Public School</option>
+                <option value="DSR School">DSR School</option>
+                <option value="Modern DAV Public School">Modern DAV Public School</option>
+                <option value="H R International School">H R International School</option>
+                <option value="R.L. Public School">R.L. Public School</option>
+                <option value="Yashdeep Public School">Yashdeep Public School</option>
+                <option value="RVM Public School">RVM Public School</option>
+                <option value="RSP Global School">RSP Global School</option>
+                <option value="Uma Education Public School">Uma Education Public School</option>
+                <option value="U.D. Public School">U.D. Public School</option>
+                <option value="Navrang Public School">Navrang Public School</option>
+                <option value="Lord Krishna Public School">Lord Krishna Public School</option>
+                <option value="Vedanta Convent School">Vedanta Convent School</option>
+                <option value="Stair Memorial & Sport School">Stair Memorial & Sport School</option>
+                <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+                <option value="Other School">Other School</option>
             </select>
 
             <select id="testClass">
@@ -1795,7 +1810,7 @@ function generateBuiltinQuestionBank() {
     }
 
     const qData = {
-        "General for all other organisation or school Coaching’s|9|Physics": {
+        "Other School|9|Physics": {
             title: "Motion (Chapter 1 Confidence Test)",
             qs: [
                 {q:"What is the SI unit of distance?", o:["Meter (m)","Kilometer (km)","Centimeter (cm)","Millimeter (mm)"], a:0, e:"The standard international unit of distance and displacement is the meter (m)."},
@@ -1820,7 +1835,7 @@ function generateBuiltinQuestionBank() {
                 {q:"Distance is always:", o:["Positive or zero","Negative","Zero only","Always negative"], a:0, e:"Distance is a scalar quantity and cannot be negative."}
             ]
         },
-        "General for all other organisation or school Coaching’s|10|Physics": {
+        "Other School|10|Physics": {
             title: "Light - Reflection & Refraction (Chapter 1 Confidence Test)",
             qs: [
                 {q:"The focal length of a plane mirror is:", o:["Zero","Infinity","25 cm","1 m"], a:1, e:"A plane mirror has no curvature, so its radius and focal length are infinite."},
@@ -1845,7 +1860,7 @@ function generateBuiltinQuestionBank() {
                 {q:"A ray passing through the optical centre of a thin lens:", o:["Goes undeviated","Bends by 90°","Reflects back","Disappears"], a:0, e:"Light rays through the optical centre pass without deviation."}
             ]
         },
-        "General for all other organisation or school Coaching’s|12|Physics": {
+        "Other School|12|Physics": {
             title: "Electric Charges and Fields (Chapter 1 Confidence Test)",
             qs: [
                 {q:"What is the SI unit of electric charge?", o:["Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)"], a:0, e:"Electric charge is measured in Coulombs (C)."},
@@ -1890,7 +1905,7 @@ async function loadPlatformData(){
 
         if(data && Array.isArray(data.questions) && data.questions.length > 0){
             data.questions.forEach(function(q, index){
-                const org = q.organization || "General for all other organisation or school Coaching’s";
+                const org = q.organization || "Other School";
                 const key = org + "|" + q.class_name + "|" + q.subject;
                 if(!testBank[key]) testBank[key] = {};
                 if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
@@ -2189,7 +2204,7 @@ submitTestBtn.addEventListener("click", async function(){
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
     let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
-    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "General";
+    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
 
     try{
         await fetch("/api/save-test-attempt", {
@@ -2220,7 +2235,7 @@ function startBotMatch() {
     const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
     const cls = document.getElementById('arenaClass').value || '10';
 
-    let sampleBank = testBank["General for all other organisation or school Coaching’s|" + cls + "|Physics"] || testBank["General for all other organisation or school Coaching’s|10|Physics"] || Object.values(testBank)[0];
+    let sampleBank = testBank["Other School|" + cls + "|Physics"] || testBank["Other School|10|Physics"] || Object.values(testBank)[0];
     let firstTestKey = Object.keys(sampleBank)[0];
     let questions = sampleBank[firstTestKey] || [];
 
