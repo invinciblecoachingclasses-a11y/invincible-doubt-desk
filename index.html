@@ -866,7 +866,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </section>
 
-<!-- 2. TEST SECTION -->
+<!-- 2. TEST SECTION (UPDATED WITH ORGANIZATION DROPDOWN) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <div class="feature-mini-guide">
         <span>⏱️</span>
@@ -879,6 +879,15 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <div>
             <input id="studentName" type="text" placeholder="Student Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
+
+            <!-- ORGANIZATION DROPDOWN ADDED HERE -->
+            <select id="testOrg">
+                <option value="">Select Organization / School</option>
+                <option value="Modern DAV SCHOOL">Modern DAV SCHOOL</option>
+                <option value="Horizon public school">Horizon public school</option>
+                <option value="Invincible coaching classes">Invincible coaching classes</option>
+                <option value="General for all other organisation or school Coaching’s">General for all other organisation or school Coaching’s</option>
+            </select>
 
             <select id="testClass">
                 <option value="">Select Class</option>
@@ -903,7 +912,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
         <div class="test-info">
             <strong style="color:var(--accent-cyan);">Scheduled Weekly Tests (10 Min Rapid Confidence Tests)</strong>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your Class and Subject selection.</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:4px;">Tests are pulled securely based on your School, Class, and Subject selection.</div>
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
@@ -1353,18 +1362,28 @@ async function loadActiveStories() {
         const data = await res.json();
         activeStories = data.stories || [];
 
-        if (activeStories.length === 0) {
-            container.innerHTML = `<div style="font-size:12px; color:var(--text-muted); align-self:center;">Be the first to drop a study note!</div>`;
-            return;
-        }
+        const welcomeStory = {
+            id: 'welcome-tour',
+            author_name: 'Invincible 360',
+            institution: 'Official Platform',
+            media_url: null,
+            caption: '👋 Welcome to Invincible 360! Your cyber academic home. Tap around to solve doubts, battle friends in PVP, or test your speed!',
+            sticker_question: '💡 Quick Vibe Check: What feature are you trying first?',
+            sticker_opt_a: '⚡ AI Doubt Solver',
+            sticker_opt_b: '⚔️ 1v1 PVP Arena',
+            sticker_correct_opt: 0,
+            is_topper: true
+        };
+
+        activeStories.unshift(welcomeStory);
 
         container.innerHTML = activeStories.map((s, idx) => `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
                 <div class="story-avatar-wrap ${s.is_topper ? 'topper' : ''}">
                     <div class="story-avatar-inner">
-                        ${s.media_url ? `<img src="${s.media_url}" alt="Story">` : escapeHTML(s.author_name.charAt(0).toUpperCase())}
+                        ${s.media_url ? `<img src="${s.media_url}" alt="Story">` : (s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase()))}
                     </div>
-                    <span class="story-badge-flame">${s.is_topper ? '👑' : '🔥'}</span>
+                    <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
                 </div>
                 <div class="story-username">${escapeHTML(s.author_name)}</div>
             </div>
@@ -1481,23 +1500,25 @@ function renderStorySlide() {
         stickerCard.style.display = 'none';
     }
 
-    const viewerName = localStorage.getItem('student_name') || document.getElementById('studentName').value.trim() || 'Peer Student';
-    const viewerInst = localStorage.getItem('student_inst') || 'School';
-    fetch('/api/stories', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: viewerName, viewer_institution: viewerInst })
-    });
+    if (story.id !== 'welcome-tour') {
+        const viewerName = localStorage.getItem('student_name') || document.getElementById('studentName').value.trim() || 'Peer Student';
+        const viewerInst = localStorage.getItem('student_inst') || 'School';
+        fetch('/api/stories', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: viewerName, viewer_institution: viewerInst })
+        });
+    }
 
     const pContainer = document.getElementById('storyProgressContainer');
     pContainer.innerHTML = activeStories.map((_, i) => `
         <div class="story-progress-seg">
-            <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 5s linear;"></div>
+            <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div>
         </div>
     `).join('');
 
     storyTimer = setTimeout(() => {
         nextStorySlide();
-    }, 5000);
+    }, 6000);
 }
 
 function closeStoryViewer() {
@@ -1516,6 +1537,13 @@ async function toggleViewersSheet() {
     
     const story = activeStories[currentStoryIdx];
     const listEl = document.getElementById('viewersListContainer');
+
+    if (story.id === 'welcome-tour') {
+        document.getElementById('viewersCount').textContent = '∞';
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform story. Thousands of students viewed this!</div>';
+        return;
+    }
+
     listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Fetching viewers...</div>';
 
     try {
@@ -1550,6 +1578,17 @@ async function voteStorySticker(selectedOpt) {
     const barB = document.getElementById('barStickerB');
 
     pA.style.display = 'inline'; pB.style.display = 'inline';
+    
+    if (story.id === 'welcome-tour') {
+        barA.style.width = '74%'; barB.style.width = '26%';
+        pA.textContent = '74%'; pB.textContent = '26%';
+        playWin();
+        if (selectedOpt === 0) bA.classList.add('voted-correct');
+        else bB.classList.add('voted-correct');
+        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 50, origin: { y: 0.5 } });
+        return; 
+    }
+
     barA.style.width = '65%'; barB.style.width = '35%';
     pA.textContent = '65%'; pB.textContent = '35%';
 
@@ -1576,10 +1615,12 @@ function reactStory(type) {
     if (typeof confetti === 'function') {
         confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
     }
-    fetch('/api/stories', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type })
-    });
+    if (story.id !== 'welcome-tour') {
+        fetch('/api/stories', {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type })
+        });
+    }
 }
 
 function saveStoryToVault() {
@@ -1741,8 +1782,8 @@ DATABASE LOADER & QUESTION BANK PRE-POPULATION
 ===================================================== */
 function generateBuiltinQuestionBank() {
     const bank = {};
-    function setTest(cls, sub, title, qs) {
-        const key = cls + "|" + sub;
+    function setTest(org, cls, sub, title, qs) {
+        const key = org + "|" + cls + "|" + sub;
         if (!bank[key]) bank[key] = {};
         bank[key][title] = qs.map((q, idx) => ({
             id: idx + 1,
@@ -1754,7 +1795,7 @@ function generateBuiltinQuestionBank() {
     }
 
     const qData = {
-        "9|Physics": {
+        "General for all other organisation or school Coaching’s|9|Physics": {
             title: "Motion (Chapter 1 Confidence Test)",
             qs: [
                 {q:"What is the SI unit of distance?", o:["Meter (m)","Kilometer (km)","Centimeter (cm)","Millimeter (mm)"], a:0, e:"The standard international unit of distance and displacement is the meter (m)."},
@@ -1779,7 +1820,7 @@ function generateBuiltinQuestionBank() {
                 {q:"Distance is always:", o:["Positive or zero","Negative","Zero only","Always negative"], a:0, e:"Distance is a scalar quantity and cannot be negative."}
             ]
         },
-        "10|Physics": {
+        "General for all other organisation or school Coaching’s|10|Physics": {
             title: "Light - Reflection & Refraction (Chapter 1 Confidence Test)",
             qs: [
                 {q:"The focal length of a plane mirror is:", o:["Zero","Infinity","25 cm","1 m"], a:1, e:"A plane mirror has no curvature, so its radius and focal length are infinite."},
@@ -1804,7 +1845,7 @@ function generateBuiltinQuestionBank() {
                 {q:"A ray passing through the optical centre of a thin lens:", o:["Goes undeviated","Bends by 90°","Reflects back","Disappears"], a:0, e:"Light rays through the optical centre pass without deviation."}
             ]
         },
-        "12|Physics": {
+        "General for all other organisation or school Coaching’s|12|Physics": {
             title: "Electric Charges and Fields (Chapter 1 Confidence Test)",
             qs: [
                 {q:"What is the SI unit of electric charge?", o:["Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)"], a:0, e:"Electric charge is measured in Coulombs (C)."},
@@ -1832,9 +1873,9 @@ function generateBuiltinQuestionBank() {
     };
 
     Object.keys(qData).forEach(key => {
-        const [cls, sub] = key.split("|");
+        const [org, cls, sub] = key.split("|");
         const item = qData[key];
-        setTest(cls, sub, item.title, item.qs);
+        setTest(org, cls, sub, item.title, item.qs);
     });
 
     return bank;
@@ -1849,7 +1890,8 @@ async function loadPlatformData(){
 
         if(data && Array.isArray(data.questions) && data.questions.length > 0){
             data.questions.forEach(function(q, index){
-                const key = q.class_name + "|" + q.subject;
+                const org = q.organization || "General for all other organisation or school Coaching’s";
+                const key = org + "|" + q.class_name + "|" + q.subject;
                 if(!testBank[key]) testBank[key] = {};
                 if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
                 testBank[key][q.test_title].push({
@@ -1903,7 +1945,12 @@ async function loadPlatformData(){
         }
     }catch(error){ console.error("Data load error:", error); }
 }
-loadPlatformData();
+
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        loadPlatformData();
+    }, 300);
+});
 
 function checkPuzzleGuess(selected, btn) {
     const feedback = document.getElementById("puzzleFeedback");
@@ -1942,6 +1989,7 @@ let testTimerInterval = null;
 let totalTimeLimit = 600;
 let timeRemaining = 600;
 
+const testOrg = document.getElementById("testOrg");
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
 const testSelect = document.getElementById("testSelect");
@@ -1976,25 +2024,35 @@ function updateTimerUI() {
 
 function updateTestList(){
     testSelect.innerHTML = '<option value="">Select Test</option>';
-    const key = testClass.value + "|" + testSubject.value;
+    const org = testOrg.value;
+    const cls = testClass.value;
+    const sub = testSubject.value;
+    if(!org || !cls || !sub) return;
+
+    const key = org + "|" + cls + "|" + sub;
     if(testBank[key]){
         Object.keys(testBank[key]).forEach(function(testName){
             const option = document.createElement("option"); option.value = testName; option.textContent = testName; testSelect.appendChild(option);
         });
     }
 }
+testOrg.addEventListener("change", updateTestList);
 testClass.addEventListener("change", updateTestList);
 testSubject.addEventListener("change", updateTestList);
 
 startTestBtn.addEventListener("click", function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
-    const cls = testClass.value; const subject = testSubject.value; const test = testSelect.value;
-    if(!name || !mobile || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
+    const org = testOrg.value;
+    const cls = testClass.value; 
+    const subject = testSubject.value; 
+    const test = testSelect.value;
+    if(!name || !mobile || !org || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
     if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
 
     let questions = null;
-    if (testBank[cls+"|"+subject] && testBank[cls+"|"+subject][test]){ questions = testBank[cls+"|"+subject][test]; }
+    const key = org + "|" + cls + "|" + subject;
+    if (testBank[key] && testBank[key][test]){ questions = testBank[key][test]; }
     if(!questions || !questions.length){ alert("Selected test is currently unavailable."); return; }
 
     activeTestClass = cls; activeTestSubject = subject;
@@ -2066,11 +2124,6 @@ function startQuestions(questions, headerTitle, testTitle){
     startTimer();
 }
 
-function escapeHTML(text){
-    if(!text) return "";
-    return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
 function generateBadges(percentage, timeSpentSeconds) {
     let badgesHTML = "";
     if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
@@ -2136,11 +2189,12 @@ submitTestBtn.addEventListener("click", async function(){
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
     let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
+    const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "General";
 
     try{
         await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
         });
     }catch(error){ console.error(error); }
     finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
@@ -2166,7 +2220,7 @@ function startBotMatch() {
     const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
     const cls = document.getElementById('arenaClass').value || '10';
 
-    let sampleBank = testBank[cls + "|Physics"] || testBank["10|Physics"];
+    let sampleBank = testBank["General for all other organisation or school Coaching’s|" + cls + "|Physics"] || testBank["General for all other organisation or school Coaching’s|10|Physics"] || Object.values(testBank)[0];
     let firstTestKey = Object.keys(sampleBank)[0];
     let questions = sampleBank[firstTestKey] || [];
 
