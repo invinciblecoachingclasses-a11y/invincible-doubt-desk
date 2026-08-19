@@ -7,7 +7,7 @@
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
 <title>Invincible 360 | CBSE Board Exam Preparation, Doubt Solver & 1v1 Battle Arena</title>
-<meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant AI doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
+<meta name="description" content="Ace Class 9-12 CBSE Board and competitive exams with Invincible 360. Get instant doubt solving, chapter-wise practice tests, 1v1 Live Arena battles, and peer study community.">
 <meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360, CBSE practice questions">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Invincible Coaching Classes">
@@ -120,23 +120,6 @@ body {
 .xp-fill { width: 68%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); border-radius: 6px; }
 .xp-label { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
 
-/* STREAK */
-.streak-bar-box {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border-subtle);
-  border-radius: 18px;
-  padding: 12px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 13px;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-}
-.streak-counter { color: var(--accent-amber); display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14px; }
-.streak-freeze-tag { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; }
-
 /* STORIES TRAY */
 .stories-tray-container {
   background: rgba(15, 23, 42, 0.6);
@@ -178,7 +161,7 @@ body {
 .story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
 .story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; text-align: center; position: relative; }
 .story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
-.story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
+.story-caption-text { font-size: 15px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.5; padding: 0 10px; text-align: left; }
 .story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
 .story-nav-prev { left: 0; } .story-nav-next { right: 0; }
 .story-sticker-card { background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-cyan); border-radius: 16px; padding: 14px; width: 92%; margin-top: 10px; backdrop-filter: blur(10px); z-index: 10; }
@@ -388,12 +371,12 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div class="hud-top-row">
         <div>
             <h1 class="brand-name">INVINCIBLE 360</h1>
-            <div style="font-size:12px; color:var(--text-muted); font-weight:700;">Cyber Academic Battleground</div>
+            <div style="font-size:12px; color:var(--text-muted); font-weight:700;">Academic Preparation &amp; Assessment Platform</div>
         </div>
         <div class="hud-status-badges">
-            <span class="help-guide-badge" onclick="document.getElementById('onboardingModal').style.display='flex'">❓ Help Guide</span>
-            <span class="level-badge" id="hudPlayerLvl">LVL 12 &bull; PRO</span>
-            <div class="live-ping"><span class="ping-dot"></span> LIVE 24/7</div>
+            <span class="help-guide-badge" onclick="document.getElementById('onboardingModal').style.display='flex'">❓ Guide</span>
+            <span class="level-badge" id="hudPlayerLvl">PRO</span>
+            <div class="live-ping"><span class="ping-dot"></span> 24/7 ACTIVE</div>
         </div>
     </div>
     <div class="hud-xp-row">
@@ -403,51 +386,46 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </header>
 
-<div class="streak-bar-box">
-    <div class="streak-counter"><span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days</div>
-    <div class="streak-freeze-tag" id="userFreezeStatus">🛡️ 1 Freeze Shield Ready</div>
-</div>
-
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div></div>
-        <div class="story-username">Your Drop</div>
+        <div class="story-username">My Drop</div>
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
 <section class="puzzle-banner" id="puzzleBox" style="display:none;" aria-label="Daily Academic Brain Teaser">
     <div class="puzzle-top-bar">
-        <div class="puzzle-badge">🔥 95% Get This Wrong</div>
+        <div class="puzzle-badge">🔥 Question of the Day</div>
         <div class="puzzle-streak" id="puzzleStreak">⚡ Daily IQ</div>
     </div>
-    <div class="puzzle-q-en" id="puzzleQuestionEn">Loading daily teaser...</div>
+    <div class="puzzle-q-en" id="puzzleQuestionEn">Loading challenge question...</div>
     <div class="puzzle-q-hi" id="puzzleQuestionHi"></div>
     <div class="puzzle-options-grid" id="puzzleOptionsContainer"></div>
     <div class="puzzle-actions-bar">
-        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
+        <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Solution</button>
     </div>
     <div id="puzzleFeedback" style="margin-top: 10px;"></div>
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </section>
 
 <section class="leaderboard-card" id="leaderboardBox" style="display:none;" aria-label="Top Scorers Leaderboard">
-    <div class="leaderboard-title">🏆 Platform Top Scorers</div>
+    <div class="leaderboard-title">🏆 Top Performers Leaderboard</div>
     <div id="leaderboardList"></div>
 </section>
 
 <!-- NAVIGATION MODES -->
 <nav class="mode-switch" aria-label="Academic Navigation Modes">
-    <button type="button" class="mode-btn active" id="doubtModeBtn"><span class="mode-btn-title">⚡ QUEST DESK</span><span class="mode-btn-sub">AI Doubt Solver</span></button>
+    <button type="button" class="mode-btn active" id="doubtModeBtn"><span class="mode-btn-title">⚡ QUEST DESK</span><span class="mode-btn-sub">Doubt Resolution</span></button>
     <button type="button" class="mode-btn" id="testModeBtn"><span class="mode-btn-title">⏱ TIME ATTACK</span><span class="mode-btn-sub">10-Min Tests</span></button>
-    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn"><span class="mode-btn-title">⚔️ 1v1 PVP</span><span class="mode-btn-sub">Match Rivals</span></button>
-    <button type="button" class="mode-btn feed-btn" id="feedModeBtn"><span class="mode-btn-title">🌟 CLAN FEED</span><span class="mode-btn-sub">Notes &amp; Vent</span></button>
+    <button type="button" class="mode-btn arena-btn" id="arenaModeBtn"><span class="mode-btn-title">⚔️ 1v1 PVP</span><span class="mode-btn-sub">Live Matches</span></button>
+    <button type="button" class="mode-btn feed-btn" id="feedModeBtn"><span class="mode-btn-title">🌟 CLAN FEED</span><span class="mode-btn-sub">Discussion Board</span></button>
 </nav>
 
 <!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Instant Doubt Resolution Desk">
-    <div class="feature-mini-guide"><span>💡</span><span><strong>Quick Guide:</strong> Type or upload a photo &bull; Pick tone &bull; Get step-by-step logic.</span></div>
-    <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
+    <div class="feature-mini-guide"><span>💡</span><span><strong>Quick Guide:</strong> Type or upload a photo &bull; Pick explanation style &bull; Get detailed step-by-step logic.</span></div>
+    <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
     
     <label>Select Subject</label>
     <div class="subjects">
@@ -456,37 +434,37 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
     </div>
 
-    <label>Explanation Tone</label>
+    <label>Explanation Mode</label>
     <div class="tone-switch-bar">
-        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ TL;DR Formula</button>
-        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step</button>
-        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Explain Like I'm 10</button>
+        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ Key Formulas &amp; Summary</button>
+        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step Solution</button>
+        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Conceptual Overview</button>
     </div>
 
     <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your academic doubt here..."></textarea>
+    <textarea id="question" placeholder="Type your academic problem or question here..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
     <div class="photo-buttons">
-        <button type="button" class="photo-btn" id="cameraBtn">📷 Take Photo</button>
-        <button type="button" class="photo-btn" id="uploadBtn">📁 Upload Image</button>
+        <button type="button" class="photo-btn" id="cameraBtn">📷 Capture Image</button>
+        <button type="button" class="photo-btn" id="uploadBtn">📁 Select Image</button>
     </div>
     <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:260px; object-fit:contain; margin-bottom:15px; border-radius:14px; border:1px solid var(--border-subtle);">
     <button type="button" id="removeImage" style="display:none; margin:0 auto 15px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
-    <button type="button" class="ask-btn" id="askBtn">GET SOLUTION</button>
+    <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Solution...</div>
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:15px; font-weight:bold;">Processing Detailed Solution...</div>
     
     <div class="answer-box" id="answerBox">
         <div class="logic-title-wrap">
-            <h3 class="logic-title">Conceptual Breakdown</h3>
+            <h3 class="logic-title">Solution &amp; Analysis</h3>
             <span class="difficulty-badge" id="doubtToughnessBadge">🟢 Foundational</span>
         </div>
         <div class="answer-text" id="answerText"></div>
         <div class="feedback" id="feedback">
             <div class="feedback-title">Need further clarity?</div>
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Explain Simpler</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Teacher Assistance</button>
+                <button type="button" class="feedback-btn" id="againBtn">Explain in Simpler Terms</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Ask Teacher Directly</button>
             </div>
         </div>
     </div>
@@ -494,17 +472,17 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 2. TEST SECTION -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-    <div class="feature-mini-guide"><span>⏱️</span><span><strong>Quick Guide:</strong> Select school, class, and subject &bull; Gemini API generates an AI test &bull; Complete in 10 minutes.</span></div>
-    <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
+    <div class="feature-mini-guide"><span>⏱️</span><span><strong>Quick Guide:</strong> Select school, class, subject &amp; optional chapter &bull; Complete 20 questions in 10 minutes &bull; View instant score and leaderboard standing.</span></div>
+    <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
     <div id="testSetup">
-        <label>Select Standard Test</label>
+        <label>Candidate &amp; Subject Details</label>
         <div>
-            <input id="studentName" type="text" placeholder="Student Name">
+            <input id="studentName" type="text" placeholder="Full Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
 
             <select id="testOrg">
-                <option value="">Select Organization / School</option>
+                <option value="">Select School / Institute</option>
                 <option value="DVM Public School">DVM Public School</option>
                 <option value="Pt. Salagram Junior High School">Pt. Salagram Junior High School</option>
                 <option value="Arya Kamal Public School">Arya Kamal Public School</option>
@@ -529,7 +507,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             </select>
 
             <select id="testClass">
-                <option value="">Select Class</option>
+                <option value="">Select Grade</option>
                 <option value="9">Class 9</option>
                 <option value="10">Class 10</option>
                 <option value="11">Class 11</option>
@@ -544,6 +522,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <option value="Biology">Biology</option>
                 <option value="Science">Science</option>
             </select>
+
+            <input id="testChapter" type="text" placeholder="Chapter Name (Optional, e.g. Thermodynamics, Reflection, Number Systems)">
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START TIMED TEST</button>
@@ -558,22 +538,22 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
     <div class="test-result" id="testResult">
         <div class="score-box">
-            <div style="font-size:14px; font-weight:700; color:var(--text-muted);">FINAL SCORE</div>
+            <div style="font-size:14px; font-weight:700; color:var(--text-muted);">ASSESSMENT SCORE</div>
             <div class="score" id="scoreText">0/0</div>
             <div id="badgesContainer" class="badges-container"></div>
             <div class="result-detail" id="resultDetail"></div>
             <div class="heatmap-card" id="testHeatmap"></div>
         </div>
-        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#fff;">Detailed Analytics</div>
+        <div style="font-size:16px; font-weight:800; margin-bottom:14px; color:#fff;">Detailed Answer Key &amp; Explanations</div>
         <div id="reviewContainer"></div>
         <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE CHALLENGE ON WHATSAPP</button>
+        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE SCORE ON WHATSAPP</button>
     </div>
 </section>
 
 <!-- 3. ARENA SECTION -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
-    <div class="feature-mini-guide"><span>⚔️</span><span><strong>Quick Guide:</strong> Create room & share code OR tap Solo Bot &bull; Fast correct picks win.</span></div>
+    <div class="feature-mini-guide"><span>⚔️</span><span><strong>Quick Guide:</strong> Create a room and share code OR challenge the practice bot &bull; 10s timer per question.</span></div>
     <div id="arenaSetup">
         <div class="arena-header"><h2 class="arena-title" style="margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2></div>
         <label>Your Display Name</label>
@@ -581,13 +561,13 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <label>Select Grade Level</label>
         <select id="arenaClass" style="margin-bottom: 20px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
         <div class="arena-grid">
-            <div><button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create 1v1 Room</button></div>
+            <div><button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create Match Room</button></div>
             <div>
                 <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; font-size: 16px; margin-bottom: 10px;">
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
             </div>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Solo Mode: Practice vs. Invincible Bot</button>
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Practice vs. Invincible Bot</button>
     </div>
     <div id="arenaWaiting" class="hidden lobby-box">
         <div style="font-size: 14px; color:var(--text-muted);">Share This Match Code:</div>
@@ -604,7 +584,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
         <div class="question-card" id="arenaCardContainer">
             <div class="question-number" id="arenaQNum">QUESTION 1/10</div>
-            <div class="question-text" id="arenaQText">Loading question...</div>
+            <div class="question-text" id="arenaQText">Loading challenge...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
@@ -617,7 +597,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- 4. COMMUNITY FEED -->
 <section class="card hidden" id="feedSection" aria-label="Student Community Discussion Feed">
-    <div class="feature-mini-guide"><span>🌟</span><span><strong>Quick Guide:</strong> Share notes &bull; Use Midnight Vent for casual chat.</span></div>
+    <div class="feature-mini-guide"><span>🌟</span><span><strong>Quick Guide:</strong> Share notes, questions, and discuss solutions with peers.</span></div>
     <div class="feed-header"><h2 class="feed-title">🌟 Academic Community Feed</h2></div>
     <div class="post-composer">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
@@ -628,7 +608,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
             <select id="feedClass" style="margin-bottom:0;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
             <select id="feedSubject" style="margin-bottom:0;"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="General">Study Tips</option><option value="ChillVent">🌙 Midnight Vent</option></select>
         </div>
-        <textarea id="feedContent" placeholder="Post a challenging problem..."></textarea>
+        <textarea id="feedContent" placeholder="Post a formula, question, or study discussion..."></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishPost" style="margin-top:0;">POST TO COMMUNITY</button>
     </div>
     <div class="feed-filter-pills">
@@ -636,20 +616,20 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
         <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
     </div>
-    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading posts...</div></div>
+    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">Loading community discussions...</div></div>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
     <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
-    Built for Academic Excellence &bull; CBSE Class 9, 10, 11 &amp; 12<br>
+    Academic Assessment &amp; Guidance Platform &bull; CBSE Class 9, 10, 11 &amp; 12<br>
     &copy; 2026 Invincible Coaching Classes. All Rights Reserved.
 </footer>
 
 <!-- LO-FI RADIO WIDGET -->
 <div class="lofi-widget">
     <button class="lofi-btn" id="lofiToggleBtn" onclick="toggleLofiAudio()">🎧</button>
-    <div class="lofi-label" id="lofiLabel">Lofi Focus Radio: Off</div>
+    <div class="lofi-label" id="lofiLabel">Focus Soundscape: Off</div>
 </div>
 
 </main>
@@ -657,23 +637,23 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 <!-- ONBOARDING QUEST POPUP -->
 <div class="quest-modal-overlay" id="onboardingModal">
     <div class="quest-modal-card">
-        <h2 class="quest-title">🎮 CHOOSE YOUR STARTING QUEST</h2>
-        <div class="quest-subtitle">Welcome to Invincible 360. What do you want to accomplish right now?</div>
+        <h2 class="quest-title">🎮 WELCOME TO INVINCIBLE 360</h2>
+        <div class="quest-subtitle">Select what you would like to explore first:</div>
         <div class="quest-options-grid">
             <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
                 <div class="quest-choice-icon">⚡</div>
-                <div><div class="quest-choice-heading">I'm Stuck on a Homework Question</div><div class="quest-choice-desc">Snap or type your doubt for instant step-by-step logic.</div></div>
+                <div><div class="quest-choice-heading">Doubt Resolution Desk</div><div class="quest-choice-desc">Type or snap questions for step-by-step solutions.</div></div>
             </div>
             <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
                 <div class="quest-choice-icon">⚔️</div>
-                <div><div class="quest-choice-heading">I Want to Battle a Friend / Bot</div><div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash.</div></div>
+                <div><div class="quest-choice-heading">1v1 Knowledge Match</div><div class="quest-choice-desc">10 rapid-fire questions in a 10s speed clash against friends or bot.</div></div>
             </div>
             <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
                 <div class="quest-choice-icon">⏱️</div>
-                <div><div class="quest-choice-heading">I Want to Test My Speed &amp; Accuracy</div><div class="quest-choice-desc">10-minute timed tests with instant weak-area diagnosis.</div></div>
+                <div><div class="quest-choice-heading">10-Minute Timed Assessment</div><div class="quest-choice-desc">Subject &amp; chapter tests with immediate diagnosis.</div></div>
             </div>
         </div>
-        <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Skip &amp; Explore on My Own</button>
+        <button type="button" class="restart-btn" style="margin-top:16px; border:none; color:var(--text-muted); font-size:12px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
 </div>
 
@@ -681,15 +661,15 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Drop a 24-Hr Study Story</h3>
+            <h3 style="margin:0; font-size:18px; color:var(--accent-cyan);">⚡ Share 24-Hr Study Update</h3>
             <button type="button" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
         </div>
         <input type="text" id="storyAuthorName" placeholder="Your Name">
         <input type="text" id="storyInstitution" placeholder="School / Coaching Name">
-        <textarea id="storyCaption" placeholder="What are you studying right now?"></textarea>
+        <textarea id="storyCaption" placeholder="Share a formula tip, note summary, or study question..."></textarea>
         <label>Upload Note Photo / Study Setup (Optional)</label>
         <input type="file" id="storyImageInput" accept="image/*" style="margin-bottom:12px;">
-        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE STORY (DISAPPEARS IN 24H)</button>
+        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE UPDATE (24H)</button>
     </div>
 </div>
 
@@ -706,7 +686,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
         <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
         <div class="story-body-content">
-            <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Image">
+            <img id="viewerImage" class="story-main-img" style="display:none;" alt="Story Media">
             <div class="story-caption-text" id="viewerCaption"></div>
             <div class="story-sticker-card" id="viewerStickerCard" style="display:none;">
                 <div class="sticker-q" id="viewerStickerQ">Question</div>
@@ -727,7 +707,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         </div>
         <div class="viewers-sheet" id="viewersDrawer">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Story Viewers (<span id="viewersCount">0</span>)</strong>
+                <strong style="color:var(--accent-cyan); font-size:14px;">👁️ Viewers (<span id="viewersCount">0</span>)</strong>
                 <span style="font-size:14px; cursor:pointer;" onclick="document.getElementById('viewersDrawer').style.display='none'">✕</span>
             </div>
             <div id="viewersListContainer">Loading viewers...</div>
@@ -737,7 +717,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <script>
 /* =====================================================
-AUDIO SYNTHESIS ENGINE & LO-FI RADIO
+AUDIO SYNTHESIS ENGINE & 8 FOCUS SOUNDSCAPES
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -774,35 +754,73 @@ function stopLofiAudio() {
 
 function toggleLofiAudio() {
     initAudio(); stopLofiAudio();
-    currentLofiMode = (currentLofiMode + 1) % 5;
+    currentLofiMode = (currentLofiMode + 1) % 9;
     const btn = document.getElementById('lofiToggleBtn'); 
     const label = document.getElementById('lofiLabel');
 
-    if (currentLofiMode === 0) { btn.textContent = '🎧'; label.textContent = 'Lofi Focus Radio: Off'; return; }
+    if (currentLofiMode === 0) { 
+        btn.textContent = '🎧'; 
+        label.textContent = 'Focus Soundscape: Off'; 
+        return; 
+    }
+    
     btn.textContent = '⏸️'; 
-    let gainNode = audioCtx.createGain(); gainNode.connect(audioCtx.destination);
+    let gainNode = audioCtx.createGain(); 
+    gainNode.connect(audioCtx.destination);
 
     if (currentLofiMode === 1) {
-        label.textContent = 'Radio: Alpha Focus (108Hz)';
+        label.textContent = '1. Alpha Focus Waves (108Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 108;
         let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 112;
         gainNode.gain.value = 0.05; osc.connect(gainNode); osc2.connect(gainNode); osc.start(); osc2.start();
         activeLofiNodes.push(osc, osc2);
     } else if (currentLofiMode === 2) {
-        label.textContent = 'Radio: Theta Calm (432Hz)';
+        label.textContent = '2. Deep Theta Flow (432Hz)';
         let osc = audioCtx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 432;
         gainNode.gain.value = 0.03; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
-    } else if (currentLofiMode === 3 || currentLofiMode === 4) {
-        label.textContent = currentLofiMode === 3 ? 'Radio: Deep Brown Noise' : 'Radio: Soft Pink Noise';
+    } else if (currentLofiMode === 3) {
+        label.textContent = '3. Deep Brown Noise (Heavy Study)';
         let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         let output = buffer.getChannelData(0); let lastOut = 0;
         for (let i = 0; i < bufferSize; i++) {
             let white = Math.random() * 2 - 1;
-            if(currentLofiMode === 3) { output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5; } 
-            else { output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2; }
+            output[i] = (lastOut + (0.02 * white)) / 1.02; lastOut = output[i]; output[i] *= 3.5;
         }
         let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
         gainNode.gain.value = 0.08; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
+    } else if (currentLofiMode === 4) {
+        label.textContent = '4. Soft Pink Noise (Calm Focus)';
+        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let output = buffer.getChannelData(0); let lastOut = 0;
+        for (let i = 0; i < bufferSize; i++) {
+            let white = Math.random() * 2 - 1;
+            output[i] = (lastOut + (0.05 * white)) / 1.05; lastOut = output[i]; output[i] *= 2;
+        }
+        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+        gainNode.gain.value = 0.06; noise.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
+    } else if (currentLofiMode === 5) {
+        label.textContent = '5. Gentle Rain Ambiance';
+        let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) { output[i] = (Math.random() * 2 - 1) * 0.12; }
+        let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 850;
+        let noise = audioCtx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+        gainNode.gain.value = 0.07; noise.connect(filter); filter.connect(gainNode); noise.start(); activeLofiNodes.push(noise);
+    } else if (currentLofiMode === 6) {
+        label.textContent = '6. Binaural Clarity Pulse (528Hz)';
+        let osc1 = audioCtx.createOscillator(); osc1.type = 'sine'; osc1.frequency.value = 528;
+        let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 534;
+        gainNode.gain.value = 0.035; osc1.connect(gainNode); osc2.connect(gainNode); osc1.start(); osc2.start();
+        activeLofiNodes.push(osc1, osc2);
+    } else if (currentLofiMode === 7) {
+        label.textContent = '7. Deep Drone Resonator (60Hz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.value = 60;
+        let filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 140;
+        gainNode.gain.value = 0.06; osc.connect(filter); filter.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
+    } else if (currentLofiMode === 8) {
+        label.textContent = '8. High-Frequency Focus Spark (10kHz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 10000;
+        gainNode.gain.value = 0.008; osc.connect(gainNode); osc.start(); activeLofiNodes.push(osc);
     }
 }
 
@@ -864,13 +882,13 @@ async function loadActiveStories() {
 
         const welcomeStory = {
             id: 'welcome-tour',
-            author_name: 'Invincible 360',
-            institution: 'Official Platform',
+            author_name: 'Platform Guide',
+            institution: 'Invincible 360 Ecosystem',
             media_url: null,
-            caption: '👋 Welcome to Invincible 360! Your cyber academic home. Tap around to solve doubts, battle friends in PVP, or test your speed!',
-            sticker_question: '💡 Quick Vibe Check: What feature are you trying first?',
-            sticker_opt_a: '⚡ AI Doubt Solver',
-            sticker_opt_b: '⚔️ 1v1 PVP Arena',
+            caption: '🌟 Platform Overview & Core Features:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework & exam problems.\n⏱️ 2. Time Attack: 10-minute subject & chapter mock assessments.\n⚔️ 3. 1v1 Arena: Real-time 10s speed matches with friends or solo bot.\n🌟 4. Community Feed: Collaborative notes, discussions & Midnight Vent.\n🎧 5. Soundscape: 8 distinct focus & concentration audio profiles.',
+            sticker_question: '💡 Which section do you want to explore first?',
+            sticker_opt_a: '⚡ Doubt Resolution',
+            sticker_opt_b: '⏱️ Timed Tests / Arena',
             sticker_correct_opt: 0,
             is_topper: true
         };
@@ -885,7 +903,7 @@ async function loadActiveStories() {
                     </div>
                     <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
                 </div>
-                <div class="story-username">${s.id === 'welcome-tour' ? 'Start Here' : escapeHTML(s.author_name)}</div>
+                <div class="story-username">${s.id === 'welcome-tour' ? 'Features' : escapeHTML(s.author_name)}</div>
             </div>
         `).join('');
     } catch(e) { container.innerHTML = ''; }
@@ -906,13 +924,13 @@ document.getElementById('btnPublishStory').onclick = async () => {
     const inst = document.getElementById('storyInstitution').value.trim();
     const caption = document.getElementById('storyCaption').value.trim();
 
-    if (!name || !inst) return alert("Please fill Name and School/Coaching!");
+    if (!name || !inst) return alert("Please enter your Name and School/Coaching.");
 
     localStorage.setItem('student_name', name);
     localStorage.setItem('student_inst', inst);
 
     const btn = document.getElementById('btnPublishStory');
-    btn.disabled = true; btn.textContent = "Publishing Story...";
+    btn.disabled = true; btn.textContent = "Publishing...";
 
     try {
         const res = await fetch('/api/stories', {
@@ -928,9 +946,9 @@ document.getElementById('btnPublishStory').onclick = async () => {
         document.getElementById('storyModal').style.display = 'none';
         storyImageData = null;
         loadActiveStories();
-        alert("🎉 Your study story is live for 24 hours!");
+        alert("🎉 Your update is live for 24 hours!");
     } catch(err) { alert(err.message); } 
-    finally { btn.disabled = false; btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)"; }
+    finally { btn.disabled = false; btn.textContent = "SHARE UPDATE (24H)"; }
 };
 
 function openStoryViewer(idx) {
@@ -991,7 +1009,7 @@ async function toggleViewersSheet() {
 
     if (story.id === 'welcome-tour') {
         document.getElementById('viewersCount').textContent = '∞';
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform story. Thousands viewed!</div>';
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform feature guide viewed by all active members.</div>';
         return;
     }
 
@@ -1071,9 +1089,9 @@ document.getElementById("askBtn").onclick = async () => {
         const data = await res.json();
         
         const badge = document.getElementById('doubtToughnessBadge');
-        if (currentTone === 'eli10') { badge.textContent = "🐣 Simple Story Mode (ELI10)"; badge.style.color = "var(--accent-amber)"; badge.style.borderColor = "rgba(245,158,11,0.3)"; badge.style.background = "rgba(245,158,11,0.12)"; } 
-        else if (currentTone === 'tldr') { badge.textContent = "⚡ Formula Snapshot"; badge.style.color = "var(--accent-cyan)"; badge.style.borderColor = "rgba(6,182,212,0.3)"; badge.style.background = "rgba(6,182,212,0.12)"; } 
-        else { badge.textContent = "🧠 Step-by-Step Breakdown"; badge.style.color = "var(--accent-emerald)"; badge.style.borderColor = "rgba(16,185,129,0.3)"; badge.style.background = "rgba(16,185,129,0.12)"; }
+        if (currentTone === 'eli10') { badge.textContent = "🐣 Conceptual Overview"; badge.style.color = "var(--accent-amber)"; badge.style.borderColor = "rgba(245,158,11,0.3)"; badge.style.background = "rgba(245,158,11,0.12)"; } 
+        else if (currentTone === 'tldr') { badge.textContent = "⚡ Key Formulas"; badge.style.color = "var(--accent-cyan)"; badge.style.borderColor = "rgba(6,182,212,0.3)"; badge.style.background = "rgba(6,182,212,0.12)"; } 
+        else { badge.textContent = "🧠 Detailed Steps"; badge.style.color = "var(--accent-emerald)"; badge.style.borderColor = "rgba(16,185,129,0.3)"; badge.style.background = "rgba(16,185,129,0.12)"; }
 
         document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
         document.getElementById("answerBox").style.display = "block"; document.getElementById("feedback").style.display = "block";
@@ -1093,6 +1111,70 @@ document.getElementById("againBtn").addEventListener("click", function(){ const 
 document.getElementById("teacherBtn").addEventListener("click", function(){ const studentQuestion = questionInput.value.trim(); const explanation = document.getElementById("answerText").textContent.trim(); const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); });
 
 /* =====================================================
+PLATFORM DATA & LEADERBOARD SYNC
+===================================================== */
+async function loadPlatformData(){
+    try{
+        const response = await fetch('/api/get-questions');
+        const data = await response.json();
+
+        if(data && data.dailyPuzzle){
+            document.getElementById("puzzleBox").style.display = "block";
+            const rawQ = data.dailyPuzzle.question_text || "";
+            const formattedQ = formatMathText(rawQ);
+            let enText = formattedQ, hiText = "";
+            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) {
+                const parts = formattedQ.split(/\s\/\s/);
+                enText = parts[0] ? parts[0].trim() : formattedQ;
+                hiText = parts[1] ? parts[1].trim() : "";
+            }
+            document.getElementById("puzzleQuestionEn").innerHTML = enText;
+            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
+            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
+
+            const optContainer = document.getElementById("puzzleOptionsContainer");
+            optContainer.innerHTML = '';
+            const guessOptions = ['0', '1', '2', '100'];
+            guessOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'puzzle-opt-btn'; btn.textContent = opt;
+                btn.onclick = () => checkPuzzleGuess(opt, btn);
+                optContainer.appendChild(btn);
+            });
+        }
+
+        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
+            const list = document.getElementById("leaderboardList");
+            list.innerHTML = "";
+            data.leaderboard.forEach(function(item, idx){
+                let rankClass = idx === 0 ? "first" : "";
+                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
+            });
+            document.getElementById("leaderboardBox").style.display = "block";
+        }
+    }catch(error){ console.error("Data load error:", error); }
+}
+
+window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { loadPlatformData(); }, 300); });
+
+function checkPuzzleGuess(selected, btn) {
+    const feedback = document.getElementById("puzzleFeedback");
+    if (selected === '2') {
+        playWin(); btn.classList.add('correct-pick'); feedback.style.color = 'var(--accent-emerald)'; feedback.textContent = '🎉 Correct solution!';
+        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
+    } else {
+        playBuzz(); btn.classList.add('wrong-pick'); feedback.style.color = 'var(--accent-rose)'; feedback.textContent = '❌ Incorrect. See explanation below.';
+    }
+}
+
+const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
+const puzzleSolution = document.getElementById("puzzleSolution");
+puzzleToggleBtn.addEventListener("click", function(){
+    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Solution"; }
+    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Solution"; }
+});
+
+/* =====================================================
 TEST GENERATOR & TIME ATTACK ENGINE
 ===================================================== */
 let activeQuestions = [];
@@ -1102,6 +1184,7 @@ let testTimerInterval = null; let totalTimeLimit = 600; let timeRemaining = 600;
 const testOrg = document.getElementById("testOrg");
 const testClass = document.getElementById("testClass");
 const testSubject = document.getElementById("testSubject");
+const testChapter = document.getElementById("testChapter");
 const startTestBtn = document.getElementById("startTestBtn");
 const testSetup = document.getElementById("testSetup");
 const testArea = document.getElementById("testArea");
@@ -1137,9 +1220,10 @@ startTestBtn.addEventListener("click", async function(){
     const org = testOrg.value;
     const cls = testClass.value; 
     const subject = testSubject.value; 
+    const chapter = testChapter.value.trim() || "Complete Syllabus Overview";
 
     if(!name || !mobile || !org || !cls || !subject){ 
-        return alert("Please fill all required student and test details."); 
+        return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); 
     }
     if(!/^[0-9]{10}$/.test(mobile)){ 
         return alert("Please enter a valid 10-digit mobile number."); 
@@ -1148,7 +1232,7 @@ startTestBtn.addEventListener("click", async function(){
     const btn = document.getElementById("startTestBtn");
     const originalText = btn.textContent;
     btn.disabled = true; 
-    btn.textContent = "🤖 Generating Unique AI Test... Please wait (10s)";
+    btn.textContent = "Preparing Test Paper... Please wait (10s)";
 
     try {
         const response = await fetch("/api/generate-test", {
@@ -1157,27 +1241,29 @@ startTestBtn.addEventListener("click", async function(){
             body: JSON.stringify({ 
                 className: cls, 
                 subject: subject, 
-                chapter: "Weekly Mix", 
+                chapter: chapter, 
                 numberOfQuestions: 20, 
                 difficulty: "Easy", 
-                questionType: "MCQ" 
+                questionType: "MCQ",
+                language: "English and Pure Devanagari Hindi"
             })
         });
         
         const data = await response.json();
-        if(!response.ok) throw new Error(data.error || "Generation error.");
+        if(!response.ok) throw new Error(data.error || "Preparation error.");
         
         const generated = extractQuestions(data);
         if(!generated || !generated.length) {
-            throw new Error("AI generation failed to return questions.");
+            throw new Error("Unable to load questions for this chapter. Please retry.");
         }
 
         activeTestClass = cls; 
         activeTestSubject = subject;
-        startQuestions(generated, `Class ${cls} ${subject} (Weekly Test)`, "Unique AI Test Set");
+        activeTestTitle = `${subject}: ${chapter}`;
+        startQuestions(generated, `Class ${cls} ${subject}`, chapter);
         
     } catch(error) { 
-        alert("Test Generation Error: " + error.message);
+        alert("Assessment System: " + error.message);
     } finally { 
         btn.disabled = false; 
         btn.textContent = originalText; 
@@ -1205,7 +1291,7 @@ function extractQuestions(data){
             question: q.question || q.questionText || ("Question " + (index + 1)), 
             options: options, 
             answer: Number(answer), 
-            explanation: q.explanation || "Review fundamental formulas." 
+            explanation: q.explanation || "Review textbook definitions and concepts." 
         };
     }).filter(q => q.question && q.options.length >= 2 && Number.isFinite(q.answer));
 }
@@ -1218,7 +1304,7 @@ function startQuestions(questions, headerTitle, testTitle){
     testResult.style.display = "none";
     reviewContainer.innerHTML = ""; 
     badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)";
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10-Minute Assessment)";
     questionsContainer.innerHTML = "";
 
     questions.forEach(function(q, index){
@@ -1237,10 +1323,10 @@ function startQuestions(questions, headerTitle, testTitle){
 
 function generateBadges(percentage, timeSpentSeconds) {
     let badgesHTML = "";
-    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
-    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; }
-    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; }
+    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 High Distinction</div>`; } 
+    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Proficient</div>`; } 
+    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Completed</div>`; }
+    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Rapid Accuracy</div>`; }
     return badgesHTML;
 }
 
@@ -1251,7 +1337,7 @@ submitTestBtn.addEventListener("click", async function(){
     if(!questions.length) return;
 
     submitTestBtn.disabled = true; 
-    submitTestBtn.textContent = "SUBMITTING...";
+    submitTestBtn.textContent = "RECORDING SCORE...";
     let correct = 0, attempted = 0; 
     const answers = []; 
     let reviewHTML = "";
@@ -1275,9 +1361,9 @@ submitTestBtn.addEventListener("click", async function(){
         let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
         let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>";
         let correctPick = formatMathText(escapeHTML(q.options[q.answer]));
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
+        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Concept Analysis:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
 
-        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
+        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Response: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
     });
 
     const wrong = attempted - correct; 
@@ -1292,12 +1378,12 @@ submitTestBtn.addEventListener("click", async function(){
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
+    resultDetail.innerHTML = "<strong>" + percentage + "% Score</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
 
     const heatmap = document.getElementById('testHeatmap');
-    if (percentage >= 85) { heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`; } 
-    else if (percentage >= 60) { heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`; } 
-    else { heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`; }
+    if (percentage >= 85) { heatmap.innerHTML = `<strong>🔥 Assessment Diagnosis:</strong> Excellent conceptual retention. Ready for advanced numericals.`; } 
+    else if (percentage >= 60) { heatmap.innerHTML = `<strong>⚡ Assessment Diagnosis:</strong> Good baseline understanding. Revise key formulas and review marked solutions below.`; } 
+    else { heatmap.innerHTML = `<strong>⚠️ Assessment Diagnosis:</strong> Core revision recommended. Study the chapter breakdown in the review section below.`; }
 
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); 
@@ -1307,12 +1393,30 @@ submitTestBtn.addEventListener("click", async function(){
     const studentName = document.getElementById("studentName").value.trim();
     const studentMobile = document.getElementById("studentMobile").value.trim();
     const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
+    const chapterName = testChapter.value.trim() || "Chapter Assessment";
 
     try {
         await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: "Weekly Test", testTitle: activeTestTitle, testType: "AI-Generated", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+            body: JSON.stringify({ 
+                studentName: studentName, 
+                studentMobile: studentMobile, 
+                organization: org, 
+                studentClass: activeTestClass || testClass.value, 
+                subject: activeTestSubject || testSubject.value, 
+                chapter: chapterName, 
+                testTitle: activeTestTitle, 
+                testType: "Standard Assessment", 
+                totalQuestions: questions.length, 
+                attempted: attempted, 
+                correct: correct, 
+                wrong: wrong, 
+                unanswered: unanswered, 
+                percentage: percentage, 
+                answers: answers 
+            })
         });
+        loadPlatformData();
     } catch(error){ console.error(error); }
     finally { 
         submitTestBtn.disabled = false; 
@@ -1332,7 +1436,7 @@ restartTestBtn.addEventListener("click", function(){
 });
 
 whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href;
+    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Check your preparation here: " + window.location.href;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
 });
 
@@ -1351,16 +1455,16 @@ function startBotMatch() {
     arena.score = 0;
     arena.botScore = 0;
     arena.questions = [
-        { question_text: "What is the SI unit of force?", options: ["Newton", "Joule", "Pascal", "Watt"], correct_option: 0 },
-        { question_text: "Which particle carries a negative charge?", options: ["Proton", "Neutron", "Electron", "Positron"], correct_option: 2 },
-        { question_text: "What is the formula of water?", options: ["H2O", "CO2", "NaCl", "CH4"], correct_option: 0 },
-        { question_text: "Value of acceleration due to gravity on Earth is approx:", options: ["9.8 m/s²", "10.8 m/s²", "8.9 m/s²", "12 m/s²"], correct_option: 0 },
-        { question_text: "Which gas is vital for human respiration?", options: ["Nitrogen", "Oxygen", "Helium", "Hydrogen"], correct_option: 1 },
-        { question_text: "Light year is a unit of:", options: ["Time", "Distance", "Speed", "Intensity"], correct_option: 1 },
-        { question_text: "What is the chemical symbol for Gold?", options: ["Ag", "Au", "Fe", "Cu"], correct_option: 1 },
-        { question_text: "Number of chromosomes in human cells:", options: ["46", "23", "48", "44"], correct_option: 0 },
-        { question_text: "Power of a convex lens is:", options: ["Positive", "Negative", "Zero", "Infinite"], correct_option: 0 },
-        { question_text: "Formula of kinetic energy is:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 }
+        { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0 },
+        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2 },
+        { question_text: "What is the chemical formula of water? / जल का रासायनिक सूत्र क्या है?", options: ["H2O", "CO2", "NaCl", "CH4"], correct_option: 0 },
+        { question_text: "Value of acceleration due to gravity on Earth is approx: / पृथ्वी पर गुरुत्वीय त्वरण का मान लगभग है:", options: ["9.8 m/s²", "10.8 m/s²", "8.9 m/s²", "12 m/s²"], correct_option: 0 },
+        { question_text: "Which gas is vital for human respiration? / मानव श्वसन के लिए कौन सी गैस आवश्यक है?", options: ["Nitrogen (नाइट्रोजन)", "Oxygen (ऑक्सीजन)", "Helium (हीलियम)", "Hydrogen (हाइड्रोजन)"], correct_option: 1 },
+        { question_text: "Light year is a unit of: / प्रकाश वर्ष किसका मात्रक है?", options: ["Time (समय)", "Distance (दूरी)", "Speed (गति)", "Intensity (तीव्रता)"], correct_option: 1 },
+        { question_text: "What is the chemical symbol for Gold? / सोने का रासायनिक प्रतीक क्या है?", options: ["Ag", "Au", "Fe", "Cu"], correct_option: 1 },
+        { question_text: "Number of chromosomes in human cells: / मानव कोशिका में गुणसूत्रों की संख्या होती है:", options: ["46", "23", "48", "44"], correct_option: 0 },
+        { question_text: "Power of a convex lens is always: / उत्तल लेंस की क्षमता सदैव होती है:", options: ["Positive (धनात्मक)", "Negative (ऋणात्मक)", "Zero (शून्य)", "Infinite (अनंत)"], correct_option: 0 },
+        { question_text: "Formula for kinetic energy is: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 }
     ];
 
     document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`;
@@ -1375,7 +1479,7 @@ document.getElementById('btnCreateRoom').onclick = async () => {
 
     const btn = document.getElementById('btnCreateRoom');
     btn.disabled = true; 
-    btn.textContent = "Generating match...";
+    btn.textContent = "Generating room...";
 
     try {
         const res = await fetch('/api/arena', {
@@ -1397,10 +1501,10 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         document.getElementById('displayRoomCode').textContent = arena.code;
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { 
-        alert("Arena connection error: " + err.message); 
+        alert("Arena Connection: " + err.message); 
     } finally { 
         btn.disabled = false; 
-        btn.textContent = "⚡ Create 1v1 Room"; 
+        btn.textContent = "⚡ Create Match Room"; 
     }
 };
 
@@ -1434,7 +1538,7 @@ document.getElementById('btnJoinRoom').onclick = async () => {
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { 
-        alert("Unable to join: " + err.message); 
+        alert("Match Joining: " + err.message); 
     } finally { 
         btn.disabled = false; 
         btn.textContent = "🚀 Join Room"; 
@@ -1603,7 +1707,7 @@ async function loadFeedPosts() {
         const data = await res.json();
         
         if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No posts in this category yet. Be the first to share!</div>';
+            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:14px; padding:20px;">No discussions in this category yet. Be the first to share!</div>';
             return;
         }
 
@@ -1611,13 +1715,13 @@ async function loadFeedPosts() {
             <div class="feed-card" id="post-${p.id}">
                 <div class="feed-card-header">
                     <div>
-                        <div class="feed-author">${escapeHTML(p.author_name || 'Anonymous Student')}</div>
+                        <div class="feed-author">${escapeHTML(p.author_name || 'Student')}</div>
                         <div class="feed-school">${escapeHTML(p.institution || 'CBSE School')} &bull; Class ${escapeHTML(p.student_class)}</div>
                     </div>
                     <span class="feed-badge">${escapeHTML(p.subject)}</span>
                 </div>
                 <div style="font-size:15px; color:#f1f5f9; line-height:1.5; margin-bottom:12px; white-space:pre-wrap;">${escapeHTML(p.content)}</div>
-                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment for post">` : ''}
+                ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%; max-height:260px; border-radius:10px; margin-bottom:12px; border:1px solid var(--border-subtle); object-fit:contain;" alt="Attachment">` : ''}
                 <div class="feed-actions">
                     <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span> Helpful</div>
                     <div class="action-btn" onclick="toggleComments(${p.id})">💬 Discussion</div>
@@ -1625,9 +1729,9 @@ async function loadFeedPosts() {
                 </div>
 
                 <div class="comments-drawer" id="comments-${p.id}">
-                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading comments...</div></div>
+                    <div id="comments-list-${p.id}"><div style="color:var(--text-muted); font-size:12px;">Loading discussions...</div></div>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <input type="text" id="com-input-${p.id}" placeholder="Type explanation or response..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
+                        <input type="text" id="com-input-${p.id}" placeholder="Type solution or reply..." style="margin-bottom:0; font-size:13px; padding:8px 12px; flex:1;">
                         <button type="button" class="submit-test-btn" onclick="addComment(${p.id})" style="margin-top:0; width:auto; padding:0 15px; font-size:13px;">Send</button>
                     </div>
                 </div>
@@ -1646,8 +1750,8 @@ document.getElementById('btnPublishPost').onclick = async () => {
     const sub = document.getElementById('feedSubject').value;
     const content = document.getElementById('feedContent').value.trim();
 
-    if (!content) return alert("Please enter post content.");
-    if (!name) name = "Anonymous Peer";
+    if (!content) return alert("Please enter discussion content.");
+    if (!name) name = "Student";
     if (!inst) inst = "CBSE School";
 
     localStorage.setItem('student_name', name);
@@ -1687,7 +1791,7 @@ async function likePost(postId) {
 }
 
 async function reportPost(postId) {
-    if (!confirm("Report post for academic review?")) return;
+    if (!confirm("Report discussion for academic review?")) return;
     try {
         const res = await fetch('/api/feed', {
             method: 'POST', 
@@ -1716,7 +1820,7 @@ async function loadComments(postId) {
         const res = await fetch(`/api/feed?action=get_comments&post_id=${postId}`);
         const data = await res.json();
         if (!data.comments || data.comments.length === 0) {
-            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No discussions yet.</div>';
+            container.innerHTML = '<div style="color:var(--text-muted); font-size:12px; margin-bottom:6px;">No replies yet.</div>';
             return;
         }
         container.innerHTML = data.comments.map(c => `
