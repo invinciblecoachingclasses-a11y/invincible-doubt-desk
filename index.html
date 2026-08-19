@@ -49,19 +49,28 @@ SEARCH ENGINE OPTIMIZATION (SEO) & CRAWLER DIRECTIVES
   --accent-emerald: #10b981;
 }
 
-* { box-sizing: border-box; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+* { 
+  box-sizing: border-box; 
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); 
+}
+
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-main);
-  background-image: radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), radial-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(6, 182, 212, 0.08) 1px, transparent 1px), 
+                    radial-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px);
   background-size: 32px 32px;
   background-position: 0 0, 16px 16px;
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-.container { width: min(840px, 92%); margin: 20px auto 60px; }
+
+.container { 
+  width: min(840px, 92%); 
+  margin: 20px auto 60px; 
+}
 
 /* =====================================================
 GAMIFIED PLAYER HUD HEADER
@@ -77,11 +86,26 @@ GAMIFIED PLAYER HUD HEADER
   overflow: hidden;
   backdrop-filter: blur(12px);
 }
+
 .player-hud-card::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  content: ''; 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  right: 0; 
+  height: 3px;
   background: linear-gradient(90deg, #06b6d4, #a855f7, #ec4899, #f59e0b);
 }
-.hud-top-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+
+.hud-top-row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  flex-wrap: wrap; 
+  gap: 10px; 
+  margin-bottom: 12px; 
+}
+
 .brand-name {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 26px;
@@ -92,7 +116,13 @@ GAMIFIED PLAYER HUD HEADER
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.hud-status-badges { display: flex; align-items: center; gap: 8px; }
+
+.hud-status-badges { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
 .level-badge {
   background: linear-gradient(135deg, #0284c7, #0369a1);
   color: #fff;
@@ -103,6 +133,7 @@ GAMIFIED PLAYER HUD HEADER
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+
 .help-guide-badge {
   background: rgba(245, 158, 11, 0.15);
   color: var(--accent-amber);
@@ -113,22 +144,70 @@ GAMIFIED PLAYER HUD HEADER
   border-radius: 8px;
   cursor: pointer;
 }
-.help-guide-badge:hover { background: rgba(245, 158, 11, 0.25); transform: translateY(-1px); }
+
+.help-guide-badge:hover { 
+  background: rgba(245, 158, 11, 0.25); 
+  transform: translateY(-1px); 
+}
+
 .live-ping {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald);
-  font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px;
+  display: inline-flex; 
+  align-items: center; 
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.15); 
+  color: var(--accent-emerald);
+  font-size: 11px; 
+  font-weight: 800; 
+  padding: 4px 10px; 
+  border-radius: 8px;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
-.ping-dot { width: 7px; height: 7px; background: var(--accent-emerald); border-radius: 50%; animation: pulsePing 1.5s infinite; }
-@keyframes pulsePing { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
 
-.hud-xp-row { display: flex; align-items: center; gap: 12px; }
-.xp-track { flex: 1; height: 8px; background: #0b1120; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-subtle); }
-.xp-fill { width: 68%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); border-radius: 6px; }
-.xp-label { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
+.ping-dot { 
+  width: 7px; 
+  height: 7px; 
+  background: var(--accent-emerald); 
+  border-radius: 50%; 
+  animation: pulsePing 1.5s infinite; 
+}
 
-/* STREAK & SHIELD STATUS */
+@keyframes pulsePing { 
+  0%, 100% { opacity: 1; transform: scale(1); } 
+  50% { opacity: 0.4; transform: scale(1.3); } 
+}
+
+.hud-xp-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+
+.xp-track { 
+  flex: 1; 
+  height: 8px; 
+  background: #0b1120; 
+  border-radius: 6px; 
+  overflow: hidden; 
+  border: 1px solid var(--border-subtle); 
+}
+
+.xp-fill { 
+  width: 68%; 
+  height: 100%; 
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); 
+  border-radius: 6px; 
+}
+
+.xp-label { 
+  font-size: 11px; 
+  font-weight: 800; 
+  color: var(--text-muted); 
+  white-space: nowrap; 
+}
+
+/* =====================================================
+STREAK & SHIELD STATUS
+===================================================== */
 .streak-bar-box {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-subtle);
@@ -142,10 +221,29 @@ GAMIFIED PLAYER HUD HEADER
   font-weight: 700;
   backdrop-filter: blur(8px);
 }
-.streak-counter { color: var(--accent-amber); display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 14px; }
-.streak-freeze-tag { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; }
 
-/* 24-HOUR STUDY STORIES TRAY */
+.streak-counter { 
+  color: var(--accent-amber); 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+  font-weight: 800; 
+  font-size: 14px; 
+}
+
+.streak-freeze-tag { 
+  background: rgba(6, 182, 212, 0.12); 
+  color: var(--accent-cyan); 
+  border: 1px solid rgba(6, 182, 212, 0.3); 
+  padding: 5px 12px; 
+  border-radius: 12px; 
+  font-size: 11px; 
+  font-weight: 800; 
+}
+
+/* =====================================================
+24-HOUR STUDY STORIES TRAY
+===================================================== */
 .stories-tray-container {
   background: rgba(15, 23, 42, 0.6);
   border: 1px solid var(--border-subtle);
@@ -159,7 +257,10 @@ GAMIFIED PLAYER HUD HEADER
   scrollbar-width: none;
   backdrop-filter: blur(10px);
 }
-.stories-tray-container::-webkit-scrollbar { display: none; }
+
+.stories-tray-container::-webkit-scrollbar { 
+  display: none; 
+}
 
 .story-circle-item {
   display: flex;
@@ -171,7 +272,11 @@ GAMIFIED PLAYER HUD HEADER
   width: 70px;
   text-align: center;
 }
-.story-circle-item:hover .story-avatar-wrap { transform: scale(1.08); }
+
+.story-circle-item:hover .story-avatar-wrap { 
+  transform: scale(1.08); 
+}
+
 .story-avatar-wrap {
   width: 58px;
   height: 58px;
@@ -184,8 +289,16 @@ GAMIFIED PLAYER HUD HEADER
   position: relative;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
-.story-avatar-wrap.topper { background: linear-gradient(45deg, #eab308, #f59e0b); }
-.story-avatar-wrap.add-story { background: var(--bg-surface); border: 2px dashed var(--accent-cyan); }
+
+.story-avatar-wrap.topper { 
+  background: linear-gradient(45deg, #eab308, #f59e0b); 
+}
+
+.story-avatar-wrap.add-story { 
+  background: var(--bg-surface); 
+  border: 2px dashed var(--accent-cyan); 
+}
+
 .story-avatar-inner {
   width: 100%;
   height: 100%;
@@ -199,7 +312,13 @@ GAMIFIED PLAYER HUD HEADER
   color: #fff;
   overflow: hidden;
 }
-.story-avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+
+.story-avatar-inner img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+}
+
 .story-badge-flame {
   position: absolute;
   bottom: -2px;
@@ -210,6 +329,7 @@ GAMIFIED PLAYER HUD HEADER
   padding: 2px;
   line-height: 1;
 }
+
 .story-username {
   font-size: 11px;
   font-weight: 700;
@@ -220,8 +340,10 @@ GAMIFIED PLAYER HUD HEADER
   text-overflow: ellipsis;
 }
 
-/* FULLSCREEN STORY VIEWER */
-.story-viewer-modal {
+/* =====================================================
+FULLSCREEN STORY VIEWER & MODALS
+===================================================== */
+.story-viewer-modal, .quest-modal-overlay, .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.94);
@@ -231,6 +353,7 @@ GAMIFIED PLAYER HUD HEADER
   justify-content: center;
   backdrop-filter: blur(10px);
 }
+
 .story-card-view {
   width: min(420px, 94%);
   height: min(720px, 90vh);
@@ -245,12 +368,70 @@ GAMIFIED PLAYER HUD HEADER
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9);
 }
-.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
-.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
-.story-progress-fill { height: 100%; width: 0%; background: #fff; }
-.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-.story-view-author { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
-.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+
+.modal-card, .quest-modal-card {
+  width: min(500px, 92%);
+  background: #0f172a;
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.quest-modal-card {
+  background: linear-gradient(145deg, #0d1527, #070b14);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
+  text-align: center;
+}
+
+/* =====================================================
+STORY CONTENT
+===================================================== */
+.story-progress-bar { 
+  display: flex; 
+  gap: 4px; 
+  margin-bottom: 12px; 
+}
+
+.story-progress-seg { 
+  height: 3px; 
+  flex: 1; 
+  background: rgba(255, 255, 255, 0.2); 
+  border-radius: 2px; 
+  overflow: hidden; 
+}
+
+.story-progress-fill { 
+  height: 100%; 
+  width: 0%; 
+  background: #fff; 
+}
+
+.story-view-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  z-index: 10; 
+}
+
+.story-view-author { 
+  font-size: 14px; 
+  font-weight: 800; 
+  color: #fff; 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+
+.story-close-btn { 
+  background: none; 
+  border: none; 
+  color: #fff; 
+  font-size: 22px; 
+  cursor: pointer; 
+}
 
 .story-body-content {
   flex: 1;
@@ -262,15 +443,35 @@ GAMIFIED PLAYER HUD HEADER
   text-align: center;
   position: relative;
 }
-.story-main-img { max-width: 100%; max-height: 340px; border-radius: 14px; object-fit: contain; }
-.story-caption-text { font-size: 16px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.4; padding: 0 10px; }
 
-/* Tap Navigation Zones */
-.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
+.story-main-img { 
+  max-width: 100%; 
+  max-height: 340px; 
+  border-radius: 14px; 
+  object-fit: contain; 
+}
+
+.story-caption-text { 
+  font-size: 16px; 
+  font-weight: 700; 
+  color: #f8fafc; 
+  margin-top: 12px; 
+  line-height: 1.4; 
+  padding: 0 10px; 
+}
+
+.story-nav-zone { 
+  position: absolute; 
+  top: 60px; 
+  bottom: 70px; 
+  width: 45%; 
+  z-index: 5; 
+  cursor: pointer; 
+}
+
 .story-nav-prev { left: 0; }
 .story-nav-next { right: 0; }
 
-/* Sticker Poll in Story */
 .story-sticker-card {
   background: rgba(15, 23, 42, 0.95);
   border: 1px solid var(--accent-cyan);
@@ -281,8 +482,20 @@ GAMIFIED PLAYER HUD HEADER
   backdrop-filter: blur(10px);
   z-index: 10;
 }
-.sticker-q { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 10px; }
-.sticker-opts { display: flex; flex-direction: column; gap: 8px; }
+
+.sticker-q { 
+  font-size: 14px; 
+  font-weight: 800; 
+  color: #fff; 
+  margin-bottom: 10px; 
+}
+
+.sticker-opts { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px; 
+}
+
 .sticker-btn {
   position: relative;
   background: var(--bg-surface);
@@ -299,6 +512,7 @@ GAMIFIED PLAYER HUD HEADER
   overflow: hidden;
   z-index: 1;
 }
+
 .sticker-bar {
   position: absolute;
   top: 0; left: 0; bottom: 0;
@@ -307,11 +521,18 @@ GAMIFIED PLAYER HUD HEADER
   width: 0%;
   transition: width 0.4s ease;
 }
+
 .sticker-btn.voted-correct .sticker-bar { background: rgba(16, 185, 129, 0.4) !important; }
 .sticker-btn.voted-wrong .sticker-bar { background: rgba(244, 63, 94, 0.4) !important; }
 
-/* Story Action Bar */
-.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
+.story-action-bar { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 8px; 
+  z-index: 10; 
+}
+
 .reaction-emoji-btn {
   background: rgba(255, 255, 255, 0.1);
   border: none;
@@ -324,11 +545,33 @@ GAMIFIED PLAYER HUD HEADER
   justify-content: center;
   cursor: pointer;
 }
-.reaction-emoji-btn:hover { transform: scale(1.2); }
-.vault-btn { background: var(--bg-surface); border: 1px solid var(--accent-amber); color: var(--accent-amber); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
-.viewers-btn { background: var(--bg-surface); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 12px; border-radius: 12px; font-size: 12px; font-weight: 800; cursor: pointer; }
 
-/* VIEWERS BOTTOM SHEET */
+.reaction-emoji-btn:hover { 
+  transform: scale(1.2); 
+}
+
+.vault-btn { 
+  background: var(--bg-surface); 
+  border: 1px solid var(--accent-amber); 
+  color: var(--accent-amber); 
+  padding: 8px 12px; 
+  border-radius: 12px; 
+  font-size: 12px; 
+  font-weight: 800; 
+  cursor: pointer; 
+}
+
+.viewers-btn { 
+  background: var(--bg-surface); 
+  border: 1px solid var(--accent-cyan); 
+  color: var(--accent-cyan); 
+  padding: 8px 12px; 
+  border-radius: 12px; 
+  font-size: 12px; 
+  font-weight: 800; 
+  cursor: pointer; 
+}
+
 .viewers-sheet {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -341,55 +584,39 @@ GAMIFIED PLAYER HUD HEADER
   display: none;
   z-index: 20;
 }
-.viewer-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
 
-/* MODAL OVERLAY */
-.modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(6px);
-}
-.modal-card {
-  width: min(500px, 92%);
-  background: #0f172a;
-  border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 24px;
-  max-height: 90vh;
-  overflow-y: auto;
+.viewer-item { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 8px 0; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+  font-size: 13px; 
 }
 
 /* =====================================================
-NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
+QUEST ONBOARDING
 ===================================================== */
-.quest-modal-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(4, 7, 14, 0.9);
-  z-index: 10000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(12px);
+.quest-title { 
+  font-family: 'Space Grotesk', sans-serif; 
+  font-size: 24px; 
+  font-weight: 900; 
+  margin: 0 0 8px 0; 
+  color: #fff; 
 }
-.quest-modal-card {
-  width: min(520px, 94%);
-  background: linear-gradient(145deg, #0d1527, #070b14);
-  border: 1px solid var(--accent-cyan);
-  box-shadow: 0 0 35px rgba(6, 182, 212, 0.3);
-  border-radius: 28px;
-  padding: 28px 24px;
-  text-align: center;
-  position: relative;
+
+.quest-subtitle { 
+  font-size: 13px; 
+  color: var(--text-muted); 
+  margin-bottom: 20px; 
 }
-.quest-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 900; margin: 0 0 8px 0; color: #fff; }
-.quest-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-.quest-options-grid { display: flex; flex-direction: column; gap: 12px; }
+
+.quest-options-grid { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
+
 .quest-choice-btn {
   background: #111a2e;
   border: 1px solid var(--border-subtle);
@@ -401,12 +628,17 @@ NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
   cursor: pointer;
   text-align: left;
 }
-.quest-choice-btn:hover { background: #18243e; border-color: var(--accent-cyan); transform: translateY(-2px); }
+
+.quest-choice-btn:hover { 
+  background: #18243e; 
+  border-color: var(--accent-cyan); 
+  transform: translateY(-2px); 
+}
+
 .quest-choice-icon { font-size: 26px; }
 .quest-choice-heading { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .quest-choice-desc { font-size: 11px; color: var(--text-muted); }
 
-/* In-Tab Visual Mini-Guides for Beginners */
 .feature-mini-guide {
   background: rgba(6, 182, 212, 0.08);
   border: 1px dashed rgba(6, 182, 212, 0.3);
@@ -419,52 +651,19 @@ NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
   align-items: center;
   gap: 10px;
 }
+
 .feature-mini-guide strong { color: var(--accent-cyan); font-weight: 800; }
 
-/* DAILY BRAIN TEASER (QUEST CARD) */
-.puzzle-banner {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  border-radius: 22px;
-  padding: 22px;
-  margin-bottom: 24px;
-  box-shadow: 0 12px 30px -10px rgba(245, 158, 11, 0.15);
-  position: relative;
-  backdrop-filter: blur(10px);
+/* =====================================================
+BENTO TABS
+===================================================== */
+.mode-switch { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 10px; 
+  margin-bottom: 24px; 
 }
-.puzzle-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.puzzle-badge { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); font-weight: 900; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.3); letter-spacing: 0.5px; }
-.puzzle-streak { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); font-weight: 800; font-size: 11px; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(6, 182, 212, 0.3); }
-.puzzle-q-en { font-size: 16px; font-weight: 700; color: #ffffff; line-height: 1.5; margin-bottom: 6px; }
-.puzzle-q-hi { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 16px; }
-.puzzle-options-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
-.puzzle-opt-btn { background: var(--bg-surface); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 15px; font-weight: 800; padding: 12px 6px; border-radius: 12px; cursor: pointer; text-align: center; }
-.puzzle-opt-btn:hover { border-color: var(--accent-amber); background: var(--bg-surface-hover); transform: translateY(-2px); }
-.puzzle-opt-btn.correct-pick { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--accent-emerald) !important; color: var(--accent-emerald) !important; }
-.puzzle-opt-btn.wrong-pick { background: rgba(244, 63, 94, 0.2) !important; border-color: var(--accent-rose) !important; color: var(--accent-rose) !important; }
-.puzzle-actions-bar { display: flex; align-items: center; gap: 12px; }
-.puzzle-toggle-btn { background: var(--accent-amber); color: #0f172a; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 900; font-size: 12px; cursor: pointer; }
-.puzzle-solution { display: none; margin-top: 14px; padding: 16px; background: rgba(10, 14, 23, 0.9); border-radius: 12px; border-left: 3px solid var(--accent-amber); font-size: 14px; line-height: 1.6; color: #e2e8f0; }
 
-/* WALL OF FAME */
-.leaderboard-card {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  padding: 18px;
-  margin-bottom: 24px;
-  backdrop-filter: blur(8px);
-}
-.leaderboard-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; text-align: center; }
-.leaderboard-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--bg-surface); border-radius: 12px; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
-.leaderboard-rank { background: rgba(255, 255, 255, 0.1); width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; margin-right: 8px; }
-.leaderboard-rank.first { background: var(--accent-amber); color: #0f172a; }
-.leaderboard-score { color: var(--accent-emerald); font-weight: 800; }
-
-/* GAME MODE SWITCH WITH SUB-LABELS */
-.mode-switch {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;
-}
 .mode-btn {
   padding: 12px 6px;
   border: 1px solid var(--border-subtle);
@@ -482,32 +681,46 @@ NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
   align-items: center;
   justify-content: center;
 }
+
 .mode-btn-title { font-size: 13px; font-weight: 800; }
 .mode-btn-sub { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
-.mode-btn:hover { background: var(--bg-surface); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+
+.mode-btn:hover { 
+  background: var(--bg-surface); 
+  border-color: rgba(255, 255, 255, 0.2); 
+  transform: translateY(-2px); 
+}
+
 .mode-btn.active {
   background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(15, 23, 42, 0.9));
   color: var(--accent-cyan);
   border-color: var(--accent-cyan);
   box-shadow: 0 0 20px var(--cyan-glow);
 }
+
 .mode-btn.active .mode-btn-sub { color: #cbd5e1; }
+
 .mode-btn.arena-btn.active {
   background: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(15, 23, 42, 0.9));
   color: var(--accent-rose);
   border-color: var(--accent-rose);
   box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
 }
+
 .mode-btn.arena-btn.active .mode-btn-sub { color: #fecdd3; }
+
 .mode-btn.feed-btn.active {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(15, 23, 42, 0.9));
   color: var(--accent-purple);
   border-color: var(--accent-purple);
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.25);
 }
+
 .mode-btn.feed-btn.active .mode-btn-sub { color: #e9d5ff; }
 
-/* CARDS & INPUTS */
+/* =====================================================
+CARDS & INPUTS
+===================================================== */
 .card {
   background: rgba(15, 23, 42, 0.75);
   padding: 26px;
@@ -516,9 +729,32 @@ NEW USER QUEST ONBOARDING MODAL & MINI-GUIDES
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(12px);
 }
-.section-h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; margin: 0 0 14px 0; color: #ffffff; }
-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.5px; }
-.subjects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+
+.section-h2 { 
+  font-family: 'Space Grotesk', sans-serif; 
+  font-size: 20px; 
+  font-weight: 800; 
+  margin: 0 0 14px 0; 
+  color: #ffffff; 
+}
+
+label { 
+  display: block; 
+  font-size: 13px; 
+  font-weight: 800; 
+  margin-bottom: 8px; 
+  color: #cbd5e1; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+}
+
+.subjects { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px; 
+  margin-bottom: 20px; 
+}
+
 .subject {
   padding: 12px 8px;
   border: 1px solid var(--border-subtle);
@@ -530,11 +766,13 @@ label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; c
   cursor: pointer;
   text-align: center;
 }
+
 .subject:hover { background: var(--bg-surface-hover); color: #fff; }
 .subject.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
 /* DOUBT TONE SWITCHER */
 .tone-switch-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+
 .tone-btn {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -546,6 +784,7 @@ label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; c
   cursor: pointer;
   text-align: center;
 }
+
 .tone-btn:hover { background: var(--bg-surface-hover); }
 .tone-btn.active { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
@@ -561,6 +800,7 @@ textarea, input:not([type="radio"]):not([type="range"]), select {
   font-family: inherit;
   margin-bottom: 14px;
 }
+
 textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px var(--cyan-glow);
@@ -585,11 +825,14 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
   letter-spacing: 0.5px;
   box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);
 }
+
 .ask-btn:hover, .submit-test-btn:hover, .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4); }
 .generate-btn { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #0f172a; }
 .ask-btn:disabled, .submit-test-btn:disabled, .generate-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
-/* DOUBT ANSWER & FEEDBACK */
+/* =====================================================
+DOUBT ANSWER & FEEDBACK
+===================================================== */
 .answer-box { display: none; margin-top: 24px; padding: 22px; background: #090e1a; border-radius: 18px; border: 1px solid var(--border-subtle); }
 .logic-title-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
 .logic-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: var(--accent-cyan); margin: 0; }
@@ -602,7 +845,9 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .feedback-btn:hover { background: var(--bg-surface-hover); }
 .teacher-btn { background: var(--cyan-glow); color: var(--accent-cyan); border-color: var(--accent-cyan); }
 
-/* TEST SUITE & TOPIC HEATMAP */
+/* =====================================================
+TEST SUITE & TOPIC HEATMAP
+===================================================== */
 .test-info { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px; margin: 16px 0; color: #cbd5e1; font-size: 13px; }
 .generator-box { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle); }
 .generator-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 800; color: #ffffff; }
@@ -643,7 +888,9 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .restart-btn:hover { background: rgba(6, 182, 212, 0.1); }
 .whatsapp-btn { background: #25D366 !important; color: #ffffff !important; border: none !important; }
 
-/* ARENA 1v1 */
+/* =====================================================
+ARENA 1v1
+===================================================== */
 .arena-header { text-align: center; margin-bottom: 18px; }
 .arena-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); }
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
@@ -661,13 +908,16 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 14px; margin: 8px 0; cursor: pointer; font-size: 15px; font-weight: 800; background: var(--bg-surface); text-align: center; }
 .arena-option:hover { background: var(--bg-surface-hover); border-color: var(--accent-rose); }
 .arena-shake { animation: shakeCard 0.4s ease; border-color: var(--accent-rose) !important; }
+
 @keyframes shakeCard {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-6px); }
   40%, 80% { transform: translateX(6px); }
 }
 
-/* COMMUNITY FEED */
+/* =====================================================
+COMMUNITY FEED
+===================================================== */
 .feed-header { text-align: center; margin-bottom: 18px; }
 .feed-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-purple); margin: 0; }
 .post-composer { background: #090e1a; border: 1px solid var(--border-subtle); border-radius: 18px; padding: 18px; margin-bottom: 20px; }
@@ -689,7 +939,9 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 .comment-item { background: var(--bg-surface); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 13px; }
 
-/* FLOATING LO-FI RADIO WIDGET */
+/* =====================================================
+FLOATING LO-FI RADIO WIDGET
+===================================================== */
 .lofi-widget {
   position: fixed;
   bottom: 20px;
@@ -712,14 +964,10 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .footer { text-align: center; color: #64748b; margin: 40px 0; font-size: 12px; line-height: 1.6; }
 .hidden { display: none !important; }
 
+/* MOBILE RESPONSIVENESS */
 @media (max-width: 600px) {
   .mode-switch { grid-template-columns: 1fr 1fr; }
-  .subjects { grid-template-columns: 1fr; }
-  .photo-buttons { grid-template-columns: 1fr; }
-  .generator-grid { grid-template-columns: 1fr; }
-  .arena-grid { grid-template-columns: 1fr; }
-  .puzzle-options-grid { grid-template-columns: 1fr 1fr; }
-  .tone-switch-bar { grid-template-columns: 1fr; }
+  .subjects, .tone-switch-bar, .arena-grid, .photo-buttons { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -749,20 +997,15 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </header>
 
-<!-- GAMIFIED STREAK & SHIELD STATUS -->
 <div class="streak-bar-box">
-    <div class="streak-counter">
-        <span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days
-    </div>
+    <div class="streak-counter"><span>🔥</span> Daily Streak: <span id="userStreakVal">1</span> Days</div>
     <div class="streak-freeze-tag" id="userFreezeStatus">🛡️ 1 Freeze Shield Ready</div>
 </div>
 
 <!-- 24-HOUR STUDY STORIES TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
-        <div class="story-avatar-wrap add-story">
-            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div>
-        </div>
+        <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:24px;">+</div></div>
         <div class="story-username">Your Drop</div>
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
@@ -783,7 +1026,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     <div class="puzzle-actions-bar">
         <button type="button" class="puzzle-toggle-btn" id="puzzleToggleBtn">Reveal Logic</button>
     </div>
-    <div id="puzzleFeedback" style="margin-top: 10px;"></div>
+    <div id="puzzleFeedback" style="margin-top: 10px; font-weight:bold;"></div>
     <div class="puzzle-solution" id="puzzleSolution"></div>
 </section>
 
@@ -821,6 +1064,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 
     <h2 class="section-h2">Instant Step-by-Step Doubt Solver</h2>
+    
     <label>Select Subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
@@ -866,7 +1110,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 </section>
 
-<!-- 2. TEST SECTION (UPDATED WITH EXHAUSTIVE ORGANIZATION DROPDOWN) -->
+<!-- 2. TEST SECTION (EXHAUSTIVE SCHOOL LIST) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <div class="feature-mini-guide">
         <span>⏱️</span>
@@ -874,6 +1118,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </div>
 
     <h2 class="section-h2">CBSE Mock & Practice Exam Suite</h2>
+    
     <div id="testSetup">
         <label>Select Standard Test</label>
         <div>
@@ -900,6 +1145,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <option value="Lord Krishna Public School">Lord Krishna Public School</option>
                 <option value="Vedanta Convent School">Vedanta Convent School</option>
                 <option value="Stair Memorial & Sport School">Stair Memorial & Sport School</option>
+                <option value="Horizon public school">Horizon public school</option>
                 <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
                 <option value="Other School">Other School</option>
             </select>
@@ -918,11 +1164,10 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
                 <option value="Chemistry">Chemistry</option>
                 <option value="Mathematics">Mathematics</option>
                 <option value="Biology">Biology</option>
+                <option value="Science">Science (9th/10th)</option>
             </select>
 
-            <select id="testSelect">
-                <option value="">Select Test</option>
-            </select>
+            <select id="testSelect"><option value="">Select Test</option></select>
         </div>
 
         <div class="test-info">
@@ -1133,8 +1378,8 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 
 <!-- FLOATING LO-FI RADIO WIDGET -->
 <div class="lofi-widget">
-    <button class="lofi-btn" id="lofiToggleBtn" onclick="toggleLofiAudio()">🎧</button>
-    <div class="lofi-label" id="lofiLabel">Lofi Focus Radio: Off</div>
+    <button class="lofi-btn" id="lofiToggleBtn" onclick="cycleLofiAudio()">🎧</button>
+    <div class="lofi-label" id="lofiLabel">Lofi Radio: Off</div>
 </div>
 
 </main>
@@ -1262,112 +1507,171 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
         </div>
     </div>
 </div>
-
 <script>
 /* =====================================================
-AUDIO SYNTHESIS ENGINE (SOUNDS & LO-FI OSCILLATOR)
+AUDIO SYNTHESIS ENGINE (NEW LO-FI NOISE & BINAURAL MODES)
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioCtx;
-let lofiOsc = null;
-let lofiGain = null;
-let isLofiPlaying = false;
+let audioCtx; 
+let currentLofiMode = 0; 
+let activeLofiNodes = [];
 
-function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
+function initAudio() { 
+    if (!audioCtx) audioCtx = new AudioContext(); 
+    if (audioCtx.state === 'suspended') audioCtx.resume(); 
+}
+
 function playSound(type, freq, duration, vol=0.1) {
     try {
         initAudio();
-        const osc = audioCtx.createOscillator();
+        const osc = audioCtx.createOscillator(); 
         const gain = audioCtx.createGain();
-        osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        osc.type = type; 
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime); 
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + duration);
-    } catch(e){}
+        osc.connect(gain); 
+        gain.connect(audioCtx.destination);
+        osc.start(); 
+        osc.stop(audioCtx.currentTime + duration);
+    } catch(e) {}
 }
-function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
-function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
-function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
-function playSuccessSound() { playDing(); }
 
-function toggleLofiAudio() {
-    initAudio();
-    const btn = document.getElementById('lofiToggleBtn');
+function playDing() { 
+    playSound('sine', 880, 0.1); 
+    setTimeout(() => playSound('sine', 1760, 0.25), 90); 
+}
+function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
+function playWin() { 
+    playSound('square', 440, 0.15); 
+    setTimeout(() => playSound('square', 554, 0.15), 150); 
+    setTimeout(() => playSound('square', 659, 0.35), 300); 
+}
+
+function stopLofiAudio() {
+    activeLofiNodes.forEach(n => { 
+        try { n.stop(); n.disconnect(); } catch(e) {} 
+    });
+    activeLofiNodes = [];
+}
+
+function cycleLofiAudio() {
+    initAudio(); 
+    stopLofiAudio();
+    currentLofiMode = (currentLofiMode + 1) % 5;
+    const btn = document.getElementById('lofiToggleBtn'); 
     const label = document.getElementById('lofiLabel');
 
-    if (!isLofiPlaying) {
-        lofiOsc = audioCtx.createOscillator();
-        lofiGain = audioCtx.createGain();
-        lofiOsc.type = 'triangle';
-        lofiOsc.frequency.setValueAtTime(108, audioCtx.currentTime);
-        lofiGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        lofiOsc.connect(lofiGain);
-        lofiGain.connect(audioCtx.destination);
-        lofiOsc.start();
-        isLofiPlaying = true;
-        btn.textContent = '⏸️';
-        label.textContent = 'Lofi Focus Radio: 🟢 Playing (108Hz Alpha)';
-    } else {
-        if (lofiOsc) { lofiOsc.stop(); lofiOsc.disconnect(); }
-        isLofiPlaying = false;
-        btn.textContent = '🎧';
-        label.textContent = 'Lofi Focus Radio: Off';
+    if (currentLofiMode === 0) { 
+        btn.textContent = '🎧'; 
+        label.textContent = 'Lofi Radio: Off'; 
+        return; 
+    }
+    
+    btn.textContent = '⏸️';
+    let gainNode = audioCtx.createGain(); 
+    gainNode.connect(audioCtx.destination);
+
+    if (currentLofiMode === 1) {
+        label.textContent = 'Radio: Alpha Focus (108Hz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 108;
+        let osc2 = audioCtx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 112;
+        gainNode.gain.value = 0.05; 
+        osc.connect(gainNode); 
+        osc2.connect(gainNode); 
+        osc.start(); 
+        osc2.start();
+        activeLofiNodes.push(osc, osc2);
+    } else if (currentLofiMode === 2) {
+        label.textContent = 'Radio: Theta Calm (432Hz)';
+        let osc = audioCtx.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 432;
+        gainNode.gain.value = 0.03; 
+        osc.connect(gainNode); 
+        osc.start(); 
+        activeLofiNodes.push(osc);
+    } else if (currentLofiMode === 3 || currentLofiMode === 4) {
+        label.textContent = currentLofiMode === 3 ? 'Radio: Deep Brown Noise' : 'Radio: Soft Pink Noise';
+        let bufferSize = audioCtx.sampleRate * 2; 
+        let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let output = buffer.getChannelData(0); 
+        let lastOut = 0;
+        
+        for (let i = 0; i < bufferSize; i++) {
+            let white = Math.random() * 2 - 1;
+            if(currentLofiMode === 3) { 
+                output[i] = (lastOut + (0.02 * white)) / 1.02; 
+                lastOut = output[i]; 
+                output[i] *= 3.5; 
+            } else { 
+                output[i] = (lastOut + (0.05 * white)) / 1.05; 
+                lastOut = output[i]; 
+                output[i] *= 2; 
+            }
+        }
+        let noise = audioCtx.createBufferSource(); 
+        noise.buffer = buffer; 
+        noise.loop = true;
+        gainNode.gain.value = 0.08; 
+        noise.connect(gainNode); 
+        noise.start(); 
+        activeLofiNodes.push(noise);
     }
 }
 
 /* =====================================================
 NAVIGATION LOGIC
 ===================================================== */
-const doubtModeBtn = document.getElementById('doubtModeBtn');
-const testModeBtn = document.getElementById('testModeBtn');
-const arenaModeBtn = document.getElementById('arenaModeBtn');
+const doubtModeBtn = document.getElementById('doubtModeBtn'); 
+const testModeBtn = document.getElementById('testModeBtn'); 
+const arenaModeBtn = document.getElementById('arenaModeBtn'); 
 const feedModeBtn = document.getElementById('feedModeBtn');
 
-const doubtSection = document.getElementById('doubtSection');
-const testSection = document.getElementById('testSection');
-const arenaSection = document.getElementById('arenaSection');
+const doubtSection = document.getElementById('doubtSection'); 
+const testSection = document.getElementById('testSection'); 
+const arenaSection = document.getElementById('arenaSection'); 
 const feedSection = document.getElementById('feedSection');
 
-doubtModeBtn.onclick = () => switchTab('doubt');
-testModeBtn.onclick = () => switchTab('test');
-arenaModeBtn.onclick = () => switchTab('arena');
+doubtModeBtn.onclick = () => switchTab('doubt'); 
+testModeBtn.onclick = () => switchTab('test'); 
+arenaModeBtn.onclick = () => switchTab('arena'); 
 feedModeBtn.onclick = () => { switchTab('feed'); loadFeedPosts(); };
 
 function switchTab(tab) {
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); 
     document.getElementById(tab + 'ModeBtn').classList.add('active');
-    doubtSection.classList.add('hidden');
-    testSection.classList.add('hidden');
-    arenaSection.classList.add('hidden');
+    
+    doubtSection.classList.add('hidden'); 
+    testSection.classList.add('hidden'); 
+    arenaSection.classList.add('hidden'); 
     feedSection.classList.add('hidden');
+    
     document.getElementById(tab + 'Section').classList.remove('hidden');
 }
 
 /* =====================================================
 ONBOARDING QUEST CONTROLLER
 ===================================================== */
-function checkOnboarding() {
-    if (!localStorage.getItem('invincible_onboarded')) {
-        document.getElementById('onboardingModal').style.display = 'flex';
-    }
+function checkOnboarding() { 
+    if (!localStorage.getItem('invincible_onboarded')) { 
+        document.getElementById('onboardingModal').style.display = 'flex'; 
+    } 
 }
-function selectStartingQuest(quest) {
-    localStorage.setItem('invincible_onboarded', 'true');
-    document.getElementById('onboardingModal').style.display = 'none';
-    switchTab(quest);
+function selectStartingQuest(quest) { 
+    localStorage.setItem('invincible_onboarded', 'true'); 
+    document.getElementById('onboardingModal').style.display = 'none'; 
+    switchTab(quest); 
 }
 setTimeout(checkOnboarding, 800);
 
 /* =====================================================
 24-HOUR STUDY STORIES ENGINE + VIEWER LOGGING
 ===================================================== */
-let activeStories = [];
-let currentStoryIdx = 0;
+let activeStories = []; 
+let currentStoryIdx = 0; 
 let storyTimer = null;
 
-document.getElementById('btnAddStory').onclick = () => {
-    document.getElementById('storyModal').style.display = 'flex';
+document.getElementById('btnAddStory').onclick = () => { 
+    document.getElementById('storyModal').style.display = 'flex'; 
 };
 
 async function loadActiveStories() {
@@ -1375,22 +1679,22 @@ async function loadActiveStories() {
     try {
         const res = await fetch('/api/stories');
         const data = await res.json();
-        activeStories = data.stories || [];
+        const dbStories = data.stories || [];
 
         const welcomeStory = {
-            id: 'welcome-tour',
-            author_name: 'Invincible 360',
-            institution: 'Official Platform',
+            id: 'welcome-tour', 
+            author_name: 'Invincible 360', 
+            institution: 'Official Platform', 
             media_url: null,
             caption: '👋 Welcome to Invincible 360! Your cyber academic home. Tap around to solve doubts, battle friends in PVP, or test your speed!',
-            sticker_question: '💡 Quick Vibe Check: What feature are you trying first?',
-            sticker_opt_a: '⚡ AI Doubt Solver',
-            sticker_opt_b: '⚔️ 1v1 PVP Arena',
-            sticker_correct_opt: 0,
+            sticker_question: '💡 Quick Vibe Check: What feature are you trying first?', 
+            sticker_opt_a: '⚡ AI Doubt Solver', 
+            sticker_opt_b: '⚔️ 1v1 PVP Arena', 
+            sticker_correct_opt: 0, 
             is_topper: true
         };
 
-        activeStories.unshift(welcomeStory);
+        activeStories = [welcomeStory, ...dbStories];
 
         container.innerHTML = activeStories.map((s, idx) => `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
@@ -1400,342 +1704,313 @@ async function loadActiveStories() {
                     </div>
                     <span class="story-badge-flame">${s.id === 'welcome-tour' ? '✨' : (s.is_topper ? '👑' : '🔥')}</span>
                 </div>
-                <div class="story-username">${escapeHTML(s.author_name)}</div>
+                <div class="story-username">${s.id === 'welcome-tour' ? 'Start Here' : escapeHTML(s.author_name)}</div>
             </div>
         `).join('');
-    } catch(e) {
-        container.innerHTML = '';
+    } catch(e) { 
+        console.log("Stories API load error."); 
     }
 }
-loadActiveStories();
 
 let storyImageData = null;
-document.getElementById('storyImageInput').onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => { storyImageData = reader.result; };
-    reader.readAsDataURL(file);
+document.getElementById('storyImageInput').onchange = e => { 
+    const file = e.target.files[0]; 
+    if(!file) return; 
+    const reader = new FileReader(); 
+    reader.onload = () => { storyImageData = reader.result; }; 
+    reader.readAsDataURL(file); 
 };
 
 document.getElementById('btnPublishStory').onclick = async () => {
-    const name = document.getElementById('storyAuthorName').value.trim();
-    const inst = document.getElementById('storyInstitution').value.trim();
+    const name = document.getElementById('storyAuthorName').value.trim(); 
+    const inst = document.getElementById('storyInstitution').value.trim(); 
     const caption = document.getElementById('storyCaption').value.trim();
-    const stickerQ = document.getElementById('storyStickerQ').value.trim();
-    const optA = document.getElementById('storyStickerOptA').value.trim();
-    const optB = document.getElementById('storyStickerOptB').value.trim();
+    const stickerQ = document.getElementById('storyStickerQ').value.trim(); 
+    const optA = document.getElementById('storyStickerOptA').value.trim(); 
+    const optB = document.getElementById('storyStickerOptB').value.trim(); 
     const correctOpt = document.getElementById('storyStickerCorrect').value;
-
+    
     if (!name || !inst) return alert("Please fill Name and School/Coaching!");
-
-    localStorage.setItem('student_name', name);
+    
+    localStorage.setItem('student_name', name); 
     localStorage.setItem('student_inst', inst);
-
-    const btn = document.getElementById('btnPublishStory');
-    btn.disabled = true; btn.textContent = "Publishing Story...";
+    
+    const btn = document.getElementById('btnPublishStory'); 
+    btn.disabled = true; 
+    btn.textContent = "Publishing Story...";
 
     try {
-        const res = await fetch('/api/stories', {
-            method: 'POST',
+        await fetch('/api/stories', {
+            method: 'POST', 
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                action: 'create_story',
-                author_name: name,
-                institution: inst,
-                caption: caption,
-                media_url: storyImageData,
-                sticker_question: stickerQ || null,
-                sticker_opt_a: optA || null,
-                sticker_opt_b: optB || null,
-                sticker_correct_opt: correctOpt,
-                streak_count: Math.floor(Math.random() * 5) + 1
+            body: JSON.stringify({ 
+                action: 'create_story', 
+                author_name: name, 
+                institution: inst, 
+                caption: caption, 
+                media_url: storyImageData, 
+                sticker_question: stickerQ || null, 
+                sticker_opt_a: optA || null, 
+                sticker_opt_b: optB || null, 
+                sticker_correct_opt: correctOpt, 
+                streak_count: Math.floor(Math.random() * 5) + 1 
             })
         });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        document.getElementById('storyModal').style.display = 'none';
-        storyImageData = null;
-        loadActiveStories();
+        document.getElementById('storyModal').style.display = 'none'; 
+        storyImageData = null; 
+        loadActiveStories(); 
         alert("🎉 Your study story is live for 24 hours!");
-    } catch(err) {
-        alert(err.message);
-    } finally {
-        btn.disabled = false; btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)";
+    } catch(err) { 
+        alert(err.message); 
+    } finally { 
+        btn.disabled = false; 
+        btn.textContent = "SHARE STORY (DISAPPEARS IN 24H)"; 
     }
 };
 
-function openStoryViewer(idx) {
-    if (!activeStories[idx]) return;
-    currentStoryIdx = idx;
-    document.getElementById('storyViewer').style.display = 'flex';
-    document.getElementById('viewersDrawer').style.display = 'none';
-    renderStorySlide();
+function openStoryViewer(idx) { 
+    currentStoryIdx = idx; 
+    document.getElementById('storyViewer').style.display = 'flex'; 
+    document.getElementById('viewersDrawer').style.display = 'none'; 
+    renderStorySlide(); 
 }
 
-function prevStorySlide() {
-    if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); }
-}
-function nextStorySlide() {
-    if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); }
-    else { closeStoryViewer(); }
-}
+function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
+function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
 
 function renderStorySlide() {
-    clearTimeout(storyTimer);
+    clearTimeout(storyTimer); 
     const story = activeStories[currentStoryIdx];
     if (!story) { closeStoryViewer(); return; }
-
-    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution)}</span>`;
+    
+    document.getElementById('viewerAuthor').innerHTML = `${escapeHTML(story.author_name)} <span style="font-size:12px; font-weight:normal; color:var(--text-muted);">&bull; ${escapeHTML(story.institution || 'Platform')}</span>`;
     
     const imgEl = document.getElementById('viewerImage');
-    if (story.media_url) {
-        imgEl.src = story.media_url;
-        imgEl.style.display = 'block';
-    } else {
-        imgEl.style.display = 'none';
-    }
-
+    if (story.media_url) { imgEl.src = story.media_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
     document.getElementById('viewerCaption').textContent = story.caption || '';
-
+    
     const stickerCard = document.getElementById('viewerStickerCard');
     if (story.sticker_question) {
-        stickerCard.style.display = 'block';
-        document.getElementById('viewerStickerQ').textContent = story.sticker_question;
-        document.getElementById('labelStickerA').textContent = story.sticker_opt_a;
+        stickerCard.style.display = 'block'; 
+        document.getElementById('viewerStickerQ').textContent = story.sticker_question; 
+        document.getElementById('labelStickerA').textContent = story.sticker_opt_a; 
         document.getElementById('labelStickerB').textContent = story.sticker_opt_b;
-        document.getElementById('pctStickerA').style.display = 'none';
-        document.getElementById('pctStickerB').style.display = 'none';
-        document.getElementById('barStickerA').style.width = '0%';
+        document.getElementById('pctStickerA').style.display = 'none'; 
+        document.getElementById('pctStickerB').style.display = 'none'; 
+        document.getElementById('barStickerA').style.width = '0%'; 
         document.getElementById('barStickerB').style.width = '0%';
-        document.getElementById('btnStickerA').className = 'sticker-btn';
+        document.getElementById('btnStickerA').className = 'sticker-btn'; 
         document.getElementById('btnStickerB').className = 'sticker-btn';
-    } else {
-        stickerCard.style.display = 'none';
+    } else { 
+        stickerCard.style.display = 'none'; 
     }
 
     if (story.id !== 'welcome-tour') {
-        const viewerName = localStorage.getItem('student_name') || document.getElementById('studentName').value.trim() || 'Peer Student';
-        const viewerInst = localStorage.getItem('student_inst') || 'School';
-        fetch('/api/stories', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'record_view', story_id: story.id, viewer_name: viewerName, viewer_institution: viewerInst })
+        fetch('/api/stories', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ 
+                action: 'record_view', 
+                story_id: story.id, 
+                viewer_name: localStorage.getItem('student_name') || 'Peer Student', 
+                viewer_institution: localStorage.getItem('student_inst') || 'School' 
+            }) 
         });
     }
 
     const pContainer = document.getElementById('storyProgressContainer');
-    pContainer.innerHTML = activeStories.map((_, i) => `
-        <div class="story-progress-seg">
-            <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div>
-        </div>
-    `).join('');
-
-    storyTimer = setTimeout(() => {
-        nextStorySlide();
-    }, 6000);
+    pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
+    
+    storyTimer = setTimeout(() => { nextStorySlide(); }, 6000);
 }
 
-function closeStoryViewer() {
-    clearTimeout(storyTimer);
-    document.getElementById('storyViewer').style.display = 'none';
+function closeStoryViewer() { 
+    clearTimeout(storyTimer); 
+    document.getElementById('storyViewer').style.display = 'none'; 
 }
 
 async function toggleViewersSheet() {
-    clearTimeout(storyTimer);
+    clearTimeout(storyTimer); 
     const drawer = document.getElementById('viewersDrawer');
-    if (drawer.style.display === 'block') {
-        drawer.style.display = 'none';
-        return;
-    }
-    drawer.style.display = 'block';
+    if (drawer.style.display === 'block') { drawer.style.display = 'none'; return; }
     
-    const story = activeStories[currentStoryIdx];
+    drawer.style.display = 'block'; 
+    const story = activeStories[currentStoryIdx]; 
     const listEl = document.getElementById('viewersListContainer');
-
-    if (story.id === 'welcome-tour') {
-        document.getElementById('viewersCount').textContent = '∞';
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform story. Thousands of students viewed this!</div>';
-        return;
+    
+    if (story.id === 'welcome-tour') { 
+        document.getElementById('viewersCount').textContent = '∞'; 
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Official platform story. Thousands of students viewed this!</div>'; 
+        return; 
     }
-
+    
     listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">Fetching viewers...</div>';
-
+    
     try {
-        const res = await fetch(`/api/stories?action=get_viewers&story_id=${story.id}`);
-        const data = await res.json();
-        const viewers = data.viewers || [];
+        const res = await fetch(`/api/stories?action=get_viewers&story_id=${story.id}`); 
+        const data = await res.json(); 
+        const viewers = data.viewers || []; 
         document.getElementById('viewersCount').textContent = viewers.length;
-
-        if (viewers.length === 0) {
-            listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No views recorded yet.</div>';
-            return;
+        
+        if (viewers.length === 0) { 
+            listEl.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">No views recorded yet.</div>'; 
+            return; 
         }
-
-        listEl.innerHTML = viewers.map(v => `
-            <div class="viewer-item">
-                <span style="font-weight:700; color:#fff;">${escapeHTML(v.viewer_name)}</span>
-                <span style="color:var(--text-muted); font-size:12px;">${escapeHTML(v.viewer_institution)}</span>
-            </div>
-        `).join('');
-    } catch(e) {
-        listEl.innerHTML = '<div style="font-size:12px; color:var(--accent-rose);">Failed to load viewers.</div>';
+        listEl.innerHTML = viewers.map(v => `<div class="viewer-item"><span style="font-weight:700; color:#fff;">${escapeHTML(v.viewer_name)}</span><span style="color:var(--text-muted); font-size:12px;">${escapeHTML(v.viewer_institution)}</span></div>`).join('');
+    } catch(e) { 
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--accent-rose);">Failed to load viewers.</div>'; 
     }
 }
 
 async function voteStorySticker(selectedOpt) {
     const story = activeStories[currentStoryIdx];
-    const bA = document.getElementById('btnStickerA');
-    const bB = document.getElementById('btnStickerB');
-    const pA = document.getElementById('pctStickerA');
-    const pB = document.getElementById('pctStickerB');
-    const barA = document.getElementById('barStickerA');
-    const barB = document.getElementById('barStickerB');
-
-    pA.style.display = 'inline'; pB.style.display = 'inline';
+    document.getElementById('pctStickerA').style.display = 'inline'; 
+    document.getElementById('pctStickerB').style.display = 'inline';
     
     if (story.id === 'welcome-tour') {
-        barA.style.width = '74%'; barB.style.width = '26%';
-        pA.textContent = '74%'; pB.textContent = '26%';
-        playWin();
-        if (selectedOpt === 0) bA.classList.add('voted-correct');
-        else bB.classList.add('voted-correct');
-        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 50, origin: { y: 0.5 } });
+        document.getElementById('barStickerA').style.width = '74%'; 
+        document.getElementById('barStickerB').style.width = '26%'; 
+        document.getElementById('pctStickerA').textContent = '74%'; 
+        document.getElementById('pctStickerB').textContent = '26%';
+        playWin(); 
+        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-correct'); 
+        else document.getElementById('btnStickerB').classList.add('voted-correct');
+        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 50, origin: { y: 0.5 } }); 
         return; 
     }
 
-    barA.style.width = '65%'; barB.style.width = '35%';
-    pA.textContent = '65%'; pB.textContent = '35%';
-
-    if (selectedOpt === Number(story.sticker_correct_opt)) {
-        playWin();
-        if (selectedOpt === 0) bA.classList.add('voted-correct');
-        else bB.classList.add('voted-correct');
-        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } });
-    } else {
-        playBuzz();
-        if (selectedOpt === 0) bA.classList.add('voted-wrong');
-        else bB.classList.add('voted-wrong');
+    document.getElementById('barStickerA').style.width = '65%'; 
+    document.getElementById('barStickerB').style.width = '35%'; 
+    document.getElementById('pctStickerA').textContent = '65%'; 
+    document.getElementById('pctStickerB').textContent = '35%';
+    
+    if (selectedOpt === Number(story.sticker_correct_opt)) { 
+        playWin(); 
+        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-correct'); 
+        else document.getElementById('btnStickerB').classList.add('voted-correct'); 
+        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } }); 
+    } else { 
+        playBuzz(); 
+        if (selectedOpt === 0) document.getElementById('btnStickerA').classList.add('voted-wrong'); 
+        else document.getElementById('btnStickerB').classList.add('voted-wrong'); 
     }
-
-    fetch('/api/stories', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt })
+    
+    fetch('/api/stories', { 
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify({ action: 'vote_sticker', story_id: story.id, vote_opt: selectedOpt }) 
     });
 }
 
-function reactStory(type) {
-    playDing();
-    const story = activeStories[currentStoryIdx];
-    if (typeof confetti === 'function') {
-        confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
-    }
-    if (story.id !== 'welcome-tour') {
-        fetch('/api/stories', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type })
-        });
-    }
+function reactStory(type) { 
+    playDing(); 
+    const story = activeStories[currentStoryIdx]; 
+    if (typeof confetti === 'function') { confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); } 
+    if (story.id !== 'welcome-tour') { 
+        fetch('/api/stories', { 
+            method: 'POST', headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type }) 
+        }); 
+    } 
 }
 
-function saveStoryToVault() {
-    const story = activeStories[currentStoryIdx];
-    let vault = JSON.parse(localStorage.getItem('study_vault') || '[]');
-    vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() });
-    localStorage.setItem('study_vault', JSON.stringify(vault));
-    playSuccessSound();
-    alert("💾 Saved to your personal Note Vault!");
+function saveStoryToVault() { 
+    const story = activeStories[currentStoryIdx]; 
+    let vault = JSON.parse(localStorage.getItem('study_vault') || '[]'); 
+    vault.push({ author: story.author_name, image: story.media_url, caption: story.caption, date: new Date().toLocaleDateString() }); 
+    localStorage.setItem('study_vault', JSON.stringify(vault)); 
+    playSuccessSound(); 
+    alert("💾 Saved to your personal Note Vault!"); 
 }
 
 /* =====================================================
-DOUBT DESK LOGIC (WITH EXPLICIT TONE SWITCHER)
+DOUBT DESK LOGIC 
 ===================================================== */
-let selectedSubject = "Mathematics";
-let currentTone = "step";
+let selectedSubject = "Mathematics"; 
+let currentTone = "step"; 
 let selectedImage = null;
-const questionInput = document.getElementById("question");
-const imageInput = document.getElementById("imageInput");
-const imagePreview = document.getElementById("imagePreview");
+const questionInput = document.getElementById("question"); 
+const imageInput = document.getElementById("imageInput"); 
+const imagePreview = document.getElementById("imagePreview"); 
 const removeImageButton = document.getElementById("removeImage");
 
-function setExplanationTone(tone, el) {
-    currentTone = tone;
-    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
+function setExplanationTone(tone, el) { 
+    currentTone = tone; 
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); 
+    el.classList.add('active'); 
 }
 
-document.querySelectorAll("#doubtSection .subject").forEach(b => {
-    b.onclick = () => {
-        document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active'));
-        b.classList.add('active');
-        selectedSubject = b.getAttribute('data-subject');
-    };
+document.querySelectorAll("#doubtSection .subject").forEach(b => { 
+    b.onclick = () => { 
+        document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); 
+        b.classList.add('active'); 
+        selectedSubject = b.getAttribute('data-subject'); 
+    }; 
 });
+
 document.getElementById("uploadBtn").onclick = () => imageInput.click();
 document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
 
-imageInput.onchange = e => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-        selectedImage = { data: reader.result.split(",")[1], mimeType: file.type };
-        imagePreview.src = reader.result;
-        imagePreview.style.display = "block";
-        removeImageButton.style.display = "block";
-    };
-    reader.readAsDataURL(file);
+imageInput.onchange = e => { 
+    const file = e.target.files[0]; 
+    if(!file) return; 
+    const reader = new FileReader(); 
+    reader.onload = () => { 
+        selectedImage = { data: reader.result.split(",")[1], mimeType: file.type }; 
+        imagePreview.src = reader.result; 
+        imagePreview.style.display = "block"; 
+        removeImageButton.style.display = "block"; 
+    }; 
+    reader.readAsDataURL(file); 
 };
-removeImageButton.onclick = () => {
-    selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none";
+
+removeImageButton.onclick = () => { 
+    selectedImage = null; imageInput.value = ""; 
+    imagePreview.style.display = "none"; removeImageButton.style.display = "none"; 
 };
 
 document.getElementById("askBtn").onclick = async () => {
-    const q = questionInput.value.trim();
+    const q = questionInput.value.trim(); 
     if(!q && !selectedImage) return alert("Please enter a question or upload an image.");
-    document.getElementById("loadingDoubt").classList.remove('hidden');
-    document.getElementById("answerBox").style.display = "none";
+    
+    document.getElementById("loadingDoubt").classList.remove('hidden'); 
+    document.getElementById("answerBox").style.display = "none"; 
     document.getElementById("feedback").style.display = "none";
-
+    
     try {
-        const res = await fetch("/api/ask", {
+        const res = await fetch("/api/ask", { 
             method: "POST", 
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ 
-                subject: selectedSubject, 
-                question: q, 
-                image: selectedImage,
-                tone: currentTone
-            })
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify({ subject: selectedSubject, question: q, image: selectedImage, tone: currentTone }) 
         });
         const data = await res.json();
         
         const badge = document.getElementById('doubtToughnessBadge');
-        if (currentTone === 'eli10') {
-            badge.textContent = "🐣 Simple Story Mode (ELI10)";
-            badge.style.color = "var(--accent-amber)";
-            badge.style.borderColor = "rgba(245,158,11,0.3)";
-            badge.style.background = "rgba(245,158,11,0.12)";
-        } else if (currentTone === 'tldr') {
-            badge.textContent = "⚡ Formula Snapshot";
-            badge.style.color = "var(--accent-cyan)";
-            badge.style.borderColor = "rgba(6,182,212,0.3)";
-            badge.style.background = "rgba(6,182,212,0.12)";
-        } else {
-            badge.textContent = "🧠 Step-by-Step Breakdown";
-            badge.style.color = "var(--accent-emerald)";
-            badge.style.borderColor = "rgba(16,185,129,0.3)";
-            badge.style.background = "rgba(16,185,129,0.12)";
+        if (currentTone === 'eli10') { 
+            badge.textContent = "🐣 Simple Story Mode (ELI10)"; 
+            badge.style.color = "var(--accent-amber)"; 
+            badge.style.borderColor = "rgba(245,158,11,0.3)"; 
+            badge.style.background = "rgba(245,158,11,0.12)"; 
+        } else if (currentTone === 'tldr') { 
+            badge.textContent = "⚡ Formula Snapshot"; 
+            badge.style.color = "var(--accent-cyan)"; 
+            badge.style.borderColor = "rgba(6,182,212,0.3)"; 
+            badge.style.background = "rgba(6,182,212,0.12)"; 
+        } else { 
+            badge.textContent = "🧠 Step-by-Step Breakdown"; 
+            badge.style.color = "var(--accent-emerald)"; 
+            badge.style.borderColor = "rgba(16,185,129,0.3)"; 
+            badge.style.background = "rgba(16,185,129,0.12)"; 
         }
-
-        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned.");
-        document.getElementById("answerBox").style.display = "block";
+        
+        document.getElementById("answerText").textContent = cleanAnswer(data.answer || "No solution returned."); 
+        document.getElementById("answerBox").style.display = "block"; 
         document.getElementById("feedback").style.display = "block";
-    } catch(err) {
-        document.getElementById("answerBox").style.display = "block";
-        document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection.";
-    } finally {
-        document.getElementById("loadingDoubt").classList.add('hidden');
+    } catch(err) { 
+        document.getElementById("answerBox").style.display = "block"; 
+        document.getElementById("answerText").textContent = "Unable to fetch solution. Please verify connection."; 
+    } finally { 
+        document.getElementById("loadingDoubt").classList.add('hidden'); 
     }
 };
 
@@ -1744,486 +2019,748 @@ MATH FORMATTER
 ===================================================== */
 function formatMathText(text) {
     if (!text) return "";
-    const superscripts = {
-        '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-        '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
-        '+': '⁺', '-': '⁻', '=': '⁼', '(': '⁽', ')': '⁾', 'n': 'ⁿ', 'x': 'ˣ'
-    };
-
-    return text
-        .replace(/#{1,6}\s?/g, "")
-        .replace(/\*\*/g, "")
-        .replace(/\*/g, "")
-        .replace(/\\text\{([^}]*)\}/g, "$1")
-        .replace(/\\mathrm\{([^}]*)\}/g, "$1")
-        .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
-        .replace(/\\implies/g, " ➔ ")
-        .replace(/\\rightarrow/g, " ➔ ")
-        .replace(/\\times/g, " × ")
-        .replace(/\\div/g, " ÷ ")
-        .replace(/\\cdot/g, " · ")
-        .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
-        .replace(/\\left/g, "")
-        .replace(/\\right/g, "")
-        .replace(/\\\[/g, "")
-        .replace(/\\\]/g, "")
-        .replace(/\$\$/g, "")
-        .replace(/\$/g, "")
-        .replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join(''))
-        .replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1)
-        .replace(/```[\s\S]*?```/g, "")
-        .trim();
+    const superscripts = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '+': '⁺', '-': '⁻', '=': '⁼', '(': '⁽', ')': '⁾', 'n': 'ⁿ', 'x': 'ˣ' };
+    return text.replace(/#{1,6}\s?/g, "").replace(/\*\*/g, "").replace(/\*/g, "").replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\mathrm\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\implies/g, " ➔ ").replace(/\\rightarrow/g, " ➔ ").replace(/\\times/g, " × ").replace(/\\div/g, " ÷ ").replace(/\\cdot/g, " · ").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\left/g, "").replace(/\\right/g, "").replace(/\\\[/g, "").replace(/\\\]/g, "").replace(/\$\$/g, "").replace(/\$/g, "").replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join('')).replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1).replace(/```[\s\S]*?```/g, "").trim();
 }
+function cleanAnswer(text){ return formatMathText(text); }
 
-function cleanAnswer(text){
-    return formatMathText(text);
-}
-
-document.getElementById("againBtn").addEventListener("click", function(){
-    const oldQuestion = questionInput.value.trim();
-    questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example.";
-    document.getElementById("askBtn").click();
+document.getElementById("againBtn").addEventListener("click", function(){ 
+    const oldQuestion = questionInput.value.trim(); 
+    questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example."; 
+    document.getElementById("askBtn").click(); 
 });
 
-document.getElementById("teacherBtn").addEventListener("click", function(){
-    const studentQuestion = questionInput.value.trim();
-    const explanation = document.getElementById("answerText").textContent.trim();
-    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation;
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank");
+document.getElementById("teacherBtn").addEventListener("click", function(){ 
+    const studentQuestion = questionInput.value.trim(); 
+    const explanation = document.getElementById("answerText").textContent.trim(); 
+    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; 
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
 });
 
 /* =====================================================
-DATABASE LOADER & QUESTION BANK PRE-POPULATION
+DATABASE LOADER & EXHAUSTIVE QUESTION BANK (240 QS)
 ===================================================== */
 function generateBuiltinQuestionBank() {
     const bank = {};
-    function setTest(org, cls, sub, title, qs) {
-        const key = org + "|" + cls + "|" + sub;
-        if (!bank[key]) bank[key] = {};
-        bank[key][title] = qs.map((q, idx) => ({
-            id: idx + 1,
-            question: q.q,
-            options: q.o,
-            answer: q.a,
-            explanation: q.e
-        }));
+    const o = "Other School";
+    
+    function buildQArray(rawArray) {
+        return rawArray.map((x, i) => ({ id: i+1, question: x[0], options: [x[1], x[2], x[3], x[4]], answer: x[5], explanation: x[6] }));
     }
 
-    const qData = {
-        "Other School|9|Physics": {
-            title: "Motion (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"What is the SI unit of distance?", o:["Meter (m)","Kilometer (km)","Centimeter (cm)","Millimeter (mm)"], a:0, e:"The standard international unit of distance and displacement is the meter (m)."},
-                {q:"Which quantity is a vector quantity?", o:["Distance","Speed","Displacement","Time"], a:2, e:"Displacement has both magnitude and a specific direction, making it a vector quantity."},
-                {q:"What is the SI unit of speed?", o:["m/s","m/s²","km/h","m·s"], a:0, e:"Speed is distance divided by time, hence its SI unit is meter per second (m/s)."},
-                {q:"The rate of change of displacement is called:", o:["Acceleration","Velocity","Speed","Force"], a:1, e:"Velocity is defined as the rate of change of displacement with time."},
-                {q:"What is the SI unit of acceleration?", o:["m/s","m/s²","km/h²","m·s²"], a:1, e:"Acceleration is velocity change per second, giving m/s²."},
-                {q:"If an object moves with constant speed, its acceleration is:", o:["Zero","Positive","Negative","Infinite"], a:0, e:"When speed/velocity does not change, acceleration is 0."},
-                {q:"Negative acceleration is also known as:", o:["Retardation","Velocity","Momentum","Speed"], a:0, e:"Deceleration or retardation refers to negative acceleration."},
-                {q:"The slope of a Distance-Time graph represents:", o:["Acceleration","Speed","Distance","Displacement"], a:1, e:"Slope = (Change in Distance)/(Change in Time) = Speed."},
-                {q:"The slope of a Velocity-Time graph gives:", o:["Distance","Displacement","Acceleration","Speed"], a:2, e:"Slope of v-t graph = (Change in Velocity)/(Time) = Acceleration."},
-                {q:"Area under a Velocity-Time graph represents:", o:["Displacement","Acceleration","Speed","Force"], a:0, e:"Area under v-t graph represents total distance or displacement."},
-                {q:"Which of the following is the first equation of motion?", o:["v = u + at","s = ut + ½at²","v² - u² = 2as","v = u - at"], a:0, e:"v = u + at relates initial velocity (u), final velocity (v), acceleration (a), and time (t)."},
-                {q:"In the equation s = ut + ½at², what does 's' represent?", o:["Speed","Displacement / Distance","Second","Surface"], a:1, e:"'s' stands for displacement or distance covered."},
-                {q:"An odometer in a car measures:", o:["Speed","Instantaneous speed","Distance","Acceleration"], a:2, e:"An odometer records total distance traveled by the vehicle."},
-                {q:"A speedometer measures:", o:["Average speed","Instantaneous speed","Total distance","Acceleration"], a:1, e:"A speedometer shows current or instantaneous speed."},
-                {q:"When an object travels equal distances in equal intervals of time, the motion is:", o:["Uniform","Non-uniform","Accelerated","Circular"], a:0, e:"This is the exact definition of uniform motion."},
-                {q:"Can displacement be zero even if distance is non-zero?", o:["Yes","No","Only in space","Never"], a:0, e:"Yes, returning to the starting point gives zero displacement but positive distance."},
-                {q:"What is the motion of the tip of the second hand of a watch?", o:["Uniform linear motion","Uniform circular motion","Non-uniform circular motion","Oscillatory motion"], a:1, e:"It moves with constant speed along a circular path."},
-                {q:"When a body starts from rest, its initial velocity (u) is:", o:["0 m/s","9.8 m/s","1 m/s","Infinite"], a:0, e:"'At rest' implies initial velocity u = 0."},
-                {q:"When brakes are applied to stop a car, final velocity (v) is:", o:["0 m/s","Positive","Negative","Equal to initial"], a:0, e:"When an object stops completely, final velocity v = 0."},
-                {q:"Distance is always:", o:["Positive or zero","Negative","Zero only","Always negative"], a:0, e:"Distance is a scalar quantity and cannot be negative."}
-            ]
-        },
-        "Other School|10|Physics": {
-            title: "Light - Reflection & Refraction (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"The focal length of a plane mirror is:", o:["Zero","Infinity","25 cm","1 m"], a:1, e:"A plane mirror has no curvature, so its radius and focal length are infinite."},
-                {q:"The relation between focal length (f) and radius of curvature (R) of a spherical mirror is:", o:["f = R/2","f = 2R","f = R","f = 1/R"], a:0, e:"Focal length is half of the radius of curvature: f = R/2."},
-                {q:"An image formed by a plane mirror is always:", o:["Real and inverted","Virtual and erect","Real and erect","Virtual and inverted"], a:1, e:"Plane mirrors produce upright, virtual, laterally inverted images."},
-                {q:"What type of mirror is used as a rear-view mirror in vehicles?", o:["Convex mirror","Concave mirror","Plane mirror","Cylindrical mirror"], a:0, e:"Convex mirrors give an erect, diminished image with a wide field of view."},
-                {q:"The mirror formula is:", o:["1/v + 1/u = 1/f","1/v - 1/u = 1/f","v + u = f","1/f = u - v"], a:0, e:"The standard mirror equation is 1/v + 1/u = 1/f."},
-                {q:"The lens formula is:", o:["1/v - 1/u = 1/f","1/v + 1/u = 1/f","1/f = u/v","f = uv"], a:0, e:"The lens equation is 1/v - 1/u = 1/f."},
-                {q:"The SI unit of power of a lens is:", o:["Dioptre (D)","Meter","Centimeter","Watt"], a:0, e:"Lens power P = 1/f(m), measured in Dioptres (D)."},
-                {q:"The power of a convex lens of focal length 1 m is:", o:["+1 D","-1 D","+2 D","0 D"], a:0, e:"P = 1/f = 1/1 = +1 Dioptre."},
-                {q:"The speed of light in vacuum is:", o:["3 × 10⁸ m/s","3 × 10⁶ m/s","3 × 10⁸ km/s","3 × 10¹⁰ m/s"], a:0, e:"Light travels at 300,000 km/s or 3 × 10⁸ m/s in vacuum."},
-                {q:"Snell's Law of refraction is represented by:", o:["sin i / sin r = constant","sin i × sin r = constant","i = r","sin i + sin r = 1"], a:0, e:"Snell's law states sin i / sin r = refractive index (μ)."},
-                {q:"When light travels from an optically rarer to a denser medium, it bends:", o:["Towards the normal","Away from the normal","Does not bend","Reflects back"], a:0, e:"Light slows down in a denser medium, bending towards the normal."},
-                {q:"What type of mirror is used by dentists to see enlarged teeth?", o:["Concave mirror","Convex mirror","Plane mirror","Bifocal mirror"], a:0, e:"Dentists use concave mirrors when object is within focus to get an enlarged erect view."},
-                {q:"The magnification produced by a rear-view convex mirror is:", o:["Less than 1","Greater than 1","Equal to 1","Can be anything"], a:0, e:"Convex mirrors always form diminished images (m < 1)."},
-                {q:"A concave lens always forms an image that is:", o:["Virtual, erect and diminished","Real and inverted","Virtual and magnified","Real and enlarged"], a:0, e:"Concave lenses diverge rays, always producing virtual, upright, diminished images."},
-                {q:"The centre of the reflecting surface of a spherical mirror is called:", o:["Pole (P)","Focus (F)","Center of curvature (C)","Optical centre"], a:0, e:"The midpoint of the mirror's surface is its Pole."},
-                {q:"If a lens has power -2.0 D, its nature and focal length are:", o:["Concave, -0.5 m","Convex, +0.5 m","Concave, -2 m","Convex, +2 m"], a:0, e:"Negative power indicates a concave lens; f = 1/(-2) = -0.5 m."},
-                {q:"Refractive index of diamond is approx 2.42. This means light in diamond:", o:["Travels 2.42 times slower than in vacuum","Travels faster","Is absorbed","Scatters"], a:0, e:"n = c/v => speed in diamond is c/2.42."},
-                {q:"Where should an object be placed in front of a concave mirror to get an image of the same size?", o:["At Center of Curvature (C)","At Focus (F)","Between F and C","At Infinity"], a:0, e:"Object at C produces a real, inverted image of the same size at C."},
-                {q:"Law of reflection states that angle of incidence (i) is:", o:["Equal to angle of reflection (r)","Greater than r","Smaller than r","Always 90°"], a:0, e:"∠i = ∠r is the primary law of reflection."},
-                {q:"A ray passing through the optical centre of a thin lens:", o:["Goes undeviated","Bends by 90°","Reflects back","Disappears"], a:0, e:"Light rays through the optical centre pass without deviation."}
-            ]
-        },
-        "Other School|12|Physics": {
-            title: "Electric Charges and Fields (Chapter 1 Confidence Test)",
-            qs: [
-                {q:"What is the SI unit of electric charge?", o:["Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)"], a:0, e:"Electric charge is measured in Coulombs (C)."},
-                {q:"The charge of an electron is approximately:", o:["-1.6 × 10⁻¹⁹ C","+1.6 × 10⁻¹⁹ C","-1.6 × 10⁻²⁷ C","-9.1 × 10⁻³¹ C"], a:0, e:"Elementary fundamental charge e = 1.602 × 10⁻¹⁹ C."},
-                {q:"Quantization of electric charge is expressed as:", o:["q = ±ne","q = n/e","q = e/n","q = n²e"], a:0, e:"Charge exists in integral multiples of elementary charge e: q = ne."},
-                {q:"Coulomb's Law constant (1 / 4πε₀) in vacuum is equal to:", o:["9 × 10⁹ N·m²/C²","8.85 × 10⁻¹² N·m²/C²","9 × 10⁻⁹ N·m²/C²","3 × 10⁸ N·m²/C²"], a:0, e:"1/(4πε₀) ≈ 8.99 × 10⁹ ≈ 9 × 10⁹ N m²/C²."},
-                {q:"The SI unit of electric field intensity (E) is:", o:["N/C or V/m","N·m/C","J/C","C/m"], a:0, e:"E = F/q (Newton per Coulomb) or -dV/dr (Volt per meter)."},
-                {q:"The electric field inside a hollow charged spherical conductor is:", o:["Zero","Infinite","Uniform and non-zero","Decreasing towards center"], a:0, e:"Inside an electrostatic conductor, electric field E = 0."},
-                {q:"Electric field lines start from:", o:["Positive charge and end on negative charge","Negative and end on positive","Start from infinity always","Form closed loops"], a:0, e:"Electric lines of force diverge from positive and terminate at negative charges."},
-                {q:"Can two electric field lines intersect each other?", o:["No, because at intersection there would be two directions of field","Yes, always","Only in vacuum","Only for like charges"], a:0, e:"At an intersection point, tangent would indicate two contradictory directions."},
-                {q:"The SI unit of electric flux (Φ) is:", o:["N·m²/C or V·m","N/C","C/m²","Farad"], a:0, e:"Electric flux Φ = E·A = (N/C)·m² = N m²/C = V m."},
-                {q:"Gauss's Law states that total electric flux through a closed surface is:", o:["q_enclosed / ε₀","q_enclosed × ε₀","Zero always","q / 4πε₀"], a:0, e:"Gauss's law: ∮ E·dA = q_inside / ε₀."},
-                {q:"An electric dipole consists of:", o:["Two equal and opposite charges separated by small distance","Two like charges","Single positive charge","Three charges"], a:0, e:"Dipole = +q and -q separated by distance 2a."},
-                {q:"The SI unit of electric dipole moment (p = q × 2a) is:", o:["Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt·meter"], a:0, e:"Dipole moment has units of charge (C) × length (m) = C·m."},
-                {q:"The direction of an electric dipole moment is conventionally taken from:", o:["Negative charge to positive charge","Positive to negative","Random","North to south"], a:0, e:"By physics convention, dipole vector p points from -q to +q."},
-                {q:"Torque (τ) experienced by an electric dipole in uniform field E is:", o:["p × E (p E sin θ)","p · E","p / E","Zero always"], a:0, e:"τ = p × E = pE sin θ."},
-                {q:"A dipole in a uniform electric field experiences:", o:["Only torque, no net force","Both force and torque","Only force, no torque","Neither force nor torque"], a:0, e:"Net force is zero because equal and opposite forces act on +q and -q."},
-                {q:"Electric field due to a point charge q at distance r varies as:", o:["1/r²","1/r","1/r³","r"], a:0, e:"E = kq/r² (inversely proportional to r²)."},
-                {q:"Electric field on axial line of short dipole varies with distance as:", o:["1/r³","1/r²","1/r","1/r⁴"], a:0, e:"For short dipoles, E_axial = 2kp/r³ (varies as 1/r³)."},
-                {q:"Permittivity of free space (ε₀) has the value:", o:["8.854 × 10⁻¹² C²/N·m²","9 × 10⁹ C²/N·m²","1.6 × 10⁻¹⁹ C²/N·m²","6.67 × 10⁻¹¹ C²/N·m²"], a:0, e:"ε₀ = 8.854 × 10⁻¹² C² N⁻¹ m⁻²."},
-                {q:"Linear charge density (λ) has SI unit:", o:["C/m","C/m²","C/m³","C·m"], a:0, e:"λ = q/L (Coulombs per meter)."},
-                {q:"Surface charge density (σ) has SI unit:", o:["C/m²","C/m","C/m³","Coulomb"], a:0, e:"σ = q/A (Coulombs per square meter)."}
-            ]
-        }
-    };
+    // 1. CLASS 9 SCIENCE (Matter in our Surroundings)
+    const c9SciRaw = [
+        ["Which state of matter has a definite volume but no definite shape?","Solid","Liquid","Gas","Plasma",1,"Liquids take the shape of their container."],
+        ["What is the SI unit of temperature?","Celsius","Fahrenheit","Kelvin","Pascal",2,"Kelvin is the standard SI unit."],
+        ["The process of a solid changing directly to a gas is called:","Melting","Evaporation","Sublimation","Condensation",2,"Sublimation bypasses the liquid state entirely."],
+        ["What is the boiling point of water in Kelvin?","273 K","373 K","100 K","0 K",1,"100°C + 273 = 373 K."],
+        ["Which factor does NOT affect evaporation?","Temperature","Surface Area","Wind Speed","Colour of liquid",3,"Colour has no effect on evaporation rate."],
+        ["The state of matter with the highest kinetic energy is:","Solid","Liquid","Gas","Bose-Einstein",2,"Gas particles move freely and rapidly."],
+        ["What happens to kinetic energy of particles as temperature increases?","Decreases","Increases","Remains same","Becomes zero",1,"Heat causes particles to move faster."],
+        ["Dry ice is the solid form of:","Water","Carbon Monoxide","Carbon Dioxide","Nitrogen",2,"Solid CO2 is called dry ice."],
+        ["Which property of gas allows it to be filled into cylinders easily?","High density","High compressibility","Rigidity","Definite shape",1,"Gases can be compressed heavily."],
+        ["The phenomenon of mixing of particles of two different types is:","Diffusion","Osmosis","Sublimation","Melting",0,"Diffusion is spontaneous mixing."],
+        ["Which has the strongest intermolecular forces of attraction?","Water","Oxygen","Iron","Alcohol",2,"Solids like iron have the strongest bonds."],
+        ["During evaporation, particles escape from the:","Bottom","Bulk of liquid","Surface","Sides",2,"Evaporation is a surface phenomenon."],
+        ["Latent heat of fusion is the heat required to change:","Liquid to Gas","Solid to Gas","Solid to Liquid","Liquid to Solid",2,"Fusion means melting solid into liquid."],
+        ["The melting point of ice is:","273.15 K","373.15 K","100 K","0 K",0,"0°C equals 273.15 K."],
+        ["Evaporation causes:","Heating","Cooling","No change","Boiling",1,"Evaporation absorbs heat, causing cooling."],
+        ["Which of the following is not matter?","Air","Water","Love","Dust",2,"Feelings are not matter as they have no mass."],
+        ["Gases exert pressure on the walls of the container because:","They have high mass","Particles collide with walls","They are light","They are cool",1,"Collisions create outward force/pressure."],
+        ["The physical state of water at 250°C is:","Solid","Liquid","Gas","Plasma",2,"Above 100°C, water is a gas (steam)."],
+        ["What is the term for gas turning into a liquid?","Freezing","Condensation","Sublimation","Melting",1,"Cooling a gas condenses it into liquid."],
+        ["Plasma consists of:","Super-cooled particles","Super-energetic ionized particles","Neutral atoms","Solid crystals",1,"Plasma is hot ionized gas."]
+    ];
+    
+    // 2. CLASS 9 MATHS (Number Systems)
+    const c9MatRaw = [
+        ["Every rational number is a:","Natural number","Integer","Real number","Whole number",2,"Rational and irrational numbers together make Real numbers."],
+        ["Which of the following is an irrational number?","√4","√9","√2","√16",2,"√2 is non-terminating and non-repeating."],
+        ["The decimal expansion of a rational number is:","Terminating","Non-terminating recurring","Either A or B","Non-terminating non-recurring",2,"Rationals either terminate or loop."],
+        ["Between any two rational numbers, there are:","Exactly one","Exactly two","No rational number","Infinitely many",3,"There are infinite numbers between any two numbers."],
+        ["What is the value of 2^0?","2","0","1","Undefined",2,"Any non-zero number to power 0 is 1."],
+        ["Which is equivalent to (a^m)^n?","a^(m+n)","a^(m-n)","a^(mn)","a^(m/n)",2,"Power of a power multiplies the exponents."],
+        ["√3 × √3 equals:","√6","3","9","√9",1,"The square root of a number times itself is the number."],
+        ["What is the sum of a rational and irrational number?","Always rational","Always irrational","Sometimes rational","Zero",1,"Rational + Irrational = Irrational."],
+        ["Can we write 0 in the form p/q?","Yes","No","Only as 0/0","Sometimes",0,"0 can be written as 0/1."],
+        ["Which number is neither prime nor composite?","0","1","2","3",1,"1 is not considered prime or composite."],
+        ["pi (π) is:","Rational","Integer","Irrational","Whole number",2,"Pi never terminates or repeats."],
+        ["Value of (64)^(1/2) is:","4","8","16","32",1,"The square root of 64 is 8."],
+        ["Which of the following is equal to x^3 × x^4?","x^12","x^7","x^1","x^34",1,"When bases match, add exponents: 3+4=7."],
+        ["What is the simplest form of √50?","5","5√2","10","5√5",1,"√50 = √(25*2) = 5√2."],
+        ["The value of 5^(-2) is:","25","-25","1/25","-1/25",2,"Negative exponent flips it to denominator."],
+        ["Are integers rational numbers?","Yes","No","Only positive ones","Only negative ones",0,"Any integer x can be written as x/1."],
+        ["Which of these is a terminating decimal?","1/3","1/7","1/2","1/9",2,"1/2 = 0.5 exactly."],
+        ["What is the decimal form of 1/4?","0.25","0.50","0.75","0.14",0,"1 divided by 4 is 0.25."],
+        ["A number is irrational if its decimal is:","Terminating","Repeating","Non-terminating, non-repeating","Finite",2,"Irrational decimals never end or loop."],
+        ["What is √16 + √9?","7","5","25","12",0,"4 + 3 = 7."]
+    ];
 
-    Object.keys(qData).forEach(key => {
-        const [org, cls, sub] = key.split("|");
-        const item = qData[key];
-        setTest(org, cls, sub, item.title, item.qs);
-    });
+    // 3. CLASS 10 SCIENCE (Chemical Reactions)
+    const c10SciRaw = [
+        ["The reaction Fe2O3 + 2Al -> Al2O3 + 2Fe is an example of a:","Combination","Double displacement","Decomposition","Displacement",3,"Aluminium displaces iron from its oxide."],
+        ["Burning of magnesium ribbon in air is what type of reaction?","Endothermic","Exothermic","Displacement","Double displacement",1,"Burning releases heat and light."],
+        ["What gas is produced when acid reacts with a metal?","Oxygen","Carbon dioxide","Hydrogen","Nitrogen",2,"Metals displace hydrogen from acids."],
+        ["Rancidity of food is caused by:","Reduction","Oxidation","Neutralization","Precipitation",1,"Fats and oils oxidize when exposed to air."],
+        ["To prevent chips from getting oxidized, bags are flushed with:","Oxygen","Nitrogen","Hydrogen","Chlorine",1,"Nitrogen acts as an inert preservative."],
+        ["Which of these is a chemical change?","Melting ice","Boiling water","Digestion of food","Breaking glass",2,"Digestion forms completely new substances."],
+        ["A reaction where heat is absorbed is called:","Exothermic","Endothermic","Combination","Displacement",1,"Endo = absorbing heat."],
+        ["CaO + H2O -> Ca(OH)2 is a:","Decomposition","Combination","Displacement","Redox",1,"Two reactants combine to form one product."],
+        ["What color is copper sulphate crystal?","Green","Blue","White","Red",1,"Hydrated copper sulphate is bright blue."],
+        ["Rusting of iron is a form of:","Corrosion","Reduction","Sublimation","Melting",0,"Iron oxidizes to form rust."],
+        ["In the reaction CuO + H2 -> Cu + H2O, which substance is reduced?","H2","CuO","Cu","H2O",1,"CuO loses its oxygen."],
+        ["Respiration is considered an:","Endothermic reaction","Exothermic reaction","Displacement reaction","Precipitation reaction",1,"It releases energy in our cells."],
+        ["When Ag is exposed to air, it gets a black coating of:","AgNO3","Ag2S","Ag2O","AgCl",1,"Silver reacts with sulphur in the air."],
+        ["Which compound is used for whitewashing walls?","CaO","Ca(OH)2","CaCO3","CaCl2",1,"Slaked lime, Ca(OH)2, is used."],
+        ["What precipitate is formed when barium chloride reacts with sodium sulphate?","White","Yellow","Black","Green",0,"Barium sulphate is a white solid precipitate."],
+        ["A balanced chemical equation satisfies the law of:","Conservation of momentum","Conservation of mass","Multiple proportions","Definite proportions",1,"Mass cannot be created or destroyed."],
+        ["Heating of limestone produces:","CO and Ca","CO2 and CaO","O2 and Ca","H2 and CaO",1,"CaCO3 decomposes to CaO and CO2."],
+        ["Which is an example of a photochemical reaction?","Rusting","Digestion","Photosynthesis","Combustion",2,"Requires sunlight to proceed."],
+        ["A substance that oxidizes another is the:","Reducing agent","Catalyst","Oxidizing agent","Precipitate",2,"It causes oxidation by taking electrons/giving oxygen."],
+        ["Colour of solid magnesium is:","Black","Silvery white","Red","Yellow",1,"Mg is a shiny, silvery metal."]
+    ];
+
+    // 4. CLASS 10 MATHS (Real Numbers)
+    const c10MatRaw = [
+        ["Euclid's division lemma states a = bq + r, where r must satisfy:","1 < r < b","0 ≤ r < b","0 < r ≤ b","r > b",1,"Remainder must be 0 or greater, but less than divisor."],
+        ["The HCF of 4 and 6 is:","1","2","4","12",1,"2 is the highest common factor."],
+        ["The LCM of 4 and 6 is:","2","10","12","24",2,"12 is the lowest common multiple."],
+        ["For any two positive integers a and b, HCF(a,b) × LCM(a,b) = ?","a + b","a - b","a × b","a / b",2,"Product of numbers equals product of HCF and LCM."],
+        ["Every composite number can be expressed as a product of:","Primes","Evens","Odds","Fractions",0,"Fundamental Theorem of Arithmetic."],
+        ["π is a:","Rational number","Irrational number","Integer","Prime number",1,"Pi does not terminate or repeat."],
+        ["The decimal expansion of 7/8 is:","Non-terminating","Terminating","Non-terminating non-repeating","Integer",1,"Denominator is 8 (2^3), so it terminates exactly at 0.875."],
+        ["Which of the following is terminating?","1/3","3/8","2/7","5/11",1,"Denominator 8 has only prime factor 2."],
+        ["If p is a prime and divides a^2, then p also divides:","a","2a","a/2","a^3",0,"Standard theorem in Real Numbers."],
+        ["What is the HCF of two consecutive even numbers?","1","2","4","8",1,"Even numbers are always divisible by 2."],
+        ["What is the HCF of two consecutive prime numbers?","1","2","0","Undefined",0,"Primes have no common factors other than 1."],
+        ["√(p) is irrational if p is:","A perfect square","A prime number","An even number","Zero",1,"Root of any prime is irrational."],
+        ["Is √144 rational or irrational?","Rational","Irrational","Imaginary","Complex",0,"√144 = 12, which is rational."],
+        ["The sum of a rational and an irrational number is:","Always rational","Always irrational","Sometimes rational","Zero",1,"Rational + Irrational = Irrational."],
+        ["What is the LCM of 2, 3, and 5?","6","15","30","60",2,"2×3×5 = 30."],
+        ["Which number has no reciprocal?","1","-1","0","100",2,"Division by zero is undefined."],
+        ["The number 1 is:","Prime","Composite","Neither prime nor composite","Irrational",2,"1 only has one factor (itself)."],
+        ["Express 140 as product of primes:","2^2 × 5 × 7","2^3 × 5 × 7","2 × 5 × 14","4 × 35",0,"140 = 4 × 35 = 2^2 × 5 × 7."],
+        ["If HCF(26, 91) = 13, LCM is:","104","182","260","364",1,"(26×91)/13 = 182."],
+        ["The product of three consecutive positive integers is always divisible by:","4","5","6","10",2,"One is a multiple of 2, one is a multiple of 3."]
+    ];
+
+    // 5. CLASS 11 PHYSICS (Units & Measurement)
+    const c11PhyRaw = [
+        ["The dimensional formula of Force is:","[MLT-1]","[MLT-2]","[ML2T-2]","[M2LT-2]",1,"F = ma = kg * m/s2 = MLT-2."],
+        ["Which of the following is NOT a fundamental SI unit?","Meter","Kilogram","Newton","Ampere",2,"Newton is a derived unit (kg m/s2)."],
+        ["Light year is a unit of:","Time","Speed","Distance","Luminosity",2,"It is the distance light travels in one year."],
+        ["1 parsec is approximately equal to:","3.26 light years","1.5 light years","10 light years","100 AU",0,"Standard astronomical constant."],
+        ["Dimensional formula for work/energy is:","[MLT-2]","[ML2T-2]","[ML2T-3]","[M2L2T-2]",1,"Work = Force × Distance = ML2T-2."],
+        ["Which quantity has no dimensions?","Angle","Velocity","Momentum","Density",0,"Angle = arc/radius (L/L = 1)."],
+        ["Significant figures in 0.00502 are:","2","3","5","6",1,"Leading zeros are not significant; 5,0,2 are."],
+        ["The SI unit of solid angle is:","Radian","Degree","Steradian","Minute",2,"Steradian is used for 3D solid angles."],
+        ["Error in measurement is the difference between:","True and measured value","Two measured values","True and expected value","Zero and true value",0,"Error = |True - Measured|."],
+        ["Dimensions of universal gravitational constant (G) are:","[M-1L3T-2]","[ML3T-2]","[M-1L2T-2]","[ML2T-2]",0,"F=Gmm/r2 -> G=Fr2/m2."],
+        ["The number of base SI units is:","5","6","7","8",2,"Length, mass, time, current, temp, amount, luminosity."],
+        ["Prefix 'nano' stands for:","10^-6","10^-9","10^-12","10^9",1,"Nano = one billionth."],
+        ["1 Angstrom (AU) is the distance between:","Earth and Moon","Earth and Sun","Sun and Pluto","Earth and Mars",1,"Mean distance from Earth to Sun."],
+        ["Precision of a measurement depends on:","Least count of instrument","True value","Formula used","Environment",0,"Smaller least count = higher precision."],
+        ["Dimensions of Pressure are same as:","Force","Energy","Stress","Power",2,"Pressure and stress are both Force/Area."],
+        ["If error in radius is 2%, error in volume of a sphere is:","2%","4%","6%","8%",2,"V ~ r^3, so error is 3 * 2% = 6%."],
+        ["Which instrument is most precise?","Meter scale","Vernier caliper","Screw gauge","Measuring tape",2,"Screw gauge usually has least count of 0.001 cm."],
+        ["Light year measures what physical quantity?","Time","Mass","Length","Velocity",2,"It measures vast astronomical lengths."],
+        ["Which pair has identical dimensions?","Force and Work","Momentum and Impulse","Power and Energy","Velocity and Acceleration",1,"Impulse = Change in momentum."],
+        ["Order of magnitude of Earth's radius (6400 km) in meters is:","10^6","10^7","10^5","10^8",1,"6.4 x 10^6 m ~ 10^7 m order."]
+    ];
+
+    // 6. CLASS 11 CHEMISTRY (Some Basic Concepts)
+    const c11CheRaw = [
+        ["What is the number of moles in 18g of water?","1","2","18","0.5",0,"Molar mass of H2O is 18g/mol. 18/18 = 1."],
+        ["Avogadro's number is:","6.022 x 10^23","6.022 x 10^22","6.022 x 10^24","6.022",0,"Standard constant for particles in a mole."],
+        ["Which has the highest mass?","1 mole of H2","1 mole of O2","1 mole of H2O","1 mole of CO2",3,"CO2 is 44g/mol."],
+        ["Empirical formula of C6H12O6 is:","C6H12O6","CH2O","CHO","C2H4O2",1,"Divide by common factor 6."],
+        ["Law of definite proportions was given by:","Dalton","Proust","Lavoisier","Bohr",1,"Joseph Proust formulated it."],
+        ["Volume occupied by 1 mole of gas at STP is:","22.4 L","24.2 L","11.2 L","44.8 L",0,"Standard molar volume."],
+        ["SI unit of amount of substance is:","Gram","Kilogram","Mole","Liter",2,"Mole is the base SI unit."],
+        ["How many atoms are in 1 mole of Helium?","6.022 x 10^23","12.044 x 10^23","3.011 x 10^23","1",0,"Helium is monoatomic."],
+        ["Molarity is defined as moles of solute per:","Kg of solvent","Liter of solution","Liter of solvent","Kg of solution",1,"Molarity = moles / Vol in Liters."],
+        ["Mole fraction is independent of:","Mass","Volume","Temperature","Both Volume and Temp",3,"It uses only mass/moles, not volume."],
+        ["What is the molar mass of NaCl?","58.5 g/mol","23 g/mol","35.5 g/mol","40 g/mol",0,"23 (Na) + 35.5 (Cl) = 58.5."],
+        ["Which law states mass is neither created nor destroyed?","Law of Multiple Proportions","Law of Conservation of Mass","Law of Definite Proportions","Avogadro's Law",1,"Antoine Lavoisier's law."],
+        ["A limiting reagent is the reactant that is:","Left over","Consumed entirely","Produces most product","Has highest mass",1,"It dictates when the reaction stops."],
+        ["How many significant figures in 0.0025?","1","2","4","5",1,"Only 2 and 5 are significant."],
+        ["Calculate moles in 44g of CO2:","0.5","1","2","44",1,"Molar mass is 44g/mol, so 44/44 = 1 mole."],
+        ["Mass percentage of H in H2O is approx:","11.1%","88.9%","20%","50%",0,"2 / 18 * 100 = 11.11%."],
+        ["Unit of molality is:","mol/L","mol/kg","g/L","kg/mol",1,"Moles per kilogram of solvent."],
+        ["1 amu (atomic mass unit) is equal to:","1/12 mass of C-12","1/16 mass of O-16","1/1 mass of H-1","1g",0,"Standard definition of amu/Dalton."],
+        ["Which prefix means 10^-3?","Deci","Centi","Milli","Micro",2,"Milli stands for one-thousandth."],
+        ["The chemical formula for rust is:","Fe2O3","FeO","Fe3O4","Fe2O3.xH2O",3,"Hydrated iron(III) oxide."]
+    ];
+
+    // 7. CLASS 11 MATHS (Sets)
+    const c11MatRaw = [
+        ["If a set has n elements, how many subsets does it have?","n","n^2","2^n","2n",2,"The formula for total subsets is 2^n."],
+        ["A set with no elements is called:","Singleton set","Infinite set","Empty set/Null set","Universal set",2,"Also denoted by { } or Ø."],
+        ["The set of all natural numbers is an:","Empty set","Finite set","Infinite set","Singleton set",2,"Natural numbers go on forever."],
+        ["If A = {1, 2} and B = {2, 3}, what is A ∩ B?","{1, 2, 3}","{2}","{1, 3}","Ø",1,"Intersection means common elements."],
+        ["If A = {1, 2} and B = {2, 3}, what is A ∪ B?","{1, 2, 3}","{2}","{1, 3}","Ø",0,"Union merges both sets."],
+        ["Two sets are disjoint if their intersection is:","Universal set","Empty set","Singleton set","Infinite",1,"Disjoint means no common elements."],
+        ["A - B means elements that are in:","Both A and B","A but not B","B but not A","Neither",1,"Set difference."],
+        ["Power set of a set A is the set of all:","Elements of A","Subsets of A","Supersets of A","Intersections",1,"Power set contains all possible subsets."],
+        ["If A is a subset of B, then A ∪ B = ?","A","B","Ø","A ∩ B",1,"Since B contains A, uniting them just gives B."],
+        ["If A is a subset of B, then A ∩ B = ?","A","B","Ø","A ∪ B",0,"The common elements are exactly set A."],
+        ["De Morgan's Law states (A ∪ B)' = ?","A' ∪ B'","A' ∩ B'","A ∩ B","A' - B'",1,"The complement of a union is the intersection of complements."],
+        ["In a set, the order of elements:","Must be ascending","Must be descending","Does not matter","Matters",2,"Sets are unordered collections."],
+        ["Repetition of elements in a set is:","Required","Not allowed / ignored","Encouraged","Only for numbers",1,"Sets only care about distinct elements."],
+        ["Number of elements in power set of empty set Ø is:","0","1","2","Undefined",1,"The only subset is Ø itself. 2^0 = 1."],
+        ["Universal set is usually denoted by:","U","Ø","N","R",0,"U stands for Universal set."],
+        ["If n(A)=3 and n(B)=4 and they are disjoint, n(A ∪ B) = ?","3","4","7","12",2,"3 + 4 = 7."],
+        ["Set of all vowels in English alphabet is:","Finite","Infinite","Empty","Null",0,"It has exactly 5 elements."],
+        ["A' (Complement of A) equals:","A - U","U - A","A ∩ U","Ø",1,"Everything in the Universal set except A."],
+        ["Which is an empty set?","Set of even prime numbers","Set of odd numbers divisible by 2","Set of negative integers","Set of real numbers",1,"No odd number is divisible by 2."],
+        ["Set {x: x is an integer, x^2 = 4} is:","{2}","{-2}","{2, -2}","Ø",2,"Both 2 and -2 square to 4."]
+    ];
+
+    // 8. CLASS 11 BIOLOGY (The Living World)
+    const c11BioRaw = [
+        ["The system of binomial nomenclature was given by:","Charles Darwin","Carolus Linnaeus","Gregor Mendel","Aristotle",1,"Linnaeus developed the two-part naming system."],
+        ["The basic/lowest unit of classification is:","Phylum","Class","Genus","Species",3,"Species is the fundamental taxonomic rank."],
+        ["Which of the following is a defining characteristic of living organisms?","Growth","Reproduction","Response to stimuli","Increase in mass",2,"Non-living things can 'grow' by accumulation, but consciousness is defining."],
+        ["ICBN stands for:","International Code of Botanical Nomenclature","Indian Code of Biological Naming","International Congress of Botany","Internal Code of Biology",0,"Rules for naming plants."],
+        ["A group of related genera is classified as a:","Family","Order","Class","Phylum",0,"Family groups similar genera."],
+        ["In Mangifera indica, the word Mangifera represents:","Species","Genus","Family","Order",1,"The first word is the Genus."],
+        ["Herbarium is a collection of:","Live plants","Dried, pressed plant specimens","Live animals","Fossils",1,"Used for reference in botany."],
+        ["Which taxonomic aid uses analytical keys for identification?","Museum","Herbarium","Botanical Garden","Taxonomic Key",3,"Keys use contrasting characters for ID."],
+        ["Metabolism is the sum total of all:","Chemical reactions in a cell","Physical movements","Reproductive acts","Growth phases",0,"Defines all internal cellular chemistry."],
+        ["Taxonomy deals with:","Identification","Nomenclature","Classification","All of the above",3,"It encompasses all three."],
+        ["Highest category in taxonomy is:","Phylum","Kingdom","Domain/Kingdom","Class",2,"Kingdom (or Domain) is the highest."],
+        ["Binomial name has how many parts?","One","Two","Three","Many",1,"Genus and Species epithet."],
+        ["When hand-written, scientific names should be:","Bolded","Capitalized entirely","Underlined separately","Ignored",2,"Genus and species must be underlined separately."],
+        ["Taxon is a:","Process of naming","Unit of classification","Herbarium sheet","Book",1,"A taxonomic group of any rank."],
+        ["Systema Naturae was written by:","Darwin","Lamarck","Linnaeus","Wallace",2,"Linnaeus's famous taxonomy book."],
+        ["Which is the correct sequence?","Species -> Genus -> Family -> Order","Genus -> Species -> Order -> Family","Family -> Genus -> Species -> Class","Order -> Family -> Species -> Genus",0,"Ascending hierarchy."],
+        ["A zoological park is meant for:","Preserving dead animals","Ex situ conservation of animals","Growing plants","Fossil study",1,"Live animals kept outside natural habitat."],
+        ["Can non-living objects exhibit metabolism?","Yes","No","Only crystals","Only viruses",1,"Metabolism requires a cellular structure."],
+        ["Phylogeny refers to:","Naming process","Evolutionary history","Habitats","Cell structure",1,"Evolutionary relationship of organisms."],
+        ["The word 'biology' means study of:","Chemicals","Life/Living things","Rocks","Stars",1,"Bios = life, logos = study."]
+    ];
+
+    // 9. CLASS 12 PHYSICS (Electric Charges & Fields)
+    const c12PhyRaw = [
+        ["The SI unit of Electric Flux is:","N/C","V m","C/m","Farad",1,"Flux = E.A = (V/m)*m2 = V.m"],
+        ["What is the SI unit of electric charge?","Coulomb (C)","Ampere (A)","Volt (V)","Farad (F)",0,"Electric charge is measured in Coulombs."],
+        ["The charge of an electron is approximately:","-1.6 × 10^-19 C","+1.6 × 10^-19 C","-1.6 × 10^-27 C","-9.1 × 10^-31 C",0,"Elementary fundamental charge e."],
+        ["Quantization of electric charge is expressed as:","q = ±ne","q = n/e","q = e/n","q = n^2e",0,"Charge exists in integral multiples of e."],
+        ["Coulomb's Law constant (1/4πε0) in vacuum is equal to:","9 × 10^9","8.85 × 10^-12","9 × 10^-9","3 × 10^8",0,"Value is approx 9 x 10^9 N m2/C2."],
+        ["The electric field inside a hollow charged spherical conductor is:","Zero","Infinite","Uniform and non-zero","Decreasing",0,"Inside an electrostatic conductor, E = 0."],
+        ["Electric field lines start from:","Positive and end on negative","Negative and end on positive","Infinity always","Closed loops",0,"Diverge from +, terminate at -."],
+        ["Can two electric field lines intersect each other?","No","Yes","Only in vacuum","Only for like charges",0,"Intersection would mean two directions of field."],
+        ["Gauss's Law states that total electric flux through a closed surface is:","q_enc / ε0","q_enc × ε0","Zero","q / 4πε0",0,"Gauss's law formula."],
+        ["An electric dipole consists of:","Two equal and opposite charges","Two like charges","Single charge","Three charges",0,"Separated by a small distance."],
+        ["The SI unit of electric dipole moment is:","Coulomb-meter (C·m)","Coulomb/meter","N/C","Volt",0,"p = q × 2a."],
+        ["The direction of an electric dipole moment is conventionally from:","Negative to positive","Positive to negative","Random","North to south",0,"Physics convention is -q to +q."],
+        ["Torque experienced by an electric dipole in uniform field E is:","p × E","p · E","p / E","Zero",0,"Cross product pE sin θ."],
+        ["A dipole in a uniform electric field experiences:","Only torque, no net force","Both force and torque","Only force","Neither",0,"Net force is zero (F = qE - qE = 0)."],
+        ["Electric field due to a point charge q at distance r varies as:","1/r^2","1/r","1/r^3","r",0,"Coulomb field is inverse-square."],
+        ["Electric field on axial line of short dipole varies with distance as:","1/r^3","1/r^2","1/r","1/r^4",0,"Dipole field drops off faster than point charge."],
+        ["Permittivity of free space (ε0) has the value:","8.854 × 10^-12","9 × 10^9","1.6 × 10^-19","6.67 × 10^-11",0,"Standard constant ε0."],
+        ["Linear charge density (λ) has SI unit:","C/m","C/m^2","C/m^3","C.m",0,"Charge per unit length."],
+        ["Surface charge density (σ) has SI unit:","C/m^2","C/m","C/m^3","Coulomb",0,"Charge per unit area."],
+        ["If a glass rod is rubbed with silk, it acquires:","Positive charge","Negative charge","No charge","Infinite charge",0,"Glass loses electrons to silk."]
+    ];
+
+    // 10. CLASS 12 CHEMISTRY (Solutions)
+    const c12CheRaw = [
+        ["Which of the following is independent of temperature?","Molarity","Molality","Normality","Formality",1,"Molality depends on mass of solvent, not volume."],
+        ["Molarity is defined as moles of solute per:","Litre of solution","Kg of solvent","Litre of solvent","Kg of solution",0,"Moles / Volume in L."],
+        ["Colligative properties depend on:","Nature of solute","Number of solute particles","Nature of solvent","Colour of solution",1,"They depend strictly on quantity/number."],
+        ["Which of the following is a colligative property?","Boiling point","Freezing point","Osmotic pressure","Vapour pressure",2,"Relative lowering of VP, elevation of BP, depression of FP, and Osmotic Pressure."],
+        ["Raoult's law states relative lowering of vapour pressure is equal to:","Mole fraction of solvent","Mole fraction of solute","Molarity","Molality",1,"Standard Raoult definition."],
+        ["The unit of ebullioscopic constant (Kb) is:","K kg mol-1","K mol kg-1","K L mol-1","mol L-1",0,"Unit for boiling point elevation constant."],
+        ["Isotonic solutions have the same:","Density","Osmotic pressure","Temperature","Viscosity",1,"Iso = same, tonic = pressure."],
+        ["Adding a non-volatile solute to a solvent:","Lowers boiling point","Raises vapour pressure","Lowers freezing point","Increases freezing point",2,"Freezing point depression."],
+        ["Van't Hoff factor (i) for NaCl is approximately:","1","2","3","0.5",1,"NaCl dissociates into 2 ions (Na+ and Cl-)."],
+        ["Henry's Law is related to:","Solubility of gas in liquid","Boiling point elevation","Freezing point depression","Solid in solid",0,"Gas pressure correlates with concentration in liquid."],
+        ["A solution which obeys Raoult's law strictly is called:","Ideal solution","Non-ideal solution","Azeotrope","Saturated",0,"Ideal solutions have no change in enthalpy/volume on mixing."],
+        ["Positive deviation from Raoult's law means interactions are:","Stronger than pure components","Weaker than pure components","Equal to pure components","Zero",1,"Weak bonds cause particles to escape easily, raising VP."],
+        ["A mixture of ethanol and acetone shows:","Positive deviation","Negative deviation","Ideal behavior","No vapor pressure",0,"Hydrogen bonds are broken."],
+        ["Azeotropes boil at:","A constant temperature","Varying temperatures","0°C","100°C",0,"They act like pure liquids."],
+        ["The semi-permeable membrane allows passage of:","Solute particles only","Solvent molecules only","Both solute and solvent","Neither",1,"Used in osmosis."],
+        ["Osmotic pressure (Pi) is given by formula:","Pi = CRT","Pi = C/RT","Pi = RT/C","Pi = C+R+T",0,"Derived from ideal gas law."],
+        ["If Van't Hoff factor i < 1, the solute undergoes:","Dissociation","Association","No change","Evaporation",1,"Particles combine, reducing total number."],
+        ["Cryoscopic constant is related to:","Boiling point","Freezing point","Osmosis","Vapour pressure",1,"Depression of freezing point."],
+        ["Molality is preferred over Molarity because:","Easier to measure","Volume changes with temp","Mass changes with temp","It sounds better",1,"Mass is unaffected by temperature."],
+        ["Brass is an example of which type of solution?","Liquid in liquid","Solid in liquid","Solid in solid","Gas in solid",2,"Alloy of copper and zinc."]
+    ];
+
+    // 11. CLASS 12 MATHS (Relations and Functions)
+    const c12MatRaw = [
+        ["A relation which is reflexive, symmetric and transitive is known as:","Universal relation","Equivalence relation","Void relation","Identity relation",1,"This is the exact definition of an Equivalence relation."],
+        ["A relation R on set A is reflexive if:","(a,b) in R","(a,a) in R for all a in A","(a,b) and (b,a) in R","(a,b) and (b,c) implies (a,c)",1,"Every element must relate to itself."],
+        ["A relation is symmetric if:","(a,b) in R => (b,a) in R","(a,a) in R","(a,b) in R => (a,c) in R","It is empty",0,"The relation works in both directions."],
+        ["A relation is transitive if (a,b) in R and (b,c) in R implies:","(c,a) in R","(b,a) in R","(a,c) in R","(a,a) in R",2,"Chain logic."],
+        ["The universal relation on a set A is:","Ø","A x A","A","Identity",1,"Every element relates to every element."],
+        ["A function f: X -> Y is one-one (injective) if:","f(x1)=f(x2) implies x1=x2","f(x)=y for all y","Range = Codomain","It is a straight line",0,"Every input maps to a unique output."],
+        ["A function is onto (surjective) if:","Domain = Range","Range = Codomain","It is one-one","It is linear",1,"Every output in Y has a preimage in X."],
+        ["A function that is both one-one and onto is called:","Bijective","Reflexive","Symmetric","Constant",0,"Bijective functions have inverses."],
+        ["The relation R = {(1,1), (2,2), (3,3)} on set {1,2,3} is:","Only reflexive","Only symmetric","Only transitive","Equivalence relation",3,"It satisfies all three conditions trivially."],
+        ["If f(x) = x^2, f: R -> R, is it one-one?","Yes","No","Only for positive x","Only for negative x",1,"f(2) = 4 and f(-2) = 4. Not unique."],
+        ["Composition of functions f and g is denoted by:","f+g","f-g","fog","f/g",2,"f(g(x)) = fog(x)."],
+        ["For an inverse function f^-1 to exist, f must be:","One-one","Onto","Bijective","Constant",2,"Only bijections are invertible."],
+        ["If R is a relation from A to B, then R is a subset of:","A","B","A x B","A U B",2,"Relations are subsets of the Cartesian product."],
+        ["Number of relations from a set with 2 elements to a set with 3 elements is:","6","2^5","2^6","64",2,"Number of elements in A x B = 6. Power set size = 2^6."],
+        ["Identity relation on set A is:","{(x,y): x != y}","{(x,x): x in A}","Ø","A x A",1,"Every element maps only to itself."],
+        ["If f(x) = 2x + 3, what is f^-1(x)?","(x-3)/2","(x+3)/2","2x-3","1/(2x+3)",0,"y = 2x+3 -> x = (y-3)/2."],
+        ["Let A={1,2}. How many equivalence relations are possible on A?","1","2","3","4",1,"The identity and the universal relation."],
+        ["If range is a proper subset of codomain, function is:","Onto","Into","Bijective","One-one",1,"It does not cover the whole codomain."],
+        ["Void relation is:","Reflexive","Symmetric and Transitive","Equivalence","Universal",1,"Vacuously true for symmetric and transitive."],
+        ["Greatest integer function f(x) = [x] is:","One-one","Onto","Bijective","Neither one-one nor onto",3,"Maps multiple reals to one integer."]
+    ];
+
+    // 12. CLASS 12 BIOLOGY (Reproduction in Organisms)
+    const c12BioRaw = [
+        ["Which type of reproduction produces clones?","Sexual reproduction","Asexual reproduction","Both a and b","None of the above",1,"Asexual reproduction produces genetically identical offspring."],
+        ["Binary fission is observed in:","Amoeba","Hydra","Sponge","Fern",0,"Amoeba divides into two equal halves."],
+        ["Budding is a common method of asexual reproduction in:","Yeast","Human","Mosquito","Frog",0,"Yeast grows a bud that detaches."],
+        ["Vegetative propagation in potatoes is by:","Leaves","Stem tubers (Eyes)","Roots","Flowers",1,"The 'eyes' are axillary buds on the stem."],
+        ["Which plant propagates through leaf buds?","Potato","Ginger","Bryophyllum","Onion",2,"Bryophyllum forms plantlets on leaf margins."],
+        ["Water hyacinth (Terror of Bengal) is:","Eichhornia","Lotus","Hydrilla","Pistia",0,"Eichhornia crassipes drains oxygen from water."],
+        ["Oestrous cycle occurs in:","Primates","Non-primate mammals","Birds","Reptiles",1,"Cows, dogs, sheep exhibit oestrous."],
+        ["Menstrual cycle occurs in:","Primates (Monkeys, Humans)","Amphibians","Insects","Fish",0,"Unique to primates."],
+        ["Hermaphrodites are animals that are:","Unisexual","Bisexual","Asexual","Sterile",1,"They possess both male and female organs."],
+        ["Which is an example of a hermaphrodite?","Cockroach","Earthworm","Dog","Human",1,"Earthworms have both organs."],
+        ["Syngamy refers to:","Cell division","Fusion of gametes","Formation of spores","Death of cell",1,"Fertilization / fusion of male and female gametes."],
+        ["Parthenogenesis is the development of an organism:","Without fertilization","With double fertilization","From vegetative parts","From pollen",0,"Unfertilized egg develops into adult."],
+        ["External fertilization takes place in:","Humans","Birds","Frogs (Amphibians)","Reptiles",2,"Eggs and sperm are released in water."],
+        ["Which reproduction ensures genetic variation?","Vegetative","Asexual","Cloning","Sexual",3,"Mixing of two genomes causes variation."],
+        ["Lifespan of a crow is approximately:","1-2 years","15 years","140 years","400 years",1,"Parrot is 140, crow is 15."],
+        ["Zoospores are:","Motile sexual spores","Motile asexual spores","Non-motile spores","Seeds",1,"Flagellated asexual spores in algae/fungi."],
+        ["Conidia are asexual reproductive structures in:","Amoeba","Penicillium (Fungi)","Hydra","Yeast",1,"Non-motile spores produced externally."],
+        ["Offset is a vegetative propagule found in:","Water hyacinth","Agave","Mint","Potato",0,"Horizontal stem running over water."],
+        ["The vital link that ensures continuity of species between generations is:","Sperm","Egg","Zygote","Embryo",2,"Zygote is the single-cell origin of the new generation."],
+        ["Post-fertilization events include:","Gametogenesis","Embryogenesis","Pollination","Meiosis",1,"Development of embryo from zygote."]
+    ];
+
+    // Assigning to "Other School"
+    setTest(o, "9", "Science", "TEST 1", buildQArray(c9SciRaw));
+    setTest(o, "9", "Mathematics", "TEST 1", buildQArray(c9MatRaw));
+    setTest(o, "10", "Science", "TEST 1", buildQArray(c10SciRaw));
+    setTest(o, "10", "Mathematics", "TEST 1", buildQArray(c10MatRaw));
+    setTest(o, "11", "Physics", "TEST 1", buildQArray(c11PhyRaw));
+    setTest(o, "11", "Chemistry", "TEST 1", buildQArray(c11CheRaw));
+    setTest(o, "11", "Mathematics", "TEST 1", buildQArray(c11MatRaw));
+    setTest(o, "11", "Biology", "TEST 1", buildQArray(c11BioRaw));
+    setTest(o, "12", "Physics", "TEST 1", buildQArray(c12PhyRaw));
+    setTest(o, "12", "Chemistry", "TEST 1", buildQArray(c12CheRaw));
+    setTest(o, "12", "Mathematics", "TEST 1", buildQArray(c12MatRaw));
+    setTest(o, "12", "Biology", "TEST 1", buildQArray(c12BioRaw));
 
     return bank;
 }
 
 let testBank = generateBuiltinQuestionBank();
 
-async function loadPlatformData(){
-    try{
+function getRoutingOrg(orgName) {
+    const specific = ["Modern DAV Public School", "Horizon public school", "Invincible Coaching Classes"];
+    if (specific.includes(orgName)) { return orgName; }
+    return "Other School";
+}
+
+async function loadPlatformData() {
+    try {
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        if(data && Array.isArray(data.questions) && data.questions.length > 0){
-            data.questions.forEach(function(q, index){
-                const org = q.organization || "Other School";
+        if (data && Array.isArray(data.questions) && data.questions.length > 0) {
+            data.questions.forEach(function(q, index) {
+                const org = getRoutingOrg(q.organization || "Other School");
                 const key = org + "|" + q.class_name + "|" + q.subject;
-                if(!testBank[key]) testBank[key] = {};
-                if(!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
-                testBank[key][q.test_title].push({
-                    id: index + 1, question: q.question_text,
-                    options: [q.option_1, q.option_2, q.option_3, q.option_4],
-                    answer: q.correct_option, explanation: q.explanation
+                if (!testBank[key]) testBank[key] = {};
+                if (!testBank[key][q.test_title]) testBank[key][q.test_title] = [];
+                testBank[key][q.test_title].push({ 
+                    id: index + 1, question: q.question_text, 
+                    options: [q.option_1, q.option_2, q.option_3, q.option_4], 
+                    answer: q.correct_option, explanation: q.explanation 
                 });
             });
         }
 
-        if(data && data.dailyPuzzle){
+        if (data && data.dailyPuzzle) {
             document.getElementById("puzzleBox").style.display = "block";
+            const rawQ = data.dailyPuzzle.question_text || ""; 
+            const formattedQ = formatMathText(rawQ); 
+            let enText = formattedQ; let hiText = "";
             
-            const rawQ = data.dailyPuzzle.question_text || "";
-            const formattedQ = formatMathText(rawQ);
-            
-            let enText = formattedQ;
-            let hiText = "";
-            
-            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) {
-                const parts = formattedQ.split(/\s\/\s/);
-                enText = parts[0] ? parts[0].trim() : formattedQ;
-                hiText = parts[1] ? parts[1].trim() : "";
+            if (formattedQ.includes(" / यदि") || formattedQ.includes(" / ")) { 
+                const parts = formattedQ.split(/\s\/\s/); 
+                enText = parts[0] ? parts[0].trim() : formattedQ; 
+                hiText = parts[1] ? parts[1].trim() : ""; 
             }
-
-            document.getElementById("puzzleQuestionEn").innerHTML = enText;
-            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
-            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
-
-            const optContainer = document.getElementById("puzzleOptionsContainer");
-            optContainer.innerHTML = '';
             
+            document.getElementById("puzzleQuestionEn").innerHTML = enText; 
+            document.getElementById("puzzleQuestionHi").innerHTML = hiText; 
+            document.getElementById("puzzleSolution").innerHTML = formatMathText(data.dailyPuzzle.solution_text || "");
+            
+            const optContainer = document.getElementById("puzzleOptionsContainer"); 
+            optContainer.innerHTML = '';
             const guessOptions = ['0', '1', '2', '100'];
-            guessOptions.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'puzzle-opt-btn';
-                btn.textContent = opt;
-                btn.onclick = () => checkPuzzleGuess(opt, btn);
-                optContainer.appendChild(btn);
+            guessOptions.forEach(opt => { 
+                const btn = document.createElement('button'); 
+                btn.className = 'puzzle-opt-btn'; 
+                btn.textContent = opt; 
+                btn.onclick = () => checkPuzzleGuess(opt, btn); 
+                optContainer.appendChild(btn); 
             });
         }
 
-        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
-            const list = document.getElementById("leaderboardList");
+        if (data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0) {
+            const list = document.getElementById("leaderboardList"); 
             list.innerHTML = "";
-            data.leaderboard.forEach(function(item, idx){
-                let rankClass = idx === 0 ? "first" : "";
-                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`;
+            data.leaderboard.forEach(function(item, idx) { 
+                let rankClass = idx === 0 ? "first" : ""; 
+                list.innerHTML += `<div class="leaderboard-item"><div><span class="leaderboard-rank ${rankClass}">${idx+1}</span> ${escapeHTML(item.student_name)} (Class ${item.student_class} ${item.subject})</div><div class="leaderboard-score">${item.percentage}%</div></div>`; 
             });
             document.getElementById("leaderboardBox").style.display = "block";
         }
-    }catch(error){ console.error("Data load error:", error); }
+    } catch(error) { 
+        console.error("Data load error:", error); 
+    }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        loadPlatformData();
-    }, 300);
+window.addEventListener('DOMContentLoaded', () => { 
+    setTimeout(() => { loadPlatformData(); }, 300); 
 });
 
 function checkPuzzleGuess(selected, btn) {
     const feedback = document.getElementById("puzzleFeedback");
-    
-    if (selected === '2') {
-        playWin();
-        btn.classList.add('correct-pick');
-        feedback.style.color = 'var(--accent-emerald)';
-        feedback.textContent = '🎉 Correct! Value is 2.';
-        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } });
-    } else {
-        playBuzz();
-        btn.classList.add('wrong-pick');
-        feedback.style.color = 'var(--accent-rose)';
-        feedback.textContent = '❌ Incorrect. See explanation below.';
+    if (selected === '2') { 
+        playWin(); 
+        btn.classList.add('correct-pick'); 
+        feedback.style.color = 'var(--accent-emerald)'; 
+        feedback.textContent = '🎉 Correct! Value is 2.'; 
+        if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.3 } }); 
+    } else { 
+        playBuzz(); 
+        btn.classList.add('wrong-pick'); 
+        feedback.style.color = 'var(--accent-rose)'; 
+        feedback.textContent = '❌ Incorrect. See explanation below.'; 
     }
 }
 
-const puzzleToggleBtn = document.getElementById("puzzleToggleBtn");
+const puzzleToggleBtn = document.getElementById("puzzleToggleBtn"); 
 const puzzleSolution = document.getElementById("puzzleSolution");
-puzzleToggleBtn.addEventListener("click", function(){
-    if(puzzleSolution.style.display === "block"){ puzzleSolution.style.display = "none"; puzzleToggleBtn.textContent = "Reveal Logic"; }
-    else{ puzzleSolution.style.display = "block"; puzzleToggleBtn.textContent = "Hide Logic"; }
+puzzleToggleBtn.addEventListener("click", function() { 
+    if(puzzleSolution.style.display === "block") { 
+        puzzleSolution.style.display = "none"; 
+        puzzleToggleBtn.textContent = "Reveal Logic"; 
+    } else { 
+        puzzleSolution.style.display = "block"; 
+        puzzleToggleBtn.textContent = "Hide Logic"; 
+    } 
 });
 
 /* =====================================================
 TEST GENERATOR & TIMER LOGIC (10 MINUTE RAPID TEST)
 ===================================================== */
-let activeQuestions = [];
-let activeTestTitle = "";
-let activeTestClass = "";
-let activeTestSubject = "";
+let activeQuestions = []; 
+let activeTestTitle = ""; 
+let activeTestClass = ""; 
+let activeTestSubject = ""; 
 let finalScoreData = {};
 
-let testTimerInterval = null;
-let totalTimeLimit = 600;
+let testTimerInterval = null; 
+let totalTimeLimit = 600; 
 let timeRemaining = 600;
 
-const testOrg = document.getElementById("testOrg");
-const testClass = document.getElementById("testClass");
-const testSubject = document.getElementById("testSubject");
+const testOrg = document.getElementById("testOrg"); 
+const testClass = document.getElementById("testClass"); 
+const testSubject = document.getElementById("testSubject"); 
 const testSelect = document.getElementById("testSelect");
-const startTestBtn = document.getElementById("startTestBtn");
-const testSetup = document.getElementById("testSetup");
-const testArea = document.getElementById("testArea");
-const testHeader = document.getElementById("testHeader");
-const questionsContainer = document.getElementById("questionsContainer");
-const submitTestBtn = document.getElementById("submitTestBtn");
-const testResult = document.getElementById("testResult");
-const scoreText = document.getElementById("scoreText");
-const badgesContainer = document.getElementById("badgesContainer");
-const resultDetail = document.getElementById("resultDetail");
-const reviewContainer = document.getElementById("reviewContainer");
-const restartTestBtn = document.getElementById("restartTestBtn");
-const timerDisplay = document.getElementById("timerDisplay");
+const startTestBtn = document.getElementById("startTestBtn"); 
+const testSetup = document.getElementById("testSetup"); 
+const testArea = document.getElementById("testArea"); 
+const testHeader = document.getElementById("testHeader"); 
+const questionsContainer = document.getElementById("questionsContainer"); 
+const submitTestBtn = document.getElementById("submitTestBtn"); 
+const testResult = document.getElementById("testResult"); 
+const scoreText = document.getElementById("scoreText"); 
+const badgesContainer = document.getElementById("badgesContainer"); 
+const resultDetail = document.getElementById("resultDetail"); 
+const reviewContainer = document.getElementById("reviewContainer"); 
+const restartTestBtn = document.getElementById("restartTestBtn"); 
+const timerDisplay = document.getElementById("timerDisplay"); 
 const whatsappShareBtn = document.getElementById("whatsappShareBtn");
 
 function startTimer() {
-    clearInterval(testTimerInterval); timeRemaining = totalTimeLimit; updateTimerUI();
-    testTimerInterval = setInterval(function() {
-        timeRemaining--; updateTimerUI();
-        if (timeRemaining <= 0) { clearInterval(testTimerInterval); alert("Time complete. Submitting test."); submitTestBtn.click(); }
+    clearInterval(testTimerInterval); 
+    timeRemaining = totalTimeLimit; 
+    updateTimerUI();
+    testTimerInterval = setInterval(function() { 
+        timeRemaining--; 
+        updateTimerUI(); 
+        if (timeRemaining <= 0) { 
+            clearInterval(testTimerInterval); 
+            alert("Time complete. Submitting test."); 
+            submitTestBtn.click(); 
+        } 
     }, 1000);
 }
 
 function updateTimerUI() {
-    if (!timerDisplay) return;
-    const minutes = Math.floor(timeRemaining / 60); const seconds = timeRemaining % 60;
+    if (!timerDisplay) return; 
+    const minutes = Math.floor(timeRemaining / 60); 
+    const seconds = timeRemaining % 60;
     timerDisplay.textContent = "⏳ " + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
 }
 
-function updateTestList(){
+function updateTestList() {
     testSelect.innerHTML = '<option value="">Select Test</option>';
-    const org = testOrg.value;
-    const cls = testClass.value;
+    const org = testOrg.value; 
+    const cls = testClass.value; 
     const sub = testSubject.value;
-    if(!org || !cls || !sub) return;
-
-    const key = org + "|" + cls + "|" + sub;
-    if(testBank[key]){
-        Object.keys(testBank[key]).forEach(function(testName){
-            const option = document.createElement("option"); option.value = testName; option.textContent = testName; testSelect.appendChild(option);
-        });
+    if (!org || !cls || !sub) return;
+    
+    const key = getRoutingOrg(org) + "|" + cls + "|" + sub;
+    if (testBank[key]) { 
+        Object.keys(testBank[key]).forEach(function(testName) { 
+            const option = document.createElement("option"); 
+            option.value = testName; 
+            option.textContent = testName; 
+            testSelect.appendChild(option); 
+        }); 
     }
 }
-testOrg.addEventListener("change", updateTestList);
-testClass.addEventListener("change", updateTestList);
+
+testOrg.addEventListener("change", updateTestList); 
+testClass.addEventListener("change", updateTestList); 
 testSubject.addEventListener("change", updateTestList);
 
-startTestBtn.addEventListener("click", function(){
-    const name = document.getElementById("studentName").value.trim();
-    const mobile = document.getElementById("studentMobile").value.trim();
-    const org = testOrg.value;
+startTestBtn.addEventListener("click", function() {
+    const name = document.getElementById("studentName").value.trim(); 
+    const mobile = document.getElementById("studentMobile").value.trim(); 
+    const org = testOrg.value; 
     const cls = testClass.value; 
     const subject = testSubject.value; 
     const test = testSelect.value;
-    if(!name || !mobile || !org || !cls || !subject || !test){ alert("Please fill all required student and test details."); return; }
-    if(!/^[0-9]{10}$/.test(mobile)){ alert("Please enter a valid 10-digit mobile number."); return; }
-
-    let questions = null;
-    const key = org + "|" + cls + "|" + subject;
-    if (testBank[key] && testBank[key][test]){ questions = testBank[key][test]; }
-    if(!questions || !questions.length){ alert("Selected test is currently unavailable."); return; }
-
-    activeTestClass = cls; activeTestSubject = subject;
+    
+    if(!name || !mobile || !org || !cls || !subject || !test) { alert("Please fill all required student and test details."); return; }
+    if(!/^[0-9]{10}$/.test(mobile)) { alert("Please enter a valid 10-digit mobile number."); return; }
+    
+    let questions = null; 
+    const key = getRoutingOrg(org) + "|" + cls + "|" + subject;
+    if (testBank[key] && testBank[key][test]) { questions = testBank[key][test]; }
+    
+    if (!questions || !questions.length) { alert("Selected test is currently unavailable."); return; }
+    
+    activeTestClass = cls; 
+    activeTestSubject = subject; 
     startQuestions(questions, "Class " + cls + " " + subject, test);
 });
 
-const generateTestBtn = document.getElementById("generateTestBtn");
+const generateTestBtn = document.getElementById("generateTestBtn"); 
 const generatorLoading = document.getElementById("generatorLoading");
 
-generateTestBtn.addEventListener("click", async function(){
-    const cls = document.getElementById("genClass").value; const subject = document.getElementById("genSubject").value;
-    const chapter = document.getElementById("genChapter").value.trim(); const numberOfQuestions = Number(document.getElementById("genNumber").value);
-    const difficulty = document.getElementById("genDifficulty").value; const questionType = document.getElementById("genQuestionType").value;
+generateTestBtn.addEventListener("click", async function() {
+    const cls = document.getElementById("genClass").value; 
+    const subject = document.getElementById("genSubject").value; 
+    const chapter = document.getElementById("genChapter").value.trim(); 
+    const numberOfQuestions = Number(document.getElementById("genNumber").value); 
+    const difficulty = document.getElementById("genDifficulty").value; 
+    const questionType = document.getElementById("genQuestionType").value;
 
-    if(!cls || !subject || !chapter){ alert("Please complete Class, Subject, and Chapter inputs."); return; }
+    if(!cls || !subject || !chapter) { alert("Please complete Class, Subject, and Chapter inputs."); return; }
 
-    generateTestBtn.disabled = true; generatorLoading.classList.remove('hidden');
-    try{
-        const response = await fetch("/api/generate-test", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" })
+    generateTestBtn.disabled = true; 
+    generatorLoading.classList.remove('hidden');
+    
+    try {
+        const response = await fetch("/api/generate-test", { 
+            method: "POST", 
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: numberOfQuestions, difficulty: difficulty, questionType: questionType, language: "English + Hindi" }) 
         });
-        const data = await response.json();
+        const data = await response.json(); 
         if(!response.ok) throw new Error(data.error || "Generation error.");
-        const generated = extractQuestions(data);
+        
+        const generated = extractQuestions(data); 
         if(!generated.length) throw new Error("No questions returned.");
-        activeTestClass = cls; activeTestSubject = subject;
+        
+        activeTestClass = cls; 
+        activeTestSubject = subject; 
         startQuestions(generated, "Class " + cls + " " + subject, "Practice Set — " + chapter);
-    }catch(error){ alert("Test generation failed: " + error.message); }
-    finally{ generateTestBtn.disabled = false; generatorLoading.classList.add('hidden'); }
+    } catch(error) { 
+        alert("Test generation failed: " + error.message); 
+    } finally { 
+        generateTestBtn.disabled = false; 
+        generatorLoading.classList.add('hidden'); 
+    }
 });
 
-function extractQuestions(data){
-    let questions=[];
-    if(Array.isArray(data)) questions = data;
-    else if(data && Array.isArray(data.questions)) questions = data.questions;
-    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions;
+function extractQuestions(data) {
+    let questions=[]; 
+    if(Array.isArray(data)) questions = data; 
+    else if(data && Array.isArray(data.questions)) questions = data.questions; 
+    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions; 
     else if(data && data.data && Array.isArray(data.data.questions)) questions = data.data.questions;
 
-    return questions.map(function(q,index){
-        let options = q.options || q.choices || []; let answer = q.answer;
-        if(answer===undefined || answer===null) answer = q.correctAnswer;
-        if(typeof answer==="string" && options.length){
-            const letter = answer.trim().toUpperCase();
-            if(letter==="A") answer=0; if(letter==="B") answer=1; if(letter==="C") answer=2; if(letter==="D") answer=3;
-            if(answer>=0 && answer<options.length) answer = Number(answer);
-        }
-        return { id: index+1, question: q.question || q.questionText || "Question " + (index+1), options: options, answer: Number(answer), explanation: q.explanation };
-    }).filter(function(q){ return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length); });
+    return questions.map(function(q,index) { 
+        let options = q.options || q.choices || []; 
+        let answer = q.answer; 
+        if (answer===undefined || answer===null) answer = q.correctAnswer; 
+        if (typeof answer==="string" && options.length) { 
+            const letter = answer.trim().toUpperCase(); 
+            if(letter==="A") answer=0; 
+            if(letter==="B") answer=1; 
+            if(letter==="C") answer=2; 
+            if(letter==="D") answer=3; 
+            if(answer>=0 && answer<options.length) answer = Number(answer); 
+        } 
+        return { id: index+1, question: q.question || q.questionText || "Question " + (index+1), options: options, answer: Number(answer), explanation: q.explanation }; 
+    }).filter(function(q) { 
+        return(q.question && q.options.length>=2 && Number.isFinite(q.answer) && q.answer>=0 && q.answer<q.options.length); 
+    });
 }
 
-function startQuestions(questions, headerTitle, testTitle){
-    activeQuestions = questions; activeTestTitle = testTitle;
-    testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
-    reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)";
+function startQuestions(questions, headerTitle, testTitle) {
+    activeQuestions = questions; 
+    activeTestTitle = testTitle; 
+    testSetup.classList.add("hidden"); 
+    testArea.classList.remove("hidden"); 
+    testResult.style.display = "none"; 
+    reviewContainer.innerHTML = ""; 
+    badgesContainer.innerHTML = ""; 
+    
+    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &nbsp; | &nbsp; " + questions.length + " Questions (10 Min Rapid Test)"; 
     questionsContainer.innerHTML = "";
 
-    questions.forEach(function(q,index){
-        const card = document.createElement("div"); card.className = "question-card";
-        let optionsHTML="";
-        q.options.forEach(function(option, optionIndex){
-            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>';
-        });
-        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
-        questionsContainer.appendChild(card);
+    questions.forEach(function(q,index) { 
+        const card = document.createElement("div"); 
+        card.className = "question-card"; 
+        let optionsHTML=""; 
+        q.options.forEach(function(option, optionIndex) { 
+            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>'; 
+        }); 
+        card.innerHTML = '<div class="question-number">QUESTION ' + (index+1) + '</div><div class="question-text">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML; 
+        questionsContainer.appendChild(card); 
     });
-    window.scrollTo({ top:0, behavior:"smooth" });
+    
+    window.scrollTo({ top:0, behavior:"smooth" }); 
     startTimer();
+}
+
+function escapeHTML(text) { 
+    if(!text) return ""; 
+    return text.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); 
 }
 
 function generateBadges(percentage, timeSpentSeconds) {
     let badgesHTML = "";
-    if(percentage === 100) { badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; } 
-    else if (percentage >= 80) { badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; } 
-    else { badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; }
+    if (percentage === 100) { 
+        badgesHTML += `<div class="badge scholar">👑 Invincible Scholar</div>`; 
+    } else if (percentage >= 80) { 
+        badgesHTML += `<div class="badge sharp">🎯 Sharpshooter</div>`; 
+    } else { 
+        badgesHTML += `<div class="badge" style="background:rgba(255,255,255,0.05); color:#cbd5e1;">🌱 Complete</div>`; 
+    }
 
-    if(timeSpentSeconds < 300 && percentage >= 80) { badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; }
+    if(timeSpentSeconds < 300 && percentage >= 80) { 
+        badgesHTML += `<div class="badge speedster">⚡ Fast Solver</div>`; 
+    }
     return badgesHTML;
 }
 
-submitTestBtn.addEventListener("click", async function(){
-    const timeSpent = totalTimeLimit - timeRemaining; clearInterval(testTimerInterval);
-    const questions = activeQuestions; if(!questions.length) return;
+submitTestBtn.addEventListener("click", async function() {
+    const timeSpent = totalTimeLimit - timeRemaining; 
+    clearInterval(testTimerInterval); 
+    const questions = activeQuestions; 
+    if(!questions.length) return;
 
-    submitTestBtn.disabled = true; submitTestBtn.textContent = "SUBMITTING...";
-    let correct=0, attempted=0; const answers=[]; let reviewHTML = "";
+    submitTestBtn.disabled = true; 
+    submitTestBtn.textContent = "SUBMITTING..."; 
+    let correct=0, attempted=0; 
+    const answers=[]; 
+    let reviewHTML = "";
 
-    questions.forEach(function(q,index){
-        const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
-        let selectedAnswer = null; let isCorrect = false;
-
-        if(selected){
-            attempted++; selectedAnswer = Number(selected.value);
-            if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
+    questions.forEach(function(q,index) { 
+        const selected = document.querySelector('input[name="q' + q.id + '"]:checked'); 
+        let selectedAnswer = null; 
+        let isCorrect = false; 
+        
+        if(selected) { 
+            attempted++; 
+            selectedAnswer = Number(selected.value); 
+            if(selectedAnswer === Number(q.answer)) { 
+                correct++; 
+                isCorrect = true; 
+            } 
         }
         
         answers.push({ questionNumber: index+1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
 
-        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>';
-        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>";
-        let correctPick = formatMathText(escapeHTML(q.options[q.answer]));
-        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : '';
-
-        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`;
+        let statusBadge = isCorrect ? '<span class="review-correct">✓ Correct</span>' : '<span class="review-wrong">✗ Incorrect</span>'; 
+        let studentPick = selectedAnswer !== null ? formatMathText(escapeHTML(q.options[selectedAnswer])) : "<em>Unattempted</em>"; 
+        let correctPick = formatMathText(escapeHTML(q.options[q.answer])); 
+        let explanationBox = q.explanation ? '<div class="review-explanation"><strong>Logic:</strong> ' + formatMathText(escapeHTML(q.explanation)) + '</div>' : ''; 
+        
+        reviewHTML += `<div class="review-card"><div style="font-size:12px; font-weight:800; color:var(--text-muted); margin-bottom:4px;">Q${index+1} &bull; ${statusBadge}</div><div class="question-text">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:13px; margin-bottom:4px;">Your Answer: ${studentPick}</div><div style="font-size:13px; font-weight:700;">Correct Answer: ${correctPick}</div>${explanationBox}</div>`; 
     });
 
-    const wrong = attempted - correct; const unanswered = questions.length - attempted;
+    const wrong = attempted - correct; 
+    const unanswered = questions.length - attempted; 
     const percentage = Math.round((correct/questions.length)*100);
 
     badgesContainer.innerHTML = generateBadges(percentage, timeSpent);
-    if (percentage >= 80) {
-        playSuccessSound();
-        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); }
+    if (percentage >= 80) { 
+        playSuccessSound(); 
+        if (typeof confetti === "function") { confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } }); } 
     }
 
-    finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
-    scoreText.textContent = correct + "/" + questions.length;
+    finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle }; 
+    scoreText.textContent = correct + "/" + questions.length; 
     resultDetail.innerHTML = "<strong>" + percentage + "% Accuracy</strong><br>Correct: " + correct + " &bull; Incorrect: " + wrong + " &bull; Unattempted: " + unanswered;
 
     const heatmap = document.getElementById('testHeatmap');
-    if (percentage >= 85) {
-        heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`;
-    } else if (percentage >= 60) {
-        heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`;
-    } else {
-        heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`;
+    if (percentage >= 85) { 
+        heatmap.innerHTML = `<strong>🔥 Performance Diagnosis:</strong> Excellent conceptual retention. You are ready for high-difficulty numericals.`; 
+    } else if (percentage >= 60) { 
+        heatmap.innerHTML = `<strong>⚡ Performance Diagnosis:</strong> Solid foundation. Revise tricky formulas and review the marked explanations below.`; 
+    } else { 
+        heatmap.innerHTML = `<strong>⚠️ Performance Diagnosis:</strong> Core revision required. Check step-by-step logic in the review section below.`; 
     }
 
-    reviewContainer.innerHTML = reviewHTML;
-    testArea.classList.add("hidden"); testResult.style.display = "block";
+    reviewContainer.innerHTML = reviewHTML; 
+    testArea.classList.add("hidden"); 
+    testResult.style.display = "block"; 
     testResult.scrollIntoView({ behavior:"smooth", block:"start" });
 
-    const studentName = document.getElementById("studentName").value.trim();
-    const studentMobile = document.getElementById("studentMobile").value.trim();
-    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : "";
+    const studentName = document.getElementById("studentName").value.trim(); 
+    const studentMobile = document.getElementById("studentMobile").value.trim(); 
+    let chapter = activeTestTitle ? (activeTestTitle.startsWith("Practice Set —") ? activeTestTitle.replace("Practice Set —","").trim() : activeTestTitle.replace(/\s+Test\s+\d+$/i,"").trim()) : ""; 
     const org = document.getElementById("testOrg") ? document.getElementById("testOrg").value : "Other School";
 
-    try{
-        await fetch("/api/save-test-attempt", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers })
+    try {
+        await fetch("/api/save-test-attempt", { 
+            method: "POST", 
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapter, testTitle: activeTestTitle, testType: activeTestTitle.startsWith("Practice Set") ? "Custom" : "Manual", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: wrong, unanswered: unanswered, percentage: percentage, answers: answers }) 
         });
-    }catch(error){ console.error(error); }
-    finally{ submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
+    } catch(error) { 
+        console.error(error); 
+    } finally { 
+        submitTestBtn.disabled = false; 
+        submitTestBtn.textContent = "SUBMIT ANSWERS"; 
+    }
 });
 
-restartTestBtn.addEventListener("click", function(){
-    testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
-    activeQuestions = []; activeTestTitle = ""; activeTestClass = ""; activeTestSubject = "";
-    window.scrollTo({ top:0, behavior:"smooth" });
+restartTestBtn.addEventListener("click", function() {
+    testResult.style.display = "none"; 
+    testSetup.classList.remove("hidden"); 
+    testArea.classList.add("hidden"); 
+    activeQuestions = []; 
+    activeTestTitle = ""; 
+    activeTestClass = ""; 
+    activeTestSubject = ""; 
+    window.scrollTo({ top:0, behavior:"smooth" }); 
 });
 
-whatsappShareBtn.addEventListener("click", function(){
-    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href;
-    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
+whatsappShareBtn.addEventListener("click", function() {
+    const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Can you beat my score? " + window.location.href; 
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank"); 
 });
 
 /* =====================================================
@@ -2232,98 +2769,124 @@ ARENA 1v1 LOGIC (WITH SOLO BOT PRACTICE ENGINE)
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
 
 function startBotMatch() {
-    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
+    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1'; 
     const cls = document.getElementById('arenaClass').value || '10';
 
+    // Try to get test from General School first, otherwise pull from any
     let sampleBank = testBank["Other School|" + cls + "|Physics"] || testBank["Other School|10|Physics"] || Object.values(testBank)[0];
-    let firstTestKey = Object.keys(sampleBank)[0];
+    let firstTestKey = Object.keys(sampleBank)[0]; 
     let questions = sampleBank[firstTestKey] || [];
 
-    arena.isBotMatch = true;
-    arena.name = name;
-    arena.playerNum = 1;
-    arena.score = 0;
-    arena.botScore = 0;
+    arena.isBotMatch = true; 
+    arena.name = name; 
+    arena.playerNum = 1; 
+    arena.score = 0; 
+    arena.botScore = 0; 
     arena.questions = questions.slice(0, 10);
 
-    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`;
+    document.getElementById('uiP1Name').innerHTML = `${name} (You) <span id="uiP1Score">0</span>`; 
     document.getElementById('uiP2Name').innerHTML = `🤖 Invincible Bot <span id="uiP2Score">0</span>`;
     startArenaGame();
 }
 
 document.getElementById('btnCreateRoom').onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim();
+    const name = document.getElementById('arenaPlayerName').value.trim(); 
     const className = document.getElementById('arenaClass').value;
+    
     if(!name) return alert("Please enter your name.");
 
-    const btn = document.getElementById('btnCreateRoom');
-    btn.disabled = true; btn.textContent = "Generating match...";
+    const btn = document.getElementById('btnCreateRoom'); 
+    btn.disabled = true; 
+    btn.textContent = "Generating match...";
 
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'create', player_name: name, class_name: className })
+        const res = await fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) 
         });
-        const data = await res.json();
+        const data = await res.json(); 
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
+        arena.isBotMatch = false; 
+        arena.code = data.room_code; 
+        arena.questions = data.questions; 
+        arena.name = name; 
+        arena.playerNum = 1;
 
-        document.getElementById('arenaSetup').classList.add('hidden');
-        document.getElementById('arenaWaiting').classList.remove('hidden');
+        document.getElementById('arenaSetup').classList.add('hidden'); 
+        document.getElementById('arenaWaiting').classList.remove('hidden'); 
         document.getElementById('displayRoomCode').textContent = arena.code;
+        
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Arena connection error: " + err.message); } 
-    finally { btn.disabled = false; btn.textContent = "⚡ Create 1v1 Room"; }
+    } catch(err) { 
+        alert("Arena connection error: " + err.message); 
+    } finally { 
+        btn.disabled = false; 
+        btn.textContent = "⚡ Create 1v1 Room"; 
+    }
 };
 
 document.getElementById('btnJoinRoom').onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim();
+    const name = document.getElementById('arenaPlayerName').value.trim(); 
     const code = document.getElementById('arenaJoinCode').value.trim();
+    
     if(!name || !code) return alert("Enter name and 4-digit code.");
 
-    const btn = document.getElementById('btnJoinRoom');
-    btn.disabled = true; btn.textContent = "Connecting...";
+    const btn = document.getElementById('btnJoinRoom'); 
+    btn.disabled = true; 
+    btn.textContent = "Connecting...";
 
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'join', room_code: code, player_name: name })
+        const res = await fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) 
         });
-        const data = await res.json();
+        const data = await res.json(); 
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+        arena.isBotMatch = false; 
+        arena.code = code; 
+        arena.questions = data.questions; 
+        arena.name = name; 
+        arena.playerNum = 2;
 
-        document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
+        document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`; 
         document.getElementById('uiP2Name').innerHTML = `${name} (You) <span id="uiP2Score">0</span>`;
 
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Unable to join: " + err.message); } 
-    finally { btn.disabled = false; btn.textContent = "🚀 Join Room"; }
+    } catch(err) { 
+        alert("Unable to join: " + err.message); 
+    } finally { 
+        btn.disabled = false; 
+        btn.textContent = "🚀 Join Room"; 
+    }
 };
 
 async function pollRoomState() {
     if (arena.isBotMatch) return;
     try {
-        const res = await fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'sync', room_code: arena.code })
+        const res = await fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'sync', room_code: arena.code }) 
         });
-        const data = await res.json();
-        if(!data.room) return;
+        const data = await res.json(); 
+        if(!data.room) return; 
         const room = data.room;
 
         if (arena.playerNum === 1 && room.status === 'playing' && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
-            document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`;
+            document.getElementById('uiP1Name').innerHTML = `${arena.name} (You) <span id="uiP1Score">0</span>`; 
             document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
             startArenaGame();
         }
 
-        const p1Score = room.player1_score || 0;
+        const p1Score = room.player1_score || 0; 
         const p2Score = room.player2_score || 0;
-        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score;
+        
+        if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = p1Score; 
         if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = p2Score;
 
         const total = p1Score + p2Score;
@@ -2334,37 +2897,47 @@ async function pollRoomState() {
         }
 
         if (room.player1_finished && room.player2_finished) {
-            clearInterval(arena.pollInterval); showArenaResult(room);
+            clearInterval(arena.pollInterval); 
+            showArenaResult(room);
         }
     } catch(e){}
 }
 
 function startArenaGame() {
-    document.getElementById('arenaSetup').classList.add('hidden');
-    document.getElementById('arenaWaiting').classList.add('hidden');
-    document.getElementById('arenaBattle').classList.remove('hidden');
-    arena.currentQ = 0; loadArenaQuestion();
+    document.getElementById('arenaSetup').classList.add('hidden'); 
+    document.getElementById('arenaWaiting').classList.add('hidden'); 
+    document.getElementById('arenaBattle').classList.remove('hidden'); 
+    arena.currentQ = 0; 
+    loadArenaQuestion();
 }
 
 function loadArenaQuestion() {
-    if (arena.currentQ >= 10) { finishArenaGame(); return; }
+    if (arena.currentQ >= 10) { 
+        finishArenaGame(); 
+        return; 
+    }
     const q = arena.questions[arena.currentQ];
-    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`;
+    
+    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/10`; 
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
     
-    let optsHTML = '';
+    let optsHTML = ''; 
     const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
+    
     opts.forEach((opt, idx) => {
         const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
         optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
     });
+    
     document.getElementById('arenaOptions').innerHTML = optsHTML;
 
     arena.timer = 10;
     document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
     clearInterval(arena.interval);
+    
     arena.interval = setInterval(() => {
-        arena.timer--; document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+        arena.timer--; 
+        document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
         if (arena.timer <= 0) handleArenaAnswer(-1, -1);
     }, 1000);
 }
@@ -2395,23 +2968,27 @@ async function handleArenaAnswer(selectedIdx, correctIdx) {
         }
     } else {
         fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score })
         });
     }
 
-    arena.currentQ++; loadArenaQuestion();
+    arena.currentQ++; 
+    loadArenaQuestion();
 }
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
+    
     if (arena.isBotMatch) {
         showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible Bot", player2_score: arena.botScore });
     } else {
         document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent to finish...</div>`;
         document.getElementById('arenaResult').classList.remove('hidden');
         fetch('/api/arena', {
-            method: 'POST', headers: {'Content-Type': 'application/json'},
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true })
         });
     }
@@ -2420,12 +2997,14 @@ function finishArenaGame() {
 function showArenaResult(room) {
     const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
     const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
+    
     document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
     document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
     document.getElementById('arenaResult').classList.remove('hidden');
 
     if (myScore > opScore) {
-        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
+        playWin(); 
+        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
         if (typeof confetti === "function") confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
     } else if (myScore < opScore) {
         document.getElementById('arenaResultText').innerHTML = `<div style="font-size:26px; font-weight:900; color:var(--accent-rose);">MATCH OVER</div>`;
@@ -2506,7 +3085,8 @@ document.getElementById('btnPublishPost').onclick = async () => {
     localStorage.setItem('student_inst', inst);
 
     const btn = document.getElementById('btnPublishPost');
-    btn.disabled = true; btn.textContent = "Publishing...";
+    btn.disabled = true; 
+    btn.textContent = "Publishing...";
 
     try {
         const res = await fetch('/api/feed', {
@@ -2522,7 +3102,8 @@ document.getElementById('btnPublishPost').onclick = async () => {
     } catch(err) {
         alert(err.message);
     } finally {
-        btn.disabled = false; btn.textContent = "POST TO COMMUNITY";
+        btn.disabled = false; 
+        btn.textContent = "POST TO COMMUNITY";
     }
 };
 
@@ -2599,6 +3180,5 @@ async function addComment(postId) {
     }
 }
 </script>
-
 </body>
 </html>
