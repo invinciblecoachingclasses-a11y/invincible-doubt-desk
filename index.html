@@ -944,46 +944,63 @@ document.getElementById('generateNotesBtn').onclick = async () => {
     document.getElementById('notesResultContainer').classList.add('hidden');
 
     const fallbackHTML = `
-        <div class="note-h1">🌱 ${chapter.toUpperCase()}</div>
+        <div class="note-h1">📚 ${chapter.toUpperCase()}</div>
         
-        <div class="note-h2">1. Definition</div>
-        <p class="note-p"><strong>${chapter}:</strong> The process by which green plants prepare their food using sunlight, carbon dioxide and water.</p>
+        <div class="note-h2">1. Chapter Overview</div>
+        <p class="note-p">This chapter covers the fundamental concepts, principles, and core applications of <strong>${chapter}</strong> in Class ${cls} ${sub}.</p>
         
-        <div class="note-h2">2. Important points</div>
+        <div class="note-h2">2. Important Concepts</div>
         <ul class="note-ul">
-            <li>Occurs mainly in green leaves.</li>
-            <li>Chlorophyll absorbs sunlight.</li>
-            <li>CO₂ comes from the air.</li>
-            <li>Water is absorbed by roots.</li>
-            <li>Glucose is produced as food.</li>
-            <li>Oxygen is released.</li>
+            <li>Key definitions and foundational theories.</li>
+            <li>Standard formulas and derivations (if applicable).</li>
+            <li>Important exceptions and special cases.</li>
         </ul>
         
-        <div class="note-h2">3. Formula / Equation</div>
+        <div class="note-h2">3. Core Formula / Equation</div>
         <div class="note-formula">
-            CO₂ + H₂O → Glucose + O₂<br>
-            <span style="font-size:12px; color:#92400e; font-weight:700;">(in the presence of sunlight and chlorophyll)</span>
+            [Connect to internet to generate AI formulas]<br>
+            <span style="font-size:12px; color:#92400e; font-weight:700;">(Ensure accurate units and symbols)</span>
         </div>
         
         <div class="note-h2">4. Keywords ⭐</div>
         <div class="note-keywords">
-            <span class="note-keyword-chip">Chlorophyll</span>
-            <span class="note-keyword-chip">Sunlight</span>
-            <span class="note-keyword-chip">CO₂</span>
-            <span class="note-keyword-chip">Water</span>
-            <span class="note-keyword-chip">Glucose</span>
-            <span class="note-keyword-chip">Oxygen</span>
+            <span class="note-keyword-chip">${chapter}</span>
+            <span class="note-keyword-chip">${sub}</span>
+            <span class="note-keyword-chip">CBSE Class ${cls}</span>
         </div>
         
         <div class="note-h2">5. Exam points 🎯</div>
         <div class="note-exam-box">
-            <p>⭐ Photosynthesis occurs in chloroplasts.</p>
-            <p>⭐ Chlorophyll traps light energy.</p>
-            <p>⭐ Oxygen is released as a by-product.</p>
+            <p>⭐ Server connection failed. Please check your internet.</p>
+            <p>⭐ Once connected, this section will contain high-yield exam traps.</p>
         </div>
     `;
 
-    const formatInstructions = "Return raw HTML ONLY. Use these strict classes: .note-h1 (Main Heading), .note-h2 (Numbered Subheadings like '1. Definition'), .note-p (Text/Definitions), .note-ul and li (For bullet points), .note-formula (Inside a div for equations), .note-keywords (div containing spans with class .note-keyword-chip), .note-exam-box (div containing p tags starting with ⭐ for exam points). Structure MUST follow: Heading -> Definition -> Important points -> Formula/Equation -> Keywords -> Exam points. Do NOT use markdown ```html blocks.";
+    const formatInstructions = `Act as an expert CBSE teacher and school topper. Generate highly accurate, concise, and syllabus-relevant revision notes for Class ${cls} ${sub}, Chapter: ${chapter}.
+    
+    The content MUST be subject-specific:
+    - Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
+    - Chemistry: focus on reactions, equations, concepts, and exceptions.
+    - Biology: focus on processes, terminology, diagrams, and differences.
+    - Mathematics: focus on formulas, theorems, identities, methods, and examples.
+
+    Structure MUST follow these sections exactly:
+    1. Chapter overview
+    2. Important concepts & Key definitions
+    3. ⭐ Must-remember points
+    4. Formulas / equations (or reactions/theorems)
+    5. Common mistakes
+    6. 🎯 Exam-focused points & Quick revision summary
+
+    Return raw HTML ONLY. Use these strict CSS classes: 
+    .note-h1 (Main Heading), 
+    .note-h2 (Numbered Subheadings), 
+    .note-p (Text/Definitions), 
+    .note-ul and li (For bullet points), 
+    .note-formula (Inside a div for formulas/equations), 
+    .note-keywords (div containing spans with class .note-keyword-chip), 
+    .note-exam-box (div containing p tags starting with ⭐ for exam points). 
+    Do NOT use markdown \`\`\`html blocks. Keep it visually attractive, easy to scan, and extremely accurate without unnecessary repetition.`;
 
     try {
         const res = await fetch('/api/generate-notes', {
@@ -998,7 +1015,7 @@ document.getElementById('generateNotesBtn').onclick = async () => {
         document.getElementById('notesResultContainer').classList.remove('hidden');
         playWin();
     } catch(err) {
-        console.warn("Backend unavailable, loading sample aesthetic notes...");
+        console.warn("Backend unavailable, loading fallback template...");
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} • ${sub.toUpperCase()}`;
         document.getElementById('notesContentBody').innerHTML = fallbackHTML;
         document.getElementById('notesResultContainer').classList.remove('hidden');
@@ -1008,10 +1025,6 @@ document.getElementById('generateNotesBtn').onclick = async () => {
         document.getElementById('notesLoading').classList.add('hidden');
     }
 };
-
-/* =====================================================
-REELS ENGINE
-===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
 let storyTimer = null;
