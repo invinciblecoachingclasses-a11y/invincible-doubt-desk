@@ -1,4 +1,14 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -10,12 +20,11 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is missing in Vercel environment variables.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY is missing in Vercel settings.' });
   }
 
-  const promptText = customStructure || `Act as an expert CBSE teacher and topper. Generate complete revision notes in clean HTML (do not use markdown blocks) for Class ${cls} ${sub}, Chapter: ${chapter}. Include Key definitions, Formulas, Exam Traps, and High-Yield Board Points.`;
+  const promptText = customStructure || `Act as an expert CBSE teacher and national board topper. Generate comprehensive, syllabus-accurate revision notes in clean HTML for Class ${cls} ${sub}, Chapter: ${chapter}. Include Key definitions, Formulas, Exam Traps, and High-Yield Board Points.`;
 
-  // List of fallback models if one is not enabled
   const modelEndpoints = [
     'gemini-1.5-flash-latest',
     'gemini-1.5-pro-latest',
@@ -44,12 +53,12 @@ export default async function handler(req, res) {
         
         return res.status(200).json({ notes: generatedHTML });
       } else {
-        lastError = data.error?.message || 'Model call failed';
+        lastError = data.error?.message || 'Model execution error';
       }
     } catch (err) {
       lastError = err.message;
     }
   }
 
-  return res.status(500).json({ error: `All model endpoints failed: ${lastError}` });
-}
+  return res.status(500).json({ error: `AI generation failed: ${lastError}` });
+};
