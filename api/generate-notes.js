@@ -1,73 +1,55 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-const geminiApiKey = process.env.GEMINI_API_KEY;
-
-const supabase = createClient(supabaseUrl, supabaseKey);
-const genAI = new GoogleGenerativeAI(geminiApiKey);
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Accept both className and classLevel
-  const cls = req.body.className || req.body.classLevel;
-  const sub = req.body.subject;
-  const chapter = req.body.chapter;
+  const cls = req.body.className || req.body.classLevel || '9';
+  const sub = req.body.subject || 'Physics';
+  const chapter = req.body.chapter || 'Sound';
   const customStructure = req.body.structure;
 
-  if (!cls || !sub || !chapter) {
-    return res.status(400).json({ error: 'Missing class, subject, or chapter' });
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'GEMINI_API_KEY is missing in Vercel environment variables.' });
   }
 
-  const cleanChapter = chapter.trim().toLowerCase();
+  const promptText = customStructure || `Act as an expert CBSE teacher and topper. Generate complete revision notes in clean HTML (do not use markdown blocks) for Class ${cls} ${sub}, Chapter: ${chapter}. Include Key definitions, Formulas, Exam Traps, and High-Yield Board Points.`;
 
-  try {
-    // 1. Check Supabase cache
-    const { data: cachedNote } = await supabase
-      .from('topper_notes')
-      .select('content_markdown')
-      .eq('class_level', String(cls))
-      .eq('subject', sub)
-      .ilike('chapter', cleanChapter)
-      .maybeSingle();
+  // List of fallback models if one is not enabled
+  const modelEndpoints = [
+    'gemini-1.5-flash-latest',
+    'gemini-1.5-pro-latest',
+    'gemini-pro'
+  ];
 
-    if (cachedNote && cachedNote.content_markdown) {
-      return res.status(200).json({
-        notes: cachedNote.content_markdown
+  let lastError = null;
+
+  for (const modelName of modelEndpoints) {
+    try {
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+      const response = await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }]
+        })
       });
-    }
 
-    // 2. Generate with Gemini
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-1.5-flash'
-    });
+      const data = await response.json();
 
-    const prompt = customStructure || `Act as an expert CBSE teacher and school topper. Generate complete revision notes for Class ${cls} ${sub}, Chapter: ${chapter}. Include key definitions, formulas in LaTeX format, exam traps, and quick revision points.`;
-
-    const result = await model.generateContent(prompt);
-    const generatedContent = result.response.text();
-
-    // 3. Save to Supabase cache
-    await supabase.from('topper_notes').insert([
-      {
-        class_level: String(cls),
-        subject: sub,
-        chapter: cleanChapter,
-        content_markdown: generatedContent
+      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        let generatedHTML = data.candidates[0].content.parts[0].text;
+        generatedHTML = generatedHTML.replace(/^```html\s*/i, '').replace(/\s*```$/i, '');
+        
+        return res.status(200).json({ notes: generatedHTML });
+      } else {
+        lastError = data.error?.message || 'Model call failed';
       }
-    ]);
-
-    // Return under the exact 'notes' property index.html expects
-    return res.status(200).json({
-      notes: generatedContent
-    });
-
-  } catch (error) {
-    console.error('API Generation error:', error);
-    return res.status(500).json({ error: 'Failed to generate notes.' });
+    } catch (err) {
+      lastError = err.message;
+    }
   }
+
+  return res.status(500).json({ error: `All model endpoints failed: ${lastError}` });
 }
