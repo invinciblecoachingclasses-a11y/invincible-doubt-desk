@@ -1523,11 +1523,14 @@ function renderDailyPuzzle(puzzle) {
   container.innerHTML = '';
 
   let opts = puzzle.options;
+  let correctIdx = puzzle.correct_option !== undefined ? puzzle.correct_option : 1;
+
   if (!opts || !opts.length) {
     if (puzzle.option_1) {
       opts = [puzzle.option_1, puzzle.option_2, puzzle.option_3, puzzle.option_4];
     } else {
-      opts = ['0', '1', '2', '100'];
+      opts = ['+6', '-6', '±6', 'Not Real'];
+
     }
   }
 
@@ -1536,7 +1539,8 @@ function renderDailyPuzzle(puzzle) {
     btn.type = 'button';
     btn.className = 'survival-btn';
     btn.textContent = opt;
-    btn.onclick = () => handleDailyClashAnswer(idx, puzzle.correct_option !== undefined ? puzzle.correct_option : 2);
+    btn.onclick = () => handleDailyClashAnswer(idx, correctIdx);
+
     container.appendChild(btn);
   });
 
@@ -1564,11 +1568,22 @@ function startDailyClashTimer() {
 }
 
 function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
+  // Freeze the countdown timer immediately
   clearInterval(clashTimerInterval);
+  
   const fb = document.getElementById('puzzleFeedback');
   const optsContainer = document.getElementById('puzzleOptionsContainer');
+  
+  // Disable buttons and highlight the correct answer
   if (optsContainer) {
-    Array.from(optsContainer.children).forEach(btn => btn.disabled = true);
+    Array.from(optsContainer.children).forEach((btn, idx) => {
+      btn.disabled = true;
+      btn.style.cursor = 'default';
+      if (idx === Number(correctIdx)) {
+        btn.style.borderColor = 'var(--accent-emerald)';
+        btn.style.background = 'rgba(5, 255, 161, 0.15)';
+      }
+    });
   }
 
   if (timedOut) {
@@ -1580,9 +1595,10 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
 
   if (isCorrect) {
-    playDing();
+    if (typeof playDing === 'function') playDing();
     const newXp = currentXp + 50;
     
+    // Animate XP counters
     const xpEl = document.getElementById('xpCounter');
     const userXpEl = document.getElementById('userXpDisplay');
     if (xpEl) xpEl.textContent = newXp;
@@ -1592,22 +1608,23 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
       fb.innerHTML = `
         <div style="background:rgba(5,255,161,0.12); border:1px solid rgba(5,255,161,0.3); border-radius:12px; padding:10px; margin-top:10px;">
           <div style="font-size:13px; font-weight:900; color:var(--accent-emerald);">🔥 PERFECT! +50 XP</div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Streak active • Next challenge ready in 1v1 Arena</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">√(-4) × √(-9) = 2i × 3i = 6i² = <b>-6</b></div>
         </div>
       `;
     }
     if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
   } else {
-    playBuzz();
+    if (typeof playBuzz === 'function') playBuzz();
     if (fb) {
       fb.innerHTML = `
         <div style="background:rgba(255,42,95,0.1); border:1px solid rgba(255,42,95,0.25); border-radius:12px; padding:10px; margin-top:10px;">
-          <div style="font-size:12px; font-weight:800; color:var(--accent-rose);">Not quite! Keep practicing.</div>
+          <div style="font-size:12px; font-weight:800; color:var(--accent-rose);">Incorrect! Correct answer is -6 (since i² = -1).</div>
         </div>
       `;
     }
   }
 }
+
 
 
 /* =====================================================
