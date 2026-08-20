@@ -85,8 +85,8 @@ Make the HTML clean, professional, and dense with high-value academic knowledge.
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: masterPrompt }] }],
         generationConfig: { 
-          temperature: 0.2, // Low temperature for high factual accuracy
-          maxOutputTokens: 8192 // Max out tokens to accommodate the massive 10-12 page requirement
+          temperature: 0.2,
+          maxOutputTokens: 8192
         }
       })
     });
@@ -95,7 +95,6 @@ Make the HTML clean, professional, and dense with high-value academic knowledge.
     if (!response.ok) return res.status(response.status).json({ error: data?.error?.message || "Generation failed." });
 
     let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    // Clean out any accidental markdown wrapper from the AI
     generatedText = generatedText.replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
 
     return res.status(200).json({ success: true, notes: generatedText });
