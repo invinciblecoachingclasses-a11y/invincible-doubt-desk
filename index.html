@@ -323,6 +323,31 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .note-exam-box { background: #fff1f2; border-left: 4px solid #e11d48; padding: 12px 16px; border-radius: 0 12px 12px 0; margin: 15px 0; box-shadow: 3px 3px 0px rgba(225, 29, 72, 0.1); }
 .note-exam-box p { margin: 0 0 5px 0; color: #be123c; font-weight: 800; font-size: 13px; line-height: 1.5; }
 
+/* TABLE STYLING FOR COMPARISONS & DIFFERENCES */
+.note-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.note-table th {
+  background: #4338ca;
+  color: #ffffff;
+  padding: 10px 14px;
+  font-size: 13px;
+  text-align: left;
+}
+.note-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.5;
+}
+
 /* FLOATING GLASS DOCK */
 .floating-dock {
   position: fixed;
@@ -654,7 +679,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 <!-- 5. NOTES STUDIO SECTION -->
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
-    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate structured, visually rich summary notes instantly.</div>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate comprehensive, exhaustive topper-grade chapter modules.</div>
     
     <label>Select Grade</label>
     <select id="notesClass" style="margin-bottom:12px;">
@@ -673,10 +698,10 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
     </select>
     
     <label>Chapter Name</label>
-    <input type="text" id="notesChapter" placeholder="e.g. Photosynthesis, Sound, Motion">
+    <input type="text" id="notesChapter" placeholder="e.g. Sound, Motion, Electrostatics">
     
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
-    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling elite topper notes...</div>
+    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling exhaustive topper notes...</div>
     
     <div id="notesResultContainer" class="hidden topper-paper-container">
         <div style="position:relative; z-index:10; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-left:0px;">
@@ -931,7 +956,7 @@ function toggleLofiAudio() {
 }
 
 /* =====================================================
-NOTES STUDIO GENERATOR (TOPPER NOTEBOOK AESTHETIC)
+NOTES STUDIO GENERATOR (EXHAUSTIVE MASTERCLASS NOTEBOOK)
 ===================================================== */
 document.getElementById('generateNotesBtn').onclick = async () => {
     const cls = document.getElementById('notesClass').value;
@@ -940,46 +965,21 @@ document.getElementById('generateNotesBtn').onclick = async () => {
     if(!chapter) return alert("Please enter a chapter name.");
 
     const btn = document.getElementById('generateNotesBtn');
-    btn.disabled = true; btn.textContent = "Synthesizing Notes...";
+    btn.disabled = true; 
+    btn.textContent = "Compiling Comprehensive Notes (10-15s)...";
     document.getElementById('notesLoading').classList.remove('hidden');
     document.getElementById('notesResultContainer').classList.add('hidden');
-
-    const formatInstructions = `Act as an expert CBSE teacher and school topper. Generate highly accurate, concise, and syllabus-relevant revision notes for Class ${cls} ${sub}, Chapter:${chapter}.
-    
-    The content MUST be subject-specific:
-    - Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
-    - Chemistry: focus on reactions, equations, concepts, and exceptions.
-    - Biology: focus on processes, terminology, diagrams, and differences.
-    - Mathematics: focus on formulas, theorems, identities, methods, and examples.
-
-    Structure MUST follow these sections exactly:
-    1. Chapter overview
-    2. Important concepts & Key definitions
-    3. ⭐ Must-remember points
-    4. Formulas / equations (or reactions/theorems)
-    5. Common mistakes
-    6. 🎯 Exam-focused points & Quick revision summary
-
-    Return raw HTML ONLY. Use these strict CSS classes: 
-    .note-h1 (Main Heading), 
-    .note-h2 (Numbered Subheadings), 
-    .note-p (Text/Definitions), 
-    .note-ul and li (For bullet points), 
-    .note-formula (Inside a div for formulas/equations), 
-    .note-keywords (div containing spans with class .note-keyword-chip), 
-    .note-exam-box (div containing p tags starting with ⭐ for exam points). 
-    Do NOT use markdown \`\`\`html blocks. Keep it visually attractive, easy to scan, and extremely accurate without unnecessary repetition.`;
 
     try {
         const res = await fetch('/api/generate-notes', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter, structure: formatInstructions })
+            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter })
         });
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
 
-        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} • ${sub.toUpperCase()}`;
+        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} •${sub.toUpperCase()}`;
         document.getElementById('notesContentBody').innerHTML = data.notes;
         document.getElementById('notesResultContainer').classList.remove('hidden');
         playWin();
@@ -1086,7 +1086,6 @@ async function loadPlatformData(){
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        // 1. Survival Bet Initialization
         if(data && data.dailyPuzzle){
             document.getElementById("puzzleBox").style.display = "flex";
             const formattedQ = formatMathText(data.dailyPuzzle.question_text || "");
@@ -1109,7 +1108,6 @@ async function loadPlatformData(){
             startSurvivalTimer();
         }
 
-        // 2. Clout Podium & List
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
@@ -1292,8 +1290,8 @@ startTestBtn.addEventListener("click", async function(){
         if(!generated || !generated.length) throw new Error("Unable to load questions.");
 
         activeTestClass = cls; activeTestSubject = subject;
-        activeTestTitle = `${subject}: ${chapter}`;
-        startQuestions(generated, `Class ${cls} ${subject}`, chapter);
+        activeTestTitle = `${subject}:${chapter}`;
+        startQuestions(generated, `Class ${cls}${subject}`, chapter);
     } catch(error) { alert("Assessment System: " + error.message); }
     finally { btn.disabled = false; btn.textContent = originalText; }
 });
@@ -1359,7 +1357,7 @@ submitTestBtn.addEventListener("click", async function(){
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
+    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} \vert{} Incorrect:${attempted - correct}`;
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1525,8 +1523,8 @@ function finishArenaGame() {
 function showArenaResult(room) {
     const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
     const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
-    document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong> ${room.player1_score} pts`;
-    document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong> ${room.player2_score} pts`;
+    document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong>${room.player1_score} pts`;
+    document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong>${room.player2_score} pts`;
     document.getElementById('arenaResult').classList.remove('hidden');
     if (myScore > opScore) {
         playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:22px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
