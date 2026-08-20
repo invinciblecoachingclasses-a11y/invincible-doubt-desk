@@ -63,26 +63,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-
-* { 
-  box-sizing: border-box; 
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
-}
-
-body {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-main);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(251, 113, 133, 0.08) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: var(--text-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
 body.midnight-vent-active {
   background-color: #030308;
   background-image: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
@@ -306,9 +286,7 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 16px; background: rgba(56, 189, 248, 0.05); color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .whatsapp-btn { background: #25D366 !important; color: #fff !important; border: none !important; }
 
-/* =====================================================
-ARENA 1v1 - ESPORT UPGRADED AESTHETICS
-===================================================== */
+/* ARENA 1v1 */
 .arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
 .arena-btn-create { 
   background: linear-gradient(135deg, #f43f5e, #be123c); 
@@ -400,20 +378,10 @@ ARENA 1v1 - ESPORT UPGRADED AESTHETICS
   background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; text-align: center;
 }
 
-/* COMMUNITY FEED */
-.post-composer { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 16px; margin-bottom: 16px; }
-.feed-filter-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; }
-.filter-pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: var(--text-muted); font-size: 12px; font-weight: 800; padding: 6px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; }
-.filter-pill.active { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); border-color: var(--accent-purple); }
-.feed-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 16px; margin-bottom: 12px; }
-.feed-actions { display: flex; gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 10px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
-.action-btn { cursor: pointer; display: flex; align-items: center; gap: 4px; }
-.comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
-
-/* 5. PREMIUM KOTA-STYLE COACHING MODULE AESTHETIC */
+/* TOPPER NOTES STYLING */
 .topper-paper-container {
-  background-color: #FAFAFA; /* Warm White / Very Light Grey */
-  color: #333333; /* Dark Charcoal */
+  background-color: #FAFAFA;
+  color: #333333;
   padding: 40px;
   border-radius: 12px;
   border: 1px solid #cbd5e1;
@@ -427,152 +395,12 @@ ARENA 1v1 - ESPORT UPGRADED AESTHETICS
   line-height: 1.6;
 }
 
-.module-hero {
-  border-bottom: 3px solid #0A192F;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
-  text-align: center;
-}
-.module-hero-title {
-  font-size: 28px;
-  font-weight: 900;
-  color: #0A192F; /* Deep Navy Blue */
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.module-hero-subtitle {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1A365D; /* Dark Blue */
-}
-
-/* Typography & Headings */
-.kota-h2 {
-  font-size: 22px;
-  font-weight: 800;
-  color: #0A192F;
-  margin: 32px 0 16px 0;
-  border-bottom: 2px solid #cbd5e1;
-  padding-bottom: 8px;
-}
-.kota-h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1A365D;
-  margin: 24px 0 12px 0;
-}
-
-/* Content Blocks */
-.kota-concept {
-  background: #ffffff;
-  border-left: 4px solid #1A365D;
-  padding: 16px;
-  margin: 16px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.kota-formula {
-  background: #FFF3E0; /* Light Orange Bg */
-  border: 1px solid #FF9800;
-  border-left: 5px solid #E65100; /* Orange */
-  padding: 16px;
-  margin: 16px 0;
-  border-radius: 6px;
-}
-.kota-formula-title {
-  color: #E65100;
-  font-weight: 800;
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-.kota-result {
-  background: #E8F5E9; /* Light Green Bg */
-  border: 1px solid #4CAF50;
-  border-left: 5px solid #2E7D32; /* Green */
-  padding: 16px;
-  margin: 16px 0;
-  border-radius: 6px;
-}
-.kota-result-title {
-  color: #2E7D32;
-  font-weight: 800;
-  font-size: 14px;
-}
-.kota-mistake {
-  background: #FFEBEE; /* Light Red Bg */
-  border: 1px solid #EF5350;
-  border-left: 5px solid #C62828; /* Red */
-  padding: 16px;
-  margin: 16px 0;
-  border-radius: 6px;
-}
-.kota-mistake-title {
-  color: #C62828;
-  font-weight: 800;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Tables & Boxes */
-.kota-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-  margin: 20px 0;
-}
-.kota-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-}
-.kota-table th {
-  background: #F0F4F8; /* Light Blue/Grey */
-  color: #0A192F;
-  font-weight: 700;
-  padding: 12px;
-  border: 1px solid #cbd5e1;
-  text-align: left;
-}
-.kota-table td {
-  padding: 12px;
-  border: 1px solid #cbd5e1;
-  color: #333333;
-}
-
-/* Test & Exam Section */
-.kota-test-header {
-  border: 2px solid #0A192F;
-  padding: 16px;
-  text-align: center;
-  margin: 40px 0 24px 0;
-  border-radius: 8px;
-}
-.kota-question {
-  margin-bottom: 20px;
-}
-.kota-question-text {
-  font-weight: 600;
-  color: #0A192F;
-  margin-bottom: 8px;
-}
-
-/* Utility for Printing Pagination */
-.page-break {
-  page-break-before: always;
-  margin-top: 40px;
-  padding-top: 40px;
-  border-top: 1px dashed #cbd5e1;
-}
-/* MOBILE SPACING & ALIGNMENT PATCH */
 @media (max-width: 600px) {
   .slim-hud { padding: 8px 14px; }
   .slim-logo { font-size: 16px; }
-  .slim-xp-pill { padding: 4px 8px; font-size: 10px; }
   .lofi-widget { bottom: 95px; right: 14px; }
   .container { margin-bottom: 140px; }
 }
-
 
 /* FLOATING GLASS DOCK */
 .floating-dock {
@@ -614,7 +442,7 @@ ARENA 1v1 - ESPORT UPGRADED AESTHETICS
   background: var(--accent-cyan); border-radius: 50%; box-shadow: 0 0 8px var(--accent-cyan);
 }
 .dock-btn.arena-tab.active::after { background: var(--accent-rose); box-shadow: 0 0 8px var(--accent-rose); }
-.dock-btn.feed-tab.active::after { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+.dock-btn.feed-tab.active::after { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
 .dock-btn.notes-tab.active::after { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
 
 /* LO-FI WAVEFORM WIDGET */
@@ -658,56 +486,6 @@ ARENA 1v1 - ESPORT UPGRADED AESTHETICS
 .story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
 .reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 
-/* =====================================================
-PRINT STYLESHEET: CLEAN MODULE ONLY
-===================================================== */
-@media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-  body, .container, .card, .topper-paper-container {
-    overflow: visible !important;
-    height: auto !important;
-  }
-  .slim-hud, .stories-tray-container, .bento-grid, #doubtSection, 
-  #testSection, #arenaSection, #feedSection, .floating-dock, 
-  .lofi-widget, .footer, #onboardingModal, #storyModal, #storyViewer,
-  #notesClass, #notesSubject, #notesChapter, #generateNotesBtn, 
-  #notesLoading, label, button, .section-h2, .topper-paper-container button,
-  .hide-on-print {
-    display: none !important;
-  }
-  .container {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  #notesSection {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: block !important;
-  }
-  .topper-paper-container {
-    display: block !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    background-color: #ffffff !important;
-    font-size: 12pt !important;
-  }
-  .page-break {
-    page-break-before: always !important;
-    border-top: none !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-}
 /* Hub Category Filter Pills */
 .hub-pill {
   background: rgba(255, 255, 255, 0.05);
@@ -745,7 +523,6 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
 .tag-syllabus_notes { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
 .tag-ask_seniors { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
 .tag-news { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-
 </style>
 </head>
 
@@ -780,7 +557,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </div>
 </section>
 
-<!-- 3. SECONDARY UTILITY TRAY (HACKS & GUIDE) -->
+<!-- 3. SECONDARY UTILITY TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story">
@@ -797,7 +574,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
 </div>
 
-<!-- 4. HERO SECTION: DAILY CLASH (15s CHALLENGE) -->
+<!-- 4. HERO SECTION: DAILY CLASH -->
 <div class="bento-grid">
     <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Challenge">
         <div>
@@ -815,138 +592,9 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
             <div class="reward-hint">+50 XP • Instant Reward</div>
             <div id="puzzleFeedback"></div>
         </div>
-    </section><!-- CAMPUS HUB / SCHOOL DISPATCH SECTION -->
+    </section>
 
-<!-- SIMPLE DESI SCHOOL DISPATCH -->
-<section id="campusHubSection" style="margin: 20px auto 40px auto; max-width: 600px; padding: 0 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-
-  <!-- Main School Bar -->
-  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4);">
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="font-size: 20px;">📢</span>
-        <div>
-          <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin: 0;">School Charcha & Notes</h3>
-          <p style="font-size: 11px; color: #9ca3af; margin: 2px 0 0 0;">Apne school ki baatein, notes aur updates</p>
-        </div>
-      </div>
-      <button type="button" onclick="openCreatePostModal()" style="background: #22c55e; color: #052e16; border: none; font-weight: 800; font-size: 12px; padding: 8px 14px; border-radius: 10px; cursor: pointer;">
-        + Post Karo
-      </button>
-    </div>
-
-    <!-- School Select Dropdown -->
-    <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; outline: none;">
-      <option value="ALL">📍 Sabhi Local Schools (Kulesra / Greater Noida)</option>
-      <option value="DVM Public School">DVM Public School</option>
-      <option value="DSR School">DSR School</option>
-      <option value="The Ideal Public School">The Ideal Public School</option>
-      <option value="H R International School">H R International School</option>
-      <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
-      <option value="Bharat Public School">Bharat Public School</option>
-      <option value="R.L. Public School">R.L. Public School</option>
-      <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
-      <option value="SMPN Public School">SMPN Public School</option>
-      <option value="Heritage Public School">Heritage Public School</option>
-    </select>
-
-    <!-- Clean Hinglish Tabs -->
-    <div style="display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; padding-bottom: 2px;" id="hubCategoryPills">
-      <button class="hub-pill active" onclick="setCategoryFilter('ALL', this)">🔥 Sabhi</button>
-      <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teacher Updates</button>
-      <button class="hub-pill" onclick="setCategoryFilter('syllabus_notes', this)">📚 Notes & Paper</button>
-      <button class="hub-pill" onclick="setCategoryFilter('ask_seniors', this)">❓ Seniors se Poocho</button>
-      <button class="hub-pill" onclick="setCategoryFilter('news', this)">🎉 School Masti & News</button>
-    </div>
-  </div>
-
-  <!-- Feed List -->
-  <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
-    <!-- Cards render here -->
-  </div>
-</section>
-
-<!-- SIMPLE POPUP FOR POSTING -->
-<!-- CLEAN CAMPUS POST MODAL -->
-<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
-  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; font-family: inherit;">
-    
-    <!-- Modal Header -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <div>
-        <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
-        <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Share intel, notes, or ask local students</p>
-      </div>
-      <button type="button" onclick="closeCreatePostModal()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-size: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">✕</button>
-    </div>
-
-    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 14px;">
-      
-      <!-- School Selector -->
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">School</label>
-        <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; outline: none; appearance: auto;">
-          <option value="DVM Public School">DVM Public School</option>
-          <option value="DSR School">DSR School</option>
-          <option value="The Ideal Public School">The Ideal Public School</option>
-          <option value="H R International School">H R International School</option>
-          <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
-          <option value="Bharat Public School">Bharat Public School</option>
-          <option value="R.L. Public School">R.L. Public School</option>
-          <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
-          <option value="SMPN Public School">SMPN Public School</option>
-          <option value="Heritage Public School">Heritage Public School</option>
-        </select>
-      </div>
-
-      <!-- Tag & Class Row -->
-      <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 10px;">
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Category</label>
-          <select id="modalCategorySelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; outline: none; appearance: auto;">
-            <option value="teacher_intel">👨‍🏫 Teacher Intel / Viva Tip</option>
-            <option value="syllabus_notes">📚 Notes & Questions</option>
-            <option value="ask_seniors">❓ Ask Seniors</option>
-            <option value="news">📢 School News & Buzz</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Class / Batch</label>
-          <input type="text" id="modalBatchInput" placeholder="e.g. 10th-B / 12th Sci" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; box-sizing: border-box; outline: none;">
-        </div>
-      </div>
-
-      <!-- Post Title -->
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Post Title</label>
-        <input type="text" id="modalTitleInput" placeholder="What's this update about?" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; box-sizing: border-box; outline: none;">
-      </div>
-
-      <!-- Content -->
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Details / Message</label>
-        <textarea id="modalContentInput" rows="3" placeholder="Write the full update, syllabus hint, or your question here..." required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; resize: none; box-sizing: border-box; outline: none; line-height: 1.4;"></textarea>
-      </div>
-
-      <!-- Footer / Actions -->
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #d1d5db; cursor: pointer; user-select: none;">
-          <input type="checkbox" id="modalAnonCheckbox" checked style="width: 16px; height: 16px; accent-color: #22c55e; cursor: pointer;">
-          <span>Post Anonymously</span>
-        </label>
-        
-        <button type="submit" style="background: #22c55e; color: #052e16; font-weight: 800; font-size: 13px; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: transform 0.15s ease;">
-          Publish Post 🚀
-        </button>
-      </div>
-
-    </form>
-  </div>
-</div>
-
-
-
-    <!-- CLOUT LEADERBOARD WITH PINNED POSITION -->
+    <!-- CLOUT LEADERBOARD -->
     <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
         <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
             <span>🏆 CLOUT LEADERBOARD</span>
@@ -964,9 +612,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </section>
 </div>
 
-
-
-<!-- 1. DOUBT SECTION -->
+<!-- 1. DOUBT SECTION (QUEST TAB) -->
 <section class="card" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
     <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
     
@@ -1009,7 +655,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </div>
 </section>
 
-<!-- 2. TEST SECTION -->
+<!-- 2. TEST SECTION (TESTS TAB) -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
@@ -1087,7 +733,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </div>
 </section>
 
-<!-- 3. ARENA SECTION (ESPORT LEVEL UPGRADED) -->
+<!-- 3. ARENA SECTION (ARENA TAB) -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
     <div style="text-align:center; margin-bottom:16px;">
         <h2 class="section-h2" style="color:var(--accent-rose); margin:0; letter-spacing:1px;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
@@ -1136,7 +782,6 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
             </div>
         </div>
 
-        <!-- TUG-OF-WAR TERRITORY BAR -->
         <div class="vs-progress-bar-wrap">
             <div class="vs-fill-p1" id="vsFillP1"></div>
             <div class="vs-fill-p2" id="vsFillP2"></div>
@@ -1170,11 +815,47 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </div>
 </section>
 
+<!-- 4. CAMPUS HUB / SCHOOL DISPATCH (FEED TAB) -->
+<section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+    <div>
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0;">📢 School Charcha &amp; Notes</h3>
+      <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Apne school ki baatein, notes aur senior updates</p>
+    </div>
+    <button type="button" onclick="openCreatePostModal()" style="background: #22c55e; color: #052e16; border: none; font-weight: 800; font-size: 12px; padding: 9px 15px; border-radius: 10px; cursor: pointer;">
+      + Post Karo
+    </button>
+  </div>
 
-<!-- 4. COMMUNITY FEED -->
+  <!-- School Dropdown -->
+  <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; outline: none; margin-bottom: 10px;">
+    <option value="ALL">📍 Sabhi Local Schools (Kulesra / Greater Noida)</option>
+    <option value="DVM Public School">DVM Public School</option>
+    <option value="DSR School">DSR School</option>
+    <option value="The Ideal Public School">The Ideal Public School</option>
+    <option value="H R International School">H R International School</option>
+    <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
+    <option value="Bharat Public School">Bharat Public School</option>
+    <option value="R.L. Public School">R.L. Public School</option>
+    <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
+    <option value="SMPN Public School">SMPN Public School</option>
+    <option value="Heritage Public School">Heritage Public School</option>
+  </select>
 
+  <!-- Clean Tabs -->
+  <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px;" id="hubCategoryPills">
+    <button class="hub-pill active" onclick="setCategoryFilter('ALL', this)">🔥 Sabhi</button>
+    <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teacher Updates</button>
+    <button class="hub-pill" onclick="setCategoryFilter('syllabus_notes', this)">📚 Notes &amp; Paper</button>
+    <button class="hub-pill" onclick="setCategoryFilter('ask_seniors', this)">❓ Seniors se Poocho</button>
+    <button class="hub-pill" onclick="setCategoryFilter('news', this)">🎉 School Masti &amp; News</button>
+  </div>
 
-<!-- 5. NOTES STUDIO SECTION -->
+  <!-- Feed List -->
+  <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 10px;"></div>
+</section>
+
+<!-- 5. NOTES STUDIO SECTION (NOTES TAB) -->
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
     <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate high-density, scannable topper-grade chapter modules.</div>
@@ -1217,6 +898,8 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     &copy; 2026 Invincible Coaching Classes.
 </footer>
 
+</main>
+
 <!-- FLOATING GLASS DOCK (5 TABS) -->
 <nav class="floating-dock" aria-label="Bottom Navigation Dock">
     <button type="button" class="dock-btn active" onclick="switchTab('doubt')">
@@ -1229,7 +912,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
         <span class="dock-icon">⚔️</span> Arena
     </button>
     <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')">
-        <span class="dock-icon">🌟</span> Feed
+        <span class="dock-icon">📢</span> Feed
     </button>
     <button type="button" class="dock-btn notes-tab" onclick="switchTab('notes')">
         <span class="dock-icon">📝</span> Notes
@@ -1245,7 +928,71 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     <div class="lofi-label" id="lofiLabel">Soundscape: Off</div>
 </div>
 
-</main>
+<!-- POST CREATION MODAL -->
+<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
+  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
+        <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Share notes, viva questions, or ask seniors</p>
+      </div>
+      <button type="button" onclick="closeCreatePostModal()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-size: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">✕</button>
+    </div>
+
+    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 14px;">
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">School</label>
+        <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px;">
+          <option value="DVM Public School">DVM Public School</option>
+          <option value="DSR School">DSR School</option>
+          <option value="The Ideal Public School">The Ideal Public School</option>
+          <option value="H R International School">H R International School</option>
+          <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
+          <option value="Bharat Public School">Bharat Public School</option>
+          <option value="R.L. Public School">R.L. Public School</option>
+          <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
+          <option value="SMPN Public School">SMPN Public School</option>
+          <option value="Heritage Public School">Heritage Public School</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 10px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Category</label>
+          <select id="modalCategorySelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px;">
+            <option value="teacher_intel">👨‍🏫 Teacher Update / Viva Tip</option>
+            <option value="syllabus_notes">📚 Notes &amp; Questions</option>
+            <option value="ask_seniors">❓ Ask Seniors</option>
+            <option value="news">📢 School News &amp; Buzz</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Class / Batch</label>
+          <input type="text" id="modalBatchInput" placeholder="e.g. 10th-B" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; box-sizing: border-box;">
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Post Title</label>
+        <input type="text" id="modalTitleInput" placeholder="What's this update about?" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Details / Message</label>
+        <textarea id="modalContentInput" rows="3" placeholder="Write in natural Hindi, Hinglish, or English..." required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; resize: none; box-sizing: border-box;"></textarea>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #d1d5db; cursor: pointer;">
+          <input type="checkbox" id="modalAnonCheckbox" checked style="width: 16px; height: 16px; accent-color: #22c55e;">
+          <span>Post Anonymously 🤫</span>
+        </label>
+        <button type="submit" style="background: #22c55e; color: #052e16; font-weight: 800; font-size: 13px; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Publish Post 🚀</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- ONBOARDING MODAL -->
 <div class="quest-modal-overlay" id="onboardingModal">
@@ -1278,7 +1025,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
         <input type="text" id="storyAuthorName" placeholder="Your Name">
         <input type="text" id="storyInstitution" placeholder="School Name">
         <textarea id="storyCaption" placeholder="Drop a formula trick or mnemonic..."></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE WITH CLAN</button>
+        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE TIP</button>
     </div>
 </div>
 
@@ -1311,6 +1058,7 @@ function animateXP() {
     let xp = 0;
     const target = 680;
     const el = document.getElementById('xpCounter');
+    if (!el) return;
     const timer = setInterval(() => {
         xp += 15;
         if(xp >= target) { xp = target; clearInterval(timer); }
@@ -1350,20 +1098,22 @@ function switchTab(tab) {
     document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
     
     const dockButtons = document.querySelectorAll('.dock-btn');
-    if(tab === 'doubt') dockButtons[0].classList.add('active');
-    if(tab === 'test') dockButtons[1].classList.add('active');
-    if(tab === 'arena') dockButtons[2].classList.add('active');
-    if(tab === 'feed') dockButtons[3].classList.add('active');
-    if(tab === 'notes') dockButtons[4].classList.add('active');
+    if(tab === 'doubt' && dockButtons[0]) dockButtons[0].classList.add('active');
+    if(tab === 'test' && dockButtons[1]) dockButtons[1].classList.add('active');
+    if(tab === 'arena' && dockButtons[2]) dockButtons[2].classList.add('active');
+    if(tab === 'feed' && dockButtons[3]) dockButtons[3].classList.add('active');
+    if(tab === 'notes' && dockButtons[4]) dockButtons[4].classList.add('active');
 
-    document.getElementById('doubtSection').classList.add('hidden');
-    document.getElementById('testSection').classList.add('hidden');
-    document.getElementById('arenaSection').classList.add('hidden');
-    document.getElementById('feedSection').classList.add('hidden');
-    document.getElementById('notesSection').classList.add('hidden');
+    const sections = ['doubt', 'test', 'arena', 'feed', 'notes'];
+    sections.forEach(s => {
+        const el = document.getElementById(s + 'Section');
+        if (el) el.classList.add('hidden');
+    });
 
-    document.getElementById(tab + 'Section').classList.remove('hidden');
-    if(tab === 'feed') loadFeedPosts();
+    const target = document.getElementById(tab + 'Section');
+    if (target) target.classList.remove('hidden');
+    
+    if(tab === 'feed') fetchSchoolPosts();
 
     playDing();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1371,10 +1121,11 @@ function switchTab(tab) {
 
 function selectStartingQuest(quest) {
     localStorage.setItem('invincible_onboarded', 'true');
-    document.getElementById('onboardingModal').style.display = 'none';
+    const modal = document.getElementById('onboardingModal');
+    if (modal) modal.style.display = 'none';
     switchTab(quest);
 }
-setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) document.getElementById('onboardingModal').style.display = 'flex'; }, 800);
+setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) { const m = document.getElementById('onboardingModal'); if(m) m.style.display = 'flex'; } }, 800);
 
 /* =====================================================
 AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
@@ -1419,14 +1170,14 @@ function toggleLofiAudio() {
     const waveform = document.getElementById('lofiWaveform');
 
     if (currentLofiMode === 0) { 
-        btn.textContent = '🎧'; 
-        label.textContent = 'Soundscape: Off'; 
-        waveform.style.display = 'none';
+        if (btn) btn.textContent = '🎧'; 
+        if (label) label.textContent = 'Soundscape: Off'; 
+        if (waveform) waveform.style.display = 'none';
         return; 
     }
     
-    btn.textContent = '⏸️'; 
-    waveform.style.display = 'flex';
+    if (btn) btn.textContent = '⏸️'; 
+    if (waveform) waveform.style.display = 'flex';
     let gainNode = audioCtx.createGain(); 
     gainNode.connect(audioCtx.destination);
 
@@ -1435,7 +1186,7 @@ function toggleLofiAudio() {
         "4. Pink Noise (Chill)", "5. Rain Ambiance", "6. Clarity Pulse (528Hz)",
         "7. Deep Drone (60Hz)", "8. Spark Wave (10kHz)"
     ];
-    label.textContent = soundNames[currentLofiMode];
+    if (label) label.textContent = soundNames[currentLofiMode];
 
     if (currentLofiMode === 1) {
         let o1 = audioCtx.createOscillator(); o1.type = 'sine'; o1.frequency.value = 108;
@@ -1480,17 +1231,18 @@ function toggleLofiAudio() {
 /* =====================================================
 NOTES STUDIO GENERATOR
 ===================================================== */
-document.getElementById('generateNotesBtn').onclick = async () => {
+const genNotesBtn = document.getElementById('generateNotesBtn');
+if (genNotesBtn) {
+  genNotesBtn.onclick = async () => {
     const cls = document.getElementById('notesClass').value;
     const sub = document.getElementById('notesSubject').value;
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
-    const btn = document.getElementById('generateNotesBtn');
-    btn.disabled = true; 
-    btn.textContent = "Compiling Comprehensive Notes (10-15s)...";
-    document.getElementById('notesLoading').classList.remove('hidden');
-    document.getElementById('notesResultContainer').classList.add('hidden');
+    genNotesBtn.disabled = true; 
+    genNotesBtn.textContent = "Compiling Comprehensive Notes (10-15s)...";
+    document.getElementById('notesLoading')?.classList.remove('hidden');
+    document.getElementById('notesResultContainer')?.classList.add('hidden');
 
     try {
         const res = await fetch('/api/generate-notes', {
@@ -1501,27 +1253,35 @@ document.getElementById('generateNotesBtn').onclick = async () => {
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
 
-        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} •${sub.toUpperCase()}`;
+        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} • ${sub.toUpperCase()}`;
         document.getElementById('notesContentBody').innerHTML = data.notes;
-        document.getElementById('notesResultContainer').classList.remove('hidden');
+        document.getElementById('notesResultContainer')?.classList.remove('hidden');
         playWin();
     } catch(err) {
         alert("Notes Engine Error: " + err.message);
     } finally {
-        btn.disabled = false; 
-        btn.textContent = "GENERATE TOPPER NOTES";
-        document.getElementById('notesLoading').classList.add('hidden');
+        genNotesBtn.disabled = false; 
+        genNotesBtn.textContent = "GENERATE TOPPER NOTES";
+        document.getElementById('notesLoading')?.classList.add('hidden');
     }
-};
+  };
+}
 
 let activeStories = [];
 let currentStoryIdx = 0;
 let storyTimer = null;
 
-document.getElementById('btnAddStory').onclick = () => { document.getElementById('storyModal').style.display = 'flex'; };
+const addStoryBtn = document.getElementById('btnAddStory');
+if (addStoryBtn) {
+  addStoryBtn.onclick = () => { 
+    const m = document.getElementById('storyModal');
+    if (m) m.style.display = 'flex'; 
+  };
+}
 
 async function loadActiveStories() {
     const container = document.getElementById('dynamicStoryCircles');
+    if (!container) return;
     try {
         const res = await fetch('/api/stories');
         const data = await res.json();
@@ -1531,7 +1291,7 @@ async function loadActiveStories() {
             id: 'welcome-tour',
             author_name: 'Platform Guide',
             institution: 'Invincible 360',
-            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n🌟 4. Clan Feed: Study discussions & Midnight Vent.\n📝 5. Notes Studio: Elite topper-style notes generation.'
+            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n📢 4. School Feed: Local school notes, viva tips & discussions.\n📝 5. Notes Studio: Elite topper-style notes generation.'
         };
 
         activeStories = [welcomeStory, ...dbStories];
@@ -1550,7 +1310,9 @@ async function loadActiveStories() {
 }
 loadActiveStories();
 
-document.getElementById('btnPublishStory').onclick = async () => {
+const pubStoryBtn = document.getElementById('btnPublishStory');
+if (pubStoryBtn) {
+  pubStoryBtn.onclick = async () => {
     const name = document.getElementById('storyAuthorName').value.trim();
     const inst = document.getElementById('storyInstitution').value.trim();
     const caption = document.getElementById('storyCaption').value.trim();
@@ -1570,11 +1332,13 @@ document.getElementById('btnPublishStory').onclick = async () => {
         loadActiveStories();
         alert("🎉 Formula Hack Shared!");
     } catch(err) { alert(err.message); }
-};
+  };
+}
 
 function openStoryViewer(idx) {
     currentStoryIdx = idx;
-    document.getElementById('storyViewer').style.display = 'flex';
+    const viewer = document.getElementById('storyViewer');
+    if (viewer) viewer.style.display = 'flex';
     renderStorySlide();
 }
 function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
@@ -1585,56 +1349,60 @@ function renderStorySlide() {
     const story = activeStories[currentStoryIdx];
     if (!story) { closeStoryViewer(); return; }
 
-    document.getElementById('viewerAuthor').textContent = `${story.author_name} (${story.institution || 'Platform'})`;
-    document.getElementById('viewerCaption').textContent = story.caption || '';
+    const authorEl = document.getElementById('viewerAuthor');
+    const capEl = document.getElementById('viewerCaption');
+    if (authorEl) authorEl.textContent = `${story.author_name} (${story.institution || 'Platform'})`;
+    if (capEl) capEl.textContent = story.caption || '';
 
     const pContainer = document.getElementById('storyProgressContainer');
-    pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
+    if (pContainer) {
+      pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
+    }
     storyTimer = setTimeout(nextStorySlide, 6000);
 }
-function closeStoryViewer() { clearTimeout(storyTimer); document.getElementById('storyViewer').style.display = 'none'; }
-
+function closeStoryViewer() { clearTimeout(storyTimer); const v = document.getElementById('storyViewer'); if (v) v.style.display = 'none'; }
 function reactStory(type) { playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
 function saveStoryToVault() { playWin(); alert("💾 Saved to Note Pocket!"); }
 
 /* =====================================================
 SURVIVAL BET & CLOUT LEADERBOARD SYNC
 ===================================================== */
-let survivalTimer = 15;
-let survivalInterval = null;
-
 async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-            if (data && data.dailyPuzzle) {
-      renderDailyPuzzle(data.dailyPuzzle);
-    }
-
+        if (data && data.dailyPuzzle) {
+          renderDailyPuzzle(data.dailyPuzzle);
+        }
 
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
 
             const podiumEl = document.getElementById("podiumContainer");
-            podiumEl.innerHTML = top3.map((item, idx) => `
-                <div class="podium-item podium-${idx+1}">
-                    <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
-                    <div class="podium-name">${escapeHTML(item.student_name)}</div>
-                    <div class="podium-score">${item.percentage}%</div>
-                </div>
-            `).join('');
+            if (podiumEl) {
+              podiumEl.innerHTML = top3.map((item, idx) => `
+                  <div class="podium-item podium-${idx+1}">
+                      <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
+                      <div class="podium-name">${escapeHTML(item.student_name)}</div>
+                      <div class="podium-score">${item.percentage}%</div>
+                  </div>
+              `).join('');
+            }
 
             const listEl = document.getElementById("leaderboardList");
-            listEl.innerHTML = rest.map((item, idx) => `
-                <div class="clout-row">
-                    <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(Class ${item.student_class})</span></span>
-                    <span style="color:var(--accent-emerald);">${item.percentage}%</span>
-                </div>
-            `).join('');
+            if (listEl) {
+              listEl.innerHTML = rest.map((item, idx) => `
+                  <div class="clout-row">
+                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(Class ${item.student_class})</span></span>
+                      <span style="color:var(--accent-emerald);">${item.percentage}%</span>
+                  </div>
+              `).join('');
+            }
 
-            document.getElementById("leaderboardBox").style.display = "block";
+            const lb = document.getElementById("leaderboardBox");
+            if (lb) lb.style.display = "block";
         }
     }catch(error){ console.error(error); }
 }
@@ -1645,7 +1413,6 @@ function renderDailyPuzzle(puzzle) {
   const pBox = document.getElementById('puzzleBox');
   if (pBox) pBox.style.display = 'flex';
 
-  // Handle question parsing (English & Hindi split by " / ")
   const rawQ = puzzle.question || puzzle.question_en || "Is √(-4) × √(-9) equal to +6 or -6?";
   const formattedQ = typeof formatMathText === 'function' ? formatMathText(rawQ) : rawQ;
   
@@ -1664,7 +1431,6 @@ function renderDailyPuzzle(puzzle) {
   if (qEn) qEn.innerHTML = enText;
   if (qHi) qHi.innerHTML = hiText;
 
-  // Handle options fallback safely
   const container = document.getElementById('puzzleOptionsContainer');
   if (!container) return;
   container.innerHTML = '';
@@ -1677,7 +1443,6 @@ function renderDailyPuzzle(puzzle) {
       opts = [puzzle.option_1, puzzle.option_2, puzzle.option_3, puzzle.option_4];
     } else {
       opts = ['+6', '-6', '±6', 'Not Real'];
-
     }
   }
 
@@ -1687,13 +1452,11 @@ function renderDailyPuzzle(puzzle) {
     btn.className = 'survival-btn';
     btn.textContent = opt;
     btn.onclick = () => handleDailyClashAnswer(idx, correctIdx);
-
     container.appendChild(btn);
   });
 
   startDailyClashTimer();
 }
-
 
 let clashTimerInterval = null;
 function startDailyClashTimer() {
@@ -1715,13 +1478,11 @@ function startDailyClashTimer() {
 }
 
 function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
-  // Freeze the countdown timer immediately
   clearInterval(clashTimerInterval);
   
   const fb = document.getElementById('puzzleFeedback');
   const optsContainer = document.getElementById('puzzleOptionsContainer');
   
-  // Disable buttons and highlight the correct answer
   if (optsContainer) {
     Array.from(optsContainer.children).forEach((btn, idx) => {
       btn.disabled = true;
@@ -1742,10 +1503,8 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
 
   if (isCorrect) {
-    if (typeof playDing === 'function') playDing();
+    playDing();
     const newXp = currentXp + 50;
-    
-    // Animate XP counters
     const xpEl = document.getElementById('xpCounter');
     const userXpEl = document.getElementById('userXpDisplay');
     if (xpEl) xpEl.textContent = newXp;
@@ -1759,9 +1518,9 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
         </div>
       `;
     }
-    if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
+    confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
   } else {
-    if (typeof playBuzz === 'function') playBuzz();
+    playBuzz();
     if (fb) {
       fb.innerHTML = `
         <div style="background:rgba(255,42,95,0.1); border:1px solid rgba(255,42,95,0.25); border-radius:12px; padding:10px; margin-top:10px;">
@@ -1782,23 +1541,32 @@ async function fetchSchoolPosts() {
   const selectedSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
   
   try {
-    let query = supabase
-      .from('school_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (selectedSchool !== 'ALL') {
-      query = query.eq('school_name', selectedSchool);
+    if (typeof supabase !== 'undefined') {
+      let query = supabase.from('school_posts').select('*').order('created_at', { ascending: false });
+      if (selectedSchool !== 'ALL') query = query.eq('school_name', selectedSchool);
+      const { data, error } = await query;
+      if (error) throw error;
+      allSchoolPosts = data || [];
+    } else {
+      const res = await fetch(`/api/feed?school=${encodeURIComponent(selectedSchool)}`);
+      if (res.ok) {
+        const resData = await res.json();
+        allSchoolPosts = resData.posts || [];
+      } else {
+        allSchoolPosts = getSamplePosts();
+      }
     }
-    
-    const { data, error } = await query;
-    if (error) throw error;
-    
-    allSchoolPosts = data || [];
-    renderSchoolFeed();
   } catch (err) {
-    console.error('Error fetching campus posts:', err);
+    allSchoolPosts = getSamplePosts();
   }
+  renderSchoolFeed();
+}
+
+function getSamplePosts() {
+  return [
+    { id: 1, school_name: "Bharat Public School", category: "teacher_intel", title: "Chemistry Viva Important Topics", content: "External teacher is focusing heavily on Titration equations and Organic functional group tests. Be prepared!", author_name: "Anonymous Backbencher", batch_tag: "Class 12th", is_anonymous: true, upvotes: 14 },
+    { id: 2, school_name: "DVM Public School", category: "syllabus_notes", title: "Physics Ch 9 Ray Optics Notes", content: "Diagrams for telescope and compound microscope derivations will definitely come in 5 marks.", author_name: "Rohan K.", batch_tag: "Class 12th Sci", is_anonymous: false, upvotes: 22 }
+  ];
 }
 
 function formatCategoryName(cat) {
@@ -1854,10 +1622,7 @@ function renderSchoolFeed() {
   `).join('');
 }
 
-
-function filterSchoolPosts() {
-  fetchSchoolPosts();
-}
+function filterSchoolPosts() { fetchSchoolPosts(); }
 
 function setCategoryFilter(cat, btn) {
   currentCategoryFilter = cat;
@@ -1874,50 +1639,57 @@ async function upvotePost(postId, btnEl) {
   btnEl.disabled = true;
 
   try {
-    await supabase.from('school_posts').update({ upvotes: currentVal + 1 }).eq('id', postId);
-  } catch (err) {
-    console.error('Error saving upvote:', err);
-  }
+    if (typeof supabase !== 'undefined') {
+      await supabase.from('school_posts').update({ upvotes: currentVal + 1 }).eq('id', postId);
+    }
+  } catch (err) {}
 }
 
 function openCreatePostModal() {
-  const selSchool = document.getElementById('hubSchoolSelect').value;
+  const selSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
   if (selSchool !== 'ALL') {
-    document.getElementById('modalSchoolSelect').value = selSchool;
+    const mSel = document.getElementById('modalSchoolSelect');
+    if (mSel) mSel.value = selSchool;
   }
-  document.getElementById('createPostModal').style.display = 'flex';
+  const modal = document.getElementById('createPostModal');
+  if (modal) modal.style.display = 'flex';
 }
 
 function closeCreatePostModal() {
-  document.getElementById('createPostModal').style.display = 'none';
+  const modal = document.getElementById('createPostModal');
+  if (modal) modal.style.display = 'none';
 }
 
 async function handleCreatePost(e) {
   e.preventDefault();
-  const school_name = document.getElementById('modalSchoolSelect').value;
-  const category = document.getElementById('modalCategorySelect').value;
-  const batch_tag = document.getElementById('modalBatchInput').value;
-  const title = document.getElementById('modalTitleInput').value;
-  const content = document.getElementById('modalContentInput').value;
-  const is_anonymous = document.getElementById('modalAnonCheckbox').checked;
+  const school_name = document.getElementById('modalSchoolSelect')?.value;
+  const category = document.getElementById('modalCategorySelect')?.value;
+  const batch_tag = document.getElementById('modalBatchInput')?.value;
+  const title = document.getElementById('modalTitleInput')?.value;
+  const content = document.getElementById('modalContentInput')?.value;
+  const is_anonymous = document.getElementById('modalAnonCheckbox')?.checked ?? true;
 
   const newPost = {
+    id: Date.now(),
     school_name,
     category,
     batch_tag,
     title,
     content,
     is_anonymous,
+    upvotes: 0,
     author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('userName') || 'Student')
   };
 
   try {
-    const { error } = await supabase.from('school_posts').insert([newPost]);
-    if (error) throw error;
-
+    if (typeof supabase !== 'undefined') {
+      const { error } = await supabase.from('school_posts').insert([newPost]);
+      if (error) throw error;
+    }
+    allSchoolPosts.unshift(newPost);
     closeCreatePostModal();
-    document.getElementById('createPostForm').reset();
-    fetchSchoolPosts();
+    document.getElementById('createPostForm')?.reset();
+    renderSchoolFeed();
   } catch (err) {
     alert('Failed to publish post: ' + err.message);
   }
@@ -1927,9 +1699,6 @@ function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
-
-fetchSchoolPosts();
-
 
 /* =====================================================
 DOUBT DESK LOGIC
@@ -2030,7 +1799,8 @@ function updateTimerUI() {
     timerDisplay.textContent = "⏳ " + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
 }
 
-startTestBtn.addEventListener("click", async function(){
+if (startTestBtn) {
+  startTestBtn.addEventListener("click", async function(){
     const name = document.getElementById("studentName").value.trim();
     const mobile = document.getElementById("studentMobile").value.trim();
     const org = testOrg.value;
@@ -2041,9 +1811,8 @@ startTestBtn.addEventListener("click", async function(){
     if(!name || !mobile || !org || !cls || !subject){ return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); }
     if(!/^[0-9]{10}$/.test(mobile)){ return alert("Please enter a valid 10-digit mobile number."); }
 
-    const btn = document.getElementById("startTestBtn");
-    const originalText = btn.textContent;
-    btn.disabled = true; btn.textContent = "⚙️ Compiling Assessment... (10s)";
+    const originalText = startTestBtn.textContent;
+    startTestBtn.disabled = true; startTestBtn.textContent = "⚙️ Compiling Assessment... (10s)";
 
     try {
         const response = await fetch("/api/generate-test", {
@@ -2058,10 +1827,11 @@ startTestBtn.addEventListener("click", async function(){
 
         activeTestClass = cls; activeTestSubject = subject;
         activeTestTitle = `${subject}:${chapter}`;
-        startQuestions(generated, `Class ${cls}${subject}`, chapter);
+        startQuestions(generated, `Class ${cls} ${subject}`, chapter);
     } catch(error) { alert("Assessment System: " + error.message); }
-    finally { btn.disabled = false; btn.textContent = originalText; }
-});
+    finally { startTestBtn.disabled = false; startTestBtn.textContent = originalText; }
+  });
+}
 
 function extractQuestions(data){
     let questions = [];
@@ -2100,7 +1870,8 @@ function startQuestions(questions, headerTitle, testTitle){
     startTimer();
 }
 
-submitTestBtn.addEventListener("click", async function(){
+if (submitTestBtn) {
+  submitTestBtn.addEventListener("click", async function(){
     clearInterval(testTimerInterval);
     const questions = activeQuestions; if(!questions.length) return;
 
@@ -2124,7 +1895,7 @@ submitTestBtn.addEventListener("click", async function(){
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} \vert{} Incorrect:${attempted - correct}`;
+    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2142,23 +1913,25 @@ submitTestBtn.addEventListener("click", async function(){
         loadPlatformData();
     } catch(e){}
     finally { submitTestBtn.disabled = false; submitTestBtn.textContent = "SUBMIT ANSWERS"; }
-});
+  });
+}
 
-restartTestBtn.addEventListener("click", function(){
+if (restartTestBtn) {
+  restartTestBtn.addEventListener("click", function(){
     testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
-});
+  });
+}
 
-whatsappShareBtn.addEventListener("click", function(){
+if (whatsappShareBtn) {
+  whatsappShareBtn.addEventListener("click", function(){
     const rawMsg = "⚔️ I scored " + finalScoreData.percentage + "% (" + finalScoreData.scoreString + ") on " + finalScoreData.testName + " at Invincible 360! Check your preparation here: " + window.location.href;
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
-});
+  });
+}
 
 /* =====================================================
 ARENA 1v1 LOGIC
-===================================================== */
-/* =====================================================
-ARENA 1v1 LOGIC (DYNAMIC CLASH & HAPTICS)
 ===================================================== */
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
 
@@ -2180,7 +1953,9 @@ function startBotMatch() {
     startArenaGame();
 }
 
-document.getElementById('btnCreateRoom').onclick = async () => {
+const btnCreate = document.getElementById('btnCreateRoom');
+if (btnCreate) {
+  btnCreate.onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
     if(!name) return alert("Please enter your battle tag name.");
@@ -2196,9 +1971,12 @@ document.getElementById('btnCreateRoom').onclick = async () => {
         document.getElementById('displayRoomCode').textContent = arena.code;
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Arena: " + err.message); }
-};
+  };
+}
 
-document.getElementById('btnJoinRoom').onclick = async () => {
+const btnJoin = document.getElementById('btnJoinRoom');
+if (btnJoin) {
+  btnJoin.onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
     if(!name || !code) return alert("Enter your name and the 4-digit code.");
@@ -2214,7 +1992,8 @@ document.getElementById('btnJoinRoom').onclick = async () => {
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Join Error: " + err.message); }
-};
+  };
+}
 
 async function pollRoomState() {
     if (arena.isBotMatch) return;
@@ -2247,8 +2026,10 @@ function updateClashBar(p1Score, p2Score) {
     if (total > 0) {
         p1Percent = Math.min(Math.max((p1Score / total) * 100, 15), 85);
     }
-    document.getElementById('vsFillP1').style.width = p1Percent + '%';
-    document.getElementById('vsFillP2').style.width = (100 - p1Percent) + '%';
+    const fill1 = document.getElementById('vsFillP1');
+    const fill2 = document.getElementById('vsFillP2');
+    if (fill1) fill1.style.width = p1Percent + '%';
+    if (fill2) fill2.style.width = (100 - p1Percent) + '%';
 }
 
 function startArenaGame() {
@@ -2304,8 +2085,10 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
     } else {
         playBuzz();
         const card = document.getElementById('arenaCardContainer');
-        card.classList.add('arena-shake');
-        setTimeout(() => card.classList.remove('arena-shake'), 400);
+        if (card) {
+          card.classList.add('arena-shake');
+          setTimeout(() => card.classList.remove('arena-shake'), 400);
+        }
     }
 
     if (arena.isBotMatch) {
@@ -2374,78 +2157,6 @@ function showArenaResult(room) {
             <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Review formulas and seek redemption.</div>
         `;
     }
-}
-
-
-/* =====================================================
-COMMUNITY FEED JAVASCRIPT
-===================================================== */
-let currentFeedFilterSubject = 'All';
-
-function setFeedSubjectFilter(sub, el) {
-    currentFeedFilterSubject = sub;
-    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-    if(sub === 'ChillVent') document.body.classList.add('midnight-vent-active');
-    else document.body.classList.remove('midnight-vent-active');
-    loadFeedPosts();
-}
-
-async function loadFeedPosts() {
-    const list = document.getElementById('postsList');
-    try {
-        const res = await fetch(`/api/feed?student_class=All&subject=${currentFeedFilterSubject}`);
-        const data = await res.json();
-        if (!data.posts || data.posts.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px;">No discussions here yet.</div>';
-            return;
-        }
-        list.innerHTML = data.posts.map(p => `
-            <div class="feed-card">
-                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                    <div><strong style="color:var(--accent-cyan); font-size:13px;">${escapeHTML(p.author_name)}</strong> <span style="color:var(--text-muted); font-size:11px;">&bull; ${escapeHTML(p.institution)}</span></div>
-                    <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; background:rgba(139,92,246,0.15); color:var(--accent-purple);">${escapeHTML(p.subject)}</span>
-                </div>
-                <div style="font-size:14px; color:#f1f5f9; line-height:1.4; margin-bottom:10px;">${escapeHTML(p.content)}</div>
-                <div class="feed-actions">
-                    <div class="action-btn" onclick="likePost(${p.id})">👍 <span id="likes-${p.id}">${p.likes_count || 0}</span></div>
-                    <div class="action-btn" onclick="reportPost(${p.id})">🚩 Report</div>
-                </div>
-            </div>
-        `).join('');
-    } catch(err) { list.innerHTML = '<div style="text-align:center; color:var(--accent-rose); font-size:13px;">Feed sync failed.</div>'; }
-}
-
-document.getElementById('btnPublishPost').onclick = async () => {
-    let name = document.getElementById('feedAuthorName').value.trim() || "Student";
-    let inst = document.getElementById('feedInstitution').value.trim() || "CBSE School";
-    const cls = document.getElementById('feedClass').value;
-    const sub = document.getElementById('feedSubject').value;
-    const content = document.getElementById('feedContent').value.trim();
-    if (!content) return alert("Please enter discussion content.");
-
-    try {
-        const res = await fetch('/api/feed', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'create_post', author_name: name, institution: inst, student_class: cls, subject: sub, content: content })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-        document.getElementById('feedContent').value = '';
-        loadFeedPosts();
-    } catch(err) { alert(err.message); }
-};
-
-async function likePost(postId) {
-    const el = document.getElementById(`likes-${postId}`);
-    el.textContent = Number(el.textContent) + 1;
-    await fetch('/api/feed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'like_post', post_id: postId }) });
-}
-
-async function reportPost(postId) {
-    if (!confirm("Report post for academic review?")) return;
-    await fetch('/api/feed', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'report_post', post_id: postId }) });
-    alert("Report recorded.");
 }
 
 function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
