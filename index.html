@@ -63,8 +63,9 @@ body {
 
 .container { width: min(860px, 92%); margin: 12px auto 110px; }
 
-button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .dock-btn:active {
-  transform: scale(0.95) !important;
+/* TACTILE INTERACTIONS */
+button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active {
+  transform: scale(0.93) !important;
 }
 
 /* QUICK RETURN BANNER ON SUB-PAGES */
@@ -80,11 +81,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   cursor: pointer;
 }
 .quick-hub-banner:hover { border-color: var(--accent-cyan); background: rgba(0, 229, 255, 0.05); }
-
-/* TACTILE INTERACTIONS */
-button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active {
-  transform: scale(0.93) !important;
-}
 
 /* 1. DYNAMIC TOP HUD */
 .slim-hud {
@@ -129,20 +125,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   border-color: rgba(0, 229, 255, 0.35);
   color: var(--accent-cyan);
 }
-
-/* QUICK RETURN BANNER ON SUB-PAGES */
-.quick-hub-banner {
-  background: rgba(13, 18, 36, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 10px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  cursor: pointer;
-}
-.quick-hub-banner:hover { border-color: var(--accent-cyan); }
 
 /* FEATURE GRID FOR HOME VIEW */
 .feature-quick-grid {
@@ -491,23 +473,6 @@ textarea:focus, input:focus, select:focus {
 .dock-btn.feed-tab.active::after { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
 .dock-btn.notes-tab.active::after { background: var(--accent-amber); box-shadow: 0 0 10px var(--accent-amber); }
 
-/* LO-FI WAVEFORM WIDGET */
-.lofi-widget {
-  position: fixed; bottom: 85px; right: 18px; background: rgba(13, 18, 36, 0.88);
-  border: 1px solid var(--accent-cyan); border-radius: 30px; padding: 7px 12px;
-  display: flex; align-items: center; gap: 8px; z-index: 990; backdrop-filter: blur(16px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-}
-.lofi-btn { background: none; border: none; font-size: 16px; cursor: pointer; color: #fff; line-height: 1; padding: 0; }
-.lofi-label { font-size: 10px; font-weight: 800; color: var(--accent-cyan); white-space: nowrap; }
-.lofi-waveform { display: flex; align-items: center; gap: 3px; height: 12px; }
-.lofi-waveform .bar { width: 3px; background: var(--accent-cyan); border-radius: 2px; animation: wave 1s infinite ease-in-out; }
-.lofi-waveform .bar:nth-child(1) { height: 40%; animation-delay: 0s; }
-.lofi-waveform .bar:nth-child(2) { height: 80%; animation-delay: 0.2s; }
-.lofi-waveform .bar:nth-child(3) { height: 60%; animation-delay: 0.4s; }
-.lofi-waveform .bar:nth-child(4) { height: 100%; animation-delay: 0.6s; }
-@keyframes wave { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
-
 .footer { text-align: center; color: rgba(255,255,255,0.4); margin: 30px 0 60px; font-size: 11px; }
 .hidden { display: none !important; }
 
@@ -571,7 +536,6 @@ textarea:focus, input:focus, select:focus {
 <body>
 <main class="container">
 
-<!-- 1. COMPACT DYNAMIC ISLAND HUD -->
 <!-- 1. CLEAN TOP DYNAMIC HUD -->
 <header class="slim-hud">
     <div class="slim-logo" onclick="switchTab('home')" style="cursor:pointer;">
@@ -585,6 +549,7 @@ textarea:focus, input:focus, select:focus {
         <span class="hud-stat-badge hud-xp-badge">✨ <span id="xpCounter">680</span> XP</span>
     </div>
 </header>
+
 <!-- =====================================================
      HOME DECK (ONLY SHOWS ON HOME TAB)
 ===================================================== -->
@@ -689,11 +654,6 @@ textarea:focus, input:focus, select:focus {
 <!-- =====================================================
      1. DOUBT SECTION
 ===================================================== -->
-</div>
-
-<!-- 1. DOUBT SECTION -->
-<section class="card" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
-
 <section class="card hidden" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
@@ -745,19 +705,9 @@ textarea:focus, input:focus, select:focus {
      2. TEST SECTION
 ===================================================== -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
-      <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
-    </div>
-
-      <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
-    </div>
-
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
     </div>
 
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
@@ -840,11 +790,6 @@ textarea:focus, input:focus, select:focus {
      3. ARENA SECTION
 ===================================================== -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
-      <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
-    </div>
-
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -934,11 +879,6 @@ textarea:focus, input:focus, select:focus {
      4. SCHOOL FEED SECTION
 ===================================================== -->
 <section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes">
-      <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
-    </div>
-
   <div class="quick-hub-banner" onclick="switchTab('home')">
       <span style="font-size:12px; font-weight:800; color:#22c55e;">← Return to Home Deck</span>
       <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -983,11 +923,6 @@ textarea:focus, input:focus, select:focus {
      5. NOTES STUDIO SECTION
 ===================================================== -->
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
-      <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
-    </div>
-
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-amber);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -1036,7 +971,6 @@ textarea:focus, input:focus, select:focus {
 
 </main>
 
-<!-- HIGH VISIBILITY 5-TAB BOTTOM DOCK -->
 <!-- HIGH VISIBILITY 6-TAB BOTTOM DOCK -->
 <nav class="floating-dock" aria-label="Bottom Navigation Dock">
     <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')">
@@ -1058,7 +992,6 @@ textarea:focus, input:focus, select:focus {
         <span class="dock-icon">📝</span> Notes
     </button>
 </nav>
-
 
 <!-- POST CREATION MODAL -->
 <div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
@@ -1226,9 +1159,6 @@ window.addEventListener('DOMContentLoaded', checkDailyStreak);
 /* =====================================================
    CLEAN SEPARATION NAVIGATION ENGINE
 ===================================================== */
-/* =====================================================
-   CLEAN SEPARATION NAVIGATION ENGINE
-===================================================== */
 function switchTab(tab) {
     document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
     
@@ -1246,7 +1176,6 @@ function switchTab(tab) {
         if (el) el.classList.add('hidden');
     });
 
-    // Special check in case your feed section is named campusHubSection
     const targetId = (tab === 'feed' && document.getElementById('campusHubSection')) ? 'campusHubSection' : tab + 'Section';
     const target = document.getElementById(targetId);
     if (target) target.classList.remove('hidden');
@@ -1256,7 +1185,6 @@ function switchTab(tab) {
     if (typeof playDing === 'function') playDing();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
 
 function selectStartingQuest(quest) {
     localStorage.setItem('invincible_onboarded', 'true');
@@ -1304,26 +1232,20 @@ function stopLofiAudio() {
 function toggleLofiAudio() {
     initAudio(); stopLofiAudio();
     currentLofiMode = (currentLofiMode + 1) % 9;
-    const btn = document.getElementById('lofiToggleBtn'); 
     const label = document.getElementById('lofiLabel');
-    const waveform = document.getElementById('lofiWaveform');
 
     if (currentLofiMode === 0) { 
-        if (btn) btn.textContent = '🎧'; 
-        if (label) label.textContent = 'Soundscape: Off'; 
-        if (waveform) waveform.style.display = 'none';
+        if (label) label.textContent = 'Sound: Off'; 
         return; 
     }
     
-    if (btn) btn.textContent = '⏸️'; 
-    if (waveform) waveform.style.display = 'flex';
     let gainNode = audioCtx.createGain(); 
     gainNode.connect(audioCtx.destination);
 
     const soundNames = [
-        "", "1. Alpha Focus (108Hz)", "2. Theta Calm (432Hz)", "3. Brown Noise (Study)",
-        "4. Pink Noise (Chill)", "5. Rain Ambiance", "6. Clarity Pulse (528Hz)",
-        "7. Deep Drone (60Hz)", "8. Spark Wave (10kHz)"
+        "", "Alpha 108Hz", "Theta 432Hz", "Brown Noise",
+        "Pink Noise", "Rain Ambiance", "Pulse 528Hz",
+        "Deep Drone", "Spark Wave"
     ];
     if (label) label.textContent = soundNames[currentLofiMode];
 
