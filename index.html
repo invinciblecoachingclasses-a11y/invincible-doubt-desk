@@ -281,21 +281,99 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .restart-btn { margin-top: 10px; padding: 14px; border: 1px solid var(--accent-cyan); border-radius: 14px; background: rgba(6, 182, 212, 0.05); color: var(--accent-cyan); font-weight: 800; cursor: pointer; width: 100%; }
 .whatsapp-btn { background: #25D366 !important; color: #fff !important; border: none !important; }
 
-/* ARENA 1v1 */
-.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.arena-btn-create { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; padding: 14px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; }
-.arena-btn-join { background: linear-gradient(135deg, #059669, #047857); color: #fff; padding: 14px; border: none; border-radius: 14px; font-weight: 900; cursor: pointer; width: 100%; }
-.lobby-box { text-align: center; padding: 24px 16px; background: rgba(0,0,0,0.4); border-radius: 20px; border: 1px dashed var(--accent-rose); }
-.room-code-display { font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 900; color: var(--accent-rose); letter-spacing: 6px; margin: 8px 0; }
-.vs-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 16px; border-radius: 14px; border: 1px solid var(--border-subtle); margin-bottom: 8px; }
-.vs-progress-bar-wrap { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; display: flex; margin-bottom: 12px; }
-.vs-fill-p1 { background: var(--accent-cyan); height: 100%; width: 50%; }
-.vs-fill-p2 { background: var(--accent-rose); height: 100%; width: 50%; }
-.arena-timer { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; color: var(--accent-rose); text-align: center; margin-bottom: 10px; }
-.arena-option { display: block; padding: 14px; border: 1px solid var(--border-subtle); border-radius: 14px; margin: 8px 0; cursor: pointer; font-size: 14px; font-weight: 800; background: rgba(255,255,255,0.03); text-align: center; }
-.arena-option:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-rose); }
-.arena-shake { animation: shakeCard 0.4s ease; border-color: var(--accent-rose) !important; }
-@keyframes shakeCard { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+/* =====================================================
+ARENA 1v1 - ESPORT UPGRADED AESTHETICS
+===================================================== */
+.arena-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.arena-btn-create { 
+  background: linear-gradient(135deg, #f43f5e, #be123c); 
+  color: #fff; padding: 15px; border: none; border-radius: 16px; 
+  font-weight: 900; font-family: 'Space Grotesk', sans-serif; cursor: pointer; width: 100%;
+  box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
+}
+.arena-btn-join { 
+  background: linear-gradient(135deg, #10b981, #059669); 
+  color: #fff; padding: 15px; border: none; border-radius: 16px; 
+  font-weight: 900; font-family: 'Space Grotesk', sans-serif; cursor: pointer; width: 100%;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+.lobby-box { 
+  text-align: center; padding: 36px 20px; background: rgba(0,0,0,0.5); 
+  border-radius: 24px; border: 1px dashed var(--accent-rose); position: relative; overflow: hidden;
+}
+.lobby-radar {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 180px; height: 180px; border-radius: 50%; border: 2px solid rgba(244, 63, 94, 0.2);
+  animation: radarPulse 2s infinite ease-out; pointer-events: none;
+}
+@keyframes radarPulse {
+  0% { width: 50px; height: 50px; opacity: 1; border-color: rgba(244, 63, 94, 0.8); }
+  100% { width: 300px; height: 300px; opacity: 0; border-color: rgba(6, 182, 212, 0.2); }
+}
+
+.room-code-display { 
+  font-family: 'Space Grotesk', sans-serif; font-size: 46px; font-weight: 900; 
+  color: var(--accent-rose); letter-spacing: 8px; margin: 12px 0; text-shadow: 0 0 25px rgba(244, 63, 94, 0.5);
+}
+
+.vs-header { 
+  display: flex; justify-content: space-between; align-items: center; 
+  background: rgba(8, 12, 24, 0.85); padding: 14px 18px; border-radius: 18px; 
+  border: 1px solid var(--border-subtle); margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 900;
+}
+.player-tag { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.player-score-badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+
+.vs-progress-bar-wrap { 
+  height: 10px; background: rgba(255,255,255,0.06); border-radius: 6px; 
+  overflow: hidden; display: flex; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+.vs-fill-p1 { background: linear-gradient(90deg, #0284c7, var(--accent-cyan)); height: 100%; width: 50%; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 10px var(--accent-cyan); }
+.vs-fill-p2 { background: linear-gradient(90deg, var(--accent-rose), #e11d48); height: 100%; width: 50%; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 10px var(--accent-rose); }
+
+.arena-timer { 
+  font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 900; 
+  color: var(--accent-cyan); text-align: center; margin-bottom: 12px; text-shadow: 0 0 12px var(--cyan-glow);
+}
+.arena-timer.panic {
+  color: var(--accent-rose) !important;
+  animation: timerHeartbeat 0.5s infinite alternate !important;
+  text-shadow: 0 0 18px rgba(244, 63, 94, 0.8) !important;
+}
+@keyframes timerHeartbeat { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
+.arena-option { 
+  display: block; padding: 15px; border: 1px solid var(--border-subtle); border-radius: 16px; 
+  margin: 10px 0; cursor: pointer; font-size: 14px; font-weight: 800; background: rgba(255,255,255,0.03); 
+  text-align: center; backdrop-filter: blur(10px);
+}
+.arena-option:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-cyan); }
+.arena-option.hit-correct {
+  background: rgba(16, 185, 129, 0.25) !important;
+  border-color: var(--accent-emerald) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5) !important;
+  transform: scale(1.02);
+}
+.arena-shake { animation: shakeGlitch 0.4s cubic-bezier(.36,.07,.19,.97) both; border-color: var(--accent-rose) !important; }
+@keyframes shakeGlitch {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+  40%, 60% { transform: translate3d(6px, 0, 0); }
+}
+
+.arena-winner-podium {
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.05));
+  border: 1px solid var(--border-subtle); border-radius: 24px; padding: 24px; margin-bottom: 20px;
+}
+.arena-stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0;
+}
+.arena-stat-card {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; text-align: center;
+}
 
 /* COMMUNITY FEED */
 .post-composer { background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: 18px; padding: 16px; margin-bottom: 16px; }
@@ -776,50 +854,89 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     </div>
 </section>
 
-<!-- 3. ARENA SECTION -->
+<!-- 3. ARENA SECTION (ESPORT LEVEL UPGRADED) -->
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
     <div style="text-align:center; margin-bottom:16px;">
-        <h2 class="section-h2" style="color:var(--accent-rose); margin:0;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
+        <h2 class="section-h2" style="color:var(--accent-rose); margin:0; letter-spacing:1px;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
     </div>
+    
     <div id="arenaSetup">
-        <label>Your Display Name</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Name">
-        <label>Select Grade Level</label>
-        <select id="arenaClass" style="margin-bottom:16px;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
+        <label>Your Battle Tag</label>
+        <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
+        <label>Select Battle Grade</label>
+        <select id="arenaClass" style="margin-bottom:16px;">
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+        
         <div class="arena-grid">
-            <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ Create Match</button>
+            <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ CREATE MATCH</button>
             <div>
                 <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; margin-bottom:8px;">
-                <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 Join Room</button>
+                <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 JOIN ROOM</button>
             </div>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:12px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Practice vs. Invincible Bot</button>
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
     </div>
+
+    <!-- RADAR LOBBY -->
     <div id="arenaWaiting" class="hidden lobby-box">
-        <div style="font-size:13px; color:var(--text-muted);">Share Match Code:</div>
+        <div class="lobby-radar"></div>
+        <div style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; position:relative; z-index:2;">Share Room Match Code</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size:12px; color:var(--accent-cyan); font-weight:700;">Waiting for opponent to connect...</div>
+        <div style="font-size:13px; color:var(--accent-cyan); font-weight:800; position:relative; z-index:2;">🛰️ Scanning for Opponent Connection...</div>
     </div>
+
+    <!-- LIVE BATTLE ARENA -->
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
-            <div id="uiP1Name">Player 1 <span id="uiP1Score">0</span></div>
-            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:2px 6px; border-radius:4px; font-size:10px;">VS</div>
-            <div id="uiP2Name">Player 2 <span id="uiP2Score">0</span></div>
+            <div class="player-tag" style="color:var(--accent-cyan);">
+              <span>🔵</span> <span id="uiP1Name">Player 1</span>
+              <span class="player-score-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan);" id="uiP1Score">0</span>
+            </div>
+            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:2px 8px; border-radius:6px; font-size:11px; letter-spacing:1px;">VS</div>
+            <div class="player-tag" style="color:var(--accent-rose);">
+              <span class="player-score-badge" style="background:rgba(244,63,94,0.2); color:var(--accent-rose);" id="uiP2Score">0</span>
+              <span id="uiP2Name">Player 2</span> <span>🔴</span>
+            </div>
         </div>
-        <div class="vs-progress-bar-wrap"><div class="vs-fill-p1" id="vsFillP1"></div><div class="vs-fill-p2" id="vsFillP2"></div></div>
-        <div class="arena-timer" id="arenaTimerDisplay">⏱ 10</div>
+
+        <!-- TUG-OF-WAR TERRITORY BAR -->
+        <div class="vs-progress-bar-wrap">
+            <div class="vs-fill-p1" id="vsFillP1"></div>
+            <div class="vs-fill-p2" id="vsFillP2"></div>
+        </div>
+
+        <div class="arena-timer" id="arenaTimerDisplay">⏱ 10s</div>
+
         <div class="question-card" id="arenaCardContainer">
-            <div style="color:var(--accent-cyan); font-size:11px; font-weight:900;" id="arenaQNum">QUESTION 1/10</div>
-            <div style="font-size:15px; font-weight:700; margin:10px 0;" id="arenaQText">Loading...</div>
+            <div style="color:var(--accent-cyan); font-size:11px; font-weight:900; letter-spacing:1px;" id="arenaQNum">QUESTION 1/10</div>
+            <div style="font-size:16px; font-weight:800; margin:12px 0; color:#fff;" id="arenaQText">Loading Challenge...</div>
             <div id="arenaOptions"></div>
         </div>
     </div>
-    <div id="arenaResult" class="hidden" style="text-align:center; padding:16px;">
-        <div id="arenaResultText"></div>
-        <div style="margin:16px 0; color:#cbd5e1; font-size:15px;"><span id="finalP1"></span> <br> <span id="finalP2"></span></div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()">RETURN TO LOBBY</button>
+
+    <!-- POST MATCH PODIUM -->
+    <div id="arenaResult" class="hidden" style="text-align:center; padding:10px;">
+        <div class="arena-winner-podium">
+            <div id="arenaResultText"></div>
+            <div class="arena-stat-grid">
+                <div class="arena-stat-card">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-muted);">FINAL SCORE</div>
+                    <div id="finalP1" style="font-size:16px; font-weight:900; color:var(--accent-cyan); margin-top:4px;">0</div>
+                </div>
+                <div class="arena-stat-card">
+                    <div style="font-size:11px; font-weight:800; color:var(--text-muted);">OPPONENT SCORE</div>
+                    <div id="finalP2" style="font-size:16px; font-weight:900; color:var(--accent-rose); margin-top:4px;">0</div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="submit-test-btn" onclick="location.reload()" style="background:linear-gradient(135deg, var(--accent-rose), #be123c);">⚔️ PLAY ANOTHER MATCH</button>
     </div>
 </section>
+
 
 <!-- 4. COMMUNITY FEED -->
 <section class="card hidden" id="feedSection" aria-label="Discussion Feed">
@@ -1582,6 +1699,9 @@ whatsappShareBtn.addEventListener("click", function(){
 /* =====================================================
 ARENA 1v1 LOGIC
 ===================================================== */
+/* =====================================================
+ARENA 1v1 LOGIC (DYNAMIC CLASH & HAPTICS)
+===================================================== */
 let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
 
 function startBotMatch() {
@@ -1590,17 +1710,22 @@ function startBotMatch() {
     arena.questions = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0 },
         { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2 },
-        { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 }
+        { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 },
+        { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण के दौरान कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1 },
+        { question_text: "Value of acceleration due to gravity (g) on Earth: / पृथ्वी पर गुरुत्वीय त्वरण (g) का मान:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0 }
     ];
-    document.getElementById('uiP1Name').innerHTML = `${name} <span id="uiP1Score">0</span>`;
-    document.getElementById('uiP2Name').innerHTML = `🤖 Bot <span id="uiP2Score">0</span>`;
+    document.getElementById('uiP1Name').textContent = name;
+    document.getElementById('uiP2Name').textContent = "Invincible AI";
+    document.getElementById('uiP1Score').textContent = "0";
+    document.getElementById('uiP2Score').textContent = "0";
+    updateClashBar(0, 0);
     startArenaGame();
 }
 
 document.getElementById('btnCreateRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
-    if(!name) return alert("Please enter your name.");
+    if(!name) return alert("Please enter your battle tag name.");
 
     try {
         const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) });
@@ -1618,7 +1743,7 @@ document.getElementById('btnCreateRoom').onclick = async () => {
 document.getElementById('btnJoinRoom').onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter name and code.");
+    if(!name || !code) return alert("Enter your name and the 4-digit code.");
 
     try {
         const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) });
@@ -1626,8 +1751,8 @@ document.getElementById('btnJoinRoom').onclick = async () => {
         if(data.error) throw new Error(data.error);
 
         arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
-        document.getElementById('uiP1Name').innerHTML = `${data.room.player1_name} <span id="uiP1Score">0</span>`;
-        document.getElementById('uiP2Name').innerHTML = `${name} <span id="uiP2Score">0</span>`;
+        document.getElementById('uiP1Name').textContent = data.room.player1_name;
+        document.getElementById('uiP2Name').textContent = name;
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Join Error: " + err.message); }
@@ -1642,25 +1767,45 @@ async function pollRoomState() {
         const room = data.room;
 
         if (arena.playerNum === 1 && room.player2_name && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
-            document.getElementById('uiP1Name').innerHTML = `${arena.name} <span id="uiP1Score">0</span>`;
-            document.getElementById('uiP2Name').innerHTML = `${room.player2_name} <span id="uiP2Score">0</span>`;
+            document.getElementById('uiP1Name').textContent = arena.name;
+            document.getElementById('uiP2Name').textContent = room.player2_name;
             startArenaGame();
         }
         if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = room.player1_score || 0;
         if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = room.player2_score || 0;
-        if (room.player1_finished && room.player2_finished) { clearInterval(arena.pollInterval); showArenaResult(room); }
+        
+        updateClashBar(room.player1_score || 0, room.player2_score || 0);
+
+        if (room.player1_finished && room.player2_finished) { 
+            clearInterval(arena.pollInterval); 
+            showArenaResult(room); 
+        }
     } catch(e){}
+}
+
+function updateClashBar(p1Score, p2Score) {
+    const total = p1Score + p2Score;
+    let p1Percent = 50;
+    if (total > 0) {
+        p1Percent = Math.min(Math.max((p1Score / total) * 100, 15), 85);
+    }
+    document.getElementById('vsFillP1').style.width = p1Percent + '%';
+    document.getElementById('vsFillP2').style.width = (100 - p1Percent) + '%';
 }
 
 function startArenaGame() {
     document.getElementById('arenaSetup').classList.add('hidden');
     document.getElementById('arenaWaiting').classList.add('hidden');
     document.getElementById('arenaBattle').classList.remove('hidden');
-    arena.currentQ = 0; loadArenaQuestion();
+    arena.currentQ = 0; 
+    loadArenaQuestion();
 }
 
 function loadArenaQuestion() {
-    if (arena.currentQ >= arena.questions.length) { finishArenaGame(); return; }
+    if (arena.currentQ >= arena.questions.length) { 
+        finishArenaGame(); 
+        return; 
+    }
     const q = arena.questions[arena.currentQ];
     document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/${arena.questions.length}`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
@@ -1669,62 +1814,110 @@ function loadArenaQuestion() {
     const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
     opts.forEach((opt, idx) => {
         const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
-        optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(${idx}, ${correctIdx})">${opt}</div>`;
+        optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(this, ${idx}, ${correctIdx})">${opt}</div>`;
     });
     document.getElementById('arenaOptions').innerHTML = optsHTML;
+    
     arena.timer = 10;
-    document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
+    const timerDisplay = document.getElementById('arenaTimerDisplay');
+    timerDisplay.textContent = `⏱ ${arena.timer}s`;
+    timerDisplay.classList.remove('panic');
+    
     clearInterval(arena.interval);
     arena.interval = setInterval(() => {
-        arena.timer--; document.getElementById('arenaTimerDisplay').textContent = `⏱ ${arena.timer}`;
-        if (arena.timer <= 0) handleArenaAnswer(-1, -1);
+        arena.timer--; 
+        timerDisplay.textContent = `⏱ ${arena.timer}s`;
+        if (arena.timer <= 3) {
+            timerDisplay.classList.add('panic');
+        }
+        if (arena.timer <= 0) {
+            handleArenaAnswer(null, -1, -1);
+        }
     }, 1000);
 }
 
-async function handleArenaAnswer(selectedIdx, correctIdx) {
+async function handleArenaAnswer(element, selectedIdx, correctIdx) {
     clearInterval(arena.interval);
+    
     if (selectedIdx === Number(correctIdx)) {
-        playDing(); arena.score += (10 + arena.timer);
+        if(element) element.classList.add('hit-correct');
+        playDing(); 
+        arena.score += (10 + arena.timer);
     } else {
         playBuzz();
-        document.getElementById('arenaCardContainer').classList.add('arena-shake');
-        setTimeout(() => document.getElementById('arenaCardContainer').classList.remove('arena-shake'), 400);
+        const card = document.getElementById('arenaCardContainer');
+        card.classList.add('arena-shake');
+        setTimeout(() => card.classList.remove('arena-shake'), 400);
     }
 
     if (arena.isBotMatch) {
-        if (Math.random() > 0.3) arena.botScore += (10 + Math.floor(Math.random() * 8));
+        if (Math.random() > 0.35) arena.botScore += (10 + Math.floor(Math.random() * 8));
         document.getElementById('uiP1Score').textContent = arena.score;
         document.getElementById('uiP2Score').textContent = arena.botScore;
+        updateClashBar(arena.score, arena.botScore);
     } else {
-        fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score }) });
+        fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score }) 
+        });
     }
-    arena.currentQ++; loadArenaQuestion();
+
+    setTimeout(() => {
+        arena.currentQ++; 
+        loadArenaQuestion();
+    }, 450);
 }
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
     if (arena.isBotMatch) {
-        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Bot", player2_score: arena.botScore });
+        showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible AI", player2_score: arena.botScore });
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:700;">Waiting for opponent...</div>`;
+        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:800; font-size:18px;">⚡ Match Complete! Awaiting Final Verdict...</div>`;
         document.getElementById('arenaResult').classList.remove('hidden');
-        fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true }) });
+        fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ action: 'sync', room_code: arena.code, player_num: arena.playerNum, total_score: arena.score, is_finished: true }) 
+        });
     }
 }
 
 function showArenaResult(room) {
-    const myScore = arena.playerNum === 1 ? room.player1_score : room.player2_score;
-    const opScore = arena.playerNum === 1 ? room.player2_score : room.player1_score;
-    document.getElementById('finalP1').innerHTML = `<strong>${room.player1_name}:</strong>${room.player1_score} pts`;
-    document.getElementById('finalP2').innerHTML = `<strong>${room.player2_name}:</strong>${room.player2_score} pts`;
+    const p1 = room.player1_score || 0;
+    const p2 = room.player2_score || 0;
+    const isP1 = arena.playerNum === 1;
+    const myScore = isP1 ? p1 : p2;
+    const opScore = isP1 ? p2 : p1;
+
+    document.getElementById('finalP1').textContent = `${p1} PTS`;
+    document.getElementById('finalP2').textContent = `${p2} PTS`;
     document.getElementById('arenaResult').classList.remove('hidden');
+
     if (myScore > opScore) {
-        playWin(); document.getElementById('arenaResultText').innerHTML = `<div style="font-size:22px; font-weight:900; color:var(--accent-emerald);">🏆 VICTORY!</div>`;
-        confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } });
+        playWin();
+        document.getElementById('arenaResultText').innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">👑</div>
+            <div style="font-size:26px; font-weight:900; color:var(--accent-emerald); letter-spacing:1px;">DOMINANT VICTORY</div>
+            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP</div>
+        `;
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
+    } else if(myScore === opScore) {
+        document.getElementById('arenaResultText').innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">🤝</div>
+            <div style="font-size:24px; font-weight:900; color:var(--accent-amber); letter-spacing:1px;">STALEMATE TIE</div>
+            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Evenly matched gladiators. +50 XP</div>
+        `;
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="font-size:22px; font-weight:900; color:var(--accent-rose);">MATCH COMPLETE</div>`;
+        document.getElementById('arenaResultText').innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">💥</div>
+            <div style="font-size:24px; font-weight:900; color:var(--accent-rose); letter-spacing:1px;">DEFEATED</div>
+            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Review formulas and seek redemption.</div>
+        `;
     }
 }
+
 
 /* =====================================================
 COMMUNITY FEED JAVASCRIPT
