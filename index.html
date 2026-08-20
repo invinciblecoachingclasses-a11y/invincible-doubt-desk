@@ -1226,6 +1226,9 @@ window.addEventListener('DOMContentLoaded', checkDailyStreak);
 /* =====================================================
    CLEAN SEPARATION NAVIGATION ENGINE
 ===================================================== */
+/* =====================================================
+   CLEAN SEPARATION NAVIGATION ENGINE
+===================================================== */
 function switchTab(tab) {
     document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
     
@@ -1243,14 +1246,17 @@ function switchTab(tab) {
         if (el) el.classList.add('hidden');
     });
 
-    const target = document.getElementById(tab + 'Section');
+    // Special check in case your feed section is named campusHubSection
+    const targetId = (tab === 'feed' && document.getElementById('campusHubSection')) ? 'campusHubSection' : tab + 'Section';
+    const target = document.getElementById(targetId);
     if (target) target.classList.remove('hidden');
     
-    if(tab === 'feed') fetchSchoolPosts();
+    if(tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
 
-    playDing();
+    if (typeof playDing === 'function') playDing();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 
 function selectStartingQuest(quest) {
     localStorage.setItem('invincible_onboarded', 'true');
