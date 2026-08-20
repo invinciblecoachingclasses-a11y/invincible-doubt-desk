@@ -867,17 +867,25 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
 </section>
 
 <!-- SIMPLE POPUP FOR POSTING -->
-<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 9999; align-items: center; justify-content: center; padding: 14px;">
-  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.15); border-radius: 18px; width: 100%; max-width: 440px; padding: 18px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin: 0;">✍️ Apne School ki Baat Likho</h4>
-      <button onclick="closeCreatePostModal()" style="background: none; border: none; color: #9ca3af; font-size: 20px; cursor: pointer;">✕</button>
+<!-- CLEAN CAMPUS POST MODAL -->
+<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative; font-family: inherit;">
+    
+    <!-- Modal Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
+        <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Share intel, notes, or ask local students</p>
+      </div>
+      <button type="button" onclick="closeCreatePostModal()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-size: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">✕</button>
     </div>
 
-    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 10px;">
+    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 14px;">
+      
+      <!-- School Selector -->
       <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af;">School Chuno:</label>
-        <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px; font-size: 12px; margin-top: 4px;">
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">School</label>
+        <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; outline: none; appearance: auto;">
           <option value="DVM Public School">DVM Public School</option>
           <option value="DSR School">DSR School</option>
           <option value="The Ideal Public School">The Ideal Public School</option>
@@ -891,41 +899,51 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
         </select>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 8px;">
+      <!-- Tag & Class Row -->
+      <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 10px;">
         <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af;">Topic:</label>
-          <select id="modalCategorySelect" required style="width: 100%; background: #1f2937; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px; font-size: 12px; margin-top: 4px;">
-            <option value="teacher_intel">👨‍🏫 Teacher Update / Viva Tip</option>
-            <option value="syllabus_notes">📚 Notes / Important Questions</option>
-            <option value="ask_seniors">❓ Senior se Help</option>
-            <option value="news">🎉 School News / Masti</option>
+          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Category</label>
+          <select id="modalCategorySelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; outline: none; appearance: auto;">
+            <option value="teacher_intel">👨‍🏫 Teacher Intel / Viva Tip</option>
+            <option value="syllabus_notes">📚 Notes & Questions</option>
+            <option value="ask_seniors">❓ Ask Seniors</option>
+            <option value="news">📢 School News & Buzz</option>
           </select>
         </div>
         <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af;">Class / Batch:</label>
-          <input type="text" id="modalBatchInput" placeholder="Class 10th / 12th" required style="width: 100%; background: #1f2937; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px; font-size: 12px; margin-top: 4px; box-sizing: border-box;">
+          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Class / Batch</label>
+          <input type="text" id="modalBatchInput" placeholder="e.g. 10th-B / 12th Sci" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; box-sizing: border-box; outline: none;">
         </div>
       </div>
 
+      <!-- Post Title -->
       <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af;">Heading (Ek line me):</label>
-        <input type="text" id="modalTitleInput" placeholder="Jaise: Chemistry Viva me kya pooch rahe hain?" required style="width: 100%; background: #1f2937; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px; font-size: 12px; margin-top: 4px; box-sizing: border-box;">
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Post Title</label>
+        <input type="text" id="modalTitleInput" placeholder="What's this update about?" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; box-sizing: border-box; outline: none;">
       </div>
 
+      <!-- Content -->
       <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af;">Poori Baat (Hindi / Hinglish / English):</label>
-        <textarea id="modalContentInput" rows="3" placeholder="Jo bhi batana ya poochna hai yahan aaram se likho..." required style="width: 100%; background: #1f2937; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px; font-size: 12px; margin-top: 4px; resize: none; box-sizing: border-box;"></textarea>
+        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px;">Details / Message</label>
+        <textarea id="modalContentInput" rows="3" placeholder="Write the full update, syllabus hint, or your question here..." required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; resize: none; box-sizing: border-box; outline: none; line-height: 1.4;"></textarea>
       </div>
 
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
-        <label style="font-size: 12px; color: #d1d5db; display: flex; align-items: center; gap: 6px; cursor: pointer;">
-          <input type="checkbox" id="modalAnonCheckbox" checked> Naam Chhupao (Anonymous) 🤫
+      <!-- Footer / Actions -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #d1d5db; cursor: pointer; user-select: none;">
+          <input type="checkbox" id="modalAnonCheckbox" checked style="width: 16px; height: 16px; accent-color: #22c55e; cursor: pointer;">
+          <span>Post Anonymously</span>
         </label>
-        <button type="submit" style="background: #22c55e; color: #052e16; font-weight: 900; font-size: 12px; border: none; padding: 9px 18px; border-radius: 8px; cursor: pointer;">Post Karo 🚀</button>
+        
+        <button type="submit" style="background: #22c55e; color: #052e16; font-weight: 800; font-size: 13px; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: transform 0.15s ease;">
+          Publish Post 🚀
+        </button>
       </div>
+
     </form>
   </div>
 </div>
+
 
 
     <!-- CLOUT LEADERBOARD WITH PINNED POSITION -->
