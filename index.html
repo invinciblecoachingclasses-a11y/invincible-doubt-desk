@@ -680,55 +680,55 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
 <!-- SLIM HUD -->
 <header class="slim-hud">
     <div class="slim-logo">
-        <span>⚡</span> INVINCIBLE 360
+        <span style="font-size:18px;">⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
     </div>
     <div class="slim-right">
-        <div class="slim-xp-pill" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">
-            <span>🔥</span> <span id="streakCounter">1</span> Day
-        </div>
         <div class="slim-xp-pill">
-            <span>✨</span> <span id="xpCounter">680</span> XP
+            <span>✨</span> <span id="xpCounter">680</span> <span style="font-size:9px; opacity:0.7;">XP</span>
         </div>
-        <span class="slim-guide-btn" onclick="document.getElementById('onboardingModal').style.display='flex'">Guide</span>
+        <button type="button" class="slim-guide-btn" onclick="document.getElementById('onboardingModal').style.display='flex'">GUIDE</button>
     </div>
 </header>
 
-<!-- REELS TRAY -->
+<!-- REELS & HACKS TRAY -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
-        <div class="story-avatar-wrap add-story"><div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:22px;">+</div></div>
+        <div class="story-avatar-wrap add-story">
+            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:22px; font-weight:300;">+</div>
+        </div>
         <div class="story-username">Drop Hack</div>
     </div>
     <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
 </div>
 
-<!-- BENTO GRID -->
+<!-- HERO BENTO GRID -->
 <div class="bento-grid">
     <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Bet">
         <div>
             <div class="survival-top">
-                <span style="font-size:11px; font-weight:900; color:var(--accent-rose); letter-spacing:0.5px;">🔥 SURVIVAL BET (15s)</span>
-                <span id="survivalTimerNum" style="font-size:12px; font-weight:900; color:#fff;">15s</span>
+                <span class="live-pill-tag">🔥 DAILY CLASH</span>
+                <span id="survivalTimerNum" class="timer-badge">15s</span>
             </div>
             <div class="survival-timer-track"><div class="survival-timer-fill" id="survivalTimerBar"></div></div>
-            <div class="survival-q" id="puzzleQuestionEn">Loading challenge question...</div>
-            <div class="survival-q" id="puzzleQuestionHi" style="font-size:12px; color:var(--text-muted);"></div>
+            <div class="survival-q" id="puzzleQuestionEn">Loading challenge...</div>
+            <div class="survival-q-hi" id="puzzleQuestionHi"></div>
         </div>
         <div>
             <div class="survival-options" id="puzzleOptionsContainer"></div>
-            <div id="puzzleFeedback" style="font-size:11px; font-weight:800; margin-top:8px;"></div>
+            <div id="puzzleFeedback" style="font-size:12px; font-weight:800; margin-top:10px; text-align:center;"></div>
         </div>
     </section>
 
     <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
-        <div style="font-family:'Space Grotesk'; font-size:13px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between;">
-            <span>🏆 HALL OF CLOUT</span>
-            <span style="color:var(--accent-emerald);">LIVE</span>
+        <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="letter-spacing:1px;">🏆 CLOUT LEADERBOARD</span>
+            <span class="live-status-dot">LIVE</span>
         </div>
         <div class="podium-row" id="podiumContainer"></div>
         <div class="clout-list" id="leaderboardList"></div>
     </section>
 </div>
+
 
 <!-- 1. DOUBT SECTION -->
 <section class="card" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
