@@ -1498,27 +1498,51 @@ function renderDailyPuzzle(puzzle) {
   const pBox = document.getElementById('puzzleBox');
   if (pBox) pBox.style.display = 'flex';
 
+  // Handle question parsing (English & Hindi split by " / ")
+  const rawQ = puzzle.question || puzzle.question_en || "Is √(-4) × √(-9) equal to +6 or -6?";
+  const formattedQ = typeof formatMathText === 'function' ? formatMathText(rawQ) : rawQ;
+  
+  let enText = formattedQ;
+  let hiText = "";
+  if (formattedQ.includes(" / ")) {
+    const parts = formattedQ.split(/\s\/\s/);
+    enText = parts[0] || formattedQ;
+    hiText = parts[1] || "";
+  } else if (puzzle.question_hi) {
+    hiText = puzzle.question_hi;
+  }
+
   const qEn = document.getElementById('puzzleQuestionEn');
   const qHi = document.getElementById('puzzleQuestionHi');
-  if (qEn) qEn.textContent = puzzle.question_en || puzzle.question || "Can you solve this challenge?";
-  if (qHi) qHi.textContent = puzzle.question_hi || "";
+  if (qEn) qEn.innerHTML = enText;
+  if (qHi) qHi.innerHTML = hiText;
 
+  // Handle options fallback safely
   const container = document.getElementById('puzzleOptionsContainer');
   if (!container) return;
   container.innerHTML = '';
 
-  const opts = puzzle.options || [puzzle.option_1, puzzle.option_2, puzzle.option_3, puzzle.option_4];
+  let opts = puzzle.options;
+  if (!opts || !opts.length) {
+    if (puzzle.option_1) {
+      opts = [puzzle.option_1, puzzle.option_2, puzzle.option_3, puzzle.option_4];
+    } else {
+      opts = ['0', '1', '2', '100'];
+    }
+  }
+
   opts.forEach((opt, idx) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'survival-btn';
     btn.textContent = opt;
-    btn.onclick = () => handleDailyClashAnswer(idx, puzzle.correct_option !== undefined ? puzzle.correct_option : puzzle.answer);
+    btn.onclick = () => handleDailyClashAnswer(idx, puzzle.correct_option !== undefined ? puzzle.correct_option : 2);
     container.appendChild(btn);
   });
 
   startDailyClashTimer();
 }
+
 
 let clashTimerInterval = null;
 function startDailyClashTimer() {
