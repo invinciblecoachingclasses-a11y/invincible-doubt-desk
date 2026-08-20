@@ -777,7 +777,116 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
             <div class="reward-hint">+50 XP • Instant Reward</div>
             <div id="puzzleFeedback"></div>
         </div>
-    </section>
+    </section><!-- CAMPUS HUB / SCHOOL DISPATCH SECTION -->
+<section id="campusHubSection" class="campus-hub-wrapper" style="margin: 24px auto; max-width: 600px; padding: 0 16px;">
+  
+  <!-- Main Hub Control Card -->
+  <div style="background: rgba(18, 24, 38, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 18px; backdrop-filter: blur(12px); box-shadow: 0 8px 24px rgba(0,0,0,0.3);">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+      <div>
+        <div style="font-size: 11px; font-weight: 800; color: #ff3366; text-transform: uppercase; letter-spacing: 1px;">📍 Hyperlocal Campus Intel</div>
+        <h3 style="font-size: 18px; font-weight: 900; color: #fff; margin: 2px 0 0 0;">School Dispatch</h3>
+      </div>
+      <button type="button" onclick="openCreatePostModal()" style="background: linear-gradient(135deg, #05ffa1, #00c3ff); color: #050b14; border: none; font-weight: 800; font-size: 12px; padding: 8px 14px; border-radius: 10px; cursor: pointer;">
+        + Post Intel
+      </button>
+    </div>
+
+    <!-- School Filter Dropdown -->
+    <div style="position: relative;">
+      <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 10px 14px; font-size: 13px; font-weight: 700; outline: none; appearance: auto;">
+        <option value="ALL">🏫 All Local Schools (Greater Noida / Kulesra)</option>
+        <option value="DVM Public School">DVM Public School</option>
+        <option value="DSR School">DSR School</option>
+        <option value="The Ideal Public School">The Ideal Public School</option>
+        <option value="H R International School">H R International School</option>
+        <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
+        <option value="Bharat Public School">Bharat Public School</option>
+        <option value="R.L. Public School">R.L. Public School</option>
+        <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. / Jr. High School</option>
+        <option value="SMPN Public School">SMPN Public School</option>
+        <option value="Heritage Public School">Heritage Public School</option>
+      </select>
+    </div>
+
+    <!-- Category Pill Filter -->
+    <div style="display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; padding-bottom: 4px;" id="hubCategoryPills">
+      <button class="hub-pill active" onclick="setCategoryFilter('ALL', this)">🔥 All</button>
+      <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teacher Intel</button>
+      <button class="hub-pill" onclick="setCategoryFilter('syllabus_notes', this)">📚 Notes & Syllabus</button>
+      <button class="hub-pill" onclick="setCategoryFilter('ask_seniors', this)">💬 Ask Seniors</button>
+      <button class="hub-pill" onclick="setCategoryFilter('news', this)">📢 Campus News</button>
+    </div>
+  </div>
+
+  <!-- Dynamic Post Cards Feed -->
+  <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+    <!-- Supabase content renders here -->
+  </div>
+</section>
+
+<!-- CREATE POST MODAL (Hidden By Default) -->
+<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
+  <div style="background: #121826; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; width: 100%; max-width: 480px; padding: 20px; position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h4 style="font-size: 16px; font-weight: 900; color: #fff; margin: 0;">Share Local Intel / Doubt</h4>
+      <button onclick="closeCreatePostModal()" style="background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer;">✕</button>
+    </div>
+
+    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #94a3b8;">Select School</label>
+        <select id="modalSchoolSelect" required style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; font-size: 12px; margin-top: 4px;">
+          <option value="DVM Public School">DVM Public School</option>
+          <option value="DSR School">DSR School</option>
+          <option value="The Ideal Public School">The Ideal Public School</option>
+          <option value="H R International School">H R International School</option>
+          <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
+          <option value="Bharat Public School">Bharat Public School</option>
+          <option value="R.L. Public School">R.L. Public School</option>
+          <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. / Jr. High School</option>
+          <option value="SMPN Public School">SMPN Public School</option>
+          <option value="Heritage Public School">Heritage Public School</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #94a3b8;">Category</label>
+          <select id="modalCategorySelect" required style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; font-size: 12px; margin-top: 4px;">
+            <option value="teacher_intel">👨‍🏫 Teacher Intel</option>
+            <option value="syllabus_notes">📚 Notes / Syllabus</option>
+            <option value="ask_seniors">💬 Ask Seniors</option>
+            <option value="news">📢 Campus News</option>
+            <option value="infra">🏫 Campus & Vibe</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 11px; font-weight: 700; color: #94a3b8;">Grade / Batch</label>
+          <input type="text" id="modalBatchInput" placeholder="e.g. 10th A, 12th Sci" required style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; font-size: 12px; margin-top: 4px; box-sizing: border-box;">
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #94a3b8;">Title</label>
+        <input type="text" id="modalTitleInput" placeholder="e.g. Chemistry Viva Important Questions" required style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; font-size: 12px; margin-top: 4px; box-sizing: border-box;">
+      </div>
+
+      <div>
+        <label style="font-size: 11px; font-weight: 700; color: #94a3b8;">Details & Intel</label>
+        <textarea id="modalContentInput" rows="3" placeholder="Share what was taught, teacher instructions, question formats..." required style="width: 100%; background: #0b111e; color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 8px 12px; font-size: 12px; margin-top: 4px; resize: none; box-sizing: border-box;"></textarea>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px;">
+        <label style="font-size: 12px; color: #cbd5e1; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="modalAnonCheckbox" checked> Post Anonymously
+        </label>
+        <button type="submit" style="background: #05ffa1; color: #050b14; font-weight: 900; font-size: 13px; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Publish Intel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
     <!-- CLOUT LEADERBOARD WITH PINNED POSITION -->
     <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
