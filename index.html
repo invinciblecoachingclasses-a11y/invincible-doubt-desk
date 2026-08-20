@@ -708,6 +708,51 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
     padding-top: 0 !important;
   }
 }
+/* Hub Category Filter Pills */
+.hub-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.hub-pill.active, .hub-pill:hover {
+  background: rgba(5, 255, 161, 0.15);
+  border-color: #05ffa1;
+  color: #05ffa1;
+}
+
+/* Individual Post Card Styling */
+.post-card {
+  background: rgba(18, 24, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* Badge Color Variations */
+.post-tag {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.tag-teacher_intel { background: rgba(255, 187, 0, 0.15); color: #ffbb00; }
+.tag-syllabus_notes { background: rgba(0, 195, 255, 0.15); color: #00c3ff; }
+.tag-ask_seniors { background: rgba(255, 42, 95, 0.15); color: #ff2a5f; }
+.tag-news { background: rgba(5, 255, 161, 0.15); color: #05ffa1; }
+.tag-infra { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+
 </style>
 </head>
 
