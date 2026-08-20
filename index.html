@@ -1779,6 +1779,163 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   }
 }
 
+/* =====================================================
+   CAMPUS HUB / SCHOOL DISPATCH CONTROLLER
+===================================================== */
+let currentCategoryFilter = 'ALL';
+let allSchoolPosts = [];
+
+async function fetchSchoolPosts() {
+  const selectedSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
+  
+  try {
+    let query = supabase
+      .from('school_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (selectedSchool !== 'ALL') {
+      query = query.eq('school_name', selectedSchool);
+    }
+    
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    allSchoolPosts = data || [];
+    renderSchoolFeed();
+  } catch (err) {
+    console.error('Error fetching campus posts:', err);
+  }
+}
+
+function renderSchoolFeed() {
+  const container = document.getElementById('schoolPostsFeed');
+  if (!container) return;
+
+  const filtered = allSchoolPosts.filter(p => {
+    return currentCategoryFilter === 'ALL' || p.category === currentCategoryFilter;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:32px 16px; background:rgba(18,24,38,0.5); border-radius:14px; border:1px dashed rgba(255,255,255,0.1);">
+        <div style="font-size:24px;">🎒</div>
+        <div style="color:#cbd5e1; font-weight:800; font-size:14px; margin-top:6px;">No posts for this school yet</div>
+        <div style="color:#64748b; font-size:12px; margin-top:2px;">Be the first to share syllabus updates, notes, or tips!</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(post => `
+    <div class="post-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span class="post-tag tag-${post.category}">${formatCategoryName(post.category)}</span>
+        <span style="font-size:11px; color:#64748b; font-weight:600;">${post.school_name}</span>
+      </div>
+
+      <h4 style="font-size:15px; font-weight:800; color:#fff; margin:0 0 6px 0;">${escapeHtml(post.title)}</h4>
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.45; margin:0 0 12px 0;">${escapeHtml(post.content)}</p>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+        <div style="font-size:11px; color:#94a3b8; display:flex; align-items:center; gap:6px;">
+          <span style="font-weight:700; color:#cbd5e1;">${post.is_anonymous ? '🤫 Anonymous' : '👤 ' + (post.author_name || 'Student')}</span>
+          <span>•</span>
+          <span style="color:#64748b;">${post.batch_tag || 'Student'}</span>
+        </div>
+        <button onclick="upvotePost(${post.id}, this)" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:8px; padding:4px 10px; font-size:11px; font-weight:700; cursor:pointer; display:flex; align-items:center; gap:4px;">
+          🔥 <span>${post.upvotes || 0}</span>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function formatCategoryName(cat) {
+  const map = {
+    'teacher_intel': '👨‍🏫 Teacher Intel',
+    'syllabus_notes': '📚 Notes & Syllabus',
+    'ask_seniors': '💬 Ask Seniors',
+    'news': '📢 News',
+    'infra': '🏫 Campus'
+  };
+  return map[cat] || 'General';
+}
+
+function filterSchoolPosts() {
+  fetchSchoolPosts();
+}
+
+function setCategoryFilter(cat, btn) {
+  currentCategoryFilter = cat;
+  document.querySelectorAll('#hubCategoryPills .hub-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSchoolFeed();
+}
+
+async function upvotePost(postId, btnEl) {
+  const span = btnEl.querySelector('span');
+  let currentVal = parseInt(span.textContent, 10) || 0;
+  span.textContent = currentVal + 1;
+  btnEl.style.borderColor = '#05ffa1';
+  btnEl.disabled = true;
+
+  try {
+    await supabase.from('school_posts').update({ upvotes: currentVal + 1 }).eq('id', postId);
+  } catch (err) {
+    console.error('Error saving upvote:', err);
+  }
+}
+
+function openCreatePostModal() {
+  const selSchool = document.getElementById('hubSchoolSelect').value;
+  if (selSchool !== 'ALL') {
+    document.getElementById('modalSchoolSelect').value = selSchool;
+  }
+  document.getElementById('createPostModal').style.display = 'flex';
+}
+
+function closeCreatePostModal() {
+  document.getElementById('createPostModal').style.display = 'none';
+}
+
+async function handleCreatePost(e) {
+  e.preventDefault();
+  const school_name = document.getElementById('modalSchoolSelect').value;
+  const category = document.getElementById('modalCategorySelect').value;
+  const batch_tag = document.getElementById('modalBatchInput').value;
+  const title = document.getElementById('modalTitleInput').value;
+  const content = document.getElementById('modalContentInput').value;
+  const is_anonymous = document.getElementById('modalAnonCheckbox').checked;
+
+  const newPost = {
+    school_name,
+    category,
+    batch_tag,
+    title,
+    content,
+    is_anonymous,
+    author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('userName') || 'Student')
+  };
+
+  try {
+    const { error } = await supabase.from('school_posts').insert([newPost]);
+    if (error) throw error;
+
+    closeCreatePostModal();
+    document.getElementById('createPostForm').reset();
+    fetchSchoolPosts();
+  } catch (err) {
+    alert('Failed to publish post: ' + err.message);
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+fetchSchoolPosts();
 
 
 /* =====================================================
