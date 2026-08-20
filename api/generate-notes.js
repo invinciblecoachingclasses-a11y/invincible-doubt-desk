@@ -1,7 +1,6 @@
 // api/generate-notes.js
 
 export default async function handler(req, res) {
-  // CORS Headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -28,8 +27,12 @@ export default async function handler(req, res) {
   const cls = className || "Class 9";
   const sub = subject || "Physics";
 
-  // Updated to the current production model
-  const MODEL = "gemini-3.6-flash";
+  // Tiered fallback models to bypass high-demand spikes
+  const modelsToTry = [
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
+    "gemini-3.6-flash"
+  ];
 
   const prompt = `
 You are an expert CBSE school teacher and national board topper creating condensed, visually engaging revision notes.
@@ -70,54 +73,45 @@ CRITICAL RULES:
 4. Do NOT wrap output in markdown \`\`\`html or \`\`\` code fences.
 `;
 
-  try {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  let lastError = null;
 
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
+  for (const model of modelsToTry) {
+    try {
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 1500
           }
-        ],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 2000
-        }
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Gemini Notes API Error:", data);
-      return res.status(response.status).json({
-        error: data?.error?.message || "Failed to generate notes from Gemini."
+        })
       });
+
+      const data = await response.json();
+
+      if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+        let generatedText = data.candidates[0].content.parts[0].text;
+        generatedText = generatedText
+          .replace(/^```html\s*/i, "")
+          .replace(/^```\s*/i, "")
+          .replace(/\s*```$/i, "")
+          .trim();
+
+        return res.status(200).json({
+          success: true,
+          notes: generatedText
+        });
+      } else {
+        lastError = data?.error?.message || `Model ${model} failed`;
+      }
+    } catch (err) {
+      lastError = err.message;
     }
-
-    let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
-    generatedText = generatedText
-      .replace(/^```html\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
-
-    if (!generatedText) {
-      return res.status(500).json({ error: "Gemini returned empty notes." });
-    }
-
-    return res.status(200).json({
-      success: true,
-      notes: generatedText
-    });
-
-  } catch (error) {
-    console.error("Server Error in generate-notes:", error);
-    return res.status(500).json({ error: "Internal server error: " + error.message });
   }
+
+  return res.status(503).json({ error: "All AI models are currently busy. Please retry in a few seconds: " + lastError });
 }
