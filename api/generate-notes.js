@@ -28,8 +28,8 @@ export default async function handler(req, res) {
   const cls = className || "Class 9";
   const sub = subject || "Physics";
 
-  // Production model matching your working ask.js & generate-test.js
-  const MODEL = "gemini-2.5-flash";
+  // Updated to the current production model
+  const MODEL = "gemini-3.6-flash";
 
   const prompt = `
 You are an expert CBSE school teacher and national board topper creating condensed, visually engaging revision notes.
@@ -40,7 +40,7 @@ CHAPTER: ${chapter}
 
 INSTRUCTIONS & STRUCTURE:
 ${structure || `
-Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter: ${chapter}.
+Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter:${chapter}.
 Subject-specific guidelines:
 - Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
 - Chemistry: focus on reactions, equations, concepts, and exceptions.
