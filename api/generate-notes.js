@@ -1,64 +1,124 @@
-module.exports = async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+// api/generate-notes.js
 
-  if (req.method === 'OPTIONS') {
+export default async function handler(req, res) {
+  // CORS Headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Only POST requests are allowed." });
   }
-
-  const cls = req.body.className || req.body.classLevel || '9';
-  const sub = req.body.subject || 'Physics';
-  const chapter = req.body.chapter || 'Sound';
-  const customStructure = req.body.structure;
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is missing in Vercel settings.' });
+    return res.status(500).json({ error: "GEMINI_API_KEY is missing from Vercel environment variables." });
   }
 
-  const promptText = customStructure || `Act as an expert CBSE teacher and national board topper. Generate comprehensive, syllabus-accurate revision notes in clean HTML for Class ${cls} ${sub}, Chapter: ${chapter}. Include Key definitions, Formulas, Exam Traps, and High-Yield Board Points.`;
+  const { className, subject, chapter, structure } = req.body || {};
 
-  const modelEndpoints = [
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-pro-latest',
-    'gemini-pro'
-  ];
+  if (!chapter) {
+    return res.status(400).json({ error: "Please provide a chapter name." });
+  }
 
-  let lastError = null;
+  const cls = className || "Class 9";
+  const sub = subject || "Physics";
 
-  for (const modelName of modelEndpoints) {
-    try {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+  // Active production model matching your working ask.js & generate-test.js
+  const MODEL = "gemini-2.5-flash";
 
-      const response = await fetch(geminiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: promptText }] }]
-        })
+  const prompt = `
+You are an expert CBSE school teacher and national board topper creating condensed, visually engaging revision notes.
+
+CLASS: ${cls}
+SUBJECT: ${sub}
+CHAPTER: ${chapter}
+
+INSTRUCTIONS & STRUCTURE:
+${structure || `
+Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter:${chapter}.
+Subject-specific guidelines:
+- Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
+- Chemistry: focus on reactions, equations, concepts, and exceptions.
+- Biology: focus on processes, terminology, diagrams (use placeholders if needed), and differences.
+- Mathematics: focus on formulas, theorems, identities, methods, and examples.
+
+Structure:
+1. Chapter overview
+2. Important concepts & Key definitions
+3. Must-remember points
+4. Formulas / equations / reactions
+5. Common mistakes
+6. Exam-focused points & Quick revision summary
+`}
+
+CRITICAL RULES:
+1. Every definition, formula, law, and point must be 100% accurate for CBSE ${cls} ${sub}, Chapter: "${chapter}".
+2. Do NOT mention any unrelated subject or chapter.
+3. Return clean raw HTML ONLY using the required CSS classes:
+   - .note-h1 (Main Heading)
+   - .note-h2 (Numbered Subheadings)
+   - .note-p (Text/Definitions)
+   - .note-ul and li (For bullet points)
+   - .note-formula (Inside a div for formulas/equations)
+   - .note-keywords (div containing spans with class .note-keyword-chip)
+   - .note-exam-box (div containing p tags starting with ⭐ for exam points)
+4. Do NOT wrap output in markdown \`\`\`html or \`\`\` code fences.
+`;
+
+  try {
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 2000
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Gemini Notes API Error:", data);
+      return res.status(response.status).json({
+        error: data?.error?.message || "Failed to generate notes from Gemini."
       });
-
-      const data = await response.json();
-
-      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        let generatedHTML = data.candidates[0].content.parts[0].text;
-        generatedHTML = generatedHTML.replace(/^```html\s*/i, '').replace(/\s*```$/i, '');
-        
-        return res.status(200).json({ notes: generatedHTML });
-      } else {
-        lastError = data.error?.message || 'Model execution error';
-      }
-    } catch (err) {
-      lastError = err.message;
     }
-  }
 
-  return res.status(500).json({ error: `AI generation failed: ${lastError}` });
-};
+    let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    // Strip markdown code fences if model output contains them
+    generatedText = generatedText
+      .replace(/^```html\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+
+    if (!generatedText) {
+      return res.status(500).json({ error: "Gemini returned empty notes." });
+    }
+
+    return res.status(200).json({
+      success: true,
+      notes: generatedText
+    });
+
+  } catch (error) {
+    console.error("Server Error in generate-notes:", error);
+    return res.status(500).json({ error: "Internal server error: " + error.message });
+  }
+}
