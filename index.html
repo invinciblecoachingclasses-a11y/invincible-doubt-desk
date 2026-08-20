@@ -23,7 +23,7 @@
 <!-- FONTS & CONFETTI -->
 <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
 <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-<link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700;800;900&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700;800;900&display=swap)" rel="stylesheet">
+<link href="[https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap](https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap)" rel="stylesheet">
 <script src="[https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js](https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js)"></script>
 
 <style>
@@ -73,7 +73,7 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   transform: scale(0.96) !important;
 }
 
-/* 1. SLIM HUD */
+/* 1. SLIM MINIMALIST GLASS DYNAMIC ISLAND HUD */
 .slim-hud {
   position: sticky;
   top: 12px;
@@ -291,147 +291,143 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .action-btn { cursor: pointer; display: flex; align-items: center; gap: 4px; }
 .comments-drawer { display: none; margin-top: 14px; border-top: 1px dashed var(--border-subtle); padding-top: 14px; }
 
-/* 5. NOTES STUDIO & HIGH-CONTRAST MODERN TOPPER NOTEBOOK */
+/* 5. NOTES STUDIO & AUTHENTIC HANDWRITTEN NOTEBOOK AESTHETIC */
 .topper-paper-container {
-  background-color: #faf8f5;
+  background-color: #fdfaf4;
   background-image: 
-    linear-gradient(90deg, transparent 48px, #f43f5e 49px, #f43f5e 50px, transparent 51px),
+    linear-gradient(90deg, transparent 58px, #f43f5e 59px, #f43f5e 60px, transparent 61px),
     linear-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 100% 100%, 100% 30px;
+  background-size: 100% 100%, 100% 32px;
   color: #0f172a;
-  padding: 35px 24px 45px 65px;
+  padding: 35px 24px 40px 75px;
   border-radius: 16px;
   border: 1px solid #cbd5e1;
   box-shadow: 0 20px 45px rgba(0,0,0,0.6);
   position: relative;
   text-align: left;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Patrick Hand', cursive, sans-serif;
   margin-top: 20px;
   margin-bottom: 80px;
-  font-size: 15px;
+  font-size: 18px;
+  line-height: 32px;
   font-weight: 600;
-  line-height: 30px;
 }
 
 .topper-content { position: relative; z-index: 2; }
 
 .note-hero-card {
-  background: linear-gradient(135deg, #0f172a, #1e1b4b);
-  color: #ffffff;
-  border: 2px solid #3b82f6;
-  border-radius: 14px;
-  padding: 18px 22px;
+  background: #fef08a;
+  color: #713f12;
+  border: 2px solid #eab308;
+  border-radius: 12px;
+  padding: 16px 20px;
   margin-bottom: 24px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+  box-shadow: 4px 4px 0px rgba(202, 138, 4, 0.3);
+  transform: rotate(-0.5deg);
 }
-.note-hero-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 6px; color: #38bdf8; }
+.note-hero-title { font-family: 'Caveat', cursive; font-size: 30px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; color: #854d0e; }
 .note-hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.note-tag { background: rgba(255,255,255,0.12); color: #f8fafc; font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.25); }
+.note-tag { background: #fff; color: #854d0e; font-size: 14px; font-weight: 700; padding: 2px 12px; border-radius: 20px; border: 1px solid #ca8a04; }
 
 .note-section-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 17px;
-  font-weight: 900;
-  color: #0f172a;
-  margin: 32px 0 12px 0;
-  text-transform: uppercase;
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1e1b4b;
+  margin: 30px 0 10px 0;
+  text-decoration: underline wavy #f59e0b;
   letter-spacing: 0.5px;
-  border-left: 5px solid #2563eb;
-  padding-left: 10px;
-  background: rgba(37, 99, 235, 0.06);
-  line-height: 24px;
 }
 
 .note-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
 @media (max-width: 600px) { .note-card-grid { grid-template-columns: 1fr; } }
 .note-card {
   background: #ffffff;
-  border: 1.5px solid #94a3b8;
+  border: 2px solid #cbd5e1;
   border-radius: 12px;
   padding: 14px 16px;
-  box-shadow: 3px 3px 0px rgba(15, 23, 42, 0.08);
-  font-size: 14px;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.06);
+  font-size: 18px;
   color: #0f172a;
-  font-weight: 600;
-  line-height: 1.5;
 }
-.note-card strong { color: #1e1b4b; display: block; font-size: 15px; margin-bottom: 4px; font-weight: 800; }
+.note-card strong { color: #0f172a; display: block; font-size: 22px; margin-bottom: 2px; font-family: 'Caveat', cursive; font-weight: 700; }
 
 .note-concept-box {
   background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-left: 4px solid #6366f1;
+  border: 2px solid #cbd5e1;
+  border-left: 4px solid #3b82f6;
   border-radius: 10px;
-  padding: 12px 16px;
-  margin: 12px 0;
-  font-size: 14px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  font-size: 18px;
   color: #0f172a;
-  line-height: 1.6;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
-.note-concept-box strong { color: #312e81; font-weight: 800; font-size: 15px; }
+.note-concept-box strong { color: #1e1b4b; font-family: 'Caveat', cursive; font-size: 22px; }
 
 .note-derivation-card {
   background: #ffffff;
   border: 2px solid #3b82f6;
   border-radius: 12px;
   padding: 16px;
-  margin: 14px 0;
+  margin: 16px 0;
   box-shadow: 3px 3px 0px rgba(59, 130, 246, 0.2);
-  line-height: 1.6;
-  font-size: 14px;
   color: #0f172a;
+  font-size: 18px;
 }
 
 .note-formula-card {
-  background: #fefce8;
-  border: 2px solid #ca8a04;
+  background: #dbeafe;
+  border: 2px dashed #3b82f6;
   border-radius: 12px;
   padding: 16px;
-  margin: 14px 0;
-  box-shadow: 3px 3px 0px rgba(202, 138, 4, 0.2);
+  margin: 16px 0;
+  box-shadow: 3px 3px 0px rgba(59, 130, 246, 0.2);
+  transform: rotate(0.4deg);
 }
-.formula-main { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 900; color: #854d0e; margin-bottom: 4px; }
-.formula-sub { font-size: 13px; color: #713f12; font-weight: 700; line-height: 1.4; }
+.formula-main { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 700; color: #1e3a8a; margin-bottom: 4px; }
+.formula-sub { font-size: 16px; color: #1e40af; line-height: 1.4; font-weight: 600; }
 
 .note-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 18px 0;
+  margin: 20px 0;
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1.5px solid #0f172a;
-  box-shadow: 4px 4px 0px rgba(15, 23, 42, 0.1);
+  border: 2px solid #1e1b4b;
+  box-shadow: 4px 4px 0px rgba(30, 27, 75, 0.15);
 }
-.note-table th { background: #0f172a; color: #ffffff; padding: 10px 12px; font-size: 13px; text-align: left; font-weight: 800; }
-.note-table td { padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 13px; color: #0f172a; font-weight: 600; line-height: 1.5; }
+.note-table th { background: #1e1b4b; color: #ffffff; padding: 10px 12px; text-align: left; font-family: 'Caveat', cursive; font-size: 24px; font-weight: 700; }
+.note-table td { padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 18px; color: #0f172a; line-height: 1.4; }
 
 .note-numerical-card {
-  background: #ffffff;
-  border: 2px solid #0284c7;
+  background: #f0fdf4;
+  border: 2px solid #22c55e;
   border-radius: 12px;
   padding: 16px;
-  margin: 14px 0;
-  box-shadow: 3px 3px 0px rgba(2, 132, 199, 0.2);
+  margin: 16px 0;
+  box-shadow: 3px 3px 0px rgba(34, 197, 94, 0.2);
 }
-.num-q { font-size: 14px; color: #0f172a; margin-bottom: 6px; font-weight: 800; line-height: 1.5; }
-.num-step { font-size: 13px; color: #334155; margin-bottom: 3px; font-weight: 600; }
-.num-ans { background: #e0f2fe; color: #0369a1; font-weight: 900; padding: 4px 12px; border-radius: 6px; display: inline-block; margin-top: 6px; font-size: 14px; font-family: 'Space Grotesk', sans-serif; border: 1px solid #7dd3fc; }
+.num-q { font-size: 19px; color: #14532d; margin-bottom: 6px; font-weight: 700; line-height: 1.4; }
+.num-step { font-size: 18px; color: #166534; margin-bottom: 2px; }
+.num-ans { background: #bbf7d0; color: #14532d; font-weight: 700; padding: 4px 12px; border-radius: 8px; display: inline-block; margin-top: 6px; font-size: 19px; font-family: 'Caveat', cursive; border: 1px solid #86efac; }
 
 .note-trap-box {
   background: #fff1f2;
-  border: 2px solid #e11d48;
+  border: 2px dashed #e11d48;
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin: 18px 0;
-  box-shadow: 3px 3px 0px rgba(225, 29, 72, 0.2);
+  box-shadow: 3px 3px 0px rgba(225, 29, 72, 0.15);
+  transform: rotate(-0.3deg);
 }
-.trap-head { font-family: 'Space Grotesk', sans-serif; font-weight: 900; color: #be123c; font-size: 15px; margin-bottom: 6px; }
-.blueprint-head { font-family: 'Space Grotesk', sans-serif; font-weight: 900; color: #1e1b4b; font-size: 15px; margin-top: 10px; margin-bottom: 4px; }
-.note-trap-box p { margin: 0 0 6px 0; color: #881337; font-size: 13px; font-weight: 700; line-height: 1.5; }
+.trap-head { font-family: 'Caveat', cursive; font-weight: 700; color: #be123c; font-size: 24px; margin-bottom: 4px; }
+.blueprint-head { font-family: 'Caveat', cursive; font-weight: 700; color: #1e1b4b; font-size: 24px; margin-top: 12px; margin-bottom: 4px; }
+.note-trap-box p { margin: 0 0 6px 0; color: #9f1239; font-size: 18px; line-height: 1.4; }
 
 .note-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-.note-keyword-chip { background: #e0e7ff; border: 1.5px solid #6366f1; color: #312e81; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; }
+.note-keyword-chip { background: #fef3c7; border: 2px solid #f59e0b; color: #92400e; padding: 2px 14px; border-radius: 20px; font-size: 17px; font-weight: 700; }
 
 /* FLOATING GLASS DOCK */
 .floating-dock {
@@ -518,18 +514,23 @@ textarea:focus, input:not([type="radio"]):not([type="range"]):focus, select:focu
 .reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 
 /* =====================================================
-PRINT STYLESHEET: CLEAN TOPPER NOTES ONLY (NO UI CLUTTER)
+PRINT STYLESHEET: CLEAN TOPPER NOTES ONLY (ANTI-CLIPPING)
 ===================================================== */
 @media print {
   body {
     background: #ffffff !important;
     color: #000000 !important;
   }
+  body, .container, .card, .topper-paper-container {
+    overflow: visible !important;
+    height: auto !important;
+  }
   .slim-hud, .stories-tray-container, .bento-grid, #doubtSection, 
   #testSection, #arenaSection, #feedSection, .floating-dock, 
   .lofi-widget, .footer, #onboardingModal, #storyModal, #storyViewer,
   #notesClass, #notesSubject, #notesChapter, #generateNotesBtn, 
-  #notesLoading, label, button, .section-h2, .topper-paper-container button {
+  #notesLoading, label, button, .section-h2, .topper-paper-container button,
+  .hide-on-print {
     display: none !important;
   }
   .container {
@@ -808,7 +809,7 @@ PRINT STYLESHEET: CLEAN TOPPER NOTES ONLY (NO UI CLUTTER)
 <!-- 5. NOTES STUDIO SECTION -->
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
-    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate high-density, scannable topper-grade chapter modules.</div>
+    <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate high-density, scannable topper-grade chapter modules.</div>
     
     <label>Select Grade</label>
     <select id="notesClass" style="margin-bottom:12px;">
@@ -833,9 +834,9 @@ PRINT STYLESHEET: CLEAN TOPPER NOTES ONLY (NO UI CLUTTER)
     <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling elite topper notes...</div>
     
     <div id="notesResultContainer" class="hidden topper-paper-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase; letter-spacing:1px;" id="notesResultTitle">CLASS • SUBJECT</div>
-            <button type="button" onclick="window.print()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800; box-shadow:0 4px 10px rgba(0,0,0,0.2);">🖨️ Save PDF</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div style="font-family:'Caveat', cursive; font-size:24px; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:1px;" id="notesResultTitle">CLASS • SUBJECT</div>
+            <button type="button" onclick="window.print()" style="background:#1e1b4b; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:14px; cursor:pointer; font-weight:800; box-shadow:0 4px 10px rgba(0,0,0,0.15);">🖨️ Save PDF</button>
         </div>
         <div id="notesContentBody" class="topper-content"></div>
     </div>
