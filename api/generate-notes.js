@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY is missing in Vercel settings." });
+    return res.status(500).json({ error: "GEMINI_API_KEY is missing from Vercel settings." });
   }
 
   const { className, subject, chapter } = req.body || {};
@@ -24,8 +24,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Please enter a chapter name." });
   }
 
-  const cls = className || "Class 9";
-  const sub = subject || "Physics";
+  const cls = className || "Class 10";
+  const sub = subject || "Science";
 
   const modelsToTry = [
     "gemini-2.5-flash",
@@ -33,53 +33,74 @@ export default async function handler(req, res) {
     "gemini-3.6-flash"
   ];
 
-  const exhaustivePrompt = `
-You are the Head of Academics at a premier national coaching institute and a CBSE National Board Topper.
-Generate an EXHAUSTIVE, MULTI-PAGE, FULL-CHAPTER MASTERCLASS NOTEBOOK for:
-GRADE: Class ${cls}
+  const topperPrompt = `
+You are the Head of Academics and a CBSE National Board Topper creating an elite, visually rich, and scannable revision module for:
+CLASS: ${cls}
 SUBJECT: ${sub}
 CHAPTER: "${chapter}"
 
-Generate a thorough, end-to-end chapter module covering EVERY NCERT topic in depth. Do not summarize or skip subtopics.
+CRITICAL FORMATTING & NOTATION RULES:
+1. NEVER output raw LaTeX syntax like "\\frac", "\\lambda", "\\nu", "\\times", "\\text{}", "\\quad", or "$$". 
+2. Write all math and physics symbols in clean plain text and Unicode (e.g., write "v = f × λ", "d = (v × t) / 2", "1/f = 1/v - 1/u", "CO₂ + H₂O → C₆H₁₂O₆ + O₂").
+3. Use bullet points and high-contrast Bento cards. Do NOT write dense, multi-sentence paragraphs.
+4. Output raw HTML ONLY. Do not wrap in markdown \`\`\`html or \`\`\` code fences.
 
-MANDATORY SECTIONS TO GENERATE:
+MANDATORY SECTIONS TO INCLUDE:
 
-1. <div class="note-h1">📖 MASTER MODULE: ${chapter.toUpperCase()}</div>
-   <div class="note-h2">1. SYLLABUS ROADMAP & CORE THEMES</div>
-   Provide a complete breakdown of every sub-concept in this chapter.
+1. <div class="note-hero-card">
+     <div class="note-hero-title">📖 MASTER MODULE: ${chapter.toUpperCase()}</div>
+     <div class="note-hero-tags">
+       <span class="note-tag">🎯 CBSE Class ${cls} ${sub}</span>
+       <span class="note-tag">⚡ High Weightage</span>
+       <span class="note-tag">⏱️ 10-Min Fast Revision</span>
+     </div>
+   </div>
 
-2. <div class="note-h2">2. IN-DEPTH CONCEPTUAL THEORY & LAWS</div>
-   Explain every topic step-by-step with clear definitions (<p class="note-p">), key principles, and bullet breakdowns (<ul class="note-ul"><li>).
+2. <div class="note-section-title">1. CHAPTER FAST MAP & CORE DEFINITIONS</div>
+   <div class="note-card-grid">
+     (Provide 3 to 4 distinct cards using <div class="note-card"> with <strong>Term</strong> and a concise 1-2 sentence definition.)
+   </div>
 
-3. <div class="note-h2">3. DERIVATIONS, PROOFS & SCIENTIFIC LAWS</div>
-   Provide full step-by-step derivations with clear justification for every mathematical step.
+3. <div class="note-section-title">2. MASTER FORMULA & EQUATION SHEET</div>
+   (For every critical formula/reaction, use:
+     <div class="note-formula-card">
+       <div class="formula-main">Formula: [Write clear formula in plain text]</div>
+       <div class="formula-sub"><strong>Where:</strong> [Symbol definitions & SI units]</div>
+     </div>
+   )
 
-4. <div class="note-h2">4. MASTER FORMULA & EQUATION SHEET</div>
-   Wrap all core formulas inside <div class="note-formula"> boxes with symbol definitions, SI units, and boundary conditions.
+4. <div class="note-section-title">3. TABULAR COMPARISONS & DIFFERENCES</div>
+   (Provide at least one essential CBSE difference table using:
+     <table class="note-table">
+       <thead><tr><th>Parameter</th><th>Category A</th><th>Category B</th></tr></thead>
+       <tbody><tr><td>Key Point</td><td>...</td><td>...</td></tr></tbody>
+     </table>
+   )
 
-5. <div class="note-h2">5. STEP-BY-STEP SOLVED NUMERICALS / EXAMPLES</div>
-   Include at least 3 standard CBSE board numericals with:
-   - Given Data
-   - Formula Used
-   - Step-by-Step Substitution
-   - Final Answer with Units
+5. <div class="note-section-title">4. STEP-BY-STEP BOARD NUMERICALS / SOLVED EXAMPLES</div>
+   (Provide 2 to 3 standard numerical problems formatted cleanly:
+     <div class="note-numerical-card">
+       <div class="num-q"><strong>Q:</strong> [Problem statement]</div>
+       <div class="num-step"><strong>Given:</strong> [Values with units]</div>
+       <div class="num-step"><strong>Formula:</strong> [Formula used]</div>
+       <div class="num-step"><strong>Calculation:</strong> [Clean step-by-step substitution]</div>
+       <div class="num-ans"><strong>Final Answer:</strong> [Result with correct SI unit]</div>
+     </div>
+   )
 
-6. <div class="note-h2">6. TABULAR DIFFERENCES & COMPARISONS</div>
-   Include key board comparison tables (e.g., Longitudinal vs. Transverse, Speed vs. Velocity) using clean HTML tables with class "note-table".
+6. <div class="note-section-title">5. 🎯 TOPPER EXAM TRAPS & 5-MARK BLUEPRINT</div>
+   <div class="note-trap-box">
+     <div style="font-weight:900; color:#e11d48; margin-bottom:6px;">⚠️ Common Board Mistakes to Avoid:</div>
+     <p>⭐ [Common mistake 1: calculation, sign conventions, or unit errors]</p>
+     <p>⭐ [Common mistake 2: keyword omissions examiners deduct marks for]</p>
+     <div style="font-weight:900; color:#4338ca; margin-top:10px; margin-bottom:4px;">📝 5-Mark Question Blueprint:</div>
+     <p>👉 [Exact sub-points, required headings, and diagram labels needed for full marks]</p>
+   </div>
 
-7. <div class="note-h2">7. EXAM TRAPS, REASONING & TOPPER TIPS 🎯</div>
-   Use <div class="note-exam-box"> to detail:
-   - Common calculation and sign mistakes
-   - Conceptual tricky questions
-   - 5-mark board question predictions
-
-8. <div class="note-h2">8. HIGH-YIELD KEYWORDS & FORMULA RECALL ⭐</div>
-   Include 8-12 keywords inside <div class="note-keywords"><span class="note-keyword-chip">...</span></div>.
-
-HTML FORMATTING RULES:
-- Use only raw HTML with the classes specified above.
-- Do NOT wrap the output in markdown code blocks (\`\`\`html).
-- Provide exhaustive, textbook-complete explanations.
+7. <div class="note-section-title">6. HIGH-YIELD KEYWORDS ⭐</div>
+   <div class="note-keywords">
+     (Provide 8 to 10 keyword chips using <span class="note-keyword-chip">Keyword</span>)
+   </div>
 `;
 
   let lastError = null;
@@ -92,9 +113,9 @@ HTML FORMATTING RULES:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: exhaustivePrompt }] }],
+          contents: [{ role: "user", parts: [{ text: topperPrompt }] }],
           generationConfig: {
-            temperature: 0.25,
+            temperature: 0.2,
             maxOutputTokens: 8192
           }
         })
