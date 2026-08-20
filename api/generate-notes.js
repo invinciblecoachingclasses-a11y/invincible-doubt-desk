@@ -16,19 +16,19 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY is missing from Vercel environment variables." });
+    return res.status(500).json({ error: "GEMINI_API_KEY is missing in Vercel environment variables." });
   }
 
   const { className, subject, chapter, structure } = req.body || {};
 
   if (!chapter) {
-    return res.status(400).json({ error: "Please provide a chapter name." });
+    return res.status(400).json({ error: "Please enter a chapter name." });
   }
 
   const cls = className || "Class 9";
   const sub = subject || "Physics";
 
-  // Active production model matching your working ask.js & generate-test.js
+  // Production model matching your working ask.js & generate-test.js
   const MODEL = "gemini-2.5-flash";
 
   const prompt = `
@@ -40,11 +40,11 @@ CHAPTER: ${chapter}
 
 INSTRUCTIONS & STRUCTURE:
 ${structure || `
-Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter:${chapter}.
+Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter: ${chapter}.
 Subject-specific guidelines:
 - Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
 - Chemistry: focus on reactions, equations, concepts, and exceptions.
-- Biology: focus on processes, terminology, diagrams (use placeholders if needed), and differences.
+- Biology: focus on processes, terminology, diagrams, and differences.
 - Mathematics: focus on formulas, theorems, identities, methods, and examples.
 
 Structure:
@@ -101,7 +101,6 @@ CRITICAL RULES:
 
     let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
-    // Strip markdown code fences if model output contains them
     generatedText = generatedText
       .replace(/^```html\s*/i, "")
       .replace(/^```\s*/i, "")
