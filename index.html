@@ -1461,27 +1461,10 @@ async function loadPlatformData(){
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
-        if(data && data.dailyPuzzle){
-            document.getElementById("puzzleBox").style.display = "flex";
-            const formattedQ = formatMathText(data.dailyPuzzle.question_text || "");
-            let enText = formattedQ, hiText = "";
-            if (formattedQ.includes(" / ")) {
-                const parts = formattedQ.split(/\s\/\s/);
-                enText = parts[0]; hiText = parts[1] || "";
-            }
-            document.getElementById("puzzleQuestionEn").innerHTML = enText;
-            document.getElementById("puzzleQuestionHi").innerHTML = hiText;
+            if (data && data.dailyPuzzle) {
+      renderDailyPuzzle(data.dailyPuzzle);
+    }
 
-            const optContainer = document.getElementById("puzzleOptionsContainer");
-            optContainer.innerHTML = '';
-            ['0', '1', '2', '100'].forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'survival-btn'; btn.textContent = opt;
-                btn.onclick = () => checkSurvivalBet(opt, btn);
-                optContainer.appendChild(btn);
-            });
-            startSurvivalTimer();
-        }
 
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const top3 = data.leaderboard.slice(0, 3);
@@ -1510,34 +1493,98 @@ async function loadPlatformData(){
 }
 window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
 
-function startSurvivalTimer() {
-    survivalTimer = 15;
-    const bar = document.getElementById("survivalTimerBar");
-    const num = document.getElementById("survivalTimerNum");
-    clearInterval(survivalInterval);
-    survivalInterval = setInterval(() => {
-        survivalTimer--;
-        num.textContent = survivalTimer + "s";
-        bar.style.width = (survivalTimer / 15 * 100) + "%";
-        if(survivalTimer <= 0) {
-            clearInterval(survivalInterval);
-            document.getElementById("puzzleFeedback").innerHTML = "<span style='color:var(--accent-rose);'>⏱️ Time up! Bet closed.</span>";
-        }
-    }, 1000);
+function renderDailyPuzzle(puzzle) {
+  if (!puzzle) return;
+  const pBox = document.getElementById('puzzleBox');
+  if (pBox) pBox.style.display = 'flex';
+
+  const qEn = document.getElementById('puzzleQuestionEn');
+  const qHi = document.getElementById('puzzleQuestionHi');
+  if (qEn) qEn.textContent = puzzle.question_en || puzzle.question || "Can you solve this challenge?";
+  if (qHi) qHi.textContent = puzzle.question_hi || "";
+
+  const container = document.getElementById('puzzleOptionsContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const opts = puzzle.options || [puzzle.option_1, puzzle.option_2, puzzle.option_3, puzzle.option_4];
+  opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'survival-btn';
+    btn.textContent = opt;
+    btn.onclick = () => handleDailyClashAnswer(idx, puzzle.correct_option !== undefined ? puzzle.correct_option : puzzle.answer);
+    container.appendChild(btn);
+  });
+
+  startDailyClashTimer();
 }
 
-function checkSurvivalBet(selected, btn) {
-    clearInterval(survivalInterval);
-    const feedback = document.getElementById("puzzleFeedback");
-    if(selected === '2') {
-        playWin(); btn.style.background = "rgba(16,185,129,0.3)"; btn.style.borderColor = "var(--accent-emerald)";
-        feedback.innerHTML = "<span style='color:var(--accent-emerald);'>🎉 Won Bet! +50 Clout XP</span>";
-        confetti({ particleCount: 60, spread: 50, origin: { y: 0.4 } });
-    } else {
-        playBuzz(); btn.style.background = "rgba(244,63,94,0.3)"; btn.style.borderColor = "var(--accent-rose)";
-        feedback.innerHTML = "<span style='color:var(--accent-rose);'>❌ Trap triggered! Correct was 2.</span>";
+let clashTimerInterval = null;
+function startDailyClashTimer() {
+  let timeLeft = 15;
+  const numDisplay = document.getElementById('survivalTimerNum');
+  const barDisplay = document.getElementById('survivalTimerBar');
+  
+  clearInterval(clashTimerInterval);
+  clashTimerInterval = setInterval(() => {
+    timeLeft--;
+    if (numDisplay) numDisplay.textContent = `${timeLeft}s`;
+    if (barDisplay) barDisplay.style.width = `${(timeLeft / 15) * 100}%`;
+
+    if (timeLeft <= 0) {
+      clearInterval(clashTimerInterval);
+      handleDailyClashAnswer(-1, -1, true);
     }
+  }, 1000);
 }
+
+function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
+  clearInterval(clashTimerInterval);
+  const fb = document.getElementById('puzzleFeedback');
+  const optsContainer = document.getElementById('puzzleOptionsContainer');
+  if (optsContainer) {
+    Array.from(optsContainer.children).forEach(btn => btn.disabled = true);
+  }
+
+  if (timedOut) {
+    if (fb) fb.innerHTML = `<div style="color:var(--accent-rose); font-weight:800; margin-top:8px;">⏱ Time's up! Clash closed.</div>`;
+    return;
+  }
+
+  const isCorrect = Number(selectedIdx) === Number(correctIdx);
+  const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
+
+  if (isCorrect) {
+    playDing();
+    const newXp = currentXp + 50;
+    
+    const xpEl = document.getElementById('xpCounter');
+    const userXpEl = document.getElementById('userXpDisplay');
+    if (xpEl) xpEl.textContent = newXp;
+    if (userXpEl) userXpEl.textContent = newXp;
+
+    if (fb) {
+      fb.innerHTML = `
+        <div style="background:rgba(5,255,161,0.12); border:1px solid rgba(5,255,161,0.3); border-radius:12px; padding:10px; margin-top:10px;">
+          <div style="font-size:13px; font-weight:900; color:var(--accent-emerald);">🔥 PERFECT! +50 XP</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Streak active • Next challenge ready in 1v1 Arena</div>
+        </div>
+      `;
+    }
+    if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
+  } else {
+    playBuzz();
+    if (fb) {
+      fb.innerHTML = `
+        <div style="background:rgba(255,42,95,0.1); border:1px solid rgba(255,42,95,0.25); border-radius:12px; padding:10px; margin-top:10px;">
+          <div style="font-size:12px; font-weight:800; color:var(--accent-rose);">Not quite! Keep practicing.</div>
+        </div>
+      `;
+    }
+  }
+}
+
 
 /* =====================================================
 DOUBT DESK LOGIC
