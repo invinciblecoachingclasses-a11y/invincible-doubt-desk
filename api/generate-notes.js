@@ -15,10 +15,10 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY is missing in Vercel environment variables." });
+    return res.status(500).json({ error: "GEMINI_API_KEY is missing in Vercel settings." });
   }
 
-  const { className, subject, chapter, structure } = req.body || {};
+  const { className, subject, chapter } = req.body || {};
 
   if (!chapter) {
     return res.status(400).json({ error: "Please enter a chapter name." });
@@ -27,50 +27,59 @@ export default async function handler(req, res) {
   const cls = className || "Class 9";
   const sub = subject || "Physics";
 
-  // Tiered fallback models to bypass high-demand spikes
   const modelsToTry = [
     "gemini-2.5-flash",
     "gemini-2.5-pro",
     "gemini-3.6-flash"
   ];
 
-  const prompt = `
-You are an expert CBSE school teacher and national board topper creating condensed, visually engaging revision notes.
-
-CLASS: ${cls}
+  const exhaustivePrompt = `
+You are the Head of Academics at a premier national coaching institute and a CBSE National Board Topper.
+Generate an EXHAUSTIVE, MULTI-PAGE, FULL-CHAPTER MASTERCLASS NOTEBOOK for:
+GRADE: Class ${cls}
 SUBJECT: ${sub}
-CHAPTER: ${chapter}
+CHAPTER: "${chapter}"
 
-INSTRUCTIONS & STRUCTURE:
-${structure || `
-Generate comprehensive, subject-specific revision notes for CBSE Class ${cls} ${sub}, Chapter:${chapter}.
-Subject-specific guidelines:
-- Physics: focus on formulas, laws, derivations, numerical hints, and graphs.
-- Chemistry: focus on reactions, equations, concepts, and exceptions.
-- Biology: focus on processes, terminology, diagrams, and differences.
-- Mathematics: focus on formulas, theorems, identities, methods, and examples.
+Generate a thorough, end-to-end chapter module covering EVERY NCERT topic in depth. Do not summarize or skip subtopics.
 
-Structure:
-1. Chapter overview
-2. Important concepts & Key definitions
-3. Must-remember points
-4. Formulas / equations / reactions
-5. Common mistakes
-6. Exam-focused points & Quick revision summary
-`}
+MANDATORY SECTIONS TO GENERATE:
 
-CRITICAL RULES:
-1. Every definition, formula, law, and point must be 100% accurate for CBSE ${cls} ${sub}, Chapter: "${chapter}".
-2. Do NOT mention any unrelated subject or chapter.
-3. Return clean raw HTML ONLY using the required CSS classes:
-   - .note-h1 (Main Heading)
-   - .note-h2 (Numbered Subheadings)
-   - .note-p (Text/Definitions)
-   - .note-ul and li (For bullet points)
-   - .note-formula (Inside a div for formulas/equations)
-   - .note-keywords (div containing spans with class .note-keyword-chip)
-   - .note-exam-box (div containing p tags starting with ⭐ for exam points)
-4. Do NOT wrap output in markdown \`\`\`html or \`\`\` code fences.
+1. <div class="note-h1">📖 MASTER MODULE: ${chapter.toUpperCase()}</div>
+   <div class="note-h2">1. SYLLABUS ROADMAP & CORE THEMES</div>
+   Provide a complete breakdown of every sub-concept in this chapter.
+
+2. <div class="note-h2">2. IN-DEPTH CONCEPTUAL THEORY & LAWS</div>
+   Explain every topic step-by-step with clear definitions (<p class="note-p">), key principles, and bullet breakdowns (<ul class="note-ul"><li>).
+
+3. <div class="note-h2">3. DERIVATIONS, PROOFS & SCIENTIFIC LAWS</div>
+   Provide full step-by-step derivations with clear justification for every mathematical step.
+
+4. <div class="note-h2">4. MASTER FORMULA & EQUATION SHEET</div>
+   Wrap all core formulas inside <div class="note-formula"> boxes with symbol definitions, SI units, and boundary conditions.
+
+5. <div class="note-h2">5. STEP-BY-STEP SOLVED NUMERICALS / EXAMPLES</div>
+   Include at least 3 standard CBSE board numericals with:
+   - Given Data
+   - Formula Used
+   - Step-by-Step Substitution
+   - Final Answer with Units
+
+6. <div class="note-h2">6. TABULAR DIFFERENCES & COMPARISONS</div>
+   Include key board comparison tables (e.g., Longitudinal vs. Transverse, Speed vs. Velocity) using clean HTML tables with class "note-table".
+
+7. <div class="note-h2">7. EXAM TRAPS, REASONING & TOPPER TIPS 🎯</div>
+   Use <div class="note-exam-box"> to detail:
+   - Common calculation and sign mistakes
+   - Conceptual tricky questions
+   - 5-mark board question predictions
+
+8. <div class="note-h2">8. HIGH-YIELD KEYWORDS & FORMULA RECALL ⭐</div>
+   Include 8-12 keywords inside <div class="note-keywords"><span class="note-keyword-chip">...</span></div>.
+
+HTML FORMATTING RULES:
+- Use only raw HTML with the classes specified above.
+- Do NOT wrap the output in markdown code blocks (\`\`\`html).
+- Provide exhaustive, textbook-complete explanations.
 `;
 
   let lastError = null;
@@ -83,10 +92,10 @@ CRITICAL RULES:
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          contents: [{ role: "user", parts: [{ text: exhaustivePrompt }] }],
           generationConfig: {
-            temperature: 0.2,
-            maxOutputTokens: 1500
+            temperature: 0.25,
+            maxOutputTokens: 8192
           }
         })
       });
@@ -113,5 +122,5 @@ CRITICAL RULES:
     }
   }
 
-  return res.status(503).json({ error: "All AI models are currently busy. Please retry in a few seconds: " + lastError });
+  return res.status(503).json({ error: "Service busy. Details: " + lastError });
 }
