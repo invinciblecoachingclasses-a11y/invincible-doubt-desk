@@ -701,57 +701,89 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
 <body>
 <main class="container">
 
-<!-- SLIM HUD -->
+<!-- 1. COMPACT DYNAMIC ISLAND HUD -->
 <header class="slim-hud">
     <div class="slim-logo">
-        <span style="font-size:18px;">⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
+        <span>⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
     </div>
-    <div class="slim-right">
-        <div class="slim-xp-pill">
-            <span>✨</span> <span id="xpCounter">680</span> <span style="font-size:9px; opacity:0.7;">XP</span>
-        </div>
-        <button type="button" class="slim-guide-btn" onclick="document.getElementById('onboardingModal').style.display='flex'">GUIDE</button>
+    <div class="slim-hud-stats">
+        <span class="hud-stat-badge">🔥 <span id="streakCounter">2</span>d</span>
+        <span class="hud-stat-badge hud-xp-badge">✨ <span id="xpCounter">680</span> XP</span>
+        <span class="hud-stat-badge" style="color:var(--accent-amber);">🏆 #4</span>
     </div>
 </header>
 
-<!-- REELS & HACKS TRAY -->
+<!-- 2. TODAY'S DAILY MISSION -->
+<section class="mission-card" aria-label="Daily Progress Tracker">
+    <div class="mission-top">
+        <span style="font-size:11px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted);">TODAY'S MISSION</span>
+        <span style="font-size:11px; font-weight:900; color:var(--accent-cyan);" id="missionCount">3 / 5 COMPLETED</span>
+    </div>
+    <div class="mission-track"><div class="mission-fill" id="missionBar" style="width:60%;"></div></div>
+    <div class="mission-items">
+        <span class="mission-pill done">✓ Daily Clash</span>
+        <span class="mission-pill done">✓ 10 Qs</span>
+        <span class="mission-pill done">✓ Revision</span>
+        <span class="mission-pill">○ 1v1 Arena</span>
+        <span class="mission-pill">○ Practice Test</span>
+    </div>
+</section>
+
+<!-- 3. SECONDARY UTILITY TRAY (HACKS & GUIDE) -->
 <div class="stories-tray-container" id="storiesTray">
     <div class="story-circle-item" id="btnAddStory">
         <div class="story-avatar-wrap add-story">
-            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:22px; font-weight:300;">+</div>
+            <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:18px;">+</div>
         </div>
         <div class="story-username">Drop Hack</div>
     </div>
-    <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
+    <div class="story-circle-item" onclick="document.getElementById('onboardingModal').style.display='flex'">
+        <div class="story-avatar-wrap">
+            <div class="story-avatar-inner">🎓</div>
+        </div>
+        <div class="story-username">Guide</div>
+    </div>
+    <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
 </div>
 
-<!-- HERO BENTO GRID -->
+<!-- 4. HERO SECTION: DAILY CLASH (15s CHALLENGE) -->
 <div class="bento-grid">
-    <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Bet">
+    <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Challenge">
         <div>
             <div class="survival-top">
-                <span class="live-pill-tag">🔥 DAILY CLASH</span>
+                <span class="clash-badge">🔥 DAILY CLASH // 15s</span>
                 <span id="survivalTimerNum" class="timer-badge">15s</span>
             </div>
             <div class="survival-timer-track"><div class="survival-timer-fill" id="survivalTimerBar"></div></div>
-            <div class="survival-q" id="puzzleQuestionEn">Loading challenge...</div>
+            <div class="survival-tagline">⚡ Can you solve this before time runs out?</div>
+            <div class="survival-q" id="puzzleQuestionEn">Loading challenge question...</div>
             <div class="survival-q-hi" id="puzzleQuestionHi"></div>
         </div>
         <div>
             <div class="survival-options" id="puzzleOptionsContainer"></div>
-            <div id="puzzleFeedback" style="font-size:12px; font-weight:800; margin-top:10px; text-align:center;"></div>
+            <div class="reward-hint">+50 XP • Instant Reward</div>
+            <div id="puzzleFeedback"></div>
         </div>
     </section>
 
+    <!-- CLOUT LEADERBOARD WITH PINNED POSITION -->
     <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
-        <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="letter-spacing:1px;">🏆 CLOUT LEADERBOARD</span>
-            <span class="live-status-dot">LIVE</span>
+        <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <span>🏆 CLOUT LEADERBOARD</span>
+            <span style="font-size:9px; font-weight:900; color:var(--accent-emerald); background:rgba(5,255,161,0.1); padding:2px 6px; border-radius:6px;">LIVE</span>
         </div>
         <div class="podium-row" id="podiumContainer"></div>
         <div class="clout-list" id="leaderboardList"></div>
+        <div class="user-position-card">
+            <div>
+                <span style="font-size:10px; font-weight:800; color:var(--text-muted);">YOUR RANK</span>
+                <div style="font-size:13px; font-weight:900; color:#fff;">#4 You <span style="font-size:10px; color:var(--accent-emerald);">↑1</span></div>
+            </div>
+            <div style="font-size:13px; font-weight:900; color:var(--accent-cyan);"><span id="userXpDisplay">680</span> XP</div>
+        </div>
     </section>
 </div>
+
 
 
 <!-- 1. DOUBT SECTION -->
