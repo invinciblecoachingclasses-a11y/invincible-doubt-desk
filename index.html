@@ -1172,27 +1172,7 @@ PRINT STYLESHEET: CLEAN MODULE ONLY
 
 
 <!-- 4. COMMUNITY FEED -->
-<section class="card hidden" id="feedSection" aria-label="Discussion Feed">
-    <h2 class="section-h2" style="color:var(--accent-purple);">🌟 Academic Clan Feed</h2>
-    <div class="post-composer">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-            <input type="text" id="feedAuthorName" placeholder="Your Name" style="margin-bottom:0;">
-            <input type="text" id="feedInstitution" placeholder="School Name" style="margin-bottom:0;">
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
-            <select id="feedClass" style="margin-bottom:0;"><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option></select>
-            <select id="feedSubject" style="margin-bottom:0;"><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="General">Study Tips</option><option value="ChillVent">🌙 Midnight Vent</option></select>
-        </div>
-        <textarea id="feedContent" placeholder="Post a formula, question, or midnight thought..."></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishPost">POST TO CLAN</button>
-    </div>
-    <div class="feed-filter-pills">
-        <span class="filter-pill active" onclick="setFeedSubjectFilter('All', this)">🌟 All Feed</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('Physics', this)">⚡ Physics</span>
-        <span class="filter-pill" onclick="setFeedSubjectFilter('ChillVent', this)">🌙 Midnight Vent</span>
-    </div>
-    <div id="postsList"><div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px;">Loading discussions...</div></div>
-</section>
+
 
 <!-- 5. NOTES STUDIO SECTION -->
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
