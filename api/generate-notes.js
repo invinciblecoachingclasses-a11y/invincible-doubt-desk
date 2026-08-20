@@ -1,5 +1,8 @@
 // api/generate-notes.js
 
+// Force Vercel to allow up to 60 seconds for 15-page generation
+export const maxDuration = 60; 
+
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -31,7 +34,7 @@ export default async function handler(req, res) {
   let depthSpecs = "";
   if (cls === "9") {
     depthSpecs = `
-TARGET LENGTH: 7 - 8 Complete PDF Pages
+TARGET LENGTH: 7 to 8 Complete PDF Pages
 - Comprehensive conceptual breakdown of every single sub-concept.
 - 4 In-depth Formula cards with complete SI unit and symbol breakdowns.
 - 2 Full tabular differences (e.g. Speed vs Velocity, Longitudinal vs Transverse).
@@ -39,7 +42,7 @@ TARGET LENGTH: 7 - 8 Complete PDF Pages
 - 5 Common CBSE exam traps + 1 Detailed 5-mark long answer question blueprint.`;
   } else if (cls === "10") {
     depthSpecs = `
-TARGET LENGTH: 9 - 10 Complete PDF Pages
+TARGET LENGTH: 9 to 10 Complete PDF Pages
 - Exhaustive NCERT & Board Syllabus coverage covering every single topic.
 - Complete reaction/formula master bank with balanced equations & constants.
 - 3 Detailed multi-row comparison tables.
@@ -48,7 +51,7 @@ TARGET LENGTH: 9 - 10 Complete PDF Pages
 - 6 High-yield exam traps + 2 Complete 5-mark answer scoring blueprints.`;
   } else if (cls === "11") {
     depthSpecs = `
-TARGET LENGTH: 11 - 13 Complete PDF Pages
+TARGET LENGTH: 11 to 13 Complete PDF Pages
 - Rigorous academic conceptual depth with clear physical intuition.
 - All Core Mathematical Derivations written out step-by-step with clean text justification.
 - Complete formula sheet with dimensional formulas, sign conventions, and boundary limits.
@@ -57,7 +60,7 @@ TARGET LENGTH: 11 - 13 Complete PDF Pages
   } else {
     // Class 12
     depthSpecs = `
-TARGET LENGTH: 13 - 15 Complete PDF Pages (Exhaustive Board Masterclass)
+TARGET LENGTH: 13 to 15 Complete PDF Pages (Exhaustive Board Masterclass)
 - Zero topics omitted. Provide an end-to-end masterclass for CBSE Board exams.
 - ALL Core Board Derivations written out in complete step-by-step format (e.g. Gauss's Law, Dipole fields, Capacitance, Lens Maker's, etc.).
 - Complete Master Formula Deck with SI units, vector forms, and constants.
@@ -145,7 +148,7 @@ MANDATORY HTML STRUCTURE:
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: masterPrompt }] }],
           generationConfig: {
-            temperature: 0.2,
+            temperature: 0.25,
             maxOutputTokens: 8192
           }
         })
