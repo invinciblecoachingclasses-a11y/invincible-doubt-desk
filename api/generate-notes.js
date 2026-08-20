@@ -17,73 +17,64 @@ export default async function handler(req, res) {
 
   const cls = String(className || "10").replace(/[^0-9]/g, '') || "10";
   const sub = subject || "Science";
-  const MODEL = "gemini-3.6-flash"; // Highly reliable, fast endpoint
+  const MODEL = "gemini-3.6-flash"; // Reliable, fast endpoint with large context window
 
-  // Dynamic Scaling
-  let depthSpecs = "";
-  if (cls === "9" || cls === "10") {
-    depthSpecs = `Generate 4 to 5 highly dense, high-yield sections. Focus on core definitions, formula cards, 3 solved board numericals, and 5 common board traps.`;
-  } else {
-    depthSpecs = `Generate 6 to 8 highly dense, high-yield sections. Focus on advanced derivations (broken into clear steps), complex formulas, 4 solved numericals, and 8 critical JEE/NEET/Board traps.`;
-  }
+  // Custom Subject Logic
+  let subjectStyle = "";
+  if (sub.toLowerCase() === "physics") subjectStyle = "Focus on physical meaning, derivations, graphs, free-body diagrams, units, and logical reasoning behind formulas.";
+  else if (sub.toLowerCase() === "chemistry") subjectStyle = "Focus on chemical reactions, structures, mechanisms, periodic trends, standard conditions, and exceptions.";
+  else if (sub.toLowerCase() === "mathematics") subjectStyle = "Focus on generalized formulas, conditions of applicability, distinct solving methods, step-by-step solutions, and identifying question patterns.";
+  else if (sub.toLowerCase() === "biology") subjectStyle = "Focus strictly on NCERT terminology, processes, flowcharts, structural comparisons, and logical functions.";
+  else subjectStyle = "Focus on clear concepts, standard definitions, and logical reasoning.";
+
+  const lengthInstruction = (cls === "9" || cls === "10") 
+    ? "Generate highly extensive content equivalent to exactly 10 pages in print." 
+    : "Generate highly extensive and deep content equivalent to exactly 12 pages in print.";
 
   const masterPrompt = `
-You are the Academic Director and a CBSE Board Topper creating an elite, hyper-dense "Cheat Sheet" Revision Notebook for:
-CLASS: Class ${cls}
-SUBJECT: ${sub}
-CHAPTER: "${chapter}"
+You are the Academic Director of a premier coaching institute (like in Kota) creating a highly professional, strictly accurate CBSE/NCERT study module.
+
+TARGET: Class ${cls} | Subject: ${sub} \vert{} Chapter: "${chapter}"
+${lengthInstruction} Never stretch content unnecessarily, but ensure exhaustive depth.
 
 CRITICAL RULES FOR AI:
-1. NO LATEX ALLOWED. NEVER use $, $$, \\frac, \\lambda, \\nu, \\times, or \\text. 
-2. Use standard keyboard symbols: write "v = f * wavelength", "CO2 + H2O -> C6H12O6", "d = (v * t) / 2".
-3. NO WALLS OF TEXT. Use short bullet points (max 2 sentences per point).
-4. Output ONLY raw HTML. No markdown formatting.
+1. NO LATEX ALLOWED. NEVER use $,$$, \\frac, \\lambda, \\nu, \\times, or \\text. Use standard text (e.g., v = f * wavelength, H2O).
+2. OUTPUT ONLY RAW HTML. Do not use Markdown (no \`\`\`, no **).
+3. SUBJECT STYLE: ${subjectStyle}
 
-REQUIREMENTS:
-${depthSpecs}
+MODULE ARCHITECTURE (Generate strictly in this order, using the provided HTML classes):
 
-USE EXACTLY THESE HTML STRUCTURES:
+--- PART 1: PREMIUM STUDY NOTES ---
+Flow for every topic: Concept → Simple Explanation → Logic/Derivation → Formula/Rule → Example → Exam Point → Common Mistake.
 
-1. HERO SECTION:
-<div class="note-hero-card">
-  <div class="note-hero-title">📖 MASTER MODULE: ${chapter.toUpperCase()}</div>
-  <div class="note-hero-tags">
-    <span class="note-tag">🎯 Class ${cls} ${sub}</span><span class="note-tag">⚡ High Yield</span>
-  </div>
-</div>
+Use these EXACT HTML snippets:
+- Hero: <div class="module-hero"><div class="module-hero-title">${chapter}</div><div class="module-hero-subtitle">Class ${cls} ${sub} | Premium Study Module</div></div>
+- Main Heading: <h2 class="kota-h2">1. Topic Name</h2>
+- Sub Heading: <h3 class="kota-h3">1.1 Subtopic Name</h3>
+- Concept Block: <div class="kota-concept"><strong>Concept:</strong> Explanation...</div>
+- Formula Block: <div class="kota-formula"><div class="kota-formula-title">📌 MUST REMEMBER FORMULA</div>[Formula logic here]</div>
+- Key Result/Exam Point: <div class="kota-result"><div class="kota-result-title">🎯 EXAM POINT</div>[Text]</div>
+- Common Mistake: <div class="kota-mistake"><div class="kota-mistake-title">⚠️ COMMON MISTAKE</div>[Text]</div>
+- Table: <div class="kota-table-wrap"><table class="kota-table"><tr><th>A</th><th>B</th></tr><tr><td>...</td><td>...</td></tr></table></div>
 
-2. FAST-MAP / DEFINITIONS:
-<div class="note-section-title">1. CORE CONCEPTS</div>
-<div class="note-concept-box"><strong>Concept:</strong> Explanation.</div>
+--- PART 2: CHAPTER TEST (Use <div class="page-break"></div> before this) ---
+Create a professional coaching-style test.
+- Header: <div class="kota-test-header"><h2>CHAPTER ASSESSMENT: ${chapter}</h2><p>Time: 60 Min | Max Marks: 30</p><p>Difficulty: 30% Easy | 50% Moderate | 20% Difficult</p></div>
+- Include sections: Section A (MCQs & Assertion-Reason), Section B (Short Answer), Section C (Case/Source Based), Section D (Long Answer).
+- Use <div class="kota-question"><div class="kota-question-text">Q1. ...</div></div> format. Leave visual space for writing.
 
-3. FORMULAS (Use this for all math/reactions):
-<div class="note-section-title">2. MASTER FORMULAS</div>
-<div class="note-formula-card">
-  <div class="formula-main">Formula: [Plain text math]</div>
-  <div class="formula-sub"><strong>Where:</strong> [Units and symbols]</div>
-</div>
+--- PART 3: ANSWER KEY (Use <div class="page-break"></div> before this) ---
+<h2 class="kota-h2">MARKING SCHEME & ANSWER KEY</h2>
+Provide step-by-step marking schemes (e.g., "1 mark for formula, 1 mark for correct unit").
 
-4. DIFFERENCE TABLES:
-<div class="note-section-title">3. TABULAR DIFFERENCES</div>
-<table class="note-table"><tr><th>Feature</th><th>A</th><th>B</th></tr><tr><td>...</td><td>...</td><td>...</td></tr></table>
+--- PART 4: FINAL REVISION PAGE (Use <div class="page-break"></div> before this) ---
+<h2 class="kota-h2">FINAL REVISION & RANK BOOSTER</h2>
+Include:
+1. Rapid Revision Fact Sheet.
+2. Top 3 Exam Concepts.
+3. 5 Must-Practice Question Patterns.
 
-5. SOLVED NUMERICALS / PROOFS:
-<div class="note-section-title">4. BOARD NUMERICALS</div>
-<div class="note-numerical-card">
-  <div class="num-q"><strong>Q:</strong> Question text</div>
-  <div class="num-step"><strong>Given:</strong> Data</div>
-  <div class="num-step"><strong>Formula:</strong> Text</div>
-  <div class="num-ans"><strong>Answer:</strong> Final unit</div>
-</div>
-
-6. TRAPS & BLUEPRINTS:
-<div class="note-section-title">5. EXAM TRAPS & 5-MARK HACKS</div>
-<div class="note-trap-box">
-  <div class="trap-head">⚠️ Avoid These Mistakes:</div>
-  <p>⭐ Trap 1...</p>
-  <div class="blueprint-head">📝 5-Mark Hack:</div>
-  <p>👉 Step 1...</p>
-</div>
+Make the HTML clean, professional, and dense with high-value academic knowledge.
 `;
 
   try {
@@ -93,7 +84,10 @@ USE EXACTLY THESE HTML STRUCTURES:
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: masterPrompt }] }],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 6000 }
+        generationConfig: { 
+          temperature: 0.2, // Low temperature for high factual accuracy
+          maxOutputTokens: 8192 // Max out tokens to accommodate the massive 10-12 page requirement
+        }
       })
     });
 
@@ -101,6 +95,7 @@ USE EXACTLY THESE HTML STRUCTURES:
     if (!response.ok) return res.status(response.status).json({ error: data?.error?.message || "Generation failed." });
 
     let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    // Clean out any accidental markdown wrapper from the AI
     generatedText = generatedText.replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
 
     return res.status(200).json({ success: true, notes: generatedText });
