@@ -2331,11 +2331,16 @@ if (btnJoin) {
         arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
         document.getElementById('uiP1Name').textContent = data.room.player1_name;
         document.getElementById('uiP2Name').textContent = name;
+        
+        // Trigger voice on button click using the join code
+        startArenaVoiceChat(code);
+
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Join Error: " + err.message); }
   };
 }
+
 
 async function pollRoomState() {
     if (arena.isBotMatch) return;
