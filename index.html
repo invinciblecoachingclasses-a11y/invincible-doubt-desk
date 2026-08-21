@@ -2306,10 +2306,15 @@ if (btnCreate) {
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
+        
+        // Trigger voice on button click using the created room code
+        startArenaVoiceChat(arena.code);
+
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Arena: " + err.message); }
   };
 }
+
 
 const btnJoin = document.getElementById('btnJoinRoom');
 if (btnJoin) {
