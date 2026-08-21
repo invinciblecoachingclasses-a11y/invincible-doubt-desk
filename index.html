@@ -2627,6 +2627,7 @@ function toggleArenaSpeaker() {
 
 // 6. Stop Voice Call on Game Exit
 function stopArenaVoiceChat() {
+  localStorage.removeItem('arena_voice_arena-room');
   if (localVoiceStream) {
     localVoiceStream.getTracks().forEach(track => track.stop());
     localVoiceStream = null;
@@ -2639,6 +2640,7 @@ function stopArenaVoiceChat() {
   if (statusText) statusText.textContent = "Voice: Disconnected";
   if (statusDot) statusDot.classList.remove('connected');
 }
+
 
 
 </script>
