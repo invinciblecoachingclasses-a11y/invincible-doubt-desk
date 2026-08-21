@@ -2513,37 +2513,64 @@ let isMicMuted = false;
 let isSpeakerMuted = false;
 
 // 1. Initialize Peer connection with the Room/Opponent ID
-async function startArenaVoiceChat(roomId, isHost) {
+// SELF-NEGOTIATING 1V1 ARENA VOICE ENGINE
+async function startArenaVoiceChat(roomId = 'arena-room') {
   const statusText = document.getElementById('voiceStatusText');
   const statusDot = document.getElementById('voiceStatusDot');
-  if (statusText) statusText.textContent = "Connecting Voice...";
+  if (statusText) statusText.textContent = "Requesting Mic...";
 
   try {
+    // 1. Acquire Local Audio
     localVoiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 
-    const myPeerId = isHost ? `invincible-${roomId}-host` : `invincible-${roomId}-guest`;
-    const targetPeerId = isHost ? `invincible-${roomId}-guest` : `invincible-${roomId}-host`;
+    // 2. Generate Unique Client Session ID
+    const myClientId = 'user_' + Math.random().toString(36).substring(2, 7);
+    const roomChannelKey = `arena_voice_${roomId}`;
 
-    if (peerVoiceInstance) peerVoiceInstance.destroy();
-    peerVoiceInstance = new Peer(myPeerId);
+    if (peerVoiceInstance) {
+      peerVoiceInstance.destroy();
+      peerVoiceInstance = null;
+    }
 
-    peerVoiceInstance.on('open', () => {
-      if (statusText) statusText.textContent = "Voice Ready";
-      if (!isHost) {
-        setTimeout(() => callOpponentVoice(targetPeerId), 1000);
+    // 3. Create Peer instance
+    peerVoiceInstance = new Peer(myClientId);
+
+    peerVoiceInstance.on('open', (id) => {
+      if (statusText) statusText.textContent = "Connecting Voice...";
+
+      const currentHost = localStorage.getItem(roomChannelKey);
+
+      if (!currentHost || currentHost === id) {
+        // Device A becomes Host
+        localStorage.setItem(roomChannelKey, id);
+        if (statusText) statusText.textContent = "Voice: Waiting for Opponent...";
+      } else {
+        // Device B becomes Guest -> Call Device A directly
+        setTimeout(() => {
+          callOpponentVoice(currentHost);
+        }, 1200);
       }
     });
 
+    // Listen for incoming call
     peerVoiceInstance.on('call', (incomingCall) => {
       incomingCall.answer(localVoiceStream);
       handleIncomingVoiceStream(incomingCall);
     });
 
+    peerVoiceInstance.on('error', (err) => {
+      console.warn("PeerJS error:", err);
+      localStorage.removeItem(roomChannelKey);
+      if (statusText) statusText.textContent = "Reconnecting Voice...";
+      setTimeout(() => startArenaVoiceChat(roomId), 2000);
+    });
+
   } catch (err) {
-    console.warn("Microphone access denied or error:", err);
-    if (statusText) statusText.textContent = "Mic Blocked";
+    console.warn("Mic Error:", err);
+    if (statusText) statusText.textContent = "Mic Blocked / Error";
   }
 }
+
 
 // 2. Outgoing Call Handler
 function callOpponentVoice(targetPeerId) {
