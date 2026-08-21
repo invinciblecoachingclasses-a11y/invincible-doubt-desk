@@ -1,24 +1,21 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ success: false, error: "GEMINI_API_KEY missing in Vercel." });
+  }
+
   try {
     const { imageBase64, examData } = req.body;
-
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ success: false, error: "GEMINI_API_KEY missing in Vercel" });
-    }
 
     if (!imageBase64) {
       return res.status(400).json({ success: false, error: "No student answer sheet image provided." });
     }
 
-    const prompt = `
+    const promptText = `
 You are an expert school teacher evaluating a handwritten student answer sheet.
 
 Master Question Paper and Marking Scheme:
@@ -30,7 +27,7 @@ TASK:
 3. Grade step-by-step logic, formulas, and final answers, awarding partial marks accurately.
 4. Provide constructive feedback explaining where marks were deducted.
 
-Respond ONLY with valid, raw JSON (no backticks, no markdown):
+Respond ONLY with valid, raw JSON (no backticks, no markdown prefix):
 {
   "student_name": "Student Name or Unknown",
   "roll_number": "Roll No or Unknown",
@@ -50,37 +47,32 @@ Respond ONLY with valid, raw JSON (no backticks, no markdown):
 }
 `;
 
-    const imagePart = {
-      inlineData: {
-        data: imageBase64.replace(/^data:image\/\w+;base64,/, ""),
-        mimeType: "image/jpeg",
-      },
-    };
-
-    const promptContents = [prompt, imagePart];
-
-    // Fallback across active models
-    const candidateModels = ["gemini-2.0-flash", "gemini-1.5-flash-002", "gemini-1.5-flash", "gemini-1.5-pro"];
-    let responseText = null;
-    let lastErr = null;
-
-    for (const modelName of candidateModels) {
-      try {
-        const model = genAI.getGenerativeModel({ model: modelName });
-        const result = await model.generateContent(promptContents);
-        responseText = result.response.text().trim();
-        if (responseText) break;
-      } catch (err) {
-        lastErr = err;
+    const parts = [
+      { text: promptText },
+      {
+        inline_data: {
+          mime_type: "image/jpeg",
+          data: imageBase64.replace(/^data:image\/\w+;base64,/, "")
+        }
       }
+    ];
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts }] })
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error?.message || JSON.stringify(data));
     }
 
-    if (!responseText) {
-      throw new Error(lastErr ? lastErr.message : "Grading failed.");
-    }
-
-    const cleanedText = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
-    const evaluation = JSON.parse(cleanedText);
+    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const cleanJson = rawOutput.replace(/```json/g, "").replace(/```/g, "").trim();
+    const evaluation = JSON.parse(cleanJson);
 
     return res.status(200).json({ success: true, evaluation });
   } catch (error) {
