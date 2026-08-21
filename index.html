@@ -1034,14 +1034,14 @@ textarea:focus, input:focus, select:focus {
     </div>
 
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
-    <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate high-density, scannable topper-grade chapter modules.</div>
+    <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate comprehensive chapter revision modules with formulas, traps, and diagrams.</div>
     
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
         <select id="notesClass">
-            <option value="9">Class 9</option>
-            <option value="10">Class 10</option>
-            <option value="11">Class 11</option>
-            <option value="12">Class 12</option>
+            <option value="9">Class 9 (8-Page Module)</option>
+            <option value="10">Class 10 (8-Page Module)</option>
+            <option value="11">Class 11 (10-Page Module)</option>
+            <option value="12">Class 12 (10-Page Module)</option>
         </select>
         
         <select id="notesSubject">
@@ -1049,32 +1049,31 @@ textarea:focus, input:focus, select:focus {
             <option value="Chemistry">Chemistry</option>
             <option value="Mathematics">Mathematics</option>
             <option value="Biology">Biology</option>
+            <option value="Science">Science</option>
         </select>
 
-        <!-- Our New Language Box -->
         <select id="notesLanguage">
             <option value="English">English</option>
             <option value="Hindi">Hindi (हिंदी)</option>
             <option value="Hinglish">Hinglish</option>
         </select>
     </div>
-
     
     <label>Chapter Name</label>
-    <input type="text" id="notesChapter" placeholder="e.g. Sound, Light, Electrostatics">
+    <input type="text" id="notesChapter" placeholder="e.g. Gravitation, Sound, Chemical Reactions">
     
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
-    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling elite topper notes...</div>
+    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling module (15-20s)...</div>
     
     <div id="notesResultContainer" class="hidden topper-paper-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <div style="font-family:'Plus Jakarta Sans', sans-serif; font-size:18px; font-weight:800; color:#0A192F; text-transform:uppercase; letter-spacing:1px;" id="notesResultTitle">CLASS • SUBJECT</div>
-           <button type="button" onclick="downloadPDF()" style="background:#0A192F; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:14px; cursor:pointer; font-weight:800; box-shadow:0 4px 10px rgba(0,0,0,0.15);">🖨️ Save PDF</button>
-
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
+            <div style="font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase;" id="notesResultTitle">CLASS • SUBJECT</div>
+            <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🖨️ Download PDF</button>
         </div>
         <div id="notesContentBody" class="topper-content"></div>
     </div>
 </section>
+
 
 <!-- FOOTER -->
 <footer class="footer">
