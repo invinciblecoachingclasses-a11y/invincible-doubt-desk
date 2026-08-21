@@ -81,7 +81,7 @@ Respond ONLY with valid, raw JSON without markdown backticks:
     }
 
     // Direct REST call to Gemini 2.0 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
