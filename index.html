@@ -2379,9 +2379,15 @@ function startArenaGame() {
 
 function loadArenaQuestion() {
     if (arena.currentQ >= arena.questions.length) { 
+        stopArenaVoiceChat();
+
         finishArenaGame(); 
         return; 
     }
+    if (arena.currentQ === 0) {
+  startArenaVoiceChat(arena.roomId || 'arena-room', true);
+}
+
     const q = arena.questions[arena.currentQ];
     document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/${arena.questions.length}`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
