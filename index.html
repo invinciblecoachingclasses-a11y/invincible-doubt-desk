@@ -2601,18 +2601,34 @@ function handleIncomingVoiceStream(call) {
   const statusDot = document.getElementById('voiceStatusDot');
 
   call.on('stream', (remoteStream) => {
-    const remoteAudio = document.getElementById('remoteArenaAudio');
-    if (remoteAudio) {
-      remoteAudio.srcObject = remoteStream;
-      remoteAudio.play().catch(e => console.warn('Audio autoplay blocked:', e));
+    let remoteAudio = document.getElementById('remoteArenaAudio');
+    if (!remoteAudio) {
+      remoteAudio = new Audio();
+      remoteAudio.id = 'remoteArenaAudio';
+      document.body.appendChild(remoteAudio);
     }
+    
+    remoteAudio.srcObject = remoteStream;
+    remoteAudio.muted = false;
+    remoteAudio.volume = 1.0;
+
+    const playPromise = remoteAudio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        document.addEventListener('click', () => {
+          remoteAudio.play();
+        }, { once: true });
+      });
+    }
+
     if (statusText) statusText.textContent = "Voice: Connected 🟢";
     if (statusDot) statusDot.classList.add('connected');
   });
 
   call.on('close', () => stopArenaVoiceChat());
-  call.on('error', (err) => console.error("Call stream error:", err));
+  call.on('error', (err) => console.error("Call error:", err));
 }
+
 
 function toggleArenaVoiceMute() {
   if (!localVoiceStream) return;
