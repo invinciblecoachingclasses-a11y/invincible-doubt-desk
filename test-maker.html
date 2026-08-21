@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Test & Worksheet Studio</title>
+  <title>Exam & Worksheet Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @media print {
@@ -20,11 +20,19 @@
     <!-- App Header -->
     <div class="mb-6 text-center no-print">
       <h1 class="text-3xl font-extrabold text-indigo-700 tracking-tight">Exam & Worksheet Studio</h1>
-      <p class="text-sm text-slate-500 mt-1">Snap handwritten drafts or pick topics $\rightarrow$ Generate print-ready test papers in seconds.</p>
+      <p class="text-sm text-slate-500 mt-1">Generate print-ready school question papers from handwritten drafts, NCERT topics, or pasted text.</p>
     </div>
 
-    <!-- Generator Form Card -->
+    <!-- Generator Setup Card -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8 no-print">
+      
+      <!-- Input Mode Switcher Tabs -->
+      <div class="flex rounded-xl bg-slate-100 p-1 mb-5 text-xs font-bold">
+        <button id="tabCamera" onclick="switchMode('camera')" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700">📸 Camera / Photo</button>
+        <button id="tabNCERT" onclick="switchMode('ncert')" class="flex-1 py-2 rounded-lg text-slate-600">📚 NCERT Chapter</button>
+        <button id="tabText" onclick="switchMode('text')" class="flex-1 py-2 rounded-lg text-slate-600">📋 Copy-Paste Text</button>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">School / Institute Name</label>
@@ -39,27 +47,43 @@
           <input id="classGrade" type="text" placeholder="e.g., Class 10" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Target Total Marks</label>
-          <input id="totalMarks" type="number" placeholder="e.g., 25" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Exam Type & Total Marks</label>
+          <div class="flex gap-2">
+            <select id="examType" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm bg-white">
+              <option value="Unit Assessment">Unit Test</option>
+              <option value="Periodic Test">Periodic Test</option>
+              <option value="Formative Assessment (FA)">Formative (FA)</option>
+              <option value="Summative Assessment (SA)">Summative (SA)</option>
+            </select>
+            <input id="totalMarks" type="number" placeholder="25" value="25" class="w-20 border border-slate-300 rounded-lg p-2.5 text-sm" />
+          </div>
         </div>
       </div>
 
-      <!-- Photo Upload Input -->
-      <div class="mb-5">
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Snap Photos of Handwritten Draft</label>
+      <!-- Mode 1: Camera Photo View -->
+      <div id="viewCamera" class="mb-5">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Snap Photos of Draft or Textbook Page</label>
         <label class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-50 rounded-xl p-6 cursor-pointer transition">
-          <svg class="w-8 h-8 text-indigo-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          </svg>
-          <span class="text-sm font-medium text-indigo-900">Click to Snap Photo or Upload Drafts</span>
-          <span class="text-xs text-slate-500 mt-1">PNG, JPG up to 10MB</span>
+          <span class="text-sm font-medium text-indigo-900">Click to Snap Photo or Upload Images</span>
+          <span class="text-xs text-slate-500 mt-1">Supports handwritten pages and book diagrams</span>
           <input id="cameraInput" type="file" accept="image/*" multiple capture="environment" class="hidden" />
         </label>
         <div id="previewContainer" class="flex gap-2 mt-3 overflow-x-auto"></div>
       </div>
 
-      <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-xl shadow-md transition disabled:bg-slate-400">
+      <!-- Mode 2: NCERT Topic View -->
+      <div id="viewNCERT" class="mb-5 hidden">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Chapter Name / NCERT Exercise Topics</label>
+        <input id="chapterName" type="text" placeholder="e.g., Chapter 4: Quadratic Equations (Exercise 4.2 & 4.3 word problems)" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+      </div>
+
+      <!-- Mode 3: Copy-Paste Text View -->
+      <div id="viewText" class="mb-5 hidden">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Paste Raw Questions / Notes / PDF Text</label>
+        <textarea id="rawText" rows="4" placeholder="Paste your question bank or copied PDF text here..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+      </div>
+
+      <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition disabled:bg-slate-400">
         Generate Print-Ready Exam & Marking Key
       </button>
     </div>
@@ -68,7 +92,7 @@
     <div id="resultCard" class="hidden">
       <div class="flex gap-3 mb-4 no-print">
         <button onclick="window.print()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow transition">
-          🖨️ Print / Save Student Paper
+          🖨️ Print / Save Student Paper (PDF)
         </button>
         <button id="toggleAnswersBtn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl shadow transition">
           👁️ Toggle Marking Scheme
@@ -76,10 +100,9 @@
       </div>
 
       <div id="printable-area" class="bg-white rounded-2xl border border-slate-300 p-8 shadow-sm text-slate-900">
-        <!-- Paper Header -->
         <div class="text-center border-b-2 border-slate-800 pb-4 mb-6">
-          <h2 id="paperSchool" class="text-2xl font-black uppercase tracking-wide">Delhi Public School</h2>
-          <h3 id="paperTitle" class="text-lg font-bold text-slate-700 mt-1">Unit Assessment</h3>
+          <h2 id="paperSchool" class="text-2xl font-black uppercase tracking-wide">Academic Institution</h2>
+          <h3 id="paperTitle" class="text-lg font-bold text-slate-700 mt-1">Periodic Test</h3>
           <div class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-slate-600 mt-4 border-t pt-2 border-slate-200">
             <span><strong>Subject:</strong> <span id="paperSubject"></span></span>
             <span><strong>Class:</strong> <span id="paperClass"></span></span>
@@ -88,13 +111,11 @@
           </div>
         </div>
 
-        <!-- Instructions -->
         <div class="mb-6 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
           <strong class="block mb-1 text-slate-800">General Instructions:</strong>
           <ul id="paperInstructions" class="list-disc pl-4 space-y-0.5"></ul>
         </div>
 
-        <!-- Sections & Questions -->
         <div id="paperSections" class="space-y-6"></div>
       </div>
     </div>
@@ -102,21 +123,35 @@
   </div>
 
   <script>
-    const cameraInput = document.getElementById('cameraInput');
-    const previewContainer = document.getElementById('previewContainer');
-    const generateBtn = document.getElementById('generateBtn');
-    const resultCard = document.getElementById('resultCard');
+    let activeMode = 'camera';
     let base64Images = [];
     let showAnswers = false;
 
+    function switchMode(mode) {
+      activeMode = mode;
+      document.getElementById('viewCamera').classList.toggle('hidden', mode !== 'camera');
+      document.getElementById('viewNCERT').classList.toggle('hidden', mode !== 'ncert');
+      document.getElementById('viewText').classList.toggle('hidden', mode !== 'text');
+
+      ['tabCamera', 'tabNCERT', 'tabText'].forEach(id => {
+        const btn = document.getElementById(id);
+        const isActive = (id === 'tab' + mode.toUpperCase() || (mode === 'camera' && id === 'tabCamera') || (mode === 'ncert' && id === 'tabNCERT') || (mode === 'text' && id === 'tabText'));
+        btn.className = isActive 
+          ? 'flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold' 
+          : 'flex-1 py-2 rounded-lg text-slate-600';
+      });
+    }
+
+    const cameraInput = document.getElementById('cameraInput');
+    const previewContainer = document.getElementById('previewContainer');
+
     cameraInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files);
-      files.forEach((file) => {
+      Array.from(e.target.files).forEach((file) => {
         const reader = new FileReader();
-        reader.onload = (event) => {
-          base64Images.push(event.target.result);
+        reader.onload = (ev) => {
+          base64Images.push(ev.target.result);
           const img = document.createElement('img');
-          img.src = event.target.result;
+          img.src = ev.target.result;
           img.className = 'w-16 h-16 object-cover rounded-lg border border-slate-300';
           previewContainer.appendChild(img);
         };
@@ -124,26 +159,28 @@
       });
     });
 
-    generateBtn.addEventListener('click', async () => {
-      if (base64Images.length === 0) {
-        alert('Please snap or select at least one photo of your test draft!');
-        return;
-      }
-
-      generateBtn.disabled = true;
-      generateBtn.innerText = 'Transcribing & Structuring Test...';
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.innerText = 'AI Structuring Test & Marking Scheme...';
 
       try {
+        const payload = {
+          inputType: activeMode,
+          schoolName: document.getElementById('schoolName').value,
+          subject: document.getElementById('subject').value,
+          classGrade: document.getElementById('classGrade').value,
+          totalMarks: document.getElementById('totalMarks').value,
+          examType: document.getElementById('examType').value,
+          chapterName: document.getElementById('chapterName').value,
+          rawText: document.getElementById('rawText').value,
+          imageBase64Array: activeMode === 'camera' ? base64Images : []
+        };
+
         const res = await fetch('/api/ocr-paper', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            imageBase64Array: base64Images,
-            schoolName: document.getElementById('schoolName').value,
-            subject: document.getElementById('subject').value,
-            classGrade: document.getElementById('classGrade').value,
-            totalMarks: document.getElementById('totalMarks').value,
-          }),
+          body: JSON.stringify(payload)
         });
 
         const data = await res.json();
@@ -153,14 +190,14 @@
       } catch (err) {
         alert('Generation failed: ' + err.message);
       } finally {
-        generateBtn.disabled = false;
-        generateBtn.innerText = 'Generate Print-Ready Exam & Marking Key';
+        btn.disabled = false;
+        btn.innerText = 'Generate Print-Ready Exam & Marking Key';
       }
     });
 
     function renderExam(exam) {
-      document.getElementById('paperSchool').innerText = exam.school_name || 'Academic Examination';
-      document.getElementById('paperTitle').innerText = exam.title || 'Periodic Test';
+      document.getElementById('paperSchool').innerText = exam.school_name || 'Academic Institution';
+      document.getElementById('paperTitle').innerText = exam.title || 'Periodic Assessment';
       document.getElementById('paperSubject').innerText = exam.subject || 'General';
       document.getElementById('paperClass').innerText = exam.class_grade || '';
       document.getElementById('paperDuration').innerText = exam.duration_minutes || '45';
@@ -203,6 +240,7 @@
         sectionsContainer.appendChild(secDiv);
       });
 
+      const resultCard = document.getElementById('resultCard');
       resultCard.classList.remove('hidden');
       resultCard.scrollIntoView({ behavior: 'smooth' });
     }
@@ -216,4 +254,3 @@
   </script>
 </body>
 </html>
-
