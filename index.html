@@ -1305,11 +1305,15 @@ function toggleLofiAudio() {
 /* =====================================================
 NOTES STUDIO GENERATOR
 ===================================================== */
+/* =====================================================
+NOTES STUDIO GENERATOR & PDF ENGINE
+===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
   genNotesBtn.onclick = async () => {
     const cls = document.getElementById('notesClass').value;
     const sub = document.getElementById('notesSubject').value;
+    const lang = document.getElementById('notesLanguage').value; // Reads your new Language box!
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
@@ -1319,16 +1323,25 @@ if (genNotesBtn) {
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
     try {
+        // Sends the requested language to the backend
         const res = await fetch('/api/generate-notes', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter })
+            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter, language: lang }) 
         });
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
 
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} • ${sub.toUpperCase()}`;
-        document.getElementById('notesContentBody').innerHTML = data.notes;
+        
+        const contentBody = document.getElementById('notesContentBody');
+        contentBody.innerHTML = data.notes;
+        
+        // This magic spell makes the math symbols look pretty!
+        if (window.MathJax) {
+            MathJax.typesetPromise([contentBody]).catch((err) => console.log('Math error:', err));
+        }
+
         document.getElementById('notesResultContainer')?.classList.remove('hidden');
         playWin();
     } catch(err) {
@@ -1340,6 +1353,35 @@ if (genNotesBtn) {
     }
   };
 }
+
+// THIS IS THE NEW PDF MAKER
+function downloadPDF() {
+    const element = document.getElementById('notesContentBody');
+    const chapterName = document.getElementById('notesChapter').value.trim() || 'Chapter';
+    
+    // Tells the PDF maker how we want the page to look
+    const opt = {
+      margin:       15,
+      filename:     `Invincible_Class_${document.getElementById('notesClass').value}_${chapterName.replace(/\s+/g, '_')}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    
+    // Temporarily makes the background white so the PDF looks like real paper
+    element.style.backgroundColor = '#ffffff';
+    element.style.color = '#000000';
+    element.style.padding = '20px';
+    
+    // Creates the PDF and downloads it!
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Puts the colors back to normal on your screen when it's done
+        element.style.backgroundColor = '';
+        element.style.color = '';
+        element.style.padding = '';
+    });
+}
+
 
 let activeStories = [];
 let currentStoryIdx = 0;
