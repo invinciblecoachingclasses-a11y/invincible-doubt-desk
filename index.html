@@ -1411,42 +1411,79 @@ NOTES STUDIO GENERATOR & PDF ENGINE
 /* =====================================================
 NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
+/* =====================================================
+NOTES STUDIO GENERATOR & PDF ENGINE
+===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
   genNotesBtn.onclick = async () => {
     const cls = document.getElementById('notesClass').value;
     const sub = document.getElementById('notesSubject').value;
-    const lang = document.getElementById('notesLanguage').value; // Grabs English or Hindi
+    const lang = document.getElementById('notesLanguage').value; 
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
+    // Strict page requirements based on grade level
+    const targetPages = (cls === "9" || cls === "10") ? 8 : 10;
+
     genNotesBtn.disabled = true; 
-    genNotesBtn.textContent = "Compiling Premium Topper Notes (10-15s)...";
+    genNotesBtn.textContent = `Compiling ${targetPages}-Page Study Module...`;
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
-    // 🪄 THE SECRET COMMAND: We force the AI to listen to our rules!
-        const secretCommand = chapter + " (STRICT RULE: Write entirely in " + lang + ". Act as a last-minute exam CHEAT SHEET. ZERO long paragraphs. Use EXTREMELY short bullet points (max 10 words each). Use heavy emojis like ⚡, 🔥, 🧠. Bold all important keywords. Make it look like a topper's 5-minute quick revision flashcard, NOT a Wikipedia encyclopedia!)";
+    // Strict System Prompt Prompting to enforce Callouts, Length, and Markdown Structure
+    const strictPrompt = `
+      Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
+      Target Audience: Class ${cls} (${sub}).
+      Language: ${lang}. (If Hindi or Hinglish, keep scientific terms in English brackets).
 
+      STRICT DESIGN & STRUCTURE REQUIREMENTS:
+      1. MUST BE VERY THOROUGH AND DETAILED TO FILL APPROXIMATELY ${targetPages} STANDARD PRINT PAGES.
+      2. Divide the chapter into 5 to 7 logical major sections.
+      3. For EVERY section include:
+         - ⚡ 1-Minute TL;DR Box: High-yield summary bullets.
+         - Core Concepts: Clear 1-2 line concept trigger bullets (NO long dense paragraphs).
+         - 🧠 FORMULA VAULT: Display all mathematical equations centered using standard LaTeX math ($ or $$).
+         - Derivations / Step-by-Step Logic: Clear numbered sequences with justifications in brackets.
+         - Comparison Tables: Fully formatted Markdown tables comparing definitions, devices, or wave types.
+         - 🚨 EXAMINER TRAP Callout: Highlight standard student calculation or conceptual mistakes (e.g. ❌ Wrong vs ✅ Right).
+      4. DO NOT add standalone multiple-choice question sets or practice quizzes at the end.
+      5. Output ONLY valid Markdown with clean standard tables and LaTeX math.
+    `;
 
     try {
         const res = await fetch('/api/generate-notes', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
-            // We send the secret command instead of just the plain chapter name
-            body: JSON.stringify({ className: cls, subject: sub, chapter: secretCommand, language: lang }) 
+            body: JSON.stringify({ 
+              className: cls, 
+              subject: sub, 
+              chapter: strictPrompt, 
+              language: lang,
+              targetPages: targetPages 
+            }) 
         });
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
 
-        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} • ${sub.toUpperCase()}`;
+        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
         const contentBody = document.getElementById('notesContentBody');
-        contentBody.innerHTML = data.notes;
         
-        // This magic spell turns the raw math text into pretty textbook equations!
+        // Parse Markdown to HTML
+        let rawHtml = marked.parse(data.notes || "");
+
+        // Convert standard blockquotes to Bento Callout cards
+        rawHtml = rawHtml
+          .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
+          .replace(/<blockquote>\s*<p>.*?TL;DR[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-tldr">${match.replace(/<\/?blockquote>/g, '')}</div>`)
+          .replace(/<blockquote>\s*<p>.*?FORMULA VAULT[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-formula">${match.replace(/<\/?blockquote>/g, '')}</div>`);
+
+        contentBody.innerHTML = rawHtml;
+        
+        // Typeset LaTeX equations
         if (window.MathJax) {
-            MathJax.typesetPromise([contentBody]).catch((err) => console.log('Math error:', err));
+            await MathJax.typesetPromise([contentBody]);
         }
 
         document.getElementById('notesResultContainer')?.classList.remove('hidden');
@@ -1461,36 +1498,44 @@ if (genNotesBtn) {
   };
 }
 
-
-// THIS IS THE NEW PDF MAKER
+// 🖨️ CLEAN A4 PDF EXPORTER (PREVENTS BLANK & CUT-OFF PAGES)
 function downloadPDF() {
     const element = document.getElementById('notesContentBody');
-    const chapterName = document.getElementById('notesChapter').value.trim() || 'Chapter';
+    const title = document.getElementById('notesResultTitle').textContent;
+    const cls = document.getElementById('notesClass').value;
+    const chapterName = document.getElementById('notesChapter').value.trim() || 'Module';
     
-    // Tells the PDF maker how we want the page to look
+    // Create wrapper for rendering
+    const pdfWrapper = document.createElement('div');
+    pdfWrapper.style.backgroundColor = '#ffffff';
+    pdfWrapper.style.color = '#0f172a';
+    pdfWrapper.style.padding = '20px 24px';
+    pdfWrapper.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
     
-        const opt = {
-      margin:       15,
-      filename:     `Invincible_Class_${document.getElementById('notesClass').value}_${chapterName.replace(/\s+/g, '_')}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:    { mode: 'avoid-all', before: '.section-h2, h2, h3' } // Stops scissors from cutting lines in half!
-    };
+    // Branded Header
+    pdfWrapper.innerHTML = `
+      <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <div style="font-size: 10px; font-weight: 900; color: #0284c7; letter-spacing: 1px;">INVINCIBLE 360 • TOPPER STUDY MODULE</div>
+          <div style="font-size: 16px; font-weight: 900; color: #0f172a;">${title}</div>
+        </div>
+        <div style="font-size: 9px; font-weight: 700; color: #64748b;">CBSE CURRICULUM</div>
+      </div>
+      <div class="topper-content">${element.innerHTML}</div>
+    `;
 
-    // Temporarily makes the background white so the PDF looks like real paper
-    element.style.backgroundColor = '#ffffff';
-    element.style.color = '#000000';
-    element.style.padding = '20px';
+    const opt = {
+      margin:       [12, 12, 12, 12],
+      filename:     `Invincible_Class_${cls}_${chapterName.replace(/\s+/g, '_')}_Notes.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
     
-    // Creates the PDF and downloads it!
-    html2pdf().set(opt).from(element).save().then(() => {
-        // Puts the colors back to normal on your screen when it's done
-        element.style.backgroundColor = '';
-        element.style.color = '';
-        element.style.padding = '';
-    });
+    html2pdf().set(opt).from(pdfWrapper).save();
 }
+
 
 
 let activeStories = [];
