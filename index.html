@@ -2394,9 +2394,7 @@ function loadArenaQuestion() {
         finishArenaGame(); 
         return; 
     }
-    if (arena.currentQ === 0) {
-  startArenaVoiceChat(arena.roomId || 'arena-room', true);
-}
+    
 
     const q = arena.questions[arena.currentQ];
     document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/${arena.questions.length}`;
