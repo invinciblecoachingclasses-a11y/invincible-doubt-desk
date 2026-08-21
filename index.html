@@ -1326,7 +1326,8 @@ if (genNotesBtn) {
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
     // 🪄 THE SECRET COMMAND: We force the AI to listen to our rules!
-    const secretCommand = chapter + " (CRITICAL INSTRUCTION: You MUST write these notes in the " + lang + " language. Do NOT write like a boring Wikipedia article. Write like a smart student's premium short notes. Use bullet points, emojis, short crisp sentences, and bold headings. Put all math formulas inside $ math $ symbols so they format beautifully!)";
+        const secretCommand = chapter + " (STRICT RULE: Write entirely in " + lang + ". Act as a last-minute exam CHEAT SHEET. ZERO long paragraphs. Use EXTREMELY short bullet points (max 10 words each). Use heavy emojis like ⚡, 🔥, 🧠. Bold all important keywords. Make it look like a topper's 5-minute quick revision flashcard, NOT a Wikipedia encyclopedia!)";
+
 
     try {
         const res = await fetch('/api/generate-notes', {
