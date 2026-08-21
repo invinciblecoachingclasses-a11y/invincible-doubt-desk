@@ -935,21 +935,29 @@ textarea:focus, input:focus, select:focus {
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
     <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate high-density, scannable topper-grade chapter modules.</div>
     
-    <label>Select Grade</label>
-    <select id="notesClass" style="margin-bottom:12px;">
-        <option value="9">Class 9</option>
-        <option value="10">Class 10</option>
-        <option value="11">Class 11</option>
-        <option value="12">Class 12</option>
-    </select>
-    
-    <label>Select Subject</label>
-    <select id="notesSubject" style="margin-bottom:12px;">
-        <option value="Physics">Physics</option>
-        <option value="Chemistry">Chemistry</option>
-        <option value="Mathematics">Mathematics</option>
-        <option value="Biology">Biology</option>
-    </select>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
+        <select id="notesClass">
+            <option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            <option value="11">Class 11</option>
+            <option value="12">Class 12</option>
+        </select>
+        
+        <select id="notesSubject">
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Biology">Biology</option>
+        </select>
+
+        <!-- Our New Language Box -->
+        <select id="notesLanguage">
+            <option value="English">English</option>
+            <option value="Hindi">Hindi (हिंदी)</option>
+            <option value="Hinglish">Hinglish</option>
+        </select>
+    </div>
+
     
     <label>Chapter Name</label>
     <input type="text" id="notesChapter" placeholder="e.g. Sound, Light, Electrostatics">
