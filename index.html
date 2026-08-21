@@ -2523,34 +2523,46 @@ async function startArenaVoiceChat(roomId = 'arena-room') {
     // 1. Acquire Local Audio
     localVoiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
 
-    // 2. Generate Unique Client Session ID
-    const myClientId = 'user_' + Math.random().toString(36).substring(2, 7);
-    const roomChannelKey = `arena_voice_${roomId}`;
+        // 2. Identify Host vs Guest based on Game Room
+    const roomId = currentRoomId || "arena_default_room"; 
+    const hostPeerId = `room_host_${roomId}`;
+    const guestPeerId = `room_guest_${roomId}_` + Math.floor(Math.random() * 10000);
 
     if (peerVoiceInstance) {
       peerVoiceInstance.destroy();
       peerVoiceInstance = null;
     }
 
-    // 3. Create Peer instance
-    peerVoiceInstance = new Peer(myClientId);
+    // 3. Try to become the Room Host first
+    peerVoiceInstance = new Peer(hostPeerId);
 
     peerVoiceInstance.on('open', (id) => {
-      if (statusText) statusText.textContent = "Connecting Voice...";
+      // Successfully registered as Host
+      if (statusText) statusText.textContent = "Voice: Host Ready (Waiting for Guest)";
+    });
 
-      const currentHost = localStorage.getItem(roomChannelKey);
+    peerVoiceInstance.on('error', (err) => {
+      // If Host ID is already taken, this device becomes the Guest
+      if (err.type === 'unavailable-id') {
+        peerVoiceInstance.destroy();
+        
+        // Connect as Guest and call the Host
+        peerVoiceInstance = new Peer(guestPeerId);
+        
+        peerVoiceInstance.on('open', () => {
+          if (statusText) statusText.textContent = "Voice: Calling Opponent...";
+          setTimeout(() => {
+            callOpponentVoice(hostPeerId);
+          }, 1000);
+        });
 
-      if (!currentHost || currentHost === id) {
-        // Device A becomes Host
-        localStorage.setItem(roomChannelKey, id);
-        if (statusText) statusText.textContent = "Voice: Waiting for Opponent...";
-      } else {
-        // Device B becomes Guest -> Call Device A directly
-        setTimeout(() => {
-          callOpponentVoice(currentHost);
-        }, 1200);
+        peerVoiceInstance.on('call', (incomingCall) => {
+          incomingCall.answer(localVoiceStream);
+          handleIncomingVoiceStream(incomingCall);
+        });
       }
     });
+
 
     // Listen for incoming call
     peerVoiceInstance.on('call', (incomingCall) => {
