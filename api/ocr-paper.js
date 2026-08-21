@@ -2,10 +2,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from "@supabase/supabase-js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -14,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     const { 
-      inputType, // 'camera', 'text', 'ncert'
+      inputType,
       rawText, 
       imageBase64Array, 
       subject, 
@@ -25,7 +21,8 @@ export default async function handler(req, res) {
       examType 
     } = req.body;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Use latest compatible model identifier
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
     let promptContents = [];
 
@@ -33,39 +30,38 @@ export default async function handler(req, res) {
     You are an expert school examination setter and NCERT curriculum specialist.
     School Name: ${schoolName || "Academic Institution"}
     Class: ${classGrade || "Class 10"}
-    Subject: ${subject || "General Science"}
-    Chapter/Topic: ${chapterName || "General Curriculum"}
+    Subject: ${subject || "Science"}
+    Chapter/Topic: ${chapterName || "Curriculum"}
     Target Marks: ${totalMarks || 25}
-    Assessment Type: ${examType || "Unit Test / Formative"}
+    Assessment Type: ${examType || "Unit Test"}
 
     TASK:
-    - If images are provided: Transcribe questions accurately, fix phrasing, allocate marks, and generate step solutions.
-    - If raw pasted text is provided: Extract and restructure questions into a clean exam blueprint.
-    - If NCERT topic/chapter is provided: Generate authentic, latest NCERT-standard exercise and HOTS (High Order Thinking Skills) questions based on standard curriculum.
-    - Allocate marks per section (Section A: 1-2 marks, Section B: 3-5 marks).
-    - Provide a complete step-by-step Answer Key and Marking Scheme for the teacher.
+    - If NCERT topic/chapter is provided: Create standard NCERT & CBSE board format questions (MCQ, Short Answer, Long Answer) covering key concepts.
+    - If pasted text/images are provided: Structure the questions cleanly into formal sections.
+    - Allocate marks properly across sections.
+    - Provide complete step-by-step marking keys for every question.
 
-    Respond ONLY with valid JSON in this exact structure without markdown backticks:
+    Respond ONLY with raw JSON without markdown backticks:
     {
       "school_name": "${schoolName || "Academic Institution"}",
       "title": "${examType || "Periodic Assessment"}",
-      "subject": "${subject || "Mathematics"}",
+      "subject": "${subject || "Science"}",
       "class_grade": "${classGrade || "Class 10"}",
       "total_marks": ${totalMarks || 25},
       "duration_minutes": 45,
       "instructions": [
         "All questions are compulsory.",
-        "Marks are allocated against each section."
+        "Marks are indicated against each question."
       ],
       "sections": [
         {
-          "section_name": "Section A",
+          "section_name": "Section A (Short Questions)",
           "questions": [
             {
               "question_number": 1,
               "question_text": "Sample question text here...",
               "marks": 2,
-              "answer_key": "Step 1: ..., Step 2: ... Final answer."
+              "answer_key": "Step-by-step marking answer."
             }
           ]
         }
@@ -76,7 +72,7 @@ export default async function handler(req, res) {
     promptContents.push(systemPrompt);
 
     if (inputType === 'text' || inputType === 'ncert') {
-      promptContents.push(`Context / Content Input: ${rawText || chapterName}`);
+      promptContents.push(`Topic Details: ${chapterName || rawText}`);
     }
 
     if (imageBase64Array && imageBase64Array.length > 0) {
