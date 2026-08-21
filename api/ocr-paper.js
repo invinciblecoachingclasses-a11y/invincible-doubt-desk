@@ -1,10 +1,11 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ success: false, error: "GEMINI_API_KEY is not set in Vercel Environment Variables." });
   }
 
   try {
@@ -20,10 +21,6 @@ export default async function handler(req, res) {
       examType 
     } = req.body;
 
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ success: false, error: "GEMINI_API_KEY is missing in Vercel Environment Variables." });
-    }
-
     const systemPrompt = `
 You are an expert school examination setter for Indian schools (CBSE / NCERT / State Boards).
 School Name: ${schoolName || "Academic Institution"}
@@ -35,10 +32,10 @@ Exam Type: ${examType || "Periodic Test"}
 
 INSTRUCTIONS:
 1. Create a balanced, high-quality school exam paper tailored to this topic and class level.
-2. Structure sections clearly: Section A (MCQs / Very Short), Section B (Short Answer), Section C (Long / Application).
-3. Include accurate question numbers, mark allocations per question totaling ${totalMarks || 25}, and a step-by-step model marking answer for every question.
+2. Structure sections clearly: Section A (Objective/Short), Section B (Short Answer), Section C (Long/Application).
+3. Include question numbers, mark allocations totaling ${totalMarks || 25}, and step-by-step marking answers.
 
-Respond ONLY with valid, raw JSON (no backticks, no markdown prefix):
+Respond ONLY with valid, raw JSON without markdown backticks:
 {
   "school_name": "${schoolName || "Academic Institution"}",
   "title": "${examType || "Periodic Assessment"}",
@@ -52,13 +49,13 @@ Respond ONLY with valid, raw JSON (no backticks, no markdown prefix):
   ],
   "sections": [
     {
-      "section_name": "Section A (Objective & Short)",
+      "section_name": "Section A",
       "questions": [
         {
           "question_number": 1,
-          "question_text": "Write a balanced chemical equation for the reaction between Zinc and dilute Sulphuric Acid.",
+          "question_text": "Sample Question",
           "marks": 2,
-          "answer_key": "Zn + H2SO4 -> ZnSO4 + H2 ^ (1 mark for equation, 1 mark for state/balancing)"
+          "answer_key": "Model answer steps."
         }
       ]
     }
@@ -66,48 +63,47 @@ Respond ONLY with valid, raw JSON (no backticks, no markdown prefix):
 }
 `;
 
-    let promptContents = [systemPrompt];
+    let parts = [{ text: systemPrompt }];
 
     if (inputType === 'text' || inputType === 'ncert') {
-      promptContents.push(`Topic: ${chapterName || rawText}`);
+      parts.push({ text: `Topic: ${chapterName || rawText}` });
     }
 
     if (imageBase64Array && imageBase64Array.length > 0) {
-      const imageParts = imageBase64Array.map((b64) => ({
-        inlineData: {
-          data: b64.replace(/^data:image\/\w+;base64,/, ""),
-          mimeType: "image/jpeg",
-        },
-      }));
-      promptContents.push(...imageParts);
+      imageBase64Array.forEach((b64) => {
+        parts.push({
+          inline_data: {
+            mime_type: "image/jpeg",
+            data: b64.replace(/^data:image\/\w+;base64,/, "")
+          }
+        });
+      });
     }
 
-    // Try primary models with automatic fallback
-    const candidateModels = ["gemini-2.0-flash", "gemini-1.5-flash-002", "gemini-1.5-flash", "gemini-1.5-pro"];
-    let responseText = null;
-    let lastErr = null;
+    // Direct REST call to Gemini 2.0 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+    
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts }]
+      })
+    });
 
-    for (const modelName of candidateModels) {
-      try {
-        const model = genAI.getGenerativeModel({ model: modelName });
-        const result = await model.generateContent(promptContents);
-        responseText = result.response.text().trim();
-        if (responseText) break;
-      } catch (err) {
-        lastErr = err;
-      }
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || JSON.stringify(data));
     }
 
-    if (!responseText) {
-      throw new Error(lastErr ? lastErr.message : "Failed to generate exam from Gemini models.");
-    }
-
-    const cleanedText = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
-    const examData = JSON.parse(cleanedText);
+    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const cleanJson = rawOutput.replace(/```json/g, "").replace(/```/g, "").trim();
+    const examData = JSON.parse(cleanJson);
 
     return res.status(200).json({ success: true, exam: examData });
   } catch (error) {
-    console.error("AI Generation Error:", error);
+    console.error("OCR Paper Error:", error);
     return res.status(500).json({ success: false, error: error.message });
   }
 }
