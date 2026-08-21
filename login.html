@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Teacher Login - DoubtDesk</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
@@ -19,67 +18,72 @@
 
     <div id="loginForm" class="space-y-4">
       <input id="emailInput" type="email" placeholder="Enter your email address" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center" />
-      <button id="sendLinkBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-xl shadow-md transition disabled:bg-slate-400">
+      <button id="sendLinkBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-xl shadow-md transition">
         Send Magic Login Link
       </button>
     </div>
 
     <div id="successMessage" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-4 text-sm font-medium">
-      ✨ Magic link sent! Check your email inbox (and spam folder) and click the link to instantly log in. You can close this tab.
+      ✨ Magic link sent! Check your email inbox (and spam folder) and click the link to log in.
     </div>
 
   </div>
 
   <script>
-    // Initialize Supabase with your public Vercel environment variables or paste your raw URL/anon key here if purely client-side
-    // Since this is static HTML, we need the actual URL and Anon Key here to trigger the email.
-    // Replace these two values with your actual Supabase URL and Anon Key from your notes!
-    const supabaseUrl = 'YOUR_SUPABASE_URL_HERE';
-    const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    const supabaseUrl = 'https://cbgwbzidkmcefoithipp.supabase.co';
+    const supabaseAnonKey = 'PASTE_YOUR_ACTUAL_ANON_KEY_HERE';
     
-    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    let supabaseClient;
+    try {
+      supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    } catch (e) {
+      console.error("Supabase init failed", e);
+    }
 
     const sendLinkBtn = document.getElementById('sendLinkBtn');
     const emailInput = document.getElementById('emailInput');
     const loginForm = document.getElementById('loginForm');
     const successMessage = document.getElementById('successMessage');
 
-    // Check if user is already logged in
-    async function checkUser() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        window.location.href = '/index.html'; // Redirect to home if already logged in
-      }
-    }
-    checkUser();
-
-    sendLinkBtn.addEventListener('click', async () => {
+    sendLinkBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
       const email = emailInput.value.trim();
+      
       if (!email) {
-        alert('Please enter your email.');
+        alert('Please enter your email address first.');
+        return;
+      }
+
+      if (!supabaseAnonKey || supabaseAnonKey.includes('PASTE_YOUR')) {
+        alert('Please paste your actual Supabase Anon Key in the code first.');
         return;
       }
 
       sendLinkBtn.disabled = true;
       sendLinkBtn.innerText = 'Sending Link...';
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email,
-        options: {
-          emailRedirectTo: window.location.origin + '/index.html'
-        }
-      });
+      try {
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email: email,
+          options: {
+            emailRedirectTo: window.location.origin + '/history.html'
+          }
+        });
 
-      if (error) {
-        alert('Error: ' + error.message);
+        if (error) {
+          alert('Login Error: ' + error.message);
+          sendLinkBtn.disabled = false;
+          sendLinkBtn.innerText = 'Send Magic Login Link';
+        } else {
+          loginForm.classList.add('hidden');
+          successMessage.classList.remove('hidden');
+        }
+      } catch (err) {
+        alert('System Error: ' + err.message);
         sendLinkBtn.disabled = false;
         sendLinkBtn.innerText = 'Send Magic Login Link';
-      } else {
-        loginForm.classList.add('hidden');
-        successMessage.classList.remove('hidden');
       }
     });
   </script>
 </body>
 </html>
-
