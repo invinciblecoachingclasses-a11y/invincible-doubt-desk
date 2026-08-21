@@ -2497,6 +2497,117 @@ function showArenaResult(room) {
 }
 
 function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
+/* =====================================================
+1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
+===================================================== */
+let localVoiceStream = null;
+let peerVoiceInstance = null;
+let currentVoiceCall = null;
+let isMicMuted = false;
+let isSpeakerMuted = false;
+
+// 1. Initialize Peer connection with the Room/Opponent ID
+async function startArenaVoiceChat(roomId, isHost) {
+  const statusText = document.getElementById('voiceStatusText');
+  const statusDot = document.getElementById('voiceStatusDot');
+  if (statusText) statusText.textContent = "Connecting Voice...";
+
+  try {
+    localVoiceStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+
+    const myPeerId = isHost ? `invincible-${roomId}-host` : `invincible-${roomId}-guest`;
+    const targetPeerId = isHost ? `invincible-${roomId}-guest` : `invincible-${roomId}-host`;
+
+    if (peerVoiceInstance) peerVoiceInstance.destroy();
+    peerVoiceInstance = new Peer(myPeerId);
+
+    peerVoiceInstance.on('open', () => {
+      if (statusText) statusText.textContent = "Voice Ready";
+      if (!isHost) {
+        setTimeout(() => callOpponentVoice(targetPeerId), 1000);
+      }
+    });
+
+    peerVoiceInstance.on('call', (incomingCall) => {
+      incomingCall.answer(localVoiceStream);
+      handleIncomingVoiceStream(incomingCall);
+    });
+
+  } catch (err) {
+    console.warn("Microphone access denied or error:", err);
+    if (statusText) statusText.textContent = "Mic Blocked";
+  }
+}
+
+// 2. Outgoing Call Handler
+function callOpponentVoice(targetPeerId) {
+  if (!peerVoiceInstance || !localVoiceStream) return;
+  const outgoingCall = peerVoiceInstance.call(targetPeerId, localVoiceStream);
+  handleIncomingVoiceStream(outgoingCall);
+}
+
+// 3. Connect Remote Stream to Audio Element
+function handleIncomingVoiceStream(call) {
+  currentVoiceCall = call;
+  const statusText = document.getElementById('voiceStatusText');
+  const statusDot = document.getElementById('voiceStatusDot');
+
+  call.on('stream', (remoteStream) => {
+    const remoteAudio = document.getElementById('remoteArenaAudio');
+    if (remoteAudio) {
+      remoteAudio.srcObject = remoteStream;
+      remoteAudio.play().catch(e => console.log('Autoplay audio:', e));
+    }
+    if (statusText) statusText.textContent = "Voice: Connected 🟢";
+    if (statusDot) statusDot.classList.add('connected');
+  });
+
+  call.on('close', () => stopArenaVoiceChat());
+}
+
+// 4. Mute / Unmute Local Microphone
+function toggleArenaVoiceMute() {
+  if (!localVoiceStream) return;
+  isMicMuted = !isMicMuted;
+  localVoiceStream.getAudioTracks().forEach(track => track.enabled = !isMicMuted);
+  
+  const btn = document.getElementById('voiceToggleMicBtn');
+  if (btn) {
+    btn.classList.toggle('muted', isMicMuted);
+    btn.textContent = isMicMuted ? '🔇' : '🎙️';
+  }
+}
+
+// 5. Deafen / Mute Opponent Speaker
+function toggleArenaSpeaker() {
+  const remoteAudio = document.getElementById('remoteArenaAudio');
+  if (!remoteAudio) return;
+  isSpeakerMuted = !isSpeakerMuted;
+  remoteAudio.muted = isSpeakerMuted;
+  
+  const btn = document.getElementById('voiceToggleSpeakerBtn');
+  if (btn) {
+    btn.classList.toggle('muted', isSpeakerMuted);
+    btn.textContent = isSpeakerMuted ? '🔈' : '🔊';
+  }
+}
+
+// 6. Stop Voice Call on Game Exit
+function stopArenaVoiceChat() {
+  if (localVoiceStream) {
+    localVoiceStream.getTracks().forEach(track => track.stop());
+    localVoiceStream = null;
+  }
+  if (currentVoiceCall) currentVoiceCall.close();
+  if (peerVoiceInstance) peerVoiceInstance.destroy();
+  
+  const statusText = document.getElementById('voiceStatusText');
+  const statusDot = document.getElementById('voiceStatusDot');
+  if (statusText) statusText.textContent = "Voice: Disconnected";
+  if (statusDot) statusDot.classList.remove('connected');
+}
+
+
 </script>
 </body>
 </html>
