@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Exam & Worksheet Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     @media print {
       body * { visibility: hidden; }
@@ -17,6 +18,14 @@
 <body class="bg-slate-50 text-slate-900 min-h-screen">
   <div class="max-w-3xl mx-auto p-4 md:py-8">
     
+    <!-- Top Navigation Bar -->
+    <div class="flex justify-between items-center mb-6 no-print">
+      <a href="/history.html" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-lg transition">
+        ← Exam Archive (7-Day History)
+      </a>
+      <button id="logoutBtn" class="text-xs text-slate-500 hover:text-slate-800 font-medium">Logout</button>
+    </div>
+
     <!-- App Header -->
     <div class="mb-6 text-center no-print">
       <h1 class="text-3xl font-extrabold text-indigo-700 tracking-tight">Exam & Worksheet Studio</h1>
@@ -123,9 +132,34 @@
   </div>
 
   <script>
+    const supabaseUrl = 'https://cbgwbzidkmcefoithipp.supabase.co';
+    const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    let currentUser = null;
     let activeMode = 'camera';
     let base64Images = [];
     let showAnswers = false;
+
+    // Check login state on load
+    async function checkAuth() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) {
+        window.location.href = '/login.html';
+        return;
+      }
+      currentUser = user;
+
+      // Check if loading an exam from 7-day history session
+      const stored = sessionStorage.getItem('currentExam');
+      if (stored) {
+        try {
+          renderExam(JSON.parse(stored));
+          sessionStorage.removeItem('currentExam');
+        } catch(e) {}
+      }
+    }
+    checkAuth();
 
     function switchMode(mode) {
       activeMode = mode;
@@ -185,6 +219,19 @@
 
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
+
+        // Auto-save to Supabase (7-Day retention)
+        if (currentUser) {
+          await supabaseClient.from('exams').insert({
+            user_id: currentUser.id,
+            school_name: data.exam.school_name,
+            subject: data.exam.subject,
+            class_grade: data.exam.class_grade,
+            title: data.exam.title,
+            total_marks: data.exam.total_marks,
+            exam_data: data.exam
+          });
+        }
 
         renderExam(data.exam);
       } catch (err) {
@@ -250,6 +297,11 @@
       document.querySelectorAll('.answer-key-box').forEach(box => {
         box.classList.toggle('hidden', !showAnswers);
       });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = '/login.html';
     });
   </script>
 </body>
