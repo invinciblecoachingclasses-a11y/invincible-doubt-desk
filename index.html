@@ -531,6 +531,16 @@ textarea:focus, input:focus, select:focus {
 .tag-ask_seniors { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
 .tag-news { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
 </style>
+<!-- Markdown Parser, Math Rendering & Clean PDF Engine -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] }
+  };
+</script>
+
 </head>
 <!-- Magic Tools for PDFs and Math -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
