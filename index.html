@@ -25,6 +25,97 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+/* TOPPER BENTO CALLOUTS & TABLE FORMATTING */
+.topper-content {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #1e293b;
+  line-height: 1.65;
+  font-size: 13.5px;
+}
+.topper-content h1, .topper-content h2, .topper-content h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  margin-top: 22px;
+  margin-bottom: 10px;
+}
+.topper-content p { margin: 8px 0; }
+.topper-content ul { padding-left: 18px; margin: 8px 0; }
+.topper-content li { margin-bottom: 6px; }
+
+/* Callout Bento Blocks */
+.callout-tldr {
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+.callout-trap {
+  background: rgba(244, 63, 94, 0.08);
+  border-left: 4px solid #f43f5e;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+.callout-formula {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px 0;
+  text-align: center;
+}
+
+/* Micro-Badges */
+.badge-ncert {
+  background: #0284c7;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  display: inline-block;
+}
+.badge-marks {
+  background: #10b981;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Structured Tables with Zebra Striping */
+.topper-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 12.5px;
+}
+.topper-content th, .topper-content td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  text-align: left;
+}
+.topper-content th {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-weight: 800;
+}
+.topper-content tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.03); }
+
+/* Prevent Page Break Glitches */
+@media print {
+  .topper-content tr, .topper-content .callout-tldr, .topper-content .callout-trap, .topper-content .callout-formula {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
 
 <style>
 :root {
