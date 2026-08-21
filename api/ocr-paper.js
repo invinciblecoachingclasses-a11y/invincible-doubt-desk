@@ -8,54 +8,54 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-  // Allow only POST requests
   if (req.method !== "POST") {
-    return res.status(455).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { imageBase64Array, subject, classGrade, schoolName, totalMarks } = req.body;
-
-    if (!imageBase64Array || imageBase64Array.length === 0) {
-      return res.status(400).json({ error: "No draft images provided" });
-    }
-
-    // Format images for Gemini Vision
-    const imageParts = imageBase64Array.map((b64) => ({
-      inlineData: {
-        data: b64.replace(/^data:image\/\w+;base64,/, ""),
-        mimeType: "image/jpeg",
-      },
-    }));
+    const { 
+      inputType, // 'camera', 'text', 'ncert'
+      rawText, 
+      imageBase64Array, 
+      subject, 
+      classGrade, 
+      chapterName, 
+      schoolName, 
+      totalMarks,
+      examType 
+    } = req.body;
 
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `
-    You are an expert examination setter. Analyze these photos of a teacher's handwritten test draft or textbook pages.
-    School Name: ${schoolName || "Standard Examination"}
-    Subject: ${subject || "General"}
-    Class: ${classGrade || "Standard"}
-    Target Marks: ${totalMarks || "Auto"}
+    let promptContents = [];
+
+    const systemPrompt = `
+    You are an expert school examination setter and NCERT curriculum specialist.
+    School Name: ${schoolName || "Academic Institution"}
+    Class: ${classGrade || "Class 10"}
+    Subject: ${subject || "General Science"}
+    Chapter/Topic: ${chapterName || "General Curriculum"}
+    Target Marks: ${totalMarks || 25}
+    Assessment Type: ${examType || "Unit Test / Formative"}
 
     TASK:
-    1. Transcribe all handwritten questions accurately.
-    2. Convert all mathematical/scientific formulas to clean text/LaTeX.
-    3. Fix grammatical mistakes and polish phrasing.
-    4. Group into structured sections (e.g., Section A: Short Answer, Section B: Long Answer).
-    5. Allocate realistic marks for each question.
-    6. Generate a step-by-step Answer Key and Marking Scheme for the teacher.
+    - If images are provided: Transcribe questions accurately, fix phrasing, allocate marks, and generate step solutions.
+    - If raw pasted text is provided: Extract and restructure questions into a clean exam blueprint.
+    - If NCERT topic/chapter is provided: Generate authentic, latest NCERT-standard exercise and HOTS (High Order Thinking Skills) questions based on standard curriculum.
+    - Allocate marks per section (Section A: 1-2 marks, Section B: 3-5 marks).
+    - Provide a complete step-by-step Answer Key and Marking Scheme for the teacher.
 
     Respond ONLY with valid JSON in this exact structure without markdown backticks:
     {
-      "school_name": "${schoolName || "Examination"}",
-      "title": "Unit Assessment",
-      "subject": "${subject}",
-      "class_grade": "${classGrade}",
-      "total_marks": 25,
+      "school_name": "${schoolName || "Academic Institution"}",
+      "title": "${examType || "Periodic Assessment"}",
+      "subject": "${subject || "Mathematics"}",
+      "class_grade": "${classGrade || "Class 10"}",
+      "total_marks": ${totalMarks || 25},
       "duration_minutes": 45,
       "instructions": [
         "All questions are compulsory.",
-        "Marks are indicated against each question."
+        "Marks are allocated against each section."
       ],
       "sections": [
         {
@@ -63,9 +63,9 @@ export default async function handler(req, res) {
           "questions": [
             {
               "question_number": 1,
-              "question_text": "Define Newton's Second Law of Motion.",
+              "question_text": "Sample question text here...",
               "marks": 2,
-              "answer_key": "Force is equal to mass multiplied by acceleration (F = ma)."
+              "answer_key": "Step 1: ..., Step 2: ... Final answer."
             }
           ]
         }
@@ -73,10 +73,24 @@ export default async function handler(req, res) {
     }
     `;
 
-    const result = await model.generateContent([prompt, ...imageParts]);
+    promptContents.push(systemPrompt);
+
+    if (inputType === 'text' || inputType === 'ncert') {
+      promptContents.push(`Context / Content Input: ${rawText || chapterName}`);
+    }
+
+    if (imageBase64Array && imageBase64Array.length > 0) {
+      const imageParts = imageBase64Array.map((b64) => ({
+        inlineData: {
+          data: b64.replace(/^data:image\/\w+;base64,/, ""),
+          mimeType: "image/jpeg",
+        },
+      }));
+      promptContents.push(...imageParts);
+    }
+
+    const result = await model.generateContent(promptContents);
     const responseText = result.response.text().trim();
-    
-    // Clean response of any unwanted markdown ticks if present
     const cleanedText = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
     const examData = JSON.parse(cleanedText);
 
