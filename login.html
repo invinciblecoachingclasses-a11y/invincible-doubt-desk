@@ -1,1 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Login - DoubtDesk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-8 text-center">
+    
+    <div class="mb-6">
+      <span class="text-4xl mb-2 block">🎓</span>
+      <h1 class="text-2xl font-black text-slate-900 tracking-tight">Teacher Access</h1>
+      <p class="text-sm text-slate-500 mt-2">Sign in to generate exams and grade sheets. <br><span class="text-rose-600 font-semibold">Note: All generated data auto-deletes after 7 days for security.</span></p>
+    </div>
+
+    <div id="loginForm" class="space-y-4">
+      <input id="emailInput" type="email" placeholder="Enter your email address" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-center" />
+      <button id="sendLinkBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-xl shadow-md transition disabled:bg-slate-400">
+        Send Magic Login Link
+      </button>
+    </div>
+
+    <div id="successMessage" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-4 text-sm font-medium">
+      ✨ Magic link sent! Check your email inbox (and spam folder) and click the link to instantly log in. You can close this tab.
+    </div>
+
+  </div>
+
+  <script>
+    // Initialize Supabase with your public Vercel environment variables or paste your raw URL/anon key here if purely client-side
+    // Since this is static HTML, we need the actual URL and Anon Key here to trigger the email.
+    // Replace these two values with your actual Supabase URL and Anon Key from your notes!
+    const supabaseUrl = 'YOUR_SUPABASE_URL_HERE';
+    const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY_HERE';
+    
+    const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    const sendLinkBtn = document.getElementById('sendLinkBtn');
+    const emailInput = document.getElementById('emailInput');
+    const loginForm = document.getElementById('loginForm');
+    const successMessage = document.getElementById('successMessage');
+
+    // Check if user is already logged in
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        window.location.href = '/index.html'; // Redirect to home if already logged in
+      }
+    }
+    checkUser();
+
+    sendLinkBtn.addEventListener('click', async () => {
+      const email = emailInput.value.trim();
+      if (!email) {
+        alert('Please enter your email.');
+        return;
+      }
+
+      sendLinkBtn.disabled = true;
+      sendLinkBtn.innerText = 'Sending Link...';
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: window.location.origin + '/index.html'
+        }
+      });
+
+      if (error) {
+        alert('Error: ' + error.message);
+        sendLinkBtn.disabled = false;
+        sendLinkBtn.innerText = 'Send Magic Login Link';
+      } else {
+        loginForm.classList.add('hidden');
+        successMessage.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
 
