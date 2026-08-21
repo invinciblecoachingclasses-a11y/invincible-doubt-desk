@@ -1308,26 +1308,32 @@ NOTES STUDIO GENERATOR
 /* =====================================================
 NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
+/* =====================================================
+NOTES STUDIO GENERATOR & PDF ENGINE
+===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
   genNotesBtn.onclick = async () => {
     const cls = document.getElementById('notesClass').value;
     const sub = document.getElementById('notesSubject').value;
-    const lang = document.getElementById('notesLanguage').value; // Reads your new Language box!
+    const lang = document.getElementById('notesLanguage').value; // Grabs English or Hindi
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
     genNotesBtn.disabled = true; 
-    genNotesBtn.textContent = "Compiling Comprehensive Notes (10-15s)...";
+    genNotesBtn.textContent = "Compiling Premium Topper Notes (10-15s)...";
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
+    // 🪄 THE SECRET COMMAND: We force the AI to listen to our rules!
+    const secretCommand = chapter + " (CRITICAL INSTRUCTION: You MUST write these notes in the " + lang + " language. Do NOT write like a boring Wikipedia article. Write like a smart student's premium short notes. Use bullet points, emojis, short crisp sentences, and bold headings. Put all math formulas inside $ math $ symbols so they format beautifully!)";
+
     try {
-        // Sends the requested language to the backend
         const res = await fetch('/api/generate-notes', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ className: cls, subject: sub, chapter: chapter, language: lang }) 
+            // We send the secret command instead of just the plain chapter name
+            body: JSON.stringify({ className: cls, subject: sub, chapter: secretCommand, language: lang }) 
         });
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
@@ -1337,13 +1343,13 @@ if (genNotesBtn) {
         const contentBody = document.getElementById('notesContentBody');
         contentBody.innerHTML = data.notes;
         
-        // This magic spell makes the math symbols look pretty!
+        // This magic spell turns the raw math text into pretty textbook equations!
         if (window.MathJax) {
             MathJax.typesetPromise([contentBody]).catch((err) => console.log('Math error:', err));
         }
 
         document.getElementById('notesResultContainer')?.classList.remove('hidden');
-        playWin();
+        if (typeof playWin === 'function') playWin();
     } catch(err) {
         alert("Notes Engine Error: " + err.message);
     } finally {
@@ -1353,6 +1359,7 @@ if (genNotesBtn) {
     }
   };
 }
+
 
 // THIS IS THE NEW PDF MAKER
 function downloadPDF() {
