@@ -26,7 +26,8 @@ export default async function handler(req, res) {
       },
     }));
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+
 
     const prompt = `
     You are an expert school teacher evaluating a student's handwritten answer sheet.
