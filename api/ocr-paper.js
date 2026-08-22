@@ -57,7 +57,7 @@ INSTRUCTIONS:
    - Section B: Very Short Answer (2 Marks).
    - Section C: Short Answer (3 Marks).
    - Section D: Long Answer (5 Marks) / Case-Based Integrated Study (4-5 Marks).
-4. Provide comprehensive, step-by-step marking keys for each question (e.g., Step 1: formula, Step 2: calculation, Step 3: units). For MCQs, state the correct option letter + brief justification.
+4. Provide comprehensive, step-by-step marking keys for each question. For MCQs, state the correct option letter + explanation.
 
 Respond ONLY with valid, raw JSON (NO markdown backticks, NO markdown formatting):
 {
@@ -110,8 +110,8 @@ Respond ONLY with valid, raw JSON (NO markdown backticks, NO markdown formatting
       });
     }
 
-    // Direct API call to Gemini 2.5/2.0 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // Direct REST call using Gemini 3.6 Flash
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
     
     const response = await fetch(url, {
       method: "POST",
