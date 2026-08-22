@@ -6,7 +6,7 @@
   <title>Exam & Worksheet Studio - DoubtDesk</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
+     <style>
     @media print {
       @page {
         margin: 12mm 15mm;
@@ -28,13 +28,17 @@
         box-shadow: none !important;
       }
       .no-print { display: none !important; }
-      .question-block {
+
+      #paperSections > div > div > div,
+      #paperSections .space-y-4 > div {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        display: block;
+        display: block !important;
+        margin-bottom: 1rem !important;
       }
     }
   </style>
+
 
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
