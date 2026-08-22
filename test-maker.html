@@ -6,14 +6,36 @@
   <title>Exam & Worksheet Studio - DoubtDesk</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
+    <style>
     @media print {
+      @page {
+        margin: 12mm 15mm;
+        size: A4 portrait;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
       body * { visibility: hidden; }
       #printable-area, #printable-area * { visibility: visible; }
-      #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+      #printable-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
       .no-print { display: none !important; }
+      .question-block {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        display: block;
+      }
     }
   </style>
+
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
   <div class="max-w-3xl mx-auto p-4 md:py-8">
