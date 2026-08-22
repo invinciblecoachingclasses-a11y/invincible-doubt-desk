@@ -972,16 +972,52 @@ textarea:focus, input:focus, select:focus {
 
 
     
-    <div id="arenaSetup">
+       <div id="arenaSetup">
         <label>Your Battle Tag</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
-        <label>Select Battle Grade</label>
-        <select id="arenaClass" style="margin-bottom:16px;">
-          <option value="9">Class 9</option>
-          <option value="10">Class 10</option>
-          <option value="11">Class 11</option>
-          <option value="12">Class 12</option>
-        </select>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <div>
+            <label>Grade</label>
+            <select id="arenaClass">
+              <option value="9">Class 9</option>
+              <option value="10" selected>Class 10</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          <div>
+            <label>Subject</label>
+            <select id="arenaSubject">
+              <option value="Science & Maths">Science & Maths (Mix)</option>
+              <option value="Science">Science (PCB)</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Social Studies">Social Studies (SST)</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Specific Chapter / Topic (Optional)</label>
+        <input type="text" id="arenaChapter" placeholder="e.g. Light, Chemical Reactions, Trigonometry">
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+          <div>
+            <label>Time Per Question</label>
+            <select id="arenaTimePerQ">
+              <option value="10">⚡ 10s (Speed Demon)</option>
+              <option value="15" selected>⏱ 15s (Standard)</option>
+              <option value="20">🐢 20s (Relaxed)</option>
+            </select>
+          </div>
+          <div>
+            <label>Total Questions</label>
+            <select id="arenaQuestionCount">
+              <option value="5">5 Qs (Quick Sprint)</option>
+              <option value="10" selected>10 Qs (Standard Match)</option>
+              <option value="15">15 Qs (Deep Battle)</option>
+            </select>
+          </div>
+        </div>
         
         <div class="arena-grid">
             <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ CREATE MATCH</button>
@@ -990,8 +1026,9 @@ textarea:focus, input:focus, select:focus {
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 JOIN ROOM</button>
             </div>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-purple); color:var(--accent-purple);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
     </div>
+
 
     <!-- RADAR LOBBY -->
     <div id="arenaWaiting" class="hidden lobby-box">
