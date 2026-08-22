@@ -2152,6 +2152,30 @@ function escapeHTML(str) {
   if (!str) return '';
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+function formatMathText(text) {
+  if (!text) return "";
+  const superscripts = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','x':'ˣ' };
+  return String(text)
+    .replace(/\\text\{([^}]*)\}/g, "$1")
+    .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+    .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2")
+    .replace(/\\implies/g, " ➔ ")
+    .replace(/\\rightarrow/g, " ➔ ")
+    .replace(/\\times/g, " × ")
+    .replace(/\\div/g, " ÷ ")
+    .replace(/\\cdot/g, " · ")
+    .replace(/\\sqrt\{([^}]*)\}/g, "√($1)")
+    .replace(/\\left/g, "")
+    .replace(/\\right/g, "")
+    .replace(/\\\[/g, "")
+    .replace(/\\\]/g, "")
+    .replace(/\$\$/g, "")
+    .replace(/\$/g, "")
+    .replace(/\^\{([^}]+)\}/g, (_, p1) => p1.split('').map(c => superscripts[c] || c).join(''))
+    .replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1)
+    .trim();
+}
+
 
 /* =====================================================
 DOUBT DESK LOGIC
