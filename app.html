@@ -2187,6 +2187,7 @@ function cleanAnswer(text){ return formatMathText(text); }
 document.getElementById("againBtn").addEventListener("click", function(){ const oldQuestion = questionInput.value.trim(); questionInput.value = oldQuestion + "\n\nExplain this in simpler terms with a brief step-by-step example."; document.getElementById("askBtn").click(); });
 document.getElementById("teacherBtn").addEventListener("click", function(){ const studentQuestion = questionInput.value.trim(); const explanation = document.getElementById("answerText").textContent.trim(); const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); });
 
+
 /* =====================================================
 TEST GENERATOR & TIME ATTACK ENGINE
 ===================================================== */
