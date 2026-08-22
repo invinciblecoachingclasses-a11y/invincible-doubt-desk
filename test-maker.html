@@ -299,11 +299,13 @@
         box.classList.toggle('hidden', !showAnswers);
       });
     });
-
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
+      localStorage.removeItem('doubt_desk_teacher');
+      localStorage.removeItem('sb-token');
       window.location.href = '/login.html';
     });
+
+    
   </script>
 </body>
 </html>
