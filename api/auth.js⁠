@@ -6,11 +6,12 @@ export default async function handler(req, res) {
   const { action, email, password } = req.body || {};
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
+    return res.status(400).json({ error: 'Email and password are required.' });
   }
 
-  const SUPABASE_URL = "https://wixmznptxupwcvgqjexk.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpeG16bnB0eHVwd2N2Z3FqZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3MDM3NDcsImV4cCI6MjA2MjI3OTc0N30.i9gCj1Z_WvWw2p_oXUuXm2T6wzBv4R0YJ6T0B3_HjZk";
+  // Active Supabase credentials matching test-maker.html
+  const SUPABASE_URL = "https://cbgwbzidkmcefoithipp.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g";
 
   const endpoint = action === 'signup' 
     ? `${SUPABASE_URL}/auth/v1/signup` 
@@ -24,16 +25,21 @@ export default async function handler(req, res) {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       },
-      body: JSON.stringify({ email: email.trim().toLowerCase(), password: password.trim() })
+      body: JSON.stringify({
+        email: email.trim().toLowerCase(),
+        password: password.trim()
+      })
     });
 
     const data = await response.json();
+
     if (!response.ok) {
-      return res.status(400).json({ error: data.msg || data.error_description || data.message || 'Auth failure' });
+      const errMsg = data.msg || data.error_description || data.message || 'Authentication failed';
+      return res.status(400).json({ error: errMsg });
     }
 
-    return res.status(200).json({ success: true, data });
+    return res.status(200).json({ success: true, session: data });
   } catch (err) {
-    return res.status(500).json({ error: err.message || 'Server error' });
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }
