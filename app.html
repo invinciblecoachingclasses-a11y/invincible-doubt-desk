@@ -2313,22 +2313,48 @@ if (whatsappShareBtn) {
 }
 
 /* =====================================================
-ARENA 1v1 LOGIC
+ARENA 1v1 LOGIC (ANIMATED, MULTI-TOPIC & DYNAMIC TIMER)
 ===================================================== */
-let arena = { code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 10, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 };
+let arena = { 
+  code: null, 
+  playerNum: 1, 
+  name: '', 
+  score: 0, 
+  questions: [], 
+  currentQ: 0, 
+  timer: 15, 
+  timeLimit: 15,
+  streak: 0,
+  interval: null, 
+  pollInterval: null, 
+  isBotMatch: false, 
+  botScore: 0 
+};
 
 function startBotMatch() {
     const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
-    arena.isBotMatch = true; arena.name = name; arena.playerNum = 1; arena.score = 0; arena.botScore = 0;
-    arena.questions = [
-        { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0 },
-        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2 },
-        { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0 },
-        { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण के दौरान कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1 },
-        { question_text: "Value of acceleration due to gravity (g) on Earth: / पृथ्वी पर गुरुत्वीय त्वरण (g) का मान:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0 }
+    const timerSec = parseInt(document.getElementById('arenaTimePerQ')?.value, 10) || 15;
+    const qCount = parseInt(document.getElementById('arenaQuestionCount')?.value, 10) || 5;
+
+    arena.isBotMatch = true; 
+    arena.name = name; 
+    arena.playerNum = 1; 
+    arena.score = 0; 
+    arena.botScore = 0;
+    arena.timeLimit = timerSec;
+    arena.streak = 0;
+
+    const samplePool = [
+        { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0, explanation: "Force = mass × acceleration, measured in Newtons." },
+        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
+        { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0, explanation: "KE = 1/2 m v²." },
+        { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण में कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1, explanation: "Plants split water molecules to release Oxygen (O2)." },
+        { question_text: "Value of acceleration due to gravity (g) on Earth:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0, explanation: "Standard standard gravity at sea level is ~9.8 m/s²." }
     ];
+
+    arena.questions = samplePool.slice(0, qCount);
     document.getElementById('uiP1Name').textContent = name;
-    document.getElementById('uiP2Name').textContent = "Invincible AI";
+    document.getElementById('uiP2Name').textContent = "Invincible AI 🤖";
     document.getElementById('uiP1Score').textContent = "0";
     document.getElementById('uiP2Score').textContent = "0";
     updateClashBar(0, 0);
@@ -2340,26 +2366,56 @@ if (btnCreate) {
   btnCreate.onclick = async () => {
     const name = document.getElementById('arenaPlayerName').value.trim();
     const className = document.getElementById('arenaClass').value;
+    const subject = document.getElementById('arenaSubject').value;
+    const chapter = document.getElementById('arenaChapter').value.trim();
+    const timePerQ = document.getElementById('arenaTimePerQ').value;
+    const qCount = document.getElementById('arenaQuestionCount').value;
+
     if(!name) return alert("Please enter your battle tag name.");
 
+    const originalText = btnCreate.textContent;
+    btnCreate.disabled = true;
+    btnCreate.textContent = "⚡ GENERATING BATTLE...";
+
     try {
-        const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'create', player_name: name, class_name: className }) });
+        const res = await fetch('/api/arena', { 
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify({ 
+                action: 'create', 
+                player_name: name, 
+                class_name: className,
+                subject: subject,
+                chapter: chapter,
+                time_per_question: timePerQ,
+                question_count: qCount
+            }) 
+        });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; arena.code = data.room_code; arena.questions = data.questions; arena.name = name; arena.playerNum = 1;
+        arena.isBotMatch = false; 
+        arena.code = data.room_code; 
+        arena.questions = data.questions; 
+        arena.name = name; 
+        arena.playerNum = 1;
+        arena.timeLimit = parseInt(data.time_per_question, 10) || parseInt(timePerQ, 10) || 15;
+        arena.streak = 0;
+
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
         document.getElementById('displayRoomCode').textContent = arena.code;
         
-        // Trigger voice on button click using the created room code
         startArenaVoiceChat(arena.code);
-
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { alert("Arena: " + err.message); }
+    } catch(err) { 
+        alert("Arena Error: " + err.message); 
+    } finally {
+        btnCreate.disabled = false;
+        btnCreate.textContent = originalText;
+    }
   };
 }
-
 
 const btnJoin = document.getElementById('btnJoinRoom');
 if (btnJoin) {
@@ -2373,19 +2429,23 @@ if (btnJoin) {
         const data = await res.json();
         if(data.error) throw new Error(data.error);
 
-        arena.isBotMatch = false; arena.code = code; arena.questions = data.questions; arena.name = name; arena.playerNum = 2;
+        arena.isBotMatch = false; 
+        arena.code = code; 
+        arena.questions = data.questions; 
+        arena.name = name; 
+        arena.playerNum = 2;
+        arena.timeLimit = 15;
+        arena.streak = 0;
+
         document.getElementById('uiP1Name').textContent = data.room.player1_name;
         document.getElementById('uiP2Name').textContent = name;
         
-        // Trigger voice on button click using the join code
         startArenaVoiceChat(code);
-
         startArenaGame();
         arena.pollInterval = setInterval(pollRoomState, 2000);
     } catch(err) { alert("Join Error: " + err.message); }
   };
 }
-
 
 async function pollRoomState() {
     if (arena.isBotMatch) return;
@@ -2435,14 +2495,18 @@ function startArenaGame() {
 function loadArenaQuestion() {
     if (arena.currentQ >= arena.questions.length) { 
         stopArenaVoiceChat();
-
         finishArenaGame(); 
         return; 
     }
-    
 
     const q = arena.questions[arena.currentQ];
-    document.getElementById('arenaQNum').textContent = `QUESTION ${arena.currentQ + 1}/${arena.questions.length}`;
+    
+    // Streak indicator badge
+    let streakEmoji = '';
+    if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE STREAK x' + arena.streak;
+    else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
+
+    document.getElementById('arenaQNum').innerHTML = `QUESTION ${arena.currentQ + 1}/${arena.questions.length} <span style="color:var(--accent-amber); font-weight:900;">${streakEmoji}</span>`;
     document.getElementById('arenaQText').textContent = q.question_text || q.question;
     
     let optsHTML = '';
@@ -2453,7 +2517,7 @@ function loadArenaQuestion() {
     });
     document.getElementById('arenaOptions').innerHTML = optsHTML;
     
-    arena.timer = 10;
+    arena.timer = arena.timeLimit;
     const timerDisplay = document.getElementById('arenaTimerDisplay');
     timerDisplay.textContent = `⏱ ${arena.timer}s`;
     timerDisplay.classList.remove('panic');
@@ -2477,9 +2541,18 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
     if (selectedIdx === Number(correctIdx)) {
         if(element) element.classList.add('hit-correct');
         playDing(); 
-        arena.score += (10 + arena.timer);
+        arena.streak++;
+        
+        // Speed bonus: Answering with >50% time left grants extra points
+        const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
+        arena.score += (10 + arena.timer + speedBonus);
+
+        if (arena.streak >= 3) {
+          confetti({ particleCount: 25, spread: 35, origin: { y: 0.7 } });
+        }
     } else {
         playBuzz();
+        arena.streak = 0;
         const card = document.getElementById('arenaCardContainer');
         if (card) {
           card.classList.add('arena-shake');
@@ -2537,9 +2610,9 @@ function showArenaResult(room) {
         document.getElementById('arenaResultText').innerHTML = `
             <div style="font-size:42px; margin-bottom:4px;">👑</div>
             <div style="font-size:26px; font-weight:900; color:var(--accent-emerald); letter-spacing:1px;">DOMINANT VICTORY</div>
-            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP</div>
+            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP 🔥</div>
         `;
-        confetti({ particleCount: 120, spread: 70, origin: { y: 0.5 } });
+        confetti({ particleCount: 140, spread: 80, origin: { y: 0.5 } });
     } else if(myScore === opScore) {
         document.getElementById('arenaResultText').innerHTML = `
             <div style="font-size:42px; margin-bottom:4px;">🤝</div>
@@ -2555,7 +2628,6 @@ function showArenaResult(room) {
     }
 }
 
-function escapeHTML(str){ return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
 /* =====================================================
 1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
 ===================================================== */
