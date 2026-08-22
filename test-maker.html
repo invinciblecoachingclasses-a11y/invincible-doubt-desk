@@ -141,14 +141,14 @@
     let base64Images = [];
     let showAnswers = false;
 
-        // Check login state on load
+            // Check login state on load using Supabase session
     async function checkAuth() {
-      const teacherSession = localStorage.getItem('doubt_desk_teacher') || localStorage.getItem('sb-token');
-      if (!teacherSession) {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session || !session.user) {
         window.location.href = '/login.html';
         return;
       }
-      currentUser = { email: teacherSession, id: teacherSession };
+      currentUser = session.user;
 
       // Check if loading an exam from 7-day history session
       const stored = sessionStorage.getItem('currentExam');
@@ -160,6 +160,7 @@
       }
     }
     checkAuth();
+
 
 
     function switchMode(mode) {
