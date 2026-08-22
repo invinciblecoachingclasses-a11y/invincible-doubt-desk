@@ -31,6 +31,7 @@
         <input 
           id="emailInput" 
           type="email" 
+          autocomplete="email"
           placeholder="teacher@school.com"
           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
         />
@@ -41,6 +42,7 @@
         <input 
           id="passwordInput" 
           type="password" 
+          autocomplete="current-password"
           placeholder="••••••••"
           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
         />
@@ -49,6 +51,7 @@
       <div class="flex gap-2 pt-2">
         <button 
           id="signInBtn" 
+          type="button"
           class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition active:scale-95 shadow-lg"
         >
           Sign In
@@ -56,6 +59,7 @@
 
         <button 
           id="signUpBtn" 
+          type="button"
           class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-sm border border-slate-700 transition active:scale-95"
         >
           Create Account
@@ -81,8 +85,8 @@
     }
 
     async function handleAuth(action) {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
+      const email = (emailInput.value || '').trim();
+      const password = (passwordInput.value || '').trim();
 
       if (!email || !password) {
         showStatus("Please enter both email and password.", true);
@@ -94,10 +98,11 @@
       activeBtn.textContent = action === 'signin' ? "Signing in..." : "Creating...";
 
       try {
-        const response = await fetch('/api/auth', {
+        const fullUrl = window.location.origin + '/api/auth';
+        const response = await fetch(fullUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action, email, password })
+          body: JSON.stringify({ action: action, email: email, password: password })
         });
 
         const resData = await response.json();
@@ -105,12 +110,12 @@
           throw new Error(resData.error || 'Request failed');
         }
 
-        if (resData.data?.access_token) {
+        if (resData.data && resData.data.access_token) {
           localStorage.setItem('sb-token', resData.data.access_token);
         }
 
         showStatus(action === 'signin' ? "Success! Redirecting..." : "Account created! Redirecting...", false);
-        setTimeout(() => { window.location.href = "/test-maker.html"; }, 800);
+        setTimeout(() => { window.location.href = "/test-maker.html"; }, 700);
       } catch (err) {
         showStatus("Error: " + err.message, true);
       } finally {
