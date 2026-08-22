@@ -1,1 +1,35 @@
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { action, email, password } = req.body;
+  const SUPABASE_URL = "https://wixmznptxupwcvgqjexk.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpeG16bnB0eHVwd2N2Z3FqZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3MDM3NDcsImV4cCI6MjA2MjI3OTc0N30.i9gCj1Z_WvWw2p_oXUuXm2T6wzBv4R0YJ6T0B3_HjZk";
+
+  const endpoint = action === 'signup' 
+    ? `${SUPABASE_URL}/auth/v1/signup` 
+    : `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      return res.status(400).json({ error: data.msg || data.error_description || data.message || 'Authentication error' });
+    }
+
+    return res.status(200).json({ success: true, data });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
 
