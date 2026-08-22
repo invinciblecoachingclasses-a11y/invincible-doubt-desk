@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Teacher Studio Login - DoubtDesk</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4">
 
@@ -29,13 +28,12 @@
     </div>
 
     <!-- Login Form -->
-    <form id="authForm" class="space-y-4">
+    <div class="space-y-4">
       <div>
         <label class="block text-xs font-semibold text-slate-300 mb-1.5">Teacher Email</label>
         <input 
           id="emailInput" 
           type="email" 
-          required 
           placeholder="teacher@school.com"
           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
         />
@@ -46,32 +44,27 @@
         <input 
           id="passwordInput" 
           type="password" 
-          required 
-          placeholder="Enter or create your password"
+          placeholder="••••••••"
           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
         />
       </div>
 
       <div class="flex gap-2 pt-2">
-        <!-- Sign In Button -->
         <button 
-          type="submit" 
           id="signInBtn" 
           class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition active:scale-95 shadow-lg"
         >
           Sign In
         </button>
 
-        <!-- Sign Up Button -->
         <button 
-          type="button" 
           id="signUpBtn" 
           class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-sm border border-slate-700 transition active:scale-95"
         >
           Create Account
         </button>
       </div>
-    </form>
+    </div>
 
     <!-- Error/Status Box -->
     <div id="statusMsg" class="hidden mt-4 text-xs text-center p-3 rounded-xl"></div>
@@ -81,15 +74,7 @@
   <script>
     const SUPABASE_URL = "https://wixmznptxupwcvgqjexk.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpeG16bnB0eHVwd2N2Z3FqZXhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY3MDM3NDcsImV4cCI6MjA2MjI3OTc0N30.i9gCj1Z_WvWw2p_oXUuXm2T6wzBv4R0YJ6T0B3_HjZk";
-    
-    let supabaseClient = null;
-    try {
-      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch(e) {
-      console.warn("Supabase init fallback:", e);
-    }
 
-    const authForm = document.getElementById('authForm');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
     const signInBtn = document.getElementById('signInBtn');
@@ -102,23 +87,43 @@
       statusMsg.classList.remove('hidden');
     }
 
-    // 1. Sign In Action
-    authForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    async function authRequest(endpoint, body) {
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.msg || data.error_description || data.message || 'Authentication error');
+      }
+      return data;
+    }
+
+    // 1. Sign In
+    signInBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        showStatus("Please enter both email and password.", true);
+        return;
+      }
 
       signInBtn.disabled = true;
       signInBtn.textContent = "Signing in...";
 
       try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        showStatus("Success! Redirecting to Test Studio...", false);
-        setTimeout(() => {
-          window.location.href = "/test-maker.html";
-        }, 800);
+        const data = await authRequest('token?grant_type=password', { email, password });
+        if (data.access_token) {
+          localStorage.setItem('sb-token', data.access_token);
+        }
+        showStatus("Success! Redirecting...", false);
+        setTimeout(() => { window.location.href = "/test-maker.html"; }, 800);
       } catch (err) {
         showStatus("Sign In Failed: " + err.message, true);
       } finally {
@@ -127,13 +132,13 @@
       }
     });
 
-    // 2. Sign Up Action (Create Account)
+    // 2. Create Account
     signUpBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
 
       if (!email || !password) {
-        showStatus("Please enter both email and password to create an account.", true);
+        showStatus("Please enter both email and password.", true);
         return;
       }
 
@@ -141,13 +146,12 @@
       signUpBtn.textContent = "Creating...";
 
       try {
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) throw error;
-
-        showStatus("Account created! Logging you in...", false);
-        setTimeout(() => {
-          window.location.href = "/test-maker.html";
-        }, 800);
+        const data = await authRequest('signup', { email, password });
+        if (data.access_token) {
+          localStorage.setItem('sb-token', data.access_token);
+        }
+        showStatus("Account created! Redirecting...", false);
+        setTimeout(() => { window.location.href = "/test-maker.html"; }, 800);
       } catch (err) {
         showStatus("Account Error: " + err.message, true);
       } finally {
