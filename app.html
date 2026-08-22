@@ -1725,6 +1725,7 @@ async function loadPlatformData(){
                   <div class="podium-item podium-${idx+1}">
                       <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
                       <div class="podium-name">${escapeHTML(item.student_name)}</div>
+                      <div style="font-size:8px; color:var(--text-muted); max-width:65px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(item.organization || item.school || '')}</div>
                       <div class="podium-score">${item.percentage}%</div>
                   </div>
               `).join('');
@@ -1734,7 +1735,7 @@ async function loadPlatformData(){
             if (listEl) {
               listEl.innerHTML = rest.map((item, idx) => `
                   <div class="clout-row">
-                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(Class ${item.student_class})</span></span>
+                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(${escapeHTML(item.organization || item.school || `Class ${item.student_class}`)})</span></span>
                       <span style="color:var(--accent-emerald);">${item.percentage}%</span>
                   </div>
               `).join('');
@@ -1745,6 +1746,7 @@ async function loadPlatformData(){
         }
     }catch(error){ console.error(error); }
 }
+
 window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
 
 function renderDailyPuzzle(puzzle) {
