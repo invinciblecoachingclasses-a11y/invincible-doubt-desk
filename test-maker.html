@@ -311,11 +311,11 @@
         box.classList.toggle('hidden', !showAnswers);
       });
     });
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      localStorage.removeItem('doubt_desk_teacher');
-      localStorage.removeItem('sb-token');
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
       window.location.href = '/login.html';
     });
+
 
     
   </script>
