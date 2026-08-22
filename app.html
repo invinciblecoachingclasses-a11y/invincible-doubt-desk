@@ -838,27 +838,70 @@ textarea:focus, input:focus, select:focus {
     <label for="question">Your Question</label>
     <textarea id="question" placeholder="Type your academic problem or paste text here..."></textarea>
     <input id="imageInput" type="file" accept="image/*" style="display:none;">
+    
     <div class="photo-buttons">
-        <button type="button" class="photo-btn" id="cameraBtn">📷 Capture Image</button>
-        <button type="button" class="photo-btn" id="uploadBtn">📁 Select Image</button>
+        <button type="button" class="photo-btn" id="cameraBtn">📷 Capture &amp; Crop</button>
+        <button type="button" class="photo-btn" id="uploadBtn">📁 Select &amp; Crop</button>
     </div>
-    <img id="imagePreview" alt="Preview" style="display:none; width:100%; max-height:240px; object-fit:contain; margin-bottom:12px; border-radius:14px; border:1px solid var(--border-subtle);">
-    <button type="button" id="removeImage" style="display:none; margin:0 auto 12px; background:none; border:none; color:var(--accent-rose); font-weight:bold; cursor:pointer;">Remove Photo</button>
-    <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:12px; font-weight:bold; font-size:13px;">Processing Detailed Solution...</div>
+    <!-- Image Preview Card -->
+    <div id="imagePreviewContainer" style="display:none; margin-bottom:12px; text-align:center;">
+      <img id="imagePreview" alt="Cropped Question" style="width:100%; max-height:220px; object-fit:contain; border-radius:14px; border:1px solid var(--accent-cyan); background:#000;">
+      <button type="button" id="removeImage" style="margin-top:6px; background:none; border:none; color:var(--accent-rose); font-weight:800; cursor:pointer; font-size:12px;">✕ Remove Question Photo</button>
+    </div>
+
+    <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION 🚀</button>
     
+    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:14px; font-weight:bold; font-size:13px;">
+      ⚡ Computing Step-by-Step Formula Breakdown &amp; Traps...
+    </div>
+    
+    <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
     <div class="answer-box" id="answerBox">
-        <div class="logic-title">Solution &amp; Analysis</div>
-        <div class="answer-text" id="answerText" style="margin-top:10px;"></div>
-        <div class="feedback" id="feedback">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:8px; margin-bottom:12px;">
+          <div class="logic-title">🎯 Master Teacher Solution</div>
+          <button type="button" onclick="clearDoubtThread()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px; cursor:pointer;">New Question</button>
+        </div>
+
+        <div id="doubtConversationThread" style="display:flex; flex-direction:column; gap:14px;">
+          <div class="topper-content" id="answerText"></div>
+        </div>
+
+        <!-- Conversational Follow-up Bar -->
+        <div style="margin-top:18px; padding-top:14px; border-top:1px dashed var(--border-subtle);">
+          <label style="color:var(--accent-cyan);">💬 Have a doubt in this step? Ask Follow-up:</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="followUpInput" placeholder="e.g. Why did we substitute t = x² - 1 here?" style="margin-bottom:0; font-size:13px;">
+            <button type="button" id="sendFollowUpBtn" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); border:none; color:#060913; font-weight:900; padding:0 16px; border-radius:14px; cursor:pointer; font-size:13px;">Ask</button>
+          </div>
+        </div>
+
+        <div class="feedback" id="feedback" style="display:block; margin-top:14px;">
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">Explain Simpler</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">Ask Teacher</button>
+                <button type="button" class="feedback-btn" id="againBtn">🐣 Explain Simpler</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">👨‍🏫 Send to Faculty</button>
             </div>
         </div>
     </div>
 </section>
+
+<!-- IMAGE CROPPER MODAL -->
+<div id="cropperModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:100000; flex-direction:column; align-items:center; justify-content:center; padding:16px;">
+  <div style="width:min(500px, 96%); background:#0f172a; border-radius:20px; border:1px solid rgba(255,255,255,0.15); overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:13px; font-weight:800; color:#fff;">✂️ Drag corners to crop question</div>
+      <button type="button" onclick="closeCropModal()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <div style="max-height:60vh; background:#000; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <img id="cropperImageElement" style="max-width:100%; display:block;" alt="Crop Area">
+    </div>
+    <div style="padding:12px 16px; display:flex; gap:8px; justify-content:flex-end; background:#1e293b; border-top:1px solid rgba(255,255,255,0.1);">
+      <button type="button" onclick="closeCropModal()" style="background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">Cancel</button>
+      <button type="button" onclick="confirmCroppedImage()" style="background:var(--accent-cyan); border:none; color:#060913; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:900; cursor:pointer;">Crop &amp; Attach 📐</button>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- =====================================================
