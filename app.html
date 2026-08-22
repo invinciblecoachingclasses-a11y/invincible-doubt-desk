@@ -1719,13 +1719,16 @@ async function loadPlatformData(){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
 
+            // Helper to get school name across various possible field names
+            const getSchool = (item) => item.organization || item.school_name || item.school || item.institution || `Class ${item.student_class || '10'}`;
+
             const podiumEl = document.getElementById("podiumContainer");
             if (podiumEl) {
               podiumEl.innerHTML = top3.map((item, idx) => `
                   <div class="podium-item podium-${idx+1}">
                       <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
                       <div class="podium-name">${escapeHTML(item.student_name)}</div>
-                      <div style="font-size:8px; color:var(--text-muted); max-width:65px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(item.organization || item.school || '')}</div>
+                      <div style="font-size:8px; color:var(--accent-cyan); max-width:70px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(getSchool(item))}</div>
                       <div class="podium-score">${item.percentage}%</div>
                   </div>
               `).join('');
@@ -1735,7 +1738,7 @@ async function loadPlatformData(){
             if (listEl) {
               listEl.innerHTML = rest.map((item, idx) => `
                   <div class="clout-row">
-                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--text-muted); font-size:10px;">(${escapeHTML(item.organization || item.school || `Class ${item.student_class}`)})</span></span>
+                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--accent-cyan); font-size:10px;">(${escapeHTML(getSchool(item))})</span></span>
                       <span style="color:var(--accent-emerald);">${item.percentage}%</span>
                   </div>
               `).join('');
@@ -1746,6 +1749,7 @@ async function loadPlatformData(){
         }
     }catch(error){ console.error(error); }
 }
+
 
 window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
 
