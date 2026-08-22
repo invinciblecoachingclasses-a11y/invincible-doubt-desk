@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exam & Worksheet Studio</title>
+  <title>Exam & Worksheet Studio - DoubtDesk</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -29,102 +29,184 @@
     <!-- App Header -->
     <div class="mb-6 text-center no-print">
       <h1 class="text-3xl font-extrabold text-indigo-700 tracking-tight">Exam & Worksheet Studio</h1>
-      <p class="text-sm text-slate-500 mt-1">Generate print-ready school question papers from handwritten drafts, NCERT topics, or pasted text.</p>
+      <p class="text-sm text-slate-500 mt-1">Generate print-ready CBSE/State board test papers with MCQs, marking schemes, and blueprints.</p>
     </div>
 
     <!-- Generator Setup Card -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8 no-print">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 mb-8 no-print space-y-6">
       
       <!-- Input Mode Switcher Tabs -->
-      <div class="flex rounded-xl bg-slate-100 p-1 mb-5 text-xs font-bold">
-        <button id="tabCamera" onclick="switchMode('camera')" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700">📸 Camera / Photo</button>
-        <button id="tabNCERT" onclick="switchMode('ncert')" class="flex-1 py-2 rounded-lg text-slate-600">📚 NCERT Chapter</button>
-        <button id="tabText" onclick="switchMode('text')" class="flex-1 py-2 rounded-lg text-slate-600">📋 Copy-Paste Text</button>
+      <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
+        <button id="tabNCERT" onclick="switchMode('ncert')" class="flex-1 py-2.5 rounded-lg bg-white shadow-sm text-indigo-700">📚 Multi-Chapter Syllabus</button>
+        <button id="tabText" onclick="switchMode('text')" class="flex-1 py-2.5 rounded-lg text-slate-600">📋 Paste Full Text / Bank</button>
+        <button id="tabCamera" onclick="switchMode('camera')" class="flex-1 py-2.5 rounded-lg text-slate-600">📸 Camera / Photos</button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">School / Institute Name</label>
-          <input id="schoolName" type="text" placeholder="e.g., Delhi Public School" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Subject</label>
-          <input id="subject" type="text" placeholder="e.g., Science / Mathematics" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Class / Grade</label>
-          <input id="classGrade" type="text" placeholder="e.g., Class 10" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Exam Type & Total Marks</label>
-          <div class="flex gap-2">
-            <select id="examType" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm bg-white">
-              <option value="Unit Assessment">Unit Test</option>
-              <option value="Periodic Test">Periodic Test</option>
-              <option value="Formative Assessment (FA)">Formative (FA)</option>
-              <option value="Summative Assessment (SA)">Summative (SA)</option>
-            </select>
-            <input id="totalMarks" type="number" placeholder="25" value="25" class="w-20 border border-slate-300 rounded-lg p-2.5 text-sm" />
+      <!-- 1. Administrative Top Details -->
+      <div>
+        <h3 class="text-xs font-black uppercase tracking-wider text-indigo-900 mb-3 flex items-center gap-1.5">
+          <span>🏛️</span> Institutional Header & Exam Info
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">School / Institute Name</label>
+            <input id="schoolName" type="text" placeholder="e.g., Delhi Public School / Invincible Classes" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Subject</label>
+            <input id="subject" type="text" placeholder="e.g., Science (Physics & Chemistry)" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Class / Grade</label>
+            <input id="classGrade" type="text" placeholder="e.g., Class 10th - CBSE" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Academic Session / Date</label>
+            <input id="academicSession" type="text" placeholder="e.g., 2025–26 / Term 1" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Exam Type & Total Marks</label>
+            <div class="flex gap-2">
+              <select id="examType" class="flex-1 border border-slate-300 rounded-lg p-2.5 text-sm bg-white">
+                <option value="Unit Assessment">Unit Assessment</option>
+                <option value="Periodic Test">Periodic Test</option>
+                <option value="Formative Assessment (FA)">Formative (FA)</option>
+                <option value="Summative Assessment (SA)">Summative (SA)</option>
+                <option value="Half-Yearly Examination">Half-Yearly Examination</option>
+                <option value="Pre-Board Mock Exam">Pre-Board Mock Exam</option>
+              </select>
+              <input id="totalMarks" type="number" placeholder="25" value="25" class="w-20 border border-slate-300 rounded-lg p-2.5 text-sm font-bold text-indigo-700 text-center" />
+            </div>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Time Allowed (Minutes)</label>
+            <input id="durationMinutes" type="number" value="45" placeholder="45" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
           </div>
         </div>
       </div>
 
-      <!-- Mode 1: Camera Photo View -->
-      <div id="viewCamera" class="mb-5">
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Snap Photos of Draft or Textbook Page</label>
-        <label class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-50 rounded-xl p-6 cursor-pointer transition">
-          <span class="text-sm font-medium text-indigo-900">Click to Snap Photo or Upload Images</span>
-          <span class="text-xs text-slate-500 mt-1">Supports handwritten pages and book diagrams</span>
-          <input id="cameraInput" type="file" accept="image/*" multiple capture="environment" class="hidden" />
-        </label>
-        <div id="previewContainer" class="flex gap-2 mt-3 overflow-x-auto"></div>
+      <!-- 2. Question Types & Authentic Board Settings -->
+      <div class="border-t pt-4">
+        <h3 class="text-xs font-black uppercase tracking-wider text-indigo-900 mb-3 flex items-center gap-1.5">
+          <span>🎯</span> Authentic Question Formats & Blueprint
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3 text-xs">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Difficulty Curve</label>
+            <select id="difficulty" class="w-full border border-slate-300 rounded-lg p-2.5 bg-white text-sm">
+              <option value="Standard Board Pattern">Standard Board Pattern</option>
+              <option value="Foundational / Easy">Foundational / Easy</option>
+              <option value="HOTS (High Order Thinking)">HOTS / Competency Based</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Set Code (Optional)</label>
+            <input id="setCode" type="text" placeholder="e.g., Set A" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">School Logo (Optional)</label>
+            <input id="logoInput" type="file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+          <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-xs cursor-pointer">
+            <input id="checkMCQs" type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded" />
+            <span class="font-bold text-slate-700">Include MCQs</span>
+          </label>
+          <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-xs cursor-pointer">
+            <input id="checkAssertion" type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded" />
+            <span class="font-bold text-slate-700">Assertion-Reason</span>
+          </label>
+          <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-xs cursor-pointer">
+            <input id="checkCaseStudy" type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded" />
+            <span class="font-bold text-slate-700">Case-Study Passage</span>
+          </label>
+          <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 p-2.5 rounded-lg text-xs cursor-pointer">
+            <input id="checkStudentBlanks" type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded" />
+            <span class="font-bold text-slate-700">Student Name Blanks</span>
+          </label>
+        </div>
       </div>
 
-      <!-- Mode 2: NCERT Topic View -->
-      <div id="viewNCERT" class="mb-5 hidden">
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Chapter Name / NCERT Exercise Topics</label>
-        <input id="chapterName" type="text" placeholder="e.g., Chapter 4: Quadratic Equations (Exercise 4.2 & 4.3 word problems)" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+      <!-- 3. Syllabus & Content Input Views -->
+      <div class="border-t pt-4">
+        
+        <!-- Mode 1: Multi-Chapter NCERT View -->
+        <div id="viewNCERT" class="space-y-2">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Chapters & Weightage Specification</label>
+          <textarea id="chapterName" rows="4" placeholder="Enter one or multiple chapters with topic notes:&#10;e.g.,&#10;1. Chapter 1: Chemical Reactions & Equations (Types of reactions, Redox) - 10 Marks&#10;2. Chapter 2: Acids, Bases and Salts (pH scale, Salt preparations) - 15 Marks" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Mode 2: Copy-Paste Text View -->
+        <div id="viewText" class="space-y-2 hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Paste Full Question Bank / PDF Study Notes</label>
+          <textarea id="rawText" rows="6" placeholder="Paste your question bank, copied PDF syllabus, or revision notes here..." class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Mode 3: Camera Photo View -->
+        <div id="viewCamera" class="space-y-2 hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Upload Handwritten Drafts or Book Photos</label>
+          <label class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-50 rounded-xl p-6 cursor-pointer transition">
+            <span class="text-sm font-medium text-indigo-900">Click to Snap Photo or Upload Images</span>
+            <span class="text-xs text-slate-500 mt-1">Supports multiple handwritten sheets and diagrams</span>
+            <input id="cameraInput" type="file" accept="image/*" multiple capture="environment" class="hidden" />
+          </label>
+          <div id="previewContainer" class="flex gap-2 mt-3 overflow-x-auto"></div>
+        </div>
+
       </div>
 
-      <!-- Mode 3: Copy-Paste Text View -->
-      <div id="viewText" class="mb-5 hidden">
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Paste Raw Questions / Notes / PDF Text</label>
-        <textarea id="rawText" rows="4" placeholder="Paste your question bank or copied PDF text here..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
-      </div>
-
-      <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition disabled:bg-slate-400">
-        Generate Print-Ready Exam & Marking Key
+      <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black py-3.5 rounded-xl shadow-lg transition active:scale-95 text-sm">
+        Generate Authentic Exam Paper & Step-by-Step Marking Key 🚀
       </button>
     </div>
 
     <!-- Output Paper View -->
     <div id="resultCard" class="hidden">
-      <div class="flex gap-3 mb-4 no-print">
-        <button onclick="window.print()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow transition">
-          🖨️ Print / Save Student Paper (PDF)
+      <div class="flex flex-wrap gap-3 mb-4 no-print">
+        <button onclick="window.print()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow transition text-xs sm:text-sm">
+          🖨️ Print / Save Student PDF
         </button>
-        <button id="toggleAnswersBtn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl shadow transition">
-          👁️ Toggle Marking Scheme
+        <button id="toggleAnswersBtn" class="flex-1 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 rounded-xl shadow transition text-xs sm:text-sm">
+          👁️ Toggle Marking Scheme Key
         </button>
       </div>
 
+      <!-- PRINTABLE PAPER SHEET -->
       <div id="printable-area" class="bg-white rounded-2xl border border-slate-300 p-8 shadow-sm text-slate-900">
-        <div class="text-center border-b-2 border-slate-800 pb-4 mb-6">
+        
+        <!-- School Header Block -->
+        <div class="border-b-2 border-slate-900 pb-4 mb-4 text-center relative">
+          <img id="paperLogo" class="hidden absolute left-0 top-0 w-16 h-16 object-contain" alt="School Logo" />
           <h2 id="paperSchool" class="text-2xl font-black uppercase tracking-wide">Academic Institution</h2>
-          <h3 id="paperTitle" class="text-lg font-bold text-slate-700 mt-1">Periodic Test</h3>
-          <div class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-slate-600 mt-4 border-t pt-2 border-slate-200">
-            <span><strong>Subject:</strong> <span id="paperSubject"></span></span>
-            <span><strong>Class:</strong> <span id="paperClass"></span></span>
-            <span><strong>Time:</strong> <span id="paperDuration"></span> mins</span>
-            <span><strong>Max Marks:</strong> <span id="paperMarks"></span></span>
+          <div class="flex justify-center items-center gap-2 mt-1">
+            <h3 id="paperTitle" class="text-base font-bold text-slate-800">Periodic Test</h3>
+            <span id="paperSetBadge" class="hidden text-[10px] font-black uppercase bg-slate-900 text-white px-2 py-0.5 rounded"></span>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-semibold uppercase tracking-wider text-slate-700 mt-4 border-t pt-2.5 border-slate-300 text-left">
+            <div><strong>Subject:</strong> <span id="paperSubject"></span></div>
+            <div><strong>Class:</strong> <span id="paperClass"></span></div>
+            <div><strong>Time:</strong> <span id="paperDuration"></span> Mins</div>
+            <div><strong>Max Marks:</strong> <span id="paperMarks"></span></div>
+          </div>
+
+          <!-- Student Name / Roll No Blanks -->
+          <div id="studentBlanksRow" class="hidden grid grid-cols-3 gap-3 text-xs font-semibold text-slate-800 mt-3 pt-2.5 border-t border-dashed border-slate-300 text-left">
+            <div>Name: ______________________</div>
+            <div>Roll No: __________________</div>
+            <div>Section: _________________</div>
           </div>
         </div>
 
-        <div class="mb-6 text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-200">
-          <strong class="block mb-1 text-slate-800">General Instructions:</strong>
+        <!-- Instructions -->
+        <div class="mb-5 text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-200">
+          <strong class="block mb-1 text-slate-900 font-bold uppercase tracking-wider">General Instructions:</strong>
           <ul id="paperInstructions" class="list-disc pl-4 space-y-0.5"></ul>
         </div>
 
+        <!-- Section & Questions Container -->
         <div id="paperSections" class="space-y-6"></div>
       </div>
     </div>
@@ -134,14 +216,15 @@
   <script>
     const supabaseUrl = 'https://cbgwbzidkmcefoithipp.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     let currentUser = null;
-    let activeMode = 'camera';
+    let activeMode = 'ncert';
     let base64Images = [];
+    let uploadedLogoBase64 = null;
     let showAnswers = false;
 
-            // Check login state on load using Supabase session
+    // Check login state on load using Supabase session
     async function checkAuth() {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session || !session.user) {
@@ -150,7 +233,6 @@
       }
       currentUser = session.user;
 
-      // Check if loading an exam from 7-day history session
       const stored = sessionStorage.getItem('currentExam');
       if (stored) {
         try {
@@ -161,37 +243,38 @@
     }
     checkAuth();
 
-
-
     function switchMode(mode) {
-  activeMode = mode;
-  
-  // Toggle views
-  document.getElementById('viewCamera').classList.toggle('hidden', mode !== 'camera');
-  document.getElementById('viewNCERT').classList.toggle('hidden', mode !== 'ncert');
-  document.getElementById('viewText').classList.toggle('hidden', mode !== 'text');
+      activeMode = mode;
+      document.getElementById('viewCamera').classList.toggle('hidden', mode !== 'camera');
+      document.getElementById('viewNCERT').classList.toggle('hidden', mode !== 'ncert');
+      document.getElementById('viewText').classList.toggle('hidden', mode !== 'text');
 
-  // Map mode directly to element ID
-  const tabMap = {
-    camera: 'tabCamera',
-    ncert: 'tabNCERT',
-    text: 'tabText'
-  };
+      const tabMap = { ncert: 'tabNCERT', text: 'tabText', camera: 'tabCamera' };
+      Object.entries(tabMap).forEach(([key, id]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        const isActive = key === mode;
+        btn.className = isActive 
+          ? 'flex-1 py-2.5 rounded-lg bg-white shadow-sm text-indigo-700 font-bold' 
+          : 'flex-1 py-2.5 rounded-lg text-slate-600';
+      });
+    }
 
-  Object.entries(tabMap).forEach(([key, id]) => {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    const isActive = key === mode;
-    btn.className = isActive 
-      ? 'flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold' 
-      : 'flex-1 py-2 rounded-lg text-slate-600';
-  });
-}
+    // Logo upload reader
+    document.getElementById('logoInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          uploadedLogoBase64 = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
-
+    // Camera upload reader
     const cameraInput = document.getElementById('cameraInput');
     const previewContainer = document.getElementById('previewContainer');
-
     cameraInput.addEventListener('change', (e) => {
       Array.from(e.target.files).forEach((file) => {
         const reader = new FileReader();
@@ -209,7 +292,7 @@
     document.getElementById('generateBtn').addEventListener('click', async () => {
       const btn = document.getElementById('generateBtn');
       btn.disabled = true;
-      btn.innerText = 'AI Structuring Test & Marking Scheme...';
+      btn.innerText = 'AI Structuring Complete Board Exam & Marking Key...';
 
       try {
         const payload = {
@@ -219,6 +302,14 @@
           classGrade: document.getElementById('classGrade').value,
           totalMarks: document.getElementById('totalMarks').value,
           examType: document.getElementById('examType').value,
+          durationMinutes: document.getElementById('durationMinutes').value,
+          academicSession: document.getElementById('academicSession').value,
+          setCode: document.getElementById('setCode').value,
+          includeStudentBlanks: document.getElementById('checkStudentBlanks').checked,
+          difficulty: document.getElementById('difficulty').value,
+          includeMCQs: document.getElementById('checkMCQs').checked,
+          includeAssertionReason: document.getElementById('checkAssertion').checked,
+          includeCaseStudy: document.getElementById('checkCaseStudy').checked,
           chapterName: document.getElementById('chapterName').value,
           rawText: document.getElementById('rawText').value,
           imageBase64Array: activeMode === 'camera' ? base64Images : []
@@ -251,7 +342,7 @@
         alert('Generation failed: ' + err.message);
       } finally {
         btn.disabled = false;
-        btn.innerText = 'Generate Print-Ready Exam & Marking Key';
+        btn.innerText = 'Generate Authentic Exam Paper & Step-by-Step Marking Key 🚀';
       }
     });
 
@@ -263,6 +354,28 @@
       document.getElementById('paperDuration').innerText = exam.duration_minutes || '45';
       document.getElementById('paperMarks').innerText = exam.total_marks || '25';
 
+      // Set code badge
+      const setBadge = document.getElementById('paperSetBadge');
+      if (exam.set_code) {
+        setBadge.innerText = exam.set_code;
+        setBadge.classList.remove('hidden');
+      } else {
+        setBadge.classList.add('hidden');
+      }
+
+      // Logo render
+      const logoEl = document.getElementById('paperLogo');
+      if (uploadedLogoBase64) {
+        logoEl.src = uploadedLogoBase64;
+        logoEl.classList.remove('hidden');
+      } else {
+        logoEl.classList.add('hidden');
+      }
+
+      // Student detail blanks toggle
+      document.getElementById('studentBlanksRow').classList.toggle('hidden', !exam.has_student_blanks);
+
+      // Instructions
       const instrList = document.getElementById('paperInstructions');
       instrList.innerHTML = '';
       (exam.instructions || []).forEach(inst => {
@@ -271,26 +384,39 @@
         instrList.appendChild(li);
       });
 
+      // Questions by section
       const sectionsContainer = document.getElementById('paperSections');
       sectionsContainer.innerHTML = '';
 
       exam.sections.forEach(sec => {
         const secDiv = document.createElement('div');
-        secDiv.innerHTML = `<h4 class="font-bold text-sm tracking-wider uppercase border-b pb-1 mb-3 text-slate-800">${sec.section_name}</h4>`;
+        secDiv.innerHTML = `<h4 class="font-bold text-sm tracking-wider uppercase border-b-2 border-slate-700 pb-1 mb-4 text-slate-900">${sec.section_name}</h4>`;
         
         const qList = document.createElement('div');
         qList.className = 'space-y-4';
 
         sec.questions.forEach(q => {
           const qItem = document.createElement('div');
-          qItem.className = 'text-sm';
+          qItem.className = 'text-sm space-y-1.5';
+
+          let optionsHtml = '';
+          if (q.options && Array.isArray(q.options) && q.options.length > 0) {
+            optionsHtml = `
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pl-5 pt-1 text-xs text-slate-800 font-medium">
+                ${q.options.map(opt => `<div>${opt}</div>`).join('')}
+              </div>
+            `;
+          }
+
           qItem.innerHTML = `
             <div class="flex justify-between items-baseline gap-4">
-              <span class="font-semibold text-slate-900">Q${q.question_number}. ${q.question_text}</span>
-              <span class="text-xs font-bold text-slate-600 whitespace-nowrap">[${q.marks} Mark${q.marks > 1 ? 's' : ''}]</span>
+              <span class="font-bold text-slate-900">Q${q.question_number}. ${q.question_text}</span>
+              <span class="text-xs font-bold text-slate-700 whitespace-nowrap bg-slate-100 px-2 py-0.5 rounded border border-slate-200">[${q.marks} Mark${q.marks > 1 ? 's' : ''}]</span>
             </div>
-            <div class="answer-key-box hidden mt-2 text-xs bg-emerald-50 border border-emerald-200 text-emerald-900 p-2.5 rounded-lg">
-              <strong>Marking Scheme / Answer:</strong> ${q.answer_key}
+            ${optionsHtml}
+            <div class="answer-key-box hidden mt-2 text-xs bg-emerald-50 border border-emerald-300 text-emerald-950 p-3 rounded-lg leading-relaxed shadow-sm">
+              <strong class="text-emerald-800 block mb-1">Step-by-Step Marking Scheme / Solution:</strong>
+              ${q.answer_key}
             </div>
           `;
           qList.appendChild(qItem);
@@ -311,13 +437,11 @@
         box.classList.toggle('hidden', !showAnswers);
       });
     });
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
       await supabaseClient.auth.signOut();
       window.location.href = '/login.html';
     });
-
-
-    
   </script>
 </body>
 </html>
