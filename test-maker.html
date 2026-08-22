@@ -163,19 +163,30 @@
 
 
     function switchMode(mode) {
-      activeMode = mode;
-      document.getElementById('viewCamera').classList.toggle('hidden', mode !== 'camera');
-      document.getElementById('viewNCERT').classList.toggle('hidden', mode !== 'ncert');
-      document.getElementById('viewText').classList.toggle('hidden', mode !== 'text');
+  activeMode = mode;
+  
+  // Toggle views
+  document.getElementById('viewCamera').classList.toggle('hidden', mode !== 'camera');
+  document.getElementById('viewNCERT').classList.toggle('hidden', mode !== 'ncert');
+  document.getElementById('viewText').classList.toggle('hidden', mode !== 'text');
 
-      ['tabCamera', 'tabNCERT', 'tabText'].forEach(id => {
-        const btn = document.getElementById(id);
-        const isActive = (id === 'tab' + mode.toUpperCase() || (mode === 'camera' && id === 'tabCamera') || (mode === 'ncert' && id === 'tabNCERT') || (mode === 'text' && id === 'tabText'));
-        btn.className = isActive 
-          ? 'flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold' 
-          : 'flex-1 py-2 rounded-lg text-slate-600';
-      });
-    }
+  // Map mode directly to element ID
+  const tabMap = {
+    camera: 'tabCamera',
+    ncert: 'tabNCERT',
+    text: 'tabText'
+  };
+
+  Object.entries(tabMap).forEach(([key, id]) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    const isActive = key === mode;
+    btn.className = isActive 
+      ? 'flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-700 font-bold' 
+      : 'flex-1 py-2 rounded-lg text-slate-600';
+  });
+}
+
 
     const cameraInput = document.getElementById('cameraInput');
     const previewContainer = document.getElementById('previewContainer');
