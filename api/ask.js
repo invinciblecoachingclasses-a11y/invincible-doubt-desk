@@ -29,7 +29,6 @@ INSTRUCTIONS:
 
     let parts = [{ text: systemPrompt }];
 
-    // If conversation history exists, append it
     if (Array.isArray(history) && history.length > 0) {
       history.forEach(item => {
         parts.push({ text: `${item.role === 'user' ? 'Student' : 'Teacher'}: ${item.content}` });
@@ -49,26 +48,38 @@ INSTRUCTIONS:
       });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts }]
-      })
-    });
+    // Models ordered by priority with automatic fallbacks
+    const models = ["gemini-3.6-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
+    let answer = null;
+    let lastError = null;
 
-    const data = await response.json();
+    for (const model of models) {
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contents: [{ parts }] })
+          }
+        );
 
-    if (!response.ok) {
-      console.error("Gemini Error:", data);
-      return res.status(response.status).json({ error: data?.error?.message || "AI service error." });
+        const data = await response.json();
+        if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+          answer = data.candidates[0].content.parts[0].text;
+          break; // Success! Exit loop
+        } else {
+          lastError = data?.error?.message || "Quota reached";
+        }
+      } catch (err) {
+        lastError = err.message;
+      }
     }
 
-    const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!answer) {
-      return res.status(500).json({ error: "Empty solution generated." });
+      return res.status(429).json({
+        error: "Desk is receiving high student traffic right now. Please wait 15 seconds and tap View Solution again!"
+      });
     }
 
     return res.status(200).json({
