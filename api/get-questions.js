@@ -20,8 +20,8 @@ export default async function handler(req, res) {
         });
         const puzzles = await pRes.json();
 
-        // 3. Fetch Top 5 Leaderboard Scores
-        const lRes = await fetch(`${supabaseUrl}/rest/v1/test_attempts?select=student_name,student_class,subject,percentage&order=percentage.desc,created_at.desc&limit=5`, {
+        // 3. Fetch Top 7 Leaderboard Scores with School / Organization Included
+        const lRes = await fetch(`${supabaseUrl}/rest/v1/test_attempts?select=student_name,student_class,organization,subject,percentage&order=percentage.desc,created_at.desc&limit=7`, {
             headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
         });
         const leaderboard = await lRes.json();
