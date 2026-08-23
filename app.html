@@ -1673,20 +1673,57 @@ if (genNotesBtn) {
 }
 
 // 🖨️ CLEAN A4 PDF EXPORTER (PREVENTS BLANK & CUT-OFF PAGES)
+
 function downloadPDF() {
     const element = document.getElementById('notesContentBody');
-    const title = document.getElementById('notesResultTitle').textContent;
-    const cls = document.getElementById('notesClass').value;
-    const chapterName = document.getElementById('notesChapter').value.trim() || 'Module';
+    const title = document.getElementById('notesResultTitle')?.textContent || "CBSE Study Module";
+    const cls = document.getElementById('notesClass')?.value || "10";
+    const chapterName = document.getElementById('notesChapter')?.value.trim() || 'Notes';
     
-    // Create wrapper for rendering
+    // Create an isolated, explicit black-on-white container
     const pdfWrapper = document.createElement('div');
-    pdfWrapper.style.backgroundColor = '#ffffff';
-    pdfWrapper.style.color = '#0f172a';
-    pdfWrapper.style.padding = '20px 24px';
-    pdfWrapper.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
+    pdfWrapper.style.cssText = `
+      background-color: #ffffff !important;
+      color: #0f172a !important;
+      padding: 24px 30px;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+    `;
     
-    // Branded Header
+    // Force all child text, paragraphs, and headings to dark ink
+    const contentClone = element.cloneNode(true);
+    contentClone.querySelectorAll('*').forEach(el => {
+      el.style.color = '#0f172a';
+      if (el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4') {
+        el.style.color = '#000000';
+        el.style.fontWeight = '800';
+      }
+      if (el.classList.contains('callout-trap')) {
+        el.style.backgroundColor = '#fff1f2';
+        el.style.borderLeft = '4px solid #e11d48';
+        el.style.color = '#881337';
+      }
+      if (el.classList.contains('callout-tldr')) {
+        el.style.backgroundColor = '#f0fdf4';
+        el.style.borderLeft = '4px solid #16a34a';
+        el.style.color = '#14532d';
+      }
+      if (el.classList.contains('callout-formula')) {
+        el.style.backgroundColor = '#f8fafc';
+        el.style.border = '1px solid #cbd5e1';
+        el.style.color = '#0f172a';
+      }
+      if (el.tagName === 'TH') {
+        el.style.backgroundColor = '#0f172a';
+        el.style.color = '#ffffff';
+      }
+      if (el.tagName === 'TD') {
+        el.style.color = '#0f172a';
+        el.style.borderColor = '#cbd5e1';
+      }
+    });
+
     pdfWrapper.innerHTML = `
       <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end;">
         <div>
@@ -1695,14 +1732,14 @@ function downloadPDF() {
         </div>
         <div style="font-size: 9px; font-weight: 700; color: #64748b;">CBSE CURRICULUM</div>
       </div>
-      <div class="topper-content">${element.innerHTML}</div>
     `;
+    pdfWrapper.appendChild(contentClone);
 
     const opt = {
-      margin:       [12, 12, 12, 12],
+      margin:       [10, 10, 10, 10],
       filename:     `Invincible_Class_${cls}_${chapterName.replace(/\s+/g, '_')}_Notes.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
       pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
     };
