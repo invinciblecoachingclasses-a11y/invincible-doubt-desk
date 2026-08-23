@@ -10,10 +10,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Please enter a question or upload a photo." });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
+    const rawKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
+    if (!rawKeys) {
       return res.status(500).json({ error: "Gemini API key is not configured." });
     }
+
+    // Split multiple keys, trim whitespace, and randomize order for balanced traffic
+    const keys = rawKeys.split(",").map(k => k.trim()).filter(Boolean);
+    const shuffledKeys = keys.sort(() => 0.5 - Math.random());
 
     const systemPrompt = `You are a master teacher for CBSE/State board students at Invincible Coaching Classes.
 Subject: ${subject || "General"}
@@ -49,30 +53,33 @@ INSTRUCTIONS:
     }
 
     // Models ordered by priority with automatic fallbacks
-    const models = ["gemini-3.6-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
+    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.5-pro"];
     let answer = null;
     let lastError = null;
 
-    for (const model of models) {
-      try {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: [{ parts }] })
-          }
-        );
+    // Loop through all keys and fallback models until a valid answer is returned
+    keyLoop: for (const apiKey of shuffledKeys) {
+      for (const model of models) {
+        try {
+          const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ contents: [{ parts }] })
+            }
+          );
 
-        const data = await response.json();
-        if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-          answer = data.candidates[0].content.parts[0].text;
-          break; // Success! Exit loop
-        } else {
-          lastError = data?.error?.message || "Quota reached";
+          const data = await response.json();
+          if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+            answer = data.candidates[0].content.parts[0].text;
+            break keyLoop; // Success! Exit immediately
+          } else {
+            lastError = data?.error?.message || "Quota reached on this key";
+          }
+        } catch (err) {
+          lastError = err.message;
         }
-      } catch (err) {
-        lastError = err.message;
       }
     }
 
