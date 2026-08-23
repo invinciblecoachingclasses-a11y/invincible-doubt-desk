@@ -12,12 +12,10 @@ export default async function handler(req, res) {
 
     const rawKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (!rawKeys) {
-      return res.status(500).json({ error: "Gemini API key is not configured." });
+      return res.status(500).json({ error: "Gemini API key is not configured in Vercel." });
     }
 
-    // Split multiple keys, trim whitespace, and randomize order for balanced traffic
     const keys = rawKeys.split(",").map(k => k.trim()).filter(Boolean);
-    const shuffledKeys = keys.sort(() => 0.5 - Math.random());
 
     const systemPrompt = `You are a master teacher for CBSE/State board students at Invincible Coaching Classes.
 Subject: ${subject || "General"}
@@ -25,11 +23,11 @@ Subject: ${subject || "General"}
 INSTRUCTIONS:
 1. Explain clearly in friendly conversational Hinglish.
 2. For all equations and math expressions, use standard LaTeX ($ for inline, $$ for block formulas).
-3. Always structure the response cleanly:
+3. Structure your answer cleanly:
    - 🎯 **Direct Formula / Core Concept**
    - 🧠 **Step-by-Step Solution**
    - 💡 **Final Answer / Key Takeaway**
-   - 🚨 **Common Student Mistakes (सावधानियां)**: Highlight 1-2 frequent mistakes students make in this concept.`;
+   - 🚨 **Common Student Mistakes (सावधानियां)**`;
 
     let parts = [{ text: systemPrompt }];
 
@@ -52,13 +50,11 @@ INSTRUCTIONS:
       });
     }
 
-    // Models ordered by priority with automatic fallbacks
-    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.5-pro"];
+    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
     let answer = null;
-    let lastError = null;
+    let errorLog = [];
 
-    // Loop through all keys and fallback models until a valid answer is returned
-    keyLoop: for (const apiKey of shuffledKeys) {
+    keyLoop: for (const apiKey of keys) {
       for (const model of models) {
         try {
           const response = await fetch(
@@ -73,19 +69,19 @@ INSTRUCTIONS:
           const data = await response.json();
           if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
             answer = data.candidates[0].content.parts[0].text;
-            break keyLoop; // Success! Exit immediately
+            break keyLoop;
           } else {
-            lastError = data?.error?.message || "Quota reached on this key";
+            errorLog.push(`${model}: ${data?.error?.message || response.statusText}`);
           }
         } catch (err) {
-          lastError = err.message;
+          errorLog.push(`${model}: ${err.message}`);
         }
       }
     }
 
     if (!answer) {
-      return res.status(429).json({
-        error: "Desk is receiving high student traffic right now. Please wait 15 seconds and tap View Solution again!"
+      return res.status(500).json({
+        error: `API Call Failed -> ${errorLog.slice(0, 2).join(" | ")}`
       });
     }
 
