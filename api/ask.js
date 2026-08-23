@@ -50,7 +50,8 @@ INSTRUCTIONS:
       });
     }
 
-    const models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
+    // Exact model IDs requested by your API endpoint
+    const models = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
     let answer = null;
     let errorLog = [];
 
@@ -81,7 +82,7 @@ INSTRUCTIONS:
 
     if (!answer) {
       return res.status(500).json({
-        error: `API Call Failed -> ${errorLog.slice(0, 2).join(" | ")}`
+        error: `Model Failure: ${errorLog.slice(0, 2).join(" | ")}`
       });
     }
 
