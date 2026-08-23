@@ -1587,44 +1587,80 @@ textarea:focus, input:focus, select:focus {
         <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
 </div>
-
-<!-- NOTE VAULT MODAL -->
+<!-- STORY STUDIO (DROP HACK) MODAL -->
 <div class="modal-overlay" id="storyModal">
-    <div class="modal-card">
+    <div class="modal-card" style="width: min(480px, 96%); padding: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <h3 style="margin:0; font-size:16px; color:var(--accent-cyan);">⚡ Drop 1-Line Secret Hack / Formula</h3>
+            <h3 style="margin:0; font-size:16px; color:var(--accent-cyan);">📸 Story Studio</h3>
             <button type="button" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
         </div>
-        <input type="text" id="storyAuthorName" placeholder="Your Name">
-        <input type="text" id="storyInstitution" placeholder="School Name">
-        <textarea id="storyCaption" placeholder="Drop a formula trick or mnemonic..."></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishStory">SHARE TIP</button>
+        
+        <div class="story-studio-inputs">
+          <input type="text" id="storyAuthorName" placeholder="Your Name" style="margin:0;">
+          <input type="number" id="storyAuthorAge" placeholder="Age" style="margin:0;">
+          <input type="text" id="storyAuthorClass" placeholder="Class/Batch" style="margin:0;">
+          <input type="text" id="storyInstitution" placeholder="School Name" style="margin:0;">
+        </div>
+
+        <div class="photo-upload-row">
+          <button type="button" class="photo-btn" onclick="document.getElementById('storyCameraInput').click()">📷 Camera</button>
+          <button type="button" class="photo-btn" onclick="document.getElementById('storyGalleryInput').click()">📁 Gallery</button>
+        </div>
+        <input type="file" id="storyCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleStoryImage(event)">
+        <input type="file" id="storyGalleryInput" accept="image/*" style="display:none;" onchange="handleStoryImage(event)">
+
+        <div class="story-preview-container">
+          <span id="storyPlaceholderText" style="color:var(--text-muted); font-size:12px; font-weight:700;">No photo selected</span>
+          <img id="storyImagePreview" alt="Story Preview">
+        </div>
+
+        <div class="filter-tray" id="filterTray">
+          <!-- Filters injected via JS -->
+        </div>
+
+        <textarea id="storyCaption" placeholder="Type your hack, formula, or thought here..." rows="2" style="margin-top:10px; background:rgba(0,0,0,0.6);"></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishStory">🚀 POST STORY</button>
     </div>
 </div>
 
 <!-- FULLSCREEN REELS VIEWER -->
 <div class="story-viewer-modal" id="storyViewer">
     <div class="story-card-view">
-        <div>
-            <div class="story-progress-bar" id="storyProgressContainer"></div>
-            <div class="story-view-header">
-                <div id="viewerAuthor" style="font-size:13px; font-weight:800; color:#fff;">Author</div>
-                <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
+        <img id="viewerImageBg" class="story-image-bg" src="" style="display:none;">
+        <div class="story-content-layer">
+            <div>
+                <div class="story-progress-bar" id="storyProgressContainer"></div>
+                <div class="story-view-header">
+                    <div style="font-size:13px; font-weight:900; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
+                    <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
+                </div>
             </div>
-        </div>
-        <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
-        <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
-        <div class="story-body-content">
-            <div id="viewerCaption" class="story-caption-text"></div>
-        </div>
-        <div class="story-action-bar">
-            <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
-            <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
-            <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
-            <button type="button" class="restart-btn" style="width:auto; margin:0; padding:6px 12px; font-size:11px;" onclick="saveStoryToVault()">💾 Save</button>
+            <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
+            <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
+            
+            <div class="story-body-content">
+                <div id="viewerCaption" class="story-caption-text" style="background:rgba(0,0,0,0.5); padding:10px 14px; border-radius:12px; backdrop-filter:blur(8px); width:90%;"></div>
+            </div>
+            
+            <!-- Glassmorphic Clout Card -->
+            <div class="story-id-card">
+              <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-rose), var(--accent-cyan)); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff; border:2px solid #fff;" id="viewerAvatar"></div>
+              <div>
+                <div style="font-size:14px; font-weight:900; color:#fff;" id="viewerAuthorDetails">Name</div>
+                <div style="font-size:11px; font-weight:700; color:var(--accent-cyan);" id="viewerSchoolDetails">School</div>
+              </div>
+            </div>
+
+            <div class="story-action-bar">
+                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
+                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
+                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
+                <button type="button" class="restart-btn" style="width:auto; margin:0; padding:6px 12px; font-size:11px;" onclick="saveStoryToVault()">💾 Save</button>
+            </div>
         </div>
     </div>
 </div>
+
 
 <script>
 /* =====================================================
