@@ -53,19 +53,47 @@
   box-sizing: border-box; 
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
 }
-/* ✅ FIXED HIGH-CONTRAST CSS */
+/* ✅ CRISP HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
 .topper-content {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #0f172a !important;
+  color: #f1f5f9;
   line-height: 1.65;
   font-size: 14px;
 }
 .topper-content p, 
 .topper-content li, 
-.topper-content span, 
+.topper-content span {
+  color: #e2e8f0;
+}
+.topper-content strong,
+.topper-content b,
+.topper-content h1,
+.topper-content h2,
+.topper-content h3 {
+  color: #ffffff;
+}
 .topper-content mjx-container {
+  color: #00e5ff;
+}
+
+/* Light theme override specifically for Topper Notes Studio white card */
+.topper-paper-container .topper-content,
+.topper-paper-container .topper-content p,
+.topper-paper-container .topper-content li,
+.topper-paper-container .topper-content span {
   color: #1e293b !important;
 }
+.topper-paper-container .topper-content strong,
+.topper-paper-container .topper-content b,
+.topper-paper-container .topper-content h1,
+.topper-paper-container .topper-content h2,
+.topper-paper-container .topper-content h3 {
+  color: #0f172a !important;
+}
+.topper-paper-container .topper-content mjx-container {
+  color: #0f172a !important;
+}
+
 
 
 #doubtSection .callout-trap {
