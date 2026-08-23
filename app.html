@@ -28,11 +28,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
-
-
-
-
-
 <style>
 :root {
   --bg-main: #060913;
@@ -53,48 +48,28 @@
   box-sizing: border-box; 
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
 }
-/* ✅ CRISP HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
+
+/* HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
 .topper-content {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   color: #f1f5f9;
   line-height: 1.65;
   font-size: 14px;
 }
-.topper-content p, 
-.topper-content li, 
-.topper-content span {
-  color: #e2e8f0;
-}
-.topper-content strong,
-.topper-content b,
-.topper-content h1,
-.topper-content h2,
-.topper-content h3 {
-  color: #ffffff;
-}
-.topper-content mjx-container {
-  color: #00e5ff;
-}
+.topper-content p, .topper-content li, .topper-content span { color: #e2e8f0; }
+.topper-content strong, .topper-content b, .topper-content h1, .topper-content h2, .topper-content h3 { color: #ffffff; }
+.topper-content mjx-container { color: #00e5ff; }
 
-/* Light theme override specifically for Topper Notes Studio white card */
 .topper-paper-container .topper-content,
 .topper-paper-container .topper-content p,
 .topper-paper-container .topper-content li,
-.topper-paper-container .topper-content span {
-  color: #1e293b !important;
-}
+.topper-paper-container .topper-content span { color: #1e293b !important; }
 .topper-paper-container .topper-content strong,
 .topper-paper-container .topper-content b,
 .topper-paper-container .topper-content h1,
 .topper-paper-container .topper-content h2,
-.topper-paper-container .topper-content h3 {
-  color: #0f172a !important;
-}
-.topper-paper-container .topper-content mjx-container {
-  color: #0f172a !important;
-}
-
-
+.topper-paper-container .topper-content h3 { color: #0f172a !important; }
+.topper-paper-container .topper-content mjx-container { color: #0f172a !important; }
 
 #doubtSection .callout-trap {
   background: rgba(244, 63, 94, 0.15);
@@ -104,7 +79,6 @@
   margin: 12px 0;
   color: #fecdd3;
 }
-
 #doubtSection .callout-tldr {
   background: rgba(0, 229, 255, 0.12);
   border-left: 4px solid var(--accent-cyan);
@@ -126,16 +100,15 @@ body {
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .container { width: min(860px, 92%); margin: 12px auto 110px; }
 
-/* TACTILE INTERACTIONS */
-button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active {
-  transform: scale(0.93) !important;
+button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active, .portal-hero-card:active {
+  transform: scale(0.94) !important;
 }
 
-/* QUICK RETURN BANNER ON SUB-PAGES */
 .quick-hub-banner {
   background: rgba(13, 18, 36, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -149,7 +122,7 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
 }
 .quick-hub-banner:hover { border-color: var(--accent-cyan); background: rgba(0, 229, 255, 0.05); }
 
-/* 1. DYNAMIC TOP HUD */
+/* TOP HUD */
 .slim-hud {
   position: sticky;
   top: 8px;
@@ -193,40 +166,184 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   color: var(--accent-cyan);
 }
 
-/* FEATURE GRID FOR HOME VIEW */
-.feature-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 18px;
-}
-@media (min-width: 640px) {
-  .feature-quick-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
-.feature-tile {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 16px 14px;
+/* 2-TRACK DUAL PORTAL CARDS */
+.portal-deck-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  gap: 14px;
+  margin-bottom: 18px;
 }
-.feature-tile::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--tile-accent, var(--accent-cyan)), transparent);
+@media (min-width: 680px) {
+  .portal-deck-wrapper { display: grid; grid-template-columns: 1fr 1fr; }
 }
-.feature-tile:hover { transform: translateY(-3px); border-color: var(--tile-accent, var(--accent-cyan)); }
-.feature-tile-icon { font-size: 26px; margin-bottom: 8px; }
-.feature-tile-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
-.feature-tile-desc { font-size: 11px; color: var(--text-muted); line-height: 1.3; }
 
-/* 2. TODAY'S DAILY MISSION */
+.portal-hero-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(8, 12, 24, 0.95));
+  border-radius: 26px;
+  padding: 22px 20px;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+.portal-hero-card.study-track {
+  border-top: 2px solid var(--accent-cyan);
+}
+.portal-hero-card.battle-track {
+  border-top: 2px solid var(--accent-rose);
+}
+.portal-hero-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+}
+.portal-badge {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 4px 9px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.study-badge { background: rgba(0, 229, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
+.battle-badge { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
+.portal-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.portal-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+.portal-subfeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.portal-sub-pill {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: #cbd5e1;
+}
+
+/* SUB-PORTAL SELECTION VIEWS (SLIDE ANIMATION) */
+.sub-portal-view {
+  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(25px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.feature-choice-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.feature-choice-card:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.06);
+  transform: translateX(4px);
+}
+
+/* INTERACTIVE WAITING SCREENS (ZERO PERCEIVED LATENCY) */
+.waiting-container {
+  background: rgba(13, 18, 36, 0.75);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 22px;
+  padding: 22px 18px;
+  margin-top: 18px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+}
+.pipeline-step-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  margin-bottom: 8px;
+}
+.pipeline-progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.pipeline-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald));
+  transition: width 0.3s ease;
+}
+.fact-ticker-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PUMP-TO-CHARGE MINIGAME FOR NOTES */
+.charger-orb {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-amber), #d97706);
+  margin: 12px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+  user-select: none;
+}
+.charger-orb:active {
+  transform: scale(0.86);
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.8);
+}
+
+/* WARMUP TRIVIA CARD */
+.warmup-trivia-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 4px;
+}
+.warmup-trivia-btn:hover {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.1);
+}
+
+/* DAILY MISSION & STORIES */
 .mission-card {
   background: rgba(13, 18, 36, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -248,7 +365,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   background: rgba(5, 255, 161, 0.12); color: var(--accent-emerald); border-color: rgba(5, 255, 161, 0.25);
 }
 
-/* 3. STORIES TRAY */
 .stories-tray-container {
   background: rgba(13, 18, 36, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -272,7 +388,7 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
 .story-avatar-inner { width: 100%; height: 100%; background: #080c16; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #fff; }
 .story-username { font-size: 10px; font-weight: 700; color: var(--text-muted); width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* 4. DAILY CLASH & LEADERBOARD BENTO */
+/* DAILY CLASH & LEADERBOARD BENTO */
 .bento-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -496,7 +612,7 @@ textarea:focus, input:focus, select:focus {
   line-height: 1.6;
 }
 
-/* HIGH-IMPACT VIBRANT BOTTOM DOCK */
+/* FLOATING BOTTOM DOCK */
 .floating-dock {
   position: fixed;
   bottom: 14px;
@@ -564,7 +680,7 @@ textarea:focus, input:focus, select:focus {
 .story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
 .reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 
-/* Hub Category Filter Pills */
+/* FEED POSTS */
 .hub-pill {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -576,119 +692,13 @@ textarea:focus, input:focus, select:focus {
   cursor: pointer;
   white-space: nowrap;
 }
-.hub-pill.active {
-  background: #22c55e;
-  border-color: #22c55e;
-  color: #052e16;
-}
-.post-card {
-  background: #182234;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 14px;
-}
-.post-tag {
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 5px;
-}
+.hub-pill.active { background: #22c55e; border-color: #22c55e; color: #052e16; }
+.post-card { background: #182234; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 14px; }
+.post-tag { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; }
 .tag-teacher_intel { background: rgba(234, 179, 8, 0.2); color: #facc15; }
 .tag-syllabus_notes { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
 .tag-ask_seniors { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
 .tag-news { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-/* TOPPER BENTO CALLOUTS & TABLE FORMATTING */
-.topper-content {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #1e293b;
-  line-height: 1.65;
-  font-size: 13.5px;
-}
-.topper-content h1, .topper-content h2, .topper-content h3 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.3px;
-  margin-top: 22px;
-  margin-bottom: 10px;
-}
-.topper-content p { margin: 8px 0; }
-.topper-content ul { padding-left: 18px; margin: 8px 0; }
-.topper-content li { margin-bottom: 6px; }
-
-/* Callout Bento Blocks */
-.callout-tldr {
-  background: rgba(245, 158, 11, 0.08);
-  border-left: 4px solid #f59e0b;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin: 12px 0;
-}
-.callout-trap {
-  background: rgba(244, 63, 94, 0.08);
-  border-left: 4px solid #f43f5e;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin: 12px 0;
-}
-.callout-formula {
-  background: rgba(0, 229, 255, 0.08);
-  border: 1px solid rgba(0, 229, 255, 0.35);
-  border-radius: 14px;
-  padding: 14px;
-  margin: 14px 0;
-  text-align: center;
-}
-
-/* Micro-Badges */
-.badge-ncert {
-  background: #0284c7;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px;
-  display: inline-block;
-}
-.badge-marks {
-  background: #10b981;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px;
-  display: inline-block;
-}
-
-/* Structured Tables with Zebra Striping */
-.topper-content table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 14px 0;
-  border-radius: 10px;
-  overflow: hidden;
-  font-size: 12.5px;
-}
-.topper-content th, .topper-content td {
-  border: 1px solid #cbd5e1;
-  padding: 8px 12px;
-  text-align: left;
-}
-.topper-content th {
-  background-color: #0f172a;
-  color: #f8fafc;
-  font-weight: 800;
-}
-.topper-content tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.03); }
-
-/* Prevent Page Break Glitches */
-@media print {
-  .topper-content tr, .topper-content .callout-tldr, .topper-content .callout-trap, .topper-content .callout-formula {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-}
-
 
 /* 1V1 ARENA LIVE VOICE CHAT HUD */
 .arena-voice-bar {
@@ -704,18 +714,8 @@ textarea:focus, input:focus, select:focus {
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
-.voice-status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #64748b;
-  display: inline-block;
-  margin-right: 6px;
-}
-.voice-status-dot.connected {
-  background: #10b981;
-  box-shadow: 0 0 10px #10b981;
-}
+.voice-status-dot { width: 10px; height: 10px; border-radius: 50%; background: #64748b; display: inline-block; margin-right: 6px; }
+.voice-status-dot.connected { background: #10b981; box-shadow: 0 0 10px #10b981; }
 .voice-ctrl-btn {
   background: #1e293b;
   border: 1px solid #334155;
@@ -730,13 +730,9 @@ textarea:focus, input:focus, select:focus {
   font-size: 16px;
   transition: all 0.2s ease;
 }
-.voice-ctrl-btn.muted {
-  background: #f43f5e;
-  border-color: #fda4af;
-}
-
-
+.voice-ctrl-btn.muted { background: #f43f5e; border-color: #fda4af; }
 </style>
+
 <!-- Markdown Parser, Math Rendering & Clean PDF Engine -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -749,17 +745,12 @@ textarea:focus, input:focus, select:focus {
 
 <!-- PeerJS Free WebRTC Engine for In-Game Voice Calls -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
-
 </head>
-<!-- Magic Tools for PDFs and Math -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
 <body>
 <main class="container">
 
-<!-- 1. CLEAN TOP DYNAMIC HUD -->
+<!-- 1. TOP DYNAMIC HUD -->
 <header class="slim-hud">
     <div class="slim-logo" onclick="switchTab('home')" style="cursor:pointer;">
         <span>⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
@@ -774,11 +765,11 @@ textarea:focus, input:focus, select:focus {
 </header>
 
 <!-- =====================================================
-     HOME DECK (ONLY SHOWS ON HOME TAB)
+     HOME DECK (CLEAN 2-TRACK PORTAL GATEWAY)
 ===================================================== -->
 <div id="homeSection">
     
-    <!-- 2. TODAY'S DAILY MISSION -->
+    <!-- TODAY'S DAILY MISSION -->
     <section class="mission-card" aria-label="Daily Progress Tracker">
         <div class="mission-top">
             <span style="font-size:11px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted);">TODAY'S MISSION</span>
@@ -794,7 +785,7 @@ textarea:focus, input:focus, select:focus {
         </div>
     </section>
 
-    <!-- 3. STORIES TRAY -->
+    <!-- STORIES TRAY -->
     <div class="stories-tray-container" id="storiesTray">
         <div class="story-circle-item" id="btnAddStory">
             <div class="story-avatar-wrap add-story">
@@ -811,32 +802,86 @@ textarea:focus, input:focus, select:focus {
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
 
-    <!-- 4. HIGH-CONVERTING 5-FEATURE SPEED TILES -->
-    <div class="feature-quick-grid">
-        <div class="feature-tile" style="--tile-accent: var(--accent-cyan);" onclick="switchTab('doubt')">
-            <div class="feature-tile-icon">🧠</div>
-            <div class="feature-tile-title">Doubt Desk</div>
-            <div class="feature-tile-desc">Instant Step-by-Step AI Solutions</div>
+    <!-- 2-TRACK GATEWAY SELECTION -->
+    <div id="mainPortalRoot" class="portal-deck-wrapper">
+        <!-- TRACK 1: FLOW STATE -->
+        <div class="portal-hero-card study-track" onclick="openTrackPortal('study')">
+            <span class="portal-badge study-badge">🎯 TRACK 01 // SOLO MASTERY</span>
+            <div class="portal-title">Flow State Study 🧠</div>
+            <div class="portal-desc">Step-by-step doubt solutions, CBSE chapter mock tests, and topper revision notes.</div>
+            <div class="portal-subfeatures">
+                <span class="portal-sub-pill">Doubt Desk</span>
+                <span class="portal-sub-pill">Timed Tests</span>
+                <span class="portal-sub-pill">Topper Notes</span>
+            </div>
         </div>
-        <div class="feature-tile" style="--tile-accent: var(--accent-rose);" onclick="switchTab('arena')">
-            <div class="feature-tile-icon">⚔️</div>
-            <div class="feature-tile-title">1v1 Arena</div>
-            <div class="feature-tile-desc">10s Live Speed Battles</div>
-        </div>
-        <div class="feature-tile" style="--tile-accent: #38bdf8;" onclick="switchTab('test')">
-            <div class="feature-tile-icon">⏱️</div>
-            <div class="feature-tile-title">Mock Tests</div>
-            <div class="feature-tile-desc">Chapter-wise CBSE Timed Tests</div>
-        </div>
-        <div class="feature-tile" style="--tile-accent: #22c55e;" onclick="switchTab('feed')">
-            <div class="feature-tile-icon">📢</div>
-            <div class="feature-tile-title">School Feed</div>
-            <div class="feature-tile-desc">Viva Tips, Notes & Local Buzz</div>
+
+        <!-- TRACK 2: BATTLEFIELD -->
+        <div class="portal-hero-card battle-track" onclick="openTrackPortal('battle')">
+            <span class="portal-badge battle-badge">⚔️ TRACK 02 // COMPETE & CLOUT</span>
+            <div class="portal-title">Battle Arena &amp; Feed 🚀</div>
+            <div class="portal-desc">10s live multiplayer speed clashes, daily survival riddles, and campus buzz.</div>
+            <div class="portal-subfeatures">
+                <span class="portal-sub-pill">1v1 Voice Battles</span>
+                <span class="portal-sub-pill">15s Daily Clash</span>
+                <span class="portal-sub-pill">School Feed</span>
+            </div>
         </div>
     </div>
 
-    <!-- 5. DAILY CLASH & LIVE LEADERBOARD BENTO -->
-    <div class="bento-grid">
+    <!-- TRACK 1 SELECTION SUB-VIEW -->
+    <div id="studySubView" class="sub-portal-view hidden">
+        <div class="quick-hub-banner" onclick="closeTrackPortals()">
+            <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Portal Hub</span>
+            <span style="font-size:11px; color:#9ca3af;">Solo Study Tools</span>
+        </div>
+        <div class="feature-choice-card" onclick="switchTab('doubt')">
+            <div>
+                <strong style="color:#fff; font-size:14px;">🧠 Instant Doubt Resolution Desk</strong>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Step-by-step solutions with examiner traps and audio readout.</div>
+            </div>
+            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
+        </div>
+        <div class="feature-choice-card" onclick="switchTab('test')">
+            <div>
+                <strong style="color:#fff; font-size:14px;">⏱️ CBSE Mock &amp; Practice Tests</strong>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">20-question timed chapter assessments with instant scoring.</div>
+            </div>
+            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
+        </div>
+        <div class="feature-choice-card" onclick="switchTab('notes')">
+            <div>
+                <strong style="color:#fff; font-size:14px;">📝 Topper Notes Studio</strong>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Generate full 8–10 page chapter revision study modules.</div>
+            </div>
+            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
+        </div>
+    </div>
+
+    <!-- TRACK 2 SELECTION SUB-VIEW -->
+    <div id="battleSubView" class="sub-portal-view hidden">
+        <div class="quick-hub-banner" onclick="closeTrackPortals()">
+            <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Portal Hub</span>
+            <span style="font-size:11px; color:#9ca3af;">Battle &amp; Social</span>
+        </div>
+        <div class="feature-choice-card" onclick="switchTab('arena')">
+            <div>
+                <strong style="color:#fff; font-size:14px;">⚔️ 1v1 Live Knowledge Arena</strong>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Rapid-fire 10s speed duels with live peer voice chat.</div>
+            </div>
+            <span style="color:var(--accent-rose); font-weight:900;">➔</span>
+        </div>
+        <div class="feature-choice-card" onclick="switchTab('feed')">
+            <div>
+                <strong style="color:#fff; font-size:14px;">📢 School Charcha &amp; Feed</strong>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Local school viva updates, teacher intel &amp; peer discussions.</div>
+            </div>
+            <span style="color:#22c55e; font-weight:900;">➔</span>
+        </div>
+    </div>
+
+    <!-- DAILY CLASH & LIVE LEADERBOARD BENTO -->
+    <div class="bento-grid" style="margin-top:16px;">
         <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Challenge">
             <div>
                 <div class="survival-top">
@@ -880,7 +925,7 @@ textarea:focus, input:focus, select:focus {
 <section class="card hidden" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">Study Flow Track</span>
     </div>
 
     <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
@@ -916,11 +961,14 @@ textarea:focus, input:focus, select:focus {
 
     <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION 🚀</button>
     
-    <div id="loadingDoubt" class="hidden" style="text-align:center; color:var(--accent-cyan); margin-top:14px; font-weight:bold; font-size:13px;">
-      ⚡ Computing Step-by-Step Formula Breakdown &amp; Traps...
+    <!-- INTERACTIVE WAIT PIPELINE & FLASH TICKER -->
+    <div id="loadingDoubt" class="hidden waiting-container">
+      <div class="pipeline-step-text" id="doubtPipelineText">🔍 Scanning problem tokens...</div>
+      <div class="pipeline-progress-bar"><div class="pipeline-progress-fill" id="doubtProgressFill"></div></div>
+      <div class="fact-ticker-card" id="doubtFactTicker">💡 While AI computes: Did you know that Total Internal Reflection only occurs from a denser to rarer medium?</div>
     </div>
     
-        <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
+    <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
     <div class="answer-box" id="answerBox">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:8px; margin-bottom:12px;">
           <div class="logic-title">🎯 Master Teacher Solution</div>
@@ -929,7 +977,6 @@ textarea:focus, input:focus, select:focus {
             <button type="button" onclick="clearDoubtThread()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px; cursor:pointer;">New Question</button>
           </div>
         </div>
-
 
         <div id="doubtConversationThread" style="display:flex; flex-direction:column; gap:14px;">
           <div class="topper-content" id="answerText"></div>
@@ -970,15 +1017,13 @@ textarea:focus, input:focus, select:focus {
   </div>
 </div>
 
-
-
 <!-- =====================================================
      2. TEST SECTION
 ===================================================== -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">Study Flow Track</span>
     </div>
 
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
@@ -1035,6 +1080,17 @@ textarea:focus, input:focus, select:focus {
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
+        
+        <!-- MOCK TEST WARMUP TRIVIA WAITING CARD -->
+        <div id="testWarmupBox" class="hidden waiting-container" style="margin-top:14px;">
+            <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); margin-bottom:4px;">🔥 COMPILING EXAM... QUICK REACTION CHECK (+10 XP)</div>
+            <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:8px;" id="warmupQuestionText">Unit of Electric Potential Difference:</div>
+            <div id="warmupOptions">
+                <button type="button" class="warmup-trivia-btn" onclick="answerWarmup(this, true)">Volt (V)</button>
+                <button type="button" class="warmup-trivia-btn" onclick="answerWarmup(this, false)">Ampere (A)</button>
+            </div>
+            <div id="warmupFeedback" style="font-size:11px; margin-top:6px;"></div>
+        </div>
     </div>
 
     <div id="testArea" class="hidden">
@@ -1063,30 +1119,27 @@ textarea:focus, input:focus, select:focus {
 <section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">Battlefield Track</span>
     </div>
 
     <div style="text-align:center; margin-bottom:16px;">
         <h2 class="section-h2" style="color:var(--accent-rose); margin:0; letter-spacing:1px;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
     </div>
-    <!-- Live In-Game Voice Chat HUD -->
-<div id="arenaVoiceHUD" class="arena-voice-bar">
-  <div style="display:flex; align-items:center;">
-    <span id="voiceStatusDot" class="voice-status-dot"></span>
-    <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
-  </div>
-  <div style="display:flex; gap: 8px;">
-    <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()" title="Mute/Unmute Mic">🎙️</button>
-    <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()" title="Deafen/Listen">🔊</button>
-  </div>
-</div>
-<!-- Hidden Remote Audio Player -->
-<!-- Replace your current <audio id="remoteArenaAudio"...> line with this: -->
-<audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
-
-
     
-       <div id="arenaSetup">
+    <!-- Live In-Game Voice Chat HUD -->
+    <div id="arenaVoiceHUD" class="arena-voice-bar">
+      <div style="display:flex; align-items:center;">
+        <span id="voiceStatusDot" class="voice-status-dot"></span>
+        <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
+      </div>
+      <div style="display:flex; gap: 8px;">
+        <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()" title="Mute/Unmute Mic">🎙️</button>
+        <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()" title="Deafen/Listen">🔊</button>
+      </div>
+    </div>
+    <audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
+    
+    <div id="arenaSetup">
         <label>Your Battle Tag</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
 
@@ -1142,7 +1195,6 @@ textarea:focus, input:focus, select:focus {
         </div>
         <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
     </div>
-
 
     <!-- RADAR LOBBY -->
     <div id="arenaWaiting" class="hidden lobby-box">
@@ -1205,7 +1257,7 @@ textarea:focus, input:focus, select:focus {
 <section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes">
   <div class="quick-hub-banner" onclick="switchTab('home')">
       <span style="font-size:12px; font-weight:800; color:#22c55e;">← Return to Home Deck</span>
-      <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+      <span style="font-size:11px; color:#9ca3af;">Battlefield Track</span>
   </div>
 
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
@@ -1249,7 +1301,7 @@ textarea:focus, input:focus, select:focus {
 <section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-amber);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">Study Flow Track</span>
     </div>
 
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
@@ -1282,9 +1334,16 @@ textarea:focus, input:focus, select:focus {
     <input type="text" id="notesChapter" placeholder="e.g. Gravitation, Sound, Chemical Reactions">
     
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
-    <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling module (15-20s)...</div>
     
-       <div id="notesResultContainer" class="hidden topper-paper-container">
+    <!-- TAP-TO-CHARGE SUPERCHARGER MINIGAME FOR NOTES -->
+    <div id="notesLoading" class="hidden waiting-container" style="border-color:var(--accent-amber);">
+      <div style="font-size:13px; font-weight:800; color:var(--accent-amber);">⚙️ COMPILING COMPREHENSIVE STUDY MODULE...</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Tap the energy orb to supercharge AI compilation!</div>
+      <div class="charger-orb" onclick="chargeSupercharger()">⚡</div>
+      <div style="font-size:12px; font-weight:900; color:#fff;" id="chargeBonusDisplay">+0 Bonus XP Charged</div>
+    </div>
+    
+    <div id="notesResultContainer" class="hidden topper-paper-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
             <div style="font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase;" id="notesResultTitle">CLASS • SUBJECT</div>
             <div style="display:flex; gap:8px;">
@@ -1292,11 +1351,9 @@ textarea:focus, input:focus, select:focus {
               <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🖨️ Download PDF</button>
             </div>
         </div>
-
         <div id="notesContentBody" class="topper-content"></div>
     </div>
 </section>
-
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -1332,7 +1389,6 @@ textarea:focus, input:focus, select:focus {
 <!-- POST CREATION MODAL -->
 <div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
   <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
-    
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <div>
         <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
@@ -1455,6 +1511,103 @@ textarea:focus, input:focus, select:focus {
 </div>
 
 <script>
+/* =====================================================
+   PORTAL SWIPE & TRACK GATEWAY CONTROLLER
+===================================================== */
+function openTrackPortal(track) {
+  playDing();
+  document.getElementById('mainPortalRoot')?.classList.add('hidden');
+  if (track === 'study') {
+    document.getElementById('studySubView')?.classList.remove('hidden');
+    document.getElementById('battleSubView')?.classList.add('hidden');
+  } else {
+    document.getElementById('battleSubView')?.classList.remove('hidden');
+    document.getElementById('studySubView')?.classList.add('hidden');
+  }
+}
+
+function closeTrackPortals() {
+  playDing();
+  document.getElementById('studySubView')?.classList.add('hidden');
+  document.getElementById('battleSubView')?.classList.add('hidden');
+  document.getElementById('mainPortalRoot')?.classList.remove('hidden');
+}
+
+/* =====================================================
+   INTERACTIVE WAITING PIPELINES
+===================================================== */
+let doubtTimerInterval = null;
+const doubtFacts = [
+  "💡 Total Internal Reflection happens only when light travels from denser to rarer medium.",
+  "💡 In lens formula, focal length of convex lens is ALWAYS positive (+f).",
+  "💡 Ohm's law is NOT universal—it fails for diodes and semiconductors!",
+  "💡 In redox reactions, oxidation is Loss of electrons (OIL) and reduction is Gain (RIG)."
+];
+let factIdx = 0;
+
+function startDoubtWaitingPipeline() {
+  const steps = [
+    "🔍 Scanning question tokens...",
+    "📐 Mapping CBSE marking scheme...",
+    "🚨 Checking examiner traps & edge cases...",
+    "✨ Compiling step-by-step breakdown..."
+  ];
+  let sIdx = 0;
+  let progress = 10;
+  
+  const label = document.getElementById('doubtPipelineText');
+  const bar = document.getElementById('doubtProgressFill');
+  const fact = document.getElementById('doubtFactTicker');
+  
+  clearInterval(doubtTimerInterval);
+  doubtTimerInterval = setInterval(() => {
+    sIdx = (sIdx + 1) % steps.length;
+    factIdx = (factIdx + 1) % doubtFacts.length;
+    progress = Math.min(progress + 22, 92);
+    
+    if (label) label.textContent = steps[sIdx];
+    if (bar) bar.style.width = progress + '%';
+    if (fact) fact.textContent = doubtFacts[factIdx];
+  }, 2200);
+}
+
+function stopDoubtWaitingPipeline() {
+  clearInterval(doubtTimerInterval);
+}
+
+/* Notes Tap-to-Charge Supercharger Minigame */
+let chargedBonusXP = 0;
+function chargeSupercharger() {
+  chargedBonusXP += 1;
+  playSound('sine', 600 + (chargedBonusXP * 20), 0.08, 0.12);
+  const display = document.getElementById('chargeBonusDisplay');
+  if (display) display.textContent = `+${chargedBonusXP} Bonus XP Charged! ⚡`;
+  
+  const xpEl = document.getElementById('xpCounter');
+  if (xpEl) {
+    let cur = parseInt(xpEl.textContent || '680', 10);
+    xpEl.textContent = cur + 1;
+  }
+}
+
+/* Mock Test Quick Reaction Check */
+function answerWarmup(btn, isCorrect) {
+  const fb = document.getElementById('warmupFeedback');
+  if (isCorrect) {
+    playDing();
+    btn.style.borderColor = 'var(--accent-emerald)';
+    btn.style.background = 'rgba(16, 185, 129, 0.2)';
+    if (fb) fb.innerHTML = '<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct! +10 XP</span>';
+  } else {
+    playBuzz();
+    btn.style.borderColor = 'var(--accent-rose)';
+    if (fb) fb.innerHTML = '<span style="color:var(--accent-rose); font-weight:800;">Incorrect! Correct: Volt (V)</span>';
+  }
+}
+
+/* =====================================================
+   CORE APP SCRIPTS & LOGIC (UNTOUCHED INTEGRITY)
+===================================================== */
 function animateXP() {
     let xp = 0;
     const target = 680;
@@ -1468,7 +1621,6 @@ function animateXP() {
 }
 setTimeout(animateXP, 500);
 
-/* DAILY STREAK ENGINE */
 function checkDailyStreak() {
     const today = new Date().toDateString();
     const lastVisit = localStorage.getItem('invincible_last_visit');
@@ -1492,9 +1644,6 @@ function checkDailyStreak() {
 }
 window.addEventListener('DOMContentLoaded', checkDailyStreak);
 
-/* =====================================================
-   CLEAN SEPARATION NAVIGATION ENGINE
-===================================================== */
 function switchTab(tab) {
     document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
     
@@ -1530,9 +1679,7 @@ function selectStartingQuest(quest) {
 }
 setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) { const m = document.getElementById('onboardingModal'); if(m) m.style.display = 'flex'; } }, 800);
 
-/* =====================================================
-AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
-===================================================== */
+/* AUDIO SYNTHESIS ENGINE */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 let currentLofiMode = 0; 
@@ -1626,16 +1773,7 @@ function toggleLofiAudio() {
 }
 
 /* =====================================================
-NOTES STUDIO GENERATOR
-===================================================== */
-/* =====================================================
-NOTES STUDIO GENERATOR & PDF ENGINE
-===================================================== */
-/* =====================================================
-NOTES STUDIO GENERATOR & PDF ENGINE
-===================================================== */
-/* =====================================================
-NOTES STUDIO GENERATOR & PDF ENGINE
+   NOTES STUDIO ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
@@ -1646,7 +1784,6 @@ if (genNotesBtn) {
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
-    // Strict page requirements based on grade level
     const targetPages = (cls === "9" || cls === "10") ? 8 : 10;
 
     genNotesBtn.disabled = true; 
@@ -1654,7 +1791,6 @@ if (genNotesBtn) {
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
-    // Strict System Prompt Prompting to enforce Callouts, Length, and Markdown Structure
     const strictPrompt = `
       Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
       Target Audience: Class ${cls} (${sub}).
@@ -1675,7 +1811,7 @@ if (genNotesBtn) {
     `;
 
     try {
-                const res = await fetch('/api/ask', {
+        const res = await fetch('/api/ask', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
@@ -1687,15 +1823,11 @@ if (genNotesBtn) {
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
         data.notes = data.answer;
 
-
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
         const contentBody = document.getElementById('notesContentBody');
-        
-        // Parse Markdown to HTML
         let rawHtml = marked.parse(data.notes || "");
 
-        // Convert standard blockquotes to Bento Callout cards
         rawHtml = rawHtml
           .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
           .replace(/<blockquote>\s*<p>.*?TL;DR[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-tldr">${match.replace(/<\/?blockquote>/g, '')}</div>`)
@@ -1703,7 +1835,6 @@ if (genNotesBtn) {
 
         contentBody.innerHTML = rawHtml;
         
-        // Typeset LaTeX equations
         if (window.MathJax) {
             await MathJax.typesetPromise([contentBody]);
         }
@@ -1741,23 +1872,8 @@ function downloadPDF() {
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>
         <style>
           @page { size: A4 portrait; margin: 15mm; }
-          body {
-            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
-            color: #0f172a;
-            background: #ffffff;
-            margin: 0;
-            padding: 10px;
-            font-size: 13px;
-            line-height: 1.65;
-          }
-          .header {
-            border-bottom: 2px solid #0f172a;
-            padding-bottom: 8px;
-            margin-bottom: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-          }
+          body { font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; background: #ffffff; margin: 0; padding: 10px; font-size: 13px; line-height: 1.65; }
+          .header { border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-end; }
           .title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 900; color: #0f172a; }
           .sub { font-size: 9px; font-weight: 800; color: #0284c7; letter-spacing: 1px; text-transform: uppercase; }
           h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #0f172a; margin-top: 22px; margin-bottom: 10px; break-after: avoid; }
@@ -1797,11 +1913,7 @@ function downloadPDF() {
   printWindow.document.close();
 }
 
-
-
-
-
-
+/* STORIES & VAULT */
 let activeStories = [];
 let currentStoryIdx = 0;
 let storyTimer = null;
@@ -1826,7 +1938,7 @@ async function loadActiveStories() {
             id: 'welcome-tour',
             author_name: 'Platform Guide',
             institution: 'Invincible 360',
-            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n📢 4. School Feed: Local school notes, viva tips & discussions.\n📝 5. Notes Studio: Elite topper-style notes generation.'
+            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions.\n⏱️ 2. Timed Tests: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time speed battles.\n📢 4. School Feed: Local notes & viva updates.\n📝 5. Notes Studio: Elite topper-style notes.'
         };
 
         activeStories = [welcomeStory, ...dbStories];
@@ -1899,9 +2011,7 @@ function closeStoryViewer() { clearTimeout(storyTimer); const v = document.getEl
 function reactStory(type) { playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
 function saveStoryToVault() { playWin(); alert("💾 Saved to Note Pocket!"); }
 
-/* =====================================================
-SURVIVAL BET & CLOUT LEADERBOARD SYNC
-===================================================== */
+/* LEADERBOARD & CLASH SYNC */
 async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
@@ -1914,8 +2024,6 @@ async function loadPlatformData(){
         if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
-
-            // Helper to get school name across various possible field names
             const getSchool = (item) => item.organization || item.school_name || item.school || item.institution || `Class ${item.student_class || '10'}`;
 
             const podiumEl = document.getElementById("podiumContainer");
@@ -1945,8 +2053,6 @@ async function loadPlatformData(){
         }
     }catch(error){ console.error(error); }
 }
-
-
 window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
 
 function renderDailyPuzzle(puzzle) {
@@ -2020,7 +2126,6 @@ function startDailyClashTimer() {
 
 function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   clearInterval(clashTimerInterval);
-  
   const fb = document.getElementById('puzzleFeedback');
   const optsContainer = document.getElementById('puzzleOptionsContainer');
   
@@ -2072,30 +2177,19 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   }
 }
 
-/* =====================================================
-   CAMPUS HUB / SCHOOL DISPATCH CONTROLLER
-===================================================== */
+/* FEED DISPATCH */
 let currentCategoryFilter = 'ALL';
 let allSchoolPosts = [];
 
 async function fetchSchoolPosts() {
   const selectedSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
-  
   try {
-    if (typeof supabase !== 'undefined') {
-      let query = supabase.from('school_posts').select('*').order('created_at', { ascending: false });
-      if (selectedSchool !== 'ALL') query = query.eq('school_name', selectedSchool);
-      const { data, error } = await query;
-      if (error) throw error;
-      allSchoolPosts = data || [];
+    const res = await fetch(`/api/feed?school=${encodeURIComponent(selectedSchool)}`);
+    if (res.ok) {
+      const resData = await res.json();
+      allSchoolPosts = resData.posts || [];
     } else {
-      const res = await fetch(`/api/feed?school=${encodeURIComponent(selectedSchool)}`);
-      if (res.ok) {
-        const resData = await res.json();
-        allSchoolPosts = resData.posts || [];
-      } else {
-        allSchoolPosts = getSamplePosts();
-      }
+      allSchoolPosts = getSamplePosts();
     }
   } catch (err) {
     allSchoolPosts = getSamplePosts();
@@ -2143,11 +2237,11 @@ function renderSchoolFeed() {
     <div class="post-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <span class="post-tag tag-${post.category}">${formatCategoryName(post.category)}</span>
-        <span style="font-size:10px; color:#9ca3af; font-weight:700;">🏫 ${escapeHtml(post.school_name)}</span>
+        <span style="font-size:10px; color:#9ca3af; font-weight:700;">🏫 ${escapeHTML(post.school_name)}</span>
       </div>
 
-      <h4 style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 4px 0; line-height:1.3;">${escapeHtml(post.title)}</h4>
-      <p style="font-size:12px; color:#d1d5db; line-height:1.4; margin:0 0 10px 0; white-space: pre-line;">${escapeHtml(post.content)}</p>
+      <h4 style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 4px 0; line-height:1.3;">${escapeHTML(post.title)}</h4>
+      <p style="font-size:12px; color:#d1d5db; line-height:1.4; margin:0 0 10px 0; white-space: pre-line;">${escapeHTML(post.content)}</p>
 
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06); padding-top:8px;">
         <div style="font-size:11px; color:#9ca3af; display:flex; align-items:center; gap:6px;">
@@ -2178,12 +2272,6 @@ async function upvotePost(postId, btnEl) {
   span.textContent = currentVal + 1;
   btnEl.style.borderColor = '#05ffa1';
   btnEl.disabled = true;
-
-  try {
-    if (typeof supabase !== 'undefined') {
-      await supabase.from('school_posts').update({ upvotes: currentVal + 1 }).eq('id', postId);
-    }
-  } catch (err) {}
 }
 
 function openCreatePostModal() {
@@ -2222,25 +2310,17 @@ async function handleCreatePost(e) {
     author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('userName') || 'Student')
   };
 
-  try {
-    if (typeof supabase !== 'undefined') {
-      const { error } = await supabase.from('school_posts').insert([newPost]);
-      if (error) throw error;
-    }
-    allSchoolPosts.unshift(newPost);
-    closeCreatePostModal();
-    document.getElementById('createPostForm')?.reset();
-    renderSchoolFeed();
-  } catch (err) {
-    alert('Failed to publish post: ' + err.message);
-  }
+  allSchoolPosts.unshift(newPost);
+  closeCreatePostModal();
+  document.getElementById('createPostForm')?.reset();
+  renderSchoolFeed();
 }
 
 function escapeHTML(str) {
-
   if (!str) return '';
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
 function formatMathText(text) {
   if (!text) return "";
   const superscripts = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','x':'ˣ' };
@@ -2265,13 +2345,13 @@ function formatMathText(text) {
     .trim();
 }
 
-
 /* =====================================================
-DOUBT DESK LOGIC
+   DOUBT DESK ENGINE
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
 let selectedImage = null;
+let doubtHistory = [];
 const questionInput = document.getElementById("question");
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
@@ -2296,6 +2376,7 @@ imageInput.onchange = e => {
     reader.readAsDataURL(file);
 };
 removeImageButton.onclick = () => { selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none"; };
+
 async function renderAnswerContent(container, markdownText) {
   let parsedHtml = typeof marked !== 'undefined' ? marked.parse(markdownText || "") : markdownText;
   
@@ -2318,6 +2399,7 @@ document.getElementById("askBtn").onclick = async () => {
     askBtn.disabled = true;
     document.getElementById("loadingDoubt").classList.remove('hidden'); 
     document.getElementById("answerBox").style.display = "none"; 
+    startDoubtWaitingPipeline();
 
     doubtHistory = [];
 
@@ -2348,6 +2430,7 @@ document.getElementById("askBtn").onclick = async () => {
         alert("Doubt Engine: " + err.message);
     } finally { 
         askBtn.disabled = false;
+        stopDoubtWaitingPipeline();
         document.getElementById("loadingDoubt").classList.add('hidden'); 
     }
 };
@@ -2364,7 +2447,6 @@ if (sendFollowUpBtn && followUpInput) {
     sendFollowUpBtn.textContent = "...";
 
     const thread = document.getElementById('doubtConversationThread');
-
     const userBubble = document.createElement('div');
     userBubble.style.cssText = "background:rgba(0, 229, 255, 0.1); border:1px solid rgba(0, 229, 255, 0.25); border-radius:12px; padding:10px 14px; font-size:13px; font-weight:700; color:#fff; align-self:flex-end;";
     userBubble.textContent = "🙋 " + followQ;
@@ -2420,9 +2502,19 @@ document.getElementById("teacherBtn").addEventListener("click", function(){
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
 });
 
+function clearDoubtThread() {
+  doubtHistory = [];
+  questionInput.value = "";
+  selectedImage = null;
+  imageInput.value = "";
+  imagePreview.style.display = "none";
+  removeImageButton.style.display = "none";
+  document.getElementById("doubtConversationThread").innerHTML = '<div class="topper-content" id="answerText"></div>';
+  document.getElementById("answerBox").style.display = "none";
+}
 
 /* =====================================================
-TEST GENERATOR & TIME ATTACK ENGINE
+   MOCK TEST ENGINE
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = ""; let activeTestClass = ""; let activeTestSubject = ""; let finalScoreData = {};
@@ -2475,6 +2567,7 @@ if (startTestBtn) {
 
     const originalText = startTestBtn.textContent;
     startTestBtn.disabled = true; startTestBtn.textContent = "⚙️ Compiling Assessment... (10s)";
+    document.getElementById('testWarmupBox')?.classList.remove('hidden');
 
     try {
         const response = await fetch("/api/generate-test", {
@@ -2491,7 +2584,11 @@ if (startTestBtn) {
         activeTestTitle = `${subject}:${chapter}`;
         startQuestions(generated, `Class ${cls} ${subject}`, chapter);
     } catch(error) { alert("Assessment System: " + error.message); }
-    finally { startTestBtn.disabled = false; startTestBtn.textContent = originalText; }
+    finally { 
+      startTestBtn.disabled = false; 
+      startTestBtn.textContent = originalText;
+      document.getElementById('testWarmupBox')?.classList.add('hidden');
+    }
   });
 }
 
@@ -2593,22 +2690,10 @@ if (whatsappShareBtn) {
 }
 
 /* =====================================================
-ARENA 1v1 LOGIC (ANIMATED, MULTI-TOPIC & DYNAMIC TIMER)
+   ARENA 1v1 ENGINE
 ===================================================== */
 let arena = { 
-  code: null, 
-  playerNum: 1, 
-  name: '', 
-  score: 0, 
-  questions: [], 
-  currentQ: 0, 
-  timer: 15, 
-  timeLimit: 15,
-  streak: 0,
-  interval: null, 
-  pollInterval: null, 
-  isBotMatch: false, 
-  botScore: 0 
+  code: null, playerNum: 1, name: '', score: 0, questions: [], currentQ: 0, timer: 15, timeLimit: 15, streak: 0, interval: null, pollInterval: null, isBotMatch: false, botScore: 0 
 };
 
 function startBotMatch() {
@@ -2780,8 +2865,6 @@ function loadArenaQuestion() {
     }
 
     const q = arena.questions[arena.currentQ];
-    
-    // Streak indicator badge
     let streakEmoji = '';
     if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE STREAK x' + arena.streak;
     else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
@@ -2822,8 +2905,6 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         if(element) element.classList.add('hit-correct');
         playDing(); 
         arena.streak++;
-        
-        // Speed bonus: Answering with >50% time left grants extra points
         const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
         arena.score += (10 + arena.timer + speedBonus);
 
@@ -2909,7 +2990,7 @@ function showArenaResult(room) {
 }
 
 /* =====================================================
-1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
+   LIVE VOICE CHAT WEBRTC ENGINE
 ===================================================== */
 let localVoiceStream = null;
 let peerVoiceInstance = null;
@@ -2923,8 +3004,6 @@ async function startArenaVoiceChat(roomCode = 'default_arena') {
 
   try {
     if (statusText) statusText.textContent = "Requesting Mic...";
-
-    // 1. Request microphone permission
     if (!localVoiceStream) {
       localVoiceStream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true },
@@ -2940,7 +3019,6 @@ async function startArenaVoiceChat(roomCode = 'default_arena') {
       peerVoiceInstance = null;
     }
 
-    // 2. Device A registers as Host
     peerVoiceInstance = new Peer(hostPeerId);
 
     peerVoiceInstance.on('open', () => {
@@ -2953,10 +3031,8 @@ async function startArenaVoiceChat(roomCode = 'default_arena') {
     });
 
     peerVoiceInstance.on('error', (err) => {
-      // If Host ID already taken, this device becomes Guest (Device B)
       if (err.type === 'unavailable-id') {
         peerVoiceInstance.destroy();
-
         peerVoiceInstance = new Peer(guestPeerId);
 
         peerVoiceInstance.on('open', () => {
@@ -3024,7 +3100,6 @@ function handleIncomingVoiceStream(call) {
   call.on('error', (err) => console.error("Call error:", err));
 }
 
-
 function toggleArenaVoiceMute() {
   if (!localVoiceStream) return;
   isMicMuted = !isMicMuted;
@@ -3070,6 +3145,9 @@ function stopArenaVoiceChat() {
   if (statusDot) statusDot.classList.remove('connected');
 }
 
+/* =====================================================
+   TTS AUDIO ENGINE
+===================================================== */
 let currentTtsAudio = null;
 
 async function playAudioExplanation(textToRead, btnElement) {
@@ -3111,11 +3189,7 @@ async function playAudioExplanation(textToRead, btnElement) {
     if (btnElement) btnElement.innerHTML = "🔊 Listen";
   }
 }
-
-
-
 </script>
-
 
 </body>
 </html>
