@@ -675,13 +675,96 @@ textarea:focus, input:focus, select:focus {
 }
 .topper-content tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.03); }
 
-/* Prevent Page Break Glitches */
+/* Prevent Page Break Glitches & Format Clean Print Output */
 @media print {
-  .topper-content tr, .topper-content .callout-tldr, .topper-content .callout-trap, .topper-content .callout-formula {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  /* Completely remove floating bottom navigation dock, HUDs, buttons */
+  .floating-dock,
+  .slim-hud,
+  .quick-hub-banner,
+  .footer,
+  button,
+  #notesSection > div:first-child,
+  #notesSection > h2,
+  #notesSection > div.hide-on-print,
+  #notesSection > div:nth-of-type(2),
+  #notesSection > label,
+  #notesSection > input,
+  #notesSection > button,
+  #notesLoading {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Show ONLY the generated notes container */
+  #notesSection,
+  #notesResultContainer,
+  #notesResultContainer * {
+    visibility: visible !important;
+  }
+
+  #notesResultContainer {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    border: none !important;
+    font-size: 12.5px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Prevent awkward page cuts in tables, formula cards, and callout boxes */
+  .topper-content h1, 
+  .topper-content h2, 
+  .topper-content h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+    color: #0f172a !important;
+  }
+
+  .topper-content table,
+  .topper-content tr,
+  .topper-content .callout-tldr,
+  .topper-content .callout-trap,
+  .topper-content .callout-formula,
+  .topper-content ol > li,
+  .topper-content ul > li {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Force dark contrast on all notes text */
+  .topper-content, 
+  .topper-content p, 
+  .topper-content li, 
+  .topper-content span, 
+  .topper-content td, 
+  .topper-content th {
+    color: #0f172a !important;
   }
 }
+
 /* 1V1 ARENA LIVE VOICE CHAT HUD */
 .arena-voice-bar {
   display: flex;
