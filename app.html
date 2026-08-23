@@ -1787,16 +1787,83 @@ if (genNotesBtn) {
   };
 }
 
-// 🖨️ CLEAN A4 PDF EXPORTER (PREVENTS BLANK & CUT-OFF PAGES)
-
 function downloadPDF() {
-  const container = document.getElementById('notesResultContainer');
-  if (!container || container.classList.contains('hidden')) {
+  const content = document.getElementById('notesContentBody')?.innerHTML;
+  const title = document.getElementById('notesResultTitle')?.textContent || "CBSE Study Module";
+  const cls = document.getElementById('notesClass')?.value || "10";
+  const chapter = document.getElementById('notesChapter')?.value.trim() || 'Notes';
+
+  if (!content) {
     alert("Please generate notes first.");
     return;
   }
-  window.print();
+
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Invincible_Class_${cls}_${chapter.replace(/\\s+/g, '_')}_Notes</title>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>
+        <style>
+          @page { size: A4 portrait; margin: 15mm; }
+          body {
+            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+            color: #0f172a;
+            background: #ffffff;
+            margin: 0;
+            padding: 10px;
+            font-size: 13px;
+            line-height: 1.65;
+          }
+          .header {
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+          }
+          .title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 900; color: #0f172a; }
+          .sub { font-size: 9px; font-weight: 800; color: #0284c7; letter-spacing: 1px; text-transform: uppercase; }
+          h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #0f172a; margin-top: 22px; margin-bottom: 10px; break-after: avoid; }
+          p, li { color: #1e293b; }
+          .callout-trap { background: #fff1f2; border-left: 4px solid #e11d48; border-radius: 8px; padding: 12px 16px; margin: 14px 0; color: #881337; break-inside: avoid; }
+          .callout-tldr { background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 8px; padding: 12px 16px; margin: 14px 0; color: #14532d; break-inside: avoid; }
+          .callout-formula { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin: 14px 0; text-align: center; color: #0f172a; break-inside: avoid; }
+          table { width: 100%; border-collapse: collapse; margin: 14px 0; break-inside: avoid; }
+          th, td { border: 1px solid #cbd5e1; padding: 8px 10px; text-align: left; font-size: 12px; }
+          th { background-color: #0f172a; color: #ffffff; }
+          tr:nth-child(even) { background-color: #f8fafc; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="sub">Invincible 360 • Topper Study Module</div>
+            <div class="title">${title}</div>
+          </div>
+          <div style="font-size: 9px; font-weight: 700; color: #64748b;">CBSE CURRICULUM</div>
+        </div>
+        <div>${content}</div>
+        <script>
+          window.onload = function() {
+            if (window.MathJax) {
+              MathJax.typesetPromise().then(() => {
+                setTimeout(() => { window.print(); window.close(); }, 500);
+              });
+            } else {
+              setTimeout(() => { window.print(); window.close(); }, 500);
+            }
+          };
+        <\/script>
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
 }
+
 
 
 
