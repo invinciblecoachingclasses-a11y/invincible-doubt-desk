@@ -3034,6 +3034,47 @@ function stopArenaVoiceChat() {
   if (statusDot) statusDot.classList.remove('connected');
 }
 
+let currentTtsAudio = null;
+
+async function playAudioExplanation(textToRead, btnElement) {
+  try {
+    if (currentTtsAudio) {
+      currentTtsAudio.pause();
+      currentTtsAudio = null;
+      if (btnElement) btnElement.innerHTML = "🔊 Listen";
+      return;
+    }
+
+    if (btnElement) btnElement.innerHTML = "⏳ Generating...";
+
+    const res = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: textToRead,
+        languageCode: "hi-IN",
+        speakingRate: 1.05
+      })
+    });
+
+    const data = await res.json();
+    if (!data.success || !data.audioBase64) {
+      throw new Error(data.error || "Audio generation failed");
+    }
+
+    currentTtsAudio = new Audio(data.audioBase64);
+    if (btnElement) btnElement.innerHTML = "⏹️ Stop";
+
+    currentTtsAudio.play();
+    currentTtsAudio.onended = () => {
+      if (btnElement) btnElement.innerHTML = "🔊 Listen";
+      currentTtsAudio = null;
+    };
+  } catch (err) {
+    alert("Audio error: " + err.message);
+    if (btnElement) btnElement.innerHTML = "🔊 Listen";
+  }
+}
 
 
 
