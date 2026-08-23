@@ -881,19 +881,13 @@ textarea:focus, input:focus, select:focus {
         </div>
     </section>
 
-    <!-- 3. STORIES TRAY -->
+    <!-- 3. STORIES TRAY (GUIDES REMOVED) -->
     <div class="stories-tray-container" id="storiesTray">
         <div class="story-circle-item" id="btnAddStory">
             <div class="story-avatar-wrap add-story">
                 <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:18px;">+</div>
             </div>
             <div class="story-username">Drop Hack</div>
-        </div>
-        <div class="story-circle-item" onclick="document.getElementById('onboardingModal').style.display='flex'">
-            <div class="story-avatar-wrap">
-                <div class="story-avatar-inner">🎓</div>
-            </div>
-            <div class="story-username">Guide</div>
         </div>
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
@@ -3368,23 +3362,23 @@ async function loadActiveStories() {
         const data = await res.json();
         const dbStories = data.stories || [];
 
-        const welcomeStory = {
-            id: 'welcome-tour', author_name: 'Platform Guide', age: 'AI', class_name: 'Admin', institution: 'Invincible 360',
-            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions.\n⏱️ 2. Timed Tests: Mock tests.\n⚔️ 3. 1v1 Arena: Speed battles.\n📢 4. School Feed: Updates.\n📝 5. Notes Studio: Topper notes.',
-            image_data: null, filter: 'none'
-        };
+        // Guide stories removed. We now directly map from your database.
+        activeStories = [...dbStories];
 
-        activeStories = [welcomeStory, ...dbStories];
-        container.innerHTML = activeStories.map((s, idx) => `
+        container.innerHTML = activeStories.map((s, idx) => {
+            // Failsafe in case a user uploads a story without a name
+            const author = s.author_name || "Student";
+            const initial = author.charAt(0).toUpperCase();
+            
+            return `
             <div class="story-circle-item" onclick="openStoryViewer(${idx})">
                 <div class="story-avatar-wrap ${idx === 0 ? 'pulse-glow' : ''}">
-                    <div class="story-avatar-inner">
-                        ${s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase())}
-                    </div>
+                    <div class="story-avatar-inner">${initial}</div>
                 </div>
-                <div class="story-username">${s.id === 'welcome-tour' ? 'Guide' : escapeHTML(s.author_name)}</div>
+                <div class="story-username">${escapeHTML(author)}</div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     } catch(e) { container.innerHTML = ''; }
 }
 loadActiveStories();
@@ -3480,18 +3474,22 @@ function renderStorySlide() {
     const capEl = document.getElementById('viewerCaption');
     const bgImg = document.getElementById('viewerImageBg');
 
+    // Failsafe checks
+    const authorName = story.author_name || "Student";
     let ageText = story.age ? `, ${story.age}` : '';
     let classText = story.class_name ? ` • ${story.class_name}` : '';
     
-    if (authorDetailsEl) authorDetailsEl.textContent = `${story.author_name}${ageText}${classText}`;
+    if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
     if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
-    if (avatarEl) avatarEl.textContent = story.id === 'welcome-tour' ? '🎓' : story.author_name.charAt(0).toUpperCase();
+    if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase();
 
     if (capEl) capEl.innerHTML = (story.caption || '').replace(/\n/g, '<br>');
     
+    // Checks for image_data or image_url based on backend setup
+    const imageUrl = story.image_data || story.image_url || story.image; 
     if (bgImg) {
-      if (story.image_data) {
-        bgImg.src = story.image_data;
+      if (imageUrl) {
+        bgImg.src = imageUrl;
         bgImg.style.display = 'block';
       } else {
         bgImg.style.display = 'none';
