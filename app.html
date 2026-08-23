@@ -1674,78 +1674,117 @@ if (genNotesBtn) {
 
 // 🖨️ CLEAN A4 PDF EXPORTER (PREVENTS BLANK & CUT-OFF PAGES)
 
-function downloadPDF() {
-    const element = document.getElementById('notesContentBody');
+async function downloadPDF() {
+    const originalEl = document.getElementById('notesContentBody');
     const title = document.getElementById('notesResultTitle')?.textContent || "CBSE Study Module";
     const cls = document.getElementById('notesClass')?.value || "10";
     const chapterName = document.getElementById('notesChapter')?.value.trim() || 'Notes';
-    
-    // Create an isolated, explicit black-on-white container
-    const pdfWrapper = document.createElement('div');
-    pdfWrapper.style.cssText = `
-      background-color: #ffffff !important;
-      color: #0f172a !important;
-      padding: 24px 30px;
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      font-size: 13px;
-      line-height: 1.6;
+
+    if (!originalEl || !originalEl.innerHTML.trim()) {
+        alert("Please generate notes first.");
+        return;
+    }
+
+    // 1. Create wrapper and attach directly to DOM so html2canvas can measure and render it
+    const printArea = document.createElement('div');
+    printArea.id = 'pdf-render-stage';
+    printArea.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: -9999px;
+        width: 794px; /* Exact A4 standard pixel width at 96 DPI */
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 32px 36px;
+        font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+        font-size: 13px;
+        line-height: 1.6;
+        box-sizing: border-box;
+        z-index: -1000;
     `;
-    
-    // Force all child text, paragraphs, and headings to dark ink
-    const contentClone = element.cloneNode(true);
-    contentClone.querySelectorAll('*').forEach(el => {
-      el.style.color = '#0f172a';
-      if (el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4') {
-        el.style.color = '#000000';
-        el.style.fontWeight = '800';
-      }
-      if (el.classList.contains('callout-trap')) {
-        el.style.backgroundColor = '#fff1f2';
-        el.style.borderLeft = '4px solid #e11d48';
-        el.style.color = '#881337';
-      }
-      if (el.classList.contains('callout-tldr')) {
-        el.style.backgroundColor = '#f0fdf4';
-        el.style.borderLeft = '4px solid #16a34a';
-        el.style.color = '#14532d';
-      }
-      if (el.classList.contains('callout-formula')) {
-        el.style.backgroundColor = '#f8fafc';
-        el.style.border = '1px solid #cbd5e1';
-        el.style.color = '#0f172a';
-      }
-      if (el.tagName === 'TH') {
-        el.style.backgroundColor = '#0f172a';
-        el.style.color = '#ffffff';
-      }
-      if (el.tagName === 'TD') {
-        el.style.color = '#0f172a';
-        el.style.borderColor = '#cbd5e1';
-      }
+
+    // 2. Clone content and force dark contrast on all child nodes
+    const contentClone = originalEl.cloneNode(true);
+    contentClone.querySelectorAll('*').forEach(node => {
+        node.style.color = '#0f172a';
+        if (['H1', 'H2', 'H3', 'H4'].includes(node.tagName)) {
+            node.style.color = '#000000';
+            node.style.fontWeight = '800';
+            node.style.marginTop = '18px';
+            node.style.marginBottom = '8px';
+        }
+        if (node.classList.contains('callout-trap')) {
+            node.style.backgroundColor = '#fff1f2';
+            node.style.borderLeft = '4px solid #e11d48';
+            node.style.color = '#881337';
+            node.style.padding = '12px 16px';
+            node.style.borderRadius = '8px';
+            node.style.margin = '12px 0';
+        }
+        if (node.classList.contains('callout-tldr')) {
+            node.style.backgroundColor = '#f0fdf4';
+            node.style.borderLeft = '4px solid #16a34a';
+            node.style.color = '#14532d';
+            node.style.padding = '12px 16px';
+            node.style.borderRadius = '8px';
+            node.style.margin = '12px 0';
+        }
+        if (node.classList.contains('callout-formula')) {
+            node.style.backgroundColor = '#f8fafc';
+            node.style.border = '1px solid #cbd5e1';
+            node.style.color = '#0f172a';
+            node.style.padding = '12px';
+            node.style.borderRadius = '8px';
+            node.style.margin = '12px 0';
+        }
+        if (node.tagName === 'TABLE') {
+            node.style.width = '100%';
+            node.style.borderCollapse = 'collapse';
+            node.style.margin = '14px 0';
+        }
+        if (node.tagName === 'TH') {
+            node.style.backgroundColor = '#0f172a';
+            node.style.color = '#ffffff';
+            node.style.padding = '8px 10px';
+            node.style.border = '1px solid #cbd5e1';
+        }
+        if (node.tagName === 'TD') {
+            node.style.color = '#0f172a';
+            node.style.padding = '8px 10px';
+            node.style.border = '1px solid #cbd5e1';
+        }
     });
 
-    pdfWrapper.innerHTML = `
-      <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end;">
-        <div>
-          <div style="font-size: 10px; font-weight: 900; color: #0284c7; letter-spacing: 1px;">INVINCIBLE 360 • TOPPER STUDY MODULE</div>
-          <div style="font-size: 16px; font-weight: 900; color: #0f172a;">${title}</div>
+    // 3. Assemble document structure with header
+    printArea.innerHTML = `
+        <div style="border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <div style="font-size: 10px; font-weight: 900; color: #0284c7; letter-spacing: 1px;">INVINCIBLE 360 • TOPPER STUDY MODULE</div>
+                <div style="font-size: 16px; font-weight: 900; color: #0f172a;">${title}</div>
+            </div>
+            <div style="font-size: 9px; font-weight: 700; color: #64748b;">CBSE CURRICULUM</div>
         </div>
-        <div style="font-size: 9px; font-weight: 700; color: #64748b;">CBSE CURRICULUM</div>
-      </div>
     `;
-    pdfWrapper.appendChild(contentClone);
+    printArea.appendChild(contentClone);
+    document.body.appendChild(printArea);
 
+    // 4. Configure html2pdf and export
     const opt = {
-      margin:       [10, 10, 10, 10],
-      filename:     `Invincible_Class_${cls}_${chapterName.replace(/\s+/g, '_')}_Notes.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        margin: [10, 10, 10, 10],
+        filename: `Invincible_Class_${cls}_${chapterName.replace(/\s+/g, '_')}_Notes.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
-    
-    html2pdf().set(opt).from(pdfWrapper).save();
+
+    try {
+        await html2pdf().set(opt).from(printArea).save();
+    } finally {
+        document.body.removeChild(printArea);
+    }
 }
+
 
 
 
