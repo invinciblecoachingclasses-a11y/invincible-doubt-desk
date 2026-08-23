@@ -48,6 +48,7 @@
   box-sizing: border-box; 
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
 }
+
 /* ✅ CRISP HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
 .topper-content {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -626,21 +627,6 @@ textarea:focus, input:focus, select:focus {
 .quest-modal-card { width: min(500px, 94%); background: linear-gradient(145deg, #0d1527, #070b14); border: 1px solid var(--accent-cyan); box-shadow: 0 0 35px rgba(6, 182, 212, 0.3); border-radius: 24px; padding: 24px; text-align: center; }
 .quest-choice-btn { background: #111a2e; border: 1px solid var(--border-subtle); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; margin-bottom: 8px; }
 
-/* FULLSCREEN REELS VIEWER */
-.story-viewer-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.94); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(16px); }
-.story-card-view { width: min(420px, 94%); height: min(700px, 90vh); background: #0b1120; border-radius: 24px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: space-between; padding: 18px; position: relative; overflow: hidden; }
-.story-progress-bar { display: flex; gap: 4px; margin-bottom: 12px; }
-.story-progress-seg { height: 3px; flex: 1; background: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
-.story-progress-fill { height: 100%; width: 0%; background: #fff; }
-.story-view-header { display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-.story-close-btn { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-.story-body-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
-.story-caption-text { font-size: 15px; font-weight: 700; color: #f8fafc; margin-top: 12px; line-height: 1.5; text-align: left; }
-.story-nav-zone { position: absolute; top: 60px; bottom: 70px; width: 45%; z-index: 5; cursor: pointer; }
-.story-nav-prev { left: 0; } .story-nav-next { right: 0; }
-.story-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; z-index: 10; }
-.reaction-emoji-btn { background: rgba(255, 255, 255, 0.1); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-
 /* Hub Category Filter Pills */
 .hub-pill {
   background: rgba(255, 255, 255, 0.05);
@@ -811,7 +797,7 @@ textarea:focus, input:focus, select:focus {
   background: #f43f5e;
   border-color: #fda4af;
 }
-<<<<<<< main
+
 /* =====================================================
    📸 STORY STUDIO & FILTER ENGINE
 ===================================================== */
@@ -841,10 +827,6 @@ textarea:focus, input:focus, select:focus {
   border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px;
   padding: 14px; z-index: 20; display: flex; align-items: center; gap: 14px;
 }
-
-
-=======
->>>>>>> origin/main
 </style>
 
 <!-- Markdown Parser, Math Rendering & Clean PDF Engine -->
@@ -899,19 +881,13 @@ textarea:focus, input:focus, select:focus {
         </div>
     </section>
 
-    <!-- 3. STORIES TRAY -->
+    <!-- 3. STORIES TRAY (GUIDES REMOVED) -->
     <div class="stories-tray-container" id="storiesTray">
         <div class="story-circle-item" id="btnAddStory">
             <div class="story-avatar-wrap add-story">
                 <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:18px;">+</div>
             </div>
             <div class="story-username">Drop Hack</div>
-        </div>
-        <div class="story-circle-item" onclick="document.getElementById('onboardingModal').style.display='flex'">
-            <div class="story-avatar-wrap">
-                <div class="story-avatar-inner">🎓</div>
-            </div>
-            <div class="story-username">Guide</div>
         </div>
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
@@ -1587,6 +1563,7 @@ textarea:focus, input:focus, select:focus {
         <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
 </div>
+
 <!-- STORY STUDIO (DROP HACK) MODAL -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card" style="width: min(480px, 96%); padding: 20px;">
@@ -1661,7 +1638,6 @@ textarea:focus, input:focus, select:focus {
     </div>
 </div>
 
-
 <script>
 /* =====================================================
    PORTAL SWIPE & TRACK GATEWAY CONTROLLER
@@ -1699,7 +1675,7 @@ let doubtTimerInterval = null;
 const doubtFacts = [
   "💡 Total Internal Reflection happens only when light travels from denser to rarer medium.",
   "💡 In lens formula, focal length of convex lens is ALWAYS positive (+f).",
-  "💡 Ohm's law is NOT universal—it fails for diodes and semiconductors!",
+  "💡 Ohm's law is NOT universal--it fails for diodes and semiconductors!",
   "💡 In redox reactions, oxidation is Loss of electrons (OIL) and reduction is Gain (RIG)."
 ];
 let factIdx = 0;
@@ -1944,7 +1920,6 @@ if (genNotesBtn) {
     const chapter = document.getElementById('notesChapter').value.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
-    // Strict page requirements based on grade level
     const targetPages = (cls === "9" || cls === "10") ? 8 : 10;
 
     genNotesBtn.disabled = true; 
@@ -1952,7 +1927,6 @@ if (genNotesBtn) {
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
-    // Strict System Prompt Prompting to enforce Callouts, Length, and Markdown Structure
     const strictPrompt = `
       Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
       Target Audience: Class ${cls} (${sub}).
@@ -1989,10 +1963,8 @@ if (genNotesBtn) {
         
         const contentBody = document.getElementById('notesContentBody');
         
-        // Parse Markdown to HTML
         let rawHtml = marked.parse(data.notes || "");
 
-        // Convert standard blockquotes to Bento Callout cards
         rawHtml = rawHtml
           .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
           .replace(/<blockquote>\s*<p>.*?TL;DR[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-tldr">${match.replace(/<\/?blockquote>/g, '')}</div>`)
@@ -2000,7 +1972,6 @@ if (genNotesBtn) {
 
         contentBody.innerHTML = rawHtml;
         
-        // Typeset LaTeX equations
         if (window.MathJax) {
             await MathJax.typesetPromise([contentBody]);
         }
@@ -2094,103 +2065,6 @@ function downloadPDF() {
   printWindow.document.close();
 }
 
-let activeStories = [];
-let currentStoryIdx = 0;
-let storyTimer = null;
-
-const addStoryBtn = document.getElementById('btnAddStory');
-if (addStoryBtn) {
-  addStoryBtn.onclick = () => { 
-    const m = document.getElementById('storyModal');
-    if (m) m.style.display = 'flex'; 
-  };
-}
-
-async function loadActiveStories() {
-    const container = document.getElementById('dynamicStoryCircles');
-    if (!container) return;
-    try {
-        const res = await fetch('/api/stories');
-        const data = await res.json();
-        const dbStories = data.stories || [];
-
-        const welcomeStory = {
-            id: 'welcome-tour',
-            author_name: 'Platform Guide',
-            institution: 'Invincible 360',
-            caption: '🚀 Welcome to Invincible 360 Ecosystem:\n\n⚡ 1. Quest Desk: Instant step-by-step solutions for homework.\n⏱️ 2. Time Attack: 10-minute chapter mock tests.\n⚔️ 3. 1v1 Arena: Real-time 10s speed clash against peers or bot.\n📢 4. School Feed: Local school notes, viva tips & discussions.\n📝 5. Notes Studio: Elite topper-style notes generation.'
-        };
-
-        activeStories = [welcomeStory, ...dbStories];
-
-        container.innerHTML = activeStories.map((s, idx) => `
-            <div class="story-circle-item" onclick="openStoryViewer(${idx})">
-                <div class="story-avatar-wrap ${idx === 0 ? 'pulse-glow' : ''}">
-                    <div class="story-avatar-inner">
-                        ${s.id === 'welcome-tour' ? '🎓' : escapeHTML(s.author_name.charAt(0).toUpperCase())}
-                    </div>
-                </div>
-                <div class="story-username">${s.id === 'welcome-tour' ? 'Guide' : escapeHTML(s.author_name)}</div>
-            </div>
-        `).join('');
-    } catch(e) { container.innerHTML = ''; }
-}
-loadActiveStories();
-
-const pubStoryBtn = document.getElementById('btnPublishStory');
-if (pubStoryBtn) {
-  pubStoryBtn.onclick = async () => {
-    const name = document.getElementById('storyAuthorName').value.trim();
-    const inst = document.getElementById('storyInstitution').value.trim();
-    const caption = document.getElementById('storyCaption').value.trim();
-
-    if (!name || !caption) return alert("Please fill Name and Hack details.");
-
-    try {
-        const res = await fetch('/api/stories', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ action: 'create_story', author_name: name, institution: inst || 'CBSE School', caption: caption })
-        });
-        const data = await res.json();
-        if (data.error) throw new Error(data.error);
-
-        document.getElementById('storyModal').style.display = 'none';
-        loadActiveStories();
-        alert("🎉 Formula Hack Shared!");
-    } catch(err) { alert(err.message); }
-  };
-}
-
-function openStoryViewer(idx) {
-    currentStoryIdx = idx;
-    const viewer = document.getElementById('storyViewer');
-    if (viewer) viewer.style.display = 'flex';
-    renderStorySlide();
-}
-function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
-function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
-
-function renderStorySlide() {
-    clearTimeout(storyTimer);
-    const story = activeStories[currentStoryIdx];
-    if (!story) { closeStoryViewer(); return; }
-
-    const authorEl = document.getElementById('viewerAuthor');
-    const capEl = document.getElementById('viewerCaption');
-    if (authorEl) authorEl.textContent = `${story.author_name} (${story.institution || 'Platform'})`;
-    if (capEl) capEl.textContent = story.caption || '';
-
-    const pContainer = document.getElementById('storyProgressContainer');
-    if (pContainer) {
-      pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
-    }
-    storyTimer = setTimeout(nextStorySlide, 6000);
-}
-function closeStoryViewer() { clearTimeout(storyTimer); const v = document.getElementById('storyViewer'); if (v) v.style.display = 'none'; }
-function reactStory(type) { playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
-function saveStoryToVault() { playWin(); alert("💾 Saved to Note Pocket!"); }
-
 /* =====================================================
 SURVIVAL BET & CLOUT LEADERBOARD SYNC
 ===================================================== */
@@ -2207,7 +2081,6 @@ async function loadPlatformData(){
             const top3 = data.leaderboard.slice(0, 3);
             const rest = data.leaderboard.slice(3, 7);
 
-            // Helper to get school name across various possible field names
             const getSchool = (item) => item.organization || item.school_name || item.school || item.institution || `Class ${item.student_class || '10'}`;
 
             const podiumEl = document.getElementById("podiumContainer");
@@ -3412,6 +3285,226 @@ async function playAudioExplanation(textToRead, btnElement) {
   }
 }
 
+/* =====================================================
+   📸 STORIES & INSTA-FILTER STUDIO ENGINE
+===================================================== */
+let activeStories = [];
+let currentStoryIdx = 0;
+let storyTimer = null;
+let currentStoryImageBase64 = null;
+let selectedFilterCSS = "none";
+
+const storyFilters = [
+  { name: "Original", css: "none", color: "#94a3b8" },
+  { name: "Topper Glow", css: "contrast(1.2) saturate(1.3)", color: "#f59e0b" },
+  { name: "Midnight", css: "brightness(0.8) sepia(0.3) hue-rotate(180deg) saturate(1.5)", color: "#3b82f6" },
+  { name: "Backbencher", css: "grayscale(1) contrast(1.2)", color: "#64748b" },
+  { name: "Exam Blur", css: "blur(1px) contrast(1.1)", color: "#14b8a6" },
+  { name: "Vintage", css: "sepia(0.8) contrast(1.1)", color: "#d97706" },
+  { name: "Neon Physics", css: "hue-rotate(280deg) saturate(2) contrast(1.1)", color: "#d946ef" },
+  { name: "X-Ray Vision", css: "invert(1) hue-rotate(180deg)", color: "#06b6d4" },
+  { name: "Focus Mode", css: "brightness(0.9) contrast(1.3)", color: "#ef4444" },
+  { name: "Cyberpunk", css: "hue-rotate(90deg) saturate(2) brightness(0.9)", color: "#10b981" },
+  { name: "Late Night", css: "brightness(0.7) contrast(1.4)", color: "#1e293b" },
+  { name: "Golden Hour", css: "sepia(0.4) saturate(1.5) hue-rotate(-15deg)", color: "#fbbf24" },
+  { name: "Cool Blue", css: "hue-rotate(45deg) saturate(1.2)", color: "#38bdf8" },
+  { name: "Dramatic", css: "contrast(1.5) grayscale(0.5)", color: "#475569" },
+  { name: "Vivid", css: "saturate(2) contrast(1.1)", color: "#f43f5e" }
+];
+
+function renderFilters() {
+  const tray = document.getElementById('filterTray');
+  if(!tray) return;
+  tray.innerHTML = storyFilters.map((f, idx) => `
+    <button type="button" class="filter-btn ${idx === 0 ? 'active' : ''}" onclick="applyFilter(${idx}, this)">
+      <div class="filter-preview-box" style="background-color:${f.color}; filter:${f.css};"></div>
+      <div class="filter-name">${f.name}</div>
+    </button>
+  `).join('');
+}
+
+function applyFilter(idx, btnEl) {
+  if(typeof playDing === 'function') playDing();
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+  selectedFilterCSS = storyFilters[idx].css;
+  const preview = document.getElementById('storyImagePreview');
+  if(preview) preview.style.filter = selectedFilterCSS;
+}
+
+function handleStoryImage(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    currentStoryImageBase64 = evt.target.result;
+    const preview = document.getElementById('storyImagePreview');
+    preview.src = currentStoryImageBase64;
+    preview.style.display = 'block';
+    document.getElementById('storyPlaceholderText').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+const addStoryBtn = document.getElementById('btnAddStory');
+if (addStoryBtn) {
+  addStoryBtn.onclick = () => { 
+    const m = document.getElementById('storyModal');
+    if (m) { m.style.display = 'flex'; renderFilters(); }
+  };
+}
+
+async function loadActiveStories() {
+    const container = document.getElementById('dynamicStoryCircles');
+    if (!container) return;
+    try {
+        const res = await fetch('/api/stories');
+        const data = await res.json();
+        const dbStories = data.stories || [];
+
+        // Guide stories removed. We now directly map from your database.
+        activeStories = [...dbStories];
+
+        container.innerHTML = activeStories.map((s, idx) => {
+            // Failsafe in case a user uploads a story without a name
+            const author = s.author_name || "Student";
+            const initial = author.charAt(0).toUpperCase();
+            
+            return `
+            <div class="story-circle-item" onclick="openStoryViewer(${idx})">
+                <div class="story-avatar-wrap ${idx === 0 ? 'pulse-glow' : ''}">
+                    <div class="story-avatar-inner">${initial}</div>
+                </div>
+                <div class="story-username">${escapeHTML(author)}</div>
+            </div>
+            `;
+        }).join('');
+    } catch(e) { container.innerHTML = ''; }
+}
+loadActiveStories();
+
+async function bakeImageWithFilter(base64Image, cssFilter) {
+  return new Promise((resolve) => {
+    if (!base64Image || cssFilter === "none") return resolve(base64Image);
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.filter = cssFilter;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.8));
+    };
+    img.src = base64Image;
+  });
+}
+
+const pubStoryBtn = document.getElementById('btnPublishStory');
+if (pubStoryBtn) {
+  pubStoryBtn.onclick = async () => {
+    const name = document.getElementById('storyAuthorName').value.trim();
+    const age = document.getElementById('storyAuthorAge').value.trim();
+    const stuClass = document.getElementById('storyAuthorClass').value.trim();
+    const inst = document.getElementById('storyInstitution').value.trim();
+    const caption = document.getElementById('storyCaption').value.trim();
+
+    if (!name || !caption) return alert("Please provide at least your Name and a Caption.");
+    
+    pubStoryBtn.disabled = true;
+    pubStoryBtn.textContent = "BAKING IMAGE... ⏳";
+
+    try {
+        const finalImage = await bakeImageWithFilter(currentStoryImageBase64, selectedFilterCSS);
+        
+        pubStoryBtn.textContent = "UPLOADING... 🚀";
+        const res = await fetch('/api/stories', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ 
+              action: 'create_story', 
+              author_name: name, 
+              age: age,
+              class_name: stuClass,
+              institution: inst || 'CBSE School', 
+              caption: caption,
+              image_data: finalImage 
+            })
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+
+        document.getElementById('storyModal').style.display = 'none';
+        
+        currentStoryImageBase64 = null;
+        const preview = document.getElementById('storyImagePreview');
+        if (preview) preview.style.display = 'none';
+        const placeholder = document.getElementById('storyPlaceholderText');
+        if (placeholder) placeholder.style.display = 'block';
+        document.getElementById('storyCaption').value = '';
+        
+        loadActiveStories();
+        if(typeof playWin === 'function') playWin();
+        alert("🎉 Story Posted Successfully!");
+    } catch(err) { 
+        alert("Upload failed: " + err.message); 
+    } finally {
+        pubStoryBtn.disabled = false;
+        pubStoryBtn.textContent = "🚀 POST STORY";
+    }
+  };
+}
+
+function openStoryViewer(idx) {
+    currentStoryIdx = idx;
+    const viewer = document.getElementById('storyViewer');
+    if (viewer) viewer.style.display = 'flex';
+    renderStorySlide();
+}
+function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
+function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
+
+function renderStorySlide() {
+    clearTimeout(storyTimer);
+    const story = activeStories[currentStoryIdx];
+    if (!story) { closeStoryViewer(); return; }
+
+    const authorDetailsEl = document.getElementById('viewerAuthorDetails');
+    const schoolDetailsEl = document.getElementById('viewerSchoolDetails');
+    const avatarEl = document.getElementById('viewerAvatar');
+    const capEl = document.getElementById('viewerCaption');
+    const bgImg = document.getElementById('viewerImageBg');
+
+    // Failsafe checks
+    const authorName = story.author_name || "Student";
+    let ageText = story.age ? `, ${story.age}` : '';
+    let classText = story.class_name ? ` • ${story.class_name}` : '';
+    
+    if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
+    if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
+    if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase();
+
+    if (capEl) capEl.innerHTML = (story.caption || '').replace(/\n/g, '<br>');
+    
+    // Checks for image_data or image_url based on backend setup
+    const imageUrl = story.image_data || story.image_url || story.image; 
+    if (bgImg) {
+      if (imageUrl) {
+        bgImg.src = imageUrl;
+        bgImg.style.display = 'block';
+      } else {
+        bgImg.style.display = 'none';
+      }
+    }
+
+    const pContainer = document.getElementById('storyProgressContainer');
+    if (pContainer) {
+      pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
+    }
+    storyTimer = setTimeout(nextStorySlide, 6000);
+}
+function closeStoryViewer() { clearTimeout(storyTimer); const v = document.getElementById('storyViewer'); if (v) v.style.display = 'none'; }
+function reactStory(type) { if(typeof playDing === 'function') playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
+function saveStoryToVault() { if(typeof playWin === 'function') playWin(); alert("💾 Saved to Gallery!"); }
 </script>
 
 </body>
