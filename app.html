@@ -1256,11 +1256,15 @@ textarea:focus, input:focus, select:focus {
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
     <div id="notesLoading" class="hidden" style="text-align:center; color:var(--accent-amber); margin-top:15px; font-weight:bold;">Compiling module (15-20s)...</div>
     
-    <div id="notesResultContainer" class="hidden topper-paper-container">
+       <div id="notesResultContainer" class="hidden topper-paper-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
             <div style="font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase;" id="notesResultTitle">CLASS • SUBJECT</div>
-            <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🖨️ Download PDF</button>
+            <div style="display:flex; gap:8px;">
+              <button type="button" onclick="playAudioExplanation(document.getElementById('notesContentBody').innerText, this)" style="background:#0284c7; color:#fff; border:none; padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🔊 Listen</button>
+              <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🖨️ Download PDF</button>
+            </div>
         </div>
+
         <div id="notesContentBody" class="topper-content"></div>
     </div>
 </section>
