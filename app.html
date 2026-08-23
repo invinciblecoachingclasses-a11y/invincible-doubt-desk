@@ -734,6 +734,35 @@ textarea:focus, input:focus, select:focus {
   background: #f43f5e;
   border-color: #fda4af;
 }
+/* =====================================================
+   📸 STORY STUDIO & FILTER ENGINE
+===================================================== */
+.story-studio-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.photo-upload-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.story-preview-container { 
+  width: 100%; height: 220px; background: #000; border-radius: 16px; 
+  border: 1px solid var(--border-subtle); margin-bottom: 12px; 
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  position: relative;
+}
+#storyImagePreview { width: 100%; height: 100%; object-fit: cover; display: none; }
+.filter-tray { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.filter-tray::-webkit-scrollbar { display: none; }
+.filter-btn { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; }
+.filter-preview-box { width: 56px; height: 56px; border-radius: 14px; background: #1e293b; border: 2px solid transparent; transition: 0.2s; }
+.filter-btn.active .filter-preview-box { border-color: var(--accent-cyan); transform: scale(1.05); box-shadow: 0 0 15px rgba(0,229,255,0.3); }
+.filter-name { font-size: 10px; color: #94a3b8; font-weight: 800; }
+.filter-btn.active .filter-name { color: var(--accent-cyan); }
+
+/* Viewer ID Card */
+.story-image-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.85; border-radius: 24px; }
+.story-content-layer { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; }
+.story-id-card {
+  position: absolute; bottom: 80px; left: 16px; right: 16px;
+  background: rgba(10, 15, 30, 0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px;
+  padding: 14px; z-index: 20; display: flex; align-items: center; gap: 14px;
+}
 
 
 </style>
