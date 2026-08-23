@@ -892,12 +892,16 @@ textarea:focus, input:focus, select:focus {
       ⚡ Computing Step-by-Step Formula Breakdown &amp; Traps...
     </div>
     
-    <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
+        <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
     <div class="answer-box" id="answerBox">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:8px; margin-bottom:12px;">
           <div class="logic-title">🎯 Master Teacher Solution</div>
-          <button type="button" onclick="clearDoubtThread()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px; cursor:pointer;">New Question</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" onclick="playAudioExplanation(document.getElementById('answerText').innerText, this)" style="background:rgba(0,229,255,0.12); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:4px 10px; border-radius:8px; cursor:pointer;">🔊 Listen</button>
+            <button type="button" onclick="clearDoubtThread()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px; cursor:pointer;">New Question</button>
+          </div>
         </div>
+
 
         <div id="doubtConversationThread" style="display:flex; flex-direction:column; gap:14px;">
           <div class="topper-content" id="answerText"></div>
