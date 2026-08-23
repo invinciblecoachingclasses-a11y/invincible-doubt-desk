@@ -51,12 +51,20 @@
   box-sizing: border-box; 
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
 }
+/* ✅ FIXED HIGH-CONTRAST CSS */
 .topper-content {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  color: #f1f5f9 !important;
+  color: #0f172a !important;
   line-height: 1.65;
   font-size: 14px;
 }
+.topper-content p, 
+.topper-content li, 
+.topper-content span, 
+.topper-content mjx-container {
+  color: #1e293b !important;
+}
+
 
 #doubtSection .callout-trap {
   background: rgba(244, 63, 94, 0.15);
