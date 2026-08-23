@@ -1627,19 +1627,18 @@ if (genNotesBtn) {
     `;
 
     try {
-        const res = await fetch('/api/generate-notes', {
+                const res = await fetch('/api/ask', {
             method: 'POST', 
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
-              className: cls, 
               subject: sub, 
-              chapter: strictPrompt, 
-              language: lang,
-              targetPages: targetPages 
+              question: strictPrompt
             }) 
         });
         const data = await res.json();
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
+        data.notes = data.answer;
+
 
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
