@@ -272,7 +272,14 @@ async function setReelsClass(cls, btn) {
         if (matchingBtn) matchingBtn.classList.add('active');
     }
     await renderReelsDeck();
+    
+    // Reset scroll back to card #1
+    const container = document.getElementById('studyReelsDeck');
+    if (container) {
+        container.scrollTop = 0;
+    }
 }
+
 
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
@@ -393,7 +400,7 @@ async function renderReelsDeck() {
                 
                 <div class="reel-content-box" style="text-align:center;">
                   <div class="reel-q-title" style="color:var(--accent-cyan);">${card.title || 'Core Formula'}</div>
-                  <div style="font-size:17px; font-weight:900; color:#fff; padding:12px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:12px;">$$${card.formula || ''}$$</div>
+                  <div class="reel-formula-box">$$${card.formula || ''}$$</div>
                   <div style="font-size:11.5px; color:#cbd5e1; line-height:1.35; margin-top:4px;">💡 ${card.tip || ''}</div>
                 </div>
 
@@ -422,12 +429,15 @@ async function renderReelsDeck() {
         }
     }).join('');
 
+    container.scrollTop = 0;
+
     try {
         if (window.MathJax && MathJax.typesetPromise) {
             MathJax.typesetPromise([container]).catch(() => {});
         }
     } catch(e) {}
 }
+
 
 function shareReel(text) {
     if (navigator.share) {
