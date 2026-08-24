@@ -845,6 +845,9 @@ document.getElementById("askBtn").onclick = async () => {
     
     startDoubtWaitingPipeline();
 
+    // 1. Capture the image preview source if an image was uploaded
+    const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
+
     doubtHistory = [];
 
     try {
@@ -866,7 +869,15 @@ document.getElementById("askBtn").onclick = async () => {
         doubtHistory.push({ role: 'assistant', content: data.answer });
 
         const ansContainer = document.getElementById("answerText");
+        
+        // 2. Render markdown/math solution first
         await renderAnswerContent(ansContainer, data.answer);
+        
+        // 3. Inject the uploaded picture at the top of the answer card
+        if (attachedImageBase64) {
+          const imgMarkup = `<div style="margin-bottom:14px; text-align:center;"><img src="${attachedImageBase64}" alt="Uploaded Doubt" style="max-width:100%; max-height:260px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); object-fit:contain;" /></div>`;
+          ansContainer.insertAdjacentHTML('afterbegin', imgMarkup);
+        }
         
         document.getElementById("answerBox").style.display = "block"; 
         if (typeof playDing === 'function') playDing();
@@ -878,6 +889,7 @@ document.getElementById("askBtn").onclick = async () => {
         document.getElementById("loadingDoubt").classList.add('hidden'); 
     }
 };
+
 
 const sendFollowUpBtn = document.getElementById('sendFollowUpBtn');
 const followUpInput = document.getElementById('followUpInput');
