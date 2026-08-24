@@ -66,7 +66,8 @@ export default async function handler(req, res) {
                         author_name: author_name.slice(0, 30),
                         institution: institution.slice(0, 40),
                         student_class: student_class || '10',
-                        media_url: media_url || null,
+                        media_url: media_url || image_data || null,
+
                         caption: (caption || '').slice(0, 300),
                         sticker_question: sticker_question ? sticker_question.slice(0, 120) : null,
                         sticker_opt_a: sticker_opt_a ? sticker_opt_a.slice(0, 50) : null,
