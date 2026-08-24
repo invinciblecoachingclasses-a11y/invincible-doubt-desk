@@ -209,6 +209,23 @@
     </div>
 </section>
 
+<!-- IMAGE CROPPER MODAL -->
+<div id="cropperModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:100000; flex-direction:column; align-items:center; justify-content:center; padding:16px;">
+  <div style="width:min(500px, 96%); background:#0f172a; border-radius:20px; border:1px solid rgba(255,255,255,0.15); overflow:hidden; display:flex; flex-direction:column;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:13px; font-weight:800; color:#fff;">✂️ Drag corners to crop question</div>
+      <button type="button" onclick="closeCropModal()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <div style="max-height:60vh; background:#000; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+      <img id="cropperImageElement" style="max-width:100%; display:block;" alt="Crop Area">
+    </div>
+    <div style="padding:12px 16px; display:flex; gap:8px; justify-content:flex-end; background:#1e293b; border-top:1px solid rgba(255,255,255,0.1);">
+      <button type="button" onclick="closeCropModal()" style="background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">Cancel</button>
+      <button type="button" onclick="confirmCroppedImage()" style="background:var(--accent-cyan); border:none; color:#060913; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:900; cursor:pointer;">Crop &amp; Attach 📐</button>
+    </div>
+  </div>
+</div>
+
 <!-- =====================================================
      2. TEST SECTION
 ===================================================== -->
@@ -701,7 +718,7 @@
         <div class="story-content-layer">
             <div>
                 <div class="story-progress-bar" id="storyProgressContainer"></div>
-                <div class="story-view-header">
+                <div class="story-view-header" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
                     <div style="font-size:13px; font-weight:900; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <button id="viewerDeleteBtn" style="display:none; background:rgba(239,68,68,0.3); border:1px solid rgba(239,68,68,0.6); color:#fff; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
@@ -719,20 +736,36 @@
             <!-- Glassmorphic Clout Card -->
             <div class="story-id-card">
               <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-rose), var(--accent-cyan)); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff; border:2px solid #fff;" id="viewerAvatar"></div>
-              <div>
+              <div style="flex:1;">
                 <div style="font-size:14px; font-weight:900; color:#fff;" id="viewerAuthorDetails">Name</div>
                 <div style="font-size:11px; font-weight:700; color:var(--accent-cyan);" id="viewerSchoolDetails">School</div>
               </div>
+              <button type="button" id="storyActivityBadge" onclick="openStoryViewersDrawer()" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:5px 10px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
+                👁️ <span id="storyViewCount">0</span>
+              </button>
             </div>
 
             <div class="story-action-bar">
-                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥</button>
-                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯</button>
-                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯</button>
+                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥 <span id="reactCountFire" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
+                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯 <span id="reactCountMind" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
+                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯 <span id="reactCount100" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
                 <button type="button" class="restart-btn" style="width:auto; margin:0; padding:6px 12px; font-size:11px;" onclick="saveStoryToVault()">💾 Save</button>
             </div>
         </div>
     </div>
+</div>
+
+<!-- STORY VIEWERS & REACTIONS DRAWER -->
+<div id="storyViewersDrawer" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100010; align-items:flex-end; justify-content:center;">
+  <div style="background:#0f172a; border-top:1px solid rgba(255,255,255,0.15); border-radius:24px 24px 0 0; width:min(440px, 100%); max-height:65vh; padding:18px 16px; display:flex; flex-direction:column; box-shadow:0 -10px 40px rgba(0,0,0,0.8);">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; margin-bottom:12px;">
+      <div style="font-size:14px; font-weight:900; color:#fff;">👀 Story Activity &amp; Viewers</div>
+      <button type="button" onclick="closeStoryViewersDrawer()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <div id="storyViewersList" style="overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px;">
+      <div style="color:#94a3b8; font-size:12px; text-align:center; padding:20px 0;">Loading viewers...</div>
+    </div>
+  </div>
 </div>
 
 <!-- EXTERNAL JAVASCRIPT -->
