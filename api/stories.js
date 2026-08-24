@@ -119,21 +119,22 @@ export default async function handler(req, res) {
                 return res.status(200).json({ success: true });
             }
             
-                        // Action: Delete Story
-            if (action === 'delete_story') {
-                if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
+            // Action: Delete Story
+if (action === 'delete_story') {
+    if (!story_id) return res.status(400).j...
 
-                const deleteRes = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
-                    method: 'DELETE',
-                    headers
-                });
+    const deleteRes = await fetch(`${supaba...
+        method: 'DELETE',
+        headers
+    });
 
-                if (!deleteRes.ok) {
-                    return res.status(500).json({ error: 'Failed to delete story.' });
-                }
+    if (!deleteRes.ok) {
+        return res.status(500).json({ error...
+    }
 
-                return res.status(200).json({ success: true, message: 'Story deleted successfully.' });
-            }
+    return res.status(200).json({ success: ...
+}
+
 
         } catch (err) {
             return res.status(500).json({ error: 'Server error processing story.' });
