@@ -18,7 +18,7 @@
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; 
 }
 
-/* ✅ CRISP HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
+/* CRISP HIGH-CONTRAST TEXT FOR DARK & LIGHT CONTAINERS */
 .topper-content {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   color: #f1f5f9;
@@ -41,7 +41,7 @@
   color: #00e5ff;
 }
 
-/* Light theme override specifically for Topper Notes Studio white card */
+/* Light theme override for Topper Notes Studio */
 .topper-paper-container .topper-content,
 .topper-paper-container .topper-content p,
 .topper-paper-container .topper-content li,
@@ -94,7 +94,7 @@ body {
 .container { width: min(860px, 92%); margin: 12px auto 110px; }
 
 /* TACTILE INTERACTIONS */
-button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active, .portal-hero-card:active, .feature-choice-card:active {
+button:active, .subject:active, .filter-pill:active, .story-circle-item:active, .arena-option:active, .option:active, .dock-btn:active {
   transform: scale(0.93) !important;
 }
 
@@ -156,91 +156,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   color: var(--accent-cyan);
 }
 
-/* =========================================
-   GEN-Z 2-TRACK PORTAL CSS
-========================================= */
-.portal-deck-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 18px;
-}
-@media (min-width: 680px) {
-  .portal-deck-wrapper { display: grid; grid-template-columns: 1fr 1fr; }
-}
-
-.portal-hero-card {
-  position: relative;
-  background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(8, 12, 24, 0.95));
-  border-radius: 26px;
-  padding: 22px 20px;
-  cursor: pointer;
-  overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-}
-.portal-hero-card.study-track { border-top: 2px solid var(--accent-cyan); }
-.portal-hero-card.battle-track { border-top: 2px solid var(--accent-rose); }
-.portal-hero-card:hover { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8); }
-
-.portal-badge {
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  padding: 4px 9px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 12px;
-}
-.study-badge { background: rgba(0, 229, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
-.battle-badge { background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); border: 1px solid rgba(244, 63, 94, 0.3); }
-
-.portal-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 20px;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 4px;
-}
-.portal-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  margin-bottom: 16px;
-}
-.portal-subfeatures { display: flex; flex-wrap: wrap; gap: 6px; }
-.portal-sub-pill {
-  font-size: 11px;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 5px 10px;
-  border-radius: 12px;
-  color: #cbd5e1;
-}
-
-/* SUB-PORTAL SELECTION VIEWS */
-.sub-portal-view {
-  animation: slideInFromRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes slideInFromRight {
-  from { opacity: 0; transform: translateX(25px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.feature-choice-card {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  padding: 16px 18px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-}
-.feature-choice-card:hover { border-color: var(--accent-cyan); background: rgba(0, 229, 255, 0.06); transform: translateX(4px); }
-
 /* INTERACTIVE WAITING MECHANICS CSS */
 .waiting-container {
   background: rgba(13, 18, 36, 0.75);
@@ -271,7 +186,6 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer; margin: 4px;
 }
 .warmup-trivia-btn:hover { border-color: var(--accent-cyan); background: rgba(0, 229, 255, 0.1); }
-
 
 /* 2. TODAY'S DAILY MISSION */
 .mission-card {
@@ -786,6 +700,7 @@ textarea:focus, input:focus, select:focus {
 .filter-btn.active .filter-preview-box { border-color: var(--accent-cyan); transform: scale(1.05); box-shadow: 0 0 15px rgba(0,229,255,0.3); }
 .filter-name { font-size: 10px; color: #94a3b8; font-weight: 800; }
 .filter-btn.active .filter-name { color: var(--accent-cyan); }
+
 /* =====================================================
    FULLSCREEN REELS / STORY VIEWER & ID CARD (COMPLETE)
 ===================================================== */
@@ -960,15 +875,4 @@ textarea:focus, input:focus, select:focus {
 
 .reaction-emoji-btn:active {
   transform: scale(1.35);
-}
-
-
-/* Viewer ID Card */
-.story-image-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.85; border-radius: 24px; }
-.story-content-layer { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; }
-.story-id-card {
-  position: absolute; bottom: 80px; left: 16px; right: 16px;
-  background: rgba(10, 15, 30, 0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 18px;
-  padding: 14px; z-index: 20; display: flex; align-items: center; gap: 14px;
 }
