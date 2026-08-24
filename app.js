@@ -811,14 +811,46 @@ document.getElementById("uploadBtn").onclick = () => imageInput.click();
 document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
 
 imageInput.onchange = e => {
-    const file = e.target.files[0]; if(!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
-    reader.onload = () => {
-        selectedImage = { data: reader.result.split(",")[1], mimeType: file.type };
-        imagePreview.src = reader.result; imagePreview.style.display = "block"; removeImageButton.style.display = "block";
+    reader.onload = (evt) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height && width > MAX_SIZE) {
+                height *= MAX_SIZE / width;
+                width = MAX_SIZE;
+            } else if (height > MAX_SIZE) {
+                width *= MAX_SIZE / height;
+                height = MAX_SIZE;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            selectedImage = {
+                data: compressedBase64.split(',')[1],
+                mimeType: 'image/jpeg'
+            };
+
+            imagePreview.src = compressedBase64;
+            imagePreview.style.display = "block";
+            removeImageButton.style.display = "block";
+        };
+        img.src = evt.target.result;
     };
     reader.readAsDataURL(file);
 };
+
 removeImageButton.onclick = () => { selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none"; };
 async function renderAnswerContent(container, markdownText) {
   let parsedHtml = typeof marked !== 'undefined' ? marked.parse(markdownText || "") : markdownText;
