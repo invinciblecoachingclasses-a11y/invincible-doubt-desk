@@ -1952,8 +1952,8 @@ function renderStorySlide() {
   if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
   if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
   if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
-  const myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
-  const isMyStory = story.id && myStoryIds.includes(story.id);
+  const myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]').map(Number);
+const isMyStory = story.id && myStoryIds.includes(Number(story.id));
 
   const deleteBtn = document.getElementById('viewerDeleteBtn');
   if (deleteBtn) {
