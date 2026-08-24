@@ -33,7 +33,8 @@ export default async function handler(req, res) {
 
     // 2. CREATE STORY / VOTE / REACT / RECORD VIEW
     if (req.method === 'POST') {
-        const { action, author_name, institution, student_class, media_url, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type, viewer_name, viewer_institution } = req.body;
+        const { action, author_name, institution, student_class, media_url, image_data, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type, viewer_name, viewer_institution } = req.body;
+
 
         try {
             // Action: Record a Story View
