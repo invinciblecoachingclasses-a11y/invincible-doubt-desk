@@ -261,46 +261,67 @@ let cachedReelDeck = defaultReelDeck;
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
 let reelStreak = 0;
 
-function setReelsClass(cls, btn) {
+async function setReelsClass(cls, btn) {
     currentReelsClass = String(cls);
     localStorage.setItem('invincible_user_class', currentReelsClass);
     document.querySelectorAll('.reel-class-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    renderReelsDeck();
+    if (btn) {
+        btn.classList.add('active');
+    } else {
+        const matchingBtn = document.querySelector(`.reel-class-btn[data-class="${cls}"]`);
+        if (matchingBtn) matchingBtn.classList.add('active');
+    }
+    await renderReelsDeck();
 }
 
-function renderReelsDeck() {
+async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    const deck = (cachedReelDeck && cachedReelDeck.length > 0) ? cachedReelDeck : defaultReelDeck;
-    let filtered = deck.filter(item => String(item.class_name) === String(currentReelsClass));
-    if (filtered.length === 0) filtered = deck;
+    let deck = [];
+    try {
+        const res = await fetch(`/api/get-questions?target_class=${currentReelsClass}`);
+        const data = await res.json();
+        if (data && Array.isArray(data.reelDeck) && data.reelDeck.length > 0) {
+            deck = data.reelDeck;
+        }
+    } catch(e) {}
 
-    container.innerHTML = filtered.map((card, idx) => {
+    if (!deck || deck.length === 0) {
+        deck = defaultReelDeck.filter(item => String(item.class_name) === String(currentReelsClass));
+        if (deck.length === 0) deck = defaultReelDeck;
+    }
+
+    container.innerHTML = deck.map((card, idx) => {
         if (card.type === 'mcq') {
+            let opts = card.options;
+            if (typeof opts === 'string') {
+                try { opts = JSON.parse(opts); } catch(e) { opts = []; }
+            }
+            if (!Array.isArray(opts)) opts = [];
+
             return `
               <div class="reel-card" id="reelCard_${card.id}">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge">${card.subject.toUpperCase()} • ${card.topic || 'CBSE'}</span>
+                  <span class="reel-subject-badge">${(card.subject || 'CBSE').toUpperCase()} • ${(card.topic || 'PRACTICE').toUpperCase()}</span>
                   <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
                 </div>
                 <div class="reel-content-box">
-                  <div style="font-size:16px; font-weight:800; color:#fff; line-height:1.45; margin-bottom:4px;">${formatMathText(card.q_en)}</div>
+                  <div style="font-size:15px; font-weight:800; color:#fff; line-height:1.4;">${formatMathText(card.q_en || '')}</div>
                   ${card.q_hi ? `<div style="font-size:12px; color:var(--text-muted); line-height:1.4;">${card.q_hi}</div>` : ''}
                   <div class="reel-options-grid">
-                    ${card.options.map((opt, oIdx) => `
+                    ${opts.map((opt, oIdx) => `
                       <button type="button" class="reel-opt-btn" onclick="handleReelAnswer(${card.id}, ${oIdx}, ${card.answer}, this)">
-                        <span>${formatMathText(opt)}</span>
+                        <span>${formatMathText(String(opt))}</span>
                         <span style="font-size:12px; opacity:0.4;">○</span>
                       </button>
                     `).join('')}
                   </div>
-                  <div id="reelFeedback_${card.id}" style="margin-top:10px; font-size:12px; display:none;"></div>
+                  <div id="reelFeedback_${card.id}" style="font-size:12px; display:none;"></div>
                 </div>
                 <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.q_en)}', '${card.subject}')">🧠 Explain with AI</button>
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.q_en || '')}', '${card.subject || ''}')">🧠 Explain with AI</button>
                 </div>
               </div>
             `;
@@ -308,17 +329,17 @@ function renderReelsDeck() {
             return `
               <div class="reel-card" style="border-left: 4px solid var(--accent-rose);">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge" style="color:var(--accent-rose); border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.1);">${card.subject.toUpperCase()} • EXAMINER TRAP</span>
+                  <span class="reel-subject-badge" style="color:var(--accent-rose); border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.1);">${(card.subject || 'CBSE').toUpperCase()} • EXAMINER TRAP</span>
                   <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
                 </div>
                 <div class="reel-content-box">
-                  <div style="font-size:18px; font-weight:900; color:#fff; margin-bottom:8px;">${card.title}</div>
-                  <div style="font-size:13px; color:#f1f5f9; line-height:1.6; background:rgba(244,63,94,0.08); padding:14px; border-radius:14px; border:1px solid rgba(244,63,94,0.2);">${card.content}</div>
-                  <div style="font-size:12px; color:var(--accent-emerald); font-weight:800; margin-top:10px;">✅ BOARD RULE: ${card.rule}</div>
+                  <div style="font-size:17px; font-weight:900; color:#fff;">${card.title || 'Examiner Trap'}</div>
+                  <div style="font-size:13px; color:#f1f5f9; line-height:1.5; background:rgba(244,63,94,0.08); padding:12px; border-radius:12px; border:1px solid rgba(244,63,94,0.2);">${card.content || ''}</div>
+                  <div style="font-size:12px; color:var(--accent-emerald); font-weight:800;">✅ BOARD RULE: ${card.rule || ''}</div>
                 </div>
                 <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.title + ': ' + card.content)}', '${card.subject}')">🧠 Solve Traps</button>
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML((card.title || '') + ': ' + (card.content || ''))}', '${card.subject || ''}')">🧠 Solve Traps</button>
                 </div>
               </div>
             `;
@@ -326,17 +347,17 @@ function renderReelsDeck() {
             return `
               <div class="reel-card" style="border-left: 4px solid var(--accent-cyan);">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge">${card.subject.toUpperCase()} • FORMULA VAULT</span>
+                  <span class="reel-subject-badge">${(card.subject || 'CBSE').toUpperCase()} • FORMULA VAULT</span>
                   <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
                 </div>
                 <div class="reel-content-box" style="text-align:center;">
-                  <div style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">${card.title}</div>
-                  <div style="font-size:18px; font-weight:900; color:var(--accent-cyan); padding:16px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:16px;">$$${card.formula}$$</div>
-                  <div style="font-size:12px; color:#cbd5e1; margin-top:12px; line-height:1.5;">💡 ${card.tip}</div>
+                  <div style="font-size:17px; font-weight:900; color:#fff;">${card.title || 'Core Formula'}</div>
+                  <div style="font-size:17px; font-weight:900; color:var(--accent-cyan); padding:14px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:14px;">$$${card.formula || ''}$$</div>
+                  <div style="font-size:12px; color:#cbd5e1; line-height:1.4;">💡 ${card.tip || ''}</div>
                 </div>
                 <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('Derive and explain formula: ${escapeHTML(card.formula)}', '${card.subject}')">🧠 Derivation</button>
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('Derive and explain formula: ${escapeHTML(card.formula || '')}', '${card.subject || ''}')">🧠 Derivation</button>
                 </div>
               </div>
             `;
@@ -349,6 +370,7 @@ function renderReelsDeck() {
         }
     } catch(e) {}
 }
+
 
 function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
     const card = document.getElementById(`reelCard_${cardId}`);
