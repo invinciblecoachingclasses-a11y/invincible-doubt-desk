@@ -106,30 +106,29 @@ function checkDailyStreak() {
 window.addEventListener('DOMContentLoaded', checkDailyStreak);
 
 /* =====================================================
-   CLEAN SEPARATION NAVIGATION ENGINE
+   CLEAN SEPARATION 7-TAB NAVIGATION ENGINE
 ===================================================== */
 function switchTab(tab) {
-    document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
-    
     const dockButtons = document.querySelectorAll('.dock-btn');
-    if(tab === 'home' && dockButtons[0]) dockButtons[0].classList.add('active');
-    if(tab === 'doubt' && dockButtons[1]) dockButtons[1].classList.add('active');
-    if(tab === 'test' && dockButtons[2]) dockButtons[2].classList.add('active');
-    if(tab === 'arena' && dockButtons[3]) dockButtons[3].classList.add('active');
-    if(tab === 'feed' && dockButtons[4]) dockButtons[4].classList.add('active');
-    if(tab === 'notes' && dockButtons[5]) dockButtons[5].classList.add('active');
+    dockButtons.forEach(b => b.classList.remove('active'));
+    
+    const tabMap = { 'home': 0, 'reels': 1, 'doubt': 2, 'test': 3, 'arena': 4, 'feed': 5, 'notes': 6 };
+    if (tabMap[tab] !== undefined && dockButtons[tabMap[tab]]) {
+        dockButtons[tabMap[tab]].classList.add('active');
+    }
 
-    const sections = ['home', 'doubt', 'test', 'arena', 'feed', 'notes'];
+    const sections = ['home', 'reels', 'doubt', 'test', 'arena', 'feed', 'notes'];
     sections.forEach(s => {
         const el = document.getElementById(s + 'Section');
         if (el) el.classList.add('hidden');
     });
 
-    const targetId = (tab === 'feed' && document.getElementById('campusHubSection')) ? 'campusHubSection' : tab + 'Section';
+    const targetId = tab + 'Section';
     const target = document.getElementById(targetId);
     if (target) target.classList.remove('hidden');
     
-    if(tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
+    if (tab === 'reels') renderReelsDeck();
+    if (tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
 
     if (typeof playDing === 'function') playDing();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -172,6 +171,10 @@ function playSound(type, freq, duration, vol=0.1) {
 function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
 function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
+
+function triggerHaptic(pattern = [40]) {
+  if ('vibrate' in navigator) navigator.vibrate(pattern);
+}
 
 function stopLofiAudio() {
     activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
@@ -239,6 +242,179 @@ function toggleLofiAudio() {
 }
 
 /* =====================================================
+   ⚡ ZERO-TOKEN STUDY REELS ENGINE
+===================================================== */
+const defaultReelDeck = [
+    { id: 101, class_name: "10", type: "mcq", subject: "Physics", topic: "Light & Optics", q_en: "If magnification m = -1 for a spherical mirror, where is the object placed?", q_hi: "यदि किसी गोलीय दर्पण के लिए m = -1 है, तो वस्तु कहाँ स्थित है?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)", "Between F and P"], answer: 2, trap: "Negative magnification signifies a real and inverted image of identical size, which only happens at C." },
+    { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
+    { id: 103, class_name: "10", type: "formula", subject: "Physics", topic: "Electricity", title: "🧠 Power Vault", formula: "P = VI = I^2R = \\frac{V^2}{R}", tip: "In series circuits use P = I²R. In parallel household circuits use P = V²/R." },
+    { id: 104, class_name: "10", type: "mcq", subject: "Chemistry", topic: "Chemical Reactions", q_en: "When lead nitrate powder is heated in a boiling tube, brown fumes are emitted. The gas is:", q_hi: "लेड नाइट्रेट को गर्म करने पर भूरे रंग का धुआँ निकलता है। वह गैस कौन सी है?", options: ["NO", "NO₂ (Nitrogen Dioxide)", "N₂O", "O₂"], answer: 1, trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. Brown fumes are strictly NO₂." },
+    { id: 105, class_name: "10", type: "trap", subject: "Chemistry", topic: "Acids & Bases", title: "🚨 Acid Dilution Danger", content: "NEVER add water to concentrated acid! It causes violent exothermic splashing.", rule: "Always add Acid to Water drop by drop with continuous stirring." },
+    { id: 106, class_name: "10", type: "mcq", subject: "Mathematics", topic: "Trigonometry", q_en: "If sin θ + sin² θ = 1, then the value of cos² θ + cos⁴ θ is:", q_hi: "यदि sin θ + sin² θ = 1 है, तो cos² θ + cos⁴ θ का मान क्या होगा?", options: ["0", "1", "2", "-1"], answer: 1, trap: "sin θ = 1 - sin² θ = cos² θ. Squaring both sides: sin² θ = cos⁴ θ. So cos² θ + cos⁴ θ = sin θ + sin² θ = 1." },
+    { id: 901, class_name: "9", type: "mcq", subject: "Physics", topic: "Gravitation", q_en: "The value of acceleration due to gravity (g) at the center of the Earth is:", q_hi: "पृथ्वी के केंद्र पर गुरुत्वीय त्वरण (g) का मान कितना होता है?", options: ["9.8 m/s²", "Zero (0)", "Infinite", "4.9 m/s²"], answer: 1, trap: "At Earth's center, mass attracts equally in all directions, so net gravitational force is zero." },
+    { id: 902, class_name: "9", type: "trap", subject: "Physics", topic: "Work & Energy", title: "🚨 Centripetal Work Trap", content: "Work done by centripetal force is ALWAYS ZERO because force is perpendicular to displacement (θ = 90°, cos 90° = 0).", rule: "Satellites orbiting Earth do zero net work." },
+    { id: 1101, class_name: "11", type: "mcq", subject: "Physics", topic: "Kinematics", q_en: "For a projectile, the angle of projection for maximum horizontal range is:", q_hi: "प्रक्षेप्य के लिए अधिकतम क्षैतिज परास का प्रक्षेपण कोण क्या है?", options: ["30°", "45°", "60°", "90°"], answer: 1, trap: "Range R = (u² sin 2θ)/g. Maximum when sin 2θ = 1 ⇒ θ = 45°." },
+    { id: 1201, class_name: "12", type: "mcq", subject: "Physics", topic: "Electrostatics", q_en: "Electric flux through a closed Gaussian surface enclosing an electric dipole is:", q_hi: "किसी बंद गॉसियन सतह के भीतर विद्युत द्विध्रुव होने पर कुल विद्युत फ्लक्स क्या होगा?", options: ["q / ε₀", "2q / ε₀", "Zero (0)", "Infinite"], answer: 2, trap: "Net enclosed charge inside a dipole is (+q - q) = 0. By Gauss's Law, flux = 0." }
+];
+
+let cachedReelDeck = defaultReelDeck;
+let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
+let reelStreak = 0;
+
+function setReelsClass(cls, btn) {
+    currentReelsClass = String(cls);
+    localStorage.setItem('invincible_user_class', currentReelsClass);
+    document.querySelectorAll('.reel-class-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderReelsDeck();
+}
+
+function renderReelsDeck() {
+    const container = document.getElementById('studyReelsDeck');
+    if (!container) return;
+
+    const deck = (cachedReelDeck && cachedReelDeck.length > 0) ? cachedReelDeck : defaultReelDeck;
+    let filtered = deck.filter(item => String(item.class_name) === String(currentReelsClass));
+    if (filtered.length === 0) filtered = deck;
+
+    container.innerHTML = filtered.map((card, idx) => {
+        if (card.type === 'mcq') {
+            return `
+              <div class="reel-card" id="reelCard_${card.id}">
+                <div class="reel-tag-bar">
+                  <span class="reel-subject-badge">${card.subject.toUpperCase()} • ${card.topic || 'CBSE'}</span>
+                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                </div>
+                <div class="reel-content-box">
+                  <div style="font-size:16px; font-weight:800; color:#fff; line-height:1.45; margin-bottom:4px;">${formatMathText(card.q_en)}</div>
+                  ${card.q_hi ? `<div style="font-size:12px; color:var(--text-muted); line-height:1.4;">${card.q_hi}</div>` : ''}
+                  <div class="reel-options-grid">
+                    ${card.options.map((opt, oIdx) => `
+                      <button type="button" class="reel-opt-btn" onclick="handleReelAnswer(${card.id}, ${oIdx}, ${card.answer}, this)">
+                        <span>${formatMathText(opt)}</span>
+                        <span style="font-size:12px; opacity:0.4;">○</span>
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div id="reelFeedback_${card.id}" style="margin-top:10px; font-size:12px; display:none;"></div>
+                </div>
+                <div class="reel-footer-actions">
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.q_en)}', '${card.subject}')">🧠 Explain with AI</button>
+                </div>
+              </div>
+            `;
+        } else if (card.type === 'trap') {
+            return `
+              <div class="reel-card" style="border-left: 4px solid var(--accent-rose);">
+                <div class="reel-tag-bar">
+                  <span class="reel-subject-badge" style="color:var(--accent-rose); border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.1);">${card.subject.toUpperCase()} • EXAMINER TRAP</span>
+                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                </div>
+                <div class="reel-content-box">
+                  <div style="font-size:18px; font-weight:900; color:#fff; margin-bottom:8px;">${card.title}</div>
+                  <div style="font-size:13px; color:#f1f5f9; line-height:1.6; background:rgba(244,63,94,0.08); padding:14px; border-radius:14px; border:1px solid rgba(244,63,94,0.2);">${card.content}</div>
+                  <div style="font-size:12px; color:var(--accent-emerald); font-weight:800; margin-top:10px;">✅ BOARD RULE: ${card.rule}</div>
+                </div>
+                <div class="reel-footer-actions">
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.title + ': ' + card.content)}', '${card.subject}')">🧠 Solve Traps</button>
+                </div>
+              </div>
+            `;
+        } else {
+            return `
+              <div class="reel-card" style="border-left: 4px solid var(--accent-cyan);">
+                <div class="reel-tag-bar">
+                  <span class="reel-subject-badge">${card.subject.toUpperCase()} • FORMULA VAULT</span>
+                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                </div>
+                <div class="reel-content-box" style="text-align:center;">
+                  <div style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">${card.title}</div>
+                  <div style="font-size:18px; font-weight:900; color:var(--accent-cyan); padding:16px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:16px;">$$${card.formula}$$</div>
+                  <div style="font-size:12px; color:#cbd5e1; margin-top:12px; line-height:1.5;">💡 ${card.tip}</div>
+                </div>
+                <div class="reel-footer-actions">
+                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up for Next ➔</div>
+                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('Derive and explain formula: ${escapeHTML(card.formula)}', '${card.subject}')">🧠 Derivation</button>
+                </div>
+              </div>
+            `;
+        }
+    }).join('');
+
+    try {
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([container]).catch(() => {});
+        }
+    } catch(e) {}
+}
+
+function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
+    const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) return;
+
+    const buttons = card.querySelectorAll('.reel-opt-btn');
+    buttons.forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
+
+    const fb = document.getElementById(`reelFeedback_${cardId}`);
+    const comboBadge = document.getElementById('reelsComboBadge');
+    const isCorrect = Number(selectedIdx) === Number(correctIdx);
+
+    if (isCorrect) {
+        playDing();
+        triggerHaptic([30, 40, 30]);
+        btnEl.classList.add('correct');
+        reelStreak++;
+
+        if (comboBadge) {
+            comboBadge.classList.remove('hidden');
+            comboBadge.textContent = `🔥 x${reelStreak} STREAK`;
+        }
+
+        if (fb) {
+            fb.style.display = 'block';
+            fb.innerHTML = `<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct! +15 XP</span>`;
+        }
+
+        const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
+        const xpEl = document.getElementById('xpCounter');
+        if (xpEl) xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
+
+        if (reelStreak >= 3) {
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+        }
+    } else {
+        playBuzz();
+        triggerHaptic([80]);
+        btnEl.classList.add('wrong');
+        if (buttons[correctIdx]) buttons[correctIdx].classList.add('correct');
+        reelStreak = 0;
+
+        if (comboBadge) comboBadge.classList.add('hidden');
+
+        if (fb) {
+            fb.style.display = 'block';
+            fb.innerHTML = `<span style="color:var(--accent-rose); font-weight:800;">✗ Incorrect. Check rule below!</span>`;
+        }
+    }
+}
+
+function sendReelToDoubtSolver(questionText, subject) {
+    switchTab('doubt');
+    const qInput = document.getElementById('question');
+    if (qInput) qInput.value = questionText;
+    
+    if (subject) {
+        document.querySelectorAll("#doubtSection .subject").forEach(b => {
+            if (b.getAttribute('data-subject').toLowerCase() === subject.toLowerCase()) {
+                b.click();
+            }
+        });
+    }
+}
+
+/* =====================================================
 NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
@@ -292,7 +468,6 @@ if (genNotesBtn) {
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
         const contentBody = document.getElementById('notesContentBody');
-        
         let rawHtml = marked.parse(data.notes || "");
 
         rawHtml = rawHtml
@@ -403,6 +578,10 @@ async function loadPlatformData(){
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
+        if (data && data.reelDeck && Array.isArray(data.reelDeck)) {
+            cachedReelDeck = data.reelDeck;
+        }
+
         if (data && data.dailyPuzzle) {
           renderDailyPuzzle(data.dailyPuzzle);
         }
@@ -441,7 +620,15 @@ async function loadPlatformData(){
     }catch(error){ console.error(error); }
 }
 
-window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
+window.addEventListener('DOMContentLoaded', () => { 
+    setTimeout(loadPlatformData, 300); 
+    loadActiveStories();
+    setTimeout(() => {
+        const savedClass = localStorage.getItem('invincible_user_class') || "10";
+        const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
+        setReelsClass(savedClass, btn);
+    }, 200);
+});
 
 function renderDailyPuzzle(puzzle) {
   if (!puzzle) return;
@@ -713,7 +900,7 @@ async function handleCreatePost(e) {
     content,
     is_anonymous,
     upvotes: 0,
-    author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('userName') || 'Student')
+    author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('studentName') || 'Student')
   };
 
   try {
@@ -765,6 +952,7 @@ DOUBT DESK LOGIC
 let selectedSubject = "Mathematics";
 let currentTone = "step";
 let selectedImage = null;
+let doubtHistory = [];
 const questionInput = document.getElementById("question");
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
@@ -779,48 +967,61 @@ document.querySelectorAll("#doubtSection .subject").forEach(b => {
 document.getElementById("uploadBtn").onclick = () => imageInput.click();
 document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
 
-imageInput.onchange = e => {
-    const file = e.target.files[0];
-    if (!file) return;
+if (imageInput) {
+  imageInput.onchange = e => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_SIZE = 1200;
-            let width = img.width;
-            let height = img.height;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+          const img = new Image();
+          img.onload = () => {
+              const canvas = document.createElement('canvas');
+              const MAX_SIZE = 1200;
+              let width = img.width;
+              let height = img.height;
 
-            if (width > height && width > MAX_SIZE) {
-                height *= MAX_SIZE / width;
-                width = MAX_SIZE;
-            } else if (height > MAX_SIZE) {
-                width *= MAX_SIZE / height;
-                height = MAX_SIZE;
-            }
+              if (width > height && width > MAX_SIZE) {
+                  height *= MAX_SIZE / width;
+                  width = MAX_SIZE;
+              } else if (height > MAX_SIZE) {
+                  width *= MAX_SIZE / height;
+                  height = MAX_SIZE;
+              }
 
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
 
-            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-            selectedImage = {
-                data: compressedBase64.split(',')[1],
-                mimeType: 'image/jpeg'
-            };
+              const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+              selectedImage = {
+                  data: compressedBase64.split(',')[1],
+                  mimeType: 'image/jpeg'
+              };
 
-            imagePreview.src = compressedBase64;
-            imagePreview.style.display = "block";
-            removeImageButton.style.display = "block";
-        };
-        img.src = evt.target.result;
-    };
-    reader.readAsDataURL(file);
-};
+              imagePreview.src = compressedBase64;
+              imagePreview.style.display = "block";
+              removeImageButton.style.display = "block";
+              const container = document.getElementById('imagePreviewContainer');
+              if (container) container.style.display = "block";
+          };
+          img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+  };
+}
 
-removeImageButton.onclick = () => { selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none"; };
+if (removeImageButton) {
+  removeImageButton.onclick = () => { 
+    selectedImage = null; 
+    imageInput.value = ""; 
+    imagePreview.style.display = "none"; 
+    removeImageButton.style.display = "none";
+    const container = document.getElementById('imagePreviewContainer');
+    if (container) container.style.display = "none";
+  };
+}
 
 async function renderAnswerContent(container, markdownText) {
   let parsedHtml = typeof marked !== 'undefined' ? marked.parse(markdownText || "") : markdownText;
@@ -846,7 +1047,6 @@ document.getElementById("askBtn").onclick = async () => {
     document.getElementById("answerBox").style.display = "none"; 
     
     startDoubtWaitingPipeline();
-
     const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
     doubtHistory = [];
 
@@ -1165,7 +1365,7 @@ function startBotMatch() {
 
     const samplePool = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0, explanation: "Force = mass × acceleration, measured in Newtons." },
-        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िटज़ॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
+        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
         { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0, explanation: "KE = 1/2 m v²." },
         { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण में कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1, explanation: "Plants split water molecules to release Oxygen (O2)." },
         { question_text: "Value of acceleration due to gravity (g) on Earth:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0, explanation: "Standard standard gravity at sea level is ~9.8 m/s²." }
@@ -1759,7 +1959,6 @@ async function loadActiveStories() {
         }).join('');
     } catch(e) { container.innerHTML = ''; }
 }
-loadActiveStories();
 
 async function bakeImageWithFilter(base64Image, cssFilter) {
   return new Promise((resolve) => {
@@ -1839,6 +2038,43 @@ if (pubStoryBtn) {
   };
 }
 
+function getViewerIdentity() {
+  let name = localStorage.getItem('studentName') || localStorage.getItem('userName');
+  let school = localStorage.getItem('userSchool') || localStorage.getItem('testOrg');
+
+  if (!name) {
+    let guestId = localStorage.getItem('invincible_guest_id');
+    if (!guestId) {
+      guestId = Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem('invincible_guest_id', guestId);
+    }
+    name = `Student #${guestId}`;
+  }
+  if (!school) school = 'Invincible Explorer';
+  return { name, school };
+}
+
+async function recordStoryView(storyId) {
+  if (!storyId) return;
+  const { name, school } = getViewerIdentity();
+  try {
+    await fetch('/api/stories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'record_view', story_id: storyId, viewer_name: name, viewer_institution: school })
+    });
+  } catch (e) {}
+}
+
+async function fetchStoryViewers(storyId) {
+  if (!storyId) return [];
+  try {
+    const res = await fetch(`/api/stories?action=get_viewers&story_id=${storyId}`);
+    const data = await res.json();
+    return Array.isArray(data.viewers) ? data.viewers : [];
+  } catch (e) { return []; }
+}
+
 function openStoryViewer(idx) {
   currentStoryIdx = idx;
   const viewer = document.getElementById('storyViewer');
@@ -1915,6 +2151,8 @@ function renderStorySlide() {
     return;
   }
 
+  if (story.id) recordStoryView(story.id);
+
   const authorDetailsEl = document.getElementById('viewerAuthorDetails');
   const schoolDetailsEl = document.getElementById('viewerSchoolDetails');
   const avatarEl = document.getElementById('viewerAvatar');
@@ -1922,9 +2160,10 @@ function renderStorySlide() {
   const bgImg = document.getElementById('viewerImageBg');
 
   const authorName = String(story.author_name || story.author || story.name || "Student");
-  const classText = story.student_class ? ` • Class ${story.student_class}` : '';
+  const ageText = story.age ? `, ${story.age}` : '';
+  const classText = story.class_name ? ` • ${story.class_name}` : '';
 
-  if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${classText}`;
+  if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
   if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Invincible Coaching'}`;
   if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
 
@@ -1950,6 +2189,20 @@ function renderStorySlide() {
     }
   }
 
+  const rFire = document.getElementById('reactCountFire');
+  const rMind = document.getElementById('reactCountMind');
+  const r100 = document.getElementById('reactCount100');
+  if (rFire) rFire.textContent = story.reactions_fire ? `(${story.reactions_fire})` : '';
+  if (rMind) rMind.textContent = story.reactions_mind ? `(${story.reactions_mind})` : '';
+  if (r100) r100.textContent = story.reactions_100 ? `(${story.reactions_100})` : '';
+
+  const viewCountEl = document.getElementById('storyViewCount');
+  if (viewCountEl && story.id) {
+    fetchStoryViewers(story.id).then(viewers => {
+      if (viewCountEl) viewCountEl.textContent = viewers.length;
+    });
+  }
+
   const pContainer = document.getElementById('storyProgressContainer');
   if (pContainer) {
     pContainer.innerHTML = activeStories.map((_, i) => `
@@ -1962,15 +2215,73 @@ function renderStorySlide() {
   storyTimer = setTimeout(nextStorySlide, 6000);
 }
 
+async function openStoryViewersDrawer() {
+  clearTimeout(storyTimer);
+  const story = activeStories[currentStoryIdx];
+  if (!story || !story.id) return;
+
+  const drawer = document.getElementById('storyViewersDrawer');
+  const list = document.getElementById('storyViewersList');
+  if (drawer) drawer.style.display = 'flex';
+  if (list) list.innerHTML = '<div style="color:#94a3b8; font-size:12px; text-align:center; padding:16px 0;">Fetching live watchers...</div>';
+
+  const viewers = await fetchStoryViewers(story.id);
+  if (!viewers || viewers.length === 0) {
+    list.innerHTML = `
+      <div style="text-align:center; padding:24px 10px; color:#94a3b8;">
+        <div style="font-size:24px; margin-bottom:4px;">👀</div>
+        <div style="font-weight:700; font-size:13px; color:#fff;">No views yet</div>
+        <div style="font-size:11px;">Be the first to share this story with classmates!</div>
+      </div>
+    `;
+    return;
+  }
+
+  const reactionEmojiMap = { fire: '🔥', mind: '🤯', '100': '💯' };
+  list.innerHTML = viewers.map(v => `
+    <div class="viewer-row-item">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">
+          ${(v.viewer_name || 'S').charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:800; color:#fff;">${escapeHTML(v.viewer_name || 'Student')}</div>
+          <div style="font-size:10px; color:#94a3b8;">${escapeHTML(v.viewer_institution || 'Invincible Coaching')}</div>
+        </div>
+      </div>
+      <div>${v.reaction ? `<span style="font-size:14px;">${reactionEmojiMap[v.reaction] || '🔥'}</span>` : '<span style="font-size:10px; color:#64748b;">Watched</span>'}</div>
+    </div>
+  `).join('');
+}
+
+function closeStoryViewersDrawer() {
+  const drawer = document.getElementById('storyViewersDrawer');
+  if (drawer) drawer.style.display = 'none';
+  storyTimer = setTimeout(nextStorySlide, 3500);
+}
+
 function closeStoryViewer() {
   clearTimeout(storyTimer);
   const v = document.getElementById('storyViewer');
   if (v) v.style.display = 'none';
+  closeStoryViewersDrawer();
 }
 
-function reactStory(type) {
+async function reactStory(type) {
   if (typeof playDing === 'function') playDing();
   if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+
+  const story = activeStories[currentStoryIdx];
+  if (!story || !story.id) return;
+  const { name, school } = getViewerIdentity();
+
+  try {
+    await fetch('/api/stories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type, viewer_name: name, viewer_institution: school })
+    });
+  } catch (e) {}
 }
 
 function saveStoryToVault() {
