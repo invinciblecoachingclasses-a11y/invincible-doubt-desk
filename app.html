@@ -809,10 +809,14 @@
         <div class="story-content-layer">
             <div>
                 <div class="story-progress-bar" id="storyProgressContainer"></div>
-                <div class="story-view-header">
+                               <div class="story-view-header" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
                     <div style="font-size:13px; font-weight:900; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
-                    <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button id="viewerDeleteBtn" style="display:none; background:rgba(239,68,68,0.3); border:1px solid rgba(239,68,68,0.6); color:#fff; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
+                        <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
+                    </div>
                 </div>
+
             </div>
             <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
             <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
