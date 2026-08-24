@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
-<!-- 🔥 LINK TO EXTERNAL CSS -->
+<!-- EXTERNAL CSS -->
 <link rel="stylesheet" href="styles.css">
 
 <!-- Markdown Parser, Math Rendering & Clean PDF Engine -->
@@ -48,7 +48,7 @@
 <body>
 <main class="container">
 
-<!-- 1. CLEAN TOP DYNAMIC HUD -->
+<!-- 1. TOP DYNAMIC HUD -->
 <header class="slim-hud">
     <div class="slim-logo" onclick="switchTab('home')" style="cursor:pointer;">
         <span>⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
@@ -63,11 +63,10 @@
 </header>
 
 <!-- =====================================================
-     HOME DECK (ONLY SHOWS ON HOME TAB)
+     HOME DECK
 ===================================================== -->
 <div id="homeSection">
-    
-    <!-- 2. TODAY'S DAILY MISSION -->
+    <!-- DAILY MISSION TRACKER -->
     <section class="mission-card" aria-label="Daily Progress Tracker">
         <div class="mission-top">
             <span style="font-size:11px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted);">TODAY'S MISSION</span>
@@ -83,7 +82,7 @@
         </div>
     </section>
 
-    <!-- 3. STORIES TRAY (GUIDES REMOVED) -->
+    <!-- STORIES TRAY -->
     <div class="stories-tray-container" id="storiesTray">
         <div class="story-circle-item" id="btnAddStory">
             <div class="story-avatar-wrap add-story">
@@ -94,85 +93,7 @@
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
 
-    <!-- 4. NEW 2-TRACK GATEWAY SELECTION -->
-    <div id="mainPortalRoot" class="portal-deck-wrapper">
-        <!-- TRACK 1: FLOW STATE -->
-        <div class="portal-hero-card study-track" onclick="openTrackPortal('study')">
-            <span class="portal-badge study-badge">🎯 TRACK 01 // SOLO MASTERY</span>
-            <div class="portal-title">Flow State Study 🧠</div>
-            <div class="portal-desc">Step-by-step doubt solutions, CBSE chapter mock tests, and topper revision notes.</div>
-            <div class="portal-subfeatures">
-                <span class="portal-sub-pill">Doubt Desk</span>
-                <span class="portal-sub-pill">Timed Tests</span>
-                <span class="portal-sub-pill">Topper Notes</span>
-            </div>
-        </div>
-
-        <!-- TRACK 2: BATTLEFIELD -->
-        <div class="portal-hero-card battle-track" onclick="openTrackPortal('battle')">
-            <span class="portal-badge battle-badge">⚔️ TRACK 02 // COMPETE & CLOUT</span>
-            <div class="portal-title">Battle Arena &amp; Feed 🚀</div>
-            <div class="portal-desc">10s live multiplayer speed clashes, daily survival riddles, and campus buzz.</div>
-            <div class="portal-subfeatures">
-                <span class="portal-sub-pill">1v1 Voice Battles</span>
-                <span class="portal-sub-pill">15s Daily Clash</span>
-                <span class="portal-sub-pill">School Feed</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- TRACK 1 SELECTION SUB-VIEW -->
-    <div id="studySubView" class="sub-portal-view hidden">
-        <div class="quick-hub-banner" onclick="closeTrackPortals()">
-            <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Portal Hub</span>
-            <span style="font-size:11px; color:#9ca3af;">Solo Study Tools</span>
-        </div>
-        <div class="feature-choice-card" onclick="switchTab('doubt')">
-            <div>
-                <strong style="color:#fff; font-size:14px;">🧠 Doubt Resolution Desk</strong>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Step-by-step solutions with examiner traps and audio readout.</div>
-            </div>
-            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
-        </div>
-        <div class="feature-choice-card" onclick="switchTab('test')">
-            <div>
-                <strong style="color:#fff; font-size:14px;">⏱️ CBSE Mock &amp; Practice Tests</strong>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">20-question timed chapter assessments with instant scoring.</div>
-            </div>
-            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
-        </div>
-        <div class="feature-choice-card" onclick="switchTab('notes')">
-            <div>
-                <strong style="color:#fff; font-size:14px;">📝 Topper Notes Studio</strong>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Generate full 8–10 page chapter revision study modules.</div>
-            </div>
-            <span style="color:var(--accent-cyan); font-weight:900;">➔</span>
-        </div>
-    </div>
-
-    <!-- TRACK 2 SELECTION SUB-VIEW -->
-    <div id="battleSubView" class="sub-portal-view hidden">
-        <div class="quick-hub-banner" onclick="closeTrackPortals()">
-            <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Portal Hub</span>
-            <span style="font-size:11px; color:#9ca3af;">Battle &amp; Social</span>
-        </div>
-        <div class="feature-choice-card" onclick="switchTab('arena')">
-            <div>
-                <strong style="color:#fff; font-size:14px;">⚔️ 1v1 Live Knowledge Arena</strong>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Rapid-fire 10s speed duels with live peer voice chat.</div>
-            </div>
-            <span style="color:var(--accent-rose); font-weight:900;">➔</span>
-        </div>
-        <div class="feature-choice-card" onclick="switchTab('feed')">
-            <div>
-                <strong style="color:#fff; font-size:14px;">📢 School Charcha &amp; Feed</strong>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Local school viva updates, teacher intel &amp; peer discussions.</div>
-            </div>
-            <span style="color:#22c55e; font-weight:900;">➔</span>
-        </div>
-    </div>
-
-    <!-- 5. DAILY CLASH & LIVE LEADERBOARD BENTO -->
+    <!-- DAILY CLASH & LIVE LEADERBOARD BENTO -->
     <div class="bento-grid">
         <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Challenge">
             <div>
@@ -245,7 +166,6 @@
         <button type="button" class="photo-btn" id="uploadBtn">📁 Select &amp; Crop</button>
     </div>
     
-    <!-- Image Preview Card -->
     <div id="imagePreviewContainer" style="display:none; margin-bottom:12px; text-align:center;">
       <img id="imagePreview" alt="Cropped Question" style="width:100%; max-height:220px; object-fit:contain; border-radius:14px; border:1px solid var(--accent-cyan); background:#000;">
       <button type="button" id="removeImage" style="margin-top:6px; background:none; border:none; color:var(--accent-rose); font-weight:800; cursor:pointer; font-size:12px;">✕ Remove Question Photo</button>
@@ -253,14 +173,12 @@
 
     <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION 🚀</button>
     
-    <!-- INTERACTIVE WAIT PIPELINE & FLASH TICKER -->
     <div id="loadingDoubt" class="hidden waiting-container">
       <div class="pipeline-step-text" id="doubtPipelineText">🔍 Scanning problem tokens...</div>
       <div class="pipeline-progress-bar"><div class="pipeline-progress-fill" id="doubtProgressFill"></div></div>
       <div class="fact-ticker-card" id="doubtFactTicker">💡 While AI computes: Did you know that Total Internal Reflection only occurs from a denser to rarer medium?</div>
     </div>
     
-        <!-- SOLUTION THREAD & FOLLOW-UP CONTAINER -->
     <div class="answer-box" id="answerBox">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:8px; margin-bottom:12px;">
           <div class="logic-title">🎯 Master Teacher Solution</div>
@@ -274,7 +192,6 @@
           <div class="topper-content" id="answerText"></div>
         </div>
 
-        <!-- Conversational Follow-up Bar -->
         <div style="margin-top:18px; padding-top:14px; border-top:1px dashed var(--border-subtle);">
           <label style="color:var(--accent-cyan);">💬 Have a doubt in this step? Ask Follow-up:</label>
           <div style="display:flex; gap:8px;">
@@ -292,30 +209,13 @@
     </div>
 </section>
 
-<!-- IMAGE CROPPER MODAL -->
-<div id="cropperModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:100000; flex-direction:column; align-items:center; justify-content:center; padding:16px;">
-  <div style="width:min(500px, 96%); background:#0f172a; border-radius:20px; border:1px solid rgba(255,255,255,0.15); overflow:hidden; display:flex; flex-direction:column;">
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.1);">
-      <div style="font-size:13px; font-weight:800; color:#fff;">✂️ Drag corners to crop question</div>
-      <button type="button" onclick="closeCropModal()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
-    </div>
-    <div style="max-height:60vh; background:#000; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-      <img id="cropperImageElement" style="max-width:100%; display:block;" alt="Crop Area">
-    </div>
-    <div style="padding:12px 16px; display:flex; gap:8px; justify-content:flex-end; background:#1e293b; border-top:1px solid rgba(255,255,255,0.1);">
-      <button type="button" onclick="closeCropModal()" style="background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">Cancel</button>
-      <button type="button" onclick="confirmCroppedImage()" style="background:var(--accent-cyan); border:none; color:#060913; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:900; cursor:pointer;">Crop &amp; Attach 📐</button>
-    </div>
-  </div>
-</div>
-
 <!-- =====================================================
      2. TEST SECTION
 ===================================================== -->
 <section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash, Stories & Leaderboard</span>
+        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
     </div>
 
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
@@ -373,7 +273,6 @@
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
 
-        <!-- MOCK TEST WARMUP TRIVIA WAITING CARD -->
         <div id="testWarmupBox" class="hidden waiting-container" style="margin-top:14px;">
             <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); margin-bottom:4px;">🔥 COMPILING EXAM... QUICK REACTION CHECK (+10 XP)</div>
             <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:8px;" id="warmupQuestionText">Unit of Electric Potential Difference:</div>
@@ -417,20 +316,20 @@
     <div style="text-align:center; margin-bottom:16px;">
         <h2 class="section-h2" style="color:var(--accent-rose); margin:0; letter-spacing:1px;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
     </div>
-    <!-- Live In-Game Voice Chat HUD -->
-<div id="arenaVoiceHUD" class="arena-voice-bar">
-  <div style="display:flex; align-items:center;">
-    <span id="voiceStatusDot" class="voice-status-dot"></span>
-    <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
-  </div>
-  <div style="display:flex; gap: 8px;">
-    <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()" title="Mute/Unmute Mic">🎙️</button>
-    <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()" title="Deafen/Listen">🔊</button>
-  </div>
-</div>
-<audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
 
-       <div id="arenaSetup">
+    <div id="arenaVoiceHUD" class="arena-voice-bar">
+      <div style="display:flex; align-items:center;">
+        <span id="voiceStatusDot" class="voice-status-dot"></span>
+        <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
+      </div>
+      <div style="display:flex; gap: 8px;">
+        <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()" title="Mute/Unmute Mic">🎙️</button>
+        <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()" title="Deafen/Listen">🔊</button>
+      </div>
+    </div>
+    <audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
+
+    <div id="arenaSetup">
         <label>Your Battle Tag</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
 
@@ -487,7 +386,6 @@
         <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
     </div>
 
-    <!-- RADAR LOBBY -->
     <div id="arenaWaiting" class="hidden lobby-box">
         <div class="lobby-radar"></div>
         <div style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; position:relative; z-index:2;">Share Room Match Code</div>
@@ -495,7 +393,6 @@
         <div style="font-size:13px; color:var(--accent-cyan); font-weight:800; position:relative; z-index:2;">🛰️ Scanning for Opponent Connection...</div>
     </div>
 
-    <!-- LIVE BATTLE ARENA -->
     <div id="arenaBattle" class="hidden">
         <div class="vs-header">
             <div class="player-tag" style="color:var(--accent-cyan);">
@@ -523,7 +420,6 @@
         </div>
     </div>
 
-    <!-- POST MATCH PODIUM -->
     <div id="arenaResult" class="hidden" style="text-align:center; padding:10px;">
         <div class="arena-winner-podium">
             <div id="arenaResultText"></div>
@@ -626,7 +522,6 @@
     
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
     
-    <!-- TAP-TO-CHARGE SUPERCHARGER MINIGAME FOR NOTES -->
     <div id="notesLoading" class="hidden waiting-container" style="border-color:var(--accent-amber);">
       <div style="font-size:13px; font-weight:800; color:var(--accent-amber);">⚙️ COMPILING COMPREHENSIVE STUDY MODULE...</div>
       <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Tap the energy orb to supercharge AI compilation!</div>
@@ -647,7 +542,6 @@
     </div>
 </section>
 
-
 <!-- FOOTER -->
 <footer class="footer">
     <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
@@ -657,7 +551,7 @@
 
 </main>
 
-<!-- HIGH VISIBILITY 6-TAB BOTTOM DOCK -->
+<!-- BOTTOM NAVIGATION DOCK -->
 <nav class="floating-dock" aria-label="Bottom Navigation Dock">
     <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')">
         <span class="dock-icon">🏠</span> Home
@@ -766,7 +660,7 @@
     </div>
 </div>
 
-<!-- STORY STUDIO (DROP HACK) MODAL -->
+<!-- STORY STUDIO MODAL -->
 <div class="modal-overlay" id="storyModal">
     <div class="modal-card" style="width: min(480px, 96%); padding: 20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -793,9 +687,7 @@
           <img id="storyImagePreview" alt="Story Preview">
         </div>
 
-        <div class="filter-tray" id="filterTray">
-          <!-- Filters injected via JS -->
-        </div>
+        <div class="filter-tray" id="filterTray"></div>
 
         <textarea id="storyCaption" placeholder="Type your hack, formula, or thought here..." rows="2" style="margin-top:10px; background:rgba(0,0,0,0.6);"></textarea>
         <button type="button" class="submit-test-btn" id="btnPublishStory">🚀 POST STORY</button>
@@ -809,14 +701,13 @@
         <div class="story-content-layer">
             <div>
                 <div class="story-progress-bar" id="storyProgressContainer"></div>
-                               <div class="story-view-header" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                <div class="story-view-header">
                     <div style="font-size:13px; font-weight:900; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <button id="viewerDeleteBtn" style="display:none; background:rgba(239,68,68,0.3); border:1px solid rgba(239,68,68,0.6); color:#fff; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
                         <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
                     </div>
                 </div>
-
             </div>
             <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
             <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
@@ -844,7 +735,7 @@
     </div>
 </div>
 
-<!-- 🔥 LINK TO EXTERNAL JAVASCRIPT -->
+<!-- EXTERNAL JAVASCRIPT -->
 <script src="app.js"></script>
 
 </body>
