@@ -1849,6 +1849,12 @@ if (pubStoryBtn) {
             })
         });
         const data = await res.json();
+        if (data.story && data.story.id) {
+  let myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
+  myStoryIds.push(data.story.id);
+  localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
+}
+
         if (data.error) throw new Error(data.error);
 
         document.getElementById('storyModal').style.display = 'none';
@@ -1896,6 +1902,34 @@ function nextStorySlide() {
     closeStoryViewer();
   }
 }
+
+async function deleteCurrentStory() {
+  const story = activeStories[currentStoryIdx];
+  if (!story) return;
+
+  if (!confirm("Are you sure you want to delete this story?")) return;
+
+  try {
+    const res = await fetch('/api/stories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'delete_story',
+        story_id: story.id
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "Failed to delete");
+
+    alert("Story deleted successfully!");
+    closeStoryViewer();
+    loadActiveStories();
+  } catch (err) {
+    alert("Delete failed: " + err.message);
+  }
+}
+
 
 function renderStorySlide() {
   clearTimeout(storyTimer);
