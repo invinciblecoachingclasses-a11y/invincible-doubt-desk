@@ -1921,7 +1921,8 @@ function renderStorySlide() {
 
   if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
 
-  const imageUrl = story.image_data || story.image_url || story.image;
+  const imageUrl = story.media_url || story.image_data || story.image_url || story.image;
+
   if (bgImg) {
     if (imageUrl && imageUrl.length > 50) {
       bgImg.src = imageUrl;
