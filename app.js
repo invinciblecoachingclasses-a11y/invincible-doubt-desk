@@ -1828,14 +1828,16 @@ if (pubStoryBtn) {
     }
   };
 }
-
 function openStoryViewer(idx) {
-    try {
-        currentStoryIdx = idx;
-        const viewer = document.getElementById('storyViewer');
-        if (viewer) viewer.style.display = 'flex';
-        renderStorySlide();
-    } catch(e) {
+  currentStoryIdx = idx;
+  const viewer = document.getElementById('storyViewer');
+  if (viewer) {
+    viewer.style.display = 'flex';
+    renderStorySlide();
+  }
+}
+
+ catch(e) {
         alert("Error opening story: " + e.message);
     }
 }
