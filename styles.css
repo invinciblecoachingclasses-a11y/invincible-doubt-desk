@@ -787,7 +787,7 @@ textarea:focus, input:focus, select:focus {
 .filter-name { font-size: 10px; color: #94a3b8; font-weight: 800; }
 .filter-btn.active .filter-name { color: var(--accent-cyan); }
 /* =====================================================
-   FULLSCREEN REELS / STORY VIEWER MODAL
+   FULLSCREEN REELS / STORY VIEWER & ID CARD (COMPLETE)
 ===================================================== */
 .story-viewer-modal {
   position: fixed;
@@ -812,6 +812,28 @@ textarea:focus, input:focus, select:focus {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
   display: flex;
   flex-direction: column;
+}
+
+.story-image-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  opacity: 0.9;
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+.story-content-layer {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .story-progress-bar {
@@ -842,7 +864,8 @@ textarea:focus, input:focus, select:focus {
   align-items: center;
   padding: 4px 14px 10px;
   position: relative;
-  z-index: 30;
+  z-index: 35;
+  pointer-events: auto;
 }
 
 .story-close-btn {
@@ -857,13 +880,15 @@ textarea:focus, input:focus, select:focus {
   justify-content: center;
   cursor: pointer;
   font-size: 14px;
+  pointer-events: auto;
 }
 
+/* Middle Navigation Touch Zones */
 .story-nav-zone {
   position: absolute;
-  top: 50px;
-  bottom: 120px;
-  width: 40%;
+  top: 65px;
+  bottom: 140px;
+  width: 50%;
   z-index: 15;
   cursor: pointer;
 }
@@ -880,6 +905,7 @@ textarea:focus, input:focus, select:focus {
   text-align: center;
   position: relative;
   z-index: 12;
+  pointer-events: none;
 }
 
 .story-caption-text {
@@ -890,19 +916,37 @@ textarea:focus, input:focus, select:focus {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
-.story-action-bar {
+/* Glassmorphic Viewer ID Card */
+.story-id-card {
   position: absolute;
-  bottom: 14px;
+  bottom: 65px;
   left: 14px;
   right: 14px;
+  background: rgba(10, 15, 30, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 10px 14px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.story-action-bar {
+  position: relative;
+  margin: 0 14px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 30;
+  z-index: 35;
   background: rgba(0, 0, 0, 0.4);
   padding: 6px 12px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
 }
 
 .reaction-emoji-btn {
@@ -910,12 +954,14 @@ textarea:focus, input:focus, select:focus {
   border: none;
   font-size: 20px;
   cursor: pointer;
+  pointer-events: auto;
   transition: transform 0.15s ease;
 }
 
 .reaction-emoji-btn:active {
   transform: scale(1.35);
 }
+
 
 /* Viewer ID Card */
 .story-image-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.85; border-radius: 24px; }
