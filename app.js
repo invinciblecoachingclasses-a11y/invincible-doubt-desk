@@ -1907,7 +1907,18 @@ async function deleteCurrentStory() {
   const story = activeStories[currentStoryIdx];
   if (!story) return;
 
-  if (!confirm("Are you sure you want to delete this story?")) return;
+  const myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]').map(Number);
+  const isMyStory = story.id && myStoryIds.includes(Number(story.id));
+  const savedAdminPin = localStorage.getItem('story_admin_pin');
+
+  let adminPin = savedAdminPin || null;
+
+  if (!isMyStory && !adminPin) {
+    adminPin = prompt("Enter Admin PIN to delete this story:");
+    if (!adminPin) return;
+  } else {
+    if (!confirm("Are you sure you want to delete this story?")) return;
+  }
 
   try {
     const res = await fetch('/api/stories', {
@@ -1915,12 +1926,17 @@ async function deleteCurrentStory() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'delete_story',
-        story_id: story.id
+        story_id: story.id,
+        admin_key: adminPin || undefined
       })
     });
 
     const data = await res.json();
     if (!res.ok || data.error) throw new Error(data.error || "Failed to delete");
+
+    if (adminPin) {
+      localStorage.setItem('story_admin_pin', adminPin);
+    }
 
     alert("Story deleted successfully!");
     closeStoryViewer();
@@ -1952,17 +1968,16 @@ function renderStorySlide() {
   if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
   if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
   if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
-  const myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]').map(Number);
-const isMyStory = story.id && myStoryIds.includes(Number(story.id));
 
   const deleteBtn = document.getElementById('viewerDeleteBtn');
   if (deleteBtn) {
-    deleteBtn.style.display = isMyStory ? 'inline-flex' : 'none';
+    deleteBtn.style.display = 'inline-flex';
     deleteBtn.onclick = (e) => {
       e.stopPropagation();
       deleteCurrentStory();
     };
   }
+
 
 
   if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
