@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
-<title>Invincible 360 | CBSE Exam Engine, Doubt Solver & 1v1 Battle Arena</title>
-<meta name="description" content="Ace Class 9-12 CBSE Board & competitive exams. Instant doubt solver, chapter mock tests, 1v1 Arena battles, and student community.">
-<meta name="keywords" content="CBSE Board preparation, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360">
+<title>Invincible 360 | CBSE Exam Engine, Study Reels & 1v1 Arena</title>
+<meta name="description" content="Ace Class 9-12 CBSE Board exams. Study reels, instant doubt solver, chapter mock tests, 1v1 Arena battles, and student community.">
+<meta name="keywords" content="CBSE Board preparation, study reels, online doubt solver, Class 10 science test, Class 12 physics mock test, 1v1 academic battle, Invincible 360">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="author" content="Invincible Coaching Classes">
 <link rel="canonical" href="https://invincible-doubt-desk.vercel.app/">
@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Invincible 360 | Complete Academic Engine">
-<meta property="og:description" content="Step-by-step doubt resolution, rapid timed tests, 1v1 knowledge clashes, and CBSE peer community.">
+<meta property="og:description" content="Infinite study reels, step-by-step doubt resolution, rapid tests, 1v1 knowledge clashes, and CBSE community.">
 <meta property="og:url" content="https://invincible-doubt-desk.vercel.app/">
 <meta property="og:site_name" content="Invincible 360">
 
@@ -25,15 +25,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
 <!-- EXTERNAL CSS -->
 <link rel="stylesheet" href="styles.css">
 
-<!-- Markdown Parser, Math Rendering & Clean PDF Engine -->
+<!-- Markdown Parser & MathJax Rendering -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script>
   window.MathJax = {
@@ -41,7 +38,7 @@
   };
 </script>
 
-<!-- PeerJS Free WebRTC Engine for In-Game Voice Calls -->
+<!-- PeerJS WebRTC for Arena Voice Calls -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 </head>
@@ -75,10 +72,10 @@
         <div class="mission-track"><div class="mission-fill" id="missionBar" style="width:60%;"></div></div>
         <div class="mission-items">
             <span class="mission-pill done">✓ Daily Clash</span>
-            <span class="mission-pill done">✓ 10 Qs</span>
-            <span class="mission-pill done">✓ Revision</span>
+            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('reels')">○ 10 Reels ⚡</span>
             <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('arena')">○ 1v1 Arena</span>
             <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('test')">○ Practice Test</span>
+            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('notes')">○ Revision</span>
         </div>
     </section>
 
@@ -131,6 +128,30 @@
         </section>
     </div>
 </div>
+
+<!-- =====================================================
+     STUDY REELS (INFINITE VERTICAL FEED)
+===================================================== -->
+<section id="reelsSection" class="hidden" aria-label="Study Reels Infinite Feed">
+  <!-- Grade Switcher Floating Bar -->
+  <div class="reels-header-bar">
+    <div style="font-size:13px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">
+      <span>⚡ STUDY REELS</span>
+      <span id="reelsComboBadge" class="reels-combo-pill hidden">🔥 x2 STREAK</span>
+    </div>
+    <div class="reels-class-pills">
+      <button class="reel-class-btn" data-class="9" onclick="setReelsClass('9', this)">Class 9</button>
+      <button class="reel-class-btn active" data-class="10" onclick="setReelsClass('10', this)">Class 10</button>
+      <button class="reel-class-btn" data-class="11" onclick="setReelsClass('11', this)">Class 11</button>
+      <button class="reel-class-btn" data-class="12" onclick="setReelsClass('12', this)">Class 12</button>
+    </div>
+  </div>
+
+  <!-- Vertical Snap Container -->
+  <div class="study-reels-container" id="studyReelsDeck">
+    <!-- Reel Cards dynamically injected via JS -->
+  </div>
+</section>
 
 <!-- =====================================================
      1. DOUBT SECTION
@@ -208,23 +229,6 @@
         </div>
     </div>
 </section>
-
-<!-- IMAGE CROPPER MODAL -->
-<div id="cropperModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:100000; flex-direction:column; align-items:center; justify-content:center; padding:16px;">
-  <div style="width:min(500px, 96%); background:#0f172a; border-radius:20px; border:1px solid rgba(255,255,255,0.15); overflow:hidden; display:flex; flex-direction:column;">
-    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#1e293b; border-bottom:1px solid rgba(255,255,255,0.1);">
-      <div style="font-size:13px; font-weight:800; color:#fff;">✂️ Drag corners to crop question</div>
-      <button type="button" onclick="closeCropModal()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
-    </div>
-    <div style="max-height:60vh; background:#000; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-      <img id="cropperImageElement" style="max-width:100%; display:block;" alt="Crop Area">
-    </div>
-    <div style="padding:12px 16px; display:flex; gap:8px; justify-content:flex-end; background:#1e293b; border-top:1px solid rgba(255,255,255,0.1);">
-      <button type="button" onclick="closeCropModal()" style="background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; padding:8px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer;">Cancel</button>
-      <button type="button" onclick="confirmCroppedImage()" style="background:var(--accent-cyan); border:none; color:#060913; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:900; cursor:pointer;">Crop &amp; Attach 📐</button>
-    </div>
-  </div>
-</div>
 
 <!-- =====================================================
      2. TEST SECTION
@@ -568,10 +572,13 @@
 
 </main>
 
-<!-- BOTTOM NAVIGATION DOCK -->
+<!-- HIGH VISIBILITY 7-TAB BOTTOM DOCK -->
 <nav class="floating-dock" aria-label="Bottom Navigation Dock">
     <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')">
         <span class="dock-icon">🏠</span> Home
+    </button>
+    <button type="button" class="dock-btn reels-tab" onclick="switchTab('reels')">
+        <span class="dock-icon">⚡</span> Reels
     </button>
     <button type="button" class="dock-btn" onclick="switchTab('doubt')">
         <span class="dock-icon">🧠</span> Doubt
@@ -661,6 +668,10 @@
     <div class="quest-modal-card">
         <h2 style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:0 0 8px 0;">🎮 WELCOME TO INVINCIBLE 360</h2>
         <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">What would you like to explore?</div>
+        <div class="quest-choice-btn" onclick="selectStartingQuest('reels')">
+            <span style="font-size:20px;">⚡</span>
+            <div><strong style="color:#fff; font-size:13px;">Study Reels</strong><div style="font-size:11px; color:var(--text-muted);">Swipe through 10s questions &amp; hacks.</div></div>
+        </div>
         <div class="quest-choice-btn" onclick="selectStartingQuest('doubt')">
             <span style="font-size:20px;">🧠</span>
             <div><strong style="color:#fff; font-size:13px;">Doubt Resolution</strong><div style="font-size:11px; color:var(--text-muted);">Step-by-step problem solver.</div></div>
@@ -668,10 +679,6 @@
         <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
             <span style="font-size:20px;">⚔️</span>
             <div><strong style="color:#fff; font-size:13px;">1v1 Match Arena</strong><div style="font-size:11px; color:var(--text-muted);">Rapid-fire 10s speed clash.</div></div>
-        </div>
-        <div class="quest-choice-btn" onclick="selectStartingQuest('test')">
-            <span style="font-size:20px;">⏱️</span>
-            <div><strong style="color:#fff; font-size:13px;">Timed Tests</strong><div style="font-size:11px; color:var(--text-muted);">Chapter &amp; syllabus practice.</div></div>
         </div>
         <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
