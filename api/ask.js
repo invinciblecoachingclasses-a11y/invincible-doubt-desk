@@ -53,7 +53,8 @@ INSTRUCTIONS:
     const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
-      const geminiModels = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
+      const geminiModels = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
+
 
       keyLoop: for (const apiKey of geminiKeys) {
         for (const model of geminiModels) {
