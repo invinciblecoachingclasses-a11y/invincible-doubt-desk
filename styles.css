@@ -876,3 +876,33 @@ textarea:focus, input:focus, select:focus {
 .reaction-emoji-btn:active {
   transform: scale(1.35);
 }
+/* =====================================================
+   STORY VIEWERS ACTIVITY DRAWER STYLING
+===================================================== */
+#storyViewersDrawer {
+  animation: fadeIn 0.2s ease forwards;
+}
+
+#storyViewersDrawer > div {
+  animation: slideUpDrawer 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpDrawer {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.viewer-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
