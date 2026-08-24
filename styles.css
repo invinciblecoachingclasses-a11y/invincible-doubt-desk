@@ -1077,9 +1077,10 @@ textarea:focus, input:focus, select:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4px 44px 4px 2px; /* Right padding preserves room for side-dock */
+  padding: 4px 48px 4px 2px; /* Right padding preserves room for side-dock */
   gap: 8px;
   z-index: 2;
+  overflow: hidden;
 }
 
 .reel-q-title {
@@ -1142,4 +1143,37 @@ textarea:focus, input:focus, select:focus {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+/* Formula Vault Container & MathJax Responsiveness */
+.reel-formula-box {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: clamp(12px, 3.6vw, 15px);
+  font-weight: 900;
+  color: #fff;
+  padding: 10px 8px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  scrollbar-width: none;
+}
+
+.reel-formula-box::-webkit-scrollbar {
+  display: none;
+}
+
+.reel-card mjx-container {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 2px 0 !important;
+}
+
+.reel-card mjx-container > svg {
+  max-width: 100% !important;
 }
