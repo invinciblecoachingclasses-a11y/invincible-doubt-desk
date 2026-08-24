@@ -293,6 +293,10 @@ async function renderReelsDeck() {
     }
 
     container.innerHTML = deck.map((card, idx) => {
+        const qEscaped = escapeHTML(card.q_en || card.title || '');
+        const sub = card.subject || 'Science';
+        const hook = card.topic || 'NCERT Concept';
+
         if (card.type === 'mcq') {
             let opts = card.options;
             if (typeof opts === 'string') {
@@ -303,61 +307,115 @@ async function renderReelsDeck() {
             return `
               <div class="reel-card" id="reelCard_${card.id}">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge">${(card.subject || 'CBSE').toUpperCase()} • ${(card.topic || 'PRACTICE').toUpperCase()}</span>
-                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                  <span class="reel-hook-badge">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
+                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
                 </div>
+                
                 <div class="reel-content-box">
-                  <div style="font-size:15px; font-weight:800; color:#fff; line-height:1.4;">${formatMathText(card.q_en || '')}</div>
-                  ${card.q_hi ? `<div style="font-size:12px; color:var(--text-muted); line-height:1.4;">${card.q_hi}</div>` : ''}
+                  <div class="reel-q-title">${formatMathText(card.q_en || '')}</div>
+                  ${card.q_hi ? `<div class="reel-q-sub">${card.q_hi}</div>` : ''}
                   <div class="reel-options-grid">
                     ${opts.map((opt, oIdx) => `
                       <button type="button" class="reel-opt-btn" onclick="handleReelAnswer(${card.id}, ${oIdx}, ${card.answer}, this)">
                         <span>${formatMathText(String(opt))}</span>
-                        <span style="font-size:12px; opacity:0.4;">○</span>
+                        <span style="font-size:12px; opacity:0.35;">○</span>
                       </button>
                     `).join('')}
                   </div>
-                  <div id="reelFeedback_${card.id}" style="font-size:12px; display:none;"></div>
+                  <div id="reelFeedback_${card.id}" style="font-size:11px; margin-top:4px; display:none;"></div>
                 </div>
-                <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML(card.q_en || '')}', '${card.subject || ''}')">🧠 Explain with AI</button>
+
+                <div class="reel-side-dock">
+                  <div class="reel-dock-action-btn ai-glow" title="Ask AI Tutor" onclick="sendReelToDoubtSolver('${qEscaped}', '${sub}')">
+                    <span style="font-size:16px;">🧠</span>
+                  </div>
+                  <span class="reel-dock-action-label">Ask AI</span>
+
+                  <div class="reel-dock-action-btn" title="Like / Clout" onclick="reactStory('fire')">
+                    <span style="font-size:16px;">🔥</span>
+                  </div>
+                  <span class="reel-dock-action-label">Clout</span>
+
+                  <div class="reel-dock-action-btn" title="Share with Class" onclick="shareReel('${qEscaped}')">
+                    <span style="font-size:15px;">🚀</span>
+                  </div>
+                  <span class="reel-dock-action-label">Share</span>
+                </div>
+
+                <div class="reel-footer-status">
+                  <span>⚡ Swipe up for next hack</span>
                 </div>
               </div>
             `;
         } else if (card.type === 'trap') {
             return `
-              <div class="reel-card" style="border-left: 4px solid var(--accent-rose);">
+              <div class="reel-card" style="border-left: 3px solid var(--accent-rose);">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge" style="color:var(--accent-rose); border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.1);">${(card.subject || 'CBSE').toUpperCase()} • EXAMINER TRAP</span>
-                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                  <span class="reel-hook-badge" style="color:#fda4af; border-color:rgba(244,63,94,0.4); background:rgba(244,63,94,0.15);">🚨 EXAMINER TRAP • ${sub.toUpperCase()}</span>
+                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
                 </div>
+                
                 <div class="reel-content-box">
-                  <div style="font-size:17px; font-weight:900; color:#fff;">${card.title || 'Examiner Trap'}</div>
-                  <div style="font-size:13px; color:#f1f5f9; line-height:1.5; background:rgba(244,63,94,0.08); padding:12px; border-radius:12px; border:1px solid rgba(244,63,94,0.2);">${card.content || ''}</div>
-                  <div style="font-size:12px; color:var(--accent-emerald); font-weight:800;">✅ BOARD RULE: ${card.rule || ''}</div>
+                  <div class="reel-q-title" style="color:#f43f5e;">${card.title || 'Examiner Trap'}</div>
+                  <div style="font-size:12.5px; color:#f1f5f9; line-height:1.45; background:rgba(244,63,94,0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(244,63,94,0.2);">${card.content || ''}</div>
+                  <div style="font-size:11.5px; color:var(--accent-emerald); font-weight:800; margin-top:2px;">✅ BOARD RULE: ${card.rule || ''}</div>
                 </div>
-                <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('${escapeHTML((card.title || '') + ': ' + (card.content || ''))}', '${card.subject || ''}')">🧠 Solve Traps</button>
+
+                <div class="reel-side-dock">
+                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('${qEscaped}', '${sub}')">
+                    <span style="font-size:16px;">🧠</span>
+                  </div>
+                  <span class="reel-dock-action-label">Solve</span>
+
+                  <div class="reel-dock-action-btn" onclick="reactStory('mind')">
+                    <span style="font-size:16px;">🤯</span>
+                  </div>
+                  <span class="reel-dock-action-label">Shock</span>
+
+                  <div class="reel-dock-action-btn" onclick="shareReel('${qEscaped}')">
+                    <span style="font-size:15px;">🚀</span>
+                  </div>
+                  <span class="reel-dock-action-label">Share</span>
+                </div>
+
+                <div class="reel-footer-status">
+                  <span>⚡ Swipe up for next hack</span>
                 </div>
               </div>
             `;
         } else {
             return `
-              <div class="reel-card" style="border-left: 4px solid var(--accent-cyan);">
+              <div class="reel-card" style="border-left: 3px solid var(--accent-cyan);">
                 <div class="reel-tag-bar">
-                  <span class="reel-subject-badge">${(card.subject || 'CBSE').toUpperCase()} • FORMULA VAULT</span>
-                  <span style="font-size:11px; font-weight:800; color:#94a3b8;">#${idx + 1}</span>
+                  <span class="reel-hook-badge" style="color:#bae6fd; border-color:rgba(0,229,255,0.4); background:rgba(0,229,255,0.12);">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
+                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
                 </div>
+                
                 <div class="reel-content-box" style="text-align:center;">
-                  <div style="font-size:17px; font-weight:900; color:#fff;">${card.title || 'Core Formula'}</div>
-                  <div style="font-size:17px; font-weight:900; color:var(--accent-cyan); padding:14px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:14px;">$$${card.formula || ''}$$</div>
-                  <div style="font-size:12px; color:#cbd5e1; line-height:1.4;">💡 ${card.tip || ''}</div>
+                  <div class="reel-q-title" style="color:var(--accent-cyan);">${card.title || 'Core Formula'}</div>
+                  <div style="font-size:17px; font-weight:900; color:#fff; padding:12px; background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.3); border-radius:12px;">$$${card.formula || ''}$$</div>
+                  <div style="font-size:11.5px; color:#cbd5e1; line-height:1.35; margin-top:4px;">💡 ${card.tip || ''}</div>
                 </div>
-                <div class="reel-footer-actions">
-                  <div style="font-size:11px; color:#64748b; font-weight:700;">Swipe Up ➔</div>
-                  <button type="button" class="reel-explain-ai-btn" onclick="sendReelToDoubtSolver('Derive and explain formula: ${escapeHTML(card.formula || '')}', '${card.subject || ''}')">🧠 Derivation</button>
+
+                <div class="reel-side-dock">
+                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('Derive formula: ${escapeHTML(card.formula || '')}', '${sub}')">
+                    <span style="font-size:16px;">🧠</span>
+                  </div>
+                  <span class="reel-dock-action-label">Derive</span>
+
+                  <div class="reel-dock-action-btn" onclick="reactStory('100')">
+                    <span style="font-size:16px;">💯</span>
+                  </div>
+                  <span class="reel-dock-action-label">Save</span>
+
+                  <div class="reel-dock-action-btn" onclick="shareReel('${escapeHTML(card.title || '')}')">
+                    <span style="font-size:15px;">🚀</span>
+                  </div>
+                  <span class="reel-dock-action-label">Share</span>
+                </div>
+
+                <div class="reel-footer-status">
+                  <span>⚡ Swipe up for next hack</span>
                 </div>
               </div>
             `;
@@ -370,6 +428,16 @@ async function renderReelsDeck() {
         }
     } catch(e) {}
 }
+
+function shareReel(text) {
+    if (navigator.share) {
+        navigator.share({ title: 'Invincible 360 Reel', text: `Can you solve this? ${text} 🔥 Join the clash on Invincible 360!`, url: window.location.href });
+    } else {
+        navigator.clipboard.writeText(`${text} - Solve on Invincible 360: ${window.location.href}`);
+        alert('📋 Reel link copied to clipboard!');
+    }
+}
+
 
 
 function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
