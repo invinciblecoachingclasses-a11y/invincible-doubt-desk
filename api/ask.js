@@ -42,13 +42,14 @@ INSTRUCTIONS:
     }
 
     if (image && image.data) {
-      parts.push({
-        inline_data: {
-          mime_type: image.mimeType || "image/jpeg",
-          data: image.data.replace(/^data:image\/\w+;base64,/, "")
-        }
-      });
+  parts.push({
+    inlineData: {
+      mimeType: image.mimeType || "image/jpeg",
+      data: image.data.replace(/^data:image\/\w+;base64,/, "")
     }
+  });
+}
+
 
     // Exact model IDs requested by your API endpoint
     const models = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
