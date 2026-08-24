@@ -32,7 +32,10 @@ export default async function handler(req, res) {
     }
 
     // 2. CREATE STORY / VOTE / REACT / RECORD VIEW
-    if (req.method === 'POST') {
+    if (req.method === 'POST') 
+    
+    
+    {
         const { action, author_name, institution, student_class, media_url, image_data, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type, viewer_name, viewer_institution } = req.body;
 
 
@@ -115,6 +118,23 @@ export default async function handler(req, res) {
                 }
                 return res.status(200).json({ success: true });
             }
+            
+                        // Action: Delete Story
+            if (action === 'delete_story') {
+                if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
+
+                const deleteRes = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
+                    method: 'DELETE',
+                    headers
+                });
+
+                if (!deleteRes.ok) {
+                    return res.status(500).json({ error: 'Failed to delete story.' });
+                }
+
+                return res.status(200).json({ success: true, message: 'Story deleted successfully.' });
+            }
+
         } catch (err) {
             return res.status(500).json({ error: 'Server error processing story.' });
         }
