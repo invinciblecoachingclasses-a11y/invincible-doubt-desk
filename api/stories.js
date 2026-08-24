@@ -14,8 +14,9 @@ export default async function handler(req, res) {
         const { action, story_id } = req.query;
 
         try {
-            // Action: Get viewers for a specific story
+            // Action: Get viewers & reactions for a specific story
             if (action === 'get_viewers') {
+                if (!story_id) return res.status(400).json({ error: 'Missing story_id' });
                 const response = await fetch(`${supabaseUrl}/rest/v1/story_views?story_id=eq.${story_id}&order=viewed_at.desc`, { headers });
                 const viewers = await response.json();
                 return res.status(200).json({ viewers: Array.isArray(viewers) ? viewers : [] });
@@ -31,13 +32,27 @@ export default async function handler(req, res) {
         }
     }
 
-    // 2. CREATE STORY / VOTE / REACT / RECORD VIEW
-    if (req.method === 'POST') 
-    
-    
-    {
-        const { action, author_name, institution, student_class, media_url, image_data, caption, sticker_question, sticker_opt_a, sticker_opt_b, sticker_correct_opt, streak_count, story_id, vote_opt, reaction_type, viewer_name, viewer_institution } = req.body;
-
+    // 2. CREATE STORY / VOTE / REACT / RECORD VIEW / DELETE
+    if (req.method === 'POST') {
+        const { 
+            action, 
+            author_name, 
+            institution, 
+            student_class, 
+            media_url, 
+            image_data, 
+            caption, 
+            sticker_question, 
+            sticker_opt_a, 
+            sticker_opt_b, 
+            sticker_correct_opt, 
+            streak_count, 
+            story_id, 
+            vote_opt, 
+            reaction_type, 
+            viewer_name, 
+            viewer_institution 
+        } = req.body;
 
         try {
             // Action: Record a Story View
@@ -50,7 +65,7 @@ export default async function handler(req, res) {
                     body: JSON.stringify({
                         story_id: Number(story_id),
                         viewer_name: viewer_name.slice(0, 30),
-                        viewer_institution: (viewer_institution || 'Student').slice(0, 40)
+                        viewer_institution: (viewer_institution || 'Invincible Student').slice(0, 40)
                     })
                 });
                 return res.status(200).json({ success: true });
@@ -70,7 +85,6 @@ export default async function handler(req, res) {
                         institution: institution.slice(0, 40),
                         student_class: student_class || '10',
                         media_url: media_url || image_data || null,
-
                         caption: (caption || '').slice(0, 300),
                         sticker_question: sticker_question ? sticker_question.slice(0, 120) : null,
                         sticker_opt_a: sticker_opt_a ? sticker_opt_a.slice(0, 50) : null,
@@ -115,14 +129,27 @@ export default async function handler(req, res) {
                         headers,
                         body: JSON.stringify({ [field]: currentVal + 1 })
                     });
+
+                    if (viewer_name) {
+                        await fetch(`${supabaseUrl}/rest/v1/story_views`, {
+                            method: 'POST',
+                            headers,
+                            body: JSON.stringify({
+                                story_id: Number(story_id),
+                                viewer_name: viewer_name.slice(0, 30),
+                                viewer_institution: (viewer_institution || 'Invincible Student').slice(0, 40),
+                                reaction: reaction_type
+                            })
+                        });
+                    }
                 }
                 return res.status(200).json({ success: true });
             }
             
-            // Action: Delete Story (Author or Admin)
+            // Action: Delete Story
             if (action === 'delete_story') {
                 const { admin_key } = req.body;
-                const MASTER_ADMIN_PIN = "ADMIN123"; // You can change this secret PIN anytime
+                const MASTER_ADMIN_PIN = "ADMIN123";
 
                 if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
 
@@ -141,7 +168,6 @@ export default async function handler(req, res) {
 
                 return res.status(200).json({ success: true, message: 'Story deleted successfully.' });
             }
-
 
         } catch (err) {
             return res.status(500).json({ error: 'Server error processing story.' });
