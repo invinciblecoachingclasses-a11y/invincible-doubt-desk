@@ -1,33 +1,4 @@
 /* =====================================================
-   PORTAL SWIPE & TRACK GATEWAY CONTROLLER
-===================================================== */
-function openTrackPortal(track) {
-  if(typeof playDing === 'function') playDing();
-  document.getElementById('mainPortalRoot').classList.add('hidden');
-  document.querySelector('.mission-card').classList.add('hidden');
-  document.getElementById('storiesTray').classList.add('hidden');
-  document.querySelector('.bento-grid').classList.add('hidden');
-  
-  if (track === 'study') {
-    document.getElementById('studySubView').classList.remove('hidden');
-    document.getElementById('battleSubView').classList.add('hidden');
-  } else {
-    document.getElementById('battleSubView').classList.remove('hidden');
-    document.getElementById('studySubView').classList.add('hidden');
-  }
-}
-
-function closeTrackPortals() {
-  if(typeof playDing === 'function') playDing();
-  document.getElementById('studySubView').classList.add('hidden');
-  document.getElementById('battleSubView').classList.add('hidden');
-  document.getElementById('mainPortalRoot').classList.remove('hidden');
-  document.querySelector('.mission-card').classList.remove('hidden');
-  document.getElementById('storiesTray').classList.remove('hidden');
-  document.querySelector('.bento-grid').classList.remove('hidden');
-}
-
-/* =====================================================
    INTERACTIVE WAITING PIPELINES
 ===================================================== */
 let doubtTimerInterval = null;
@@ -470,7 +441,6 @@ async function loadPlatformData(){
     }catch(error){ console.error(error); }
 }
 
-
 window.addEventListener('DOMContentLoaded', () => { setTimeout(loadPlatformData, 300); });
 
 function renderDailyPuzzle(puzzle) {
@@ -761,10 +731,10 @@ async function handleCreatePost(e) {
 }
 
 function escapeHTML(str) {
-
   if (!str) return '';
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
 function formatMathText(text) {
   if (!text) return "";
   const superscripts = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾','n':'ⁿ','x':'ˣ' };
@@ -788,7 +758,6 @@ function formatMathText(text) {
     .replace(/\^([0-9nx+-])/g, (_, p1) => superscripts[p1] || p1)
     .trim();
 }
-
 
 /* =====================================================
 DOUBT DESK LOGIC
@@ -852,6 +821,7 @@ imageInput.onchange = e => {
 };
 
 removeImageButton.onclick = () => { selectedImage = null; imageInput.value = ""; imagePreview.style.display = "none"; removeImageButton.style.display = "none"; };
+
 async function renderAnswerContent(container, markdownText) {
   let parsedHtml = typeof marked !== 'undefined' ? marked.parse(markdownText || "") : markdownText;
   
@@ -877,9 +847,7 @@ document.getElementById("askBtn").onclick = async () => {
     
     startDoubtWaitingPipeline();
 
-    // 1. Capture the image preview source if an image was uploaded
     const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
-
     doubtHistory = [];
 
     try {
@@ -901,11 +869,8 @@ document.getElementById("askBtn").onclick = async () => {
         doubtHistory.push({ role: 'assistant', content: data.answer });
 
         const ansContainer = document.getElementById("answerText");
-        
-        // 2. Render markdown/math solution first
         await renderAnswerContent(ansContainer, data.answer);
         
-        // 3. Inject the uploaded picture at the top of the answer card
         if (attachedImageBase64) {
           const imgMarkup = `<div style="margin-bottom:14px; text-align:center;"><img src="${attachedImageBase64}" alt="Uploaded Doubt" style="max-width:100%; max-height:260px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); object-fit:contain;" /></div>`;
           ansContainer.insertAdjacentHTML('afterbegin', imgMarkup);
@@ -921,7 +886,6 @@ document.getElementById("askBtn").onclick = async () => {
         document.getElementById("loadingDoubt").classList.add('hidden'); 
     }
 };
-
 
 const sendFollowUpBtn = document.getElementById('sendFollowUpBtn');
 const followUpInput = document.getElementById('followUpInput');
@@ -990,7 +954,6 @@ document.getElementById("teacherBtn").addEventListener("click", function(){
   const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; 
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
 });
-
 
 /* =====================================================
 TEST GENERATOR & TIME ATTACK ENGINE
@@ -1202,7 +1165,7 @@ function startBotMatch() {
 
     const samplePool = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0, explanation: "Force = mass × acceleration, measured in Newtons." },
-        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
+        { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िटज़ॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
         { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0, explanation: "KE = 1/2 m v²." },
         { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण में कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1, explanation: "Plants split water molecules to release Oxygen (O2)." },
         { question_text: "Value of acceleration due to gravity (g) on Earth:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0, explanation: "Standard standard gravity at sea level is ~9.8 m/s²." }
@@ -1357,7 +1320,6 @@ function loadArenaQuestion() {
 
     const q = arena.questions[arena.currentQ];
     
-    // Streak indicator badge
     let streakEmoji = '';
     if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE STREAK x' + arena.streak;
     else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
@@ -1399,7 +1361,6 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         playDing(); 
         arena.streak++;
         
-        // Speed bonus: Answering with >50% time left grants extra points
         const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
         arena.score += (10 + arena.timer + speedBonus);
 
@@ -1735,7 +1696,7 @@ function handleStoryImage(e) {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const MAX_SIZE = 1080;
+      const MAX_SIZE = 900;
       let width = img.width;
       let height = img.height;
       
@@ -1751,7 +1712,7 @@ function handleStoryImage(e) {
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
-      currentStoryImageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+      currentStoryImageBase64 = canvas.toDataURL('image/jpeg', 0.65); 
       
       const preview = document.getElementById('storyImagePreview');
       if (preview) { 
@@ -1810,7 +1771,7 @@ async function bakeImageWithFilter(base64Image, cssFilter) {
       const ctx = canvas.getContext('2d');
       ctx.filter = cssFilter;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      resolve(canvas.toDataURL('image/jpeg', 0.8));
+      resolve(canvas.toDataURL('image/jpeg', 0.65));
     };
     img.onerror = () => resolve(base64Image); 
     img.src = base64Image;
@@ -1826,10 +1787,10 @@ if (pubStoryBtn) {
     const inst = document.getElementById('storyInstitution').value.trim();
     const caption = document.getElementById('storyCaption').value.trim();
 
-    if (!name || !caption) return alert("Please provide at least your Name and a Caption.");
+    if (!name) return alert("Please enter your Name.");
     
     pubStoryBtn.disabled = true;
-    pubStoryBtn.textContent = "BAKING IMAGE... ⏳";
+    pubStoryBtn.textContent = "PROCESSING... ⏳";
 
     try {
         const finalImage = await bakeImageWithFilter(currentStoryImageBase64, selectedFilterCSS);
@@ -1841,21 +1802,20 @@ if (pubStoryBtn) {
             body: JSON.stringify({ 
               action: 'create_story', 
               author_name: name, 
-              age: age,
-              class_name: stuClass,
-              institution: inst || 'CBSE School', 
-              caption: caption,
-              image_data: finalImage 
+              institution: inst || 'Invincible Coaching',
+              student_class: stuClass || '10',
+              caption: caption || '',
+              media_url: finalImage || null
             })
         });
         const data = await res.json();
-        if (data.story && data.story.id) {
-  let myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
-  myStoryIds.push(data.story.id);
-  localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
-}
+        if (!res.ok || data.error) throw new Error(data.error || "Upload failed");
 
-        if (data.error) throw new Error(data.error);
+        if (data.story && data.story.id) {
+          let myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
+          myStoryIds.push(data.story.id);
+          localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
+        }
 
         document.getElementById('storyModal').style.display = 'none';
         
@@ -1867,7 +1827,7 @@ if (pubStoryBtn) {
         if (placeholder) placeholder.style.display = 'block';
         document.getElementById('storyCaption').value = '';
         
-        loadActiveStories();
+        await loadActiveStories();
         if(typeof playWin === 'function') playWin();
         alert("🎉 Story Posted Successfully!");
     } catch(err) { 
@@ -1878,6 +1838,7 @@ if (pubStoryBtn) {
     }
   };
 }
+
 function openStoryViewer(idx) {
   currentStoryIdx = idx;
   const viewer = document.getElementById('storyViewer');
@@ -1946,7 +1907,6 @@ async function deleteCurrentStory() {
   }
 }
 
-
 function renderStorySlide() {
   clearTimeout(storyTimer);
   const story = activeStories[currentStoryIdx];
@@ -1962,11 +1922,10 @@ function renderStorySlide() {
   const bgImg = document.getElementById('viewerImageBg');
 
   const authorName = String(story.author_name || story.author || story.name || "Student");
-  const ageText = story.age ? `, ${story.age}` : '';
-  const classText = story.class_name ? ` • ${story.class_name}` : '';
+  const classText = story.student_class ? ` • Class ${story.student_class}` : '';
 
-  if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
-  if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
+  if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${classText}`;
+  if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Invincible Coaching'}`;
   if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
 
   const deleteBtn = document.getElementById('viewerDeleteBtn');
@@ -1977,8 +1936,6 @@ function renderStorySlide() {
       deleteCurrentStory();
     };
   }
-
-
 
   if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
 
