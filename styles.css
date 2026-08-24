@@ -786,6 +786,136 @@ textarea:focus, input:focus, select:focus {
 .filter-btn.active .filter-preview-box { border-color: var(--accent-cyan); transform: scale(1.05); box-shadow: 0 0 15px rgba(0,229,255,0.3); }
 .filter-name { font-size: 10px; color: #94a3b8; font-weight: 800; }
 .filter-btn.active .filter-name { color: var(--accent-cyan); }
+/* =====================================================
+   FULLSCREEN REELS / STORY VIEWER MODAL
+===================================================== */
+.story-viewer-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 14, 0.95);
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.story-card-view {
+  width: min(420px, 94vw);
+  height: min(720px, 86vh);
+  background: #0d1527;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.story-progress-bar {
+  display: flex;
+  gap: 5px;
+  padding: 12px 14px 6px;
+  position: relative;
+  z-index: 30;
+}
+
+.story-progress-seg {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.story-progress-fill {
+  height: 100%;
+  background: #ffffff;
+  width: 0%;
+}
+
+.story-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 14px 10px;
+  position: relative;
+  z-index: 30;
+}
+
+.story-close-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.story-nav-zone {
+  position: absolute;
+  top: 50px;
+  bottom: 120px;
+  width: 40%;
+  z-index: 15;
+  cursor: pointer;
+}
+
+.story-nav-prev { left: 0; }
+.story-nav-next { right: 0; }
+
+.story-body-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 12;
+}
+
+.story-caption-text {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.story-action-bar {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 30;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reaction-emoji-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.reaction-emoji-btn:active {
+  transform: scale(1.35);
+}
 
 /* Viewer ID Card */
 .story-image-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.85; border-radius: 24px; }
