@@ -1837,54 +1837,80 @@ function openStoryViewer(idx) {
   }
 }
 
- catch(e) {
-        alert("Error opening story: " + e.message);
-    }
+function prevStorySlide() {
+  if (currentStoryIdx > 0) {
+    currentStoryIdx--;
+    renderStorySlide();
+  }
 }
-function prevStorySlide() { if (currentStoryIdx > 0) { currentStoryIdx--; renderStorySlide(); } }
-function nextStorySlide() { if (currentStoryIdx < activeStories.length - 1) { currentStoryIdx++; renderStorySlide(); } else { closeStoryViewer(); } }
+
+function nextStorySlide() {
+  if (currentStoryIdx < activeStories.length - 1) {
+    currentStoryIdx++;
+    renderStorySlide();
+  } else {
+    closeStoryViewer();
+  }
+}
 
 function renderStorySlide() {
-    try {
-        clearTimeout(storyTimer);
-        const story = activeStories[currentStoryIdx];
-        if (!story) { closeStoryViewer(); return; }
+  clearTimeout(storyTimer);
+  const story = activeStories[currentStoryIdx];
+  if (!story) {
+    closeStoryViewer();
+    return;
+  }
 
-        const authorDetailsEl = document.getElementById('viewerAuthorDetails');
-        const schoolDetailsEl = document.getElementById('viewerSchoolDetails');
-        const avatarEl = document.getElementById('viewerAvatar');
-        const capEl = document.getElementById('viewerCaption');
-        const bgImg = document.getElementById('viewerImageBg');
+  const authorDetailsEl = document.getElementById('viewerAuthorDetails');
+  const schoolDetailsEl = document.getElementById('viewerSchoolDetails');
+  const avatarEl = document.getElementById('viewerAvatar');
+  const capEl = document.getElementById('viewerCaption');
+  const bgImg = document.getElementById('viewerImageBg');
 
-        const authorName = String(story.author_name || story.author || story.name || "Student");
-        let ageText = story.age ? `, ${story.age}` : '';
-        let classText = story.class_name ? ` • ${story.class_name}` : '';
-        
-        if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
-        if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
-        if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
+  const authorName = String(story.author_name || story.author || story.name || "Student");
+  const ageText = story.age ? `, ${story.age}` : '';
+  const classText = story.class_name ? ` • ${story.class_name}` : '';
 
-        if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
-        
-        const imageUrl = story.image_data || story.image_url || story.image; 
-        if (bgImg) {
-          if (imageUrl && imageUrl.length > 50) {
-            bgImg.src = imageUrl;
-            bgImg.style.display = 'block';
-          } else {
-            bgImg.style.display = 'none';
-          }
-        }
+  if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
+  if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Platform'}`;
+  if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
 
-        const pContainer = document.getElementById('storyProgressContainer');
-        if (pContainer) {
-          pContainer.innerHTML = activeStories.map((_, i) => `<div class="story-progress-seg"><div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div></div>`).join('');
-        }
-        storyTimer = setTimeout(nextStorySlide, 6000);
-    } catch(e) {
-        alert("Render error: " + e.message);
+  if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
+
+  const imageUrl = story.image_data || story.image_url || story.image;
+  if (bgImg) {
+    if (imageUrl && imageUrl.length > 50) {
+      bgImg.src = imageUrl;
+      bgImg.style.display = 'block';
+    } else {
+      bgImg.style.display = 'none';
     }
+  }
+
+  const pContainer = document.getElementById('storyProgressContainer');
+  if (pContainer) {
+    pContainer.innerHTML = activeStories.map((_, i) => `
+      <div class="story-progress-seg">
+        <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div>
+      </div>
+    `).join('');
+  }
+
+  storyTimer = setTimeout(nextStorySlide, 6000);
 }
-function closeStoryViewer() { clearTimeout(storyTimer); const v = document.getElementById('storyViewer'); if (v) v.style.display = 'none'; }
-function reactStory(type) { if(typeof playDing === 'function') playDing(); confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } }); }
-function saveStoryToVault() { if(typeof playWin === 'function') playWin(); alert("💾 Saved to Gallery!"); }
+
+function closeStoryViewer() {
+  clearTimeout(storyTimer);
+  const v = document.getElementById('storyViewer');
+  if (v) v.style.display = 'none';
+}
+
+function reactStory(type) {
+  if (typeof playDing === 'function') playDing();
+  if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+}
+
+function saveStoryToVault() {
+  if (typeof playWin === 'function') playWin();
+  alert("💾 Saved to Gallery!");
+}
