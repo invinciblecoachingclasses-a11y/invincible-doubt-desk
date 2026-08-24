@@ -119,21 +119,28 @@ export default async function handler(req, res) {
                 return res.status(200).json({ success: true });
             }
             
-            // Action: Delete Story
-if (action === 'delete_story') {
-    if (!story_id) return res.status(400).j...
+            // Action: Delete Story (Author or Admin)
+            if (action === 'delete_story') {
+                const { admin_key } = req.body;
+                const MASTER_ADMIN_PIN = "ADMIN123"; // You can change this secret PIN anytime
 
-    const deleteRes = await fetch(`${supaba...
-        method: 'DELETE',
-        headers
-    });
+                if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
 
-    if (!deleteRes.ok) {
-        return res.status(500).json({ error...
-    }
+                if (admin_key && admin_key !== MASTER_ADMIN_PIN) {
+                    return res.status(403).json({ error: 'Invalid Admin PIN.' });
+                }
 
-    return res.status(200).json({ success: ...
-}
+                const deleteRes = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
+                    method: 'DELETE',
+                    headers
+                });
+
+                if (!deleteRes.ok) {
+                    return res.status(500).json({ error: 'Failed to delete story.' });
+                }
+
+                return res.status(200).json({ success: true, message: 'Story deleted successfully.' });
+            }
 
 
         } catch (err) {
