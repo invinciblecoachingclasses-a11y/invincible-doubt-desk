@@ -156,6 +156,18 @@ button:active, .subject:active, .filter-pill:active, .story-circle-item:active, 
   color: var(--accent-cyan);
 }
 
+/* PULSE ANIMATION FOR LIVE BLITZ & STATUS DOTS */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.6;
+  }
+}
+
 /* INTERACTIVE WAITING MECHANICS CSS */
 .waiting-container {
   background: rgba(13, 18, 36, 0.75);
@@ -876,6 +888,7 @@ textarea:focus, input:focus, select:focus {
 .reaction-emoji-btn:active {
   transform: scale(1.35);
 }
+
 /* =====================================================
    STORY VIEWERS ACTIVITY DRAWER STYLING
 ===================================================== */
@@ -906,6 +919,7 @@ textarea:focus, input:focus, select:focus {
   border-radius: 12px;
   padding: 8px 12px;
 }
+
 /* =====================================================
    📸 INSTAGRAM-STYLE STUDY REELS ENGINE (FULL FIT)
 ===================================================== */
@@ -1077,7 +1091,7 @@ textarea:focus, input:focus, select:focus {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 4px 48px 4px 2px; /* Right padding preserves room for side-dock */
+  padding: 4px 48px 4px 2px;
   gap: 8px;
   z-index: 2;
   overflow: hidden;
