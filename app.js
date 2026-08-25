@@ -520,6 +520,95 @@ function sendReelToDoubtSolver(questionText, subject) {
 }
 
 /* =====================================================
+   WHATSAPP 9:00 PM MEGA BLITZ PASS GENERATOR & MODAL
+===================================================== */
+function handleGetBlitzPass() {
+  const nameInput = document.getElementById('studentName')?.value?.trim();
+  const studentName = nameInput || localStorage.getItem('studentName') || localStorage.getItem('student_name') || 'Champion';
+  const passId = 'BLITZ-' + Math.floor(100000 + Math.random() * 900000);
+  
+  // 1. Store Pass in Local Storage
+  localStorage.setItem('blitz_pass_active', 'true');
+  localStorage.setItem('blitz_pass_id', passId);
+  
+  // 2. Award Bonus XP
+  const xpEl = document.getElementById('xpCounter');
+  let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
+  currentXP += 100;
+  if (xpEl) xpEl.textContent = currentXP;
+  localStorage.setItem('student_xp', currentXP.toString());
+
+  // 3. Recharge Powerups
+  rechargeBlitzPowerup('fiftyFifty');
+  rechargeBlitzPowerup('timeFreeze');
+  rechargeBlitzPowerup('shield');
+
+  // 4. Play audio and haptic feedback
+  if (typeof playWin === 'function') playWin();
+  if (typeof triggerHaptic === 'function') triggerHaptic([50, 50, 100]);
+  if (typeof confetti === 'function') confetti({ particleCount: 90, spread: 60, origin: { y: 0.6 } });
+
+  // 5. Render Pass Modal
+  renderBlitzPassModal(studentName, passId);
+}
+
+function renderBlitzPassModal(name, passId) {
+  const existing = document.getElementById('blitzPassModal');
+  if (existing) existing.remove();
+
+  const shareText = encodeURIComponent(
+    `🔥 *9:00 PM MEGA BLITZ PASS ACTIVATED!* 🔥\n\n` +
+    `👤 Student: *${name}*\n` +
+    `🎟️ Pass ID: *#${passId}*\n` +
+    `⚡ Perks: Unlocked 1v1 Arena + 100 Bonus XP + 3x Power-Ups\n\n` +
+    `Join tonight's 9 PM Blitz Clash with me here:\n` +
+    `👉 ${window.location.origin}/app.html`
+  );
+
+  const modalHtml = `
+    <div id="blitzPassModal" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);">
+      <div style="max-width:380px; width:100%; background:#0f172a; border:2px solid #f59e0b; border-radius:24px; padding:24px; text-align:center; position:relative; box-shadow:0 0 30px rgba(245,158,11,0.3); animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+        
+        <div style="width:60px; height:60px; margin:0 auto 12px; background:linear-gradient(135deg, #f59e0b, #d97706); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(245,158,11,0.4);">
+          🎟️
+        </div>
+
+        <span style="font-size:10px; font-weight:900; letter-spacing:1px; text-transform:uppercase; background:rgba(245,158,11,0.2); color:#fbbf24; border:1px solid rgba(245,158,11,0.4); padding:4px 10px; border-radius:999px;">
+          VIP PASS ACTIVE
+        </span>
+
+        <h3 style="font-size:20px; font-weight:900; color:#fff; margin:12px 0 4px 0;">Tonight's 9 PM Blitz Pass</h3>
+        <p style="font-size:12px; color:#94a3b8; margin:0 0 16px 0;">Pass ID: <strong style="color:#fbbf24; font-family:monospace;">#${passId}</strong></p>
+
+        <div style="background:#020617; border:1px solid #1e293b; border-radius:16px; padding:14px; text-align:left; font-size:12px; margin-bottom:18px; display:flex; flex-direction:column; gap:8px;">
+          <div style="color:#10b981; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <span>✅</span> <span>+100 Bonus XP Added Instantly</span>
+          </div>
+          <div style="color:#00e5ff; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <span>✅</span> <span>1x 50-50, Time Freeze & Shield Charged</span>
+          </div>
+          <div style="color:#fbbf24; font-weight:800; display:flex; align-items:center; gap:8px;">
+            <span>✅</span> <span>Priority State Leaderboard Entry</span>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <a href="https://api.whatsapp.com/send?text=${shareText}" target="_blank" style="display:block; width:100%; background:#10b981; color:#020617; font-weight:900; font-size:13px; padding:12px 0; border-radius:14px; text-decoration:none; box-shadow:0 4px 15px rgba(16,185,129,0.3);">
+            📲 Share Pass on WhatsApp (+50 XP)
+          </a>
+          <button onclick="document.getElementById('blitzPassModal').remove(); switchTab('arena');" style="width:100%; background:#1e293b; color:#cbd5e1; font-weight:700; font-size:12px; padding:10px 0; border-radius:14px; border:1px solid #334155; cursor:pointer;">
+            Close &amp; Enter Arena
+          </button>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+/* =====================================================
    NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
@@ -785,6 +874,16 @@ window.addEventListener('DOMContentLoaded', () => {
     loadActiveStories();
     initBlitzCountdown();
     updatePowerupUI();
+    
+    // Attach VIP Blitz Pass Click Handler
+    const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
+    passBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleGetBlitzPass();
+      });
+    });
+
     setTimeout(() => {
         const savedClass = localStorage.getItem('invincible_user_class') || "10";
         const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
@@ -929,7 +1028,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
 
 /* =====================================================
    CAMPUS HUB / SCHOOL DISPATCH CONTROLLER
-===================================================== */
+==================================================== */
 let currentCategoryFilter = 'ALL';
 let allSchoolPosts = [];
 
