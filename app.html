@@ -63,6 +63,36 @@
      HOME DECK
 ===================================================== -->
 <div id="homeSection">
+
+    <!-- 9:00 PM MEGA BLITZ LIVE COUNTDOWN & WHATSAPP PASS BANNER -->
+    <section class="card" style="background: linear-gradient(135deg, rgba(244,63,94,0.12), rgba(0,229,255,0.08)); border: 1px solid rgba(244,63,94,0.3); padding: 14px 16px; margin-bottom: 14px; border-radius: 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-rose); box-shadow:0 0 10px var(--accent-rose); animation: pulse 1.5s infinite;"></span>
+                <span id="blitzCountdownTicker" style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:#fff; letter-spacing:0.5px;">⚡ 9:00 PM MEGA BLITZ IN: CALCULATING...</span>
+            </div>
+            <a href="https://api.whatsapp.com/send?text=START%20BLITZ%20PASS%20%E2%9A%A1%20Send%20me%20tonight's%209%3A00%20PM%20Arena%20Link%20%26%20Topic%20Leaks!" target="_blank" style="text-decoration:none; background:linear-gradient(135deg, #22c55e, #16a34a); color:#fff; font-size:11px; font-weight:900; padding:6px 12px; border-radius:10px; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 12px rgba(34,197,94,0.3);">
+                <span>📲 Get WhatsApp Blitz Pass</span>
+            </a>
+        </div>
+
+        <!-- TACTICAL POWER-UP LOADOUT TRAY -->
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
+            <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Tactical Blitz Power-Ups</span>
+            <div style="display:flex; gap:8px;">
+                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(0,229,255,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:4px;" title="50:50 Lifeline">
+                    <span>✂️ 50:50</span> <span id="pupBadge_fiftyFifty" style="background:var(--accent-cyan); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:4px;" title="+3s Time Freeze">
+                    <span>❄️ +3s</span> <span id="pupBadge_timeFreeze" style="background:var(--accent-amber); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(5,255,161,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:4px;" title="Point Protection Shield">
+                    <span>🛡️ Shield</span> <span id="pupBadge_shield" style="background:var(--accent-emerald); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- DAILY MISSION TRACKER -->
     <section class="mission-card" aria-label="Daily Progress Tracker">
         <div class="mission-top">
