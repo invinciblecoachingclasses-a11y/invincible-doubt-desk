@@ -3,59 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Teacher Studio Login - DoubtDesk</title>
+  <title>Teacher & Faculty Studio Login | Invincible 360</title>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-4">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
 
-  <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    h1, h2, h3, .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+  <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl relative">
     
+    <!-- Top Navigation HUD -->
     <div class="flex justify-between items-center mb-6">
-      <a href="/index.html" class="text-xs text-slate-400 hover:text-white transition">← Workspace Select</a>
-      <span class="text-[10px] font-bold uppercase tracking-wider bg-indigo-950 text-indigo-400 border border-indigo-800/50 px-2.5 py-1 rounded-full">
-        Teacher Portal
+      <a href="app.html" class="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-cyan-400 transition">
+        <span>←</span> <span>Home Deck</span>
+      </a>
+      <span class="text-[10px] font-extrabold uppercase tracking-wider bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2.5 py-1 rounded-full font-heading">
+        Faculty Portal
       </span>
     </div>
 
+    <!-- Header Block -->
     <div class="text-center mb-6">
-      <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+      <div class="w-14 h-14 bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 border border-cyan-500/40 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3 shadow-lg shadow-cyan-500/10">
         👩‍🏫
       </div>
-      <h1 class="text-2xl font-black text-white">Teacher Studio</h1>
-      <p class="text-xs text-slate-400 mt-1">Sign in with email and password to access your papers & archive</p>
+      <h1 class="text-2xl font-black text-white tracking-tight font-heading">Teacher &amp; Faculty Studio</h1>
+      <p class="text-xs text-slate-400 mt-1">Sign in with verified institutional credentials to access exam makers, OCR evaluation &amp; blueprints</p>
     </div>
 
+    <!-- Auth Form -->
     <form id="authForm" class="space-y-4">
       <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Teacher Email</label>
+        <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Teacher Email</label>
         <input 
           id="emailInput" 
           type="email" 
           required 
           autocomplete="email"
           placeholder="teacher@school.com"
-          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+          class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
         />
       </div>
 
       <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+        <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
         <input 
           id="passwordInput" 
           type="password" 
           required 
           autocomplete="current-password"
           placeholder="Minimum 6 characters"
-          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition"
+          class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
         />
       </div>
 
-      <div class="flex gap-2 pt-2">
+      <div class="flex gap-2.5 pt-2">
         <button 
           type="submit" 
           id="signInBtn" 
-          class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-sm transition active:scale-95 shadow-lg"
+          class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black py-3 rounded-2xl text-xs md:text-sm transition active:scale-[0.98] shadow-lg shadow-cyan-500/20 font-heading"
         >
           Sign In
         </button>
@@ -63,14 +86,22 @@
         <button 
           type="button" 
           id="signUpBtn" 
-          class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-sm border border-slate-700 transition active:scale-95"
+          class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-black py-3 rounded-2xl text-xs md:text-sm border border-slate-700 transition active:scale-[0.98] font-heading"
         >
           Sign Up
         </button>
       </div>
     </form>
 
-    <div id="statusMsg" class="hidden mt-4 text-xs text-center p-3 rounded-xl"></div>
+    <!-- Quick Switcher Link for Students -->
+    <div class="mt-6 pt-4 border-t border-slate-800/80 text-center">
+      <a href="student.html" class="text-xs text-slate-400 hover:text-cyan-400 font-semibold transition">
+        Are you a student? <span class="text-cyan-400 underline decoration-cyan-500/40">Open Student Solver →</span>
+      </a>
+    </div>
+
+    <!-- Status Message Alert Box -->
+    <div id="statusMsg" class="hidden mt-4 text-xs text-center p-3 rounded-2xl font-bold"></div>
 
   </div>
 
@@ -87,11 +118,26 @@
 
     function showStatus(text, isError = false) {
       statusMsg.textContent = text;
-      statusMsg.className = `mt-4 text-xs text-center p-3 rounded-xl ${isError ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`;
+      statusMsg.className = `mt-4 text-xs text-center p-3 rounded-2xl font-bold ${
+        isError 
+          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/30' 
+          : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+      }`;
       statusMsg.classList.remove('hidden');
     }
 
-    // Sign In
+    // Auto-redirect if session already active
+    async function checkExistingSession() {
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session && session.user) {
+          window.location.href = "test-maker.html";
+        }
+      } catch (e) {}
+    }
+    checkExistingSession();
+
+    // Sign In Action
     document.getElementById('authForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = emailInput.value.trim().toLowerCase();
@@ -100,19 +146,25 @@
       signInBtn.disabled = true;
       signInBtn.textContent = "Verifying...";
 
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        showStatus(error.message, true);
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        
+        if (error) {
+          showStatus(error.message, true);
+          signInBtn.disabled = false;
+          signInBtn.textContent = "Sign In";
+        } else {
+          showStatus("Verified! Loading Teacher Studio...", false);
+          setTimeout(() => { window.location.href = "test-maker.html"; }, 500);
+        }
+      } catch (err) {
+        showStatus(err.message || "Authentication failed.", true);
         signInBtn.disabled = false;
         signInBtn.textContent = "Sign In";
-      } else {
-        showStatus("Verified! Loading Teacher Studio...", false);
-        setTimeout(() => { window.location.href = "/test-maker.html"; }, 500);
       }
     });
 
-    // Sign Up
+    // Sign Up Action
     signUpBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim().toLowerCase();
       const password = passwordInput.value.trim();
@@ -125,15 +177,21 @@
       signUpBtn.disabled = true;
       signUpBtn.textContent = "Creating...";
 
-      const { data, error } = await sb.auth.signUp({ email, password });
+      try {
+        const { data, error } = await sb.auth.signUp({ email, password });
 
-      if (error) {
-        showStatus(error.message, true);
+        if (error) {
+          showStatus(error.message, true);
+          signUpBtn.disabled = false;
+          signUpBtn.textContent = "Sign Up";
+        } else {
+          showStatus("Account created! Logging you in...", false);
+          setTimeout(() => { window.location.href = "test-maker.html"; }, 500);
+        }
+      } catch (err) {
+        showStatus(err.message || "Registration failed.", true);
         signUpBtn.disabled = false;
         signUpBtn.textContent = "Sign Up";
-      } else {
-        showStatus("Account created! Logging you in...", false);
-        setTimeout(() => { window.location.href = "/test-maker.html"; }, 500);
       }
     });
   </script>
