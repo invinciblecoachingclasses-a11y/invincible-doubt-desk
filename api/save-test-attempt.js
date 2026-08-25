@@ -1,7 +1,9 @@
 // api/save-test-attempt.js
 
 export default async function handler(req, res) {
-  // CORS
+  // ============================================================
+  // CORS HEADERS
+  // ============================================================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -30,25 +32,30 @@ export default async function handler(req, res) {
 
     const body = req.body || {};
 
-    // Validate minimum required fields from the form
+    // Extract student and academic credentials
     const studentName = body.studentName || body.name || "Anonymous Student";
     const studentMobile = body.studentMobile || body.mobile || "N/A";
+    const organization = body.organization || body.school_name || body.school || body.institution || "Invincible Coaching";
+    const studentClass = body.studentClass || body.class || body.className || "10";
+    const percentage = Math.min(Math.max(Number(body.percentage || 0), 0), 100);
 
     const record = {
       student_name: studentName,
       student_mobile: studentMobile,
-      student_class: body.studentClass || body.class || null,
-      subject: body.subject || null,
-      chapter: body.chapter || null,
-      test_title: body.testTitle || "Practice Test",
-      test_type: body.testType || "Manual",
+      organization: organization,
+      school_name: organization,
+      student_class: String(studentClass),
+      subject: body.subject || "General",
+      chapter: body.chapter || "Full Syllabus",
+      test_title: body.testTitle || "Practice Assessment",
+      test_type: body.testType || "Algorithmic Generation",
       total_questions: Number(body.totalQuestions || 0),
       attempted: Number(body.attempted || 0),
       correct: Number(body.correct || 0),
       wrong: Number(body.wrong || 0),
       unanswered: Number(body.unanswered || 0),
-      percentage: Number(body.percentage || 0),
-      answers: body.answers || [],
+      percentage: percentage,
+      answers: typeof body.answers === "string" ? body.answers : JSON.stringify(body.answers || []),
       created_at: new Date().toISOString()
     };
 
@@ -85,12 +92,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: "Test attempt saved successfully.",
+      message: "Test attempt recorded successfully.",
       attempt: Array.isArray(data) ? data[0] : data
     });
 
   } catch (error) {
-    console.error("SAVE TEST ATTEMPT ERROR:", error);
+    console.error("SAVE TEST ATTEMPT SERVER ERROR:", error);
     return res.status(500).json({
       success: false,
       error: error?.message || "Unexpected server error."
