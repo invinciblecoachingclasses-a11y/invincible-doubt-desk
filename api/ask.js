@@ -10,20 +10,29 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Please enter a question or upload a photo." });
     }
 
-    const systemPrompt = `You are a master teacher for CBSE/State board students at Invincible Coaching Classes.
-Subject: ${subject || "General"}
+    // Dynamic Tone Customization
+    let toneGuidance = "Provide a thorough step-by-step master breakdown with reasoning for each step.";
+    if (tone === "tldr") {
+      toneGuidance = "Keep it extremely concise. Focus strictly on key formulas, numerical answers, and immediate examiner traps (TL;DR bullet points).";
+    } else if (tone === "eli10") {
+      toneGuidance = "Explain with a very simple, fun real-world everyday analogy first before moving into the standard formula.";
+    }
 
-INSTRUCTIONS:
-1. Explain clearly in friendly conversational Hinglish.
-2. For all equations and math expressions, use standard LaTeX ($ for inline, $$ for block formulas).
-3. Structure your answer cleanly:
-   - 🎯 **Direct Formula / Core Concept**
-   - 🧠 **Step-by-Step Solution**
+    const systemPrompt = `You are a master teacher and board exam evaluator at Invincible Coaching Classes.
+Subject: ${subject || "General Academic"}
+Explanation Mode: ${toneGuidance}
+
+STRICT INSTRUCTIONS:
+1. Language: Friendly, engaging conversational Hinglish (blend of natural Hindi & English).
+2. Math & Formulas: Enclose all mathematical equations and formulas using standard LaTeX ($ for inline, $$ for standalone display equations).
+3. Layout & Structure (Use clean Markdown):
+   - 🎯 **Direct Approach / Core Formula**
+   - 🧠 **Step-by-Step Rigorous Solution**
    - 💡 **Final Answer / Key Takeaway**
-   - 🚨 **Common Student Mistakes (सावधानियां)**`;
+   - 🚨 **Common Student Mistakes (सावधानियां & Examiner Traps)**`;
 
     // 1. Prepare Gemini Payload Format
-    let geminiParts = [{ text: systemPrompt }];
+    const geminiParts = [{ text: systemPrompt }];
 
     if (Array.isArray(history) && history.length > 0) {
       history.forEach(item => {
@@ -53,8 +62,13 @@ INSTRUCTIONS:
     const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
-      const geminiModels = ["gemini-3.6-flash", "gemini-3.5-flash-lite"];
-
+      // Resilient model hierarchy for maximum speed and free-tier quota uptime
+      const geminiModels = [
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+        "gemini-1.5-flash-8b"
+      ];
 
       keyLoop: for (const apiKey of geminiKeys) {
         for (const model of geminiModels) {
@@ -64,7 +78,13 @@ INSTRUCTIONS:
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: [{ parts: geminiParts }] })
+                body: JSON.stringify({
+                  contents: [{ parts: geminiParts }],
+                  generationConfig: {
+                    temperature: 0.4,
+                    maxOutputTokens: 2048
+                  }
+                })
               }
             );
 
@@ -88,7 +108,7 @@ INSTRUCTIONS:
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
     if (!answer && anthropicKey) {
       try {
-        let claudeContent = [];
+        const claudeContent = [];
 
         if (image && image.data) {
           claudeContent.push({
@@ -141,7 +161,7 @@ INSTRUCTIONS:
     // ==========================================
     if (!answer) {
       return res.status(500).json({
-        error: `All models exhausted: ${errorLog.slice(0, 2).join(" | ")}`
+        error: `Could not generate explanation right now: ${errorLog.slice(0, 2).join(" | ")}`
       });
     }
 
@@ -152,7 +172,7 @@ INSTRUCTIONS:
     });
 
   } catch (error) {
-    console.error("Server Error:", error);
+    console.error("Doubt Handler Server Error:", error);
     return res.status(500).json({ error: error.message || "Server error. Please try again." });
   }
 }
