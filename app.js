@@ -143,7 +143,7 @@ function selectStartingQuest(quest) {
 setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) { const m = document.getElementById('onboardingModal'); if(m) m.style.display = 'flex'; } }, 800);
 
 /* =====================================================
-AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
+   AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
 ===================================================== */
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
@@ -171,9 +171,16 @@ function playSound(type, freq, duration, vol=0.1) {
 function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
 function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
 function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); setTimeout(()=>playSound('square', 659, 0.35), 300); }
+function playTick() { playSound('triangle', 950, 0.03, 0.05); }
+function playComboDrop(multiplier = 1) {
+  playSound('sawtooth', 180 + (multiplier * 45), 0.2, 0.18);
+  setTimeout(() => playSound('sine', 440 + (multiplier * 60), 0.25, 0.15), 60);
+}
 
 function triggerHaptic(pattern = [40]) {
-  if ('vibrate' in navigator) navigator.vibrate(pattern);
+  if ('vibrate' in navigator) {
+    try { navigator.vibrate(pattern); } catch(e){}
+  }
 }
 
 function stopLofiAudio() {
@@ -273,13 +280,11 @@ async function setReelsClass(cls, btn) {
     }
     await renderReelsDeck();
     
-    // Reset scroll back to card #1
     const container = document.getElementById('studyReelsDeck');
     if (container) {
         container.scrollTop = 0;
     }
 }
-
 
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
@@ -438,7 +443,6 @@ async function renderReelsDeck() {
     } catch(e) {}
 }
 
-
 function shareReel(text) {
     if (navigator.share) {
         navigator.share({ title: 'Invincible 360 Reel', text: `Can you solve this? ${text} 🔥 Join the clash on Invincible 360!`, url: window.location.href });
@@ -447,8 +451,6 @@ function shareReel(text) {
         alert('📋 Reel link copied to clipboard!');
     }
 }
-
-
 
 function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
     const card = document.getElementById(`reelCard_${cardId}`);
@@ -480,6 +482,9 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
         const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
         const xpEl = document.getElementById('xpCounter');
         if (xpEl) xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
+
+        // Power-up recharge trigger
+        rechargeBlitzPowerup('fiftyFifty');
 
         if (reelStreak >= 3) {
             confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
@@ -515,7 +520,7 @@ function sendReelToDoubtSolver(questionText, subject) {
 }
 
 /* =====================================================
-NOTES STUDIO GENERATOR & PDF ENGINE
+   NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
@@ -671,8 +676,63 @@ function downloadPDF() {
 }
 
 /* =====================================================
-SURVIVAL BET & CLOUT LEADERBOARD SYNC
+   SURVIVAL BET, DAILY CLASH & MEGA BLITZ ENGINE
 ===================================================== */
+let blitzState = {
+  active: false,
+  questions: [],
+  currentIdx: 0,
+  score: 0,
+  streak: 0,
+  timer: 10,
+  timerInterval: null,
+  roomTrack: 'HOT_SYLLABUS',
+  shieldActive: false,
+  timeFrozen: false,
+  powerups: {
+    fiftyFifty: 1,
+    timeFreeze: 1,
+    shield: 1
+  }
+};
+
+function rechargeBlitzPowerup(type) {
+  let count = parseInt(localStorage.getItem(`blitz_pup_${type}`) || '1', 10);
+  count = Math.min(count + 1, 3);
+  localStorage.setItem(`blitz_pup_${type}`, count);
+  updatePowerupUI();
+}
+
+function updatePowerupUI() {
+  ['fiftyFifty', 'timeFreeze', 'shield'].forEach(p => {
+    const val = parseInt(localStorage.getItem(`blitz_pup_${p}`) || '1', 10);
+    const badge = document.getElementById(`pupBadge_${p}`);
+    if (badge) badge.textContent = val;
+  });
+}
+
+function initBlitzCountdown() {
+  const tickerEl = document.getElementById('blitzCountdownTicker');
+  if (!tickerEl) return;
+
+  setInterval(() => {
+    const now = new Date();
+    const target = new Date();
+    target.setHours(21, 0, 0, 0); // 9:00 PM IST
+
+    if (now > target) {
+      target.setDate(target.getDate() + 1);
+    }
+
+    const diff = target - now;
+    const hrs = String(Math.floor(diff / (1000 * 60 * 60))).padStart(2, '0');
+    const mins = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+    const secs = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+    tickerEl.textContent = `⚡ 9:00 PM MEGA BLITZ IN: ${hrs}h ${mins}m ${secs}s`;
+  }, 1000);
+}
+
 async function loadPlatformData(){
     try{
         const response = await fetch('/api/get-questions');
@@ -723,6 +783,8 @@ async function loadPlatformData(){
 window.addEventListener('DOMContentLoaded', () => { 
     setTimeout(loadPlatformData, 300); 
     loadActiveStories();
+    initBlitzCountdown();
+    updatePowerupUI();
     setTimeout(() => {
         const savedClass = localStorage.getItem('invincible_user_class') || "10";
         const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
@@ -792,6 +854,10 @@ function startDailyClashTimer() {
     if (numDisplay) numDisplay.textContent = `${timeLeft}s`;
     if (barDisplay) barDisplay.style.width = `${(timeLeft / 15) * 100}%`;
 
+    if (timeLeft <= 4) {
+      playTick();
+    }
+
     if (timeLeft <= 0) {
       clearInterval(clashTimerInterval);
       handleDailyClashAnswer(-1, -1, true);
@@ -817,6 +883,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   }
 
   if (timedOut) {
+    triggerHaptic([80]);
     if (fb) fb.innerHTML = `<div style="color:var(--accent-rose); font-weight:800; margin-top:8px;">⏱ Time's up! Clash closed.</div>`;
     return;
   }
@@ -826,6 +893,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
 
   if (isCorrect) {
     playDing();
+    triggerHaptic([30, 40, 30]);
     const newXp = currentXp + 50;
     const xpEl = document.getElementById('xpCounter');
     const userXpEl = document.getElementById('userXpDisplay');
@@ -843,6 +911,12 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
     confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
   } else {
     playBuzz();
+    triggerHaptic([100]);
+    const pBox = document.getElementById('puzzleBox');
+    if (pBox) {
+      pBox.classList.add('arena-shake');
+      setTimeout(() => pBox.classList.remove('arena-shake'), 400);
+    }
     if (fb) {
       fb.innerHTML = `
         <div style="background:rgba(255,42,95,0.1); border:1px solid rgba(255,42,95,0.25); border-radius:12px; padding:10px; margin-top:10px;">
@@ -1047,7 +1121,7 @@ function formatMathText(text) {
 }
 
 /* =====================================================
-DOUBT DESK LOGIC
+   DOUBT DESK LOGIC
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
@@ -1064,8 +1138,12 @@ function setExplanationTone(tone, el) {
 document.querySelectorAll("#doubtSection .subject").forEach(b => {
     b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); };
 });
-document.getElementById("uploadBtn").onclick = () => imageInput.click();
-document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
+if (document.getElementById("uploadBtn")) {
+  document.getElementById("uploadBtn").onclick = () => imageInput.click();
+}
+if (document.getElementById("cameraBtn")) {
+  document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
+}
 
 if (imageInput) {
   imageInput.onchange = e => {
@@ -1137,55 +1215,57 @@ async function renderAnswerContent(container, markdownText) {
   }
 }
 
-document.getElementById("askBtn").onclick = async () => {
-    const q = questionInput.value.trim();
-    if(!q && !selectedImage) return alert("Please enter a question or upload a photo.");
+if (document.getElementById("askBtn")) {
+  document.getElementById("askBtn").onclick = async () => {
+      const q = questionInput.value.trim();
+      if(!q && !selectedImage) return alert("Please enter a question or upload a photo.");
 
-    const askBtn = document.getElementById("askBtn");
-    askBtn.disabled = true;
-    document.getElementById("loadingDoubt").classList.remove('hidden'); 
-    document.getElementById("answerBox").style.display = "none"; 
-    
-    startDoubtWaitingPipeline();
-    const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
-    doubtHistory = [];
+      const askBtn = document.getElementById("askBtn");
+      askBtn.disabled = true;
+      document.getElementById("loadingDoubt").classList.remove('hidden'); 
+      document.getElementById("answerBox").style.display = "none"; 
+      
+      startDoubtWaitingPipeline();
+      const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
+      doubtHistory = [];
 
-    try {
-        const res = await fetch("/api/ask", {
-            method: "POST", 
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ 
-              subject: selectedSubject, 
-              question: q, 
-              image: selectedImage, 
-              tone: currentTone,
-              history: []
-            })
-        });
-        const data = await res.json();
-        if(!res.ok) throw new Error(data.error || "Unable to solve.");
+      try {
+          const res = await fetch("/api/ask", {
+              method: "POST", 
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({ 
+                subject: selectedSubject, 
+                question: q, 
+                image: selectedImage, 
+                tone: currentTone,
+                history: []
+              })
+          });
+          const data = await res.json();
+          if(!res.ok) throw new Error(data.error || "Unable to solve.");
 
-        doubtHistory.push({ role: 'user', content: q || 'Image Question' });
-        doubtHistory.push({ role: 'assistant', content: data.answer });
+          doubtHistory.push({ role: 'user', content: q || 'Image Question' });
+          doubtHistory.push({ role: 'assistant', content: data.answer });
 
-        const ansContainer = document.getElementById("answerText");
-        await renderAnswerContent(ansContainer, data.answer);
-        
-        if (attachedImageBase64) {
-          const imgMarkup = `<div style="margin-bottom:14px; text-align:center;"><img src="${attachedImageBase64}" alt="Uploaded Doubt" style="max-width:100%; max-height:260px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); object-fit:contain;" /></div>`;
-          ansContainer.insertAdjacentHTML('afterbegin', imgMarkup);
-        }
-        
-        document.getElementById("answerBox").style.display = "block"; 
-        if (typeof playDing === 'function') playDing();
-    } catch(err) {
-        alert("Doubt Engine: " + err.message);
-    } finally { 
-        askBtn.disabled = false;
-        stopDoubtWaitingPipeline();
-        document.getElementById("loadingDoubt").classList.add('hidden'); 
-    }
-};
+          const ansContainer = document.getElementById("answerText");
+          await renderAnswerContent(ansContainer, data.answer);
+          
+          if (attachedImageBase64) {
+            const imgMarkup = `<div style="margin-bottom:14px; text-align:center;"><img src="${attachedImageBase64}" alt="Uploaded Doubt" style="max-width:100%; max-height:260px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); object-fit:contain;" /></div>`;
+            ansContainer.insertAdjacentHTML('afterbegin', imgMarkup);
+          }
+          
+          document.getElementById("answerBox").style.display = "block"; 
+          if (typeof playDing === 'function') playDing();
+      } catch(err) {
+          alert("Doubt Engine: " + err.message);
+      } finally { 
+          askBtn.disabled = false;
+          stopDoubtWaitingPipeline();
+          document.getElementById("loadingDoubt").classList.add('hidden'); 
+      }
+  };
+}
 
 const sendFollowUpBtn = document.getElementById('sendFollowUpBtn');
 const followUpInput = document.getElementById('followUpInput');
@@ -1243,20 +1323,27 @@ if (sendFollowUpBtn && followUpInput) {
   followUpInput.onkeydown = (e) => { if (e.key === 'Enter') submitFollowUp(); };
 }
 
-document.getElementById("againBtn").addEventListener("click", function(){ 
-  followUpInput.value = "Can you explain this step by step with a simpler real-world example?";
-  sendFollowUpBtn.click();
-});
+if (document.getElementById("againBtn")) {
+  document.getElementById("againBtn").addEventListener("click", function(){ 
+    if (followUpInput) {
+      followUpInput.value = "Can you explain this step by step with a simpler real-world example?";
+      if (sendFollowUpBtn) sendFollowUpBtn.click();
+    }
+  });
+}
 
-document.getElementById("teacherBtn").addEventListener("click", function(){ 
-  const studentQuestion = questionInput.value.trim(); 
-  const explanation = document.getElementById("answerText").innerText.trim(); 
-  const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; 
-  window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
-});
+if (document.getElementById("teacherBtn")) {
+  document.getElementById("teacherBtn").addEventListener("click", function(){ 
+    const studentQuestion = questionInput ? questionInput.value.trim() : ""; 
+    const ansEl = document.getElementById("answerText");
+    const explanation = ansEl ? ansEl.innerText.trim() : ""; 
+    const whatsappMessage = "Hello Invincible 360 Faculty,\n\nI need further help on this concept:\n\nSubject: " + selectedSubject + "\n\nQuestion:\n" + (studentQuestion || "Image attachment") + "\n\nPlatform Solution:\n" + explanation; 
+    window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(whatsappMessage), "_blank"); 
+  });
+}
 
 /* =====================================================
-TEST GENERATOR & TIME ATTACK ENGINE
+   TEST GENERATOR & TIME ATTACK ENGINE
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = ""; let activeTestClass = ""; let activeTestSubject = ""; let finalScoreData = {};
@@ -1432,7 +1519,7 @@ if (whatsappShareBtn) {
 }
 
 /* =====================================================
-ARENA 1v1 LOGIC (ANIMATED, MULTI-TOPIC & DYNAMIC TIMER)
+   ARENA 1v1 LOGIC (ANIMATED, MULTI-TOPIC & DYNAMIC TIMER)
 ===================================================== */
 let arena = { 
   code: null, 
@@ -1451,7 +1538,7 @@ let arena = {
 };
 
 function startBotMatch() {
-    const name = document.getElementById('arenaPlayerName').value.trim() || 'Player 1';
+    const name = document.getElementById('arenaPlayerName')?.value.trim() || 'Player 1';
     const timerSec = parseInt(document.getElementById('arenaTimePerQ')?.value, 10) || 15;
     const qCount = parseInt(document.getElementById('arenaQuestionCount')?.value, 10) || 5;
 
@@ -1472,10 +1559,10 @@ function startBotMatch() {
     ];
 
     arena.questions = samplePool.slice(0, qCount);
-    document.getElementById('uiP1Name').textContent = name;
-    document.getElementById('uiP2Name').textContent = "Invincible AI 🤖";
-    document.getElementById('uiP1Score').textContent = "0";
-    document.getElementById('uiP2Score').textContent = "0";
+    const p1 = document.getElementById('uiP1Name'); if(p1) p1.textContent = name;
+    const p2 = document.getElementById('uiP2Name'); if(p2) p2.textContent = "Invincible AI 🤖";
+    const s1 = document.getElementById('uiP1Score'); if(s1) s1.textContent = "0";
+    const s2 = document.getElementById('uiP2Score'); if(s2) s2.textContent = "0";
     updateClashBar(0, 0);
     startArenaGame();
 }
@@ -1624,8 +1711,11 @@ function loadArenaQuestion() {
     if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE STREAK x' + arena.streak;
     else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
 
-    document.getElementById('arenaQNum').innerHTML = `QUESTION ${arena.currentQ + 1}/${arena.questions.length} <span style="color:var(--accent-amber); font-weight:900;">${streakEmoji}</span>`;
-    document.getElementById('arenaQText').textContent = q.question_text || q.question;
+    const qNumEl = document.getElementById('arenaQNum');
+    if (qNumEl) qNumEl.innerHTML = `QUESTION ${arena.currentQ + 1}/${arena.questions.length} <span style="color:var(--accent-amber); font-weight:900;">${streakEmoji}</span>`;
+    
+    const qTextEl = document.getElementById('arenaQText');
+    if (qTextEl) qTextEl.textContent = q.question_text || q.question;
     
     let optsHTML = '';
     const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
@@ -1633,19 +1723,25 @@ function loadArenaQuestion() {
         const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
         optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(this, ${idx}, ${correctIdx})">${opt}</div>`;
     });
-    document.getElementById('arenaOptions').innerHTML = optsHTML;
+    const optsEl = document.getElementById('arenaOptions');
+    if (optsEl) optsEl.innerHTML = optsHTML;
     
     arena.timer = arena.timeLimit;
     const timerDisplay = document.getElementById('arenaTimerDisplay');
-    timerDisplay.textContent = `⏱ ${arena.timer}s`;
-    timerDisplay.classList.remove('panic');
+    if (timerDisplay) {
+      timerDisplay.textContent = `⏱ ${arena.timer}s`;
+      timerDisplay.classList.remove('panic');
+    }
     
     clearInterval(arena.interval);
     arena.interval = setInterval(() => {
         arena.timer--; 
-        timerDisplay.textContent = `⏱ ${arena.timer}s`;
-        if (arena.timer <= 3) {
-            timerDisplay.classList.add('panic');
+        if (timerDisplay) {
+          timerDisplay.textContent = `⏱ ${arena.timer}s`;
+          if (arena.timer <= 3) {
+              timerDisplay.classList.add('panic');
+              playTick();
+          }
         }
         if (arena.timer <= 0) {
             handleArenaAnswer(null, -1, -1);
@@ -1665,10 +1761,12 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         arena.score += (10 + arena.timer + speedBonus);
 
         if (arena.streak >= 3) {
+          playComboDrop(arena.streak);
           confetti({ particleCount: 25, spread: 35, origin: { y: 0.7 } });
         }
     } else {
         playBuzz();
+        triggerHaptic([90]);
         arena.streak = 0;
         const card = document.getElementById('arenaCardContainer');
         if (card) {
@@ -1679,8 +1777,8 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
 
     if (arena.isBotMatch) {
         if (Math.random() > 0.35) arena.botScore += (10 + Math.floor(Math.random() * 8));
-        document.getElementById('uiP1Score').textContent = arena.score;
-        document.getElementById('uiP2Score').textContent = arena.botScore;
+        const p1s = document.getElementById('uiP1Score'); if (p1s) p1s.textContent = arena.score;
+        const p2s = document.getElementById('uiP2Score'); if (p2s) p2s.textContent = arena.botScore;
         updateClashBar(arena.score, arena.botScore);
     } else {
         fetch('/api/arena', { 
@@ -1701,7 +1799,8 @@ function finishArenaGame() {
     if (arena.isBotMatch) {
         showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible AI", player2_score: arena.botScore });
     } else {
-        document.getElementById('arenaResultText').innerHTML = `<div style="color:var(--accent-cyan); font-weight:800; font-size:18px;">⚡ Match Complete! Awaiting Final Verdict...</div>`;
+        const resText = document.getElementById('arenaResultText');
+        if (resText) resText.innerHTML = `<div style="color:var(--accent-cyan); font-weight:800; font-size:18px;">⚡ Match Complete! Awaiting Final Verdict...</div>`;
         document.getElementById('arenaResult').classList.remove('hidden');
         fetch('/api/arena', { 
             method: 'POST', 
@@ -1718,35 +1817,43 @@ function showArenaResult(room) {
     const myScore = isP1 ? p1 : p2;
     const opScore = isP1 ? p2 : p1;
 
-    document.getElementById('finalP1').textContent = `${p1} PTS`;
-    document.getElementById('finalP2').textContent = `${p2} PTS`;
+    const fp1 = document.getElementById('finalP1'); if (fp1) fp1.textContent = `${p1} PTS`;
+    const fp2 = document.getElementById('finalP2'); if (fp2) fp2.textContent = `${p2} PTS`;
     document.getElementById('arenaResult').classList.remove('hidden');
 
+    const resultTextEl = document.getElementById('arenaResultText');
     if (myScore > opScore) {
         playWin();
-        document.getElementById('arenaResultText').innerHTML = `
-            <div style="font-size:42px; margin-bottom:4px;">👑</div>
-            <div style="font-size:26px; font-weight:900; color:var(--accent-emerald); letter-spacing:1px;">DOMINANT VICTORY</div>
-            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP 🔥</div>
-        `;
+        triggerHaptic([40, 60, 80]);
+        if (resultTextEl) {
+          resultTextEl.innerHTML = `
+              <div style="font-size:42px; margin-bottom:4px;">👑</div>
+              <div style="font-size:26px; font-weight:900; color:var(--accent-emerald); letter-spacing:1px;">DOMINANT VICTORY</div>
+              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP 🔥</div>
+          `;
+        }
         confetti({ particleCount: 140, spread: 80, origin: { y: 0.5 } });
     } else if(myScore === opScore) {
-        document.getElementById('arenaResultText').innerHTML = `
-            <div style="font-size:42px; margin-bottom:4px;">🤝</div>
-            <div style="font-size:24px; font-weight:900; color:var(--accent-amber); letter-spacing:1px;">STALEMATE TIE</div>
-            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Evenly matched gladiators. +50 XP</div>
-        `;
+        if (resultTextEl) {
+          resultTextEl.innerHTML = `
+              <div style="font-size:42px; margin-bottom:4px;">🤝</div>
+              <div style="font-size:24px; font-weight:900; color:var(--accent-amber); letter-spacing:1px;">STALEMATE TIE</div>
+              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Evenly matched gladiators. +50 XP</div>
+          `;
+        }
     } else {
-        document.getElementById('arenaResultText').innerHTML = `
-            <div style="font-size:42px; margin-bottom:4px;">💥</div>
-            <div style="font-size:24px; font-weight:900; color:var(--accent-rose); letter-spacing:1px;">DEFEATED</div>
-            <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Review formulas and seek redemption.</div>
-        `;
+        if (resultTextEl) {
+          resultTextEl.innerHTML = `
+              <div style="font-size:42px; margin-bottom:4px;">💥</div>
+              <div style="font-size:24px; font-weight:900; color:var(--accent-rose); letter-spacing:1px;">DEFEATED</div>
+              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Review formulas and seek redemption.</div>
+          `;
+        }
     }
 }
 
 /* =====================================================
-1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
+   1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
 ===================================================== */
 let localVoiceStream = null;
 let peerVoiceInstance = null;
@@ -2081,10 +2188,10 @@ const pubStoryBtn = document.getElementById('btnPublishStory');
 if (pubStoryBtn) {
   pubStoryBtn.onclick = async () => {
     const name = document.getElementById('storyAuthorName').value.trim();
-    const age = document.getElementById('storyAuthorAge').value.trim();
-    const stuClass = document.getElementById('storyAuthorClass').value.trim();
-    const inst = document.getElementById('storyInstitution').value.trim();
-    const caption = document.getElementById('storyCaption').value.trim();
+    const age = document.getElementById('storyAuthorAge')?.value.trim();
+    const stuClass = document.getElementById('storyAuthorClass')?.value.trim();
+    const inst = document.getElementById('storyInstitution')?.value.trim();
+    const caption = document.getElementById('storyCaption')?.value.trim();
 
     if (!name) return alert("Please enter your Name.");
     
@@ -2124,7 +2231,7 @@ if (pubStoryBtn) {
         if (preview) { preview.style.display = 'none'; preview.style.filter = "none"; preview.src = ""; }
         const placeholder = document.getElementById('storyPlaceholderText');
         if (placeholder) placeholder.style.display = 'block';
-        document.getElementById('storyCaption').value = '';
+        if (document.getElementById('storyCaption')) document.getElementById('storyCaption').value = '';
         
         await loadActiveStories();
         if(typeof playWin === 'function') playWin();
