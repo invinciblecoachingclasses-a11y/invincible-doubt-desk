@@ -1,6 +1,21 @@
 export default async function handler(req, res) {
+    // ============================================================
+    // CORS HEADERS
+    // ============================================================
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
+    }
+
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+        return res.status(200).json({ stories: [], viewers: [] });
+    }
 
     const headers = { 
         'apikey': supabaseKey, 
@@ -9,7 +24,9 @@ export default async function handler(req, res) {
         'Prefer': 'return=representation'
     };
 
-    // 1. GET ACTIVE 24-HOUR STORIES OR STORY VIEWERS
+    // ============================================================
+    // 1. GET: ACTIVE 24-HOUR STORIES OR STORY VIEWERS
+    // ============================================================
     if (req.method === 'GET') {
         const { action, story_id } = req.query;
 
@@ -28,11 +45,14 @@ export default async function handler(req, res) {
             const stories = await response.json();
             return res.status(200).json({ stories: Array.isArray(stories) ? stories : [] });
         } catch (err) {
-            return res.status(500).json({ error: 'Failed to load stories data.' });
+            console.error("Fetch stories error:", err);
+            return res.status(200).json({ stories: [], viewers: [] });
         }
     }
 
-    // 2. CREATE STORY / VOTE / REACT / RECORD VIEW / DELETE
+    // ============================================================
+    // 2. POST: CREATE STORY / VOTE / REACT / RECORD VIEW / DELETE
+    // ============================================================
     if (req.method === 'POST') {
         const { 
             action, 
@@ -51,8 +71,9 @@ export default async function handler(req, res) {
             vote_opt, 
             reaction_type, 
             viewer_name, 
-            viewer_institution 
-        } = req.body;
+            viewer_institution,
+            admin_key
+        } = req.body || {};
 
         try {
             // Action: Record a Story View
@@ -64,45 +85,50 @@ export default async function handler(req, res) {
                     headers,
                     body: JSON.stringify({
                         story_id: Number(story_id),
-                        viewer_name: viewer_name.slice(0, 30),
-                        viewer_institution: (viewer_institution || 'Invincible Student').slice(0, 40)
+                        viewer_name: String(viewer_name).slice(0, 30),
+                        viewer_institution: String(viewer_institution || 'Invincible Student').slice(0, 40)
                     })
-                });
+                }).catch(() => {});
                 return res.status(200).json({ success: true });
             }
 
             // Action: Create Story
             if (action === 'create_story') {
-                if (!author_name || !institution) {
-                    return res.status(400).json({ error: 'Name and School/Coaching are required.' });
+                if (!author_name) {
+                    return res.status(400).json({ error: 'Author Name is required.' });
                 }
 
                 const insertRes = await fetch(`${supabaseUrl}/rest/v1/study_stories`, {
                     method: 'POST',
                     headers,
                     body: JSON.stringify({
-                        author_name: author_name.slice(0, 30),
-                        institution: institution.slice(0, 40),
-                        student_class: student_class || '10',
+                        author_name: String(author_name).slice(0, 30),
+                        institution: String(institution || 'Invincible Coaching').slice(0, 40),
+                        student_class: String(student_class || '10'),
                         media_url: media_url || image_data || null,
-                        caption: (caption || '').slice(0, 300),
-                        sticker_question: sticker_question ? sticker_question.slice(0, 120) : null,
-                        sticker_opt_a: sticker_opt_a ? sticker_opt_a.slice(0, 50) : null,
-                        sticker_opt_b: sticker_opt_b ? sticker_opt_b.slice(0, 50) : null,
+                        caption: String(caption || '').slice(0, 300),
+                        sticker_question: sticker_question ? String(sticker_question).slice(0, 120) : null,
+                        sticker_opt_a: sticker_opt_a ? String(sticker_opt_a).slice(0, 50) : null,
+                        sticker_opt_b: sticker_opt_b ? String(sticker_opt_b).slice(0, 50) : null,
                         sticker_correct_opt: Number(sticker_correct_opt) || 0,
                         streak_count: Number(streak_count) || 1,
-                        is_topper: Number(streak_count) >= 5
+                        is_topper: Number(streak_count) >= 5,
+                        created_at: new Date().toISOString()
                     })
                 });
-                const story = await insertRes.json();
-                return res.status(200).json({ success: true, story: story[0] });
+                
+                const storyData = await insertRes.json();
+                return res.status(200).json({ 
+                    success: true, 
+                    story: Array.isArray(storyData) ? storyData[0] : storyData 
+                });
             }
 
             // Action: Vote on Story Sticker
             if (action === 'vote_sticker') {
                 const fetchS = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, { headers });
                 const curr = await fetchS.json();
-                if (curr && curr.length > 0) {
+                if (Array.isArray(curr) && curr.length > 0) {
                     const updateField = vote_opt === 0 ? 'poll_votes_a' : 'poll_votes_b';
                     const currentVal = curr[0][updateField] || 0;
                     await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
@@ -118,7 +144,7 @@ export default async function handler(req, res) {
             if (action === 'react') {
                 const fetchS = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, { headers });
                 const curr = await fetchS.json();
-                if (curr && curr.length > 0) {
+                if (Array.isArray(curr) && curr.length > 0) {
                     let field = 'reactions_fire';
                     if (reaction_type === 'mind') field = 'reactions_mind';
                     if (reaction_type === '100') field = 'reactions_100';
@@ -136,11 +162,11 @@ export default async function handler(req, res) {
                             headers,
                             body: JSON.stringify({
                                 story_id: Number(story_id),
-                                viewer_name: viewer_name.slice(0, 30),
-                                viewer_institution: (viewer_institution || 'Invincible Student').slice(0, 40),
+                                viewer_name: String(viewer_name).slice(0, 30),
+                                viewer_institution: String(viewer_institution || 'Invincible Student').slice(0, 40),
                                 reaction: reaction_type
                             })
-                        });
+                        }).catch(() => {});
                     }
                 }
                 return res.status(200).json({ success: true });
@@ -148,7 +174,6 @@ export default async function handler(req, res) {
             
             // Action: Delete Story
             if (action === 'delete_story') {
-                const { admin_key } = req.body;
                 const MASTER_ADMIN_PIN = "ADMIN123";
 
                 if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
@@ -169,7 +194,10 @@ export default async function handler(req, res) {
                 return res.status(200).json({ success: true, message: 'Story deleted successfully.' });
             }
 
+            return res.status(400).json({ error: 'Invalid story action.' });
+
         } catch (err) {
+            console.error("Story Action Error:", err);
             return res.status(500).json({ error: 'Server error processing story.' });
         }
     }
