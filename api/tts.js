@@ -4,6 +4,9 @@ import textToSpeech from '@google-cloud/text-to-speech';
 export const maxDuration = 30;
 
 export default async function handler(req, res) {
+  // ============================================================
+  // CORS HEADERS
+  // ============================================================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -12,26 +15,40 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Only POST requests allowed." });
 
   try {
-    const { text, languageCode = "hi-IN", voiceName = "hi-IN-Neural2-A", speakingRate = 1.0 } = req.body || {};
+    const { 
+      text, 
+      languageCode = "hi-IN", 
+      voiceName = "hi-IN-Neural2-A", 
+      speakingRate = 1.05 
+    } = req.body || {};
 
     if (!text || typeof text !== "string") {
       return res.status(400).json({ error: "Text is required to generate speech." });
     }
 
-    // Strip raw HTML tags, LaTeX delimiters, and Markdown formatting for clean reading
+    // Strip raw HTML tags, LaTeX delimiters, Markdown formatting, and emojis for clean audio pronunciation
     const cleanText = text
       .replace(/<[^>]*>/g, " ")
+      .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, " $1 divided by $2 ")
+      .replace(/\\sqrt\{([^}]*)\}/g, " square root of $1 ")
       .replace(/\$\$[\s\S]*?\$\$/g, " formula ")
-      .replace(/\$([^\$]+)\$/g, "$1")
-      .replace(/[*_#`~]/g, "")
+      .replace(/\$([^\$]+)\$/g, " $1 ")
+      .replace(/[*_#`~>]/g, " ")
+      .replace(/[\u{1F300}-\u{1FAFF}]/gu, "") // Strip emoji characters
       .replace(/\s+/g, " ")
       .trim()
-      .slice(0, 4500); // GCP TTS safe character limit per chunk
+      .slice(0, 4500); // Safe character ceiling per GCP TTS chunk
 
     // Authenticate using the GCP_SERVICE_ACCOUNT env var added to Vercel
     let credentials;
     if (process.env.GCP_SERVICE_ACCOUNT) {
-      credentials = JSON.parse(process.env.GCP_SERVICE_ACCOUNT);
+      try {
+        credentials = typeof process.env.GCP_SERVICE_ACCOUNT === "string" 
+          ? JSON.parse(process.env.GCP_SERVICE_ACCOUNT) 
+          : process.env.GCP_SERVICE_ACCOUNT;
+      } catch (parseErr) {
+        console.warn("GCP_SERVICE_ACCOUNT JSON parse warning:", parseErr);
+      }
     }
 
     const client = new textToSpeech.TextToSpeechClient({
@@ -47,13 +64,16 @@ export default async function handler(req, res) {
       },
       audioConfig: {
         audioEncoding: "MP3",
-        speakingRate: Number(speakingRate) || 1.0
+        speakingRate: Math.min(Math.max(Number(speakingRate) || 1.05, 0.75), 1.5)
       }
     };
 
     const [response] = await client.synthesizeSpeech(request);
 
-    // Return the base64-encoded audio directly
+    if (!response || !response.audioContent) {
+      throw new Error("Empty audio stream received from TTS service.");
+    }
+
     const audioContent = response.audioContent.toString("base64");
 
     return res.status(200).json({
@@ -62,6 +82,9 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error("TTS Generation Error:", error);
-    return res.status(500).json({ error: error.message || "Failed to generate speech." });
+    return res.status(500).json({ 
+      success: false, 
+      error: error.message || "Failed to synthesize speech." 
+    });
   }
 }
