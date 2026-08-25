@@ -51,7 +51,7 @@
         <span>⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
     </div>
     <div class="slim-hud-stats">
-        <button type="button" id="lofiToggleBtn" onclick="toggleLofiAudio()" style="background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.25); color:var(--accent-cyan); border-radius:12px; padding:4px 8px; font-size:11px; font-weight:800; display:flex; align-items:center; gap:4px; cursor:pointer;">
+        <button type="button" id="lofiToggleBtn" onclick="toggleLofiAudio()" style="background:rgba(0,229,255,0.06); border:1px solid rgba(0,229,255,0.18); color:var(--accent-cyan); border-radius:12px; padding:4px 10px; font-size:11px; font-weight:800; display:flex; align-items:center; gap:5px; cursor:pointer; backdrop-filter:blur(8px);">
           🎧 <span id="lofiLabel">Sound: Off</span>
         </button>
         <span class="hud-stat-badge">🔥 <span id="streakCounter">2</span>d</span>
@@ -65,29 +65,28 @@
 <div id="homeSection">
 
     <!-- 9:00 PM MEGA BLITZ LIVE COUNTDOWN & WHATSAPP PASS BANNER -->
-    <section class="card" style="background: linear-gradient(135deg, rgba(244,63,94,0.12), rgba(0,229,255,0.08)); border: 1px solid rgba(244,63,94,0.3); padding: 14px 16px; margin-bottom: 14px; border-radius: 16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-rose); box-shadow:0 0 10px var(--accent-rose); animation: pulse 1.5s infinite;"></span>
+    <section style="background: linear-gradient(135deg, rgba(244,63,94,0.08), rgba(0,229,255,0.05)); border: 1px solid rgba(255,255,255,0.06); padding: 18px 20px; margin-bottom: 20px; border-radius: 20px; backdrop-filter: blur(12px);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-rose); box-shadow:0 0 12px var(--accent-rose); animation: pulse 1.5s infinite;"></span>
                 <span id="blitzCountdownTicker" style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:#fff; letter-spacing:0.5px;">⚡ 9:00 PM MEGA BLITZ IN: CALCULATING...</span>
             </div>
-           <button type="button" id="blitzPassBtn" onclick="handleGetBlitzPass()" style="background:var(--accent-amber,#f59e0b); color:#000; font-weight:900; font-size:11px; padding:6px 12px; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
-  <span>📲</span> <span>Get WhatsApp Blitz Pass</span>
-</button>
-
+           <button type="button" id="blitzPassBtn" onclick="handleGetBlitzPass()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#000; font-weight:900; font-size:11px; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 15px rgba(245,158,11,0.25);">
+              <span>📲</span> <span>Get WhatsApp Blitz Pass</span>
+           </button>
         </div>
 
         <!-- TACTICAL POWER-UP LOADOUT TRAY -->
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:12px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
-            <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Tactical Blitz Power-Ups</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
+            <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Tactical Power-Ups</span>
             <div style="display:flex; gap:8px;">
-                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(0,229,255,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:4px;" title="50:50 Lifeline">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:5px;" title="50:50 Lifeline">
                     <span>✂️ 50:50</span> <span id="pupBadge_fiftyFifty" style="background:var(--accent-cyan); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
-                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(245,158,11,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:4px;" title="+3s Time Freeze">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:5px;" title="+3s Time Freeze">
                     <span>❄️ +3s</span> <span id="pupBadge_timeFreeze" style="background:var(--accent-amber); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
-                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(5,255,161,0.25); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:4px;" title="Point Protection Shield">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(5,255,161,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:5px;" title="Point Protection Shield">
                     <span>🛡️ Shield</span> <span id="pupBadge_shield" style="background:var(--accent-emerald); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
             </div>
@@ -95,7 +94,7 @@
     </section>
 
     <!-- DAILY MISSION TRACKER -->
-    <section class="mission-card" aria-label="Daily Progress Tracker">
+    <section class="mission-card" aria-label="Daily Progress Tracker" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; backdrop-filter:blur(12px);">
         <div class="mission-top">
             <span style="font-size:11px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted);">TODAY'S MISSION</span>
             <span style="font-size:11px; font-weight:900; color:var(--accent-cyan);" id="missionCount">3 / 5 COMPLETED</span>
@@ -123,7 +122,7 @@
 
     <!-- DAILY CLASH & LIVE LEADERBOARD BENTO -->
     <div class="bento-grid">
-        <section class="survival-card" id="puzzleBox" style="display:none;" aria-label="Daily Academic Survival Challenge">
+        <section class="survival-card" id="puzzleBox" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);" aria-label="Daily Academic Survival Challenge">
             <div>
                 <div class="survival-top">
                     <span class="clash-badge">🔥 DAILY CLASH // 15s</span>
@@ -142,7 +141,7 @@
         </section>
 
         <!-- LIVE LEADERBOARD -->
-        <section class="clout-card" id="leaderboardBox" style="display:none;" aria-label="Top Performers Leaderboard">
+        <section class="clout-card" id="leaderboardBox" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);" aria-label="Top Performers Leaderboard">
             <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                 <span>🏆 CLOUT LEADERBOARD</span>
                 <span style="font-size:9px; font-weight:900; color:var(--accent-emerald); background:rgba(5,255,161,0.1); padding:2px 6px; border-radius:6px;">LIVE</span>
@@ -187,7 +186,7 @@
 <!-- =====================================================
      1. DOUBT SECTION
 ===================================================== -->
-<section class="card hidden" id="doubtSection" aria-label="Step-by-Step Doubt Solver">
+<section class="card hidden" id="doubtSection" aria-label="Step-by-Step Doubt Solver" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -195,7 +194,7 @@
 
     <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
     
-    <label>Select Subject</label>
+    <label>Pick your subject</label>
     <div class="subjects">
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
         <button type="button" class="subject" data-subject="Physics">Physics</button>
@@ -264,7 +263,7 @@
 <!-- =====================================================
      2. TEST SECTION
 ===================================================== -->
-<section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite">
+<section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -273,7 +272,7 @@
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
     <div id="testSetup">
-        <label>Candidate &amp; Subject Details</label>
+        <label>Tell us your batch &amp; details</label>
         <div>
             <input id="studentName" type="text" placeholder="Full Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number">
@@ -359,7 +358,7 @@
 <!-- =====================================================
      3. ARENA SECTION
 ===================================================== -->
-<section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle">
+<section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -382,7 +381,7 @@
     <audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
 
     <div id="arenaSetup">
-        <label>Your Battle Tag</label>
+        <label>What's your battle tag, legend?</label>
         <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
@@ -493,7 +492,7 @@
 <!-- =====================================================
      4. SCHOOL FEED SECTION
 ===================================================== -->
-<section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes">
+<section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
   <div class="quick-hub-banner" onclick="switchTab('home')">
       <span style="font-size:12px; font-weight:800; color:#22c55e;">← Return to Home Deck</span>
       <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -537,7 +536,7 @@
 <!-- =====================================================
      5. NOTES STUDIO SECTION
 ===================================================== -->
-<section class="card hidden" id="notesSection" aria-label="Topper Notes Studio">
+<section class="card hidden" id="notesSection" aria-label="Topper Notes Studio" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-amber);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
