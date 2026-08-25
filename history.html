@@ -3,132 +3,222 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Teacher Dashboard - DoubtDesk</title>
+  <title>Exam Archive & History | Invincible 360</title>
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    h1, h2, h3, h4, .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
-  <div class="max-w-3xl mx-auto p-4 md:py-8">
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-cyan-500 selection:text-slate-950">
+  <div class="max-w-4xl mx-auto p-4 md:py-8">
     
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h1 class="text-2xl font-black text-slate-900">Teacher Studio</h1>
-        <p id="userEmailDisplay" class="text-xs text-indigo-600 font-medium mt-0.5">Loading account...</p>
+    <!-- Top Navigation HUD -->
+    <header class="flex justify-between items-center mb-6 bg-slate-900/90 border border-slate-800 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-xl">
+      <div class="flex items-center gap-3">
+        <a href="app.html" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 bg-cyan-950/60 border border-cyan-500/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 font-heading">
+          <span>←</span> <span>Home Deck</span>
+        </a>
+        <a href="test-maker.html" class="text-xs font-bold text-slate-300 hover:text-white bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl transition font-heading">
+          📝 Exam Studio
+        </a>
       </div>
-      <button id="logoutBtn" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-3 py-2 rounded-lg transition">
-        Logout
-      </button>
+      <div class="flex items-center gap-3">
+        <span id="userEmailDisplay" class="text-xs text-slate-400 hidden sm:inline-block font-mono bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">
+          Loading...
+        </span>
+        <button id="logoutBtn" class="text-xs text-rose-400 hover:text-rose-300 font-bold px-3 py-1.5 rounded-xl hover:bg-rose-500/10 border border-rose-500/20 transition font-heading">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- App Header -->
+    <div class="mb-6 space-y-1">
+      <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight font-heading">Faculty Exam Archive</h1>
+      <p class="text-xs md:text-sm text-slate-400">Review, re-print, and manage your recent board assessments, question banks, and marking keys.</p>
     </div>
 
     <!-- Quick Action Launchers -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <a href="/test-maker.html" class="p-4 bg-indigo-50 border border-indigo-200 rounded-xl hover:bg-indigo-100 transition flex items-center gap-3">
-        <span class="text-2xl">📝</span>
+      <a href="test-maker.html" class="p-5 bg-gradient-to-br from-slate-900 to-slate-900/90 border border-cyan-500/30 rounded-3xl hover:border-cyan-400/60 shadow-xl transition-all hover:scale-[1.01] flex items-center gap-4 group">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+          📝
+        </div>
         <div>
-          <h3 class="font-bold text-indigo-900 text-sm">Create Exam Paper</h3>
-          <p class="text-xs text-indigo-700 mt-0.5">NCERT, Photos, or Pasted Text</p>
+          <h3 class="font-black text-white text-sm font-heading group-hover:text-cyan-400 transition-colors">Create New Exam Paper</h3>
+          <p class="text-xs text-slate-400 mt-0.5">NCERT Syllabus, Photos, or Pasted Question Bank</p>
         </div>
       </a>
 
-      <a href="/grade-sheet.html" class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition flex items-center gap-3">
-        <span class="text-2xl">📸</span>
+      <a href="grade-sheet.html" class="p-5 bg-gradient-to-br from-slate-900 to-slate-900/90 border border-emerald-500/30 rounded-3xl hover:border-emerald-400/60 shadow-xl transition-all hover:scale-[1.01] flex items-center gap-4 group">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+          📸
+        </div>
         <div>
-          <h3 class="font-bold text-emerald-900 text-sm">Grade Answer Sheet</h3>
-          <p class="text-xs text-emerald-700 mt-0.5">Auto-check student papers</p>
+          <h3 class="font-black text-white text-sm font-heading group-hover:text-emerald-400 transition-colors">Grade Student Sheet</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Auto-check handwritten papers via Vision AI</p>
         </div>
       </a>
     </div>
 
     <!-- 7-Day Retention Notice -->
-    <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3.5 rounded-xl text-xs mb-6 flex items-start gap-2">
-      <span class="text-base">⏳</span>
+    <div class="bg-amber-500/10 border border-amber-500/30 text-amber-200 p-4 rounded-2xl text-xs mb-6 flex items-start gap-3 shadow-lg">
+      <span class="text-xl">⏳</span>
       <div>
-        <strong>7-Day Security Policy:</strong> Generated test papers are retained for 7 days to protect school data. Please print or save your PDF copies before they expire.
+        <strong class="font-bold text-amber-300 font-heading tracking-wide">7-Day Academic Security Retention:</strong>
+        <p class="text-slate-300 mt-0.5 leading-relaxed">Generated exam blueprints and student keys are saved for 7 days. Please make sure to download or print your PDF copies for school records before expiration.</p>
       </div>
     </div>
 
     <!-- Exam History Section -->
-    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-600 mb-3">Your Saved Papers (Last 7 Days)</h2>
-    <div id="loading" class="text-center py-8 text-slate-400 text-xs">Fetching your saved papers...</div>
-    <div id="emptyState" class="hidden text-center py-10 bg-white rounded-2xl border border-slate-200 p-6">
-      <p class="text-2xl mb-1">📄</p>
-      <h3 class="font-bold text-slate-700 text-sm">No exam papers generated yet</h3>
-      <p class="text-xs text-slate-500 mt-1">Create your first test paper using the button above.</p>
+    <div class="space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-cyan-400 font-heading">Saved Papers (Last 7 Days)</h2>
+        <span id="paperCountBadge" class="text-[11px] font-bold text-slate-400 bg-slate-900 px-2.5 py-0.5 rounded-full border border-slate-800">
+          0 Papers
+        </span>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading" class="text-center py-12 text-slate-400 text-xs space-y-2">
+        <div class="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p>Fetching your saved papers from secure vault...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-14 bg-slate-900/60 rounded-3xl border border-slate-800/80 p-6 space-y-3">
+        <div class="w-14 h-14 bg-slate-800/80 border border-slate-700/80 rounded-2xl flex items-center justify-center text-3xl mx-auto">
+          📄
+        </div>
+        <h3 class="font-black text-white text-base font-heading">No exam papers generated yet</h3>
+        <p class="text-xs text-slate-400 max-w-sm mx-auto">You have not created any question papers in the last 7 days. Tap below to create your first assessment.</p>
+        <a href="test-maker.html" class="inline-block mt-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs px-5 py-2.5 rounded-xl shadow-lg font-heading transition active:scale-95">
+          Launch Exam Studio 🚀
+        </a>
+      </div>
+
+      <!-- Exam Cards List Container -->
+      <div id="examList" class="space-y-3"></div>
     </div>
-    <div id="examList" class="space-y-3"></div>
 
   </div>
 
   <script>
-    const supabaseUrl = 'https://cbgwbzidkmcefoithipp.supabase.co';
-    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    const SUPABASE_URL = "https://cbgwbzidkmcefoithipp.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function initDashboard() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session || !session.user) {
-        window.location.href = '/login.html';
-        return;
+    let cachedExams = [];
+
+    async function initDashboard() {
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session || !session.user) {
+          window.location.href = "login.html";
+          return;
+        }
+        const user = session.user;
+
+        document.getElementById('userEmailDisplay').innerText = user.email || 'Teacher Account';
+
+        // Fetch exams generated in the last 7 days
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const { data: exams, error } = await supabaseClient
+          .from('exams')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('created_at', sevenDaysAgo)
+          .order('created_at', { ascending: false });
+
+        document.getElementById('loading').classList.add('hidden');
+
+        if (error || !exams || exams.length === 0) {
+          document.getElementById('emptyState').classList.remove('hidden');
+          document.getElementById('paperCountBadge').innerText = '0 Papers';
+          return;
+        }
+
+        cachedExams = exams;
+        document.getElementById('paperCountBadge').innerText = `${exams.length} Paper${exams.length > 1 ? 's' : ''}`;
+
+        const list = document.getElementById('examList');
+        list.innerHTML = '';
+
+        exams.forEach((item, index) => {
+          const createdDate = new Date(item.created_at);
+          const daysElapsed = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+          const daysLeft = Math.max(7 - daysElapsed, 1);
+
+          const formattedDate = createdDate.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+
+          const card = document.createElement('div');
+          card.className = 'bg-slate-900/90 border border-slate-800 hover:border-slate-700/80 p-4 sm:p-5 rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition';
+          
+          card.innerHTML = `
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <h4 class="font-black text-white text-sm md:text-base font-heading">${item.subject || 'Academic Subject'} ${item.class_grade ? `• ${item.class_grade}` : ''}</h4>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                  ${item.total_marks || 25} Marks
+                </span>
+              </div>
+              <p class="text-xs text-slate-400">${item.school_name || 'School Test'} • Generated on ${formattedDate}</p>
+              <div class="pt-1">
+                <span class="inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  ⏳ Expires in ${daysLeft} day${daysLeft > 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-center">
+              <button onclick="viewExamByIndex(${index})" class="bg-cyan-500 hover:bg-cyan-400 active:scale-95 text-slate-950 text-xs font-black px-4 py-2.5 rounded-xl shadow-lg shadow-cyan-500/20 font-heading transition flex items-center gap-1.5">
+                <span>🖨️</span> <span>View &amp; Print</span>
+              </button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error("Dashboard error:", err);
+        document.getElementById('loading').innerText = 'Could not load archive. Please refresh.';
       }
-      const user = session.user;
-
-      document.getElementById('userEmailDisplay').innerText = `Logged in as: ${user.email}`;
-
-      // Fetch exams from the last 7 days
-      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      const { data: exams, error } = await supabaseClient
-        .from('exams')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('created_at', sevenDaysAgo)
-        .order('created_at', { ascending: false });
-
-      document.getElementById('loading').classList.add('hidden');
-
-      if (error || !exams || exams.length === 0) {
-        document.getElementById('emptyState').classList.remove('hidden');
-        return;
-      }
-
-      const list = document.getElementById('examList');
-      list.innerHTML = '';
-
-      exams.forEach(item => {
-        const createdDate = new Date(item.created_at);
-        const daysLeft = 7 - Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
-
-        const card = document.createElement('div');
-        card.className = 'bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex justify-between items-center';
-        card.innerHTML = `
-          <div>
-            <h4 class="font-bold text-slate-900 text-sm">${item.subject || 'Subject'} - ${item.class_grade || 'Class'}</h4>
-            <p class="text-xs text-slate-500 mt-0.5">${item.school_name || 'Exam'} • ${item.total_marks || 25} Marks</p>
-            <span class="inline-block mt-2 text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
-              Expires in ${daysLeft} day${daysLeft > 1 ? 's' : ''}
-            </span>
-          </div>
-          <button onclick='viewExam(${JSON.stringify(item.exam_data)})' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-2 rounded-lg transition">
-            🖨️ View & Print
-          </button>
-        `;
-        list.appendChild(card);
-      });
     }
 
-
-    function viewExam(examData) {
-      sessionStorage.setItem('currentExam', JSON.stringify(examData));
-      window.location.href = '/test-maker.html';
+    function viewExamByIndex(index) {
+      if (cachedExams[index] && cachedExams[index].exam_data) {
+        sessionStorage.setItem('currentExam', JSON.stringify(cachedExams[index].exam_data));
+        window.location.href = 'test-maker.html';
+      }
     }
 
     document.getElementById('logoutBtn').addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = '/login.html';
+      try {
+        await supabaseClient.auth.signOut();
+      } catch(e) {}
+      window.location.href = 'login.html';
     });
 
     initDashboard();
   </script>
 </body>
 </html>
-
