@@ -1,7 +1,10 @@
 // api/generate-notes.js
-export const maxDuration = 60; // Tells Vercel to allow maximum time for generation
+export const maxDuration = 60; // Allows Vercel full timeout window for 10-12 page compiling
 
 export default async function handler(req, res) {
+  // ============================================================
+  // CORS HEADERS
+  // ============================================================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -9,23 +12,39 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "Only POST requests are allowed." });
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "GEMINI_API_KEY is missing." });
+  const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
+  if (!rawGeminiKeys) return res.status(500).json({ error: "GEMINI_API_KEY is missing." });
+
+  const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
 
   const { className, subject, chapter } = req.body || {};
   if (!chapter) return res.status(400).json({ error: "Please enter a chapter name." });
 
   const cls = String(className || "10").replace(/[^0-9]/g, '') || "10";
   const sub = subject || "Science";
-  const MODEL = "gemini-3.6-flash"; // Reliable, fast endpoint with large context window
+
+  // Multi-model resilience hierarchy for large-context compiling
+  const MODELS = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-8b"
+  ];
 
   // Custom Subject Logic
   let subjectStyle = "";
-  if (sub.toLowerCase() === "physics") subjectStyle = "Focus on physical meaning, derivations, graphs, free-body diagrams, units, and logical reasoning behind formulas.";
-  else if (sub.toLowerCase() === "chemistry") subjectStyle = "Focus on chemical reactions, structures, mechanisms, periodic trends, standard conditions, and exceptions.";
-  else if (sub.toLowerCase() === "mathematics") subjectStyle = "Focus on generalized formulas, conditions of applicability, distinct solving methods, step-by-step solutions, and identifying question patterns.";
-  else if (sub.toLowerCase() === "biology") subjectStyle = "Focus strictly on NCERT terminology, processes, flowcharts, structural comparisons, and logical functions.";
-  else subjectStyle = "Focus on clear concepts, standard definitions, and logical reasoning.";
+  const subLower = sub.toLowerCase();
+  if (subLower === "physics") {
+    subjectStyle = "Focus on physical meaning, derivations, graphs, free-body diagrams, units, and logical reasoning behind formulas.";
+  } else if (subLower === "chemistry") {
+    subjectStyle = "Focus on chemical reactions, structures, mechanisms, periodic trends, standard conditions, and exceptions.";
+  } else if (subLower === "mathematics") {
+    subjectStyle = "Focus on generalized formulas, conditions of applicability, distinct solving methods, step-by-step solutions, and identifying question patterns.";
+  } else if (subLower === "biology") {
+    subjectStyle = "Focus strictly on NCERT terminology, processes, flowcharts, structural comparisons, and logical functions.";
+  } else {
+    subjectStyle = "Focus on clear concepts, standard definitions, and logical reasoning.";
+  }
 
   const lengthInstruction = (cls === "9" || cls === "10") 
     ? "Generate highly extensive content equivalent to exactly 10 pages in print." 
@@ -77,28 +96,53 @@ Include:
 Make the HTML clean, professional, and dense with high-value academic knowledge.
 `;
 
-  try {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: masterPrompt }] }],
-        generationConfig: { 
-          temperature: 0.2,
-          maxOutputTokens: 8192
+  let generatedText = null;
+  let errorLog = [];
+
+  keyLoop: for (const key of geminiKeys) {
+    for (const model of MODELS) {
+      try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: masterPrompt }] }],
+            generationConfig: { 
+              temperature: 0.25,
+              maxOutputTokens: 8192
+            }
+          })
+        });
+
+        const data = await response.json();
+        if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+          generatedText = data.candidates[0].content.parts[0].text;
+          break keyLoop;
+        } else {
+          errorLog.push(`Gemini [${model}]: ${data?.error?.message || response.statusText}`);
         }
-      })
-    });
-
-    const data = await response.json();
-    if (!response.ok) return res.status(response.status).json({ error: data?.error?.message || "Generation failed." });
-
-    let generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    generatedText = generatedText.replace(/^```html\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
-
-    return res.status(200).json({ success: true, notes: generatedText });
-  } catch (error) {
-    return res.status(500).json({ error: "Server error: " + error.message });
+      } catch (err) {
+        errorLog.push(`Gemini [${model}]: ${err.message}`);
+      }
+    }
   }
+
+  if (!generatedText) {
+    return res.status(500).json({ 
+      error: `Failed to compile module: ${errorLog.slice(0, 2).join(" | ")}` 
+    });
+  }
+
+  // Strip Markdown code fencing if present
+  generatedText = generatedText
+    .replace(/^```html\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  return res.status(200).json({ 
+    success: true, 
+    notes: generatedText 
+  });
 }
