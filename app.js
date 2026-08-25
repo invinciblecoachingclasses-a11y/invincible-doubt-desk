@@ -522,7 +522,8 @@ function sendReelToDoubtSolver(questionText, subject) {
 /* =====================================================
    WHATSAPP 9:00 PM MEGA BLITZ PASS GENERATOR & MODAL
 ===================================================== */
-function handleGetBlitzPass() {
+window.handleGetBlitzPass = function() {
+
   const nameInput = document.getElementById('studentName')?.value?.trim();
   const studentName = nameInput || localStorage.getItem('studentName') || localStorage.getItem('student_name') || 'Champion';
   const passId = 'BLITZ-' + Math.floor(100000 + Math.random() * 900000);
@@ -552,7 +553,8 @@ function handleGetBlitzPass() {
   renderBlitzPassModal(studentName, passId);
 }
 
-function renderBlitzPassModal(name, passId) {
+window.renderBlitzPassModal = function(name, passId) {
+
   const existing = document.getElementById('blitzPassModal');
   if (existing) existing.remove();
 
