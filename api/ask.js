@@ -1,7 +1,14 @@
+// api/ask.js
+export const maxDuration = 45;
+
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  // CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") return res.status(200).end();
+  if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
     const { subject, question, image, tone, history } = req.body || {};
@@ -62,12 +69,12 @@ STRICT INSTRUCTIONS:
     const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
-      // Resilient model hierarchy for maximum speed and free-tier quota uptime
+      
+      // Updated model list: gemini-3.6-flash is primary
       const geminiModels = [
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
+        "gemini-3.6-flash",
         "gemini-1.5-flash",
-        "gemini-1.5-flash-8b"
+        "gemini-1.5-pro"
       ];
 
       keyLoop: for (const apiKey of geminiKeys) {
@@ -81,7 +88,7 @@ STRICT INSTRUCTIONS:
                 body: JSON.stringify({
                   contents: [{ parts: geminiParts }],
                   generationConfig: {
-                    temperature: 0.4,
+                    temperature: 0.3,
                     maxOutputTokens: 2048
                   }
                 })
