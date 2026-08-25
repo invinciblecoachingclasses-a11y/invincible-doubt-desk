@@ -1,4 +1,17 @@
+// api/auth.js
+
 export default async function handler(req, res) {
+  // ============================================================
+  // CORS HEADERS
+  // ============================================================
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -9,9 +22,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
-  // Active Supabase credentials matching test-maker.html
-  const SUPABASE_URL = "https://cbgwbzidkmcefoithipp.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g";
+  // Active Supabase credentials with environment fallback
+  const SUPABASE_URL = process.env.SUPABASE_URL || "https://cbgwbzidkmcefoithipp.supabase.co";
+  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g";
 
   const endpoint = action === 'signup' 
     ? `${SUPABASE_URL}/auth/v1/signup` 
@@ -26,8 +39,8 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       },
       body: JSON.stringify({
-        email: email.trim().toLowerCase(),
-        password: password.trim()
+        email: String(email).trim().toLowerCase(),
+        password: String(password).trim()
       })
     });
 
@@ -35,11 +48,12 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errMsg = data.msg || data.error_description || data.message || 'Authentication failed';
-      return res.status(400).json({ error: errMsg });
+      return res.status(response.status || 400).json({ error: errMsg });
     }
 
     return res.status(200).json({ success: true, session: data });
   } catch (err) {
+    console.error("Auth server error:", err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
 }
