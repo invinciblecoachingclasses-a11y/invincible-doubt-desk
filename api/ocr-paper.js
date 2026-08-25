@@ -1,12 +1,31 @@
+// api/ocr-paper.js
+export const maxDuration = 60; // Allows Vercel full timeout window for multi-image OCR extraction
+
 export default async function handler(req, res) {
+  // ============================================================
+  // CORS HEADERS
+  // ============================================================
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ success: false, error: "GEMINI_API_KEY is not set in Vercel Environment Variables." });
+  const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
+  if (!rawGeminiKeys) {
+    return res.status(500).json({ 
+      success: false, 
+      error: "GEMINI_API_KEY is not configured in environment variables." 
+    });
   }
+
+  const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
 
   try {
     const { 
@@ -28,10 +47,10 @@ export default async function handler(req, res) {
       includeAssertionReason,
       includeCaseStudy,
       isBilingual
-    } = req.body;
+    } = req.body || {};
 
     const systemPrompt = `
-You are an expert school examination setter for Indian schools (CBSE / NCERT / ICSE / State Boards).
+You are an expert school examination setter and board evaluator for Indian schools (CBSE / NCERT / ICSE / State Boards).
 
 EXAM SPECIFICATIONS:
 - School / Institute: ${schoolName || "Academic Institution"}
@@ -50,16 +69,17 @@ EXAM SPECIFICATIONS:
 - Bilingual (English + Hindi): ${isBilingual ? "YES" : "NO"}
 
 INSTRUCTIONS:
-1. Generate an authentic school question paper perfectly matching the Indian board format.
-2. Sum of marks across all questions MUST equal exactly ${totalMarks || 25}.
-3. Structure sections strictly:
+1. Generate an authentic school question paper perfectly matching the official Indian board format.
+2. The sum of marks across all questions MUST equal exactly ${totalMarks || 25}.
+3. Structure sections logically:
    - Section A: MCQs (1 Mark each, with options A, B, C, D) and/or Assertion-Reason.
    - Section B: Very Short Answer (2 Marks).
    - Section C: Short Answer (3 Marks).
    - Section D: Long Answer (5 Marks) / Case-Based Integrated Study (4-5 Marks).
 4. Provide comprehensive, step-by-step marking keys for each question. For MCQs, state the correct option letter + explanation.
+5. Use standard LaTeX notation ($ for inline math, $$ for display equations) where formulas or chemical equations are needed.
 
-Respond ONLY with valid, raw JSON (NO markdown backticks, NO markdown formatting):
+Respond ONLY with valid, raw JSON matching this schema:
 {
   "school_name": "${schoolName || "Academic Institution"}",
   "title": "${examType || "Periodic Assessment"}",
@@ -82,7 +102,7 @@ Respond ONLY with valid, raw JSON (NO markdown backticks, NO markdown formatting
       "questions": [
         {
           "question_number": 1,
-          "question_text": "Sample MCQ question text",
+          "question_text": "Question text here",
           "options": ["(A) Option 1", "(B) Option 2", "(C) Option 3", "(D) Option 4"],
           "marks": 1,
           "answer_key": "(B) Option 2 - Step-by-step explanation or rationale."
@@ -93,47 +113,87 @@ Respond ONLY with valid, raw JSON (NO markdown backticks, NO markdown formatting
 }
 `;
 
-    let parts = [{ text: systemPrompt }];
+    const parts = [{ text: systemPrompt }];
 
-    if (inputType === 'text' || inputType === 'ncert') {
-      parts.push({ text: `Detailed Curriculum / Source Input:\n${chapterName || rawText}` });
+    if (inputType === 'text' || inputType === 'ncert' || rawText || chapterName) {
+      parts.push({ text: `Detailed Curriculum / Source Input:\n${chapterName || rawText || "Standard Board Syllabus"}` });
     }
 
-    if (imageBase64Array && imageBase64Array.length > 0) {
+    if (imageBase64Array && Array.isArray(imageBase64Array) && imageBase64Array.length > 0) {
       imageBase64Array.forEach((b64) => {
-        parts.push({
-          inline_data: {
-            mime_type: "image/jpeg",
-            data: b64.replace(/^data:image\/\w+;base64,/, "")
-          }
-        });
+        if (b64) {
+          parts.push({
+            inlineData: {
+              mimeType: "image/jpeg",
+              data: String(b64).replace(/^data:image\/\w+;base64,/, "")
+            }
+          });
+        }
       });
     }
 
-    // Direct REST call using Gemini 3.6 Flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
-    
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts }]
-      })
-    });
+    // Multi-model resilience hierarchy
+    const MODELS = [
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-1.5-flash-8b"
+    ];
 
-    const data = await response.json();
+    let examData = null;
+    let errorLog = [];
 
-    if (!response.ok) {
-      throw new Error(data.error?.message || JSON.stringify(data));
+    keyLoop: for (const key of geminiKeys) {
+      for (const model of MODELS) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+          
+          const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ role: "user", parts }],
+              generationConfig: {
+                responseMimeType: "application/json",
+                temperature: 0.2
+              }
+            })
+          });
+
+          const data = await response.json();
+          if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
+            const rawOutput = data.candidates[0].content.parts[0].text;
+            const cleanJson = rawOutput
+              .replace(/^```json\s*/i, "")
+              .replace(/^```\s*/i, "")
+              .replace(/\s*```$/i, "")
+              .trim();
+            
+            examData = JSON.parse(cleanJson);
+            break keyLoop;
+          } else {
+            errorLog.push(`Gemini [${model}]: ${data?.error?.message || response.statusText}`);
+          }
+        } catch (err) {
+          errorLog.push(`Gemini [${model}]: ${err.message}`);
+        }
+      }
     }
 
-    const rawOutput = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    const cleanJson = rawOutput.replace(/```json/g, "").replace(/```/g, "").trim();
-    const examData = JSON.parse(cleanJson);
+    if (!examData) {
+      return res.status(500).json({ 
+        success: false, 
+        error: `OCR Question Paper generation failed: ${errorLog.slice(0, 2).join(" | ")}` 
+      });
+    }
 
-    return res.status(200).json({ success: true, exam: examData });
+    return res.status(200).json({ 
+      success: true, 
+      exam: examData 
+    });
+
   } catch (error) {
-    console.error("OCR Paper Error:", error);
-    return res.status(500).json({ success: false, error: error.message });
+    console.error("OCR Paper Fatal Error:", error);
+    return res.status(500).json({ success: false, error: error.message || "Server error processing question paper." });
   }
 }
