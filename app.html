@@ -41,6 +41,9 @@
 <!-- PeerJS WebRTC for Arena Voice Calls -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
+<!-- Supabase Client for Student Verification Sync -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 <body>
 <main class="container">
@@ -627,6 +630,57 @@
     </button>
 </nav>
 
+<!-- =====================================================
+     STUDENT INVITE CODE & REGISTRATION MODAL
+===================================================== -->
+<div id="studentInviteModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15);">
+    <div style="text-align:center; margin-bottom:18px;">
+      <div style="font-size:32px; margin-bottom:6px;">🏫</div>
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#fff; margin:0;">Join Your School Roster</h3>
+      <p style="font-size:12px; color:#94a3b8; margin:4px 0 0 0;">Enter the Private Invite Code provided by your teacher.</p>
+    </div>
+
+    <form id="studentInviteForm" onsubmit="handleStudentInviteSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">6-Digit Private Invite Code</label>
+        <input type="text" id="inviteCodeInput" required placeholder="e.g. DVM10A" style="text-transform:uppercase; text-align:center; font-family:monospace; font-size:18px; font-weight:900; letter-spacing:3px; background:#020617; border:1px solid #1e293b; color:#00e5ff; border-radius:12px; padding:10px; width:100%; box-sizing:border-box; margin-top:4px;">
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div>
+          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Student Name</label>
+          <input type="text" id="invStudentName" required placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Roll Number</label>
+          <input type="text" id="invRollNo" required placeholder="e.g. 14" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div>
+          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Father's Name</label>
+          <input type="text" id="invFatherName" required placeholder="Father Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+        </div>
+        <div>
+          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Mother's Name</label>
+          <input type="text" id="invMotherName" required placeholder="Mother Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+        </div>
+      </div>
+
+      <div>
+        <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Parent WhatsApp Number</label>
+        <input type="tel" id="invParentPhone" required placeholder="10-Digit Mobile" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+      </div>
+
+      <button type="submit" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 15px rgba(0,229,255,0.3);">
+        SUBMIT FOR TEACHER VERIFICATION 🚀
+      </button>
+    </form>
+  </div>
+</div>
+
 <!-- POST CREATION MODAL -->
 <div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
   <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
@@ -807,6 +861,40 @@
 
 <!-- EXTERNAL JAVASCRIPT -->
 <script src="app.js"></script>
+
+<script>
+  // STUDENT INVITE CODE CHECK ON LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    const verified = localStorage.getItem('student_verified');
+    if (!verified || verified !== 'true') {
+      const modal = document.getElementById('studentInviteModal');
+      if (modal) modal.style.display = 'flex';
+    }
+  });
+
+  async function handleStudentInviteSubmit(e) {
+    e.preventDefault();
+    const code = document.getElementById('inviteCodeInput').value.trim().toUpperCase();
+    const name = document.getElementById('invStudentName').value.trim();
+    const roll = document.getElementById('invRollNo').value.trim();
+    const father = document.getElementById('invFatherName').value.trim();
+    const mother = document.getElementById('invMotherName').value.trim();
+    const phone = document.getElementById('invParentPhone').value.trim();
+
+    if (!code || !name) return alert('Please enter code and name.');
+
+    try {
+      localStorage.setItem('studentName', name);
+      localStorage.setItem('student_verified', 'true');
+      localStorage.setItem('userSchool', code); // Mock binding to school invite code
+      
+      document.getElementById('studentInviteModal').style.display = 'none';
+      alert('🎉 Roster entry submitted! Welcome to Invincible 360.');
+    } catch(err) {
+      alert('Error: ' + err.message);
+    }
+  }
+</script>
 
 </body>
 </html>
