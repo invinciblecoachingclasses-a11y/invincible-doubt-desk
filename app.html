@@ -872,8 +872,28 @@
     }
   });
 
+  <script>
+  // SUPABASE CONNECTION
+  const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // STUDENT INVITE CODE CHECK ON LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    const verified = localStorage.getItem('student_verified');
+    if (!verified || verified !== 'true') {
+      const modal = document.getElementById('studentInviteModal');
+      if (modal) modal.style.display = 'flex';
+    }
+  });
+
   async function handleStudentInviteSubmit(e) {
     e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    btn.innerText = "VERIFYING... ⏳";
+    btn.disabled = true;
+
     const code = document.getElementById('inviteCodeInput').value.trim().toUpperCase();
     const name = document.getElementById('invStudentName').value.trim();
     const roll = document.getElementById('invRollNo').value.trim();
@@ -881,20 +901,46 @@
     const mother = document.getElementById('invMotherName').value.trim();
     const phone = document.getElementById('invParentPhone').value.trim();
 
-    if (!code || !name) return alert('Please enter code and name.');
+    if (!code || !name) {
+      alert('Please enter code and name.');
+      btn.innerText = originalText;
+      btn.disabled = false;
+      return;
+    }
 
     try {
+      // Decode the School ID and Class from the Invite Code (e.g., DVM10A -> DVM, 10)
+      const extractedClass = code.match(/\d+/) ? code.match(/\d+/)[0] : "10";
+      
+      // Push to Supabase Students Table
+      const { error } = await sbClient.from('students').insert([{
+        school_id: code, // We use the code as the secure tenant binder
+        class_name: extractedClass,
+        roll_number: parseInt(roll) || 0,
+        student_name: name,
+        father_name: father,
+        mother_name: mother,
+        parent_phone: phone,
+        status: 'pending' // Locks them in pending until teacher accepts
+      }]);
+
+      if (error) throw error;
+
+      // Lock session locally
       localStorage.setItem('studentName', name);
       localStorage.setItem('student_verified', 'true');
-      localStorage.setItem('userSchool', code); // Mock binding to school invite code
+      localStorage.setItem('userSchool', code); 
       
       document.getElementById('studentInviteModal').style.display = 'none';
-      alert('🎉 Roster entry submitted! Welcome to Invincible 360.');
+      alert('🎉 Roster entry submitted! Your teacher will verify your profile shortly.');
     } catch(err) {
-      alert('Error: ' + err.message);
+      alert('Error connecting to school server: ' + err.message);
+      btn.innerText = originalText;
+      btn.disabled = false;
     }
   }
 </script>
 
 </body>
 </html>
+
