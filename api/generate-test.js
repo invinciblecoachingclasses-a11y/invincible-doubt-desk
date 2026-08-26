@@ -1,7 +1,5 @@
 export default async function handler(req, res) {
-  // ============================================================
   // CORS HEADERS
-  // ============================================================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -17,9 +15,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // ============================================================
   // ENVIRONMENT KEYS
-  // ============================================================
   const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -29,19 +25,14 @@ export default async function handler(req, res) {
     : [];
 
   try {
-    // ==========================================================
-    // EXTRACT USER SETTINGS & MULTI-TENANT CONTEXT
-    // ==========================================================
     const body = req.body || {};
     const className = body.class || body.className || "Class 10";
-    const subject = body.subject || "Science";
+    const subject = body.subject || "Physics";
     const chapter = body.chapter || "Full Syllabus Overview";
     const requestedCount = Number(body.count || body.numberOfQuestions || 20);
     const difficulty = body.difficulty || "Moderate";
     const language = body.language || "English and Pure Devanagari Hindi";
     const questionType = body.questionType || body.type || "MCQ";
-    
-    // NEW: Multi-Tenant Identifiers
     const organization = body.organization || body.school_id || "Indian Academic Institution";
 
     const questionCount = Math.min(
@@ -49,9 +40,6 @@ export default async function handler(req, res) {
       50
     );
 
-    // ==========================================================
-    // STRUCTURED JSON SCHEMA
-    // ==========================================================
     const responseSchema = {
       type: "OBJECT",
       properties: {
@@ -75,35 +63,30 @@ export default async function handler(req, res) {
       required: ["questions"]
     };
 
-    // ==========================================================
-    // PROMPT (Now School-Aware)
-    // ==========================================================
+    // STRICT TOPIC-FENCED PROMPT
     const prompt = `
-You are an expert Indian CBSE school teacher creating a board-level question paper for ${organization}.
+You are an expert Indian CBSE school examiner creating a STRICT, BOARD-LEVEL test paper.
 
-Generate a practice assessment using the following settings:
-CLASS: ${className}
-SUBJECT: ${subject}
-CHAPTER / TOPIC: ${chapter}
-NUMBER OF QUESTIONS: ${questionCount}
-DIFFICULTY: ${difficulty}
-LANGUAGE: ${language}
-QUESTION TYPE: ${questionType}
+TARGET PARAMETERS:
+- CLASS: ${className}
+- STRICT SUBJECT: ${subject}
+- SPECIFIC CHAPTER / TOPIC: ${chapter}
+- NUMBER OF QUESTIONS: ${questionCount}
+- DIFFICULTY: ${difficulty}
+- LANGUAGE: ${language}
+- QUESTION TYPE: ${questionType}
 
-STRICT INSTRUCTIONS:
-1. Generate EXACTLY ${questionCount} high-yield questions suitable for ${className} CBSE syllabus.
-2. Questions must test conceptual understanding, NCERT core rules, and examiner traps.
-3. For MCQs:
-   - Exactly 4 options per question.
-   - Exactly one correct option.
-   - correctAnswer must be 0, 1, 2, or 3 (0=first, 1=second, 2=third, 3=fourth).
-4. Provide a 1-line educational explanation for every answer.
-5. If bilingual language is selected, provide the stem and options in English followed by Hindi translation.
-6. Use standard LaTeX math ($ or $$) for all formulas, equations, and superscripts.
-7. Return strictly valid JSON adhering to the specified schema.
+CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
+1. ONLY generate questions strictly from the domain of "${subject}" and the chapter "${chapter}".
+2. IF SUBJECT IS "Physics", DO NOT include any Chemistry (acids, bases, reactions, periodic table) or Biology (plants, human body, reproduction, cells).
+3. IF SUBJECT IS "Chemistry", DO NOT include Physics kinematics, ray optics, electricity, or Biology.
+4. IF SUBJECT IS "Mathematics", ONLY provide pure mathematical equations, geometry, trigonometry, arithmetic, or calculus.
+5. Every question must have EXACTLY 4 options.
+6. Randomize the correct answer index across 0, 1, 2, and 3. DO NOT place all correct answers at index 0 or 1.
+7. Use standard LaTeX math ($ or $$) for numerical formulas, fractions, and superscripts.
+8. Return strictly valid JSON matching the schema.
 `;
 
-    // Resilient model hierarchy for maximum speed and quota resilience
     const MODELS = [
       "gemini-2.5-flash",
       "gemini-2.0-flash",
@@ -114,9 +97,6 @@ STRICT INSTRUCTIONS:
     let validQuestions = [];
     let usedModel = "database-fallback";
 
-    // ==========================================================
-    // ATTEMPT GEMINI GENERATION
-    // ==========================================================
     if (apiKeyList.length > 0) {
       keyLoop: for (const key of apiKeyList) {
         for (const model of MODELS) {
@@ -131,7 +111,7 @@ STRICT INSTRUCTIONS:
                 generationConfig: {
                   responseMimeType: "application/json",
                   responseSchema: responseSchema,
-                  temperature: 0.3
+                  temperature: 0.4
                 }
               })
             });
@@ -154,21 +134,20 @@ STRICT INSTRUCTIONS:
                 ? q.options.map(opt => typeof opt === "string" ? opt.trim() : "").filter(Boolean)
                 : [];
 
-              let correctAnswer = q.correctAnswer;
-              if (typeof correctAnswer === "string") {
-                const upper = correctAnswer.trim().toUpperCase();
-                if (["A", "B", "C", "D"].includes(upper)) {
-                  correctAnswer = "ABCD".indexOf(upper);
-                } else if (/^[0-3]$/.test(upper)) {
-                  correctAnswer = Number(upper);
-                }
-              }
+              let correctAnswer = Number(q.correctAnswer);
 
               if (options.length === 4 && Number.isInteger(correctAnswer) && correctAnswer >= 0 && correctAnswer <= 3 && question) {
+                // Ensure options are shuffled server-side to guarantee non-deterministic placement
+                const indexed = options.map((opt, i) => ({ opt, isCorrect: i === correctAnswer }));
+                for (let i = indexed.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
+                }
+
                 validQuestions.push({
                   question,
-                  options,
-                  correctAnswer,
+                  options: indexed.map(item => item.opt),
+                  correctAnswer: indexed.findIndex(item => item.isCorrect),
                   explanation
                 });
               }
@@ -185,80 +164,65 @@ STRICT INSTRUCTIONS:
       }
     }
 
-    // ==========================================================
-    // ZERO-FAILURE BACKUP POOL (Filtered by School if available)
-    // ==========================================================
-    if (validQuestions.length === 0 && supabaseUrl && supabaseKey) {
-      try {
-        const cleanClass = className.replace(/[^0-9]/g, "") || "10";
-        // Attempt to fetch school-specific backup questions first
-        let qUrl = `${supabaseUrl}/rest/v1/weekly_tests?class_name=eq.${cleanClass}&select=*&limit=50`;
-        if (organization !== "Indian Academic Institution" && organization !== "ALL") {
-             qUrl += `&school_id=eq.${encodeURIComponent(organization)}`;
-        }
-        
-        const qRes = await fetch(qUrl, {
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`
-          }
-        });
-        const dbList = await qRes.json();
-        
-        if (Array.isArray(dbList) && dbList.length > 0) {
-          validQuestions = dbList
-            .sort(() => 0.5 - Math.random())
-            .map(item => {
-              const opts = Array.isArray(item.options) ? item.options : [item.option_1, item.option_2, item.option_3, item.option_4].filter(Boolean);
-              return {
-                question: item.question || item.question_text || "CBSE Chapter Assessment",
-                options: opts.length === 4 ? opts : ["Option A", "Option B", "Option C", "Option D"],
-                correctAnswer: Number.isInteger(item.correct_option) ? item.correct_option : 0,
-                explanation: item.explanation || "Review fundamental laws and concepts."
-              };
-            });
-        }
-      } catch (dbErr) {
-        console.error("Supabase test fallback error:", dbErr);
-      }
-    }
-
-    // Static Procedural Fallback Pool 
+    // SUBJECT-AWARE EMERGENCY FALLBACK (Prevents Chemistry showing up in Physics)
     if (validQuestions.length === 0) {
-      const emergencyPool = [
-        {
-          question: "What is the SI unit of electric potential difference? / विद्युत विभवान्तर का SI मात्रक क्या है?",
-          options: ["Volt (V)", "Ampere (A)", "Ohm (Ω)", "Coulomb (C)"],
-          correctAnswer: 0,
-          explanation: "Potential difference is work done per unit charge (V = W/Q), measured in Volts."
-        },
-        {
-          question: "When light travels from an optically denser to a rarer medium, it bends: / जब प्रकाश सघन से विरल माध्यम में प्रवेश करता है, तो यह झुकता है:",
-          options: ["Towards the normal", "Away from the normal", "Without deviation", "Reflects completely at all angles"],
-          correctAnswer: 1,
-          explanation: "Speed of light increases in a rarer medium, causing the refracted ray to bend away from the normal."
-        },
-        {
-          question: "Which of the following compounds is the main constituent of baking powder? / बेकिंग पाउडर का मुख्य घटक कौन सा है?",
-          options: ["Sodium carbonate (Na₂CO₃)", "Sodium hydrogen carbonate (NaHCO₃)", "Calcium oxychloride (CaOCl₂)", "Sodium hydroxide (NaOH)"],
-          correctAnswer: 1,
-          explanation: "Baking powder is a mixture of Sodium Hydrogen Carbonate (NaHCO₃) and a mild edible acid like tartaric acid."
-        },
-        {
-          question: "The focal length of a spherical mirror of radius of curvature 30 cm is: / 30 सेमी वक्रता त्रिज्या वाले गोलीय दर्पण की फोकस दूरी होगी:",
-          options: ["30 cm", "15 cm", "60 cm", "10 cm"],
-          correctAnswer: 1,
-          explanation: "Focal length f = R/2 = 30/2 = 15 cm."
-        },
-        {
-          question: "In human males, the testes lie outside the abdominal cavity in the scrotum because: / मानव नर में वृषण उदर गुहा के बाहर वृषण कोष में होते हैं क्योंकि:",
-          options: ["It provides protection", "Sperm formation requires 2-2.5°C lower temperature than body", "It facilitates urine flow", "It stores extra hormones"],
-          correctAnswer: 1,
-          explanation: "Spermatogenesis requires a temperature 2 to 2.5°C lower than normal internal human body temperature."
-        }
-      ];
+      const subjectLower = subject.toLowerCase();
+      
+      let fallbackPool = [];
+      if (subjectLower.includes("physic") || chapter.toLowerCase().includes("light") || chapter.toLowerCase().includes("motion")) {
+        fallbackPool = [
+          {
+            question: "When light travels from an optically denser to a rarer medium, it bends: / जब प्रकाश सघन से विरल माध्यम में प्रवेश करता है, तो यह झुकता है:",
+            options: ["Away from the normal", "Towards the normal", "Without deviation", "Reflects back along incident path"],
+            correctAnswer: 0,
+            explanation: "Speed of light increases in rarer mediums, causing the ray to bend away from the normal."
+          },
+          {
+            question: "The focal length of a convex mirror having radius of curvature 40 cm is: / 40 सेमी वक्रता त्रिज्या वाले उत्तल दर्पण की फोकस दूरी है:",
+            options: ["-20 cm", "+20 cm", "+40 cm", "-40 cm"],
+            correctAnswer: 1,
+            explanation: "f = +R/2 = +40/2 = +20 cm (convex mirror focal length is always positive)."
+          },
+          {
+            question: "What is the SI unit of electric potential difference? / विद्युत विभवान्तर का SI मात्रक क्या है?",
+            options: ["Ampere (A)", "Ohm (Ω)", "Volt (V)", "Coulomb (C)"],
+            correctAnswer: 2,
+            explanation: "Electric potential difference V = Work / Charge (Joules / Coulomb = Volt)."
+          },
+          {
+            question: "The resistance of a wire is directly proportional to its: / किसी तार का प्रतिरोध किसके सीधे समानुपाती होता है?",
+            options: ["Area of cross-section", "Diameter", "Temperature coefficient only", "Length (l)"],
+            correctAnswer: 3,
+            explanation: "R = ρ(L / A), so resistance is directly proportional to length."
+          }
+        ];
+      } else if (subjectLower.includes("chem")) {
+        fallbackPool = [
+          {
+            question: "Which of the following acids is present in lemons? / नींबू में कौन सा अम्ल उपस्थित होता है?",
+            options: ["Citric acid", "Acetic acid", "Tartaric acid", "Oxalic acid"],
+            correctAnswer: 0,
+            explanation: "Citrus fruits like lemons and oranges contain citric acid."
+          },
+          {
+            question: "What type of reaction occurs when iron rusts? / लोहे पर जंग लगना किस प्रकार की अभिक्रिया है?",
+            options: ["Reduction only", "Redox (Oxidation-Reduction)", "Displacement only", "Endothermic synthesis"],
+            correctAnswer: 1,
+            explanation: "Rusting of iron requires both oxygen and moisture, which is a redox reaction."
+          }
+        ];
+      } else {
+        fallbackPool = [
+          {
+            question: "If sin θ = 1/2, what is the value of cos θ for an acute angle? / यदि sin θ = 1/2 है, तो cos θ का मान क्या होगा?",
+            options: ["1/2", "√3/2", "1/√2", "√3"],
+            correctAnswer: 1,
+            explanation: "cos θ = √(1 - sin²θ) = √(1 - 1/4) = √3/2."
+          }
+        ];
+      }
 
-      validQuestions = emergencyPool;
+      validQuestions = fallbackPool;
     }
 
     const finalQuestions = validQuestions.slice(0, questionCount);
@@ -266,7 +230,7 @@ STRICT INSTRUCTIONS:
     return res.status(200).json({
       success: true,
       model: usedModel,
-      organization_id: organization, // Echoes the locked tenant ID
+      organization_id: organization,
       class: className,
       subject: subject,
       chapter: chapter,
