@@ -1,5 +1,3 @@
-// api/auth.js
-
 export default async function handler(req, res) {
   // ============================================================
   // CORS HEADERS
@@ -16,7 +14,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { action, email, password } = req.body || {};
+  // Extract multi-tenant metadata if provided
+  const { action, email, password, school_id, role } = req.body || {};
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
@@ -31,6 +30,20 @@ export default async function handler(req, res) {
     : `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
 
   try {
+    // Build Payload dynamically to include Multi-Tenant Meta Data
+    const requestBody = {
+      email: String(email).trim().toLowerCase(),
+      password: String(password).trim()
+    };
+
+    if (action === 'signup') {
+      // Inject identifying tags during signup
+      requestBody.data = {
+        role: role || 'student', // defaults to student unless specified
+        school_id: school_id || 'unassigned'
+      };
+    }
+
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -38,10 +51,7 @@ export default async function handler(req, res) {
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
       },
-      body: JSON.stringify({
-        email: String(email).trim().toLowerCase(),
-        password: String(password).trim()
-      })
+      body: JSON.stringify(requestBody)
     });
 
     const data = await response.json();
