@@ -17,26 +17,14 @@ export default async function handler(req, res) {
     const samplePosts = [
         {
             id: 1,
-            school_name: "Bharat Public School",
-            category: "teacher_intel",
-            title: "Chemistry Viva Important Topics",
-            content: "External teacher is focusing heavily on Titration equations and Organic functional group tests. Be prepared!",
-            author_name: "Anonymous Backbencher",
-            batch_tag: "Class 12th",
-            is_anonymous: true,
-            upvotes: 14,
-            created_at: new Date().toISOString()
-        },
-        {
-            id: 2,
-            school_name: "DVM Public School",
-            category: "syllabus_notes",
-            title: "Physics Ch 9 Ray Optics Notes",
-            content: "Diagrams for telescope and compound microscope derivations will definitely come in 5 marks.",
-            author_name: "Rohan K.",
-            batch_tag: "Class 12th Sci",
+            school_name: "Campus Updates",
+            category: "news",
+            title: "Welcome to your Campus OS",
+            content: "This is your private school feed. Only students and teachers from your institution can see posts here.",
+            author_name: "Admin",
+            batch_tag: "All Classes",
             is_anonymous: false,
-            upvotes: 22,
+            upvotes: 5,
             created_at: new Date().toISOString()
         }
     ];
@@ -77,7 +65,7 @@ export default async function handler(req, res) {
     }
 
     // ============================================================
-    // 1. GET: FETCH POSTS & COMMENTS
+    // 1. GET: FETCH POSTS & COMMENTS (STRICT MULTI-TENANT FILTER)
     // ============================================================
     if (req.method === 'GET') {
         const { action, post_id, school, category, subject, student_class } = req.query;
@@ -93,7 +81,9 @@ export default async function handler(req, res) {
             let url = `${supabaseUrl}/rest/v1/school_posts?order=created_at.desc&limit=50`;
             const conditions = [];
 
-            if (school && school !== 'ALL') {
+            // STRICT TENANT ISOLATION: 
+            const isSpecificSchool = school && school !== 'ALL';
+            if (isSpecificSchool) {
                 conditions.push(`school_name=eq.${encodeURIComponent(school)}`);
             }
             if (category && category !== 'ALL') {
@@ -113,8 +103,8 @@ export default async function handler(req, res) {
             const postRes = await fetch(url, { headers });
             let posts = await postRes.json();
 
-            // Fallback to community_posts table if school_posts hasn't been queried yet
-            if (!Array.isArray(posts) || posts.length === 0) {
+            // ONLY fallback to global community posts if they are NOT locked to a specific school
+            if ((!Array.isArray(posts) || posts.length === 0) && !isSpecificSchool) {
                 const fallbackRes = await fetch(`${supabaseUrl}/rest/v1/community_posts?order=created_at.desc&limit=30`, { headers });
                 const fallbackPosts = await fallbackRes.json();
                 if (Array.isArray(fallbackPosts) && fallbackPosts.length > 0) {
@@ -133,12 +123,13 @@ export default async function handler(req, res) {
                 }
             }
 
+            // If a specific school was queried and has no posts, return empty array to respect privacy fence
             return res.status(200).json({ 
-                posts: Array.isArray(posts) && posts.length > 0 ? posts : samplePosts 
+                posts: Array.isArray(posts) ? posts : [] 
             });
         } catch (err) {
             console.error("Fetch feed error:", err);
-            return res.status(200).json({ posts: samplePosts });
+            return res.status(200).json({ posts: [] });
         }
     }
 
