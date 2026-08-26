@@ -35,14 +35,12 @@
     }
     h1, h2, h3, h4, .font-heading { font-family: 'Space Grotesk', sans-serif; }
     
-    /* Custom Scrollbar for Dropdowns */
     select {
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300e5ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 16px center; background-size: 18px;
     }
 
-    /* Print Styles (Kept 100% Intact) */
     @media print {
       @page { margin: 10mm 12mm; size: A4 portrait; }
       body { background: #ffffff !important; color: #000000 !important; }
@@ -53,7 +51,6 @@
       #paperSections > div > div > div, #paperSections .space-y-4 > div { break-inside: avoid !important; page-break-inside: avoid !important; display: block !important; margin-bottom: 0.85rem !important; }
     }
 
-    /* Glass Input Styling */
     .glass-input {
       background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;
@@ -63,14 +60,12 @@
       box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.15), inset 0 2px 10px rgba(0,0,0,0.5); outline: none;
     }
     
-    /* Ghost Buttons */
     .ghost-btn {
       background: rgba(0, 229, 255, 0.05); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.4);
       box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); backdrop-filter: blur(8px);
     }
     .ghost-btn:hover { background: rgba(0, 229, 255, 0.15); box-shadow: 0 0 30px rgba(0, 229, 255, 0.3); transform: scale(0.98); }
     
-    /* Main Nav Tab Active State */
     .os-tab.active { background: rgba(0, 229, 255, 0.1); color: #00e5ff; border-color: rgba(0, 229, 255, 0.4); box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
   </style>
 </head>
@@ -84,11 +79,14 @@
         <a href="app.html" class="flex items-center gap-2 font-heading font-black text-white text-lg tracking-tight">
           <span class="text-2xl">⚡</span> Campus<span class="text-cyan-400">OS</span>
         </a>
+        <span id="facultySchoolBadge" class="text-[11px] font-bold text-slate-300 bg-white/5 border border-white/10 px-3 py-1 rounded-xl">
+          🏫 Loading School...
+        </span>
       </div>
       <div class="flex items-center gap-3 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-hide">
         <div class="flex bg-black/40 border border-white/5 rounded-2xl p-1 gap-1">
-          <button onclick="switchOSTab('attendance')" id="nav-attendance" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📅 Attendance</button>
-          <button onclick="switchOSTab('exam')" id="nav-exam" class="os-tab active px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📝 Exam Studio</button>
+          <button onclick="switchOSTab('attendance')" id="nav-attendance" class="os-tab active px-4 py-2 rounded-xl text-xs font-bold text-cyan-400 bg-cyan-500/20 border border-cyan-500/40 transition whitespace-nowrap">📅 Attendance</button>
+          <button onclick="switchOSTab('exam')" id="nav-exam" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📝 Exam Studio</button>
           <button onclick="switchOSTab('ppt')" id="nav-ppt" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📚 PPT & Notes</button>
           <button onclick="switchOSTab('marksheet')" id="nav-marksheet" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">🏆 Marksheets</button>
         </div>
@@ -101,21 +99,24 @@
     <!-- ========================================================
          TAB 1: ATTENDANCE & ROSTER CONTROL
     ======================================================== -->
-    <div id="section-attendance" class="hidden no-print">
+    <div id="section-attendance" class="block no-print">
       <div class="bg-[#0d1324]/60 rounded-3xl shadow-xl border border-white/5 p-6 backdrop-blur-xl">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-white/10 pb-4 gap-4">
           <div>
             <h2 class="text-xl font-black text-white font-heading">Classroom Roster & Verification</h2>
-            <p class="text-xs text-slate-400 mt-1">Manage pending approvals, edit details, and take daily attendance.</p>
+            <p class="text-xs text-slate-400 mt-1">Manage grade batches, add/edit students, and dispatch attendance alerts.</p>
           </div>
-          <div class="flex gap-2 w-full md:w-auto">
+          <div class="flex items-center gap-2 w-full md:w-auto">
             <select id="rosterClassSelect" onchange="loadClassData()" class="glass-input !mb-0 !py-2 !text-xs flex-1 md:w-32">
               <option value="10">Class 10</option>
-              <option value="12">Class 12</option>
               <option value="9">Class 9</option>
               <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
             </select>
-            <button onclick="loadClassData()" class="ghost-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
+            <button onclick="openAddStudentModal()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3.5 py-2 rounded-xl text-xs font-black whitespace-nowrap shadow-lg shadow-cyan-500/20 transition">
+              + Add Student
+            </button>
+            <button onclick="loadClassData()" class="ghost-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap">
               <span>🔄</span> Refresh
             </button>
           </div>
@@ -135,19 +136,21 @@
           <div id="attendanceGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
              <!-- Populated dynamically via JS -->
           </div>
-          <button onclick="submitDailyAttendance()" class="ghost-btn w-full mt-6 py-3.5 rounded-xl font-heading font-black text-sm uppercase">Submit Register & Notify Parents 🚀</button>
+          <button onclick="submitDailyAttendance()" class="ghost-btn w-full mt-6 py-3.5 rounded-xl font-heading font-black text-sm uppercase flex items-center justify-center gap-2">
+            <span>📲</span> Submit Register & Dispatch WhatsApp Alerts
+          </button>
         </div>
 
         <!-- VIEW 2: ROSTER & VERIFICATION -->
         <div id="view-manage-roster" class="hidden space-y-6">
           
-          <!-- Invite Code Banner -->
+          <!-- Unique Invite Code Banner -->
           <div class="bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/30 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-              <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Private Invite Code for Students</div>
-              <div class="text-xs text-slate-300 mt-1">Write this on the board. Students enter this in their app to join your roster.</div>
+              <div class="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Private Grade Invite Code</div>
+              <div class="text-xs text-slate-300 mt-1">Students enter this code in their app to link directly to this grade roster.</div>
             </div>
-            <div class="bg-[#020617] border border-cyan-500/50 text-white font-mono text-xl font-black tracking-[4px] px-6 py-2 rounded-xl shadow-inner" id="displayInviteCode">
+            <div class="bg-[#020617] border border-cyan-500/50 text-cyan-300 font-mono text-xl font-black tracking-[3px] px-6 py-2 rounded-xl shadow-inner select-all" id="displayInviteCode">
               XXXXXX
             </div>
           </div>
@@ -175,14 +178,14 @@
 
           <!-- Verified Roster Table -->
           <div>
-            <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>✅</span> Verified Roster</h3>
+            <h3 class="text-xs font-black text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5"><span>✅</span> Verified Grade Roster</h3>
             <div class="overflow-x-auto rounded-xl border border-white/5">
               <table class="w-full text-left text-xs text-slate-300">
                 <thead class="bg-black/40 text-emerald-400">
                   <tr>
                     <th class="p-2.5 font-bold">Roll</th>
                     <th class="p-2.5 font-bold">Student Name</th>
-                    <th class="p-2.5 font-bold">Father's Name</th>
+                    <th class="p-2.5 font-bold">Parents' Details</th>
                     <th class="p-2.5 font-bold">WhatsApp</th>
                     <th class="p-2.5 font-bold text-right">Action</th>
                   </tr>
@@ -199,9 +202,9 @@
     </div>
 
     <!-- ========================================================
-         TAB 2: EXAM STUDIO (YOUR EXACT EXISTING TOOL)
+         TAB 2: EXAM STUDIO
     ======================================================== -->
-    <div id="section-exam" class="block">
+    <div id="section-exam" class="hidden">
       <!-- Generator Setup Card -->
       <div class="bg-[#0d1324]/60 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/5 p-6 mb-8 no-print space-y-6">
         
@@ -301,20 +304,16 @@
 
         <!-- 3. Syllabus & Content Input Views -->
         <div class="border-t border-white/10 pt-5">
-          
-          <!-- Mode 1: Multi-Chapter NCERT View -->
           <div id="viewNCERT" class="space-y-2">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Chapters & Weightage Specification</label>
             <textarea id="chapterName" rows="4" placeholder="Enter one or multiple chapters with topic notes:&#10;e.g.,&#10;1. Chapter 1: Chemical Reactions & Equations (Types of reactions) - 10 Marks&#10;2. Chapter 2: Acids, Bases and Salts - 15 Marks" class="glass-input w-full rounded-2xl p-4 text-sm focus:outline-none"></textarea>
           </div>
 
-          <!-- Mode 2: Copy-Paste Text View -->
           <div id="viewText" class="space-y-2 hidden">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Paste Full Question Bank / PDF Study Notes</label>
             <textarea id="rawText" rows="6" placeholder="Paste your question bank, copied PDF syllabus, or revision notes here..." class="glass-input w-full rounded-2xl p-4 text-sm focus:outline-none"></textarea>
           </div>
 
-          <!-- Mode 3: Camera Photo View -->
           <div id="viewCamera" class="space-y-2 hidden">
             <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Upload Handwritten Drafts or Textbook Pages</label>
             <label class="flex flex-col items-center justify-center border-2 border-dashed border-cyan-500/30 bg-cyan-500/5 hover:bg-cyan-500/10 rounded-2xl p-8 cursor-pointer transition text-center shadow-inner">
@@ -325,7 +324,6 @@
             </label>
             <div id="previewContainer" class="flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide"></div>
           </div>
-
         </div>
 
         <button id="generateBtn" class="ghost-btn w-full py-4 rounded-2xl text-sm transition active:scale-[0.98]">
@@ -346,8 +344,6 @@
 
         <!-- PRINTABLE PAPER SHEET (A4 Standard Format) -->
         <div id="printable-area" class="bg-white rounded-3xl border border-slate-300 p-8 md:p-10 shadow-2xl text-slate-900 mx-auto" style="max-width: 210mm;">
-          
-          <!-- School Header Block -->
           <div class="border-b-2 border-slate-900 pb-4 mb-4 text-center relative">
             <img id="paperLogo" class="hidden absolute left-0 top-0 w-16 h-16 object-contain" alt="School Logo" />
             <h2 id="paperSchool" class="text-2xl font-black uppercase tracking-wide font-heading">Academic Institution</h2>
@@ -363,7 +359,6 @@
               <div><strong>Max Marks:</strong> <span id="paperMarks"></span></div>
             </div>
 
-            <!-- Student Name / Roll No Blanks -->
             <div id="studentBlanksRow" class="hidden grid grid-cols-3 gap-3 text-xs font-semibold text-slate-800 mt-3 pt-2.5 border-t border-dashed border-slate-300 text-left">
               <div>Name: ______________________</div>
               <div>Roll No: __________________</div>
@@ -371,20 +366,18 @@
             </div>
           </div>
 
-          <!-- Instructions -->
           <div class="mb-5 text-xs text-slate-700 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
             <strong class="block mb-1 text-slate-900 font-bold uppercase tracking-wider font-heading">General Instructions:</strong>
             <ul id="paperInstructions" class="list-disc pl-4 space-y-0.5"></ul>
           </div>
 
-          <!-- Section & Questions Container -->
           <div id="paperSections" class="space-y-6"></div>
         </div>
       </div>
     </div>
 
     <!-- ========================================================
-         TAB 3: PPT & NOTES STUDIO (PLACEHOLDER UI)
+         TAB 3: PPT & NOTES STUDIO
     ======================================================== -->
     <div id="section-ppt" class="hidden no-print">
       <div class="bg-[#0d1324]/60 rounded-3xl shadow-xl border border-white/5 p-6 backdrop-blur-xl text-center py-16">
@@ -410,9 +403,9 @@
           <div class="flex gap-2 w-full md:w-auto">
             <select id="gradebookClass" class="glass-input !mb-0 !py-2 !text-xs flex-1 md:w-32">
               <option value="10">Class 10</option>
-              <option value="12">Class 12</option>
               <option value="9">Class 9</option>
               <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
             </select>
             <button onclick="loadGradebook()" class="ghost-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2">
               <span>🔄</span> Load Data
@@ -420,7 +413,6 @@
           </div>
         </div>
 
-        <!-- Gradebook Table -->
         <div class="overflow-x-auto rounded-2xl border border-white/5 mb-2">
           <table class="w-full text-left text-xs text-slate-300">
             <thead class="bg-black/40 text-cyan-400 font-heading">
@@ -444,49 +436,198 @@
 
   </div>
 
+  <!-- ========================================================
+       MODAL 1: ADD STUDENT MANUALLY
+  ======================================================== -->
+  <div id="addStudentModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0d1324] border border-cyan-500/30 rounded-3xl p-6 max-w-md w-full shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-black text-white font-heading">➕ Add Student to Roster</h3>
+        <button onclick="closeAddStudentModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <form id="addStudentForm" onsubmit="handleAddStudentSubmit(event)" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Class / Grade</label>
+            <select id="addStuClass" class="glass-input w-full p-2.5 rounded-xl font-bold">
+              <option value="10">Class 10</option>
+              <option value="9">Class 9</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Roll Number</label>
+            <input id="addStuRoll" type="number" required placeholder="e.g. 1" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-400 mb-1">Student Full Name</label>
+          <input id="addStuName" type="text" required placeholder="e.g. Rahul Sharma" class="glass-input w-full p-2.5 rounded-xl" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Father's Name</label>
+            <input id="addStuFather" type="text" placeholder="Father's Name" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Mother's Name</label>
+            <input id="addStuMother" type="text" placeholder="Mother's Name" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-400 mb-1">Parent WhatsApp Number</label>
+          <input id="addStuPhone" type="tel" required placeholder="10-digit mobile" class="glass-input w-full p-2.5 rounded-xl" />
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl uppercase tracking-wider font-heading transition">
+            Save Student ✅
+          </button>
+          <button type="button" onclick="closeAddStudentModal()" class="px-4 py-3 bg-slate-800 text-slate-300 rounded-xl font-bold">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: FULL STUDENT PROFILE EDITOR
+  ======================================================== -->
+  <div id="editStudentModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0d1324] border border-cyan-500/30 rounded-3xl p-6 max-w-md w-full shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-black text-white font-heading">✏️ Edit Student Profile</h3>
+        <button onclick="closeEditStudentModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <form id="editStudentForm" onsubmit="handleEditStudentSubmit(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="editStuId" />
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Class / Grade</label>
+            <select id="editStuClass" class="glass-input w-full p-2.5 rounded-xl font-bold">
+              <option value="10">Class 10</option>
+              <option value="9">Class 9</option>
+              <option value="11">Class 11</option>
+              <option value="12">Class 12</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Roll Number</label>
+            <input id="editStuRoll" type="number" required class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-400 mb-1">Student Full Name</label>
+          <input id="editStuName" type="text" required class="glass-input w-full p-2.5 rounded-xl" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Father's Name</label>
+            <input id="editStuFather" type="text" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+          <div>
+            <label class="block font-bold text-slate-400 mb-1">Mother's Name</label>
+            <input id="editStuMother" type="text" class="glass-input w-full p-2.5 rounded-xl" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-400 mb-1">Parent WhatsApp Number</label>
+          <input id="editStuPhone" type="tel" required class="glass-input w-full p-2.5 rounded-xl" />
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl uppercase tracking-wider font-heading transition">
+            Update Record
+          </button>
+          <button type="button" onclick="deleteStudent()" class="px-4 py-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold hover:bg-rose-500/30 transition">
+            🗑️ Delete
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 3: WHATSAPP ATTENDANCE DISPATCH CENTER
+  ======================================================== -->
+  <div id="attendanceDispatchModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#0d1324] border border-emerald-500/30 rounded-3xl p-6 max-w-lg w-full shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center mb-3">
+        <div>
+          <h3 class="text-lg font-black text-white font-heading flex items-center gap-2"><span>📲</span> Parent Attendance Dispatch</h3>
+          <p class="text-xs text-slate-400">Personalized notifications ready for WhatsApp delivery.</p>
+        </div>
+        <button onclick="closeAttendanceDispatchModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div id="dispatchList" class="flex-1 overflow-y-auto space-y-2.5 my-3 pr-1">
+        <!-- Injected via JS -->
+      </div>
+
+      <button onclick="closeAttendanceDispatchModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-xs uppercase tracking-wider">
+        Done / Close
+      </button>
+    </div>
+  </div>
+
   <script>
-    // --- Top OS Nav Tab Switcher ---
     function switchOSTab(tabId) {
-      // Hide all sections
       document.getElementById('section-attendance').classList.add('hidden');
       document.getElementById('section-exam').classList.add('hidden');
       document.getElementById('section-ppt').classList.add('hidden');
       document.getElementById('section-marksheet').classList.add('hidden');
       
-      // Remove active class from all tabs
       document.getElementById('nav-attendance').classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(0,229,255,0.15)]');
       document.getElementById('nav-exam').classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(0,229,255,0.15)]');
       document.getElementById('nav-ppt').classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(0,229,255,0.15)]');
       document.getElementById('nav-marksheet').classList.remove('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(0,229,255,0.15)]');
       
-      // Show targeted section
       document.getElementById('section-' + tabId).classList.remove('hidden');
       document.getElementById('section-' + tabId).classList.add('block');
       
-      // Add active styling to targeted tab
       const activeBtn = document.getElementById('nav-' + tabId);
       activeBtn.classList.add('active', 'bg-cyan-500/20', 'text-cyan-400', 'border-cyan-500/40', 'shadow-[0_0_15px_rgba(0,229,255,0.15)]');
       activeBtn.classList.remove('text-slate-400');
     }
 
-    // --- Core Supabase & Exam Logic ---
     const supabaseUrl = 'https://cbgwbzidkmcefoithipp.supabase.co';
     const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     let currentUser = null;
+    let activeSchool = localStorage.getItem('userSchool') || 'Invincible Coaching Classes';
     let activeMode = 'ncert';
     let base64Images = [];
     let uploadedLogoBase64 = null;
     let showAnswers = false;
 
-    // Check login state on load using Supabase session
     async function checkAuth() {
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && session.user) {
           currentUser = session.user;
+          if (session.user.user_metadata?.school_id) {
+            activeSchool = session.user.user_metadata.school_id;
+            localStorage.setItem('userSchool', activeSchool);
+          }
         }
+        
+        const badge = document.getElementById('facultySchoolBadge');
+        if (badge) badge.innerText = `🏫 ${activeSchool}`;
+        
+        const schoolInput = document.getElementById('schoolName');
+        if (schoolInput && !schoolInput.value) schoolInput.value = activeSchool;
 
         const stored = sessionStorage.getItem('currentExam');
         if (stored) {
@@ -518,19 +659,15 @@
       });
     }
 
-    // Logo upload reader
     document.getElementById('logoInput').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = (ev) => {
-          uploadedLogoBase64 = ev.target.result;
-        };
+        reader.onload = (ev) => { uploadedLogoBase64 = ev.target.result; };
         reader.readAsDataURL(file);
       }
     });
 
-    // Camera upload reader with client-side canvas compression
     const cameraInput = document.getElementById('cameraInput');
     const previewContainer = document.getElementById('previewContainer');
     cameraInput.addEventListener('change', (e) => {
@@ -579,7 +716,7 @@
       try {
         const payload = {
           inputType: activeMode,
-          schoolName: document.getElementById('schoolName').value.trim(),
+          schoolName: document.getElementById('schoolName').value.trim() || activeSchool,
           subject: document.getElementById('subject').value.trim(),
           classGrade: document.getElementById('classGrade').value.trim(),
           totalMarks: Number(document.getElementById('totalMarks').value) || 25,
@@ -606,7 +743,6 @@
         const data = await res.json();
         if (!data.success || !data.exam) throw new Error(data.error || 'Failed to construct exam paper.');
 
-        // Auto-save to Supabase if authenticated
         if (currentUser) {
           try {
             await supabaseClient.from('exams').insert({
@@ -631,14 +767,13 @@
     });
 
     async function renderExam(exam) {
-      document.getElementById('paperSchool').innerText = exam.school_name || 'Academic Institution';
+      document.getElementById('paperSchool').innerText = exam.school_name || activeSchool;
       document.getElementById('paperTitle').innerText = exam.title || 'Periodic Assessment';
       document.getElementById('paperSubject').innerText = exam.subject || 'General';
       document.getElementById('paperClass').innerText = exam.class_grade || '';
       document.getElementById('paperDuration').innerText = exam.duration_minutes || '45';
       document.getElementById('paperMarks').innerText = exam.total_marks || '25';
 
-      // Set code badge
       const setBadge = document.getElementById('paperSetBadge');
       if (exam.set_code) {
         setBadge.innerText = exam.set_code;
@@ -647,7 +782,6 @@
         setBadge.classList.add('hidden');
       }
 
-      // Logo render
       const logoEl = document.getElementById('paperLogo');
       if (uploadedLogoBase64) {
         logoEl.src = uploadedLogoBase64;
@@ -656,10 +790,8 @@
         logoEl.classList.add('hidden');
       }
 
-      // Student detail blanks toggle
       document.getElementById('studentBlanksRow').classList.toggle('hidden', !exam.has_student_blanks);
 
-      // Instructions
       const instrList = document.getElementById('paperInstructions');
       instrList.innerHTML = '';
       (exam.instructions || []).forEach(inst => {
@@ -668,7 +800,6 @@
         instrList.appendChild(li);
       });
 
-      // Questions by section
       const sectionsContainer = document.getElementById('paperSections');
       sectionsContainer.innerHTML = '';
 
@@ -710,7 +841,6 @@
         sectionsContainer.appendChild(secDiv);
       });
 
-      // Typeset MathJax formulas in the generated paper
       if (window.MathJax && MathJax.typesetPromise) {
         await MathJax.typesetPromise([sectionsContainer]);
       }
@@ -731,17 +861,17 @@
       try {
         await supabaseClient.auth.signOut();
       } catch(e) {}
+      localStorage.removeItem('userSchool');
       window.location.href = 'login.html';
     });
     
-    // Ensure active mode is set on initial load
     switchMode('ncert');
   </script>
 
+  <!-- =====================================================
+       🏆 MARKSHEET & GRADEBOOK ENGINE
+  ===================================================== -->
   <script>
-    // =====================================================
-    // 🏆 MARKSHEET & GRADEBOOK ENGINE
-    // =====================================================
     let currentGradebookData = {};
 
     async function loadGradebook() {
@@ -754,9 +884,8 @@
         
         try {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            const schoolId = session?.user?.user_metadata?.school_id || localStorage.getItem('userSchool') || 'Invincible Coaching';
+            const schoolId = session?.user?.user_metadata?.school_id || activeSchool;
 
-            // Fetch securely isolated test attempts for this school and class
             const { data, error } = await supabaseClient
                 .from('test_attempts')
                 .select('*')
@@ -765,7 +894,6 @@
 
             if (error) throw error;
 
-            // Aggregate records by student name
             const students = {};
             (data || []).forEach(record => {
                 const name = record.student_name;
@@ -787,7 +915,6 @@
                 const stu = students[name];
                 const avg = Math.round(stu.totalPct / stu.exams.length);
                 
-                // CBSE Grading Scale
                 let grade = 'D';
                 if(avg >= 91) grade = 'A1';
                 else if(avg >= 81) grade = 'A2';
@@ -825,10 +952,9 @@
         const student = currentGradebookData[studentName];
         if(!student) return alert("Student data missing or corrupted.");
 
-        const schoolId = localStorage.getItem('userSchool') || 'Invincible Academic Institution';
+        const schoolId = activeSchool;
         const cls = document.getElementById('gradebookClass').value;
         
-        // Group marks by Subject to calculate subject-wise averages
         const subjects = {};
         student.exams.forEach(ex => {
             const sub = ex.subject || 'General Studies';
@@ -849,7 +975,6 @@
             `;
         }).join('');
 
-        // Launch secure printing window
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
             <!DOCTYPE html>
@@ -916,11 +1041,17 @@
     }
   </script>
 
+  <!-- =====================================================
+       🧑‍🎓 ROSTER & ATTENDANCE ENGINE
+  ===================================================== -->
   <script>
-    // =====================================================
-    // 🧑‍🎓 ROSTER & ATTENDANCE ENGINE (TEACHER SIDE)
-    // =====================================================
     let currentRoster = [];
+
+    function generateUniqueInviteCode(school, cls) {
+      let clean = (school || 'SCH').replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 4);
+      if (clean.length < 3) clean = 'CAMPUS';
+      return `${clean}${cls}A`;
+    }
 
     function switchRosterView(view) {
         const btnAtt = document.getElementById('btn-view-attendance');
@@ -941,28 +1072,24 @@
         }
     }
 
-        async function loadClassData() {
-        const cls = document.getElementById('rosterClassSelect').value;
-        const schoolId = localStorage.getItem('userSchool') || 'INVINCIBLE';
+    async function loadClassData() {
+        const cls = String(document.getElementById('rosterClassSelect').value);
+        const schoolId = activeSchool;
         
-        // Generate the exact invite code shown on screen
-        const inviteCode = (schoolId.substring(0, 3) + cls + "A").toUpperCase();
-        document.getElementById('displayInviteCode').innerText = inviteCode;
+        const inviteCode = generateUniqueInviteCode(schoolId, cls);
+        const codeDisplay = document.getElementById('displayInviteCode');
+        if (codeDisplay) codeDisplay.innerText = inviteCode;
 
         try {
-            // Match EITHER the inviteCode (e.g. INV10A) OR the schoolId (INVINCIBLE)
+            // STRICT ISOLATION: Must match this school/code AND this selected class
             const { data, error } = await supabaseClient
                 .from('students')
                 .select('*')
                 .or(`school_id.eq.${inviteCode},school_id.eq.${schoolId}`)
                 .eq('class_name', cls)
-                .order('id', { ascending: false });
+                .order('roll_number', { ascending: true });
 
-            if (error) {
-                console.error("Supabase query error:", error);
-                throw error;
-            }
-            
+            if (error) throw error;
             currentRoster = data || [];
         } catch(err) {
             console.warn("Could not load from Supabase:", err.message);
@@ -973,7 +1100,6 @@
         renderAttendanceGrid();
     }
 
-
     function escapeHTML(str) {
       if (!str) return '';
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -982,43 +1108,53 @@
     function renderRosterTables() {
         const pendingBody = document.getElementById('pendingRosterBody');
         const verifiedBody = document.getElementById('verifiedRosterBody');
+        const cls = document.getElementById('rosterClassSelect').value;
         
         const pending = currentRoster.filter(s => s.status === 'pending');
         const verified = currentRoster.filter(s => s.status === 'verified');
 
         pendingBody.innerHTML = pending.length ? pending.map(s => `
-            <tr>
-                <td class="p-2.5 font-mono text-rose-300">${s.roll_number}</td>
+            <tr class="hover:bg-rose-500/5 transition">
+                <td class="p-2.5 font-mono text-rose-300 font-bold">${s.roll_number || '-'}</td>
                 <td class="p-2.5 font-bold text-white">${escapeHTML(s.student_name)}</td>
-                <td class="p-2.5">${escapeHTML(s.father_name)}</td>
-                <td class="p-2.5 font-mono">${s.parent_phone}</td>
-                <td class="p-2.5 text-right">
-                    <button onclick="verifyStudent(${s.id})" class="bg-emerald-500 text-slate-950 px-3 py-1 rounded text-[10px] font-black uppercase hover:bg-emerald-400 transition">Verify</button>
+                <td class="p-2.5 text-slate-400">${escapeHTML(s.father_name || 'N/A')}</td>
+                <td class="p-2.5 font-mono text-slate-300">${escapeHTML(s.parent_phone)}</td>
+                <td class="p-2.5 text-right flex gap-1 justify-end">
+                    <button onclick="verifyStudent(${s.id})" class="bg-emerald-500 text-slate-950 px-3 py-1 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-400 transition">Verify ✅</button>
+                    <button onclick="openEditStudentModal(${s.id})" class="bg-slate-800 text-slate-300 px-2 py-1 rounded-lg text-[10px] font-bold hover:text-white transition">Edit</button>
                 </td>
             </tr>
-        `).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-500 font-bold">No pending verifications.</td></tr>`;
+        `).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-500 font-bold">No pending verifications for Class ${cls}.</td></tr>`;
 
         verifiedBody.innerHTML = verified.length ? verified.map(s => `
-            <tr>
-                <td class="p-2.5 font-mono text-emerald-300">${s.roll_number}</td>
+            <tr class="hover:bg-white/5 transition">
+                <td class="p-2.5 font-mono text-emerald-300 font-bold">${s.roll_number || '-'}</td>
                 <td class="p-2.5 font-bold text-white">${escapeHTML(s.student_name)}</td>
-                <td class="p-2.5">${escapeHTML(s.father_name)}</td>
-                <td class="p-2.5 font-mono">${s.parent_phone}</td>
+                <td class="p-2.5 text-slate-400">F: ${escapeHTML(s.father_name || 'N/A')} | M: ${escapeHTML(s.mother_name || 'N/A')}</td>
+                <td class="p-2.5 font-mono text-slate-300">${escapeHTML(s.parent_phone)}</td>
                 <td class="p-2.5 text-right">
-                    <button onclick="editStudent(${s.id})" class="bg-slate-700 text-white px-3 py-1 rounded text-[10px] font-black uppercase hover:bg-slate-600 transition">Edit</button>
+                    <button onclick="openEditStudentModal(${s.id})" class="bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 px-3 py-1 rounded-lg text-[10px] font-black uppercase transition">
+                      ✏️ Edit
+                    </button>
                 </td>
             </tr>
-        `).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-500 font-bold">No verified students yet. Give them the code!</td></tr>`;
+        `).join('') : `<tr><td colspan="5" class="p-4 text-center text-slate-500 font-bold">No verified students in Class ${cls}. Share code <b>${generateUniqueInviteCode(activeSchool, cls)}</b> or click "+ Add Student".</td></tr>`;
     }
 
     function renderAttendanceGrid() {
         const grid = document.getElementById('attendanceGrid');
         const verified = currentRoster.filter(s => s.status === 'verified');
+        const cls = document.getElementById('rosterClassSelect').value;
         
+        if (verified.length === 0) {
+          grid.innerHTML = `<div class="col-span-full p-6 text-center text-slate-500 text-xs font-bold border border-white/5 rounded-2xl">No verified students in Class ${cls} to take attendance.</div>`;
+          return;
+        }
+
         grid.innerHTML = verified.map(s => `
-            <button id="att-btn-${s.id}" data-status="P" onclick="toggleAttendance(${s.id})" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition select-none">
-                <span class="truncate pr-2">${s.roll_number}. ${escapeHTML(s.student_name.split(' ')[0])}</span> 
-                <span id="att-badge-${s.id}">P</span>
+            <button id="att-btn-${s.id}" data-id="${s.id}" data-status="P" onclick="toggleAttendance(${s.id})" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition select-none hover:bg-emerald-500/20">
+                <span class="truncate pr-2">${s.roll_number ? s.roll_number + '.' : ''} ${escapeHTML(s.student_name.split(' ')[0])}</span> 
+                <span id="att-badge-${s.id}" class="font-black">P</span>
             </button>
         `).join('');
     }
@@ -1031,19 +1167,19 @@
         if(current === 'P') {
             btn.setAttribute('data-status', 'A');
             badge.innerText = 'A';
-            btn.className = "bg-rose-500/10 border border-rose-500/40 text-rose-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition shadow-[0_0_10px_rgba(244,63,94,0.15)] select-none";
+            btn.className = "bg-rose-500/10 border border-rose-500/40 text-rose-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition shadow-[0_0_10px_rgba(244,63,94,0.15)] select-none hover:bg-rose-500/20";
         } else if(current === 'A') {
             btn.setAttribute('data-status', 'L');
             badge.innerText = 'L';
-            btn.className = "bg-amber-500/10 border border-amber-500/40 text-amber-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition shadow-[0_0_10px_rgba(245,158,11,0.15)] select-none";
+            btn.className = "bg-amber-500/10 border border-amber-500/40 text-amber-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition shadow-[0_0_10px_rgba(245,158,11,0.15)] select-none hover:bg-amber-500/20";
         } else {
             btn.setAttribute('data-status', 'P');
             badge.innerText = 'P';
-            btn.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition select-none";
+            btn.className = "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-3 rounded-xl text-xs font-bold text-left flex justify-between items-center transition select-none hover:bg-emerald-500/20";
         }
     }
 
-        async function verifyStudent(id) {
+    async function verifyStudent(id) {
         try {
             const { error } = await supabaseClient
                 .from('students')
@@ -1054,29 +1190,166 @@
         } catch(err) {
             console.error("Verification failed:", err.message);
         }
-        
-        // Refresh the local roster view immediately
         await loadClassData();
     }
 
-
-    function editStudent(id) {
-        const student = currentRoster.find(s => s.id === id);
-        const newName = prompt("Edit Student Name:", student.student_name);
-        if(newName) {
-            student.student_name = newName;
-            // Backend update logic would go here
-            loadClassData();
-        }
+    // Modal Operations
+    function openAddStudentModal() {
+      const cls = document.getElementById('rosterClassSelect').value;
+      document.getElementById('addStuClass').value = cls;
+      document.getElementById('addStudentForm').reset();
+      document.getElementById('addStuClass').value = cls;
+      document.getElementById('addStudentModal').classList.remove('hidden');
     }
 
+    function closeAddStudentModal() {
+      document.getElementById('addStudentModal').classList.add('hidden');
+    }
+
+    async function handleAddStudentSubmit(e) {
+      e.preventDefault();
+      const cls = document.getElementById('addStuClass').value;
+      const roll = document.getElementById('addStuRoll').value.trim();
+      const name = document.getElementById('addStuName').value.trim();
+      const father = document.getElementById('addStuFather').value.trim();
+      const mother = document.getElementById('addStuMother').value.trim();
+      const phone = document.getElementById('addStuPhone').value.trim();
+
+      const inviteCode = generateUniqueInviteCode(activeSchool, cls);
+
+      try {
+        const { error } = await supabaseClient.from('students').insert([{
+          school_id: inviteCode,
+          class_name: cls,
+          roll_number: parseInt(roll) || 0,
+          student_name: name,
+          father_name: father,
+          mother_name: mother,
+          parent_phone: phone,
+          status: 'verified'
+        }]);
+
+        if (error) throw error;
+        closeAddStudentModal();
+        await loadClassData();
+      } catch(err) {
+        alert("Failed to add student: " + err.message);
+      }
+    }
+
+    function openEditStudentModal(id) {
+      const stu = currentRoster.find(s => s.id === id);
+      if (!stu) return;
+
+      document.getElementById('editStuId').value = stu.id;
+      document.getElementById('editStuClass').value = stu.class_name;
+      document.getElementById('editStuRoll').value = stu.roll_number || '';
+      document.getElementById('editStuName').value = stu.student_name || '';
+      document.getElementById('editStuFather').value = stu.father_name || '';
+      document.getElementById('editStuMother').value = stu.mother_name || '';
+      document.getElementById('editStuPhone').value = stu.parent_phone || '';
+
+      document.getElementById('editStudentModal').classList.remove('hidden');
+    }
+
+    function closeEditStudentModal() {
+      document.getElementById('editStudentModal').classList.add('hidden');
+    }
+
+    async function handleEditStudentSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('editStuId').value;
+      const cls = document.getElementById('editStuClass').value;
+      const roll = document.getElementById('editStuRoll').value.trim();
+      const name = document.getElementById('editStuName').value.trim();
+      const father = document.getElementById('editStuFather').value.trim();
+      const mother = document.getElementById('editStuMother').value.trim();
+      const phone = document.getElementById('editStuPhone').value.trim();
+
+      try {
+        const { error } = await supabaseClient.from('students').update({
+          class_name: cls,
+          roll_number: parseInt(roll) || 0,
+          student_name: name,
+          father_name: father,
+          mother_name: mother,
+          parent_phone: phone
+        }).eq('id', id);
+
+        if (error) throw error;
+        closeEditStudentModal();
+        await loadClassData();
+      } catch(err) {
+        alert("Update failed: " + err.message);
+      }
+    }
+
+    async function deleteStudent() {
+      const id = document.getElementById('editStuId').value;
+      if (!confirm("Are you sure you want to permanently delete this student record?")) return;
+
+      try {
+        const { error } = await supabaseClient.from('students').delete().eq('id', id);
+        if (error) throw error;
+        closeEditStudentModal();
+        await loadClassData();
+      } catch(err) {
+        alert("Delete failed: " + err.message);
+      }
+    }
+
+    // REAL WHATSAPP DISPATCH TRIGGER
     function submitDailyAttendance() {
-        alert("✅ Attendance registered securely. Automated WhatsApp alerts sent to parents of absent students!");
+      const verified = currentRoster.filter(s => s.status === 'verified');
+      const defaulters = [];
+      const cls = document.getElementById('rosterClassSelect').value;
+
+      verified.forEach(s => {
+        const btn = document.getElementById(`att-btn-${s.id}`);
+        if (btn) {
+          const status = btn.getAttribute('data-status');
+          if (status === 'A' || status === 'L') {
+            defaulters.push({ ...s, attendanceStatus: status === 'A' ? 'ABSENT' : 'LATE' });
+          }
+        }
+      });
+
+      if (defaulters.length === 0) {
+        alert("🎉 100% Full Attendance Recorded! No parent alerts needed.");
+        return;
+      }
+
+      const listContainer = document.getElementById('dispatchList');
+      const todayDate = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      listContainer.innerHTML = defaulters.map(s => {
+        const cleanPhone = String(s.parent_phone).replace(/[^0-9]/g, '');
+        const formattedPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+        const msg = encodeURIComponent(`📢 *ATTENDANCE NOTICE*\n\nDear Parent,\nThis is to inform you that your child *${s.student_name}* (Roll No: ${s.roll_number || 'N/A'}, Class: ${cls}) was marked *${s.attendanceStatus}* on *${todayDate}* at *${activeSchool}*.\n\nPlease contact faculty for clarifications.`);
+        const waLink = `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${msg}`;
+
+        return `
+          <div class="bg-black/30 border border-white/10 p-3 rounded-2xl flex justify-between items-center gap-3">
+            <div>
+              <div class="font-bold text-white text-xs">${escapeHTML(s.student_name)} <span class="text-[10px] ${s.attendanceStatus === 'ABSENT' ? 'text-rose-400 bg-rose-500/10' : 'text-amber-400 bg-amber-500/10'} px-2 py-0.5 rounded font-black">${s.attendanceStatus}</span></div>
+              <div class="text-[11px] text-slate-400 mt-0.5">Parent: ${escapeHTML(s.father_name || 'Guardian')} • 📞 ${escapeHTML(s.parent_phone)}</div>
+            </div>
+            <a href="${waLink}" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-[11px] uppercase tracking-wider whitespace-nowrap shadow-lg shadow-emerald-500/20 transition flex items-center gap-1.5">
+              <span>💬</span> Send WhatsApp
+            </a>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('attendanceDispatchModal').classList.remove('hidden');
     }
 
-    // Auto-load on boot
+    function closeAttendanceDispatchModal() {
+      document.getElementById('attendanceDispatchModal').classList.add('hidden');
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(loadClassData, 500);
+      setTimeout(loadClassData, 500);
     });
   </script>
 </body>
