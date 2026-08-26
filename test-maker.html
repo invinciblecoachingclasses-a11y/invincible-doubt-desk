@@ -324,21 +324,51 @@
       </div>
     </div>
 
-    <!-- ========================================================
-         TAB 4: MARKSHEETS & GRADEBOOK (PLACEHOLDER UI)
+        <!-- ========================================================
+         TAB 4: MARKSHEETS & GRADEBOOK
     ======================================================== -->
     <div id="section-marksheet" class="hidden no-print">
-      <div class="bg-[#0d1324]/60 rounded-3xl shadow-xl border border-white/5 p-6 backdrop-blur-xl text-center py-16">
-        <div class="text-6xl mb-4">🏆</div>
-        <h2 class="text-2xl font-black text-white font-heading mb-2">1-Click CBSE Report Cards</h2>
-        <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">Aggregate Unit Tests, Half-Yearly, and Pre-Boards automatically. Generate official, print-ready CBSE holistic progress cards instantly.</p>
-        <button class="ghost-btn px-8 py-3 rounded-xl font-heading font-black text-sm uppercase inline-flex items-center gap-2">
-          <span>🖨️</span> Open Gradebook Studio
-        </button>
+      <div class="bg-[#0d1324]/60 rounded-3xl shadow-xl border border-white/5 p-6 backdrop-blur-xl">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-white/10 pb-4 gap-4">
+          <div>
+            <h2 class="text-xl font-black text-white font-heading">1-Click CBSE Report Cards</h2>
+            <p class="text-xs text-slate-400 mt-1">Aggregated year-round data for your institution.</p>
+          </div>
+          <div class="flex gap-2 w-full md:w-auto">
+            <select id="gradebookClass" class="glass-input !mb-0 !py-2 !text-xs flex-1 md:w-32">
+              <option value="10">Class 10</option>
+              <option value="12">Class 12</option>
+              <option value="9">Class 9</option>
+              <option value="11">Class 11</option>
+            </select>
+            <button onclick="loadGradebook()" class="ghost-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap flex items-center gap-2">
+              <span>🔄</span> Load Data
+            </button>
+          </div>
+        </div>
+
+        <!-- Gradebook Table -->
+        <div class="overflow-x-auto rounded-2xl border border-white/5 mb-2">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-black/40 text-cyan-400 font-heading">
+              <tr>
+                <th class="p-3 font-bold">Student Name</th>
+                <th class="p-3 font-bold hidden sm:table-cell">Mobile</th>
+                <th class="p-3 font-bold">Exams Taken</th>
+                <th class="p-3 font-bold">Avg. Score</th>
+                <th class="p-3 font-bold text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="gradebookTableBody" class="divide-y divide-white/5">
+              <tr>
+                <td colspan="5" class="p-8 text-center text-slate-500 font-bold">Click "Load Data" to fetch student records from the vault.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-  </div>
 
   <script>
     // --- NEW: Top OS Nav Tab Switcher ---
@@ -633,5 +663,184 @@
     // Ensure active mode is set on initial load
     switchMode('ncert');
   </script>
+  <script>
+// =====================================================
+// 🏆 MARKSHEET & GRADEBOOK ENGINE
+// =====================================================
+let currentGradebookData = {};
+
+async function loadGradebook() {
+    const btn = document.querySelector('button[onclick="loadGradebook()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "<span>⏳</span> Loading...";
+    
+    const cls = document.getElementById('gradebookClass').value;
+    const tbody = document.getElementById('gradebookTableBody');
+    
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const schoolId = session?.user?.user_metadata?.school_id || localStorage.getItem('userSchool') || 'Invincible Coaching';
+
+        // Fetch securely isolated test attempts for this school and class
+        const { data, error } = await supabaseClient
+            .from('test_attempts')
+            .select('*')
+            .eq('organization', schoolId)
+            .eq('student_class', cls);
+
+        if (error) throw error;
+
+        // Aggregate records by student name
+        const students = {};
+        (data || []).forEach(record => {
+            const name = record.student_name;
+            if(!students[name]) {
+                students[name] = { mobile: record.student_mobile, exams: [], totalPct: 0 };
+            }
+            students[name].exams.push(record);
+            students[name].totalPct += record.percentage;
+        });
+
+        currentGradebookData = students;
+
+        if (Object.keys(students).length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-bold">No examination records found for Class ${cls} at ${escapeHTML(schoolId)}.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = Object.keys(students).map(name => {
+            const stu = students[name];
+            const avg = Math.round(stu.totalPct / stu.exams.length);
+            
+            // CBSE Grading Scale
+            let grade = 'D';
+            if(avg >= 91) grade = 'A1';
+            else if(avg >= 81) grade = 'A2';
+            else if(avg >= 71) grade = 'B1';
+            else if(avg >= 61) grade = 'B2';
+            else if(avg >= 51) grade = 'C1';
+            else if(avg >= 41) grade = 'C2';
+            
+            const colorClass = avg >= 80 ? 'text-emerald-400' : (avg >= 60 ? 'text-amber-400' : 'text-rose-400');
+
+            return `
+              <tr class="hover:bg-white/5 transition">
+                <td class="p-3 font-bold text-white">${escapeHTML(name)}</td>
+                <td class="p-3 hidden sm:table-cell">${escapeHTML(stu.mobile)}</td>
+                <td class="p-3 font-bold">${stu.exams.length} Tests</td>
+                <td class="p-3 font-black ${colorClass}">${avg}% (${grade})</td>
+                <td class="p-3 text-center">
+                  <button onclick="printReportCard('${escapeHTML(name)}')" class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-cyan-500/20 hover:scale-95 transition shadow-lg shadow-cyan-500/10">
+                    🖨️ PDF Marksheet
+                  </button>
+                </td>
+              </tr>
+            `;
+        }).join('');
+
+    } catch(err) {
+        console.error("Gradebook Error:", err);
+        tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-rose-500 font-bold">Failed to load data: ${err.message}</td></tr>`;
+    } finally {
+        btn.innerHTML = originalText;
+    }
+}
+
+function printReportCard(studentName) {
+    const student = currentGradebookData[studentName];
+    if(!student) return alert("Student data missing or corrupted.");
+
+    const schoolId = localStorage.getItem('userSchool') || 'Invincible Academic Institution';
+    const cls = document.getElementById('gradebookClass').value;
+    
+    // Group marks by Subject to calculate subject-wise averages
+    const subjects = {};
+    student.exams.forEach(ex => {
+        const sub = ex.subject || 'General Studies';
+        if(!subjects[sub]) subjects[sub] = [];
+        subjects[sub].push(ex.percentage);
+    });
+
+    const rows = Object.keys(subjects).map(sub => {
+        const marks = subjects[sub];
+        const avg = Math.round(marks.reduce((a,b) => a+b, 0) / marks.length);
+        let grade = avg >= 91 ? 'A1' : avg >= 81 ? 'A2' : avg >= 71 ? 'B1' : avg >= 61 ? 'B2' : avg >= 51 ? 'C1' : 'D';
+        return `
+          <tr>
+            <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600;">${escapeHTML(sub)}</td>
+            <td style="padding: 12px; border: 1px solid #cbd5e1; text-align:center; font-weight: 700;">${avg}</td>
+            <td style="padding: 12px; border: 1px solid #cbd5e1; text-align:center; font-weight: 800;">${grade}</td>
+          </tr>
+        `;
+    }).join('');
+
+    // Launch secure printing window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>${studentName} - Report Card</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;900&display=swap');
+                @page { size: A4 portrait; margin: 20mm; }
+                body { font-family: 'Plus Jakarta Sans', sans-serif; padding: 20px; color: #0f172a; }
+                .header { text-align: center; border-bottom: 3px solid #0f172a; padding-bottom: 20px; margin-bottom: 30px; }
+                .title { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; }
+                .sub { font-size: 14px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+                .student-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 60px; font-size: 14px; }
+                th { background-color: #0f172a; color: #fff; padding: 14px; border: 1px solid #0f172a; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; letter-spacing: 1px; }
+                .footer { display: flex; justify-content: space-between; margin-top: 80px; padding-top: 20px; }
+                .sig { border-top: 1px solid #0f172a; padding-top: 8px; width: 220px; text-align: center; font-weight: 800; font-size: 14px; text-transform: uppercase; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div class="title">${escapeHTML(schoolId)}</div>
+                <div class="sub">Annual Holistic Progress Card • 2026-27</div>
+            </div>
+            
+            <div class="student-card">
+                <div><strong>Student Name:</strong> ${escapeHTML(studentName)}</div>
+                <div><strong>Class & Grade:</strong> Class ${escapeHTML(cls)}</div>
+                <div><strong>Mobile Contact:</strong> ${escapeHTML(student.mobile)}</div>
+                <div><strong>Roll Number:</strong> ${Math.floor(1000 + Math.random() * 9000)}</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scholastic Subject</th>
+                        <th>Aggregated Average (Out of 100)</th>
+                        <th>CBSE Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+
+            <div class="footer">
+                <div class="sig">Class Teacher Signature</div>
+                <div class="sig">Principal Signature</div>
+            </div>
+
+            <script>
+                window.onload = function() {
+                    setTimeout(function() {
+                        window.print();
+                        window.close();
+                    }, 500);
+                }
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+</script>
+
+  
 </body>
 </html>
