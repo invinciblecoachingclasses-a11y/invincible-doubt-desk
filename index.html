@@ -3,66 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to DoubtDesk</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-950 text-white min-h-screen flex flex-col justify-between p-4 sm:p-6">
+  <title>Welcome | Invincible 360 Campus OS</title>
   
-  <!-- Header Title -->
-  <div class="text-center pt-6 sm:pt-8">
-    <span class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-indigo-400 bg-indigo-950/60 border border-indigo-800/50 px-3 py-1 rounded-full">
-      Indian Education AI
-    </span>
-    <h1 class="text-3xl sm:text-5xl font-black mt-3 sm:mt-4 tracking-tight">
-      Doubt<span class="text-indigo-500">Desk</span>
-    </h1>
-    <p class="text-slate-400 text-xs sm:text-sm mt-1.5 max-w-sm mx-auto">
-      Select your workspace to get started
-    </p>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #050811;
+      background-image: 
+        radial-gradient(at 10% 10%, rgba(0, 229, 255, 0.08) 0px, transparent 40%),
+        radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.08) 0px, transparent 40%);
+      background-attachment: fixed;
+    }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    
+    .gateway-card {
+      background: rgba(13, 19, 36, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gateway-card:hover {
+      background: rgba(13, 19, 36, 0.8);
+      transform: translateY(-5px) scale(1.02);
+    }
+    .card-student:hover {
+      border-color: rgba(0, 229, 255, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
+    }
+    .card-teacher:hover {
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 text-slate-100 antialiased">
+
+  <!-- Branding -->
+  <div class="text-center mb-10 animation-fade-in">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-4 shadow-2xl">
+      <span class="text-3xl">⚡</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight font-heading mb-2">Invincible 360</h1>
+    <p class="text-sm text-slate-400 font-semibold uppercase tracking-widest">Next-Gen Campus OS</p>
   </div>
 
-  <!-- Cards Container -->
-  <div class="max-w-xl w-full mx-auto flex flex-col gap-4 my-6">
+  <!-- Gateway Selection -->
+  <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
     
-    <!-- 1. Student Card -->
-    <a href="/app.html" class="bg-slate-900 border border-slate-800 hover:border-emerald-500 rounded-3xl p-5 sm:p-6 transition-all duration-300 active:scale-95 flex flex-col justify-between shadow-xl">
-      <div>
-        <div class="w-12 h-12 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center text-2xl mb-3">
-          🎒
-        </div>
-        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Instant Access • Full Engine</span>
-        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">I'm a Student</h2>
-        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-          Snap a photo of your textbook question or notes for instant step-by-step solutions with voice explanations in English & Hinglish.
-        </p>
+    <!-- STUDENT ROUTE -->
+    <a href="app.html" class="gateway-card card-student p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
+      <div class="w-20 h-20 mx-auto bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300">
+        🎓
       </div>
-      <div class="mt-4 flex items-center gap-1.5 text-xs font-bold text-emerald-400">
-        Enter Student Zone →
+      <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Student</h2>
+      <p class="text-sm text-slate-400 mb-6">Enter the Study Deck, solve doubts with AI, and join the 1v1 Arena.</p>
+      <div class="inline-block bg-cyan-500 text-slate-950 font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-cyan-500/20 group-hover:bg-cyan-400 transition">
+        Enter Study Deck →
       </div>
     </a>
 
-    <!-- 2. Teacher Card -->
-    <a href="/test-maker.html" class="bg-slate-900 border border-slate-800 hover:border-indigo-500 rounded-3xl p-5 sm:p-6 transition-all duration-300 active:scale-95 flex flex-col justify-between shadow-xl">
-      <div>
-        <div class="w-12 h-12 bg-indigo-500/10 border border-indigo-500/30 rounded-2xl flex items-center justify-center text-2xl mb-3">
-          👩‍🏫
-        </div>
-        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Teacher Studio • Exam Engine</span>
-        <h2 class="text-xl sm:text-2xl font-black text-white mt-1">I'm a Teacher</h2>
-        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-          Generate CBSE/NCERT test papers with marking schemes in 5 seconds and auto-grade handwritten answer sheets.
-        </p>
+    <!-- TEACHER ROUTE -->
+    <a href="login.html" class="gateway-card card-teacher p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
+      <div class="w-20 h-20 mx-auto bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300">
+        👨‍🏫
       </div>
-      <div class="mt-4 flex items-center gap-1.5 text-xs font-bold text-indigo-400">
-        Enter Teacher Studio →
+      <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Teacher</h2>
+      <p class="text-sm text-slate-400 mb-6">Access the Faculty Studio, manage attendance, and generate marksheets.</p>
+      <div class="inline-block bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-amber-500/20 group-hover:bg-amber-400 transition">
+        Faculty Login →
       </div>
     </a>
 
   </div>
 
   <!-- Footer -->
-  <div class="text-center text-slate-600 text-[11px] pb-3">
-    DoubtDesk AI • Built for CBSE & Indian State Board Classrooms
+  <div class="mt-16 text-xs font-bold text-slate-500">
+    Secure Multi-Tenant Architecture • Powered by Invincible
   </div>
 
 </body>
