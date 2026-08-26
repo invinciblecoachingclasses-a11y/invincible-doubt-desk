@@ -1,5 +1,3 @@
-// api/generate-test.js
-
 export default async function handler(req, res) {
   // ============================================================
   // CORS HEADERS
@@ -32,7 +30,7 @@ export default async function handler(req, res) {
 
   try {
     // ==========================================================
-    // EXTRACT USER SETTINGS
+    // EXTRACT USER SETTINGS & MULTI-TENANT CONTEXT
     // ==========================================================
     const body = req.body || {};
     const className = body.class || body.className || "Class 10";
@@ -42,6 +40,9 @@ export default async function handler(req, res) {
     const difficulty = body.difficulty || "Moderate";
     const language = body.language || "English and Pure Devanagari Hindi";
     const questionType = body.questionType || body.type || "MCQ";
+    
+    // NEW: Multi-Tenant Identifiers
+    const organization = body.organization || body.school_id || "Indian Academic Institution";
 
     const questionCount = Math.min(
       Math.max(Number.isFinite(requestedCount) ? requestedCount : 20, 1),
@@ -75,10 +76,10 @@ export default async function handler(req, res) {
     };
 
     // ==========================================================
-    // PROMPT
+    // PROMPT (Now School-Aware)
     // ==========================================================
     const prompt = `
-You are an expert Indian CBSE school teacher and board question-paper creator.
+You are an expert Indian CBSE school teacher creating a board-level question paper for ${organization}.
 
 Generate a practice assessment using the following settings:
 CLASS: ${className}
@@ -185,18 +186,25 @@ STRICT INSTRUCTIONS:
     }
 
     // ==========================================================
-    // ZERO-FAILURE BACKUP POOL (SUPABASE OR CURATED QUESTIONS)
+    // ZERO-FAILURE BACKUP POOL (Filtered by School if available)
     // ==========================================================
     if (validQuestions.length === 0 && supabaseUrl && supabaseKey) {
       try {
         const cleanClass = className.replace(/[^0-9]/g, "") || "10";
-        const qRes = await fetch(`${supabaseUrl}/rest/v1/weekly_tests?class_name=eq.${cleanClass}&select=*&limit=50`, {
+        // Attempt to fetch school-specific backup questions first
+        let qUrl = `${supabaseUrl}/rest/v1/weekly_tests?class_name=eq.${cleanClass}&select=*&limit=50`;
+        if (organization !== "Indian Academic Institution" && organization !== "ALL") {
+             qUrl += `&school_id=eq.${encodeURIComponent(organization)}`;
+        }
+        
+        const qRes = await fetch(qUrl, {
           headers: {
             'apikey': supabaseKey,
             'Authorization': `Bearer ${supabaseKey}`
           }
         });
         const dbList = await qRes.json();
+        
         if (Array.isArray(dbList) && dbList.length > 0) {
           validQuestions = dbList
             .sort(() => 0.5 - Math.random())
@@ -215,7 +223,7 @@ STRICT INSTRUCTIONS:
       }
     }
 
-    // Static Procedural Fallback Pool (Guarantees immediate response even if API & DB are unavailable)
+    // Static Procedural Fallback Pool 
     if (validQuestions.length === 0) {
       const emergencyPool = [
         {
@@ -258,6 +266,7 @@ STRICT INSTRUCTIONS:
     return res.status(200).json({
       success: true,
       model: usedModel,
+      organization_id: organization, // Echoes the locked tenant ID
       class: className,
       subject: subject,
       chapter: chapter,
