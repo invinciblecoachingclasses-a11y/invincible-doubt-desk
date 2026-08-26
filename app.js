@@ -483,7 +483,6 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
         const xpEl = document.getElementById('xpCounter');
         if (xpEl) xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
 
-        // Power-up recharge trigger
         rechargeBlitzPowerup('fiftyFifty');
 
         if (reelStreak >= 3) {
@@ -528,28 +527,23 @@ window.handleGetBlitzPass = function() {
   const studentName = nameInput || localStorage.getItem('studentName') || localStorage.getItem('student_name') || 'Champion';
   const passId = 'BLITZ-' + Math.floor(100000 + Math.random() * 900000);
   
-  // 1. Store Pass in Local Storage
   localStorage.setItem('blitz_pass_active', 'true');
   localStorage.setItem('blitz_pass_id', passId);
   
-  // 2. Award Bonus XP
   const xpEl = document.getElementById('xpCounter');
   let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
   currentXP += 100;
   if (xpEl) xpEl.textContent = currentXP;
   localStorage.setItem('student_xp', currentXP.toString());
 
-  // 3. Recharge Powerups
   rechargeBlitzPowerup('fiftyFifty');
   rechargeBlitzPowerup('timeFreeze');
   rechargeBlitzPowerup('shield');
 
-  // 4. Play audio and haptic feedback
   if (typeof playWin === 'function') playWin();
   if (typeof triggerHaptic === 'function') triggerHaptic([50, 50, 100]);
   if (typeof confetti === 'function') confetti({ particleCount: 90, spread: 60, origin: { y: 0.6 } });
 
-  // 5. Render Pass Modal
   renderBlitzPassModal(studentName, passId);
 }
 
@@ -710,23 +704,8 @@ function downloadPDF() {
         <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"><\/script>
         <style>
           @page { size: A4 portrait; margin: 15mm; }
-          body {
-            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
-            color: #0f172a;
-            background: #ffffff;
-            margin: 0;
-            padding: 10px;
-            font-size: 13px;
-            line-height: 1.65;
-          }
-          .header {
-            border-bottom: 2px solid #0f172a;
-            padding-bottom: 8px;
-            margin-bottom: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-          }
+          body { font-family: 'Plus Jakarta Sans', Arial, sans-serif; color: #0f172a; background: #ffffff; margin: 0; padding: 10px; font-size: 13px; line-height: 1.65; }
+          .header { border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-end; }
           .title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 900; color: #0f172a; }
           .sub { font-size: 9px; font-weight: 800; color: #0284c7; letter-spacing: 1px; text-transform: uppercase; }
           h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #0f172a; margin-top: 22px; margin-bottom: 10px; break-after: avoid; }
@@ -752,9 +731,7 @@ function downloadPDF() {
         <script>
           window.onload = function() {
             if (window.MathJax) {
-              MathJax.typesetPromise().then(() => {
-                setTimeout(() => { window.print(); window.close(); }, 500);
-              });
+              MathJax.typesetPromise().then(() => { setTimeout(() => { window.print(); window.close(); }, 500); });
             } else {
               setTimeout(() => { window.print(); window.close(); }, 500);
             }
@@ -809,7 +786,7 @@ function initBlitzCountdown() {
   setInterval(() => {
     const now = new Date();
     const target = new Date();
-    target.setHours(21, 0, 0, 0); // 9:00 PM IST
+    target.setHours(21, 0, 0, 0); 
 
     if (now > target) {
       target.setDate(target.getDate() + 1);
@@ -824,8 +801,30 @@ function initBlitzCountdown() {
   }, 1000);
 }
 
+/* =====================================================
+   CORE DATA LOADING & MULTI-TENANT IDENTITY SYNC
+===================================================== */
+async function checkAuth() {
+  try {
+      if (typeof window.supabase !== 'undefined') {
+          const { data: { session } } = await window.supabase.auth.getSession();
+          if (session && session.user) {
+              const metadata = session.user.user_metadata || {};
+              if (metadata.school_id) {
+                  localStorage.setItem('userSchool', metadata.school_id);
+                  localStorage.setItem('testOrg', metadata.school_id);
+              }
+              if (metadata.name) {
+                  localStorage.setItem('studentName', metadata.name);
+              }
+          }
+      }
+  } catch(e) {}
+}
+
 async function loadPlatformData(){
     try{
+        await checkAuth(); // Sync Multi-Tenant Tags
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
@@ -877,7 +876,6 @@ window.addEventListener('DOMContentLoaded', () => {
     initBlitzCountdown();
     updatePowerupUI();
     
-    // Attach VIP Blitz Pass Click Handler
     const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
     passBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -1029,13 +1027,23 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
 }
 
 /* =====================================================
-   CAMPUS HUB / SCHOOL DISPATCH CONTROLLER
+   CAMPUS HUB / SCHOOL DISPATCH CONTROLLER (MULTI-TENANT)
 ==================================================== */
 let currentCategoryFilter = 'ALL';
 let allSchoolPosts = [];
 
 async function fetchSchoolPosts() {
-  const selectedSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
+  // Lock to the student's registered school if available
+  let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
+  const selectedSchool = studentSchool !== 'ALL' ? studentSchool : (document.getElementById('hubSchoolSelect')?.value || 'ALL');
+
+  // Update UI to reflect the locked school
+  const schoolSelect = document.getElementById('hubSchoolSelect');
+  if (schoolSelect && studentSchool !== 'ALL') {
+      schoolSelect.value = studentSchool;
+      schoolSelect.disabled = true; // Lock it down
+      schoolSelect.style.opacity = "0.7";
+  }
   
   try {
     if (typeof supabase !== 'undefined') {
@@ -1088,8 +1096,8 @@ function renderSchoolFeed() {
     container.innerHTML = `
       <div style="text-align:center; padding:24px 14px; background:#111827; border-radius:14px; border:1px dashed rgba(255,255,255,0.12);">
         <div style="font-size:24px;">💬</div>
-        <div style="color:#e5e7eb; font-weight:700; font-size:13px; margin-top:4px;">Is school ka abhi koi post nahi hai</div>
-        <div style="color:#9ca3af; font-size:11px; margin-top:2px;">Pehle student bano aur upar "+ Post Karo" daba kar shuru karo!</div>
+        <div style="color:#e5e7eb; font-weight:700; font-size:13px; margin-top:4px;">No posts available for your school</div>
+        <div style="color:#9ca3af; font-size:11px; margin-top:2px;">Check back later for updates from your teachers!</div>
       </div>
     `;
     return;
@@ -1143,11 +1151,16 @@ async function upvotePost(postId, btnEl) {
 }
 
 function openCreatePostModal() {
-  const selSchool = document.getElementById('hubSchoolSelect')?.value || 'ALL';
-  if (selSchool !== 'ALL') {
-    const mSel = document.getElementById('modalSchoolSelect');
-    if (mSel) mSel.value = selSchool;
+  let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
+  const mSel = document.getElementById('modalSchoolSelect');
+  
+  if (studentSchool !== 'ALL' && mSel) {
+    mSel.value = studentSchool;
+    // Visually lock the dropdown to their actual school
+    mSel.disabled = true;
+    mSel.style.opacity = "0.7";
   }
+
   const modal = document.getElementById('createPostModal');
   if (modal) modal.style.display = 'flex';
 }
@@ -1159,7 +1172,11 @@ function closeCreatePostModal() {
 
 async function handleCreatePost(e) {
   e.preventDefault();
-  const school_name = document.getElementById('modalSchoolSelect')?.value;
+  
+  let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
+  // Use locked school if available, otherwise read dropdown
+  const school_name = studentSchool !== 'ALL' ? studentSchool : document.getElementById('modalSchoolSelect')?.value;
+  
   const category = document.getElementById('modalCategorySelect')?.value;
   const batch_tag = document.getElementById('modalBatchInput')?.value;
   const title = document.getElementById('modalTitleInput')?.value;
@@ -1494,6 +1511,12 @@ if (startTestBtn) {
 
     if(!name || !mobile || !org || !cls || !subject){ return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); }
     if(!/^[0-9]{10}$/.test(mobile)){ return alert("Please enter a valid 10-digit mobile number."); }
+
+    // Save student identity persistently for Multi-Tenant Lock
+    if(org) {
+        localStorage.setItem('userSchool', org);
+        localStorage.setItem('testOrg', org);
+    }
 
     const originalText = startTestBtn.textContent;
     startTestBtn.disabled = true; startTestBtn.textContent = "⚙️ Compiling Assessment... (10s)";
@@ -2246,12 +2269,17 @@ if (addStoryBtn) {
 async function loadActiveStories() {
     const container = document.getElementById('dynamicStoryCircles');
     if (!container) return;
+    
+    // Multi-Tenant Isolation for Stories
+    let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
+
     try {
-        const res = await fetch('/api/stories');
+        const res = await fetch(`/api/stories?school_id=${encodeURIComponent(studentSchool)}`);
         const data = await res.json();
         const dbStories = Array.isArray(data.stories) ? data.stories : (Array.isArray(data) ? data : []);
 
-        activeStories = [...dbStories];
+        // Client-side fallback filter
+        activeStories = dbStories.filter(s => studentSchool === 'ALL' || s.institution === studentSchool || !s.institution);
 
         container.innerHTML = activeStories.map((s, idx) => {
             const author = String(s.author_name || s.author || s.name || "Student");
