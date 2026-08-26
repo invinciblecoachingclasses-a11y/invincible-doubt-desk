@@ -140,7 +140,16 @@ function selectStartingQuest(quest) {
     if (modal) modal.style.display = 'none';
     switchTab(quest);
 }
-setTimeout(() => { if (!localStorage.getItem('invincible_onboarded')) { const m = document.getElementById('onboardingModal'); if(m) m.style.display = 'flex'; } }, 800);
+
+// 🔴 THE FIX IS HERE 🔴
+// It now checks if the student is VERIFIED before showing the welcome tutorial!
+setTimeout(() => { 
+    const isVerified = localStorage.getItem('student_verified') === 'true';
+    if (isVerified && !localStorage.getItem('invincible_onboarded')) { 
+        const m = document.getElementById('onboardingModal'); 
+        if(m) m.style.display = 'flex'; 
+    } 
+}, 800);
 
 /* =====================================================
    AUDIO SYNTHESIS ENGINE & SOUNDSCAPES
@@ -824,7 +833,7 @@ async function checkAuth() {
 
 async function loadPlatformData(){
     try{
-        await checkAuth(); // Sync Multi-Tenant Tags
+        await checkAuth(); 
         const response = await fetch('/api/get-questions');
         const data = await response.json();
 
@@ -875,6 +884,13 @@ window.addEventListener('DOMContentLoaded', () => {
     loadActiveStories();
     initBlitzCountdown();
     updatePowerupUI();
+    
+    // 🔴 THE LOCK IS ENFORCED HERE TOO 🔴
+    const isVerified = localStorage.getItem('student_verified') === 'true';
+    if (!isVerified) {
+        const inviteModal = document.getElementById('studentInviteModal');
+        if (inviteModal) inviteModal.style.display = 'flex';
+    }
     
     const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
     passBtns.forEach(btn => {
@@ -1033,15 +1049,13 @@ let currentCategoryFilter = 'ALL';
 let allSchoolPosts = [];
 
 async function fetchSchoolPosts() {
-  // Lock to the student's registered school if available
   let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
   const selectedSchool = studentSchool !== 'ALL' ? studentSchool : (document.getElementById('hubSchoolSelect')?.value || 'ALL');
 
-  // Update UI to reflect the locked school
   const schoolSelect = document.getElementById('hubSchoolSelect');
   if (schoolSelect && studentSchool !== 'ALL') {
       schoolSelect.value = studentSchool;
-      schoolSelect.disabled = true; // Lock it down
+      schoolSelect.disabled = true; 
       schoolSelect.style.opacity = "0.7";
   }
   
@@ -1156,7 +1170,6 @@ function openCreatePostModal() {
   
   if (studentSchool !== 'ALL' && mSel) {
     mSel.value = studentSchool;
-    // Visually lock the dropdown to their actual school
     mSel.disabled = true;
     mSel.style.opacity = "0.7";
   }
@@ -1174,7 +1187,6 @@ async function handleCreatePost(e) {
   e.preventDefault();
   
   let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
-  // Use locked school if available, otherwise read dropdown
   const school_name = studentSchool !== 'ALL' ? studentSchool : document.getElementById('modalSchoolSelect')?.value;
   
   const category = document.getElementById('modalCategorySelect')?.value;
@@ -1512,7 +1524,6 @@ if (startTestBtn) {
     if(!name || !mobile || !org || !cls || !subject){ return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); }
     if(!/^[0-9]{10}$/.test(mobile)){ return alert("Please enter a valid 10-digit mobile number."); }
 
-    // Save student identity persistently for Multi-Tenant Lock
     if(org) {
         localStorage.setItem('userSchool', org);
         localStorage.setItem('testOrg', org);
@@ -2270,7 +2281,6 @@ async function loadActiveStories() {
     const container = document.getElementById('dynamicStoryCircles');
     if (!container) return;
     
-    // Multi-Tenant Isolation for Stories
     let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
 
     try {
@@ -2278,7 +2288,6 @@ async function loadActiveStories() {
         const data = await res.json();
         const dbStories = Array.isArray(data.stories) ? data.stories : (Array.isArray(data) ? data : []);
 
-        // Client-side fallback filter
         activeStories = dbStories.filter(s => studentSchool === 'ALL' || s.institution === studentSchool || !s.institution);
 
         container.innerHTML = activeStories.map((s, idx) => {
@@ -2624,3 +2633,31 @@ function saveStoryToVault() {
   if (typeof playWin === 'function') playWin();
   alert("💾 Saved to Gallery!");
 }
+
+window.addEventListener('DOMContentLoaded', () => { 
+    setTimeout(loadPlatformData, 300); 
+    loadActiveStories();
+    initBlitzCountdown();
+    updatePowerupUI();
+    
+    // THE LOCK IS ENFORCED HERE TOO
+    const isVerified = localStorage.getItem('student_verified') === 'true';
+    if (!isVerified) {
+        const inviteModal = document.getElementById('studentInviteModal');
+        if (inviteModal) inviteModal.style.display = 'flex';
+    }
+    
+    const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
+    passBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleGetBlitzPass();
+      });
+    });
+
+    setTimeout(() => {
+        const savedClass = localStorage.getItem('invincible_user_class') || "10";
+        const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
+        setReelsClass(savedClass, btn);
+    }, 200);
+});
