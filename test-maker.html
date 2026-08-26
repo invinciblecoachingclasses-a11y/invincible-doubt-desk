@@ -1043,16 +1043,22 @@
         }
     }
 
-    async function verifyStudent(id) {
+        async function verifyStudent(id) {
         try {
-            const { error } = await supabaseClient.from('students').update({ status: 'verified' }).eq('id', id);
+            const { error } = await supabaseClient
+                .from('students')
+                .update({ status: 'verified' })
+                .eq('id', id);
+
             if (error) throw error;
-        } catch(err) {} // Suppress error for mock mode
+        } catch(err) {
+            console.error("Verification failed:", err.message);
+        }
         
-        const student = currentRoster.find(s => s.id === id);
-        if(student) student.status = 'verified';
-        loadClassData(); // Re-render
+        // Refresh the local roster view immediately
+        await loadClassData();
     }
+
 
     function editStudent(id) {
         const student = currentRoster.find(s => s.id === id);
