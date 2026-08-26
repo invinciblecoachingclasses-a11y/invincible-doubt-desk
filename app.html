@@ -634,7 +634,7 @@
      STUDENT INVITE CODE & REGISTRATION MODAL
 ===================================================== -->
 <div id="studentInviteModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15);">
+  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15); max-height: 90vh; overflow-y: auto;">
     <div style="text-align:center; margin-bottom:18px;">
       <div style="font-size:32px; margin-bottom:6px;">🏫</div>
       <h3 style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#fff; margin:0;">Join Your School Roster</h3>
@@ -644,38 +644,43 @@
     <form id="studentInviteForm" onsubmit="handleStudentInviteSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
       <div>
         <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">6-Digit Private Invite Code</label>
-        <input type="text" id="inviteCodeInput" required placeholder="e.g. DVM10A" style="text-transform:uppercase; text-align:center; font-family:monospace; font-size:18px; font-weight:900; letter-spacing:3px; background:#020617; border:1px solid #1e293b; color:#00e5ff; border-radius:12px; padding:10px; width:100%; box-sizing:border-box; margin-top:4px;">
+        <input type="text" id="inviteCodeInput" placeholder="e.g. DVM10A" style="text-transform:uppercase; text-align:center; font-family:monospace; font-size:18px; font-weight:900; letter-spacing:3px; background:#020617; border:1px solid #1e293b; color:#00e5ff; border-radius:12px; padding:10px; width:100%; box-sizing:border-box; margin-top:4px;">
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <div>
           <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Student Name</label>
-          <input type="text" id="invStudentName" required placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+          <input type="text" id="invStudentName" placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
         </div>
         <div>
           <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Roll Number</label>
-          <input type="text" id="invRollNo" required placeholder="e.g. 14" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+          <input type="text" id="invRollNo" placeholder="e.g. 14" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
         </div>
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <div>
           <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Father's Name</label>
-          <input type="text" id="invFatherName" required placeholder="Father Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+          <input type="text" id="invFatherName" placeholder="Father Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
         </div>
         <div>
           <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Mother's Name</label>
-          <input type="text" id="invMotherName" required placeholder="Mother Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+          <input type="text" id="invMotherName" placeholder="Mother Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
         </div>
       </div>
 
       <div>
         <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Parent WhatsApp Number</label>
-        <input type="tel" id="invParentPhone" required placeholder="10-Digit Mobile" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
+        <input type="tel" id="invParentPhone" placeholder="10-Digit Mobile" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
       </div>
 
       <button type="submit" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 15px rgba(0,229,255,0.3);">
         SUBMIT FOR TEACHER VERIFICATION 🚀
+      </button>
+      
+      <!-- NEW SKIP BUTTON -->
+      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; font-size:12px; font-weight:700; border:none; padding:8px; cursor:pointer; margin-top:2px; hover:text-white;">
+        Don't have a code? Skip & Explore as Guest →
       </button>
     </form>
   </div>
