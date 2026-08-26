@@ -56,11 +56,12 @@
     <!-- Auth Form -->
     <form id="authForm" class="space-y-4">
       
-      <!-- NEW: Multi-Tenant School Selector (Required for Sign Up) -->
+      <!-- Multi-Tenant School Selector with Custom School Option -->
       <div>
         <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">Institution / Campus</label>
         <select 
           id="schoolInput" 
+          onchange="handleSchoolSelectChange(this.value)"
           class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition shadow-inner"
         >
           <option value="" disabled selected>Select your school (For Sign Up)</option>
@@ -72,7 +73,16 @@
           <option value="Bharat Public School">Bharat Public School</option>
           <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
           <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+          <option value="CUSTOM">+ Other / Register New School</option>
         </select>
+
+        <!-- Custom School Input Field -->
+        <input 
+          id="customSchoolInput" 
+          type="text" 
+          placeholder="Enter your School / Coaching Name"
+          class="hidden mt-2.5 w-full bg-slate-950 border border-cyan-500/50 rounded-2xl px-4 py-3 text-sm text-cyan-300 placeholder-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition shadow-inner"
+        />
       </div>
 
       <div>
@@ -138,9 +148,19 @@
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
     const schoolInput = document.getElementById('schoolInput');
+    const customSchoolInput = document.getElementById('customSchoolInput');
     const signInBtn = document.getElementById('signInBtn');
     const signUpBtn = document.getElementById('signUpBtn');
     const statusMsg = document.getElementById('statusMsg');
+
+    function handleSchoolSelectChange(value) {
+      if (value === 'CUSTOM') {
+        customSchoolInput.classList.remove('hidden');
+        customSchoolInput.focus();
+      } else {
+        customSchoolInput.classList.add('hidden');
+      }
+    }
 
     function showStatus(text, isError = false) {
       statusMsg.textContent = text;
@@ -157,9 +177,8 @@
       try {
         const { data: { session } } = await sb.auth.getSession();
         if (session && session.user) {
-          // Verify role is teacher before redirecting
           const role = session.user.user_metadata?.role;
-          if(role === 'teacher') {
+          if (role === 'teacher') {
              window.location.href = "test-maker.html";
           }
         }
@@ -184,6 +203,10 @@
           signInBtn.disabled = false;
           signInBtn.textContent = "Sign In";
         } else {
+          // Store school_id locally for fast reference
+          const userSchool = data.user?.user_metadata?.school_id || 'Invincible Coaching Classes';
+          localStorage.setItem('userSchool', userSchool);
+          
           showStatus("Verified! Loading Campus OS...", false);
           setTimeout(() => { window.location.href = "test-maker.html"; }, 500);
         }
@@ -194,11 +217,15 @@
       }
     });
 
-    // Sign Up Action (Multi-Tenant Injection)
+    // Sign Up Action (Multi-Tenant Custom School Injection)
     signUpBtn.addEventListener('click', async () => {
       const email = emailInput.value.trim().toLowerCase();
       const password = passwordInput.value.trim();
-      const schoolId = schoolInput.value;
+      let schoolId = schoolInput.value;
+
+      if (schoolId === 'CUSTOM') {
+        schoolId = customSchoolInput.value.trim();
+      }
 
       if (!email || !password) {
         showStatus("Please enter both email and password.", true);
@@ -206,8 +233,12 @@
       }
       
       if (!schoolId) {
-        showStatus("Institution is required for Faculty Sign Up.", true);
-        schoolInput.focus();
+        showStatus("Institution name is required for Faculty Sign Up.", true);
+        if (schoolInput.value === 'CUSTOM') {
+          customSchoolInput.focus();
+        } else {
+          schoolInput.focus();
+        }
         return;
       }
 
@@ -215,7 +246,6 @@
       signUpBtn.textContent = "Creating...";
 
       try {
-        // Tagging user with Multi-Tenant School ID & Role
         const { data, error } = await sb.auth.signUp({ 
           email, 
           password,
@@ -232,7 +262,8 @@
           signUpBtn.disabled = false;
           signUpBtn.textContent = "Sign Up";
         } else {
-          showStatus("Account created! Logging you in...", false);
+          localStorage.setItem('userSchool', schoolId);
+          showStatus("Account created! Loading Campus OS...", false);
           setTimeout(() => { window.location.href = "test-maker.html"; }, 500);
         }
       } catch (err) {
