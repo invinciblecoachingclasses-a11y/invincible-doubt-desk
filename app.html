@@ -1,4 +1,4 @@
-#<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -641,7 +641,8 @@
       <p style="font-size:12px; color:#94a3b8; margin:4px 0 0 0;">Enter the Private Invite Code provided by your teacher.</p>
     </div>
 
-    <form id="studentInviteForm" onsubmit="handleStudentInviteSubmit(event)" style="display:flex; flex-direction:column; gap:12px;">
+    <!-- PURE DIV STRUCTURE (NO FORM) TO FIX MOBILE CLICK BUGS -->
+    <div id="studentInviteForm" style="display:flex; flex-direction:column; gap:12px;">
       <div>
         <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">6-Digit Private Invite Code</label>
         <input type="text" id="inviteCodeInput" placeholder="e.g. DVM10A" style="text-transform:uppercase; text-align:center; font-family:monospace; font-size:18px; font-weight:900; letter-spacing:3px; background:#020617; border:1px solid #1e293b; color:#00e5ff; border-radius:12px; padding:10px; width:100%; box-sizing:border-box; margin-top:4px;">
@@ -674,15 +675,14 @@
         <input type="tel" id="invParentPhone" placeholder="10-Digit Mobile" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
       </div>
 
-      <button type="submit" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 15px rgba(0,229,255,0.3);">
+      <button type="button" id="btnSubmitInvite" onclick="handleStudentInviteSubmit(event)" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 15px rgba(0,229,255,0.3);">
         SUBMIT FOR TEACHER VERIFICATION 🚀
       </button>
       
-      <!-- NEW SKIP BUTTON -->
-      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; font-size:12px; font-weight:700; border:none; padding:8px; cursor:pointer; margin-top:2px; hover:text-white;">
+      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; font-size:12px; font-weight:700; border:none; padding:8px; cursor:pointer; margin-top:2px;">
         Don't have a code? Skip & Explore as Guest →
       </button>
-    </form>
+    </div>
   </div>
 </div>
 
@@ -865,20 +865,8 @@
 </div>
 
 <!-- EXTERNAL JAVASCRIPT -->
-<script src="app.js?v=1.1"></script>
+<script src="app.js?v=2.2"></script>
 
-
-<script>
-  // STUDENT INVITE CODE CHECK ON LOAD
-  window.addEventListener('DOMContentLoaded', () => {
-    const verified = localStorage.getItem('student_verified');
-    if (!verified || verified !== 'true') {
-      const modal = document.getElementById('studentInviteModal');
-      if (modal) modal.style.display = 'flex';
-    }
-  });
-
-  <script>
 <script>
   // 1. BULLETPROOF LOCK: Inject CSS immediately
   const verified = localStorage.getItem('student_verified');
@@ -892,22 +880,19 @@
     document.head.appendChild(lockStyle);
   }
 
-  // --- SKIP & EXPLORE AS GUEST (Guaranteed to work) ---
+  // --- SKIP & EXPLORE AS GUEST ---
   window.handleGuestSkip = function() {
-      try {
-          localStorage.setItem('studentName', 'Guest Explorer');
-          localStorage.setItem('student_verified', 'true'); 
-          localStorage.setItem('userSchool', 'ALL'); 
-          window.unlockScreenAndShowTutorial();
-      } catch(e) {
-          console.error(e);
-      }
+      localStorage.setItem('studentName', 'Guest Explorer');
+      localStorage.setItem('student_verified', 'true'); 
+      localStorage.setItem('userSchool', 'ALL'); 
+      window.unlockScreenAndShowTutorial();
   };
 
   // --- FAIL-SAFE SUBMIT BUTTON ---
   window.handleStudentInviteSubmit = async function(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
+    if(e) e.preventDefault();
+    
+    const btn = document.getElementById('btnSubmitInvite');
     const originalText = btn.innerText;
     btn.innerText = "VERIFYING... ⏳";
     btn.disabled = true;
@@ -920,14 +905,13 @@
     const phone = document.getElementById('invParentPhone').value.trim();
 
     if (!code || !name) {
-      alert('Please enter your Invite Code and Name.');
+      alert('Please enter your 6-Digit Invite Code and Student Name.');
       btn.innerText = originalText;
       btn.disabled = false;
       return;
     }
 
     try {
-      // Lazy load Supabase to prevent page crash if network is slow
       if (window.supabase) {
           const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
           const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
@@ -945,31 +929,20 @@
             parent_phone: phone,
             status: 'pending' 
           }]);
-          
-          if (error) console.warn("DB Error (Safe to ignore for now):", error);
+          if (error) console.warn("DB Auth Notice:", error);
       }
-
-      // Lock session locally (This guarantees they get in)
-      localStorage.setItem('studentName', name);
-      localStorage.setItem('student_verified', 'true');
-      localStorage.setItem('userSchool', code); 
-      
-      window.unlockScreenAndShowTutorial();
-      alert('🎉 Welcome! Your Roster entry was processed successfully.');
-
-    } catch(err) {
-      // Ultimate Fail-Safe: Let them in even if the server completely drops
-      localStorage.setItem('studentName', name);
-      localStorage.setItem('student_verified', 'true');
-      localStorage.setItem('userSchool', code); 
-      window.unlockScreenAndShowTutorial();
-    } finally {
-      btn.innerText = originalText;
-      btn.disabled = false;
+    } catch(e) {
+      console.warn("Network offline, bypassing DB save.");
     }
+
+    localStorage.setItem('studentName', name);
+    localStorage.setItem('student_verified', 'true');
+    localStorage.setItem('userSchool', code); 
+    
+    window.unlockScreenAndShowTutorial();
+    alert('🎉 Welcome! Your Roster entry was processed successfully.');
   };
 
-  // Helper function to reliably unlock the CSS restrictions
   window.unlockScreenAndShowTutorial = function() {
       const styles = document.querySelectorAll('style');
       styles.forEach(s => {
@@ -987,9 +960,5 @@
   };
 </script>
 
-
-
-
 </body>
 </html>
-
