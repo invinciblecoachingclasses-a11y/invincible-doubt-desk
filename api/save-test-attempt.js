@@ -1,5 +1,3 @@
-// api/save-test-attempt.js
-
 export default async function handler(req, res) {
   // ============================================================
   // CORS HEADERS
@@ -35,20 +33,26 @@ export default async function handler(req, res) {
     // Extract student and academic credentials
     const studentName = body.studentName || body.name || "Anonymous Student";
     const studentMobile = body.studentMobile || body.mobile || "N/A";
-    const organization = body.organization || body.school_name || body.school || body.institution || "Invincible Coaching";
+    
+    // STRICT MULTI-TENANT LOCK: Prefer explicit school_id if passed by the frontend
+    const organization = body.school_id || body.organization || body.school_name || body.school || body.institution || "Invincible Coaching";
+    
     const studentClass = body.studentClass || body.class || body.className || "10";
     const percentage = Math.min(Math.max(Number(body.percentage || 0), 0), 100);
+    
+    // Explicitly capture exam type (UT-1, Pre-Board, etc.) for Marksheet Aggregation
+    const examType = body.examType || body.testType || "Algorithmic Generation";
 
     const record = {
       student_name: studentName,
       student_mobile: studentMobile,
-      organization: organization,
-      school_name: organization,
+      organization: organization, // Tenant Lock
+      school_name: organization,  // Tenant Backup
       student_class: String(studentClass),
       subject: body.subject || "General",
       chapter: body.chapter || "Full Syllabus",
       test_title: body.testTitle || "Practice Assessment",
-      test_type: body.testType || "Algorithmic Generation",
+      test_type: examType, 
       total_questions: Number(body.totalQuestions || 0),
       attempted: Number(body.attempted || 0),
       correct: Number(body.correct || 0),
