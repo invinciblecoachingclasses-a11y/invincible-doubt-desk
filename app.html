@@ -873,36 +873,23 @@
   });
 
   <script>
-  <script>
+ <script>
   // SUPABASE CONNECTION
   const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
   const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // STUDENT INVITE CODE CHECK ON LOAD
-  window.addEventListener('DOMContentLoaded', () => {
-    const verified = localStorage.getItem('student_verified');
-    
-    if (!verified || verified !== 'true') {
-      // 1. Force the Invite Modal to the absolute top
-      const inviteModal = document.getElementById('studentInviteModal');
-      if (inviteModal) {
-          inviteModal.style.display = 'flex';
-          inviteModal.style.zIndex = '2147483647'; // Maximum possible z-index
-      }
-      
-      // 2. Aggressively hide the old tutorial if it tries to pop up over our lock
-      const hideTutorial = setInterval(() => {
-          const onboardModal = document.getElementById('onboardingModal');
-          if (onboardModal && onboardModal.style.display !== 'none') {
-              onboardModal.style.display = 'none';
-          }
-      }, 100); // Checks every 100ms
-      
-      // Stop checking after 5 seconds to save memory
-      setTimeout(() => clearInterval(hideTutorial), 5000);
-    }
-  });
+  // 1. BULLETPROOF LOCK: Inject CSS immediately to kill the tutorial
+  const verified = localStorage.getItem('student_verified');
+  if (!verified || verified !== 'true') {
+    const lockStyle = document.createElement('style');
+    lockStyle.innerHTML = `
+      #onboardingModal { display: none !important; }
+      #studentInviteModal { display: flex !important; z-index: 2147483647 !important; }
+      body { overflow: hidden !important; }
+    `;
+    document.head.appendChild(lockStyle);
+  }
 
   async function handleStudentInviteSubmit(e) {
     e.preventDefault();
@@ -926,7 +913,7 @@
     }
 
     try {
-      // Decode the School ID and Class from the Invite Code (e.g., DVM10A -> DVM, 10)
+      // Decode the School ID and Class
       const extractedClass = code.match(/\d+/) ? code.match(/\d+/)[0] : "10";
       
       // Push to Supabase Students Table
@@ -938,7 +925,7 @@
         father_name: father,
         mother_name: mother,
         parent_phone: phone,
-        status: 'pending' // Locks them in pending until teacher accepts
+        status: 'pending' 
       }]);
 
       if (error) throw error;
@@ -948,9 +935,16 @@
       localStorage.setItem('student_verified', 'true');
       localStorage.setItem('userSchool', code); 
       
-      document.getElementById('studentInviteModal').style.display = 'none';
+      // 2. Remove the CSS lock to let the app function normally
+      const styles = document.querySelectorAll('style');
+      styles.forEach(s => {
+        if (s.innerHTML.includes('#studentInviteModal')) s.remove();
+      });
       
-      // NOW that they are registered, let them see the tutorial!
+      document.getElementById('studentInviteModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+      
+      // 3. Show tutorial NOW that they are verified
       if (!localStorage.getItem('invincible_onboarded')) {
           const onboardModal = document.getElementById('onboardingModal');
           if (onboardModal) onboardModal.style.display = 'flex';
@@ -964,6 +958,7 @@
     }
   }
 </script>
+
 
 
 </body>
