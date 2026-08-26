@@ -941,38 +941,38 @@
         }
     }
 
-    async function loadClassData() {
+        async function loadClassData() {
         const cls = document.getElementById('rosterClassSelect').value;
         const schoolId = localStorage.getItem('userSchool') || 'INVINCIBLE';
         
-        // Generate predictable Invite Code for the students
-        const inviteCode = (schoolId.substring(0,3) + cls + "A").toUpperCase();
+        // Generate the exact invite code shown on screen
+        const inviteCode = (schoolId.substring(0, 3) + cls + "A").toUpperCase();
         document.getElementById('displayInviteCode').innerText = inviteCode;
 
         try {
-            // Fetch from Supabase `students` table
+            // Match EITHER the inviteCode (e.g. INV10A) OR the schoolId (INVINCIBLE)
             const { data, error } = await supabaseClient
                 .from('students')
                 .select('*')
-                .eq('school_id', schoolId)
+                .or(`school_id.eq.${inviteCode},school_id.eq.${schoolId}`)
                 .eq('class_name', cls)
-                .order('roll_number', { ascending: true });
+                .order('id', { ascending: false });
 
-            if (error) throw error;
+            if (error) {
+                console.error("Supabase query error:", error);
+                throw error;
+            }
+            
             currentRoster = data || [];
         } catch(err) {
-            console.warn("Using mock roster data (Create 'students' table in Supabase to sync).");
-            // Mock data fallback if table doesn't exist yet
-            currentRoster = [
-                { id: 1, roll_number: 1, student_name: "Aarav Sharma", father_name: "Rajesh Sharma", parent_phone: "9876543210", status: "verified" },
-                { id: 2, roll_number: 2, student_name: "Aditi Mathur", father_name: "Sanjay Mathur", parent_phone: "9876543211", status: "verified" },
-                { id: 3, roll_number: 14, student_name: "New Student", father_name: "Pending Parent", parent_phone: "9999999999", status: "pending" }
-            ];
+            console.warn("Could not load from Supabase:", err.message);
+            currentRoster = [];
         }
 
         renderRosterTables();
         renderAttendanceGrid();
     }
+
 
     function escapeHTML(str) {
       if (!str) return '';
