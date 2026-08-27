@@ -2812,48 +2812,74 @@ const labData = {
     }
 };
 
-function openLabSim(type) {
-    if (type === 'biology') return alert('🔒 Unlock Level 5 in Skill Tree to access Biology Lab.');
+window.openLabSim = function(type) {
+    if (type === 'biology') {
+        alert('🔒 Unlock Level 5 in Skill Tree to access Biology Lab.');
+        return;
+    }
     
     currentLabType = type;
     const data = labData[type];
-    document.getElementById('labSelectionHub').classList.add('hidden');
-    document.getElementById('activeLabPlayer').classList.remove('hidden');
+    if (!data) return;
+
+    const hub = document.getElementById('labSkillTree') || document.getElementById('labSelectionHub');
+    const player = document.getElementById('activeLabPlayer');
     
-    document.getElementById('labTitle').textContent = data.title;
-    document.getElementById('labControls').innerHTML = data.controls;
-    document.getElementById('labQuestionText').textContent = data.question;
+    if (hub) hub.classList.add('hidden');
+    if (player) player.classList.remove('hidden');
     
-    document.getElementById('labOptionsGrid').innerHTML = data.options.map((opt, idx) => `
-        <button onclick="submitLabPrediction(${idx})" style="background:#020617; border:1px solid #1e293b; color:#fff; padding:12px; border-radius:8px; text-align:left; font-weight:700; cursor:pointer;">${opt}</button>
-    `).join('');
+    const titleEl = document.getElementById('labTitle');
+    const controlsEl = document.getElementById('labControls');
+    const qEl = document.getElementById('labQuestionText');
+    const optGrid = document.getElementById('labOptionsGrid');
+
+    if (titleEl) titleEl.textContent = data.title;
+    if (controlsEl) controlsEl.innerHTML = data.controls;
+    if (qEl) qEl.textContent = data.question;
+    
+    if (optGrid) {
+        optGrid.innerHTML = data.options.map((opt, idx) => `
+            <button type="button" onclick="submitLabPrediction(${idx})" style="background:#020617; border:1px solid #1e293b; color:#fff; padding:12px; border-radius:8px; text-align:left; font-weight:700; cursor:pointer; width:100%; margin-bottom:6px;">${opt}</button>
+        `).join('');
+    }
 
     // Reset screens
-    document.getElementById('physBall').classList.add('hidden');
-    document.getElementById('chemBeaker').classList.add('hidden');
-    document.getElementById('bioZoom').classList.add('hidden');
-    clearInterval(chemInterval);
+    const ball = document.getElementById('physBall');
+    const beaker = document.getElementById('chemBeaker');
+    const bio = document.getElementById('bioZoom');
 
-    if (type === 'physics') {
-        const ball = document.getElementById('physBall');
+    if (ball) ball.classList.add('hidden');
+    if (beaker) beaker.classList.add('hidden');
+    if (bio) bio.classList.add('hidden');
+    if (typeof chemInterval !== 'undefined') clearInterval(chemInterval);
+
+    if (type === 'physics' && ball) {
         ball.classList.remove('hidden');
         ball.style.transform = `translate(0px, 0px)`;
-    } else if (type === 'chemistry') {
-        const beaker = document.getElementById('chemBeaker');
+    } else if (type === 'chemistry' && beaker) {
         beaker.classList.remove('hidden');
         beaker.innerHTML = '';
         beaker.style.background = 'rgba(16,185,129,0.2)';
-    } else if (type === 'biology') {
-        document.getElementById('bioZoom').classList.remove('hidden');
-        document.getElementById('bioZoom').style.transform = 'scale(1)';
+    } else if (type === 'biology' && bio) {
+        bio.classList.remove('hidden');
+        bio.style.transform = 'scale(1)';
     }
-}
+};
 
-function closeLabSim() {
-    document.getElementById('activeLabPlayer').classList.add('hidden');
-    document.getElementById('labSelectionHub').classList.remove('hidden');
-    clearInterval(chemInterval);
-}
+window.closeLabSim = function() {
+    const hub = document.getElementById('labSkillTree') || document.getElementById('labSelectionHub');
+    const player = document.getElementById('activeLabPlayer');
+    
+    if (player) player.classList.add('hidden');
+    if (hub) hub.classList.remove('hidden');
+    if (typeof chemInterval !== 'undefined') clearInterval(chemInterval);
+};
+
+// Expose simulation & prediction handlers globally for mobile event execution
+window.simulatePhysics = typeof simulatePhysics === 'function' ? simulatePhysics : window.simulatePhysics;
+window.simulateChem = typeof simulateChem === 'function' ? simulateChem : window.simulateChem;
+window.simulateBio = typeof simulateBio === 'function' ? simulateBio : window.simulateBio;
+window.submitLabPrediction = typeof submitLabPrediction === 'function' ? submitLabPrediction : window.submitLabPrediction;
 
 function simulatePhysics() {
     playTick();
