@@ -315,6 +315,9 @@ async function renderReelsDeck() {
         const qEscaped = escapeHTML(card.q_en || card.title || '');
         const sub = card.subject || 'Science';
         const hook = card.topic || 'NCERT Concept';
+        const author = card.author_name || 'Faculty Topper';
+        const school = card.school_name || 'Invincible 360';
+        const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:2px 6px; border-radius:6px;">⚡ By ${escapeHTML(author)} (${escapeHTML(school)})</span>`;
 
         if (card.type === 'mcq') {
             let opts = card.options;
@@ -325,9 +328,9 @@ async function renderReelsDeck() {
 
             return `
               <div class="reel-card" id="reelCard_${card.id}">
-                <div class="reel-tag-bar">
+                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
-                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
+                  ${creatorBadge}
                 </div>
                 
                 <div class="reel-content-box">
@@ -366,30 +369,30 @@ async function renderReelsDeck() {
                 </div>
               </div>
             `;
-        } else if (card.type === 'trap') {
+        } else if (card.type === 'trap' || card.type === 'hack') {
             return `
-              <div class="reel-card" style="border-left: 3px solid var(--accent-rose);">
-                <div class="reel-tag-bar">
-                  <span class="reel-hook-badge" style="color:#fda4af; border-color:rgba(244,63,94,0.4); background:rgba(244,63,94,0.15);">🚨 EXAMINER TRAP • ${sub.toUpperCase()}</span>
-                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
+              <div class="reel-card" style="border-left: 3px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'};">
+                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+                  <span class="reel-hook-badge" style="color:#fda4af; border-color:rgba(244,63,94,0.4); background:rgba(244,63,94,0.15);">${card.type === 'trap' ? '🚨 EXAMINER TRAP' : '💡 TOPPER HACK'} • ${sub.toUpperCase()}</span>
+                  ${creatorBadge}
                 </div>
                 
                 <div class="reel-content-box">
-                  <div class="reel-q-title" style="color:#f43f5e;">${card.title || 'Examiner Trap'}</div>
-                  <div style="font-size:12.5px; color:#f1f5f9; line-height:1.45; background:rgba(244,63,94,0.08); padding:10px 12px; border-radius:12px; border:1px solid rgba(244,63,94,0.2);">${card.content || ''}</div>
-                  <div style="font-size:11.5px; color:var(--accent-emerald); font-weight:800; margin-top:2px;">✅ BOARD RULE: ${card.rule || ''}</div>
+                  <div class="reel-q-title" style="color:${card.type === 'trap' ? '#f43f5e' : 'var(--accent-cyan)'};">${card.title || hook}</div>
+                  <div style="font-size:13px; color:#f1f5f9; line-height:1.5; background:rgba(255,255,255,0.03); padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
+                  ${card.rule ? `<div style="font-size:11.5px; color:var(--accent-emerald); font-weight:800; margin-top:4px;">✅ GOLDEN RULE: ${card.rule}</div>` : ''}
                 </div>
 
                 <div class="reel-side-dock">
                   <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('${qEscaped}', '${sub}')">
                     <span style="font-size:16px;">🧠</span>
                   </div>
-                  <span class="reel-dock-action-label">Solve</span>
+                  <span class="reel-dock-action-label">Explain</span>
 
                   <div class="reel-dock-action-btn" onclick="reactStory('mind')">
                     <span style="font-size:16px;">🤯</span>
                   </div>
-                  <span class="reel-dock-action-label">Shock</span>
+                  <span class="reel-dock-action-label">Clout</span>
 
                   <div class="reel-dock-action-btn" onclick="shareReel('${qEscaped}')">
                     <span style="font-size:15px;">🚀</span>
@@ -405,15 +408,15 @@ async function renderReelsDeck() {
         } else {
             return `
               <div class="reel-card" style="border-left: 3px solid var(--accent-cyan);">
-                <div class="reel-tag-bar">
+                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge" style="color:#bae6fd; border-color:rgba(0,229,255,0.4); background:rgba(0,229,255,0.12);">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
-                  <span style="font-size:11px; font-weight:900; color:#94a3b8;">#${idx + 1}</span>
+                  ${creatorBadge}
                 </div>
                 
                 <div class="reel-content-box" style="text-align:center;">
                   <div class="reel-q-title" style="color:var(--accent-cyan);">${card.title || 'Core Formula'}</div>
                   <div class="reel-formula-box">$$${card.formula || ''}$$</div>
-                  <div style="font-size:11.5px; color:#cbd5e1; line-height:1.35; margin-top:4px;">💡 ${card.tip || ''}</div>
+                  <div style="font-size:12px; color:#cbd5e1; line-height:1.4; margin-top:6px;">💡 ${card.tip || ''}</div>
                 </div>
 
                 <div class="reel-side-dock">
@@ -449,6 +452,7 @@ async function renderReelsDeck() {
         }
     } catch(e) {}
 }
+
 
 function shareReel(text) {
     if (navigator.share) {
