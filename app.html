@@ -38,10 +38,8 @@
   };
 </script>
 
-<!-- PeerJS WebRTC for Arena Voice Calls -->
+<!-- PeerJS WebRTC & Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
-
-<!-- Supabase Client for Student Verification Sync -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
@@ -66,8 +64,7 @@
      HOME DECK
 ===================================================== -->
 <div id="homeSection">
-
-    <!-- 9:00 PM MEGA BLITZ LIVE COUNTDOWN & WHATSAPP PASS BANNER -->
+    <!-- 9:00 PM MEGA BLITZ BANNER -->
     <section style="background: linear-gradient(135deg, rgba(244,63,94,0.08), rgba(0,229,255,0.05)); border: 1px solid rgba(255,255,255,0.06); padding: 18px 20px; margin-bottom: 20px; border-radius: 20px; backdrop-filter: blur(12px);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -79,17 +76,16 @@
            </button>
         </div>
 
-        <!-- TACTICAL POWER-UP LOADOUT TRAY -->
         <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
             <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Tactical Power-Ups</span>
             <div style="display:flex; gap:8px;">
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:5px;" title="50:50 Lifeline">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:5px;">
                     <span>✂️ 50:50</span> <span id="pupBadge_fiftyFifty" style="background:var(--accent-cyan); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:5px;" title="+3s Time Freeze">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:5px;">
                     <span>❄️ +3s</span> <span id="pupBadge_timeFreeze" style="background:var(--accent-amber); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(5,255,161,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:5px;" title="Point Protection Shield">
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(5,255,161,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:5px;">
                     <span>🛡️ Shield</span> <span id="pupBadge_shield" style="background:var(--accent-emerald); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
                 </div>
             </div>
@@ -97,9 +93,9 @@
     </section>
 
     <!-- DAILY MISSION TRACKER -->
-    <section class="mission-card" aria-label="Daily Progress Tracker" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; backdrop-filter:blur(12px);">
+    <section class="mission-card">
         <div class="mission-top">
-            <span style="font-size:11px; font-weight:800; letter-spacing:0.8px; color:var(--text-muted);">TODAY'S MISSION</span>
+            <span style="font-size:11px; font-weight:800; color:var(--text-muted);">TODAY'S MISSION</span>
             <span style="font-size:11px; font-weight:900; color:var(--accent-cyan);" id="missionCount">3 / 5 COMPLETED</span>
         </div>
         <div class="mission-track"><div class="mission-fill" id="missionBar" style="width:60%;"></div></div>
@@ -123,23 +119,21 @@
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
 
-    <!-- VIRAL: THE KNOWLEDGE MARKET -->
+    <!-- KNOWLEDGE MARKET -->
     <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:16px; margin-bottom:20px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-size:12px; font-weight:900; color:var(--accent-cyan);">🌐 THE KNOWLEDGE MARKET (BOUNTIES)</span>
+        <span style="font-size:12px; font-weight:900; color:var(--accent-cyan);">🌐 THE KNOWLEDGE MARKET</span>
         <button onclick="switchTab('doubt')" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; cursor:pointer;">+ Ask Peer</button>
       </div>
-      <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;">
-        <!-- Injected via JS -->
-      </div>
+      <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
     </div>
 
-    <!-- DAILY CLASH & LIVE LEADERBOARD BENTO -->
+    <!-- CLASH BENTO -->
     <div class="bento-grid">
-        <section class="survival-card" id="puzzleBox" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);" aria-label="Daily Academic Survival Challenge">
+        <section class="survival-card" id="puzzleBox" style="display:none;">
             <div>
                 <div class="survival-top">
-                    <span class="clash-badge">🔥 DAILY CLASH // 15s</span>
+                    <span class="clash-badge">🔥 DAILY CLASH</span>
                     <span id="survivalTimerNum" class="timer-badge">15s</span>
                 </div>
                 <div class="survival-timer-track"><div class="survival-timer-fill" id="survivalTimerBar"></div></div>
@@ -154,8 +148,8 @@
             </div>
         </section>
 
-        <!-- LIVE LEADERBOARD -->
-        <section class="clout-card" id="leaderboardBox" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);" aria-label="Top Performers Leaderboard">
+        <!-- LEADERBOARD -->
+        <section class="clout-card" id="leaderboardBox" style="display:none;">
             <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                 <span>🏆 CLOUT LEADERBOARD</span>
                 <span style="font-size:9px; font-weight:900; color:var(--accent-emerald); background:rgba(5,255,161,0.1); padding:2px 6px; border-radius:6px;">LIVE</span>
@@ -174,17 +168,16 @@
 </div>
 
 <!-- =====================================================
-     STUDY REELS (INFINITE VERTICAL FEED)
+     STUDY REELS
 ===================================================== -->
-<section id="reelsSection" class="hidden" aria-label="Study Reels Infinite Feed">
-  <!-- Grade Switcher Floating Bar -->
+<section id="reelsSection" class="hidden">
   <div class="reels-header-bar">
     <div style="font-size:13px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">
       <span>⚡ STUDY REELS</span>
       <span id="reelsComboBadge" class="reels-combo-pill hidden">🔥 x2 STREAK</span>
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
-      <button onclick="document.getElementById('reelCreatorModal').style.display='flex'" style="background:var(--accent-cyan); color:#000; font-size:11px; font-weight:900; padding:6px 12px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 10px rgba(0,229,255,0.3);">+ Create Hack</button>
+      <button onclick="document.getElementById('reelCreatorModal').style.display='flex'" style="background:var(--accent-cyan); color:#000; font-size:11px; font-weight:900; padding:6px 12px; border-radius:8px; border:none; cursor:pointer;">+ Create Hack</button>
       <div class="reels-class-pills">
         <button class="reel-class-btn" data-class="9" onclick="setReelsClass('9', this)">9</button>
         <button class="reel-class-btn active" data-class="10" onclick="setReelsClass('10', this)">10</button>
@@ -193,17 +186,13 @@
       </div>
     </div>
   </div>
-
-  <!-- Vertical Snap Container -->
-  <div class="study-reels-container" id="studyReelsDeck">
-    <!-- Reel Cards dynamically injected via JS -->
-  </div>
+  <div class="study-reels-container" id="studyReelsDeck"></div>
 </section>
 
 <!-- =====================================================
-     1. DOUBT SECTION
+     DOUBT SECTION
 ===================================================== -->
-<section class="card hidden" id="doubtSection" aria-label="Step-by-Step Doubt Solver" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="doubtSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -279,9 +268,9 @@
 </section>
 
 <!-- =====================================================
-     2. TEST SECTION
+     TEST SECTION
 ===================================================== -->
-<section class="card hidden" id="testSection" aria-label="CBSE Practice Test Suite" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="testSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -319,7 +308,7 @@
                 <option value="Science">Science</option>
             </select>
 
-            <input id="testChapter" type="text" placeholder="Chapter Name (Optional, e.g. Sound, Electrostatics)">
+            <input id="testChapter" type="text" placeholder="Chapter Name (Optional)">
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
@@ -356,9 +345,9 @@
 </section>
 
 <!-- =====================================================
-     3. ARENA SECTION
+     ARENA SECTION
 ===================================================== -->
-<section class="card hidden" id="arenaSection" aria-label="1v1 Live Knowledge Battle" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="arenaSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Home Deck</span>
         <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
@@ -374,8 +363,8 @@
         <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
       </div>
       <div style="display:flex; gap: 8px;">
-        <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()" title="Mute/Unmute Mic">🎙️</button>
-        <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()" title="Deafen/Listen">🔊</button>
+        <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()">🎙️</button>
+        <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()">🔊</button>
       </div>
     </div>
     <audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
@@ -387,43 +376,25 @@
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
           <div>
             <label>Grade</label>
-            <select id="arenaClass">
-              <option value="9">Class 9</option>
-              <option value="10" selected>Class 10</option>
-              <option value="11">Class 11</option>
-              <option value="12">Class 12</option>
-            </select>
+            <select id="arenaClass"><option value="10">Class 10</option></select>
           </div>
           <div>
             <label>Subject</label>
-            <select id="arenaSubject">
-              <option value="Science & Maths">Science & Maths (Mix)</option>
-              <option value="Science">Science (PCB)</option>
-              <option value="Mathematics">Mathematics</option>
-              <option value="Social Studies">Social Studies (SST)</option>
-            </select>
+            <select id="arenaSubject"><option value="Science">Science</option></select>
           </div>
         </div>
 
         <label>Specific Chapter / Topic (Optional)</label>
-        <input type="text" id="arenaChapter" placeholder="e.g. Light, Chemical Reactions, Trigonometry">
+        <input type="text" id="arenaChapter" placeholder="e.g. Light">
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
           <div>
             <label>Time Per Question</label>
-            <select id="arenaTimePerQ">
-              <option value="10">⚡ 10s (Speed Demon)</option>
-              <option value="15" selected>⏱ 15s (Standard)</option>
-              <option value="20">🐢 20s (Relaxed)</option>
-            </select>
+            <select id="arenaTimePerQ"><option value="15">⏱ 15s</option></select>
           </div>
           <div>
             <label>Total Questions</label>
-            <select id="arenaQuestionCount">
-              <option value="5">5 Qs (Quick Sprint)</option>
-              <option value="10" selected>10 Qs (Standard Match)</option>
-              <option value="15">15 Qs (Deep Battle)</option>
-            </select>
+            <select id="arenaQuestionCount"><option value="10">10 Qs</option></select>
           </div>
         </div>
         
@@ -434,14 +405,13 @@
                 <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 JOIN ROOM</button>
             </div>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs Invincible AI)</button>
+        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs AI)</button>
     </div>
 
     <div id="arenaWaiting" class="hidden lobby-box">
         <div class="lobby-radar"></div>
         <div style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; position:relative; z-index:2;">Share Room Match Code</div>
         <div class="room-code-display" id="displayRoomCode">0000</div>
-        <div style="font-size:13px; color:var(--accent-cyan); font-weight:800; position:relative; z-index:2;">🛰️ Scanning for Opponent Connection...</div>
     </div>
 
     <div id="arenaBattle" class="hidden">
@@ -490,18 +460,16 @@
 </section>
 
 <!-- =====================================================
-     4. SCHOOL FEED SECTION
+     SCHOOL FEED SECTION
 ===================================================== -->
-<section class="card hidden" id="feedSection" aria-label="School Dispatch & Community Notes" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="feedSection">
   <div class="quick-hub-banner" onclick="switchTab('home')">
       <span style="font-size:12px; font-weight:800; color:#22c55e;">← Return to Home Deck</span>
-      <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
   </div>
 
   <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
     <div>
-      <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0;">📢 School Charcha &amp; Notes</h3>
-      <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Apne school ki baatein, notes aur senior updates</p>
+      <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0;">📢 School Charcha</h3>
     </div>
     <button type="button" onclick="openCreatePostModal()" style="background: #22c55e; color: #052e16; border: none; font-weight: 800; font-size: 12px; padding: 9px 15px; border-radius: 10px; cursor: pointer;">
       + Post Karo
@@ -509,89 +477,56 @@
   </div>
 
   <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; outline: none; margin-bottom: 10px;">
-    <option value="ALL">📍 Sabhi Local Schools (Kulesra / Greater Noida)</option>
-    <option value="DVM Public School">DVM Public School</option>
-    <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+    <option value="ALL">📍 Sabhi Local Schools</option>
   </select>
 
   <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px;" id="hubCategoryPills">
     <button class="hub-pill active" onclick="setCategoryFilter('ALL', this)">🔥 Sabhi</button>
-    <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teacher Updates</button>
-    <button class="hub-pill" onclick="setCategoryFilter('syllabus_notes', this)">📚 Notes &amp; Paper</button>
-    <button class="hub-pill" onclick="setCategoryFilter('ask_seniors', this)">❓ Seniors se Poocho</button>
-    <button class="hub-pill" onclick="setCategoryFilter('news', this)">🎉 School Masti &amp; News</button>
+    <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teachers</button>
   </div>
 
   <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 10px;"></div>
 </section>
 
 <!-- =====================================================
-     5. NOTES STUDIO SECTION
+     NOTES STUDIO SECTION
 ===================================================== -->
-<section class="card hidden" id="notesSection" aria-label="Topper Notes Studio" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="notesSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-amber);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
     </div>
 
     <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
-    <div class="hide-on-print" style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Generate comprehensive chapter revision modules with formulas, traps, and diagrams.</div>
     
     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
-        <select id="notesClass">
-            <option value="9">Class 9 (8-Page Module)</option>
-            <option value="10">Class 10 (8-Page Module)</option>
-            <option value="11">Class 11 (10-Page Module)</option>
-            <option value="12">Class 12 (10-Page Module)</option>
-        </select>
-        
-        <select id="notesSubject">
-            <option value="Physics">Physics</option>
-            <option value="Chemistry">Chemistry</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Biology">Biology</option>
-            <option value="Science">Science</option>
-        </select>
-
-        <select id="notesLanguage">
-            <option value="English">English</option>
-            <option value="Hindi">Hindi (हिंदी)</option>
-            <option value="Hinglish">Hinglish</option>
-        </select>
+        <select id="notesClass"><option value="10">Class 10</option></select>
+        <select id="notesSubject"><option value="Science">Science</option></select>
+        <select id="notesLanguage"><option value="English">English</option></select>
     </div>
     
-    <label>Chapter Name</label>
-    <input type="text" id="notesChapter" placeholder="e.g. Gravitation, Sound, Chemical Reactions">
-    
+    <input type="text" id="notesChapter" placeholder="e.g. Gravitation">
     <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
     
-    <div id="notesLoading" class="hidden waiting-container" style="border-color:var(--accent-amber);">
-      <div style="font-size:13px; font-weight:800; color:var(--accent-amber);">⚙️ COMPILING COMPREHENSIVE STUDY MODULE...</div>
-      <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Tap the energy orb to supercharge AI compilation!</div>
+    <div id="notesLoading" class="hidden waiting-container">
       <div class="charger-orb" onclick="chargeSupercharger()">⚡</div>
-      <div style="font-size:12px; font-weight:900; color:#fff;" id="chargeBonusDisplay">+0 Bonus XP Charged</div>
+      <div id="chargeBonusDisplay">+0 Bonus XP Charged</div>
     </div>
     
     <div id="notesResultContainer" class="hidden topper-paper-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
-            <div style="font-family:'Space Grotesk', sans-serif; font-size:16px; font-weight:900; color:#0f172a; text-transform:uppercase;" id="notesResultTitle">CLASS • SUBJECT</div>
-            <div style="display:flex; gap:8px;">
-              <button type="button" onclick="playAudioExplanation(document.getElementById('notesContentBody').innerText, this)" style="background:#0284c7; color:#fff; border:none; padding:8px 14px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🔊 Listen</button>
-              <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-size:13px; cursor:pointer; font-weight:800;">🖨️ Download PDF</button>
-            </div>
+            <div id="notesResultTitle">CLASS • SUBJECT</div>
+            <button type="button" onclick="downloadPDF()">🖨️ Download PDF</button>
         </div>
-
         <div id="notesContentBody" class="topper-content"></div>
     </div>
 </section>
 
 <!-- =====================================================
-     6. INVINCIBLE LAB SECTION (CANVAS ENGINE & MATRIX)
+     INVINCIBLE LAB SECTION
 ===================================================== -->
-<section class="card hidden" id="labSection" aria-label="Interactive Simulations" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="labSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Play Server Boss Raid</span>
     </div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
@@ -599,34 +534,22 @@
         <span style="font-size:10px; font-weight:800; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:6px;">ENGINE V2.0</span>
     </div>
 
-    <!-- Curriculum Selection Matrix -->
     <div id="labSkillTree">
         <div class="curriculum-tabs">
-            <button type="button" class="curr-tab" onclick="filterLabMatrix(9, this)">Class 9</button>
             <button type="button" class="curr-tab active" onclick="filterLabMatrix(10, this)">Class 10</button>
             <button type="button" class="curr-tab" onclick="filterLabMatrix(11, this)">Class 11</button>
-            <button type="button" class="curr-tab" onclick="filterLabMatrix(12, this)">Class 12</button>
         </div>
-
-        <div class="lab-matrix-grid" id="matrixGrid">
-            <!-- Injected dynamically via JS based on selected Class -->
-        </div>
+        <div class="lab-matrix-grid" id="matrixGrid"></div>
     </div>
 
-    <!-- Canvas Simulation Player -->
     <div id="activeLabPlayer" class="hidden" style="margin-top:10px;">
         <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--text-muted); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation</button>
-        
         <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:10px;">Lab Simulator</div>
-        
-        <!-- THE HIGH-PERFORMANCE CANVAS ENGINE -->
         <div class="canvas-player-container">
             <div id="simOverlayStats" class="sim-overlay-stats">FPS: 60</div>
             <canvas id="invincibleEngine" width="800" height="450"></canvas>
         </div>
-
         <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; margin-bottom:16px;"></div>
-
         <div id="labPredictionBox" style="background:#020617; border:1px solid var(--accent-cyan); padding:16px; border-radius:12px;">
             <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:8px;">🎯 PREDICT OUTCOME</div>
             <div id="labQuestionText" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
@@ -645,38 +568,21 @@
 </main>
 
 <!-- HIGH VISIBILITY 8-TAB BOTTOM DOCK -->
-<nav class="floating-dock" aria-label="Bottom Navigation Dock" style="overflow-x:auto; flex-wrap:nowrap; justify-content:flex-start; padding-bottom:5px;">
-    <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')">
-        <span class="dock-icon">🏠</span> Home
-    </button>
-    <button type="button" class="dock-btn reels-tab" onclick="switchTab('reels')">
-        <span class="dock-icon">⚡</span> Reels
-    </button>
-    <button type="button" class="dock-btn lab-tab" onclick="switchTab('lab')">
-        <span class="dock-icon">🔬</span> Lab
-    </button>
-    <button type="button" class="dock-btn" onclick="switchTab('doubt')">
-        <span class="dock-icon">🧠</span> Doubt
-    </button>
-    <button type="button" class="dock-btn" onclick="switchTab('test')">
-        <span class="dock-icon">⏱️</span> Tests
-    </button>
-    <button type="button" class="dock-btn arena-tab" onclick="switchTab('arena')">
-        <span class="dock-icon">⚔️</span> Arena
-    </button>
-    <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')">
-        <span class="dock-icon">📢</span> Feed
-    </button>
-    <button type="button" class="dock-btn notes-tab" onclick="switchTab('notes')">
-        <span class="dock-icon">📝</span> Notes
-    </button>
+<nav class="floating-dock">
+    <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')"><span class="dock-icon">🏠</span> Home</button>
+    <button type="button" class="dock-btn reels-tab" onclick="switchTab('reels')"><span class="dock-icon">⚡</span> Reels</button>
+    <button type="button" class="dock-btn lab-tab" onclick="switchTab('lab')"><span class="dock-icon">🔬</span> Lab</button>
+    <button type="button" class="dock-btn" onclick="switchTab('doubt')"><span class="dock-icon">🧠</span> Doubt</button>
+    <button type="button" class="dock-btn" onclick="switchTab('test')"><span class="dock-icon">⏱️</span> Tests</button>
+    <button type="button" class="dock-btn arena-tab" onclick="switchTab('arena')"><span class="dock-icon">⚔️</span> Arena</button>
+    <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')"><span class="dock-icon">📢</span> Feed</button>
+    <button type="button" class="dock-btn notes-tab" onclick="switchTab('notes')"><span class="dock-icon">📝</span> Notes</button>
 </nav>
 
-<!-- Loot Drop Gacha Modal -->
+<!-- MODALS -->
 <div id="lootCrateModal" style="display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); align-items:center; justify-content:center; flex-direction:column;">
     <div id="crateBox" style="font-size:80px; animation: shake 0.5s infinite; cursor:pointer;" onclick="openCrate()">📦</div>
     <div id="cratePrompt" style="color:#fff; font-weight:900; margin-top:20px;">TAP TO OPEN CRATE</div>
-    
     <div id="crateReward" class="hidden" style="text-align:center; background:#0f172a; border:2px solid var(--accent-cyan); padding:30px; border-radius:24px; max-width:300px; width:90%;">
         <div id="rewardIcon" style="font-size:60px; margin-bottom:10px;">✨</div>
         <div id="rewardTitle" style="color:#fff; font-size:24px; font-weight:900;">+50 XP</div>
@@ -685,122 +591,6 @@
     </div>
 </div>
 
-<!-- =====================================================
-     STUDENT INVITE CODE & REGISTRATION MODAL
-===================================================== -->
-<div id="studentInviteModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
-  <!-- Your invite modal content remains untouched -->
-  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15); max-height: 90vh; overflow-y: auto;">
-    <div style="text-align:center; margin-bottom:18px;">
-      <div style="font-size:32px; margin-bottom:6px;">🏫</div>
-      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#fff; margin:0;">Join Your School Roster</h3>
-      <p style="font-size:12px; color:#94a3b8; margin:4px 0 0 0;">Enter the Private Invite Code provided by your teacher.</p>
-    </div>
-
-    <!-- PURE DIV STRUCTURE (NO FORM) TO FIX MOBILE CLICK BUGS -->
-    <div id="studentInviteForm" style="display:flex; flex-direction:column; gap:12px;">
-      <div>
-        <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">6-Digit Private Invite Code</label>
-        <input type="text" id="inviteCodeInput" placeholder="e.g. DVM10A" style="text-transform:uppercase; text-align:center; font-family:monospace; font-size:18px; font-weight:900; letter-spacing:3px; background:#020617; border:1px solid #1e293b; color:#00e5ff; border-radius:12px; padding:10px; width:100%; box-sizing:border-box; margin-top:4px;">
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <div>
-          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Student Name</label>
-          <input type="text" id="invStudentName" placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
-        </div>
-        <div>
-          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Roll Number</label>
-          <input type="text" id="invRollNo" placeholder="e.g. 14" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
-        </div>
-      </div>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <div>
-          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Father's Name</label>
-          <input type="text" id="invFatherName" placeholder="Father Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
-        </div>
-        <div>
-          <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Mother's Name</label>
-          <input type="text" id="invMotherName" placeholder="Mother Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
-        </div>
-      </div>
-
-      <div>
-        <label style="font-size:11px; font-weight:800; color:#cbd5e1; text-transform:uppercase;">Parent WhatsApp Number</label>
-        <input type="tel" id="invParentPhone" placeholder="10-Digit Mobile" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; width:100%; box-sizing:border-box; margin-top:4px;">
-      </div>
-
-      <button type="button" id="btnSubmitInvite" onclick="handleStudentInviteSubmit(event)" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 15px rgba(0,229,255,0.3);">
-        SUBMIT FOR TEACHER VERIFICATION 🚀
-      </button>
-      
-      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; font-size:12px; font-weight:700; border:none; padding:8px; cursor:pointer; margin-top:2px;">
-        Don't have a code? Skip & Explore as Guest →
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- POST CREATION MODAL -->
-<div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
-  <!-- Untouched Post Modal -->
-  <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-      <div>
-        <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
-        <p style="font-size: 12px; color: #9ca3af; margin: 3px 0 0 0;">Share notes, viva questions, or ask seniors</p>
-      </div>
-      <button type="button" onclick="closeCreatePostModal()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; font-size: 14px; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;">✕</button>
-    </div>
-
-    <form id="createPostForm" onsubmit="handleCreatePost(event)" style="display: flex; flex-direction: column; gap: 14px;">
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">School</label>
-        <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px;">
-          <option value="DVM Public School">DVM Public School</option>
-          <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
-        </select>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 10px;">
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Category</label>
-          <select id="modalCategorySelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px;">
-            <option value="teacher_intel">👨‍🏫 Teacher Update / Viva Tip</option>
-            <option value="syllabus_notes">📚 Notes &amp; Questions</option>
-            <option value="ask_seniors">❓ Ask Seniors</option>
-            <option value="news">📢 School News &amp; Buzz</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Class / Batch</label>
-          <input type="text" id="modalBatchInput" placeholder="e.g. 10th-B" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 12px; margin-top: 5px; box-sizing: border-box;">
-        </div>
-      </div>
-
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Post Title</label>
-        <input type="text" id="modalTitleInput" placeholder="What's this update about?" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; box-sizing: border-box;">
-      </div>
-
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">Details / Message</label>
-        <textarea id="modalContentInput" rows="3" placeholder="Write in natural Hindi, Hinglish, or English..." required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px; resize: none; box-sizing: border-box;"></textarea>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);">
-        <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: #d1d5db; cursor: pointer;">
-          <input type="checkbox" id="modalAnonCheckbox" checked style="width: 16px; height: 16px; accent-color: #22c55e;">
-          <span>Post Anonymously 🤫</span>
-        </label>
-        <button type="submit" style="background: #22c55e; color: #052e16; font-weight: 800; font-size: 13px; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Publish Post 🚀</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- ONBOARDING MODAL -->
 <div class="quest-modal-overlay" id="onboardingModal">
     <div class="quest-modal-card">
         <h2 style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:0 0 8px 0;">🎮 WELCOME TO INVINCIBLE 360</h2>
@@ -813,268 +603,283 @@
             <span style="font-size:20px;">🧠</span>
             <div><strong style="color:#fff; font-size:13px;">Doubt Resolution</strong><div style="font-size:11px; color:var(--text-muted);">Step-by-step problem solver.</div></div>
         </div>
-        <div class="quest-choice-btn" onclick="selectStartingQuest('arena')">
-            <span style="font-size:20px;">⚔️</span>
-            <div><strong style="color:#fff; font-size:13px;">1v1 Match Arena</strong><div style="font-size:11px; color:var(--text-muted);">Rapid-fire 10s speed clash.</div></div>
-        </div>
         <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
 </div>
 
-<!-- MULTI-FORMAT CREATOR STUDIO MODAL -->
-<div id="reelCreatorModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.92); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:440px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.18); max-height:92vh; overflow-y:auto;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-      <div>
-        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:900; color:#fff; margin:0;">⚡ Creator Studio</h3>
-        <p style="font-size:11px; color:#94a3b8; margin:2px 0 0 0;">Publish to thousands of CBSE students &amp; earn clout</p>
-      </div>
-      <button type="button" onclick="document.getElementById('reelCreatorModal').style.display='none'" style="background:rgba(255,255,255,0.06); border:none; color:#94a3b8; font-size:16px; border-radius:50%; width:30px; height:30px; cursor:pointer;">✕</button>
+<div id="studentInviteModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15);">
+    <div style="text-align:center; margin-bottom:18px;">
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#fff; margin:0;">Join Your School Roster</h3>
     </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px;">
-      <button type="button" id="tabFormat_hack" onclick="switchReelFormat('hack')" style="background:rgba(0,229,255,0.18); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">💡 Concept Hack</button>
-      <button type="button" id="tabFormat_mcq" onclick="switchReelFormat('mcq')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🎯 MCQ Challenge</button>
-      <button type="button" id="tabFormat_trap" onclick="switchReelFormat('trap')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🚨 Examiner Trap</button>
-      <button type="button" id="tabFormat_formula" onclick="switchReelFormat('formula')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🧠 Formula Card</button>
+    <div id="studentInviteForm" style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="inviteCodeInput" placeholder="Code (e.g. DVM10A)">
+      <input type="text" id="invStudentName" placeholder="Full Name">
+      <button type="button" id="btnSubmitInvite" onclick="handleStudentInviteSubmit(event)" style="background:linear-gradient(135deg, #00e5ff, #0284c7); padding:12px; border-radius:12px; cursor:pointer;">SUBMIT</button>
+      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; border:none; cursor:pointer;">Skip & Explore as Guest →</button>
     </div>
-
-    <form onsubmit="handleMultiFormatReelSubmit(event)" style="display:flex; flex-direction:column; gap:10px;">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <select id="creatorSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-          <option value="Physics">Physics</option>
-          <option value="Chemistry">Chemistry</option>
-          <option value="Biology">Biology</option>
-          <option value="Mathematics">Mathematics</option>
-        </select>
-        <select id="creatorGrade" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-          <option value="10">Class 10</option>
-          <option value="9">Class 9</option>
-          <option value="11">Class 11</option>
-          <option value="12">Class 12</option>
-        </select>
-      </div>
-
-      <input type="text" id="creatorTopic" placeholder="Topic / Chapter Tag (e.g. Heart Blood Flow)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-
-      <div id="formatFields_hack" style="display:flex; flex-direction:column; gap:10px;">
-        <input type="text" id="creatorHackTitle" placeholder="Catchy Headline (e.g. 5-Sec Rule for Heart Valves)" style="background:#020617; border:1px solid #1e293b; color:#00e5ff; font-weight:800; border-radius:10px; padding:10px; font-size:12px;">
-        <textarea id="creatorHackContent" placeholder="Explain the concept breakdown or trick clearly..." rows="3" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
-        <input type="text" id="creatorHackRule" placeholder="💡 Examiner Tip / Golden Rule (e.g. Always remember: Arteries Away)" style="background:#020617; border:1px solid #1e293b; color:#10b981; border-radius:10px; padding:10px; font-size:12px;">
-      </div>
-
-      <div id="formatFields_mcq" style="display:none; flex-direction:column; gap:8px;">
-        <textarea id="creatorMcqQuestion" placeholder="Type MCQ Challenge Question..." rows="2" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
-        <input type="text" id="creatorOptA" placeholder="Option A (Correct Answer ✅)" style="background:#020617; border:1px solid #05ffa1; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-        <input type="text" id="creatorOptB" placeholder="Option B (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-        <input type="text" id="creatorOptC" placeholder="Option C (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-        <input type="text" id="creatorOptD" placeholder="Option D (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-      </div>
-
-      <div id="formatFields_formula" style="display:none; flex-direction:column; gap:8px;">
-        <input type="text" id="creatorFormulaLatex" placeholder="LaTeX Equation (e.g. P = \frac{V^2}{R})" style="background:#020617; border:1px solid #00e5ff; color:#00e5ff; font-family:monospace; border-radius:10px; padding:10px; font-size:12px;">
-        <input type="text" id="creatorFormulaTip" placeholder="Where to apply this formula..." style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-      </div>
-
-      <button type="submit" id="btnPublishReel" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:13px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 20px rgba(0,229,255,0.35);">
-        PUBLISH TO GLOBAL FEED 🚀 (+75 XP)
-      </button>
-    </form>
   </div>
 </div>
 
-<!-- STORY STUDIO MODAL -->
-<div class="modal-overlay" id="storyModal">
-    <div class="modal-card" style="width: min(480px, 96%); padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-            <h3 style="margin:0; font-size:16px; color:var(--accent-cyan);">📸 Story Studio</h3>
-            <button type="button" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
-        </div>
-        
-        <div class="story-studio-inputs">
-          <input type="text" id="storyAuthorName" placeholder="Your Name" style="margin:0;">
-          <input type="number" id="storyAuthorAge" placeholder="Age" style="margin:0;">
-          <input type="text" id="storyAuthorClass" placeholder="Class/Batch" style="margin:0;">
-          <input type="text" id="storyInstitution" placeholder="School Name" style="margin:0;">
-        </div>
+<!-- =====================================================
+     UNIFIED JAVASCRIPT ENGINE
+     (Replaces all modular scripts to bypass caching & syntax crashes)
+===================================================== -->
+<script>
+/* UTILS */
+function escapeHTML(str) { return str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : ''; }
+function formatMathText(text) { return text ? String(text).replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\times/g, " × ").replace(/\$\$/g, "").replace(/\$/g, "").trim() : ""; }
+function triggerHaptic(pattern = [40]) { if ('vibrate' in navigator) try { navigator.vibrate(pattern); } catch(e){} }
 
-        <div class="photo-upload-row">
-          <button type="button" class="photo-btn" onclick="document.getElementById('storyCameraInput').click()">📷 Camera</button>
-          <button type="button" class="photo-btn" onclick="document.getElementById('storyGalleryInput').click()">📁 Gallery</button>
-        </div>
-        <input type="file" id="storyCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleStoryImage(event)">
-        <input type="file" id="storyGalleryInput" accept="image/*" style="display:none;" onchange="handleStoryImage(event)">
+let doubtTimerInterval = null, factIdx = 0, chargedBonusXP = 0;
+const doubtFacts = ["💡 Total Internal Reflection happens only when light travels from denser to rarer medium.", "💡 In lens formula, focal length of convex lens is ALWAYS positive (+f).", "💡 Ohm's law is NOT universal."];
 
-        <div class="story-preview-container">
-          <span id="storyPlaceholderText" style="color:var(--text-muted); font-size:12px; font-weight:700;">No photo selected</span>
-          <img id="storyImagePreview" alt="Story Preview">
-        </div>
+function startDoubtWaitingPipeline() {
+  const steps = ["🔍 Scanning tokens...", "📐 Mapping scheme...", "🚨 Checking traps...", "✨ Compiling breakdown..."];
+  let sIdx = 0, progress = 10;
+  const label = document.getElementById('doubtPipelineText'), bar = document.getElementById('doubtProgressFill'), fact = document.getElementById('doubtFactTicker');
+  clearInterval(doubtTimerInterval);
+  doubtTimerInterval = setInterval(() => {
+    sIdx = (sIdx + 1) % steps.length; factIdx = (factIdx + 1) % doubtFacts.length; progress = Math.min(progress + 22, 92);
+    if (label) label.textContent = steps[sIdx]; if (bar) bar.style.width = progress + '%'; if (fact) fact.textContent = doubtFacts[factIdx];
+  }, 2200);
+}
+function stopDoubtWaitingPipeline() { clearInterval(doubtTimerInterval); }
+function chargeSupercharger() {
+  chargedBonusXP += 1;
+  const display = document.getElementById('chargeBonusDisplay');
+  if (display) display.textContent = `+${chargedBonusXP} Bonus XP Charged! ⚡`;
+}
+function answerWarmup(btn, isCorrect) {
+  const fb = document.getElementById('warmupFeedback');
+  if (isCorrect) { btn.style.background = 'rgba(16, 185, 129, 0.2)'; if(fb) fb.innerHTML = '<span style="color:var(--accent-emerald);">✓ Correct! +10 XP</span>'; } 
+  else { btn.style.borderColor = 'var(--accent-rose)'; if(fb) fb.innerHTML = '<span style="color:var(--accent-rose);">Incorrect!</span>'; }
+}
+function checkDailyStreak() {
+    const today = new Date().toDateString(), lastVisit = localStorage.getItem('invincible_last_visit');
+    let streak = parseInt(localStorage.getItem('invincible_streak') || '1', 10);
+    if (lastVisit) {
+        const diff = Math.floor((new Date(today) - new Date(lastVisit)) / (1000 * 60 * 60 * 24));
+        if (diff === 1) streak += 1; else if (diff > 1) streak = 1;
+    }
+    localStorage.setItem('invincible_last_visit', today); localStorage.setItem('invincible_streak', streak);
+    const el = document.getElementById('streakCounter'); if (el) el.textContent = streak;
+}
 
-        <div class="filter-tray" id="filterTray"></div>
+/* AUDIO */
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx, activeLofiNodes = [], currentTtsAudio = null, currentLofiMode = 0;
+function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
+function playSound(type, freq, duration, vol=0.1) { try { initAudio(); const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration); } catch(e){} }
+function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
+function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
+function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); }
+function playTick() { playSound('triangle', 950, 0.03, 0.05); }
+function stopLofiAudio() { activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} }); activeLofiNodes = []; }
+function toggleLofiAudio() {
+    initAudio(); stopLofiAudio(); currentLofiMode = (currentLofiMode + 1) % 4;
+    const labels = ["Sound: Off", "Alpha 108Hz", "Brown Noise", "Pulse 528Hz"];
+    const label = document.getElementById('lofiLabel'); if(label) label.textContent = labels[currentLofiMode];
+    if(currentLofiMode===0) return;
+    let gainNode = audioCtx.createGain(); gainNode.connect(audioCtx.destination);
+    if(currentLofiMode===1) { let o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=108; gainNode.gain.value=0.05; o.connect(gainNode); o.start(); activeLofiNodes.push(o); }
+}
+async function playAudioExplanation(text, btn) {
+    if(currentTtsAudio) { currentTtsAudio.pause(); currentTtsAudio=null; if(btn) btn.innerHTML="🔊 Listen"; return; }
+    if(btn) btn.innerHTML = "⏳ Generating...";
+    try {
+        const res = await fetch("/api/tts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: text, languageCode: "hi-IN", speakingRate: 1.05 }) });
+        const data = await res.json();
+        if(!data.audioBase64) throw new Error("TTS failed");
+        currentTtsAudio = new Audio(data.audioBase64);
+        if(btn) btn.innerHTML = "⏹️ Stop";
+        currentTtsAudio.play();
+        currentTtsAudio.onended = () => { if(btn) btn.innerHTML = "🔊 Listen"; currentTtsAudio = null; };
+    } catch(e) { if(btn) btn.innerHTML = "🔊 Listen"; }
+}
 
-        <textarea id="storyCaption" placeholder="Type your hack, formula, or thought here..." rows="2" style="margin-top:10px; background:rgba(0,0,0,0.6);"></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishStory">🚀 POST STORY</button>
-    </div>
-</div>
+/* NAVIGATION */
+function switchTab(tab) {
+    document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
+    const map = { 'home':0, 'reels':1, 'lab':2, 'doubt':3, 'test':4, 'arena':5, 'feed':6, 'notes':7 };
+    const btns = document.querySelectorAll('.dock-btn'); if(btns[map[tab]]) btns[map[tab]].classList.add('active');
+    ['home','reels','lab','doubt','test','arena','feed','notes'].forEach(s => { const el = document.getElementById(s+'Section'); if(el) el.classList.add('hidden'); });
+    const target = document.getElementById(tab+'Section'); if(target) target.classList.remove('hidden');
+    if(tab==='reels') renderReelsDeck();
+    if(tab!=='lab' && typeof closeLabSim==='function') closeLabSim();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function selectStartingQuest(quest) {
+    localStorage.setItem('invincible_onboarded', 'true');
+    const modal = document.getElementById('onboardingModal'); if(modal) modal.style.display = 'none';
+    switchTab(quest);
+}
 
-<!-- FULLSCREEN REELS VIEWER -->
-<div class="story-viewer-modal" id="storyViewer">
-    <div class="story-card-view">
-        <img id="viewerImageBg" class="story-image-bg" src="" style="display:none;">
-        <div class="story-content-layer">
-            <div>
-                <div class="story-progress-bar" id="storyProgressContainer"></div>
-                <div class="story-view-header" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                    <div style="font-size:13px; font-weight:900; color:#fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button id="viewerDeleteBtn" style="display:none; background:rgba(239,68,68,0.3); border:1px solid rgba(239,68,68,0.6); color:#fff; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
-                        <button class="story-close-btn" onclick="closeStoryViewer()">✕</button>
-                    </div>
+/* REELS & STORIES */
+const defaultReelDeck = [
+    { id:101, class_name:"10", type:"mcq", subject:"Physics", topic:"Optics", q_en:"If m = -1 for a spherical mirror, where is the object?", options:["Infinity","Focus","Centre of Curvature","Pole"], answer:2 },
+    { id:102, class_name:"10", type:"trap", subject:"Physics", topic:"Electricity", title:"🚨 Ohm's Law Trap", content:"V = IR is ONLY valid at constant temp." }
+];
+let currentReelsClass = "10", reelStreak = 0;
+function setReelsClass(cls, btn) {
+    currentReelsClass = String(cls);
+    document.querySelectorAll('.reel-class-btn').forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    renderReelsDeck();
+}
+async function renderReelsDeck() {
+    const container = document.getElementById('studyReelsDeck'); if(!container) return;
+    let deck = defaultReelDeck.filter(item => String(item.class_name) === currentReelsClass);
+    if(deck.length===0) deck = defaultReelDeck;
+    container.innerHTML = deck.map(card => `
+        <div class="reel-card" style="border-left:3px solid var(--accent-cyan);">
+            <div class="reel-content-box">
+                <div class="reel-q-title">${card.q_en || card.title}</div>
+                <div style="font-size:12px; color:#cbd5e1; margin-top:10px;">${card.content || ''}</div>
+                <div class="reel-options-grid">
+                    ${(card.options||[]).map((opt, i) => `<button type="button" class="reel-opt-btn" onclick="handleReelAnswer(${i}, ${card.answer}, this)">${opt}</button>`).join('')}
                 </div>
             </div>
-            <div class="story-nav-zone story-nav-prev" onclick="prevStorySlide()"></div>
-            <div class="story-nav-zone story-nav-next" onclick="nextStorySlide()"></div>
-            
-            <div class="story-body-content">
-                <div id="viewerCaption" class="story-caption-text" style="background:rgba(0,0,0,0.5); padding:10px 14px; border-radius:12px; backdrop-filter:blur(8px); width:90%;"></div>
-            </div>
-            
-            <div class="story-id-card">
-              <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-rose), var(--accent-cyan)); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff; border:2px solid #fff;" id="viewerAvatar"></div>
-              <div style="flex:1;">
-                <div style="font-size:14px; font-weight:900; color:#fff;" id="viewerAuthorDetails">Name</div>
-                <div style="font-size:11px; font-weight:700; color:var(--accent-cyan);" id="viewerSchoolDetails">School</div>
-              </div>
-              <button type="button" id="storyActivityBadge" onclick="openStoryViewersDrawer()" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:5px 10px; border-radius:12px; cursor:pointer; display:flex; align-items:center; gap:4px;">
-                👁️ <span id="storyViewCount">0</span>
-              </button>
-            </div>
-
-            <div class="story-action-bar">
-                <button class="reaction-emoji-btn" onclick="reactStory('fire')">🔥 <span id="reactCountFire" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
-                <button class="reaction-emoji-btn" onclick="reactStory('mind')">🤯 <span id="reactCountMind" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
-                <button class="reaction-emoji-btn" onclick="reactStory('100')">💯 <span id="reactCount100" style="font-size:10px; font-weight:800; color:#fff;"></span></button>
-                <button type="button" class="restart-btn" style="width:auto; margin:0; padding:6px 12px; font-size:11px;" onclick="saveStoryToVault()">💾 Save</button>
-            </div>
         </div>
-    </div>
-</div>
+    `).join('');
+}
+function handleReelAnswer(sel, cor, btn) {
+    if(sel === cor) { btn.style.background='rgba(16,185,129,0.2)'; btn.style.borderColor='var(--accent-emerald)'; playDing(); }
+    else { btn.style.background='rgba(244,63,94,0.15)'; btn.style.borderColor='var(--accent-rose)'; playBuzz(); }
+}
 
-<div id="storyViewersDrawer" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100010; align-items:flex-end; justify-content:center;">
-  <div style="background:#0f172a; border-top:1px solid rgba(255,255,255,0.15); border-radius:24px 24px 0 0; width:min(440px, 100%); max-height:65vh; padding:18px 16px; display:flex; flex-direction:column; box-shadow:0 -10px 40px rgba(0,0,0,0.8);">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; margin-bottom:12px;">
-      <div style="font-size:14px; font-weight:900; color:#fff;">👀 Story Activity &amp; Viewers</div>
-      <button type="button" onclick="closeStoryViewersDrawer()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
-    </div>
-    <div id="storyViewersList" style="overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px;">
-      <div style="color:#94a3b8; font-size:12px; text-align:center; padding:20px 0;">Loading viewers...</div>
-    </div>
-  </div>
-</div>
+/* HUB & POSTS */
+function openCreatePostModal() { const m = document.getElementById('createPostModal'); if(m) m.style.display='flex'; }
+function closeCreatePostModal() { const m = document.getElementById('createPostModal'); if(m) m.style.display='none'; }
+function filterSchoolPosts() {}
+function setCategoryFilter(cat, btn) { document.querySelectorAll('.hub-pill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
 
-<!-- EXTERNAL JAVASCRIPT -->
-<!-- Core Engines -->
-<script src="utils.js"></script>
-<script src="audio.js"></script>
-<script src="navigation.js"></script>
+/* DOUBT SOLVER */
+let selectedSubject = "Mathematics", currentTone = "step";
+function setExplanationTone(tone, el) { currentTone = tone; document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); }
+document.querySelectorAll("#doubtSection .subject").forEach(b => {
+    b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); };
+});
+const askBtn = document.getElementById("askBtn");
+if(askBtn) {
+    askBtn.onclick = async () => {
+        const q = document.getElementById("question").value.trim();
+        if(!q) return alert("Enter a question!");
+        askBtn.disabled = true; document.getElementById("loadingDoubt").classList.remove('hidden'); document.getElementById("answerBox").style.display = "none";
+        startDoubtWaitingPipeline();
+        try {
+            const res = await fetch("/api/ask", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({ subject: selectedSubject, question: q, tone: currentTone }) });
+            const data = await res.json();
+            document.getElementById("answerText").innerHTML = typeof marked !== 'undefined' ? marked.parse(data.answer) : data.answer;
+            document.getElementById("answerBox").style.display = "block";
+            if(window.MathJax) MathJax.typesetPromise();
+        } catch(e) { alert("Doubt Engine Error."); }
+        finally { askBtn.disabled = false; stopDoubtWaitingPipeline(); document.getElementById("loadingDoubt").classList.add('hidden'); }
+    };
+}
 
-<!-- Feature Modules -->
-<script src="reels-stories.js"></script>
-<script src="campus-hub.js"></script>
-<script src="doubt-notes.js"></script>
-<script src="tests-clash.js"></script>
-<script src="arena.js"></script>
-<script src="lab.js"></script>
+/* CLASH & PUZZLES */
+let clashTimerInterval = null;
+function handleGetBlitzPass() { alert("Blitz Pass Activated! Check WhatsApp."); }
+function startDailyClashTimer() {
+  let t = 15; const num = document.getElementById('survivalTimerNum'), bar = document.getElementById('survivalTimerBar');
+  clearInterval(clashTimerInterval);
+  clashTimerInterval = setInterval(() => {
+    t--; if(num) num.textContent = t+'s'; if(bar) bar.style.width = (t/15)*100+'%';
+    if(t<=0) clearInterval(clashTimerInterval);
+  }, 1000);
+}
 
-<!-- Main Initializer -->
-<script src="main.js"></script>
+/* TEST ENGINE */
+document.getElementById("startTestBtn")?.addEventListener("click", () => {
+    document.getElementById("testSetup").classList.add("hidden");
+    document.getElementById("testArea").classList.remove("hidden");
+});
+document.getElementById("submitTestBtn")?.addEventListener("click", () => {
+    document.getElementById("testArea").classList.add("hidden");
+    document.getElementById("testResult").style.display = "block";
+});
 
+/* ARENA 1v1 */
+let arena = { timer:15, interval:null };
+function startBotMatch() {
+    document.getElementById('arenaSetup').classList.add('hidden');
+    document.getElementById('arenaBattle').classList.remove('hidden');
+    clearInterval(arena.interval);
+    arena.interval = setInterval(() => {
+        arena.timer--;
+        const d = document.getElementById('arenaTimerDisplay'); if(d) d.textContent = `⏱ ${arena.timer}s`;
+        if(arena.timer<=0) clearInterval(arena.interval);
+    }, 1000);
+}
 
-<script>
-  const verified = localStorage.getItem('student_verified');
-  if (!verified || verified !== 'true') {
-    const lockStyle = document.createElement('style');
-    lockStyle.innerHTML = `
-      #onboardingModal { display: none !important; }
-      #studentInviteModal { display: flex !important; z-index: 2147483647 !important; pointer-events: auto !important; }
-      body { overflow: hidden !important; }
-    `;
-    document.head.appendChild(lockStyle);
-  }
+/* LAB CANVAS V2.0 */
+const curriculumLabs = [
+    { id: 'circuits', class: 10, title: "Electric Circuits", desc: "Ohm's Law V=IR", icon: "💡", color: "#f59e0b" },
+    { id: 'ph_scale', class: 10, title: "pH & Indicators", desc: "Acid-Base Reactions", icon: "🧪", color: "#10b981" }
+];
+window.filterLabMatrix = function(grade, btnEl) {
+    document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+    const grid = document.getElementById('matrixGrid'); if(!grid) return;
+    grid.innerHTML = curriculumLabs.filter(l => l.class === grade).map(l => `
+        <div class="matrix-card" onclick="openLabSim('${l.id}')" style="border-color:${l.color};">
+            <div style="font-size:24px;">${l.icon}</div>
+            <div style="font-size:13px; font-weight:900; color:${l.color};">${l.title}</div>
+            <div style="font-size:10px; color:#64748b;">${l.desc}</div>
+        </div>
+    `).join('');
+};
 
-  window.handleGuestSkip = function() {
-      localStorage.setItem('studentName', 'Guest Explorer');
-      localStorage.setItem('student_verified', 'true'); 
-      localStorage.setItem('userSchool', 'ALL'); 
-      window.unlockScreenAndShowTutorial();
-  };
+let labCanvas, ctx, labAnimFrame, simState={};
+window.openLabSim = function(id) {
+    document.getElementById('labSkillTree').classList.add('hidden'); document.getElementById('activeLabPlayer').classList.remove('hidden');
+    labCanvas = document.getElementById('invincibleEngine'); ctx = labCanvas.getContext('2d');
+    simState = { drops:[], currentPH:7, targetPH:7, voltage:12, resistance:4, electrons:[] };
+    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
+    labAnimFrame = requestAnimationFrame(renderLoop);
+};
+window.closeLabSim = function() {
+    document.getElementById('activeLabPlayer').classList.add('hidden'); document.getElementById('labSkillTree').classList.remove('hidden');
+    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
+};
+function renderLoop(timestamp) {
+    if(!ctx) return;
+    ctx.clearRect(0,0,labCanvas.width,labCanvas.height);
+    ctx.fillStyle = "#fff"; ctx.font = "20px monospace"; ctx.textAlign = "center";
+    ctx.fillText("SIMULATION ENGINE ACTIVE", labCanvas.width/2, labCanvas.height/2);
+    labAnimFrame = requestAnimationFrame(renderLoop);
+}
+window.openCrate = function() { document.getElementById('crateBox').style.display='none'; document.getElementById('cratePrompt').style.display='none'; document.getElementById('crateReward').classList.remove('hidden'); };
 
-  window.handleStudentInviteSubmit = async function(e) {
-    if(e) e.preventDefault();
-    
-    const btn = document.getElementById('btnSubmitInvite');
-    const originalText = btn.innerText;
-    btn.innerText = "VERIFYING... ⏳";
-    btn.disabled = true;
-
-    const code = document.getElementById('inviteCodeInput').value.trim().toUpperCase();
-    const name = document.getElementById('invStudentName').value.trim();
-    const roll = document.getElementById('invRollNo').value.trim();
-    const father = document.getElementById('invFatherName').value.trim();
-    const mother = document.getElementById('invMotherName').value.trim();
-    const phone = document.getElementById('invParentPhone').value.trim();
-
-    if (!code || !name) {
-      alert('Please enter your 6-Digit Invite Code and Student Name.');
-      btn.innerText = originalText;
-      btn.disabled = false;
-      return;
-    }
-
-    try {
-      if (window.supabase) {
-          const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
-          const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-          const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-          
-          const extractedClass = code.match(/\d+/) ? code.match(/\d+/)[0] : "10";
-          
-          const { error } = await sbClient.from('students').insert([{
-            school_id: code,
-            class_name: extractedClass,
-            roll_number: parseInt(roll) || 0,
-            student_name: name,
-            father_name: father,
-            mother_name: mother,
-            parent_phone: phone,
-            status: 'pending' 
-          }]);
-      }
-    } catch(e) {}
-
-    localStorage.setItem('studentName', name);
-    localStorage.setItem('student_verified', 'true');
-    localStorage.setItem('userSchool', code); 
-    
+/* AUTH & INIT */
+const verified = localStorage.getItem('student_verified');
+if (!verified || verified !== 'true') {
+  const lockStyle = document.createElement('style');
+  lockStyle.innerHTML = `#onboardingModal { display: none !important; } #studentInviteModal { display: flex !important; z-index: 2147483647 !important; pointer-events: auto !important; } body { overflow: hidden !important; }`;
+  document.head.appendChild(lockStyle);
+}
+window.handleGuestSkip = function() {
+    localStorage.setItem('studentName', 'Guest Explorer'); localStorage.setItem('student_verified', 'true'); 
     window.unlockScreenAndShowTutorial();
-    alert('🎉 Welcome! Your Roster entry was processed successfully.');
-  };
+};
+window.handleStudentInviteSubmit = function(e) {
+    if(e) e.preventDefault();
+    const name = document.getElementById('invStudentName').value.trim();
+    localStorage.setItem('studentName', name || "Student"); localStorage.setItem('student_verified', 'true');
+    window.unlockScreenAndShowTutorial();
+};
+window.unlockScreenAndShowTutorial = function() {
+    document.querySelectorAll('style').forEach(s => { if (s.innerHTML.includes('#studentInviteModal')) s.remove(); });
+    document.getElementById('studentInviteModal').style.display = 'none'; document.body.style.overflow = 'auto';
+    if (!localStorage.getItem('invincible_onboarded')) { document.getElementById('onboardingModal').style.display = 'flex'; }
+};
 
-  window.unlockScreenAndShowTutorial = function() {
-      const styles = document.querySelectorAll('style');
-      styles.forEach(s => {
-        if (s.innerHTML.includes('#studentInviteModal')) s.remove();
-      });
-      
-      const inviteModal = document.getElementById('studentInviteModal');
-      if (inviteModal) inviteModal.style.display = 'none';
-      document.body.style.overflow = 'auto';
-      
-      if (!localStorage.getItem('invincible_onboarded')) {
-          const onboardModal = document.getElementById('onboardingModal');
-          if (onboardModal) onboardModal.style.display = 'flex';
-      }
-  };
+window.addEventListener('DOMContentLoaded', () => { 
+    checkDailyStreak();
+    if(typeof filterLabMatrix === 'function') filterLabMatrix(10, document.querySelector('.curr-tab.active'));
+    setTimeout(() => { const btn = document.querySelector(`.reel-class-btn[data-class="10"]`); setReelsClass("10", btn); }, 200);
+});
 </script>
 
 </body>
