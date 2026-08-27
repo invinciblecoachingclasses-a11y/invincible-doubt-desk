@@ -1,0 +1,325 @@
+/* =====================================================
+   🔬 CURRICULUM MATRIX & HTML5 CANVAS ENGINE V2.0
+===================================================== */
+const curriculumLabs = [
+    { id: 'circuits', class: 10, title: "Electric Circuits", desc: "Ohm's Law V=IR", icon: "💡", color: "#f59e0b", locked: false },
+    { id: 'ph_scale', class: 10, title: "pH & Indicators", desc: "Acid-Base Reactions", icon: "🧪", color: "#10b981", locked: false },
+    { id: 'optics', class: 10, title: "Ray Optics", desc: "Mirrors & Lenses", icon: "🔍", color: "#00e5ff", locked: true },
+    
+    { id: 'projectile', class: 11, title: "Projectile Motion", desc: "2D Kinematics Vectors", icon: "☄️", color: "#f43f5e", locked: false },
+    { id: 'pendulum', class: 11, title: "Simple Pendulum", desc: "SHM & Gravity", icon: "⏱️", color: "#8b5cf6", locked: true },
+    
+    { id: 'genetics', class: 12, title: "DNA WOW", desc: "Molecular Genetics", icon: "🧬", color: "#ec4899", locked: true }
+];
+
+window.filterLabMatrix = function(grade, btnEl) {
+    document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+    if(btnEl) btnEl.classList.add('active');
+
+    const grid = document.getElementById('matrixGrid');
+    if(!grid) return;
+
+    const filtered = curriculumLabs.filter(l => l.class === grade);
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: span 2; text-align:center; color:#64748b; font-size:12px; padding:20px;">Curriculum modules for Class ${grade} are syncing...</div>`;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(l => `
+        <div class="matrix-card ${l.locked ? 'locked' : ''}" role="button" tabindex="0" 
+             onclick="${l.locked ? `alert('🔒 Unlock Level 5 to access ${l.title}.')` : `window.openLabSim('${l.id}')`}" 
+             style="border-color:${l.locked ? 'rgba(255,255,255,0.1)' : l.color};">
+            <div>
+                <div style="font-size:24px; margin-bottom:6px; text-shadow:0 0 10px ${l.color};">${l.icon}</div>
+                <div style="font-size:13px; font-weight:900; color:${l.locked ? '#94a3b8' : l.color};">${l.title}</div>
+            </div>
+            <div style="font-size:10px; color:#64748b; margin-top:8px;">${l.desc}</div>
+        </div>
+    `).join('');
+};
+
+let labCanvas, ctx, labAnimFrame;
+let currentLabId = null;
+let lastTime = 0;
+let simState = {};
+
+window.openLabSim = function(id) {
+    currentLabId = id;
+    document.getElementById('labSkillTree').classList.add('hidden');
+    document.getElementById('activeLabPlayer').classList.remove('hidden');
+    
+    labCanvas = document.getElementById('invincibleEngine');
+    ctx = labCanvas.getContext('2d');
+    
+    setupLabEnvironment(id);
+    
+    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
+    lastTime = performance.now();
+    labAnimFrame = requestAnimationFrame(renderLoop);
+};
+
+window.closeLabSim = function() {
+    const player = document.getElementById('activeLabPlayer');
+    const tree = document.getElementById('labSkillTree');
+    if (player) player.classList.add('hidden');
+    if (tree) tree.classList.remove('hidden');
+    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
+};
+
+function setupLabEnvironment(id) {
+    const titleEl = document.getElementById('labTitle');
+    const controlsEl = document.getElementById('labControls');
+    const qEl = document.getElementById('labQuestionText');
+    const optGrid = document.getElementById('labOptionsGrid');
+
+    if (id === 'circuits') {
+        titleEl.textContent = "💡 Electric Circuits (Ohm's Law)";
+        qEl.textContent = "If Voltage is 12V and Resistance is 4Ω, what is the Current (I)?";
+        optGrid.innerHTML = ['2 Amperes', '3 Amperes', '48 Amperes', '0.33 Amperes'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 1)">${o}</button>`).join('');
+        controlsEl.innerHTML = `
+            <div class="slider-container">
+                <div class="slider-label"><span>Voltage (V): <span id="valV">12</span> V</span></div>
+                <input type="range" id="slV" min="0" max="24" value="12" oninput="simState.voltage=this.value; document.getElementById('valV').textContent=this.value">
+            </div>
+            <div class="slider-container">
+                <div class="slider-label"><span>Resistance (R): <span id="valR">4</span> Ω</span></div>
+                <input type="range" id="slR" min="1" max="20" value="4" oninput="simState.resistance=this.value; document.getElementById('valR').textContent=this.value">
+            </div>
+        `;
+        simState = { voltage: 12, resistance: 4, electrons: Array.from({length: 20}, (_, i) => ({ offset: i * 40 })) };
+    } 
+    else if (id === 'projectile') {
+        titleEl.textContent = "☄️ Projectile Motion";
+        qEl.textContent = "Which angle provides the maximum horizontal range?";
+        optGrid.innerHTML = ['30°', '45°', '60°', '90°'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 1)">${o}</button>`).join('');
+        controlsEl.innerHTML = `
+            <div class="slider-container">
+                <div class="slider-label"><span>Angle (θ): <span id="valA">45</span>°</span></div>
+                <input type="range" id="slA" min="0" max="90" value="45" oninput="simState.angle=this.value; document.getElementById('valA').textContent=this.value">
+            </div>
+            <div class="slider-container">
+                <div class="slider-label"><span>Velocity (v): <span id="valVel">60</span> m/s</span></div>
+                <input type="range" id="slVel" min="10" max="100" value="60" oninput="simState.velocity=this.value; document.getElementById('valVel').textContent=this.value">
+            </div>
+            <button type="button" onclick="simState.time=0; simState.firing=true;" class="submit-test-btn" style="margin-top:8px;">▶ FIRE CANNON</button>
+        `;
+        simState = { angle: 45, velocity: 60, time: 0, firing: false, trail: [] };
+    }
+    else if (id === 'ph_scale') {
+        titleEl.textContent = "🧪 pH & Indicators";
+        qEl.textContent = "What color does Universal Indicator turn in a strong acid (pH 1)?";
+        optGrid.innerHTML = ['Green', 'Blue', 'Red', 'Purple'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 2)">${o}</button>`).join('');
+        controlsEl.innerHTML = `
+            <div class="slider-container">
+                <div class="slider-label"><span>Add Solution (pH): <span id="valPH">7</span></span></div>
+                <input type="range" id="slPH" min="1" max="14" value="7" oninput="simState.targetPH=this.value; document.getElementById('valPH').textContent=this.value">
+            </div>
+        `;
+        simState = { currentPH: 7, targetPH: 7, drops: [] };
+    }
+
+    document.querySelectorAll('#labOptionsGrid button').forEach(b => {
+        b.style.cssText = "background:#020617; border:1px solid #1e293b; color:#fff; padding:12px; border-radius:8px; text-align:left; font-weight:700; cursor:pointer; width:100%; margin-bottom:6px;";
+    });
+}
+
+function renderLoop(timestamp) {
+    if (document.getElementById('activeLabPlayer').classList.contains('hidden')) {
+        cancelAnimationFrame(labAnimFrame);
+        return;
+    }
+
+    const dt = (timestamp - lastTime) / 1000;
+    lastTime = timestamp;
+
+    ctx.clearRect(0, 0, labCanvas.width, labCanvas.height);
+
+    if (currentLabId === 'circuits') drawCircuits(dt);
+    if (currentLabId === 'projectile') drawProjectile(dt);
+    if (currentLabId === 'ph_scale') drawPH(dt);
+
+    const fpsEl = document.getElementById('simOverlayStats');
+    if(fpsEl) fpsEl.textContent = `FPS: ${Math.round(1/dt)} | MATH ENGINE`;
+
+    labAnimFrame = requestAnimationFrame(renderLoop);
+}
+
+function drawCircuits(dt) {
+    const cx = labCanvas.width / 2;
+    const cy = labCanvas.height / 2;
+    const w = 400, h = 200;
+    const I = simState.voltage / simState.resistance;
+
+    ctx.strokeStyle = "#475569";
+    ctx.lineWidth = 6;
+    ctx.strokeRect(cx - w/2, cy - h/2, w, h);
+
+    ctx.fillStyle = "#020617"; ctx.fillRect(cx - 30, cy + h/2 - 15, 60, 30);
+    ctx.fillStyle = "#f43f5e"; ctx.fillRect(cx - 30, cy + h/2 - 10, 20, 20);
+    ctx.fillStyle = "#38bdf8"; ctx.fillRect(cx + 10, cy + h/2 - 10, 20, 20);
+    ctx.fillStyle = "#fff"; ctx.font = "12px monospace"; ctx.fillText(`${simState.voltage}V`, cx - 12, cy + h/2 + 30);
+
+    ctx.fillStyle = "#f59e0b"; ctx.fillRect(cx - w/2 - 10, cy - 30, 20, 60);
+    ctx.fillText(`${simState.resistance}Ω`, cx - w/2 - 35, cy + 5);
+
+    ctx.beginPath(); ctx.arc(cx, cy - h/2, 30, 0, Math.PI * 2);
+    ctx.fillStyle = "#334155"; ctx.fill();
+    
+    if (I > 0) {
+        const glowRadius = 30 + (I * 15);
+        const gradient = ctx.createRadialGradient(cx, cy - h/2, 10, cx, cy - h/2, glowRadius);
+        gradient.addColorStop(0, "rgba(252, 211, 77, 1)");
+        gradient.addColorStop(1, "rgba(252, 211, 77, 0)");
+        ctx.beginPath(); ctx.arc(cx, cy - h/2, glowRadius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient; ctx.fill();
+    }
+    
+    ctx.fillStyle = "#fff"; ctx.fillText(`I = ${I.toFixed(1)}A`, cx - 20, cy - h/2 - 40);
+
+    const speed = I * 50; 
+    const perimeter = (w * 2) + (h * 2);
+    ctx.fillStyle = "#00e5ff";
+    
+    simState.electrons.forEach(e => {
+        e.offset = (e.offset + speed * dt) % perimeter;
+        let ex, ey;
+        if (e.offset < w) { ex = cx - w/2 + e.offset; ey = cy + h/2; } 
+        else if (e.offset < w + h) { ex = cx + w/2; ey = cy + h/2 - (e.offset - w); } 
+        else if (e.offset < w*2 + h) { ex = cx + w/2 - (e.offset - w - h); ey = cy - h/2; } 
+        else { ex = cx - w/2; ey = cy - h/2 + (e.offset - w*2 - h); }
+        ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI*2); ctx.fill();
+    });
+}
+
+function drawProjectile(dt) {
+    const gravity = 9.8;
+    const scale = 3; 
+    const startX = 50, startY = labCanvas.height - 50;
+
+    ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 1;
+    for(let i=0; i<labCanvas.width; i+=50) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,labCanvas.height); ctx.stroke(); }
+    for(let i=0; i<labCanvas.height; i+=50) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(labCanvas.width,i); ctx.stroke(); }
+    ctx.strokeStyle = "#fff"; ctx.beginPath(); ctx.moveTo(startX, 0); ctx.lineTo(startX, startY); ctx.lineTo(labCanvas.width, startY); ctx.stroke();
+
+    const rad = simState.angle * (Math.PI / 180);
+    const v0x = simState.velocity * Math.cos(rad);
+    const v0y = simState.velocity * Math.sin(rad);
+
+    if (simState.firing) {
+        simState.time += dt * 3;
+        const t = simState.time;
+        const currentX = startX + (v0x * t * scale);
+        const currentY = startY - ((v0y * t - 0.5 * gravity * t * t) * scale);
+
+        if (currentY >= startY && t > 0.1) {
+            simState.firing = false;
+        } else {
+            simState.trail.push({x: currentX, y: currentY});
+        }
+    }
+
+    ctx.fillStyle = "rgba(244, 63, 94, 0.5)";
+    simState.trail.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill(); });
+
+    const lastPos = simState.trail.length > 0 ? simState.trail[simState.trail.length-1] : {x: startX, y: startY};
+    ctx.fillStyle = "#00e5ff";
+    ctx.beginPath(); ctx.arc(lastPos.x, lastPos.y, 8, 0, Math.PI*2); ctx.fill();
+
+    ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(startX + Math.cos(rad)*40, startY - Math.sin(rad)*40); ctx.stroke();
+}
+
+function drawPH(dt) {
+    const cx = labCanvas.width / 2;
+    const cy = labCanvas.height / 2 + 50;
+    
+    simState.currentPH += (simState.targetPH - simState.currentPH) * dt * 2;
+    
+    const hue = (simState.currentPH - 1) * (270 / 13);
+    const liquidColor = `hsla(${hue}, 80%, 50%, 0.7)`;
+
+    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(cx - 80, cy - 150); ctx.lineTo(cx - 80, cy);
+    ctx.arcTo(cx - 80, cy + 20, cx - 60, cy + 20, 20); ctx.lineTo(cx + 60, cy + 20);
+    ctx.arcTo(cx + 80, cy + 20, cx + 80, cy, 20); ctx.lineTo(cx + 80, cy - 150); ctx.stroke();
+
+    ctx.fillStyle = liquidColor;
+    ctx.beginPath(); ctx.moveTo(cx - 78, cy - 50); ctx.lineTo(cx - 78, cy);
+    ctx.arcTo(cx - 78, cy + 18, cx - 60, cy + 18, 18); ctx.lineTo(cx + 60, cy + 18);
+    ctx.arcTo(cx + 78, cy + 18, cx + 78, cy, 18); ctx.lineTo(cx + 78, cy - 50);
+    ctx.fill();
+
+    ctx.fillStyle = "#fff"; ctx.font = "20px monospace"; ctx.textAlign = "center";
+    ctx.fillText(`pH: ${simState.currentPH.toFixed(1)}`, cx, cy - 10);
+
+    if (Math.abs(simState.targetPH - simState.currentPH) > 0.1) {
+        if(Math.random() > 0.5) simState.drops.push({y: cy - 200, x: cx + (Math.random()*40 - 20)});
+    }
+    
+    ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
+    simState.drops.forEach((d, i) => {
+        d.y += 200 * dt;
+        ctx.beginPath(); ctx.arc(d.x, d.y, 4, 0, Math.PI*2); ctx.fill();
+        if (d.y > cy - 50) simState.drops.splice(i, 1);
+    });
+}
+
+window.checkPrediction = function(selectedIdx, correctIdx) {
+    const btns = document.querySelectorAll('#labOptionsGrid button');
+    btns.forEach(b => b.disabled = true);
+    
+    if (selectedIdx === correctIdx) {
+        btns[selectedIdx].style.background = 'rgba(16,185,129,0.2)';
+        btns[selectedIdx].style.borderColor = 'var(--accent-emerald)';
+        if(typeof playWin === 'function') playWin();
+        setTimeout(() => window.triggerGacha(), 500);
+    } else {
+        btns[selectedIdx].style.background = 'rgba(239,68,68,0.2)';
+        btns[selectedIdx].style.borderColor = 'var(--accent-rose)';
+        btns[correctIdx].style.borderColor = 'var(--accent-emerald)';
+        if(typeof playBuzz === 'function') playBuzz();
+    }
+};
+
+window.triggerGacha = function() {
+    const modal = document.getElementById('lootCrateModal');
+    const crate = document.getElementById('crateBox');
+    const prompt = document.getElementById('cratePrompt');
+    const reward = document.getElementById('crateReward');
+    
+    modal.style.display = 'flex';
+    crate.style.display = 'block';
+    prompt.style.display = 'block';
+    reward.classList.add('hidden');
+    
+    if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 40 });
+};
+
+window.openCrate = function() {
+    document.getElementById('crateBox').style.display = 'none';
+    document.getElementById('cratePrompt').style.display = 'none';
+    
+    const reward = document.getElementById('crateReward');
+    const icon = document.getElementById('rewardIcon');
+    const title = document.getElementById('rewardTitle');
+    const desc = document.getElementById('rewardDesc');
+    
+    reward.classList.remove('hidden');
+    if(typeof confetti === 'function') confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+
+    const roll = Math.random();
+    if (roll > 0.95) { 
+        icon.textContent = '☢️'; title.style.color = '#d946ef'; title.textContent = "Uranium-235";
+        desc.textContent = "Mythic Element Added to Vault!";
+    } else if (roll > 0.70) { 
+        icon.textContent = '🛡️'; title.style.color = '#f59e0b'; title.textContent = "Arena Shield";
+        desc.textContent = "Blocks 1 wrong answer in 1v1 Clash.";
+        let shields = parseInt(localStorage.getItem('blitz_pup_shield') || '0') + 1;
+        localStorage.setItem('blitz_pup_shield', shields);
+    } else { 
+        icon.textContent = '✨'; title.style.color = '#00e5ff'; title.textContent = "+100 XP";
+        desc.textContent = "Lab Mastery Reward.";
+        const xpEl = document.getElementById('xpCounter');
+        if(xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0') + 100;
+    }
+};
