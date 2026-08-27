@@ -589,68 +589,74 @@
 <!-- =====================================================
      6. INVINCIBLE LAB SECTION (SKILL TREE & SIMULATIONS)
 ===================================================== -->
-<section class="card hidden" id="labSection" aria-label="Interactive Lab & Skill Tree" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+<section class="card hidden" id="labSection" aria-label="Interactive Simulations" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-emerald);">← Return to Home Deck</span>
+        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
+        <span style="font-size:11px; color:#9ca3af;">🔥 Play Server Boss Raid</span>
     </div>
-    <h2 class="section-h2" style="color:var(--accent-emerald);">🔬 Invincible Lab</h2>
 
     <!-- Boss Raid Banner -->
-    <div id="bossRaidBanner" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 0, 0, 0.8)); border: 1px solid #8b5cf6; border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);">
-        <div style="color:#c4b5fd; font-size:10px; font-weight:900; letter-spacing:2px; margin-bottom:4px;">SERVER CO-OP EVENT</div>
-        <div style="color:#fff; font-size:16px; font-weight:900;">⚡ FRIDAY NIGHT BOSS RAID</div>
-        <div id="bossRaidTimer" style="color:#8b5cf6; font-size:20px; font-weight:900; font-family:monospace; margin:8px 0;">00:00:00</div>
+    <div id="bossRaidBanner" style="background:linear-gradient(135deg, rgba(139,92,246,0.15), rgba(236,72,153,0.15)); border:1px solid rgba(139,92,246,0.3); border-radius:16px; padding:16px; margin-bottom:16px; text-align:center;">
+        <div style="color:#c4b5fd; font-size:11px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase;">SERVER CO-OP EVENT</div>
+        <div style="color:#fff; font-size:16px; font-weight:900; margin:4px 0;">⚡ FRIDAY NIGHT BOSS RAID</div>
+        <div id="bossRaidTimer" style="color:#a78bfa; font-family:monospace; font-size:18px; font-weight:900; margin:4px 0;">00:00:00</div>
         <div style="color:#94a3b8; font-size:11px;">School vs. School - Defeat the 3D Circuit Boss to earn Mythic Elements!</div>
     </div>
 
     <!-- Skill Tree Menu -->
-    <div id="labSkillTree" style="display:flex; flex-direction:column; gap:16px;">
-        <div style="font-size:14px; font-weight:800; color:#fff;">🧬 Your Academic Skill Tree</div>
-        
+    <div id="labSkillTree" style="display:flex; flex-direction:column; gap:12px;">
+        <div style="font-size:15px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">🧬 Your Academic Skill Tree</div>
+
         <!-- Physics Node -->
-        <div class="skill-node unlocked" onclick="openSimulation('physics')" style="background:#020617; border:2px solid var(--accent-cyan); padding:16px; border-radius:16px; cursor:pointer; position:relative; overflow:hidden;">
-            <div style="font-size:24px; margin-bottom:8px;">⚡</div>
-            <div style="font-size:14px; font-weight:800; color:var(--accent-cyan);">Physics in Motion</div>
-            <div style="font-size:11px; color:#94a3b8;">Projectile Trajectory Simulator</div>
+        <div class="lab-card" role="button" tabindex="0" onclick="openLabSim('physics')" ontouchend="openLabSim('physics')" style="background:rgba(2,6,23,0.8); border:2px solid var(--accent-cyan); border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; box-shadow:0 0 20px rgba(0,229,255,0.15);">
+            <div style="pointer-events:none;">
+                <div style="font-size:24px; margin-bottom:4px;">⚡</div>
+                <div style="font-size:15px; font-weight:900; color:var(--accent-cyan);">Physics in Motion</div>
+                <div style="font-size:12px; color:#94a3b8;">Projectile Trajectory Simulator</div>
+            </div>
         </div>
-        
+
         <!-- Chemistry Node -->
-        <div class="skill-node unlocked" onclick="openSimulation('chemistry')" style="background:#020617; border:2px solid var(--accent-amber); padding:16px; border-radius:16px; cursor:pointer;">
-            <div style="font-size:24px; margin-bottom:8px;">🧪</div>
-            <div style="font-size:14px; font-weight:800; color:var(--accent-amber);">Reaction Lab</div>
-            <div style="font-size:11px; color:#94a3b8;">Zn + HCl Gas Evolution</div>
+        <div class="lab-card" role="button" tabindex="0" onclick="openLabSim('chemistry')" ontouchend="openLabSim('chemistry')" style="background:rgba(2,6,23,0.8); border:2px solid #f59e0b; border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; box-shadow:0 0 20px rgba(245,158,11,0.15);">
+            <div style="pointer-events:none;">
+                <div style="font-size:24px; margin-bottom:4px;">🧪</div>
+                <div style="font-size:15px; font-weight:900; color:#f59e0b;">Reaction Lab</div>
+                <div style="font-size:12px; color:#94a3b8;">Zn + HCl Gas Evolution</div>
+            </div>
         </div>
-        
-        <!-- Biology Node -->
-        <div class="skill-node locked" onclick="alert('Unlock Chemistry first to access Biology!')" style="background:#020617; border:2px solid #334155; padding:16px; border-radius:16px; cursor:not-allowed; opacity:0.6; position:relative;">
-            <div style="font-size:24px; margin-bottom:8px;">🧬</div>
-            <div style="font-size:14px; font-weight:800; color:#94a3b8;">Bio WOW (Locked)</div>
-            <div style="font-size:11px; color:#64748b;">Requires 3 Perfect Predictions</div>
-            <div style="position:absolute; top:10px; right:10px; font-size:20px;">🔒</div>
+
+        <!-- Biology Node (Locked) -->
+        <div class="lab-card" role="button" tabindex="0" onclick="alert('🔒 Complete Physics & Chemistry Labs to unlock Bio WOW!')" ontouchend="alert('🔒 Complete Physics & Chemistry Labs to unlock Bio WOW!')" style="background:rgba(2,6,23,0.5); border:1px dashed #334155; border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; opacity:0.6;">
+            <div style="pointer-events:none;">
+                <div style="font-size:24px; margin-bottom:4px;">🧬</div>
+                <div style="font-size:15px; font-weight:900; color:#94a3b8;">Bio WOW (Locked)</div>
+                <div style="font-size:12px; color:#64748b;">DNA Cell Zoom-In • Level 5 Required</div>
+            </div>
         </div>
     </div>
 
-    <!-- Simulation View (Hidden) -->
-    <div id="labSimulation" class="hidden">
-        <button onclick="closeSimulation()" style="background:none; border:none; color:var(--text-muted); font-weight:800; margin-bottom:12px; cursor:pointer;">← Back to Skill Tree</button>
-        <div id="simTitle" style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">Sim Title</div>
+    <!-- Active Simulation View -->
+    <div id="activeLabPlayer" class="hidden" style="margin-top:10px;">
+        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--text-muted); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px;">← Back to Skill Tree</button>
         
-        <div id="canvasContainer" style="width:100%; height:200px; background:#000; border-radius:12px; border:1px solid #334155; position:relative; overflow:hidden; margin-bottom:16px;">
-            <canvas id="simCanvas" style="width:100%; height:100%;"></canvas>
+        <div id="labTitle" style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">Lab Simulator</div>
+        
+        <div class="sim-screen" id="simScreen" style="background:#020617; border:2px solid #1e293b; border-radius:16px; height:200px; position:relative; overflow:hidden; margin-bottom:12px;">
+            <div id="physBall" class="hidden" style="width:14px; height:14px; background:#00e5ff; border-radius:50%; position:absolute; bottom:0; left:0; box-shadow:0 0 10px #00e5ff; transition:transform 1s cubic-bezier(0.25,0.46,0.45,0.94);"></div>
+            <div id="chemBeaker" class="hidden" style="width:60px; height:80px; border:3px solid #cbd5e1; border-top:none; border-radius:0 0 10px 10px; position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(16,185,129,0.2); overflow:hidden; transition:1s;"></div>
+            <div id="bioZoom" class="hidden" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:40px; transition:1s;">🧬</div>
         </div>
 
-        <div id="simControls" style="background:rgba(255,255,255,0.03); padding:12px; border-radius:12px; margin-bottom:16px;">
-            <!-- Sliders injected here -->
-        </div>
+        <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; margin-bottom:16px;"></div>
 
-        <div id="predictPhase" style="background:#020617; border:1px solid var(--accent-emerald); padding:16px; border-radius:12px;">
-            <div style="color:var(--accent-emerald); font-size:12px; font-weight:900; margin-bottom:8px;">🔮 PREDICT & ANSWER</div>
-            <div id="simQuestion" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;">Question text</div>
-            <div id="simOptions" style="display:flex; flex-direction:column; gap:8px;"></div>
-            <div style="margin-top:12px; font-size:10px; color:#64748b; text-align:center;">Global Heatmap: <span style="color:#ef4444;">A: 12%</span> | <span style="color:#f59e0b;">B: 45%</span> | <span style="color:#10b981;">C: 30%</span> | <span style="color:#3b82f6;">D: 13%</span></div>
+        <div id="labPredictionBox" style="background:#020617; border:1px solid var(--accent-cyan); padding:16px; border-radius:12px;">
+            <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:8px;">🎯 PREDICT OUTCOME</div>
+            <div id="labQuestionText" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
+            <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
     </div>
 </section>
+
 
 <!-- FOOTER -->
 <footer class="footer">
