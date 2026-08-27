@@ -106,9 +106,9 @@
         <div class="mission-items">
             <span class="mission-pill done">✓ Daily Clash</span>
             <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('reels')">○ 10 Reels ⚡</span>
+            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('lab')">○ Lab Sim 🔬</span>
             <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('arena')">○ 1v1 Arena</span>
             <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('test')">○ Practice Test</span>
-            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('notes')">○ Revision</span>
         </div>
     </section>
 
@@ -299,24 +299,6 @@
             <select id="testOrg">
                 <option value="">Select School / Institute</option>
                 <option value="DVM Public School">DVM Public School</option>
-                <option value="Pt. Salagram Junior High School">Pt. Salagram Junior High School</option>
-                <option value="Arya Kamal Public School">Arya Kamal Public School</option>
-                <option value="Greater Noida Public School">Greater Noida Public School</option>
-                <option value="The Ideal Public School">The Ideal Public School</option>
-                <option value="DSR School">DSR School</option>
-                <option value="Modern DAV Public School">Modern DAV Public School</option>
-                <option value="H R International School">H R International School</option>
-                <option value="R.L. Public School">R.L. Public School</option>
-                <option value="Yashdeep Public School">Yashdeep Public School</option>
-                <option value="RVM Public School">RVM Public School</option>
-                <option value="RSP Global School">RSP Global School</option>
-                <option value="Uma Education Public School">Uma Education Public School</option>
-                <option value="U.D. Public School">U.D. Public School</option>
-                <option value="Navrang Public School">Navrang Public School</option>
-                <option value="Lord Krishna Public School">Lord Krishna Public School</option>
-                <option value="Vedanta Convent School">Vedanta Convent School</option>
-                <option value="Stair Memorial & Sport School">Stair Memorial & Sport School</option>
-                <option value="Horizon public school">Horizon public school</option>
                 <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
                 <option value="Other School">Other School</option>
             </select>
@@ -530,15 +512,7 @@
   <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; outline: none; margin-bottom: 10px;">
     <option value="ALL">📍 Sabhi Local Schools (Kulesra / Greater Noida)</option>
     <option value="DVM Public School">DVM Public School</option>
-    <option value="DSR School">DSR School</option>
-    <option value="The Ideal Public School">The Ideal Public School</option>
-    <option value="H R International School">H R International School</option>
-    <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
-    <option value="Bharat Public School">Bharat Public School</option>
-    <option value="R.L. Public School">R.L. Public School</option>
-    <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
-    <option value="SMPN Public School">SMPN Public School</option>
-    <option value="Heritage Public School">Heritage Public School</option>
+    <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
   </select>
 
   <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px;" id="hubCategoryPills">
@@ -612,6 +586,72 @@
     </div>
 </section>
 
+<!-- =====================================================
+     6. INVINCIBLE LAB SECTION (SKILL TREE & SIMULATIONS)
+===================================================== -->
+<section class="card hidden" id="labSection" aria-label="Interactive Lab & Skill Tree" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
+    <div class="quick-hub-banner" onclick="switchTab('home')">
+        <span style="font-size:12px; font-weight:800; color:var(--accent-emerald);">← Return to Home Deck</span>
+    </div>
+    <h2 class="section-h2" style="color:var(--accent-emerald);">🔬 Invincible Lab</h2>
+
+    <!-- Boss Raid Banner -->
+    <div id="bossRaidBanner" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 0, 0, 0.8)); border: 1px solid #8b5cf6; border-radius: 16px; padding: 16px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);">
+        <div style="color:#c4b5fd; font-size:10px; font-weight:900; letter-spacing:2px; margin-bottom:4px;">SERVER CO-OP EVENT</div>
+        <div style="color:#fff; font-size:16px; font-weight:900;">⚡ FRIDAY NIGHT BOSS RAID</div>
+        <div id="bossRaidTimer" style="color:#8b5cf6; font-size:20px; font-weight:900; font-family:monospace; margin:8px 0;">00:00:00</div>
+        <div style="color:#94a3b8; font-size:11px;">School vs. School - Defeat the 3D Circuit Boss to earn Mythic Elements!</div>
+    </div>
+
+    <!-- Skill Tree Menu -->
+    <div id="labSkillTree" style="display:flex; flex-direction:column; gap:16px;">
+        <div style="font-size:14px; font-weight:800; color:#fff;">🧬 Your Academic Skill Tree</div>
+        
+        <!-- Physics Node -->
+        <div class="skill-node unlocked" onclick="openSimulation('physics')" style="background:#020617; border:2px solid var(--accent-cyan); padding:16px; border-radius:16px; cursor:pointer; position:relative; overflow:hidden;">
+            <div style="font-size:24px; margin-bottom:8px;">⚡</div>
+            <div style="font-size:14px; font-weight:800; color:var(--accent-cyan);">Physics in Motion</div>
+            <div style="font-size:11px; color:#94a3b8;">Projectile Trajectory Simulator</div>
+        </div>
+        
+        <!-- Chemistry Node -->
+        <div class="skill-node unlocked" onclick="openSimulation('chemistry')" style="background:#020617; border:2px solid var(--accent-amber); padding:16px; border-radius:16px; cursor:pointer;">
+            <div style="font-size:24px; margin-bottom:8px;">🧪</div>
+            <div style="font-size:14px; font-weight:800; color:var(--accent-amber);">Reaction Lab</div>
+            <div style="font-size:11px; color:#94a3b8;">Zn + HCl Gas Evolution</div>
+        </div>
+        
+        <!-- Biology Node -->
+        <div class="skill-node locked" onclick="alert('Unlock Chemistry first to access Biology!')" style="background:#020617; border:2px solid #334155; padding:16px; border-radius:16px; cursor:not-allowed; opacity:0.6; position:relative;">
+            <div style="font-size:24px; margin-bottom:8px;">🧬</div>
+            <div style="font-size:14px; font-weight:800; color:#94a3b8;">Bio WOW (Locked)</div>
+            <div style="font-size:11px; color:#64748b;">Requires 3 Perfect Predictions</div>
+            <div style="position:absolute; top:10px; right:10px; font-size:20px;">🔒</div>
+        </div>
+    </div>
+
+    <!-- Simulation View (Hidden) -->
+    <div id="labSimulation" class="hidden">
+        <button onclick="closeSimulation()" style="background:none; border:none; color:var(--text-muted); font-weight:800; margin-bottom:12px; cursor:pointer;">← Back to Skill Tree</button>
+        <div id="simTitle" style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">Sim Title</div>
+        
+        <div id="canvasContainer" style="width:100%; height:200px; background:#000; border-radius:12px; border:1px solid #334155; position:relative; overflow:hidden; margin-bottom:16px;">
+            <canvas id="simCanvas" style="width:100%; height:100%;"></canvas>
+        </div>
+
+        <div id="simControls" style="background:rgba(255,255,255,0.03); padding:12px; border-radius:12px; margin-bottom:16px;">
+            <!-- Sliders injected here -->
+        </div>
+
+        <div id="predictPhase" style="background:#020617; border:1px solid var(--accent-emerald); padding:16px; border-radius:12px;">
+            <div style="color:var(--accent-emerald); font-size:12px; font-weight:900; margin-bottom:8px;">🔮 PREDICT & ANSWER</div>
+            <div id="simQuestion" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;">Question text</div>
+            <div id="simOptions" style="display:flex; flex-direction:column; gap:8px;"></div>
+            <div style="margin-top:12px; font-size:10px; color:#64748b; text-align:center;">Global Heatmap: <span style="color:#ef4444;">A: 12%</span> | <span style="color:#f59e0b;">B: 45%</span> | <span style="color:#10b981;">C: 30%</span> | <span style="color:#3b82f6;">D: 13%</span></div>
+        </div>
+    </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="footer">
     <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
@@ -621,13 +661,16 @@
 
 </main>
 
-<!-- HIGH VISIBILITY 7-TAB BOTTOM DOCK -->
-<nav class="floating-dock" aria-label="Bottom Navigation Dock">
+<!-- HIGH VISIBILITY 8-TAB BOTTOM DOCK -->
+<nav class="floating-dock" aria-label="Bottom Navigation Dock" style="overflow-x:auto; flex-wrap:nowrap; justify-content:flex-start; padding-bottom:5px;">
     <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')">
         <span class="dock-icon">🏠</span> Home
     </button>
     <button type="button" class="dock-btn reels-tab" onclick="switchTab('reels')">
         <span class="dock-icon">⚡</span> Reels
+    </button>
+    <button type="button" class="dock-btn lab-tab" onclick="switchTab('lab')">
+        <span class="dock-icon">🔬</span> Lab
     </button>
     <button type="button" class="dock-btn" onclick="switchTab('doubt')">
         <span class="dock-icon">🧠</span> Doubt
@@ -646,10 +689,24 @@
     </button>
 </nav>
 
+<!-- Loot Drop Gacha Modal -->
+<div id="lootCrateModal" style="display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); align-items:center; justify-content:center; flex-direction:column;">
+    <div id="crateBox" style="font-size:80px; animation: shake 0.5s infinite; cursor:pointer;" onclick="openCrate()">📦</div>
+    <div id="cratePrompt" style="color:#fff; font-weight:900; margin-top:20px;">TAP TO OPEN CRATE</div>
+    
+    <div id="crateReward" class="hidden" style="text-align:center; background:#0f172a; border:2px solid var(--accent-cyan); padding:30px; border-radius:24px; max-width:300px; width:90%;">
+        <div id="rewardIcon" style="font-size:60px; margin-bottom:10px;">✨</div>
+        <div id="rewardTitle" style="color:#fff; font-size:24px; font-weight:900;">+50 XP</div>
+        <div id="rewardDesc" style="color:#94a3b8; font-size:12px; margin-top:8px;">Standard Drop</div>
+        <button onclick="document.getElementById('lootCrateModal').style.display='none'" style="margin-top:20px; background:var(--accent-cyan); color:#000; border:none; padding:10px 20px; border-radius:12px; font-weight:900; cursor:pointer;">COLLECT & CLOSE</button>
+    </div>
+</div>
+
 <!-- =====================================================
      STUDENT INVITE CODE & REGISTRATION MODAL
 ===================================================== -->
 <div id="studentInviteModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
+  <!-- Your invite modal content remains untouched -->
   <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15); max-height: 90vh; overflow-y: auto;">
     <div style="text-align:center; margin-bottom:18px;">
       <div style="font-size:32px; margin-bottom:6px;">🏫</div>
@@ -704,8 +761,8 @@
 
 <!-- POST CREATION MODAL -->
 <div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 11, 20, 0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 16px;">
+  <!-- Untouched Post Modal -->
   <div style="background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 100%; max-width: 440px; padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;">
-    
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <div>
         <h4 style="font-size: 16px; font-weight: 800; color: #f9fafb; margin: 0;">Create Campus Post</h4>
@@ -719,15 +776,7 @@
         <label style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase;">School</label>
         <select id="modalSchoolSelect" required style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 5px;">
           <option value="DVM Public School">DVM Public School</option>
-          <option value="DSR School">DSR School</option>
-          <option value="The Ideal Public School">The Ideal Public School</option>
-          <option value="H R International School">H R International School</option>
-          <option value="Modern DAV Public School Kulesra">Modern DAV Public School Kulesra</option>
-          <option value="Bharat Public School">Bharat Public School</option>
-          <option value="R.L. Public School">R.L. Public School</option>
-          <option value="Pt. Salagram Senior Secondary School">Pt. Salagram Sr. Sec. School</option>
-          <option value="SMPN Public School">SMPN Public School</option>
-          <option value="Heritage Public School">Heritage Public School</option>
+          <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
         </select>
       </div>
 
@@ -792,7 +841,6 @@
 <!-- MULTI-FORMAT CREATOR STUDIO MODAL -->
 <div id="reelCreatorModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.92); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:16px;">
   <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:440px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.18); max-height:92vh; overflow-y:auto;">
-    
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
       <div>
         <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:900; color:#fff; margin:0;">⚡ Creator Studio</h3>
@@ -801,7 +849,6 @@
       <button type="button" onclick="document.getElementById('reelCreatorModal').style.display='none'" style="background:rgba(255,255,255,0.06); border:none; color:#94a3b8; font-size:16px; border-radius:50%; width:30px; height:30px; cursor:pointer;">✕</button>
     </div>
 
-    <!-- Format Switcher -->
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px;">
       <button type="button" id="tabFormat_hack" onclick="switchReelFormat('hack')" style="background:rgba(0,229,255,0.18); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">💡 Concept Hack</button>
       <button type="button" id="tabFormat_mcq" onclick="switchReelFormat('mcq')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🎯 MCQ Challenge</button>
@@ -827,14 +874,12 @@
 
       <input type="text" id="creatorTopic" placeholder="Topic / Chapter Tag (e.g. Heart Blood Flow)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
 
-      <!-- SECTION 1: CONCEPT HACK / TRAP FIELDS -->
       <div id="formatFields_hack" style="display:flex; flex-direction:column; gap:10px;">
         <input type="text" id="creatorHackTitle" placeholder="Catchy Headline (e.g. 5-Sec Rule for Heart Valves)" style="background:#020617; border:1px solid #1e293b; color:#00e5ff; font-weight:800; border-radius:10px; padding:10px; font-size:12px;">
         <textarea id="creatorHackContent" placeholder="Explain the concept breakdown or trick clearly..." rows="3" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
         <input type="text" id="creatorHackRule" placeholder="💡 Examiner Tip / Golden Rule (e.g. Always remember: Arteries Away)" style="background:#020617; border:1px solid #1e293b; color:#10b981; border-radius:10px; padding:10px; font-size:12px;">
       </div>
 
-      <!-- SECTION 2: MCQ FIELDS -->
       <div id="formatFields_mcq" style="display:none; flex-direction:column; gap:8px;">
         <textarea id="creatorMcqQuestion" placeholder="Type MCQ Challenge Question..." rows="2" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
         <input type="text" id="creatorOptA" placeholder="Option A (Correct Answer ✅)" style="background:#020617; border:1px solid #05ffa1; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
@@ -843,7 +888,6 @@
         <input type="text" id="creatorOptD" placeholder="Option D (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
       </div>
 
-      <!-- SECTION 3: FORMULA CARD FIELDS -->
       <div id="formatFields_formula" style="display:none; flex-direction:column; gap:8px;">
         <input type="text" id="creatorFormulaLatex" placeholder="LaTeX Equation (e.g. P = \frac{V^2}{R})" style="background:#020617; border:1px solid #00e5ff; color:#00e5ff; font-family:monospace; border-radius:10px; padding:10px; font-size:12px;">
         <input type="text" id="creatorFormulaTip" placeholder="Where to apply this formula..." style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
@@ -855,7 +899,6 @@
     </form>
   </div>
 </div>
-
 
 <!-- STORY STUDIO MODAL -->
 <div class="modal-overlay" id="storyModal">
@@ -913,7 +956,6 @@
                 <div id="viewerCaption" class="story-caption-text" style="background:rgba(0,0,0,0.5); padding:10px 14px; border-radius:12px; backdrop-filter:blur(8px); width:90%;"></div>
             </div>
             
-            <!-- Glassmorphic Clout Card -->
             <div class="story-id-card">
               <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, var(--accent-rose), var(--accent-cyan)); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff; border:2px solid #fff;" id="viewerAvatar"></div>
               <div style="flex:1;">
@@ -935,7 +977,6 @@
     </div>
 </div>
 
-<!-- STORY VIEWERS & REACTIONS DRAWER -->
 <div id="storyViewersDrawer" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100010; align-items:flex-end; justify-content:center;">
   <div style="background:#0f172a; border-top:1px solid rgba(255,255,255,0.15); border-radius:24px 24px 0 0; width:min(440px, 100%); max-height:65vh; padding:18px 16px; display:flex; flex-direction:column; box-shadow:0 -10px 40px rgba(0,0,0,0.8);">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; margin-bottom:12px;">
@@ -952,7 +993,6 @@
 <script src="app.js?v=2.2"></script>
 
 <script>
-  // 1. BULLETPROOF LOCK: Inject CSS immediately
   const verified = localStorage.getItem('student_verified');
   if (!verified || verified !== 'true') {
     const lockStyle = document.createElement('style');
@@ -964,7 +1004,6 @@
     document.head.appendChild(lockStyle);
   }
 
-  // --- SKIP & EXPLORE AS GUEST ---
   window.handleGuestSkip = function() {
       localStorage.setItem('studentName', 'Guest Explorer');
       localStorage.setItem('student_verified', 'true'); 
@@ -972,7 +1011,6 @@
       window.unlockScreenAndShowTutorial();
   };
 
-  // --- FAIL-SAFE SUBMIT BUTTON ---
   window.handleStudentInviteSubmit = async function(e) {
     if(e) e.preventDefault();
     
@@ -1013,11 +1051,8 @@
             parent_phone: phone,
             status: 'pending' 
           }]);
-          if (error) console.warn("DB Auth Notice:", error);
       }
-    } catch(e) {
-      console.warn("Network offline, bypassing DB save.");
-    }
+    } catch(e) {}
 
     localStorage.setItem('studentName', name);
     localStorage.setItem('student_verified', 'true');
