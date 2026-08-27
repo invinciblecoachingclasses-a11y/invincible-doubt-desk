@@ -1180,3 +1180,48 @@ textarea:focus, input:focus, select:focus {
   box-shadow: 0 0 30px rgba(16, 185, 129, 0.3) !important; 
 }
 
+/* ===================================================== 
+   🔬 CANVAS LAB ENGINE & MATRIX UI 
+===================================================== */
+.curriculum-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 16px; scrollbar-width: none; }
+.curriculum-tabs::-webkit-scrollbar { display: none; }
+.curr-tab {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8; font-size: 12px; font-weight: 800; padding: 8px 16px;
+  border-radius: 12px; cursor: pointer; white-space: nowrap; transition: 0.2s;
+}
+.curr-tab.active { background: rgba(0,229,255,0.15); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+.lab-matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.matrix-card {
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px; padding: 14px; cursor: pointer; position: relative;
+  overflow: hidden; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between;
+}
+.matrix-card:hover, .matrix-card:active { border-color: var(--accent-cyan); background: rgba(0,229,255,0.05); }
+.matrix-card.locked { opacity: 0.5; filter: grayscale(1); border-style: dashed; cursor: not-allowed; }
+
+.canvas-player-container {
+  background: #000; border: 2px solid #1e293b; border-radius: 16px;
+  width: 100%; aspect-ratio: 16/9; overflow: hidden; margin-bottom: 16px;
+  position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+}
+canvas { width: 100%; height: 100%; display: block; }
+.sim-overlay-stats {
+  position: absolute; top: 10px; left: 10px; font-family: monospace;
+  font-size: 10px; color: #0f0; pointer-events: none;
+}
+
+/* RANGE SLIDERS */
+.slider-container { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+.slider-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: #fff; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; background: transparent !important; padding: 0 !important; margin: 4px 0 !important; height: 20px; border: none !important; box-shadow: none !important;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%; height: 6px; background: #1e293b; border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
+  background: var(--accent-cyan); margin-top: -5px; cursor: pointer; box-shadow: 0 0 10px var(--accent-cyan);
+}
