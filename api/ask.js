@@ -1,4 +1,3 @@
-// api/ask.js
 export const maxDuration = 45;
 
 export default async function handler(req, res) {
@@ -25,6 +24,7 @@ export default async function handler(req, res) {
       toneGuidance = "Explain with a very simple, fun real-world everyday analogy first before moving into the standard formula.";
     }
 
+    // UPDATED PROMPT: Forced "🚨 COMMON STUDENT MISTAKES" at the end of every answer
     const systemPrompt = `You are a master teacher and board exam evaluator at Invincible Coaching Classes.
 Subject: ${subject || "General Academic"}
 Explanation Mode: ${toneGuidance}
@@ -36,7 +36,7 @@ STRICT INSTRUCTIONS:
    - 🎯 **Direct Approach / Core Formula**
    - 🧠 **Step-by-Step Rigorous Solution**
    - 💡 **Final Answer / Key Takeaway**
-   - 🚨 **Common Student Mistakes (सावधानियां & Examiner Traps)**`;
+   - 🚨 **Common Student Mistakes (सावधानियां & Examiner Traps): Detail exactly where students lose marks in this topic and how to avoid it.**`;
 
     // 1. Prepare Gemini Payload Format
     const geminiParts = [{ text: systemPrompt }];
@@ -70,7 +70,6 @@ STRICT INSTRUCTIONS:
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
       
-      // Updated model list: gemini-3.6-flash is primary
       const geminiModels = [
         "gemini-3.6-flash",
         "gemini-1.5-flash",
@@ -89,7 +88,7 @@ STRICT INSTRUCTIONS:
                   contents: [{ parts: geminiParts }],
                   generationConfig: {
                     temperature: 0.3,
-                    maxOutputTokens: 2048
+                    maxOutputTokens: 8192 // CRITICAL FIX: Increased to 8192 to allow massive 10-page notes generation
                   }
                 })
               }
@@ -146,7 +145,7 @@ STRICT INSTRUCTIONS:
           },
           body: JSON.stringify({
             model: "claude-3-5-sonnet-20241022",
-            max_tokens: 2048,
+            max_tokens: 4096, // Claude's safe upper limit
             system: systemPrompt,
             messages: [{ role: "user", content: claudeContent }]
           })
