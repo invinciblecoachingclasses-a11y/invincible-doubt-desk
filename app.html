@@ -216,7 +216,6 @@
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
         <button type="button" class="subject" data-subject="Physics">Physics</button>
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
-        <!-- ADDED BIOLOGY -->
         <button type="button" class="subject" data-subject="Biology">Biology</button>
     </div>
 
@@ -587,7 +586,7 @@
 </section>
 
 <!-- =====================================================
-     6. INVINCIBLE LAB SECTION (SKILL TREE & SIMULATIONS)
+     6. INVINCIBLE LAB SECTION (CANVAS ENGINE & MATRIX)
 ===================================================== -->
 <section class="card hidden" id="labSection" aria-label="Interactive Simulations" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);">
     <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -595,56 +594,35 @@
         <span style="font-size:11px; color:#9ca3af;">🔥 Play Server Boss Raid</span>
     </div>
 
-    <!-- Boss Raid Banner -->
-    <div id="bossRaidBanner" style="background:linear-gradient(135deg, rgba(139,92,246,0.15), rgba(236,72,153,0.15)); border:1px solid rgba(139,92,246,0.3); border-radius:16px; padding:16px; margin-bottom:16px; text-align:center;">
-        <div style="color:#c4b5fd; font-size:11px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase;">SERVER CO-OP EVENT</div>
-        <div style="color:#fff; font-size:16px; font-weight:900; margin:4px 0;">⚡ FRIDAY NIGHT BOSS RAID</div>
-        <div id="bossRaidTimer" style="color:#a78bfa; font-family:monospace; font-size:18px; font-weight:900; margin:4px 0;">00:00:00</div>
-        <div style="color:#94a3b8; font-size:11px;">School vs. School - Defeat the 3D Circuit Boss to earn Mythic Elements!</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 class="section-h2" style="margin:0;">🔬 Canvas Curriculum Hub</h2>
+        <span style="font-size:10px; font-weight:800; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:6px;">ENGINE V2.0</span>
     </div>
 
-    <!-- Skill Tree Menu -->
-    <div id="labSkillTree" style="display:flex; flex-direction:column; gap:12px;">
-        <div style="font-size:15px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">🧬 Your Academic Skill Tree</div>
-
-        <!-- Physics Node -->
-        <div class="lab-card" role="button" tabindex="0" onclick="openLabSim('physics')" ontouchend="openLabSim('physics')" style="background:rgba(2,6,23,0.8); border:2px solid var(--accent-cyan); border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; box-shadow:0 0 20px rgba(0,229,255,0.15);">
-            <div style="pointer-events:none;">
-                <div style="font-size:24px; margin-bottom:4px;">⚡</div>
-                <div style="font-size:15px; font-weight:900; color:var(--accent-cyan);">Physics in Motion</div>
-                <div style="font-size:12px; color:#94a3b8;">Projectile Trajectory Simulator</div>
-            </div>
+    <!-- Curriculum Selection Matrix -->
+    <div id="labSkillTree">
+        <div class="curriculum-tabs">
+            <button type="button" class="curr-tab" onclick="filterLabMatrix(9, this)">Class 9</button>
+            <button type="button" class="curr-tab active" onclick="filterLabMatrix(10, this)">Class 10</button>
+            <button type="button" class="curr-tab" onclick="filterLabMatrix(11, this)">Class 11</button>
+            <button type="button" class="curr-tab" onclick="filterLabMatrix(12, this)">Class 12</button>
         </div>
 
-        <!-- Chemistry Node -->
-        <div class="lab-card" role="button" tabindex="0" onclick="openLabSim('chemistry')" ontouchend="openLabSim('chemistry')" style="background:rgba(2,6,23,0.8); border:2px solid #f59e0b; border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; box-shadow:0 0 20px rgba(245,158,11,0.15);">
-            <div style="pointer-events:none;">
-                <div style="font-size:24px; margin-bottom:4px;">🧪</div>
-                <div style="font-size:15px; font-weight:900; color:#f59e0b;">Reaction Lab</div>
-                <div style="font-size:12px; color:#94a3b8;">Zn + HCl Gas Evolution</div>
-            </div>
-        </div>
-
-        <!-- Biology Node (Locked) -->
-        <div class="lab-card" role="button" tabindex="0" onclick="alert('🔒 Complete Physics & Chemistry Labs to unlock Bio WOW!')" ontouchend="alert('🔒 Complete Physics & Chemistry Labs to unlock Bio WOW!')" style="background:rgba(2,6,23,0.5); border:1px dashed #334155; border-radius:18px; padding:16px; cursor:pointer; -webkit-tap-highlight-color:transparent; position:relative; z-index:10; opacity:0.6;">
-            <div style="pointer-events:none;">
-                <div style="font-size:24px; margin-bottom:4px;">🧬</div>
-                <div style="font-size:15px; font-weight:900; color:#94a3b8;">Bio WOW (Locked)</div>
-                <div style="font-size:12px; color:#64748b;">DNA Cell Zoom-In • Level 5 Required</div>
-            </div>
+        <div class="lab-matrix-grid" id="matrixGrid">
+            <!-- Injected dynamically via JS based on selected Class -->
         </div>
     </div>
 
-    <!-- Active Simulation View -->
+    <!-- Canvas Simulation Player -->
     <div id="activeLabPlayer" class="hidden" style="margin-top:10px;">
-        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--text-muted); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px;">← Back to Skill Tree</button>
+        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--text-muted); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation</button>
         
-        <div id="labTitle" style="font-size:18px; font-weight:900; color:#fff; margin-bottom:12px;">Lab Simulator</div>
+        <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:10px;">Lab Simulator</div>
         
-        <div class="sim-screen" id="simScreen" style="background:#020617; border:2px solid #1e293b; border-radius:16px; height:200px; position:relative; overflow:hidden; margin-bottom:12px;">
-            <div id="physBall" class="hidden" style="width:14px; height:14px; background:#00e5ff; border-radius:50%; position:absolute; bottom:0; left:0; box-shadow:0 0 10px #00e5ff; transition:transform 1s cubic-bezier(0.25,0.46,0.45,0.94);"></div>
-            <div id="chemBeaker" class="hidden" style="width:60px; height:80px; border:3px solid #cbd5e1; border-top:none; border-radius:0 0 10px 10px; position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(16,185,129,0.2); overflow:hidden; transition:1s;"></div>
-            <div id="bioZoom" class="hidden" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:40px; transition:1s;">🧬</div>
+        <!-- THE HIGH-PERFORMANCE CANVAS ENGINE -->
+        <div class="canvas-player-container">
+            <div id="simOverlayStats" class="sim-overlay-stats">FPS: 60</div>
+            <canvas id="invincibleEngine" width="800" height="450"></canvas>
         </div>
 
         <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; margin-bottom:16px;"></div>
@@ -656,7 +634,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- FOOTER -->
 <footer class="footer">
