@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       required: ["questions"]
     };
 
-    // STRICT TOPIC-FENCED PROMPT
+    // STRICT TOPIC-FENCED PROMPT (Fixes Physics/Chemistry Leakage)
     const prompt = `
 You are an expert Indian CBSE school examiner creating a STRICT, BOARD-LEVEL test paper.
 
@@ -78,8 +78,8 @@ TARGET PARAMETERS:
 
 CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
 1. ONLY generate questions strictly from the domain of "${subject}" and the chapter "${chapter}".
-2. IF SUBJECT IS "Physics", DO NOT include any Chemistry (acids, bases, reactions, periodic table) or Biology (plants, human body, reproduction, cells).
-3. IF SUBJECT IS "Chemistry", DO NOT include Physics kinematics, ray optics, electricity, or Biology.
+2. IF SUBJECT IS "Physics", YOU MUST NOT include ANY Chemistry (acids, bases, reactions, periodic table) or Biology (plants, human body, reproduction, cells).
+3. IF SUBJECT IS "Chemistry", YOU MUST NOT include Physics kinematics, ray optics, electricity, or Biology.
 4. IF SUBJECT IS "Mathematics", ONLY provide pure mathematical equations, geometry, trigonometry, arithmetic, or calculus.
 5. Every question must have EXACTLY 4 options.
 6. Randomize the correct answer index across 0, 1, 2, and 3. DO NOT place all correct answers at index 0 or 1.
@@ -111,7 +111,7 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
                 generationConfig: {
                   responseMimeType: "application/json",
                   responseSchema: responseSchema,
-                  temperature: 0.4
+                  temperature: 0.2 // CRITICAL FIX: Lowered temperature to stop AI from hallucinating cross-subject topics
                 }
               })
             });
