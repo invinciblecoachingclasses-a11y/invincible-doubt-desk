@@ -106,18 +106,19 @@ function checkDailyStreak() {
 window.addEventListener('DOMContentLoaded', checkDailyStreak);
 
 /* =====================================================
-   CLEAN SEPARATION 7-TAB NAVIGATION ENGINE
+   CLEAN SEPARATION 8-TAB NAVIGATION ENGINE
 ===================================================== */
 function switchTab(tab) {
     const dockButtons = document.querySelectorAll('.dock-btn');
     dockButtons.forEach(b => b.classList.remove('active'));
     
-    const tabMap = { 'home': 0, 'reels': 1, 'doubt': 2, 'test': 3, 'arena': 4, 'feed': 5, 'notes': 6 };
+    // Updated tabMap to include 'lab'
+    const tabMap = { 'home': 0, 'reels': 1, 'lab': 2, 'doubt': 3, 'test': 4, 'arena': 5, 'feed': 6, 'notes': 7 };
     if (tabMap[tab] !== undefined && dockButtons[tabMap[tab]]) {
         dockButtons[tabMap[tab]].classList.add('active');
     }
 
-    const sections = ['home', 'reels', 'doubt', 'test', 'arena', 'feed', 'notes'];
+    const sections = ['home', 'reels', 'lab', 'doubt', 'test', 'arena', 'feed', 'notes'];
     sections.forEach(s => {
         const el = document.getElementById(s + 'Section');
         if (el) el.classList.add('hidden');
@@ -256,7 +257,7 @@ function toggleLofiAudio() {
 }
 
 /* =====================================================
-   ⚡ ZERO-TOKEN STUDY REELS ENGINE
+   ⚡ ZERO-TOKEN STUDY REELS ENGINE (WITH MULTI-FORMAT SUPPORT)
 ===================================================== */
 const defaultReelDeck = [
     { id: 101, class_name: "10", type: "mcq", subject: "Physics", topic: "Light & Optics", q_en: "If magnification m = -1 for a spherical mirror, where is the object placed?", q_hi: "यदि किसी गोलीय दर्पण के लिए m = -1 है, तो वस्तु कहाँ स्थित है?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)", "Between F and P"], answer: 2, trap: "Negative magnification signifies a real and inverted image of identical size, which only happens at C." },
@@ -453,7 +454,6 @@ async function renderReelsDeck() {
     } catch(e) {}
 }
 
-
 function shareReel(text) {
     if (navigator.share) {
         navigator.share({ title: 'Invincible 360 Reel', text: `Can you solve this? ${text} 🔥 Join the clash on Invincible 360!`, url: window.location.href });
@@ -616,7 +616,7 @@ window.renderBlitzPassModal = function(name, passId) {
 }
 
 /* =====================================================
-   NOTES STUDIO GENERATOR & PDF ENGINE (FIXED MASSIVE PROMPT)
+   NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
@@ -634,23 +634,23 @@ if (genNotesBtn) {
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
-    // EXTREME DEPTH PROMPT TO FORCE LONG-FORM OUTPUT
     const strictPrompt = `
-      You are writing a definitive, exhaustive CBSE Class ${cls} ${sub} textbook chapter for "${chapter}". 
+      Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
+      Target Audience: Class ${cls} (${sub}).
       Language: ${lang}. (If Hindi or Hinglish, keep scientific terms in English brackets).
 
-      CRITICAL LENGTH & DEPTH REQUIREMENT:
-      You MUST generate a massive, deeply detailed document (minimum 2500 words) to act as a full ${targetPages}-page printed module. DO NOT summarize. Expand every single concept, law, and derivation.
-
       STRICT DESIGN & STRUCTURE REQUIREMENTS:
-      1. INTRODUCTION & WEIGHTAGE: Deep dive into the chapter basics.
-      2. 5-7 MAJOR SECTIONS: For each section, write 3-4 paragraphs of exhaustive explanation, include real-world examples, and full step-by-step logic.
-      3. 🧠 FORMULA VAULT: Display all mathematical equations centered using standard LaTeX math ($ or $$).
-      4. 🚨 EXAMINER TRAP: Highlight standard student calculation or conceptual mistakes in detail.
-      5. ⚡ 1-Minute TL;DR Box: High-yield summary bullets at the end.
-      6. COMPARISON TABLES: Fully formatted Markdown tables comparing definitions, devices, or rules.
-      
-      DO NOT skip any details. Output ONLY valid Markdown with clean standard tables and LaTeX math.
+      1. MUST BE VERY THOROUGH AND DETAILED TO FILL APPROXIMATELY ${targetPages} STANDARD PRINT PAGES.
+      2. Divide the chapter into 5 to 7 logical major sections.
+      3. For EVERY section include:
+         - ⚡ 1-Minute TL;DR Box: High-yield summary bullets.
+         - Core Concepts: Clear 1-2 line concept trigger bullets (NO long dense paragraphs).
+         - 🧠 FORMULA VAULT: Display all mathematical equations centered using standard LaTeX math ($ or $$).
+         - Derivations / Step-by-Step Logic: Clear numbered sequences with justifications in brackets.
+         - Comparison Tables: Fully formatted Markdown tables comparing definitions, devices, or wave types.
+         - 🚨 EXAMINER TRAP Callout: Highlight standard student calculation or conceptual mistakes (e.g. ❌ Wrong vs ✅ Right).
+      4. DO NOT add standalone multiple-choice question sets or practice quizzes at the end.
+      5. Output ONLY valid Markdown with clean standard tables and LaTeX math.
     `;
 
     try {
@@ -1225,7 +1225,7 @@ function formatMathText(text) {
 }
 
 /* =====================================================
-   DOUBT DESK LOGIC (FIXED PROMPT FOR COMMON MISTAKES)
+   DOUBT DESK LOGIC
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
@@ -1339,8 +1339,7 @@ if (document.getElementById("askBtn")) {
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify({ 
                 subject: selectedSubject, 
-                // OVERRIDE: Forcing AI to strictly include common mistakes
-                question: q + "\n\nCRITICAL INSTRUCTION: At the very end of your response, you MUST create a section specifically titled '🚨 COMMON STUDENT MISTAKES'. Detail 1 or 2 typical errors students make regarding this exact topic and how to avoid them.", 
+                question: q, 
                 image: selectedImage, 
                 tone: currentTone,
                 history: []
@@ -2610,136 +2609,7 @@ function saveStoryToVault() {
 }
 
 /* =====================================================
-   VIRAL GROWTH ENGINES: CREATOR STUDIO, BOUNTIES & ARENA SHARES
-===================================================== */
-async function handleReelSubmission(e) {
-  e.preventDefault();
-  const subject = document.getElementById('creatorSubject').value;
-  const topic = document.getElementById('creatorTopic').value.trim();
-  const q_en = document.getElementById('creatorQuestion').value.trim();
-  const optA = document.getElementById('creatorOptA').value.trim();
-  const optB = document.getElementById('creatorOptB').value.trim();
-  const optC = document.getElementById('creatorOptC').value.trim();
-  const optD = document.getElementById('creatorOptD').value.trim();
-  const author = localStorage.getItem('studentName') || 'Student Creator';
-  const school = localStorage.getItem('userSchool') || 'Global';
-
-  const newReel = {
-    class_name: localStorage.getItem('invincible_user_class') || "10",
-    type: "mcq",
-    subject: subject,
-    topic: topic,
-    q_en: q_en,
-    options: JSON.stringify([optA, optB, optC, optD]),
-    answer: 0,
-    author_name: author,
-    school_name: school,
-    views_count: 0
-  };
-
-  try {
-    if (typeof window.supabase !== 'undefined') {
-      const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
-      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      
-      const { error } = await client.from('study_reels').insert([newReel]);
-      if (error) throw error;
-    }
-
-    const xpEl = document.getElementById('xpCounter');
-    if (xpEl) {
-      let cur = parseInt(xpEl.textContent || '680', 10);
-      xpEl.textContent = cur + 50;
-    }
-
-    document.getElementById('reelCreatorModal').style.display = 'none';
-    if(typeof playWin === 'function') playWin();
-    if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 60 });
-    alert("🎉 Study Reel published globally! +50 XP earned.");
-    renderReelsDeck();
-  } catch(err) {
-    alert("Failed to publish reel: " + err.message);
-  }
-}
-
-async function loadBountyMarket() {
-  const container = document.getElementById('bountyMarketFeed');
-  if (!container) return;
-
-  try {
-    const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const { data, error } = await client.from('doubt_bounties').select('*').eq('status', 'open').order('id', { ascending: false }).limit(5);
-    if (error) throw error;
-
-    if (!data || data.length === 0) {
-      container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center; padding:10px;">No open peer bounties. Be the first to ask!</div>`;
-      return;
-    }
-
-    container.innerHTML = data.map(b => `
-      <div style="background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:10px; font-weight:800; color:var(--accent-cyan);">${b.subject.toUpperCase()} • Bountied by ${escapeHTML(b.student_name)}</div>
-          <div style="font-size:12px; color:#fff; font-weight:700; margin-top:2px;">${escapeHTML(b.question)}</div>
-        </div>
-        <button onclick="solveBounty(${b.id}, '${escapeHTML(b.question)}')" style="background:var(--accent-emerald); color:#020617; border:none; padding:6px 10px; border-radius:8px; font-size:10px; font-weight:900; cursor:pointer; whitespace-nowrap;">Solve (+${b.bounty_xp} XP)</button>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center;">Market offline.</div>`;
-  }
-}
-
-async function solveBounty(bountyId, questionText) {
-  switchTab('doubt');
-  const qInput = document.getElementById('question');
-  if (qInput) qInput.value = questionText;
-  alert("💡 Solve this doubt in the AI Solver, copy the steps, and share with your classmate to claim your bounty XP!");
-}
-
-function shareSchoolVictory(schoolName, opponentName, score) {
-  const text = encodeURIComponent(
-    `🔥 *SCHOOL VS SCHOOL ARENA CLASH!* 🔥\n\n` +
-    `🏆 My school (*${schoolName}*) just defeated *${opponentName}* in the 1v1 Live Knowledge Battle with *${score} points*!\n\n` +
-    `Defend our school rank and join the clash here:\n` +
-    `👉 ${window.location.origin}/app.html`
-  );
-  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-}
-
-window.addEventListener('DOMContentLoaded', () => { 
-    setTimeout(loadPlatformData, 300); 
-    loadActiveStories();
-    initBlitzCountdown();
-    updatePowerupUI();
-    loadBountyMarket(); // Load Viral Bounties
-    
-    const isVerified = localStorage.getItem('student_verified') === 'true';
-    if (!isVerified) {
-        const inviteModal = document.getElementById('studentInviteModal');
-        if (inviteModal) inviteModal.style.display = 'flex';
-    }
-    
-    const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
-    passBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        handleGetBlitzPass();
-      });
-    });
-
-    setTimeout(() => {
-        const savedClass = localStorage.getItem('invincible_user_class') || "10";
-        const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
-        setReelsClass(savedClass, btn);
-    }, 200);
-});
-/* =====================================================
-   MULTI-FORMAT CREATOR STUDIO LOGIC
+   MULTI-FORMAT CREATOR STUDIO LOGIC (NEW)
 ===================================================== */
 let activeCreatorFormat = 'hack';
 
@@ -2858,3 +2728,265 @@ async function handleMultiFormatReelSubmit(e) {
   }
 }
 
+/* =====================================================
+   KNOWLEDGE MARKET (PEER BOUNTIES) LOGIC (NEW)
+===================================================== */
+async function loadBountyMarket() {
+  const container = document.getElementById('bountyMarketFeed');
+  if (!container) return;
+
+  try {
+    const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const { data, error } = await client.from('doubt_bounties').select('*').eq('status', 'open').order('id', { ascending: false }).limit(5);
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center; padding:10px;">No open peer bounties. Be the first to ask!</div>`;
+      return;
+    }
+
+    container.innerHTML = data.map(b => `
+      <div style="background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:10px; font-weight:800; color:var(--accent-cyan);">${b.subject.toUpperCase()} • Bountied by ${escapeHTML(b.student_name)}</div>
+          <div style="font-size:12px; color:#fff; font-weight:700; margin-top:2px;">${escapeHTML(b.question)}</div>
+        </div>
+        <button onclick="solveBounty(${b.id}, '${escapeHTML(b.question)}')" style="background:var(--accent-emerald); color:#020617; border:none; padding:6px 10px; border-radius:8px; font-size:10px; font-weight:900; cursor:pointer; whitespace-nowrap;">Solve (+${b.bounty_xp} XP)</button>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center;">Market offline.</div>`;
+  }
+}
+
+async function solveBounty(bountyId, questionText) {
+  switchTab('doubt');
+  const qInput = document.getElementById('question');
+  if (qInput) qInput.value = questionText;
+  alert("💡 Solve this doubt in the AI Solver, copy the steps, and share with your classmate to claim your bounty XP!");
+}
+
+/* =====================================================
+   INVINCIBLE LAB (SIMULATIONS & GACHA LOOT) (NEW)
+===================================================== */
+let currentLabType = null;
+let chemInterval = null;
+
+const labData = {
+    physics: {
+        title: "☄️ Physics: Projectile Motion",
+        question: "If angle is 45° and power is 100%, where will it land?",
+        options: ["Near", "Middle", "Maximum Range", "Backwards"],
+        correct: 2,
+        controls: `
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <label style="color:#fff; font-size:12px;">Angle: <span id="valAngle">45</span>°</label>
+                <input type="range" id="slAngle" min="0" max="90" value="45" oninput="document.getElementById('valAngle').textContent=this.value">
+                <label style="color:#fff; font-size:12px;">Power: <span id="valPower">100</span>%</label>
+                <input type="range" id="slPower" min="0" max="100" value="100" oninput="document.getElementById('valPower').textContent=this.value">
+                <button onclick="simulatePhysics()" style="background:var(--accent-cyan); color:#000; font-weight:900; border:none; padding:8px; border-radius:8px;">▶ LAUNCH</button>
+            </div>
+        `
+    },
+    chemistry: {
+        title: "🧪 Chemistry: Reaction Lab (Zn + HCl)",
+        question: "What gas is produced in this vigorous reaction?",
+        options: ["Oxygen (O2)", "Hydrogen (H2)", "Carbon Dioxide", "Chlorine"],
+        correct: 1,
+        controls: `
+            <button onclick="simulateChem()" style="background:var(--accent-emerald); color:#000; font-weight:900; border:none; padding:12px; border-radius:8px; width:100%;">💧 DROP ZINC INTO ACID</button>
+        `
+    },
+    biology: {
+        title: "🧬 Biology: DNA Bio WOW",
+        question: "Where is DNA mainly found in a human cell?",
+        options: ["Ribosome", "Nucleus", "Mitochondria", "Cell Membrane"],
+        correct: 1,
+        controls: `
+            <div style="color:#94a3b8; font-size:12px; text-align:center; padding:10px;">If human DNA was stretched out, it would be 2 meters long!</div>
+            <button onclick="simulateBio()" style="background:var(--accent-amber); color:#000; font-weight:900; border:none; padding:12px; border-radius:8px; width:100%;">🔍 ZOOM INTO CELL</button>
+        `
+    }
+};
+
+function openLabSim(type) {
+    if (type === 'biology') return alert('🔒 Unlock Level 5 in Skill Tree to access Biology Lab.');
+    
+    currentLabType = type;
+    const data = labData[type];
+    document.getElementById('labSelectionHub').classList.add('hidden');
+    document.getElementById('activeLabPlayer').classList.remove('hidden');
+    
+    document.getElementById('labTitle').textContent = data.title;
+    document.getElementById('labControls').innerHTML = data.controls;
+    document.getElementById('labQuestionText').textContent = data.question;
+    
+    document.getElementById('labOptionsGrid').innerHTML = data.options.map((opt, idx) => `
+        <button onclick="submitLabPrediction(${idx})" style="background:#020617; border:1px solid #1e293b; color:#fff; padding:12px; border-radius:8px; text-align:left; font-weight:700; cursor:pointer;">${opt}</button>
+    `).join('');
+
+    // Reset screens
+    document.getElementById('physBall').classList.add('hidden');
+    document.getElementById('chemBeaker').classList.add('hidden');
+    document.getElementById('bioZoom').classList.add('hidden');
+    clearInterval(chemInterval);
+
+    if (type === 'physics') {
+        const ball = document.getElementById('physBall');
+        ball.classList.remove('hidden');
+        ball.style.transform = `translate(0px, 0px)`;
+    } else if (type === 'chemistry') {
+        const beaker = document.getElementById('chemBeaker');
+        beaker.classList.remove('hidden');
+        beaker.innerHTML = '';
+        beaker.style.background = 'rgba(16,185,129,0.2)';
+    } else if (type === 'biology') {
+        document.getElementById('bioZoom').classList.remove('hidden');
+        document.getElementById('bioZoom').style.transform = 'scale(1)';
+    }
+}
+
+function closeLabSim() {
+    document.getElementById('activeLabPlayer').classList.add('hidden');
+    document.getElementById('labSelectionHub').classList.remove('hidden');
+    clearInterval(chemInterval);
+}
+
+function simulatePhysics() {
+    playTick();
+    const ball = document.getElementById('physBall');
+    const angle = document.getElementById('slAngle').value;
+    const power = document.getElementById('slPower').value;
+    
+    ball.style.transition = 'none';
+    ball.style.transform = 'translate(0px, 0px)';
+    
+    setTimeout(() => {
+        ball.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        // Calculate arc
+        const xDist = (power / 100) * 280 * Math.sin((angle * Math.PI) / 90);
+        const yDist = -((power / 100) * 150 * Math.sin((angle * Math.PI) / 180));
+        ball.style.transform = `translate(${xDist}px, ${yDist}px)`;
+    }, 50);
+}
+
+function simulateChem() {
+    playTick();
+    const beaker = document.getElementById('chemBeaker');
+    beaker.style.background = 'rgba(239,68,68,0.4)'; // Turns red/hot
+    
+    clearInterval(chemInterval);
+    let count = 0;
+    chemInterval = setInterval(() => {
+        if(count > 15) clearInterval(chemInterval);
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.style.left = Math.random() * 80 + '%';
+        bubble.style.animationDuration = (0.5 + Math.random()) + 's';
+        beaker.appendChild(bubble);
+        count++;
+    }, 100);
+}
+
+function simulateBio() {
+    playDing();
+    const zoom = document.getElementById('bioZoom');
+    zoom.style.transform = 'scale(5)';
+    setTimeout(() => zoom.style.transform = 'scale(1)', 1500);
+}
+
+function submitLabPrediction(selectedIdx) {
+    const data = labData[currentLabType];
+    const btns = document.getElementById('labOptionsGrid').querySelectorAll('button');
+    btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+    
+    if (selectedIdx === data.correct) {
+        btns[selectedIdx].style.background = 'rgba(16,185,129,0.2)';
+        btns[selectedIdx].style.borderColor = 'var(--accent-emerald)';
+        btns[selectedIdx].style.opacity = '1';
+        playWin();
+        triggerGachaLootDrop();
+    } else {
+        btns[selectedIdx].style.background = 'rgba(239,68,68,0.2)';
+        btns[selectedIdx].style.borderColor = 'var(--accent-rose)';
+        btns[selectedIdx].style.opacity = '1';
+        btns[data.correct].style.borderColor = 'var(--accent-emerald)';
+        btns[data.correct].style.opacity = '1';
+        playBuzz();
+    }
+}
+
+function triggerGachaLootDrop() {
+    const modal = document.getElementById('lootModal');
+    const icon = document.getElementById('lootIcon');
+    const title = document.getElementById('lootTitle');
+    const desc = document.getElementById('lootDesc');
+    
+    modal.style.display = 'flex';
+    if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 80, origin: {y: 0.6} });
+
+    // Gacha RNG Math
+    const roll = Math.random();
+    if (roll > 0.95) {
+        // 5% Mythic Drop
+        icon.textContent = '☢️';
+        title.innerHTML = '<span style="color:#d946ef;">Mythic Element: Uranium-235</span>';
+        desc.textContent = "Extremely rare! Added to your Periodic Vault.";
+    } else if (roll > 0.70) {
+        // 25% Power-up
+        icon.textContent = '🛡️';
+        title.innerHTML = '<span style="color:#f59e0b;">Arena Shield Unlocked</span>';
+        desc.textContent = "Blocks 1 wrong answer in 1v1 Arena.";
+        let shields = parseInt(localStorage.getItem('blitz_pup_shield') || '0') + 1;
+        localStorage.setItem('blitz_pup_shield', shields);
+    } else {
+        // 70% XP Drop
+        icon.textContent = '✨';
+        title.innerHTML = '<span style="color:#00e5ff;">+100 Lab Scholar XP</span>';
+        desc.textContent = "Great prediction! Keep climbing the leaderboard.";
+        const xpEl = document.getElementById('xpCounter');
+        if(xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0') + 100;
+    }
+}
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+window.addEventListener('DOMContentLoaded', () => { 
+    setTimeout(loadPlatformData, 300); 
+    loadActiveStories();
+    initBlitzCountdown();
+    updatePowerupUI();
+    loadBountyMarket(); 
+    
+    const isVerified = localStorage.getItem('student_verified') === 'true';
+    if (!isVerified) {
+        const inviteModal = document.getElementById('studentInviteModal');
+        if (inviteModal) inviteModal.style.display = 'flex';
+    }
+    
+    const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
+    passBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleGetBlitzPass();
+      });
+    });
+
+    setTimeout(() => {
+        const savedClass = localStorage.getItem('invincible_user_class') || "10";
+        const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
+        setReelsClass(savedClass, btn);
+    }, 200);
+
+    // Start Boss Raid Countdown
+    setInterval(() => {
+        const d = new Date();
+        const diff = (24 - d.getHours()) + "h " + (60 - d.getMinutes()) + "m";
+        const ticker = document.getElementById('blitzCountdownTicker');
+        if (ticker) ticker.textContent = "⚡ FRIDAY BOSS RAID IN: " + diff;
+    }, 60000);
+});
