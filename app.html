@@ -123,6 +123,17 @@
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
 
+    <!-- VIRAL: THE KNOWLEDGE MARKET -->
+    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:16px; margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:12px; font-weight:900; color:var(--accent-cyan);">🌐 THE KNOWLEDGE MARKET (BOUNTIES)</span>
+        <button onclick="switchTab('doubt')" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; cursor:pointer;">+ Ask Peer</button>
+      </div>
+      <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
     <!-- DAILY CLASH & LIVE LEADERBOARD BENTO -->
     <div class="bento-grid">
         <section class="survival-card" id="puzzleBox" style="display:none; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); backdrop-filter:blur(12px);" aria-label="Daily Academic Survival Challenge">
@@ -172,11 +183,14 @@
       <span>⚡ STUDY REELS</span>
       <span id="reelsComboBadge" class="reels-combo-pill hidden">🔥 x2 STREAK</span>
     </div>
-    <div class="reels-class-pills">
-      <button class="reel-class-btn" data-class="9" onclick="setReelsClass('9', this)">Class 9</button>
-      <button class="reel-class-btn active" data-class="10" onclick="setReelsClass('10', this)">Class 10</button>
-      <button class="reel-class-btn" data-class="11" onclick="setReelsClass('11', this)">Class 11</button>
-      <button class="reel-class-btn" data-class="12" onclick="setReelsClass('12', this)">Class 12</button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button onclick="document.getElementById('reelCreatorModal').style.display='flex'" style="background:var(--accent-cyan); color:#000; font-size:11px; font-weight:900; padding:6px 12px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 10px rgba(0,229,255,0.3);">+ Create Hack</button>
+      <div class="reels-class-pills">
+        <button class="reel-class-btn" data-class="9" onclick="setReelsClass('9', this)">9</button>
+        <button class="reel-class-btn active" data-class="10" onclick="setReelsClass('10', this)">10</button>
+        <button class="reel-class-btn" data-class="11" onclick="setReelsClass('11', this)">11</button>
+        <button class="reel-class-btn" data-class="12" onclick="setReelsClass('12', this)">12</button>
+      </div>
     </div>
   </div>
 
@@ -202,6 +216,8 @@
         <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
         <button type="button" class="subject" data-subject="Physics">Physics</button>
         <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
+        <!-- ADDED BIOLOGY -->
+        <button type="button" class="subject" data-subject="Biology">Biology</button>
     </div>
 
     <label>Explanation Mode</label>
@@ -771,6 +787,31 @@
         </div>
         <button type="button" class="restart-btn" style="margin-top:12px; font-size:12px; padding:10px;" onclick="document.getElementById('onboardingModal').style.display='none'">Explore on My Own</button>
     </div>
+</div>
+
+<!-- STUDENT STUDY REEL CREATOR STUDIO MODAL -->
+<div id="reelCreatorModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:900; color:#fff; margin:0;">⚡ Create Study Reel</h3>
+      <button onclick="document.getElementById('reelCreatorModal').style.display='none'" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <form onsubmit="handleReelSubmission(event)" style="display:flex; flex-direction:column; gap:10px;">
+      <select id="creatorSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Biology">Biology</option>
+      </select>
+      <input type="text" id="creatorTopic" placeholder="Topic (e.g. Ray Optics Trick)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+      <textarea id="creatorQuestion" placeholder="Write your MCQ or Concept Hack..." rows="3" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
+      <input type="text" id="creatorOptA" placeholder="Option A (Correct Answer)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+      <input type="text" id="creatorOptB" placeholder="Option B" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+      <input type="text" id="creatorOptC" placeholder="Option C" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+      <input type="text" id="creatorOptD" placeholder="Option D" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+      <button type="submit" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:4px;">Publish to Feed 🚀 (+50 XP)</button>
+    </form>
+  </div>
 </div>
 
 <!-- STORY STUDIO MODAL -->
