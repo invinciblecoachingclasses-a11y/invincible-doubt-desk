@@ -2738,3 +2738,123 @@ window.addEventListener('DOMContentLoaded', () => {
         setReelsClass(savedClass, btn);
     }, 200);
 });
+/* =====================================================
+   MULTI-FORMAT CREATOR STUDIO LOGIC
+===================================================== */
+let activeCreatorFormat = 'hack';
+
+function switchReelFormat(format) {
+  activeCreatorFormat = format;
+  const formats = ['hack', 'mcq', 'trap', 'formula'];
+  
+  formats.forEach(f => {
+    const tabBtn = document.getElementById(`tabFormat_${f}`);
+    if (tabBtn) {
+      if (f === format) {
+        tabBtn.style.background = 'rgba(0,229,255,0.18)';
+        tabBtn.style.borderColor = 'var(--accent-cyan)';
+        tabBtn.style.color = 'var(--accent-cyan)';
+      } else {
+        tabBtn.style.background = '#020617';
+        tabBtn.style.borderColor = '#1e293b';
+        tabBtn.style.color = '#94a3b8';
+      }
+    }
+  });
+
+  const hEl = document.getElementById('formatFields_hack');
+  const mEl = document.getElementById('formatFields_mcq');
+  const fEl = document.getElementById('formatFields_formula');
+
+  if (hEl) hEl.style.display = (format === 'hack' || format === 'trap') ? 'flex' : 'none';
+  if (mEl) mEl.style.display = format === 'mcq' ? 'flex' : 'none';
+  if (fEl) fEl.style.display = format === 'formula' ? 'flex' : 'none';
+}
+
+async function handleMultiFormatReelSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnPublishReel');
+  const originalText = btn ? btn.innerText : "PUBLISH";
+  if (btn) {
+    btn.innerText = "PUBLISHING... ⏳";
+    btn.disabled = true;
+  }
+
+  const subject = document.getElementById('creatorSubject')?.value || 'Science';
+  const grade = document.getElementById('creatorGrade')?.value || '10';
+  const topic = document.getElementById('creatorTopic')?.value?.trim() || 'Concept';
+  const author = localStorage.getItem('studentName') || 'Topper Creator';
+  const school = localStorage.getItem('userSchool') || 'Invincible Coaching';
+
+  let payload = {
+    class_name: grade,
+    type: activeCreatorFormat,
+    subject: subject,
+    topic: topic,
+    author_name: author,
+    school_name: school,
+    views_count: 1,
+    likes_count: 0
+  };
+
+  if (activeCreatorFormat === 'mcq') {
+    const qText = document.getElementById('creatorMcqQuestion')?.value?.trim();
+    const optA = document.getElementById('creatorOptA')?.value?.trim();
+    const optB = document.getElementById('creatorOptB')?.value?.trim();
+    const optC = document.getElementById('creatorOptC')?.value?.trim();
+    const optD = document.getElementById('creatorOptD')?.value?.trim();
+
+    if (!qText || !optA || !optB) {
+      alert("Please provide the question and options.");
+      if (btn) { btn.innerText = originalText; btn.disabled = false; }
+      return;
+    }
+
+    payload.q_en = qText;
+    payload.options = JSON.stringify([optA, optB, optC, optD]);
+    payload.answer = 0;
+  } else if (activeCreatorFormat === 'formula') {
+    payload.title = topic;
+    payload.formula = document.getElementById('creatorFormulaLatex')?.value?.trim() || '';
+    payload.tip = document.getElementById('creatorFormulaTip')?.value?.trim() || '';
+  } else {
+    payload.title = document.getElementById('creatorHackTitle')?.value?.trim() || topic;
+    payload.content = document.getElementById('creatorHackContent')?.value?.trim() || '';
+    payload.rule = document.getElementById('creatorHackRule')?.value?.trim() || 'Focus on NCERT definitions.';
+  }
+
+  try {
+    if (window.supabase) {
+      const sbClient = window.supabase.createClient(
+        'https://cbgwbzidkmcefoithipp.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g'
+      );
+
+      const { error } = await sbClient.from('study_reels').insert([payload]);
+      if (error) throw error;
+    }
+
+    const xpEl = document.getElementById('xpCounter');
+    if (xpEl) {
+      const cur = parseInt(xpEl.textContent || '680', 10);
+      xpEl.textContent = cur + 75;
+    }
+
+    const modal = document.getElementById('reelCreatorModal');
+    if (modal) modal.style.display = 'none';
+
+    if (typeof playWin === 'function') playWin();
+    if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
+    
+    alert(`🎉 Published globally! You earned +75 XP as a Topper Creator.`);
+    await renderReelsDeck();
+  } catch (err) {
+    alert("Publishing notice: " + err.message);
+  } finally {
+    if (btn) {
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }
+  }
+}
+
