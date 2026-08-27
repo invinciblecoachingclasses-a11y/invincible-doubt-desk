@@ -141,8 +141,6 @@ function selectStartingQuest(quest) {
     switchTab(quest);
 }
 
-// 🔴 THE FIX IS HERE 🔴
-// It now checks if the student is VERIFIED before showing the welcome tutorial!
 setTimeout(() => { 
     const isVerified = localStorage.getItem('student_verified') === 'true';
     if (isVerified && !localStorage.getItem('invincible_onboarded')) { 
@@ -614,7 +612,7 @@ window.renderBlitzPassModal = function(name, passId) {
 }
 
 /* =====================================================
-   NOTES STUDIO GENERATOR & PDF ENGINE
+   NOTES STUDIO GENERATOR & PDF ENGINE (FIXED MASSIVE PROMPT)
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
@@ -632,23 +630,23 @@ if (genNotesBtn) {
     document.getElementById('notesLoading')?.classList.remove('hidden');
     document.getElementById('notesResultContainer')?.classList.add('hidden');
 
+    // EXTREME DEPTH PROMPT TO FORCE LONG-FORM OUTPUT
     const strictPrompt = `
-      Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
-      Target Audience: Class ${cls} (${sub}).
+      You are writing a definitive, exhaustive CBSE Class ${cls} ${sub} textbook chapter for "${chapter}". 
       Language: ${lang}. (If Hindi or Hinglish, keep scientific terms in English brackets).
 
+      CRITICAL LENGTH & DEPTH REQUIREMENT:
+      You MUST generate a massive, deeply detailed document (minimum 2500 words) to act as a full ${targetPages}-page printed module. DO NOT summarize. Expand every single concept, law, and derivation.
+
       STRICT DESIGN & STRUCTURE REQUIREMENTS:
-      1. MUST BE VERY THOROUGH AND DETAILED TO FILL APPROXIMATELY ${targetPages} STANDARD PRINT PAGES.
-      2. Divide the chapter into 5 to 7 logical major sections.
-      3. For EVERY section include:
-         - ⚡ 1-Minute TL;DR Box: High-yield summary bullets.
-         - Core Concepts: Clear 1-2 line concept trigger bullets (NO long dense paragraphs).
-         - 🧠 FORMULA VAULT: Display all mathematical equations centered using standard LaTeX math ($ or $$).
-         - Derivations / Step-by-Step Logic: Clear numbered sequences with justifications in brackets.
-         - Comparison Tables: Fully formatted Markdown tables comparing definitions, devices, or wave types.
-         - 🚨 EXAMINER TRAP Callout: Highlight standard student calculation or conceptual mistakes (e.g. ❌ Wrong vs ✅ Right).
-      4. DO NOT add standalone multiple-choice question sets or practice quizzes at the end.
-      5. Output ONLY valid Markdown with clean standard tables and LaTeX math.
+      1. INTRODUCTION & WEIGHTAGE: Deep dive into the chapter basics.
+      2. 5-7 MAJOR SECTIONS: For each section, write 3-4 paragraphs of exhaustive explanation, include real-world examples, and full step-by-step logic.
+      3. 🧠 FORMULA VAULT: Display all mathematical equations centered using standard LaTeX math ($ or $$).
+      4. 🚨 EXAMINER TRAP: Highlight standard student calculation or conceptual mistakes in detail.
+      5. ⚡ 1-Minute TL;DR Box: High-yield summary bullets at the end.
+      6. COMPARISON TABLES: Fully formatted Markdown tables comparing definitions, devices, or rules.
+      
+      DO NOT skip any details. Output ONLY valid Markdown with clean standard tables and LaTeX math.
     `;
 
     try {
@@ -878,34 +876,6 @@ async function loadPlatformData(){
         }
     }catch(error){ console.error(error); }
 }
-
-window.addEventListener('DOMContentLoaded', () => { 
-    setTimeout(loadPlatformData, 300); 
-    loadActiveStories();
-    initBlitzCountdown();
-    updatePowerupUI();
-    
-    // 🔴 THE LOCK IS ENFORCED HERE TOO 🔴
-    const isVerified = localStorage.getItem('student_verified') === 'true';
-    if (!isVerified) {
-        const inviteModal = document.getElementById('studentInviteModal');
-        if (inviteModal) inviteModal.style.display = 'flex';
-    }
-    
-    const passBtns = document.querySelectorAll('#blitzPassBtn, [data-action="blitz-pass"]');
-    passBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        handleGetBlitzPass();
-      });
-    });
-
-    setTimeout(() => {
-        const savedClass = localStorage.getItem('invincible_user_class') || "10";
-        const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
-        setReelsClass(savedClass, btn);
-    }, 200);
-});
 
 function renderDailyPuzzle(puzzle) {
   if (!puzzle) return;
@@ -1251,7 +1221,7 @@ function formatMathText(text) {
 }
 
 /* =====================================================
-   DOUBT DESK LOGIC
+   DOUBT DESK LOGIC (FIXED PROMPT FOR COMMON MISTAKES)
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
@@ -1365,7 +1335,8 @@ if (document.getElementById("askBtn")) {
               headers: {"Content-Type": "application/json"},
               body: JSON.stringify({ 
                 subject: selectedSubject, 
-                question: q, 
+                // OVERRIDE: Forcing AI to strictly include common mistakes
+                question: q + "\n\nCRITICAL INSTRUCTION: At the very end of your response, you MUST create a section specifically titled '🚨 COMMON STUDENT MISTAKES'. Detail 1 or 2 typical errors students make regarding this exact topic and how to avoid them.", 
                 image: selectedImage, 
                 tone: currentTone,
                 history: []
@@ -2634,13 +2605,115 @@ function saveStoryToVault() {
   alert("💾 Saved to Gallery!");
 }
 
+/* =====================================================
+   VIRAL GROWTH ENGINES: CREATOR STUDIO, BOUNTIES & ARENA SHARES
+===================================================== */
+async function handleReelSubmission(e) {
+  e.preventDefault();
+  const subject = document.getElementById('creatorSubject').value;
+  const topic = document.getElementById('creatorTopic').value.trim();
+  const q_en = document.getElementById('creatorQuestion').value.trim();
+  const optA = document.getElementById('creatorOptA').value.trim();
+  const optB = document.getElementById('creatorOptB').value.trim();
+  const optC = document.getElementById('creatorOptC').value.trim();
+  const optD = document.getElementById('creatorOptD').value.trim();
+  const author = localStorage.getItem('studentName') || 'Student Creator';
+  const school = localStorage.getItem('userSchool') || 'Global';
+
+  const newReel = {
+    class_name: localStorage.getItem('invincible_user_class') || "10",
+    type: "mcq",
+    subject: subject,
+    topic: topic,
+    q_en: q_en,
+    options: JSON.stringify([optA, optB, optC, optD]),
+    answer: 0,
+    author_name: author,
+    school_name: school,
+    views_count: 0
+  };
+
+  try {
+    if (typeof window.supabase !== 'undefined') {
+      const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      
+      const { error } = await client.from('study_reels').insert([newReel]);
+      if (error) throw error;
+    }
+
+    const xpEl = document.getElementById('xpCounter');
+    if (xpEl) {
+      let cur = parseInt(xpEl.textContent || '680', 10);
+      xpEl.textContent = cur + 50;
+    }
+
+    document.getElementById('reelCreatorModal').style.display = 'none';
+    if(typeof playWin === 'function') playWin();
+    if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 60 });
+    alert("🎉 Study Reel published globally! +50 XP earned.");
+    renderReelsDeck();
+  } catch(err) {
+    alert("Failed to publish reel: " + err.message);
+  }
+}
+
+async function loadBountyMarket() {
+  const container = document.getElementById('bountyMarketFeed');
+  if (!container) return;
+
+  try {
+    const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
+    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const { data, error } = await client.from('doubt_bounties').select('*').eq('status', 'open').order('id', { ascending: false }).limit(5);
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center; padding:10px;">No open peer bounties. Be the first to ask!</div>`;
+      return;
+    }
+
+    container.innerHTML = data.map(b => `
+      <div style="background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:10px; font-weight:800; color:var(--accent-cyan);">${b.subject.toUpperCase()} • Bountied by ${escapeHTML(b.student_name)}</div>
+          <div style="font-size:12px; color:#fff; font-weight:700; margin-top:2px;">${escapeHTML(b.question)}</div>
+        </div>
+        <button onclick="solveBounty(${b.id}, '${escapeHTML(b.question)}')" style="background:var(--accent-emerald); color:#020617; border:none; padding:6px 10px; border-radius:8px; font-size:10px; font-weight:900; cursor:pointer; whitespace-nowrap;">Solve (+${b.bounty_xp} XP)</button>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center;">Market offline.</div>`;
+  }
+}
+
+async function solveBounty(bountyId, questionText) {
+  switchTab('doubt');
+  const qInput = document.getElementById('question');
+  if (qInput) qInput.value = questionText;
+  alert("💡 Solve this doubt in the AI Solver, copy the steps, and share with your classmate to claim your bounty XP!");
+}
+
+function shareSchoolVictory(schoolName, opponentName, score) {
+  const text = encodeURIComponent(
+    `🔥 *SCHOOL VS SCHOOL ARENA CLASH!* 🔥\n\n` +
+    `🏆 My school (*${schoolName}*) just defeated *${opponentName}* in the 1v1 Live Knowledge Battle with *${score} points*!\n\n` +
+    `Defend our school rank and join the clash here:\n` +
+    `👉 ${window.location.origin}/app.html`
+  );
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+}
+
 window.addEventListener('DOMContentLoaded', () => { 
     setTimeout(loadPlatformData, 300); 
     loadActiveStories();
     initBlitzCountdown();
     updatePowerupUI();
+    loadBountyMarket(); // Load Viral Bounties
     
-    // THE LOCK IS ENFORCED HERE TOO
     const isVerified = localStorage.getItem('student_verified') === 'true';
     if (!isVerified) {
         const inviteModal = document.getElementById('studentInviteModal');
