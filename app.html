@@ -789,30 +789,73 @@
     </div>
 </div>
 
-<!-- STUDENT STUDY REEL CREATOR STUDIO MODAL -->
-<div id="reelCreatorModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.9); backdrop-filter:blur(12px); align-items:center; justify-content:center; padding:16px;">
-  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:420px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.15);">
+<!-- MULTI-FORMAT CREATOR STUDIO MODAL -->
+<div id="reelCreatorModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.92); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:16px;">
+  <div style="background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; width:100%; max-width:440px; padding:24px; box-shadow:0 0 40px rgba(0,229,255,0.18); max-height:92vh; overflow-y:auto;">
+    
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-      <h3 style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:900; color:#fff; margin:0;">⚡ Create Study Reel</h3>
-      <button onclick="document.getElementById('reelCreatorModal').style.display='none'" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+      <div>
+        <h3 style="font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:900; color:#fff; margin:0;">⚡ Creator Studio</h3>
+        <p style="font-size:11px; color:#94a3b8; margin:2px 0 0 0;">Publish to thousands of CBSE students &amp; earn clout</p>
+      </div>
+      <button type="button" onclick="document.getElementById('reelCreatorModal').style.display='none'" style="background:rgba(255,255,255,0.06); border:none; color:#94a3b8; font-size:16px; border-radius:50%; width:30px; height:30px; cursor:pointer;">✕</button>
     </div>
-    <form onsubmit="handleReelSubmission(event)" style="display:flex; flex-direction:column; gap:10px;">
-      <select id="creatorSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-        <option value="Physics">Physics</option>
-        <option value="Chemistry">Chemistry</option>
-        <option value="Mathematics">Mathematics</option>
-        <option value="Biology">Biology</option>
-      </select>
-      <input type="text" id="creatorTopic" placeholder="Topic (e.g. Ray Optics Trick)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
-      <textarea id="creatorQuestion" placeholder="Write your MCQ or Concept Hack..." rows="3" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
-      <input type="text" id="creatorOptA" placeholder="Option A (Correct Answer)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-      <input type="text" id="creatorOptB" placeholder="Option B" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-      <input type="text" id="creatorOptC" placeholder="Option C" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-      <input type="text" id="creatorOptD" placeholder="Option D" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
-      <button type="submit" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; margin-top:4px;">Publish to Feed 🚀 (+50 XP)</button>
+
+    <!-- Format Switcher -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:12px;">
+      <button type="button" id="tabFormat_hack" onclick="switchReelFormat('hack')" style="background:rgba(0,229,255,0.18); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">💡 Concept Hack</button>
+      <button type="button" id="tabFormat_mcq" onclick="switchReelFormat('mcq')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🎯 MCQ Challenge</button>
+      <button type="button" id="tabFormat_trap" onclick="switchReelFormat('trap')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🚨 Examiner Trap</button>
+      <button type="button" id="tabFormat_formula" onclick="switchReelFormat('formula')" style="background:#020617; border:1px solid #1e293b; color:#94a3b8; font-size:11px; font-weight:800; padding:8px; border-radius:10px; cursor:pointer;">🧠 Formula Card</button>
+    </div>
+
+    <form onsubmit="handleMultiFormatReelSubmit(event)" style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <select id="creatorSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Biology">Biology</option>
+          <option value="Mathematics">Mathematics</option>
+        </select>
+        <select id="creatorGrade" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+          <option value="10">Class 10</option>
+          <option value="9">Class 9</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+        </select>
+      </div>
+
+      <input type="text" id="creatorTopic" placeholder="Topic / Chapter Tag (e.g. Heart Blood Flow)" required style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+
+      <!-- SECTION 1: CONCEPT HACK / TRAP FIELDS -->
+      <div id="formatFields_hack" style="display:flex; flex-direction:column; gap:10px;">
+        <input type="text" id="creatorHackTitle" placeholder="Catchy Headline (e.g. 5-Sec Rule for Heart Valves)" style="background:#020617; border:1px solid #1e293b; color:#00e5ff; font-weight:800; border-radius:10px; padding:10px; font-size:12px;">
+        <textarea id="creatorHackContent" placeholder="Explain the concept breakdown or trick clearly..." rows="3" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
+        <input type="text" id="creatorHackRule" placeholder="💡 Examiner Tip / Golden Rule (e.g. Always remember: Arteries Away)" style="background:#020617; border:1px solid #1e293b; color:#10b981; border-radius:10px; padding:10px; font-size:12px;">
+      </div>
+
+      <!-- SECTION 2: MCQ FIELDS -->
+      <div id="formatFields_mcq" style="display:none; flex-direction:column; gap:8px;">
+        <textarea id="creatorMcqQuestion" placeholder="Type MCQ Challenge Question..." rows="2" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none;"></textarea>
+        <input type="text" id="creatorOptA" placeholder="Option A (Correct Answer ✅)" style="background:#020617; border:1px solid #05ffa1; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+        <input type="text" id="creatorOptB" placeholder="Option B (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+        <input type="text" id="creatorOptC" placeholder="Option C (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+        <input type="text" id="creatorOptD" placeholder="Option D (Wrong Option)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:8px; font-size:11px;">
+      </div>
+
+      <!-- SECTION 3: FORMULA CARD FIELDS -->
+      <div id="formatFields_formula" style="display:none; flex-direction:column; gap:8px;">
+        <input type="text" id="creatorFormulaLatex" placeholder="LaTeX Equation (e.g. P = \frac{V^2}{R})" style="background:#020617; border:1px solid #00e5ff; color:#00e5ff; font-family:monospace; border-radius:10px; padding:10px; font-size:12px;">
+        <input type="text" id="creatorFormulaTip" placeholder="Where to apply this formula..." style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+      </div>
+
+      <button type="submit" id="btnPublishReel" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:13px; border-radius:12px; cursor:pointer; margin-top:6px; box-shadow:0 4px 20px rgba(0,229,255,0.35);">
+        PUBLISH TO GLOBAL FEED 🚀 (+75 XP)
+      </button>
     </form>
   </div>
 </div>
+
 
 <!-- STORY STUDIO MODAL -->
 <div class="modal-overlay" id="storyModal">
