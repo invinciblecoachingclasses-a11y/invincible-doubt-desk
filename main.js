@@ -75,14 +75,15 @@ async function loadPlatformData(){
 window.addEventListener('DOMContentLoaded', () => { 
     setTimeout(loadPlatformData, 300); 
     
+    // Trigger external modules
     if (typeof loadActiveStories === 'function') loadActiveStories();
     if (typeof initBlitzCountdown === 'function') initBlitzCountdown();
     if (typeof updatePowerupUI === 'function') updatePowerupUI();
     if (typeof loadBountyMarket === 'function') loadBountyMarket(); 
     
-    // Initialize Lab Matrix
+    // Initialize Lab Matrix (FIXED: Passed as string)
     if (typeof window.filterLabMatrix === 'function') {
-        window.filterLabMatrix(10, document.querySelector('.curr-tab.active'));
+        window.filterLabMatrix("10", document.querySelector('.curr-tab.active'));
     }
     
     const isVerified = localStorage.getItem('student_verified') === 'true';
@@ -104,12 +105,4 @@ window.addEventListener('DOMContentLoaded', () => {
         const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
         if (typeof setReelsClass === 'function') setReelsClass(savedClass, btn);
     }, 200);
-
-    // Start Boss Raid Countdown
-    setInterval(() => {
-        const d = new Date();
-        const diff = (24 - d.getHours()) + "h " + (60 - d.getMinutes()) + "m";
-        const ticker = document.getElementById('blitzCountdownTicker');
-        if (ticker) ticker.textContent = "⚡ FRIDAY BOSS RAID IN: " + diff;
-    }, 60000);
 });
