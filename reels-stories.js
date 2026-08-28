@@ -55,12 +55,25 @@ async function renderReelsDeck() {
     }
 
     container.innerHTML = deck.map((card, idx) => {
-        const qEscaped = escapeHTML(card.q_en || card.title || '');
+        // Safe string extraction to prevent JS errors on click
+        const rawTitle = String(card.q_en || card.title || '');
+        const rawSub = String(card.subject || 'Science');
+        const rawFormula = String(card.formula || '');
+        
+        // Escape for inline JS function arguments
+        const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        const formulaJS = rawFormula.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        
+        // Escape for HTML display
         const sub = card.subject || 'Science';
         const hook = card.topic || 'NCERT Concept';
         const author = card.author_name || 'Faculty Topper';
         const school = card.school_name || 'Invincible 360';
         const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:2px 6px; border-radius:6px;">⚡ By ${escapeHTML(author)} (${escapeHTML(school)})</span>`;
+        
+        // Use card.id explicitly as a string to prevent UUID syntax errors
+        const safeCardId = String(card.id || idx);
 
         if (card.type === 'mcq') {
             let opts = card.options;
@@ -70,7 +83,7 @@ async function renderReelsDeck() {
             if (!Array.isArray(opts)) opts = [];
 
             return `
-              <div class="reel-card" id="reelCard_${card.id}">
+              <div class="reel-card" id="reelCard_${safeCardId}">
                 <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
                   ${creatorBadge}
@@ -81,17 +94,17 @@ async function renderReelsDeck() {
                   ${card.q_hi ? `<div class="reel-q-sub">${card.q_hi}</div>` : ''}
                   <div class="reel-options-grid">
                     ${opts.map((opt, oIdx) => `
-                      <button type="button" class="reel-opt-btn" onclick="handleReelAnswer(${card.id}, ${oIdx}, ${card.answer}, this)">
+                      <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, this)">
                         <span>${formatMathText(String(opt))}</span>
                         <span style="font-size:12px; opacity:0.35;">○</span>
                       </button>
                     `).join('')}
                   </div>
-                  <div id="reelFeedback_${card.id}" style="font-size:11px; margin-top:4px; display:none;"></div>
+                  <div id="reelFeedback_${safeCardId}" style="font-size:11px; margin-top:4px; display:none;"></div>
                 </div>
 
                 <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" title="Ask AI Tutor" onclick="sendReelToDoubtSolver('${qEscaped}', '${sub}')">
+                  <div class="reel-dock-action-btn ai-glow" title="Ask AI Tutor" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">
                     <span style="font-size:16px;">🧠</span>
                   </div>
                   <span class="reel-dock-action-label">Ask AI</span>
@@ -101,7 +114,7 @@ async function renderReelsDeck() {
                   </div>
                   <span class="reel-dock-action-label">Clout</span>
 
-                  <div class="reel-dock-action-btn" title="Share with Class" onclick="shareReel('${qEscaped}')">
+                  <div class="reel-dock-action-btn" title="Share with Class" onclick="shareReel('${qJS}')">
                     <span style="font-size:15px;">🚀</span>
                   </div>
                   <span class="reel-dock-action-label">Share</span>
@@ -127,7 +140,7 @@ async function renderReelsDeck() {
                 </div>
 
                 <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('${qEscaped}', '${sub}')">
+                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">
                     <span style="font-size:16px;">🧠</span>
                   </div>
                   <span class="reel-dock-action-label">Explain</span>
@@ -137,7 +150,7 @@ async function renderReelsDeck() {
                   </div>
                   <span class="reel-dock-action-label">Clout</span>
 
-                  <div class="reel-dock-action-btn" onclick="shareReel('${qEscaped}')">
+                  <div class="reel-dock-action-btn" onclick="shareReel('${qJS}')">
                     <span style="font-size:15px;">🚀</span>
                   </div>
                   <span class="reel-dock-action-label">Share</span>
@@ -163,7 +176,7 @@ async function renderReelsDeck() {
                 </div>
 
                 <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('Derive formula: ${escapeHTML(card.formula || '')}', '${sub}')">
+                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">
                     <span style="font-size:16px;">🧠</span>
                   </div>
                   <span class="reel-dock-action-label">Derive</span>
@@ -173,7 +186,7 @@ async function renderReelsDeck() {
                   </div>
                   <span class="reel-dock-action-label">Save</span>
 
-                  <div class="reel-dock-action-btn" onclick="shareReel('${escapeHTML(card.title || '')}')">
+                  <div class="reel-dock-action-btn" onclick="shareReel('${qJS}')">
                     <span style="font-size:15px;">🚀</span>
                   </div>
                   <span class="reel-dock-action-label">Share</span>
@@ -217,8 +230,8 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
     const isCorrect = Number(selectedIdx) === Number(correctIdx);
 
     if (isCorrect) {
-        playDing();
-        triggerHaptic([30, 40, 30]);
+        if (typeof playDing === 'function') playDing();
+        if (typeof triggerHaptic === 'function') triggerHaptic([30, 40, 30]);
         btnEl.classList.add('correct');
         reelStreak++;
 
@@ -232,18 +245,20 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
             fb.innerHTML = `<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct! +15 XP</span>`;
         }
 
-        const currentXp = parseInt(document.getElementById('xpCounter')?.textContent || '680', 10);
         const xpEl = document.getElementById('xpCounter');
-        if (xpEl) xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
+        if (xpEl) {
+            const currentXp = parseInt(xpEl.textContent || '680', 10);
+            xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
+        }
 
         if (typeof rechargeBlitzPowerup === 'function') rechargeBlitzPowerup('fiftyFifty');
 
         if (reelStreak >= 3) {
-            confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
+            if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
         }
     } else {
-        playBuzz();
-        triggerHaptic([80]);
+        if (typeof playBuzz === 'function') playBuzz();
+        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
         btnEl.classList.add('wrong');
         if (buttons[correctIdx]) buttons[correctIdx].classList.add('correct');
         reelStreak = 0;
@@ -258,13 +273,13 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
 }
 
 function sendReelToDoubtSolver(questionText, subject) {
-    switchTab('doubt');
+    if (typeof switchTab === 'function') switchTab('doubt');
     const qInput = document.getElementById('question');
     if (qInput) qInput.value = questionText;
     
     if (subject) {
         document.querySelectorAll("#doubtSection .subject").forEach(b => {
-            if (b.getAttribute('data-subject').toLowerCase() === subject.toLowerCase()) {
+            if (b.getAttribute('data-subject') && b.getAttribute('data-subject').toLowerCase() === subject.toLowerCase()) {
                 b.click();
             }
         });
