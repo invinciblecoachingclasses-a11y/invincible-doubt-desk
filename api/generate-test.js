@@ -17,9 +17,6 @@ export default async function handler(req, res) {
 
   // ENVIRONMENT KEYS
   const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
   const apiKeyList = rawGeminiKeys
     ? rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean)
     : [];
@@ -27,7 +24,7 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
     const className = body.class || body.className || "Class 10";
-    const subject = body.subject || "Physics";
+    const subject = body.subject || "Science";
     const chapter = body.chapter || "Full Syllabus Overview";
     const requestedCount = Number(body.count || body.numberOfQuestions || 20);
     const difficulty = body.difficulty || "Moderate";
@@ -40,55 +37,38 @@ export default async function handler(req, res) {
       50
     );
 
-    const responseSchema = {
-      type: "OBJECT",
-      properties: {
-        questions: {
-          type: "ARRAY",
-          items: {
-            type: "OBJECT",
-            properties: {
-              question: { type: "STRING" },
-              options: {
-                type: "ARRAY",
-                items: { type: "STRING" }
-              },
-              correctAnswer: { type: "INTEGER" },
-              explanation: { type: "STRING" }
-            },
-            required: ["question", "options", "correctAnswer", "explanation"]
-          }
-        }
-      },
-      required: ["questions"]
-    };
-
-    // STRICT TOPIC-FENCED PROMPT (Fixes Physics/Chemistry Leakage)
+    // STRICT PROMPT-BASED JSON ENFORCEMENT (Faster and less prone to API timeouts)
     const prompt = `
-You are an expert Indian CBSE school examiner creating a STRICT, BOARD-LEVEL test paper.
+You are an expert CBSE examiner creating a STRICT, BOARD-LEVEL test paper.
 
 TARGET PARAMETERS:
 - CLASS: ${className}
-- STRICT SUBJECT: ${subject}
-- SPECIFIC CHAPTER / TOPIC: ${chapter}
+- SUBJECT: ${subject}
+- CHAPTER / TOPIC: ${chapter}
 - NUMBER OF QUESTIONS: ${questionCount}
 - DIFFICULTY: ${difficulty}
 - LANGUAGE: ${language}
-- QUESTION TYPE: ${questionType}
 
-CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
-1. ONLY generate questions strictly from the domain of "${subject}" and the chapter "${chapter}".
-2. IF SUBJECT IS "Physics", YOU MUST NOT include ANY Chemistry (acids, bases, reactions, periodic table) or Biology (plants, human body, reproduction, cells).
-3. IF SUBJECT IS "Chemistry", YOU MUST NOT include Physics kinematics, ray optics, electricity, or Biology.
-4. IF SUBJECT IS "Mathematics", ONLY provide pure mathematical equations, geometry, trigonometry, arithmetic, or calculus.
-5. Every question must have EXACTLY 4 options.
-6. Randomize the correct answer index across 0, 1, 2, and 3. DO NOT place all correct answers at index 0 or 1.
-7. Use standard LaTeX math ($ or $$) for numerical formulas, fractions, and superscripts.
-8. Return strictly valid JSON matching the schema.
+CRITICAL RULES:
+1. ONLY generate questions from "${subject}" and the chapter "${chapter}". Do not mix subjects.
+2. Every question must have EXACTLY 4 options.
+3. Provide a brief 1-line explanation for the correct answer.
+4. Output MUST be purely a JSON object. Do NOT wrap it in markdown blockquotes like \`\`\`json. 
+
+Output EXACTLY in this JSON format:
+{
+  "questions": [
+    {
+      "question": "Question text here?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correctAnswer": 1,
+      "explanation": "Brief explanation here."
+    }
+  ]
+}
 `;
 
     const MODELS = [
-      "gemini-2.5-flash",
       "gemini-2.0-flash",
       "gemini-1.5-flash",
       "gemini-1.5-flash-8b"
@@ -101,7 +81,7 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
       keyLoop: for (const key of apiKeyList) {
         for (const model of MODELS) {
           try {
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+            const apiUrl = `[https://generativelanguage.googleapis.com/v1beta/models/$](https://generativelanguage.googleapis.com/v1beta/models/$){model}:generateContent?key=${encodeURIComponent(key)}`;
 
             const googleResponse = await fetch(apiUrl, {
               method: "POST",
@@ -110,8 +90,7 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
                 contents: [{ role: "user", parts: [{ text: prompt }] }],
                 generationConfig: {
                   responseMimeType: "application/json",
-                  responseSchema: responseSchema,
-                  temperature: 0.2 // CRITICAL FIX: Lowered temperature to stop AI from hallucinating cross-subject topics
+                  temperature: 0.3
                 }
               })
             });
@@ -119,17 +98,20 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
             if (!googleResponse.ok) continue;
 
             const geminiData = await googleResponse.json();
-            const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
+            let rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
             if (!rawText) continue;
 
+            // Strip Markdown formatting to prevent JSON.parse crashes
+            rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
             const parsed = JSON.parse(rawText);
-            const questionsArray = Array.isArray(parsed?.questions) ? parsed.questions : [];
+            
+            const questionsArray = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
 
             for (const q of questionsArray) {
               if (!q || typeof q !== "object") continue;
 
               const question = typeof q.question === "string" ? q.question.trim() : "";
-              const explanation = typeof q.explanation === "string" ? q.explanation.trim() : "Review NCERT formula.";
+              const explanation = typeof q.explanation === "string" ? q.explanation.trim() : "Review NCERT rules.";
               let options = Array.isArray(q.options)
                 ? q.options.map(opt => typeof opt === "string" ? opt.trim() : "").filter(Boolean)
                 : [];
@@ -137,7 +119,8 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
               let correctAnswer = Number(q.correctAnswer);
 
               if (options.length === 4 && Number.isInteger(correctAnswer) && correctAnswer >= 0 && correctAnswer <= 3 && question) {
-                // Ensure options are shuffled server-side to guarantee non-deterministic placement
+                
+                // Shuffle options server-side to guarantee randomness
                 const indexed = options.map((opt, i) => ({ opt, isCorrect: i === correctAnswer }));
                 for (let i = indexed.length - 1; i > 0; i--) {
                   const j = Math.floor(Math.random() * (i + 1));
@@ -153,75 +136,56 @@ CRITICAL RULES TO PREVENT SUBJECT CONTAMINATION:
               }
             }
 
-            if (validQuestions.length > 0) {
+            if (validQuestions.length >= 5) { // Accept if we got at least 5 valid questions
               usedModel = model;
               break keyLoop;
             }
           } catch (modelErr) {
-            console.error(`Gemini generation error on model ${model}:`, modelErr);
+            console.error(`Gemini parsing error on model ${model}:`, modelErr);
           }
         }
       }
     }
 
-    // SUBJECT-AWARE EMERGENCY FALLBACK (Prevents Chemistry showing up in Physics)
+    // SUBJECT-AWARE EMERGENCY FALLBACK (Only triggers if API fails completely)
     if (validQuestions.length === 0) {
       const subjectLower = subject.toLowerCase();
       
       let fallbackPool = [];
-      if (subjectLower.includes("physic") || chapter.toLowerCase().includes("light") || chapter.toLowerCase().includes("motion")) {
+      if (subjectLower.includes("physic") || chapter.toLowerCase().includes("light")) {
         fallbackPool = [
           {
-            question: "When light travels from an optically denser to a rarer medium, it bends: / जब प्रकाश सघन से विरल माध्यम में प्रवेश करता है, तो यह झुकता है:",
-            options: ["Away from the normal", "Towards the normal", "Without deviation", "Reflects back along incident path"],
+            question: "When light travels from an optically denser to a rarer medium, it bends:",
+            options: ["Away from the normal", "Towards the normal", "Without deviation", "Reflects back"],
             correctAnswer: 0,
-            explanation: "Speed of light increases in rarer mediums, causing the ray to bend away from the normal."
+            explanation: "Speed of light increases in rarer mediums."
           },
           {
-            question: "The focal length of a convex mirror having radius of curvature 40 cm is: / 40 सेमी वक्रता त्रिज्या वाले उत्तल दर्पण की फोकस दूरी है:",
-            options: ["-20 cm", "+20 cm", "+40 cm", "-40 cm"],
-            correctAnswer: 1,
-            explanation: "f = +R/2 = +40/2 = +20 cm (convex mirror focal length is always positive)."
-          },
-          {
-            question: "What is the SI unit of electric potential difference? / विद्युत विभवान्तर का SI मात्रक क्या है?",
+            question: "The SI unit of electric potential difference is:",
             options: ["Ampere (A)", "Ohm (Ω)", "Volt (V)", "Coulomb (C)"],
             correctAnswer: 2,
-            explanation: "Electric potential difference V = Work / Charge (Joules / Coulomb = Volt)."
-          },
-          {
-            question: "The resistance of a wire is directly proportional to its: / किसी तार का प्रतिरोध किसके सीधे समानुपाती होता है?",
-            options: ["Area of cross-section", "Diameter", "Temperature coefficient only", "Length (l)"],
-            correctAnswer: 3,
-            explanation: "R = ρ(L / A), so resistance is directly proportional to length."
+            explanation: "V = W/Q (Joules/Coulomb = Volt)."
           }
         ];
       } else if (subjectLower.includes("chem")) {
         fallbackPool = [
           {
-            question: "Which of the following acids is present in lemons? / नींबू में कौन सा अम्ल उपस्थित होता है?",
+            question: "Which acid is present in lemons?",
             options: ["Citric acid", "Acetic acid", "Tartaric acid", "Oxalic acid"],
             correctAnswer: 0,
-            explanation: "Citrus fruits like lemons and oranges contain citric acid."
-          },
-          {
-            question: "What type of reaction occurs when iron rusts? / लोहे पर जंग लगना किस प्रकार की अभिक्रिया है?",
-            options: ["Reduction only", "Redox (Oxidation-Reduction)", "Displacement only", "Endothermic synthesis"],
-            correctAnswer: 1,
-            explanation: "Rusting of iron requires both oxygen and moisture, which is a redox reaction."
+            explanation: "Citrus fruits contain citric acid."
           }
         ];
       } else {
         fallbackPool = [
           {
-            question: "If sin θ = 1/2, what is the value of cos θ for an acute angle? / यदि sin θ = 1/2 है, तो cos θ का मान क्या होगा?",
+            question: "If sin θ = 1/2, what is cos θ for an acute angle?",
             options: ["1/2", "√3/2", "1/√2", "√3"],
             correctAnswer: 1,
-            explanation: "cos θ = √(1 - sin²θ) = √(1 - 1/4) = √3/2."
+            explanation: "cos θ = √(1 - sin²θ) = √3/2."
           }
         ];
       }
-
       validQuestions = fallbackPool;
     }
 
