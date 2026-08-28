@@ -1,0 +1,86 @@
+/* =====================================================
+   INVINCIBLE 360 LAB - PREMIUM FUTURISTIC UI
+   (Isolated to prevent breaking global styles)
+===================================================== */
+
+/* Lab Cards Hover & Glow Effects */
+#labSection .lab-card {
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+#labSection .lab-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 35px rgba(0, 229, 255, 0.15);
+    border-color: rgba(0, 229, 255, 0.6) !important;
+}
+
+/* Subject Filter Buttons Active State */
+#labSection .lab-subj-btn {
+    transition: all 0.3s ease;
+}
+
+#labSection .lab-subj-btn.active {
+    background: rgba(0, 229, 255, 0.12) !important;
+    border-color: #00e5ff !important;
+    color: #00e5ff !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+}
+
+/* Main Simulation Canvas Screen */
+#labSection .canvas-player-container {
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.12);
+    background: radial-gradient(circle at center, #0f172a 0%, #020617 100%) !important;
+}
+
+/* Prediction Option Buttons Hover */
+#labOptionsGrid button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(0, 229, 255, 0.5) !important;
+}
+
+/* =====================================================
+   GEN-Z TOUCH-FRIENDLY SLIDERS (For Mobile Lab Controls)
+===================================================== */
+#labSection input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #1e293b;
+    height: 8px;
+    border-radius: 6px;
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Chrome / Safari / Edge */
+#labSection input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #00e5ff;
+    cursor: pointer;
+    box-shadow: 0 0 12px #00e5ff, 0 0 0 4px rgba(0, 229, 255, 0.2);
+    border: 2px solid #fff;
+    transition: transform 0.1s;
+}
+
+#labSection input[type="range"]::-webkit-slider-thumb:active {
+    transform: scale(1.2);
+}
+
+/* Firefox */
+#labSection input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #00e5ff;
+    cursor: pointer;
+    box-shadow: 0 0 12px #00e5ff, 0 0 0 4px rgba(0, 229, 255, 0.2);
+    border: 2px solid #fff;
+    transition: transform 0.1s;
+}
+
+#labSection input[type="range"]::-moz-range-thumb:active {
+    transform: scale(1.2);
+}
