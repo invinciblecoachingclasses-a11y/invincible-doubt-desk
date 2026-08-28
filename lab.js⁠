@@ -49,8 +49,9 @@ function triggerLabHaptic(pattern = [40]) {
   else if (navigator.vibrate) navigator.vibrate(pattern);
 }
 
-// --- SIMULATION DATABASE ---
+// --- FULL 5-SIMULATION DATABASE ---
 const SIMULATIONS = {
+  // 1. OHM'S LAW & CIRCUIT OVERLOAD
   'ohms_law': {
     id: 'ohms_law',
     title: "Ohm's Law & Circuit Overload",
@@ -133,7 +134,7 @@ const SIMULATIONS = {
         ctx.fillStyle = '#060913'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('💡 BULB', bulbX, bulbY + 4);
       }
 
-      // HUD
+      // Readout
       ctx.fillStyle = 'rgba(2, 6, 23, 0.85)'; ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 210, 16, 195, 100); ctx.strokeRect(w - 210, 16, 195, 100);
       ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
@@ -145,6 +146,7 @@ const SIMULATIONS = {
     }
   },
 
+  // 2. RAY OPTICS & CONCAVE MIRROR BENCH
   'ray_optics': {
     id: 'ray_optics',
     title: "Ray Optics & Focal Bench",
@@ -224,6 +226,93 @@ const SIMULATIONS = {
     }
   },
 
+  // 3. PROJECTILE MOTION & TRAJECTORY (Physics 9 & 11)
+  'projectile_motion': {
+    id: 'projectile_motion',
+    title: "Kinematics & Projectile Arc",
+    subject: 'physics',
+    class: ['9', '11'],
+    badge: '🚀 Mechanics Lab',
+    desc: 'Launch a projectile by varying velocity (v₀), launch angle (θ), and gravitational acceleration (g).',
+    realLife: 'Rocket launches, football trajectory, satellite orbit injection.',
+    viva: [
+      { q: "At what angle is the horizontal range of a projectile maximum?", a: "At θ = 45° (since sin(2θ) reaches its maximum value of 1)." },
+      { q: "What happens to the vertical velocity at the highest point?", a: "Vertical component becomes zero (vy = 0), while horizontal component remains v₀ cos(θ)." }
+    ],
+    prediction: {
+      prompt: "If a projectile is launched at θ = 45° versus θ = 60° with the same velocity, which angle achieves the maximum horizontal range?",
+      options: [
+        { text: "θ = 45° achieves maximum range", correct: true, exp: "R = (v₀² sin 2θ) / g. For θ = 45°, sin(90°) = 1, giving the absolute maximum range." },
+        { text: "θ = 60° achieves maximum range", correct: false, exp: "60° gives higher altitude, but lower horizontal range." },
+        { text: "Both achieve identical range", correct: false, exp: "Complementary angles (30° and 60°) have equal range, but 45° is greater than both." }
+      ]
+    },
+    params: { v0: 25, theta: 45, g: 9.8 },
+    controls: [
+      { id: 'ctrl_v0', label: 'Initial Velocity (v₀)', min: 10, max: 40, step: 1, default: 25, unit: 'm/s' },
+      { id: 'ctrl_theta', label: 'Launch Angle (θ)', min: 15, max: 80, step: 5, default: 45, unit: '°' },
+      { id: 'ctrl_g', label: 'Gravity (g)', min: 3.7, max: 15, step: 0.1, default: 9.8, unit: 'm/s²' }
+    ],
+    init: function() { this.params.v0 = 25; this.params.theta = 45; this.params.g = 9.8; },
+    update: function(paramId, value) {
+      if (paramId === 'ctrl_v0') this.params.v0 = parseFloat(value);
+      if (paramId === 'ctrl_theta') this.params.theta = parseFloat(value);
+      if (paramId === 'ctrl_g') this.params.g = parseFloat(value);
+      playTone(250 + (this.params.theta * 5), 'sine', 0.05, 0.03);
+    },
+    render: function(canvas, ctx) {
+      const w = canvas.width; const h = canvas.height; ctx.clearRect(0, 0, w, h);
+      const groundY = h - 50; const startX = 60;
+
+      // Ground plane
+      ctx.strokeStyle = '#334155'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
+
+      const v0 = this.params.v0;
+      const rad = (this.params.theta * Math.PI) / 180;
+      const g = this.params.g;
+
+      // Kinematic Calculations
+      const tFlight = (2 * v0 * Math.sin(rad)) / g;
+      const hMax = (v0 * v0 * Math.sin(rad) * Math.sin(rad)) / (2 * g);
+      const range = (v0 * v0 * Math.sin(2 * rad)) / g;
+
+      const scaleX = (w - 140) / Math.max(100, range);
+      const scaleY = (h - 140) / Math.max(40, hMax);
+
+      // Trajectory Path
+      ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 3; ctx.beginPath();
+      ctx.moveTo(startX, groundY);
+      const steps = 60;
+      for (let i = 0; i <= steps; i++) {
+        const t = (i / steps) * tFlight;
+        const x = v0 * Math.cos(rad) * t;
+        const y = (v0 * Math.sin(rad) * t) - (0.5 * g * t * t);
+        ctx.lineTo(startX + (x * scaleX), groundY - (y * scaleY));
+      }
+      ctx.stroke();
+
+      // Launch Cannon Indicator
+      ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 5; ctx.beginPath();
+      ctx.moveTo(startX, groundY);
+      ctx.lineTo(startX + (25 * Math.cos(rad)), groundY - (25 * Math.sin(rad)));
+      ctx.stroke();
+
+      // Metrics HUD
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)'; ctx.lineWidth = 1;
+      ctx.fillRect(w - 220, 16, 205, 100); ctx.strokeRect(w - 220, 16, 205, 100);
+      ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
+      ctx.fillText('FLIGHT KINEMATICS:', w - 208, 34);
+      ctx.fillStyle = '#00e5ff'; ctx.font = 'bold 12px monospace';
+      ctx.fillText(`MAX RANGE (R): ${range.toFixed(1)} m`, w - 208, 54);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText(`MAX HEIGHT (H): ${hMax.toFixed(1)} m`, w - 208, 72);
+      ctx.fillStyle = '#05ffa1';
+      ctx.fillText(`TIME OF FLIGHT: ${tFlight.toFixed(2)} s`, w - 208, 90);
+    }
+  },
+
+  // 4. ACID-BASE TITRATION & PH CURVE
   'titration_ph': {
     id: 'titration_ph',
     title: "Acid-Base Titration & pH Curve",
@@ -287,6 +376,91 @@ const SIMULATIONS = {
       ctx.fillStyle = ph < 7 ? '#ef4444' : (ph === 7 ? '#05ffa1' : '#f43f5e');
       ctx.font = '900 32px monospace'; ctx.fillText(`pH ${ph.toFixed(2)}`, mX + 25, mY + 68);
       ctx.font = '10px sans-serif'; ctx.fillStyle = '#cbd5e1'; ctx.fillText(ph < 7 ? 'Acidic Medium' : (ph === 7 ? 'Neutralized' : 'Basic Medium'), mX + 25, mY + 88);
+    }
+  },
+
+  // 5. OSMOSIS & CELL TURGOR PRESSURE (Biology 9, 10, 11, 12)
+  'osmosis_cell': {
+    id: 'osmosis_cell',
+    title: "Osmosis & Cell Plasmolysis",
+    subject: 'biology',
+    class: ['9', '10', '11', '12'],
+    badge: '🧬 Cellular Bio',
+    desc: 'Change the surrounding solution molarity to observe Endosmosis (Turgid), Isotonic Equilibrium, or Plasmolysis (Shrinkage).',
+    realLife: 'Kidney dialysis, plant root water uptake, pickling preservation.',
+    viva: [
+      { q: "What is plasmolysis?", a: "The shrinkage of cytoplasm away from the cell wall when placed in a hypertonic solution (exosmosis)." },
+      { q: "Why do plant cells not burst in a hypotonic medium?", a: "Due to the presence of a rigid cellulose cell wall that exerts counter turgor pressure." }
+    ],
+    prediction: {
+      prompt: "When a plant cell is placed in a concentrated 20% NaCl hypertonic solution, what will occur?",
+      options: [
+        { text: "Exosmosis: Cytoplasm shrinks (Plasmolysis)", correct: true, exp: "Water moves out of the cell toward the region of higher solute concentration (lower water potential)." },
+        { text: "Endosmosis: Cell swells and bursts", correct: false, exp: "Endosmosis occurs only in hypotonic (dilute) solutions." },
+        { text: "No movement of water", correct: false, exp: "Water always moves down its chemical potential gradient." }
+      ]
+    },
+    params: { soluteConc: 0.9 }, // 0.9% is physiological saline (isotonic)
+    controls: [
+      { id: 'ctrl_solute', label: 'Solution Concentration (NaCl %)', min: 0.1, max: 5.0, step: 0.1, default: 0.9, unit: '%' }
+    ],
+    init: function() { this.params.soluteConc = 0.9; },
+    update: function(paramId, value) {
+      if (paramId === 'ctrl_solute') this.params.soluteConc = parseFloat(value);
+      playTone(320 + (this.params.soluteConc * 40), 'sine', 0.05, 0.03);
+    },
+    render: function(canvas, ctx) {
+      const w = canvas.width; const h = canvas.height; ctx.clearRect(0, 0, w, h);
+      const conc = this.params.soluteConc;
+
+      const cX = w * 0.4; const cY = h / 2;
+      // Isotonic is ~0.9%. Lower -> Swell, Higher -> Shrink
+      let shrinkFactor = 1.0;
+      let stateLabel = "Isotonic (Equilibrium)";
+      let stateColor = "#05ffa1";
+
+      if (conc < 0.8) {
+        shrinkFactor = 1.15; // Swollen/Turgid
+        stateLabel = "Hypotonic (Turgid / Endosmosis)";
+        stateColor = "#00e5ff";
+      } else if (conc > 1.2) {
+        shrinkFactor = Math.max(0.6, 1.0 - ((conc - 1.2) * 0.1)); // Plasmolyzed
+        stateLabel = "Hypertonic (Plasmolyzed / Exosmosis)";
+        stateColor = "#ef4444";
+      }
+
+      // Outer Rigid Cell Wall (Static)
+      ctx.strokeStyle = '#10b981'; ctx.lineWidth = 6;
+      ctx.strokeRect(cX - 110, cY - 110, 220, 220);
+
+      // Cytoplasm / Plasma Membrane (Dynamic Shrink/Expand)
+      const memW = 200 * shrinkFactor; const memH = 200 * shrinkFactor;
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+      ctx.strokeStyle = stateColor; ctx.lineWidth = 3;
+      ctx.fillRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
+      ctx.strokeRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
+
+      // Central Vacuole
+      const vacW = 90 * shrinkFactor; const vacH = 90 * shrinkFactor;
+      ctx.fillStyle = 'rgba(0, 229, 255, 0.35)'; ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(cX, cY, vacW / 2, vacH / 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+      // Nucleus
+      ctx.fillStyle = '#fbbf24'; ctx.beginPath();
+      ctx.arc(cX + (40 * shrinkFactor), cY - (40 * shrinkFactor), 16 * shrinkFactor, 0, Math.PI * 2);
+      ctx.fill();
+
+      // HUD
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 1;
+      ctx.fillRect(w - 230, 16, 215, 100); ctx.strokeRect(w - 230, 16, 215, 100);
+      ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
+      ctx.fillText('CELLULAR OSMOMETER:', w - 218, 34);
+      ctx.fillStyle = stateColor; ctx.font = 'bold 12px monospace';
+      ctx.fillText(`STATE: ${stateLabel.split(' ')[0]}`, w - 218, 54);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText(`MEDIUM CONC: ${conc.toFixed(1)}% NaCl`, w - 218, 72);
+      ctx.fillStyle = '#05ffa1';
+      ctx.fillText(`WATER FLUX:  ${conc < 0.8 ? 'INTO CELL' : (conc > 1.2 ? 'OUT OF CELL' : 'BALANCED')}`, w - 218, 90);
     }
   }
 };
