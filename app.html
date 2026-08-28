@@ -256,7 +256,7 @@
 </section>
 
 <!-- =====================================================
-     TEST SECTION
+     TEST SECTION (UPDATED FOR LOCAL SCHOOLS)
 ===================================================== -->
 <section class="card hidden" id="testSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -267,20 +267,24 @@
     <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
     <div id="testSetup">
-        <label>Tell us your batch &amp; details</label>
+        <label style="margin-bottom: 6px; display: block; font-weight: 800; color: #cbd5e1; font-size: 13px;">Tell us your batch &amp; details</label>
         <div>
-            <input id="studentName" type="text" placeholder="Full Name">
-            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number (Optional)">
+            <input id="studentName" type="text" placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
+            
+            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number (Optional)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
 
+            <!-- ADDED LOCAL SCHOOL HOOKS HERE -->
             <select id="testOrg" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select School / Institute</option>
                 <option value="ALL">All Schools (Global)</option>
-                <option value="DVM Public School">DVM Public School</option>
-                <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+                <option value="Invincible Coaching Classes">Invincible Coaching Classes (Local)</option>
+                <option value="DVM Public School">DVM Public School (Local)</option>
+                <option value="Kendriya Vidyalaya">Kendriya Vidyalaya (Local)</option>
+                <option value="Delhi Public School">Delhi Public School (Local)</option>
                 <option value="Other School">Other School</option>
             </select>
 
-            <select id="testClass">
+            <select id="testClass" onchange="window.updateTestSubjects()" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select Grade</option>
                 <option value="9">Class 9</option>
                 <option value="10">Class 10</option>
@@ -288,16 +292,24 @@
                 <option value="12">Class 12</option>
             </select>
 
-            <select id="testSubject">
+            <!-- DYNAMIC SUBJECT DROPDOWN -->
+            <select id="testSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select Subject</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Science">Science</option>
                 <option value="Physics">Physics</option>
                 <option value="Chemistry">Chemistry</option>
-                <option value="Mathematics">Mathematics</option>
                 <option value="Biology">Biology</option>
-                <option value="Science">Science</option>
             </select>
 
-            <input id="testChapter" type="text" placeholder="Chapter Name (Optional)">
+            <!-- NEW DIFFICULTY DROPDOWN -->
+            <select id="testDifficulty" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
+                <option value="Easy">Difficulty: Easy (Board Level)</option>
+                <option value="Moderate">Difficulty: Moderate (JEE/NEET Prep)</option>
+                <option value="Hard">Difficulty: Hard (Advanced)</option>
+            </select>
+
+            <input id="testChapter" type="text" placeholder="Chapter Name (Optional)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
         </div>
 
         <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
@@ -801,6 +813,21 @@
       if (!localStorage.getItem('invincible_onboarded')) {
           const onboardModal = document.getElementById('onboardingModal');
           if (onboardModal) onboardModal.style.display = 'flex';
+      }
+  };
+
+  // Helper function to dynamically update subject list based on Class
+  window.updateTestSubjects = function() {
+      const cls = document.getElementById('testClass').value;
+      const subj = document.getElementById('testSubject');
+      if (!subj) return;
+      
+      if (cls === '9' || cls === '10') {
+          subj.innerHTML = '<option value="">Select Subject</option><option value="Mathematics">Mathematics</option><option value="Science">Science</option>';
+      } else if (cls === '11' || cls === '12') {
+          subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option>';
+      } else {
+          subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="Science">Science</option>';
       }
   };
 </script>
