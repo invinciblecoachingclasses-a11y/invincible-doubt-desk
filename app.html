@@ -256,7 +256,7 @@
 </section>
 
 <!-- =====================================================
-     TEST SECTION (FIXED VALIDATION & ALL SCHOOLS)
+     TEST SECTION
 ===================================================== -->
 <section class="card hidden" id="testSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -988,7 +988,7 @@ window.unlockScreenAndShowTutorial = function() {
     if (!localStorage.getItem('invincible_onboarded')) { document.getElementById('onboardingModal').style.display = 'flex'; }
 };
 
-window.addEventListener('DOMContentLoaded', () => { 
+window.addEventListenher('DOMContentLoaded', () => { 
     checkDailyStreak();
     if(typeof filterLabMatrix === 'function') filterLabMatrix('10', document.querySelector('.curr-tab.active'));
     setTimeout(() => { const btn = document.querySelector(`.reel-class-btn[data-class="10"]`); setReelsClass("10", btn); }, 200);
