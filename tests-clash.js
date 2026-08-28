@@ -309,22 +309,18 @@ function updateTimerUI() {
 if (startTestBtn) {
   startTestBtn.addEventListener("click", async function(){
     let name = document.getElementById("studentName")?.value?.trim();
-    if (!name) name = localStorage.getItem("studentName") || "Student"; // Auto-resolve name so it doesn't block
+    if (!name) name = localStorage.getItem("studentName") || "Student";
 
     const mobile = document.getElementById("studentMobile")?.value?.trim();
-    
-    let org = testOrg?.value;
-    if (!org) org = localStorage.getItem("userSchool"); // Try fetching from storage
-
+    let org = testOrg?.value || localStorage.getItem("userSchool");
     const cls = testClass?.value; 
     const subject = testSubject?.value; 
     const chapter = testChapter?.value?.trim() || "Full Syllabus Overview";
     const difficultyLevel = document.getElementById("testDifficulty")?.value || "Moderate";
 
-    // SMART VALIDATION: Tell the user EXACTLY what they missed
     if(!org) return alert("Please select your School/Institute from the dropdown.");
     if(!cls) return alert("Please select your Grade/Class.");
-    if(!subject) return alert("Please select your Subject.\n\nNote: Whenever you change the Class, the Subject dropdown resets automatically. Please select it again.");
+    if(!subject) return alert("Please select your Subject.");
 
     if(mobile && !/^[0-9]{10}$/.test(mobile)){ 
       return alert("Please enter a valid 10-digit mobile number, or leave it blank."); 
@@ -354,14 +350,7 @@ if (startTestBtn) {
             })
         });
         
-        const textResponse = await response.text();
-        let data;
-        try {
-            data = JSON.parse(textResponse);
-        } catch(e) {
-            throw new Error("Server timeout while generating 20 questions. Please try a more specific chapter.");
-        }
-        
+        const data = await response.json();
         if(!response.ok) throw new Error(data.error || "Preparation error.");
         
         const generated = extractQuestions(data);
@@ -397,6 +386,38 @@ function extractQuestions(data){
     }).filter(q => q.question && q.options.length >= 2 && Number.isFinite(q.answer));
 }
 
+// REAL-TIME OPTION TAP INTERACTION (Sound, Haptics & Visual Feedback)
+window.handleTestOptionSelect = function(qId, selectedIdx, correctIdx) {
+  const card = document.getElementById(`qCard_${qId}`);
+  if (!card) return;
+
+  const labels = card.querySelectorAll('.option');
+  const isCorrect = Number(selectedIdx) === Number(correctIdx);
+
+  labels.forEach((lbl, idx) => {
+    if (idx === Number(correctIdx)) {
+      lbl.style.borderColor = 'var(--accent-emerald)';
+      lbl.style.background = 'rgba(5, 255, 161, 0.15)';
+    } else if (idx === Number(selectedIdx) && !isCorrect) {
+      lbl.style.borderColor = 'var(--accent-rose)';
+      lbl.style.background = 'rgba(255, 42, 95, 0.15)';
+    } else {
+      lbl.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+      lbl.style.background = 'rgba(255, 255, 255, 0.02)';
+    }
+  });
+
+  if (isCorrect) {
+    if (typeof playDing === 'function') playDing();
+    if (typeof triggerHaptic === 'function') triggerHaptic([30, 40, 30]);
+  } else {
+    if (typeof playBuzz === 'function') playBuzz();
+    if (typeof triggerHaptic === 'function') triggerHaptic([100]);
+    card.classList.add('arena-shake');
+    setTimeout(() => card.classList.remove('arena-shake'), 400);
+  }
+};
+
 function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions; activeTestTitle = testTitle;
     testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
@@ -405,10 +426,18 @@ function startQuestions(questions, headerTitle, testTitle){
     questionsContainer.innerHTML = "";
 
     questions.forEach(function(q, index){
-        const card = document.createElement("div"); card.className = "question-card";
+        const card = document.createElement("div"); 
+        card.className = "question-card";
+        card.id = `qCard_${q.id}`;
+        
         let optionsHTML = "";
         q.options.forEach(function(option, optionIndex){
-            optionsHTML += '<label class="option"><input type="radio" name="q' + q.id + '" value="' + optionIndex + '"><span>' + formatMathText(escapeHTML(String(option))) + '</span></label>';
+            optionsHTML += `
+              <label class="option" onclick="handleTestOptionSelect(${q.id}, ${optionIndex}, ${q.answer})">
+                <input type="radio" name="q${q.id}" value="${optionIndex}">
+                <span>${formatMathText(escapeHTML(String(option)))}</span>
+              </label>
+            `;
         });
         card.innerHTML = '<div style="color:var(--accent-cyan); font-size:11px; font-weight:900;">QUESTION ' + (index + 1) + '</div><div style="font-size:15px; font-weight:700; margin:8px 0;">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
         questionsContainer.appendChild(card);
@@ -477,7 +506,6 @@ if (whatsappShareBtn) {
   });
 }
 
-// Ensure the Mega Blitz Countdown actually starts when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     if(typeof initBlitzCountdown === 'function') initBlitzCountdown();
 });
