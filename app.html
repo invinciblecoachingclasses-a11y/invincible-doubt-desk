@@ -588,43 +588,64 @@
 </section>
 
 <!-- =====================================================
-     INVINCIBLE LAB SECTION
+     INVINCIBLE LAB SECTION (UPGRADED PLAYGROUND)
 ===================================================== -->
 <section class="card hidden" id="labSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
         <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
+        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 class="section-h2" style="margin:0;">🔬 Canvas Curriculum Hub</h2>
-        <span style="font-size:10px; font-weight:800; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:6px;">ENGINE V2.0</span>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+        <div>
+          <h2 class="section-h2" style="margin:0;">🔬 Invincible Science Lab</h2>
+          <div style="font-size:11px; color:var(--text-muted); font-weight:700;">"Don't just learn it. Make it happen."</div>
+        </div>
+        <span style="font-size:10px; font-weight:900; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">SIMULATION ENGINE V3.0</span>
     </div>
 
+    <!-- LAB NAVIGATION & FILTER SYSTEM -->
     <div id="labSkillTree">
-        <div class="curriculum-tabs">
-            <button type="button" class="curr-tab" onclick="filterLabMatrix('9', this)">Class 9</button>
-            <button type="button" class="curr-tab active" onclick="filterLabMatrix('10', this)">Class 10</button>
-            <button type="button" class="curr-tab" onclick="filterLabMatrix('11', this)">Class 11</button>
-            <button type="button" class="curr-tab" onclick="filterLabMatrix('12', this)">Class 12</button>
+        <!-- Grade Pills -->
+        <div class="curriculum-tabs" style="margin-bottom:10px;">
+            <button type="button" class="curr-tab" onclick="filterLabClass('9', this)">Class 9</button>
+            <button type="button" class="curr-tab active" onclick="filterLabClass('10', this)">Class 10</button>
+            <button type="button" class="curr-tab" onclick="filterLabClass('11', this)">Class 11</button>
+            <button type="button" class="curr-tab" onclick="filterLabClass('12', this)">Class 12</button>
         </div>
-        <div class="lab-matrix-grid" id="matrixGrid"></div>
+
+        <!-- Subject Switcher -->
+        <div style="display:flex; gap:6px; margin-bottom:16px;">
+            <button type="button" class="lab-subj-btn active" onclick="filterLabSubject('all', this)" style="background:#0f172a; border:1px solid rgba(0,229,255,0.3); color:#fff; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ All Labs</button>
+            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('physics', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ Physics</button>
+            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('chemistry', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">🧪 Chemistry</button>
+        </div>
+
+        <!-- Dynamic Experiment Matrix Grid -->
+        <div class="lab-matrix-grid" id="matrixGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;"></div>
     </div>
 
+    <!-- ACTIVE INTERACTIVE SIMULATION PLAYER -->
     <div id="activeLabPlayer" class="hidden" style="margin-top:10px;">
-        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--text-muted); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation</button>
-        <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:10px;">Lab Simulator</div>
-        <div class="canvas-player-container">
-            <div id="simOverlayStats" class="sim-overlay-stats">FPS: 60</div>
-            <canvas id="invincibleEngine" width="800" height="450"></canvas>
+        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--accent-cyan); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation to Lab Deck</button>
+        <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:12px;">Lab Simulator</div>
+
+        <div class="canvas-player-container" style="background:#020617; border:1px solid rgba(0,229,255,0.3); border-radius:16px; overflow:hidden; margin-bottom:14px; position:relative;">
+            <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
         </div>
-        <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; margin-bottom:16px;"></div>
-        <div id="labPredictionBox" style="background:#020617; border:1px solid var(--accent-cyan); padding:16px; border-radius:12px;">
-            <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:8px;">🎯 PREDICT OUTCOME</div>
-            <div id="labQuestionText" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
+
+        <!-- Touch Controls Drawer -->
+        <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:14px; margin-bottom:14px;"></div>
+
+        <!-- Predict -> Play -> Discover Card -->
+        <div id="labPredictionBox" style="background:#0f172a; border:1px solid var(--accent-cyan); padding:16px; border-radius:14px;">
+            <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:6px;">🤔 PREDICT FIRST (+30 XP)</div>
+            <div id="labQuestionText" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
             <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
     </div>
 </section>
+
 
 <!-- FOOTER -->
 <footer class="footer">
