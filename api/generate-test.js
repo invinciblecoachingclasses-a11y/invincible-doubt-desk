@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   if (!rawKeys) {
     return res.status(500).json({ success: false, error: "No GEMINI_API_KEY found in Vercel environment." });
   }
-  
+
   const apiKeyList = rawKeys.split(",").map(k => k.trim()).filter(Boolean);
 
   try {
@@ -22,69 +22,20 @@ export default async function handler(req, res) {
     const difficulty = body.difficulty || "Moderate";
     const language = body.language || "English and Hindi";
 
-    const questionCount = Math.min(Math.max(requestedCount, 1), 30);
+    const questionCount = Math.min(Math.max(requestedCount, 1), 25);
 
-    const prompt = `Create exactly ${questionCount} multiple-choice questions for CBSE Board exam prep.
-Class: ${className}
-Subject: ${subject}
-Topic: ${chapter}
-Difficulty: ${difficulty}
-Language: ${language}
+    // Ultra-compressed prompt to ensure Gemini responds in < 3 seconds
+    const prompt = `Generate ${questionCount} CBSE MCQs for Class ${className} ${subject}, Chapter: ${chapter}, Level: ${difficulty}, Lang: ${language}.
+Format STRICTLY as valid JSON:
+{"questions":[{"question":"Text?","options":["A","B","C","D"],"correctAnswer":0,"explanation":"Brief note."}]}`;
 
-Rules:
-1. Generate questions strictly from ${subject} - ${chapter}.
-2. Provide exactly 4 options per question.
-3. Return ONLY a valid JSON object matching the format below without any markdown wrapper:
-{
-  "questions": [
-    {
-      "question": "Question text?",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": 0,
-      "explanation": "Brief concept rule."
-    }
-  ]
-}`;
-
+    const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
     let finalQuestions = [];
-    let lastError = "No supported models found.";
-    let activeModelName = "";
+    let lastError = "";
+    let usedModel = "";
 
     keyLoop: for (const key of apiKeyList) {
-      // Step 1: Query Google dynamically for all models supported by this specific key
-      let candidateModels = [];
-      try {
-        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-        if (listRes.ok) {
-          const listData = await listRes.json();
-          const available = (listData.models || [])
-            .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes("generateContent"))
-            .map(m => m.name.replace("models/", ""));
-
-          const priorityList = [
-            "gemini-2.0-flash",
-            "gemini-1.5-flash",
-            "gemini-1.5-flash-001",
-            "gemini-1.5-flash-002",
-            "gemini-1.5-flash-latest",
-            "gemini-pro"
-          ];
-
-          candidateModels = priorityList.filter(p => available.includes(p));
-          if (candidateModels.length === 0 && available.length > 0) {
-            candidateModels = available;
-          }
-        }
-      } catch (e) {
-        // Fallback to standard aliases if ListModels request fails
-      }
-
-      if (candidateModels.length === 0) {
-        candidateModels = ["gemini-2.0-flash", "gemini-1.5-flash-001", "gemini-1.5-flash-002", "gemini-1.5-flash", "gemini-pro"];
-      }
-
-      // Step 2: Request question generation using the confirmed models
-      for (const model of candidateModels) {
+      for (const model of MODELS) {
         try {
           const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
@@ -93,23 +44,26 @@ Rules:
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               contents: [{ role: "user", parts: [{ text: prompt }] }],
-              generationConfig: { temperature: 0.2 }
+              generationConfig: {
+                temperature: 0.2,
+                maxOutputTokens: 3000
+              }
             })
           });
 
           if (!response.ok) {
             const errData = await response.text();
-            lastError = `HTTP ${response.status} on ${model}: ${errData.substring(0, 100)}`;
+            lastError = `HTTP ${response.status} on ${model}: ${errData.substring(0, 80)}`;
             continue;
           }
 
           const data = await response.json();
           let rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-          if (!rawText) {
-            lastError = `${model} returned empty content.`;
-            continue;
-          }
+          if (!rawText) continue;
+
+          // Strip Markdown code blocks if present
+          rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
 
           const firstBrace = rawText.indexOf('{');
           const lastBrace = rawText.lastIndexOf('}');
@@ -136,19 +90,18 @@ Rules:
               question: String(q.question),
               options: indexed.map(x => x.opt),
               correctAnswer: indexed.findIndex(x => x.isCorrect),
-              explanation: String(q.explanation || "Review NCERT chapter summary.")
+              explanation: String(q.explanation || "Review NCERT concepts.")
             });
           }
 
           if (finalQuestions.length >= 5) {
-            activeModelName = model;
+            usedModel = model;
             break keyLoop;
           } else {
             finalQuestions = [];
-            lastError = `${model} produced fewer than 5 parseable questions.`;
           }
         } catch (err) {
-          lastError = `Parse error on ${model}: ${err.message}`;
+          lastError = `${model} parse error: ${err.message}`;
         }
       }
     }
@@ -156,7 +109,7 @@ Rules:
     if (finalQuestions.length === 0) {
       return res.status(500).json({
         success: false,
-        error: `AI Generation Failed: ${lastError}`
+        error: `AI Generation Failed: ${lastError || "Timeout or invalid response format."}`
       });
     }
 
@@ -164,7 +117,7 @@ Rules:
 
     return res.status(200).json({
       success: true,
-      model: activeModelName,
+      model: usedModel,
       class: className,
       subject: subject,
       chapter: chapter,
