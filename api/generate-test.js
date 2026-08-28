@@ -33,9 +33,7 @@ Target Parameters:
 Strict Rules:
 1. Every question must belong exclusively to ${subject} - ${chapter}.
 2. Exactly 4 options per question.
-3. Output MUST be ONLY a valid, parseable JSON object with no markdown block formatting.
-
-Format schema:
+3. Return ONLY a valid JSON object matching this schema without any markdown formatting:
 {
   "questions": [
     {
@@ -58,12 +56,11 @@ Format schema:
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
       
+      // Exact model hierarchy from your working api/ask.js
       const geminiModels = [
-        "gemini-2.5-flash",
-        "gemini-2.0-flash",
+        "gemini-3.6-flash",
         "gemini-1.5-flash",
-        "gemini-1.5-flash-latest",
-        "gemini-pro"
+        "gemini-1.5-pro"
       ];
 
       keyLoop: for (const apiKey of geminiKeys) {
@@ -88,7 +85,6 @@ Format schema:
             if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
               let rawText = data.candidates[0].content.parts[0].text;
               
-              // Clean markdown if wrapped in ```json
               rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
               const firstBrace = rawText.indexOf('{');
               const lastBrace = rawText.lastIndexOf('}');
@@ -141,7 +137,7 @@ Format schema:
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
     if (finalQuestions.length === 0 && anthropicKey) {
       try {
-        const claudeRes = await fetch("[https://api.anthropic.com/v1/messages](https://api.anthropic.com/v1/messages)", {
+        const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
