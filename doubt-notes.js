@@ -80,11 +80,14 @@ if (removeImageButton) {
 }
 
 async function renderAnswerContent(container, markdownText) {
-  let parsedHtml = typeof marked !== 'undefined' ? marked.parse(markdownText || "") : markdownText;
+  let parsedHtml = markdownText;
+  if (typeof marked !== 'undefined') {
+      parsedHtml = typeof marked.parse === 'function' ? marked.parse(markdownText || "") : marked(markdownText || "");
+  }
   
   parsedHtml = parsedHtml
-    .replace(/🚨\s*\*\*Common Student Mistakes[\s\S]*?(?=(🎯|🧠|💡|$))/gi, (match) => `<div class="callout-trap">${typeof marked !== 'undefined' ? marked.parse(match) : match}</div>`)
-    .replace(/🎯\s*\*\*Direct Approach[\s\S]*?(?=(🧠|💡|🚨|$))/gi, (match) => `<div class="callout-tldr">${typeof marked !== 'undefined' ? marked.parse(match) : match}</div>`);
+    .replace(/🚨\s*\*\*Common Student Mistakes[\s\S]*?(?=(🎯|🧠|💡|$))/gi, (match) => `<div class="callout-trap">${typeof marked !== 'undefined' ? (marked.parse ? marked.parse(match) : marked(match)) : match}</div>`)
+    .replace(/🎯\s*\*\*Direct Approach[\s\S]*?(?=(🧠|💡|🚨|$))/gi, (match) => `<div class="callout-tldr">${typeof marked !== 'undefined' ? (marked.parse ? marked.parse(match) : marked(match)) : match}</div>`);
 
   container.innerHTML = parsedHtml;
   
@@ -119,7 +122,16 @@ if (document.getElementById("askBtn")) {
                 history: []
               })
           });
-          const data = await res.json();
+          
+          // Safe JSON parsing to prevent silent crashes on Vercel timeouts
+          const textResponse = await res.text();
+          let data;
+          try {
+              data = JSON.parse(textResponse);
+          } catch(e) {
+              throw new Error("Server timeout. The question might be too complex, please try again.");
+          }
+
           if(!res.ok) throw new Error(data.error || "Unable to solve.");
 
           doubtHistory.push({ role: 'user', content: q || 'Image Question' });
@@ -181,7 +193,11 @@ if (sendFollowUpBtn && followUpInput) {
           history: doubtHistory
         })
       });
-      const data = await res.json();
+      
+      const textResponse = await res.text();
+      let data;
+      try { data = JSON.parse(textResponse); } catch(e) { throw new Error("Server timeout. Please try again."); }
+
       if (!res.ok) throw new Error(data.error || "Failed follow-up");
 
       doubtHistory.push({ role: 'user', content: followQ });
@@ -267,14 +283,27 @@ if (genNotesBtn) {
               question: strictPrompt
             }) 
         });
-        const data = await res.json();
+        
+        // Safe JSON parsing to prevent silent crashes on Vercel timeouts
+        const textResponse = await res.text();
+        let data;
+        try {
+            data = JSON.parse(textResponse);
+        } catch(e) {
+            throw new Error("Server timeout. Generating a massive PDF takes a lot of processing power. Try breaking the chapter name into smaller topics.");
+        }
+
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
         data.notes = data.answer;
 
         document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
         const contentBody = document.getElementById('notesContentBody');
-        let rawHtml = marked.parse(data.notes || "");
+        
+        let rawHtml = data.notes || "";
+        if (typeof marked !== 'undefined') {
+            rawHtml = typeof marked.parse === 'function' ? marked.parse(rawHtml) : marked(rawHtml);
+        }
 
         rawHtml = rawHtml
           .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
