@@ -39,8 +39,8 @@ Format:
   ]
 }`;
 
-    // FIX: Using ONLY the globally stable model to prevent the 404 Not Found error
-    const MODELS = ["gemini-1.5-flash"];
+    // FIX: Added gemini-pro (globally available) to prevent 404 errors on regional Vercel servers
+    const MODELS = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-pro"];
     
     let validQuestions = [];
     let usedModel = "database-fallback";
@@ -63,8 +63,8 @@ Format:
 
             if (!googleResponse.ok) {
               const errText = await googleResponse.text();
-              lastErrorMsg = `HTTP ${googleResponse.status}: ${errText.substring(0, 40)}`;
-              continue; // If 404 or 400, skip
+              lastErrorMsg = `HTTP ${googleResponse.status}: ${errText.substring(0, 60)}`;
+              continue; // If 404 or 400, skip to the next model
             }
 
             const geminiData = await googleResponse.json();
