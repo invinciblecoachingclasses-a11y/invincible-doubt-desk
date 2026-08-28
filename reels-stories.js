@@ -55,25 +55,26 @@ async function renderReelsDeck() {
     }
 
     container.innerHTML = deck.map((card, idx) => {
-        // Safe string extraction to prevent JS errors on click
         const rawTitle = String(card.q_en || card.title || '');
         const rawSub = String(card.subject || 'Science');
         const rawFormula = String(card.formula || '');
         
-        // Escape for inline JS function arguments
         const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
         const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
         const formulaJS = rawFormula.replace(/'/g, "\\'").replace(/"/g, "&quot;");
         
-        // Escape for HTML display
         const sub = card.subject || 'Science';
         const hook = card.topic || 'NCERT Concept';
         const author = card.author_name || 'Faculty Topper';
         const school = card.school_name || 'Invincible 360';
         const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:2px 6px; border-radius:6px;">⚡ By ${escapeHTML(author)} (${escapeHTML(school)})</span>`;
         
-        // Use card.id explicitly as a string to prevent UUID syntax errors
         const safeCardId = String(card.id || idx);
+
+        // STYLING BLOCK FOR DOCK (Since CSS was missing)
+        const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:16px; align-items:center; z-index:10;`;
+        const dockBtnStyle = `width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(4px); box-shadow:0 4px 10px rgba(0,0,0,0.5);`;
+        const dockLabelStyle = `font-size:10px; color:#fff; font-weight:700; margin-top:4px; text-shadow:0 1px 3px #000;`;
 
         if (card.type === 'mcq') {
             let opts = card.options;
@@ -83,7 +84,7 @@ async function renderReelsDeck() {
             if (!Array.isArray(opts)) opts = [];
 
             return `
-              <div class="reel-card" id="reelCard_${safeCardId}">
+              <div class="reel-card" id="reelCard_${safeCardId}" style="position:relative; padding-right:60px;">
                 <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
                   ${creatorBadge}
@@ -103,21 +104,19 @@ async function renderReelsDeck() {
                   <div id="reelFeedback_${safeCardId}" style="font-size:11px; margin-top:4px; display:none;"></div>
                 </div>
 
-                <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" title="Ask AI Tutor" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">
-                    <span style="font-size:16px;">🧠</span>
+                <div style="${dockStyle}">
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle} box-shadow:0 0 15px rgba(0,229,255,0.4);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+                    <div style="${dockLabelStyle}">Doubt</div>
                   </div>
-                  <span class="reel-dock-action-label">Ask AI</span>
-
-                  <div class="reel-dock-action-btn" title="Like / Clout" onclick="reactStory('fire')">
-                    <span style="font-size:16px;">🔥</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="reactStory('fire')">🔥</div>
+                    <div style="${dockLabelStyle}">Clout</div>
                   </div>
-                  <span class="reel-dock-action-label">Clout</span>
-
-                  <div class="reel-dock-action-btn" title="Share with Class" onclick="shareReel('${qJS}')">
-                    <span style="font-size:15px;">🚀</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                    <div style="${dockLabelStyle}">Share</div>
                   </div>
-                  <span class="reel-dock-action-label">Share</span>
                 </div>
 
                 <div class="reel-footer-status">
@@ -127,7 +126,7 @@ async function renderReelsDeck() {
             `;
         } else if (card.type === 'trap' || card.type === 'hack') {
             return `
-              <div class="reel-card" style="border-left: 3px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'};">
+              <div class="reel-card" style="position:relative; padding-right:60px; border-left: 3px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'};">
                 <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge" style="color:#fda4af; border-color:rgba(244,63,94,0.4); background:rgba(244,63,94,0.15);">${card.type === 'trap' ? '🚨 EXAMINER TRAP' : '💡 TOPPER HACK'} • ${sub.toUpperCase()}</span>
                   ${creatorBadge}
@@ -139,21 +138,19 @@ async function renderReelsDeck() {
                   ${card.rule ? `<div style="font-size:11.5px; color:var(--accent-emerald); font-weight:800; margin-top:4px;">✅ GOLDEN RULE: ${card.rule}</div>` : ''}
                 </div>
 
-                <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">
-                    <span style="font-size:16px;">🧠</span>
+                <div style="${dockStyle}">
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle} box-shadow:0 0 15px rgba(0,229,255,0.4);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+                    <div style="${dockLabelStyle}">Explain</div>
                   </div>
-                  <span class="reel-dock-action-label">Explain</span>
-
-                  <div class="reel-dock-action-btn" onclick="reactStory('mind')">
-                    <span style="font-size:16px;">🤯</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="reactStory('mind')">🤯</div>
+                    <div style="${dockLabelStyle}">Clout</div>
                   </div>
-                  <span class="reel-dock-action-label">Clout</span>
-
-                  <div class="reel-dock-action-btn" onclick="shareReel('${qJS}')">
-                    <span style="font-size:15px;">🚀</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                    <div style="${dockLabelStyle}">Share</div>
                   </div>
-                  <span class="reel-dock-action-label">Share</span>
                 </div>
 
                 <div class="reel-footer-status">
@@ -163,7 +160,7 @@ async function renderReelsDeck() {
             `;
         } else {
             return `
-              <div class="reel-card" style="border-left: 3px solid var(--accent-cyan);">
+              <div class="reel-card" style="position:relative; padding-right:60px; border-left: 3px solid var(--accent-cyan);">
                 <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
                   <span class="reel-hook-badge" style="color:#bae6fd; border-color:rgba(0,229,255,0.4); background:rgba(0,229,255,0.12);">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
                   ${creatorBadge}
@@ -175,21 +172,19 @@ async function renderReelsDeck() {
                   <div style="font-size:12px; color:#cbd5e1; line-height:1.4; margin-top:6px;">💡 ${card.tip || ''}</div>
                 </div>
 
-                <div class="reel-side-dock">
-                  <div class="reel-dock-action-btn ai-glow" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">
-                    <span style="font-size:16px;">🧠</span>
+                <div style="${dockStyle}">
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle} box-shadow:0 0 15px rgba(0,229,255,0.4);" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">🧠</div>
+                    <div style="${dockLabelStyle}">Derive</div>
                   </div>
-                  <span class="reel-dock-action-label">Derive</span>
-
-                  <div class="reel-dock-action-btn" onclick="reactStory('100')">
-                    <span style="font-size:16px;">💯</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="reactStory('100')">💯</div>
+                    <div style="${dockLabelStyle}">Save</div>
                   </div>
-                  <span class="reel-dock-action-label">Save</span>
-
-                  <div class="reel-dock-action-btn" onclick="shareReel('${qJS}')">
-                    <span style="font-size:15px;">🚀</span>
+                  <div style="text-align:center;">
+                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                    <div style="${dockLabelStyle}">Share</div>
                   </div>
-                  <span class="reel-dock-action-label">Share</span>
                 </div>
 
                 <div class="reel-footer-status">
@@ -317,9 +312,9 @@ function renderFilters() {
   const tray = document.getElementById('filterTray');
   if(!tray) return;
   tray.innerHTML = storyFilters.map((f, idx) => `
-    <button type="button" class="filter-btn ${idx === 0 ? 'active' : ''}" onclick="applyFilter(${idx}, this)">
-      <div class="filter-preview-box" style="background-color:${f.color}; filter:${f.css};"></div>
-      <div class="filter-name">${f.name}</div>
+    <button type="button" class="filter-btn ${idx === 0 ? 'active' : ''}" onclick="applyFilter(${idx}, this)" style="border:none; background:none; cursor:pointer;">
+      <div class="filter-preview-box" style="width:50px; height:50px; border-radius:12px; background-color:${f.color}; filter:${f.css};"></div>
+      <div class="filter-name" style="color:#fff; font-size:10px; text-align:center; margin-top:4px;">${f.name}</div>
     </button>
   `).join('');
 }
@@ -372,12 +367,18 @@ function handleStoryImage(e) {
   reader.readAsDataURL(file);
 }
 
+// FIX: Target correct button ID from app.html for opening the Add Story Modal
 const addStoryBtn = document.getElementById('btnAddStory');
 if (addStoryBtn) {
-  addStoryBtn.onclick = () => { 
+  addStoryBtn.addEventListener('click', () => { 
     const m = document.getElementById('storyModal');
-    if (m) { m.style.display = 'flex'; renderFilters(); }
-  };
+    if (m) { 
+      m.style.display = 'flex'; 
+      renderFilters(); 
+    } else {
+      alert("Story modal not found in HTML.");
+    }
+  });
 }
 
 async function loadActiveStories() {
@@ -397,11 +398,11 @@ async function loadActiveStories() {
             const author = String(s.author_name || s.author || s.name || "Student");
             const initial = author.charAt(0).toUpperCase() || "S";
             return `
-            <div class="story-circle-item" onclick="openStoryViewer(${idx})">
-                <div class="story-avatar-wrap">
-                    <div class="story-avatar-inner">${initial}</div>
+            <div class="story-circle-item" onclick="openStoryViewer(${idx})" style="cursor:pointer;">
+                <div class="story-avatar-wrap" style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan), #0284c7); padding:2px; margin-bottom:4px;">
+                    <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#020617; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:900; color:#fff;">${initial}</div>
                 </div>
-                <div class="story-username">${escapeHTML(author)}</div>
+                <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHTML(author)}</div>
             </div>
             `;
         }).join('');
@@ -523,7 +524,7 @@ async function fetchStoryViewers(storyId) {
   } catch (e) { return []; }
 }
 
-function openStoryViewer(idx) {
+window.openStoryViewer = function(idx) {
   currentStoryIdx = idx;
   const viewer = document.getElementById('storyViewer');
   if (viewer) {
@@ -532,14 +533,14 @@ function openStoryViewer(idx) {
   }
 }
 
-function prevStorySlide() {
+window.prevStorySlide = function() {
   if (currentStoryIdx > 0) {
     currentStoryIdx--;
     renderStorySlide();
   }
 }
 
-function nextStorySlide() {
+window.nextStorySlide = function() {
   if (currentStoryIdx < activeStories.length - 1) {
     currentStoryIdx++;
     renderStorySlide();
@@ -654,8 +655,8 @@ function renderStorySlide() {
   const pContainer = document.getElementById('storyProgressContainer');
   if (pContainer) {
     pContainer.innerHTML = activeStories.map((_, i) => `
-      <div class="story-progress-seg">
-        <div class="story-progress-fill" style="width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div>
+      <div class="story-progress-seg" style="flex:1; height:3px; background:rgba(255,255,255,0.3); border-radius:3px; overflow:hidden;">
+        <div class="story-progress-fill" style="height:100%; background:#fff; width: ${i < currentStoryIdx ? '100%' : (i === currentStoryIdx ? '100%' : '0%')}; transition: width 6s linear;"></div>
       </div>
     `).join('');
   }
@@ -663,7 +664,7 @@ function renderStorySlide() {
   storyTimer = setTimeout(nextStorySlide, 6000);
 }
 
-async function openStoryViewersDrawer() {
+window.openStoryViewersDrawer = async function() {
   clearTimeout(storyTimer);
   const story = activeStories[currentStoryIdx];
   if (!story || !story.id) return;
@@ -687,7 +688,7 @@ async function openStoryViewersDrawer() {
 
   const reactionEmojiMap = { fire: '🔥', mind: '🤯', '100': '💯' };
   list.innerHTML = viewers.map(v => `
-    <div class="viewer-row-item">
+    <div class="viewer-row-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:12px;">
       <div style="display:flex; align-items:center; gap:8px;">
         <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">
           ${(v.viewer_name || 'S').charAt(0).toUpperCase()}
@@ -702,20 +703,20 @@ async function openStoryViewersDrawer() {
   `).join('');
 }
 
-function closeStoryViewersDrawer() {
+window.closeStoryViewersDrawer = function() {
   const drawer = document.getElementById('storyViewersDrawer');
   if (drawer) drawer.style.display = 'none';
   storyTimer = setTimeout(nextStorySlide, 3500);
 }
 
-function closeStoryViewer() {
+window.closeStoryViewer = function() {
   clearTimeout(storyTimer);
   const v = document.getElementById('storyViewer');
   if (v) v.style.display = 'none';
   closeStoryViewersDrawer();
 }
 
-async function reactStory(type) {
+window.reactStory = async function(type) {
   if (typeof playDing === 'function') playDing();
   if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 40, origin: { y: 0.8 } });
 
