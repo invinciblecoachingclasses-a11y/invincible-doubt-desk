@@ -20,72 +20,42 @@ export default async function handler(req, res) {
 
     const questionCount = Math.min(Math.max(requestedCount, 1), 25);
 
-    // CRITICAL: Explicit instruction to avoid LaTeX backslashes that corrupt JSON strings
-    const testPrompt = `You are a CBSE Board Examiner creating an exam paper.
-Generate exactly ${questionCount} multiple-choice questions (MCQs).
-
+    const testPrompt = `Create exactly ${questionCount} multiple-choice questions (MCQs) for CBSE Board Exam.
 Class: ${className}
 Subject: ${subject}
 Topic: ${chapter}
 Difficulty: ${difficulty}
 Language: ${language}
 
-STRICT FORMATTING RULES:
+Rules:
 1. Stay strictly on the topic: ${subject} - ${chapter}.
 2. Provide exactly 4 options per question.
-3. FORMULAS & MATH: DO NOT use LaTeX backslashes (NO \\frac, NO \\sqrt, NO \\epsilon, NO \\theta). Write formulas in clean plain text with Unicode symbols: e.g., θ, λ, μ, Ω, ε0, π, √, x², F = q(E + v × B), V = IR.
-4. Output MUST be ONLY valid JSON matching this schema:
-{
-  "questions": [
-    {
-      "question": "Question text here",
-      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-      "correctAnswer": 0,
-      "explanation": "Brief explanation"
-    }
-  ]
-}`;
+3. For math/physics symbols, use standard Unicode (e.g. θ, λ, μ, Ω, ε, π, √, x²).
+4. Do NOT use unescaped double quotes inside strings.`;
 
-    // Helper to sanitize broken JSON escape sequences
-    function robustJsonParse(text) {
-      let cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      const firstBrace = cleaned.indexOf('{');
-      const lastBrace = cleaned.lastIndexOf('}');
-      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-      }
-
-      try {
-        return JSON.parse(cleaned);
-      } catch (e1) {
-        // Fix invalid escape characters (e.g., \e, \O, \s, \m, invalid \u sequences)
-        try {
-          let sanitized = cleaned
-            .replace(/\\u(?![0-9a-fA-F]{4})/g, "\\\\u")
-            .replace(/\\([^"\\\/bfnrtu])/g, "\\\\$1");
-          return JSON.parse(sanitized);
-        } catch (e2) {
-          // If JSON.parse still fails, extract question blocks via Regex
-          const questions = [];
-          const qRegex = /"question"\s*:\s*"([^"]+)"[\s\S]*?"options"\s*:\s*\[([\s\S]*?)\][\s\S]*?"correctAnswer"\s*:\s*(\d+)[\s\S]*?"explanation"\s*:\s*"([^"]*)"/g;
-          let match;
-          while ((match = qRegex.exec(cleaned)) !== null) {
-            const rawOptions = match[2].match(/"([^"]+)"/g) || [];
-            const parsedOptions = rawOptions.map(o => o.replace(/^"|"$/g, '').trim());
-            if (parsedOptions.length >= 2) {
-              questions.push({
-                question: match[1],
-                options: parsedOptions,
-                correctAnswer: parseInt(match[3], 10),
-                explanation: match[4] || "Review NCERT concepts."
-              });
-            }
+    // Strict JSON Schema Definition (Enforced by Gemini token decoder)
+    const jsonSchema = {
+      type: "OBJECT",
+      properties: {
+        questions: {
+          type: "ARRAY",
+          items: {
+            type: "OBJECT",
+            properties: {
+              question: { type: "STRING" },
+              options: {
+                type: "ARRAY",
+                items: { type: "STRING" }
+              },
+              correctAnswer: { type: "INTEGER" },
+              explanation: { type: "STRING" }
+            },
+            required: ["question", "options", "correctAnswer", "explanation"]
           }
-          if (questions.length >= 5) return { questions };
-          throw new Error("Unable to parse structured JSON from model response.");
         }
-      }
-    }
+      },
+      required: ["questions"]
+    };
 
     let finalQuestions = [];
     let errorLog = [];
@@ -97,7 +67,7 @@ STRICT FORMATTING RULES:
     const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
-      const geminiModels = ["gemini-3.6-flash"];
+      const geminiModels = ["gemini-3.6-flash", "gemini-1.5-flash"];
 
       keyLoop: for (const apiKey of geminiKeys) {
         for (const model of geminiModels) {
@@ -112,7 +82,8 @@ STRICT FORMATTING RULES:
                   generationConfig: {
                     temperature: 0.2,
                     maxOutputTokens: 8192,
-                    responseMimeType: "application/json"
+                    responseMimeType: "application/json",
+                    responseSchema: jsonSchema
                   }
                 })
               }
@@ -121,8 +92,8 @@ STRICT FORMATTING RULES:
             const data = await response.json();
             if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
               const rawText = data.candidates[0].content.parts[0].text;
-              const parsed = robustJsonParse(rawText);
-              const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
+              const parsed = JSON.parse(rawText);
+              const qList = Array.isArray(parsed?.questions) ? parsed.questions : [];
 
               for (const q of qList) {
                 if (!q || !q.question || !Array.isArray(q.options) || q.options.length < 2) continue;
@@ -176,16 +147,24 @@ STRICT FORMATTING RULES:
           body: JSON.stringify({
             model: "claude-3-5-sonnet-20241022",
             max_tokens: 4096,
-            system: "You are a CBSE test generator. Return ONLY valid JSON matching the requested schema.",
+            system: "You are a CBSE test generator. Return strictly a raw JSON object with a 'questions' array. No markdown, no introductory text.",
             messages: [{ role: "user", content: testPrompt }]
           })
         });
 
         const claudeData = await claudeRes.json();
         if (claudeRes.ok && claudeData?.content?.[0]?.text) {
-          const rawText = claudeData.content[0].text;
-          const parsed = robustJsonParse(rawText);
-          const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
+          let rawText = claudeData.content[0].text.trim();
+          rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
+
+          const firstBrace = rawText.indexOf('{');
+          const lastBrace = rawText.lastIndexOf('}');
+          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+            rawText = rawText.substring(firstBrace, lastBrace + 1);
+          }
+
+          const parsed = JSON.parse(rawText);
+          const qList = Array.isArray(parsed?.questions) ? parsed.questions : [];
 
           for (const q of qList) {
             if (!q || !q.question || !Array.isArray(q.options) || q.options.length < 2) continue;
@@ -219,7 +198,7 @@ STRICT FORMATTING RULES:
     }
 
     // ==========================================
-    // PHASE 3: Delivery
+    // PHASE 3: Output Delivery
     // ==========================================
     if (finalQuestions.length === 0) {
       return res.status(500).json({
