@@ -11,27 +11,33 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
-    const className = body.className || body.class || "12";
-    const subject = body.subject || "Physics";
-    const chapter = body.chapter || "Full Syllabus";
+    const className = body.className || body.class || "10";
+    const subject = body.subject || "Science";
+    const chapter = body.chapter || "Full Syllabus Overview";
     const requestedCount = Number(body.count || body.numberOfQuestions || 20);
     const difficulty = body.difficulty || "Moderate";
     const language = body.language || "English and Hindi";
 
-    const questionCount = Math.min(Math.max(requestedCount, 1), 25);
+    // Strictly enforce 20 questions
+    const questionCount = Math.min(Math.max(requestedCount, 1), 30);
 
-    const testPrompt = `Create exactly ${questionCount} multiple-choice questions (MCQs) for CBSE Board Exam prep.
-Class: ${className}
-Subject: ${subject}
-Topic: ${chapter}
-Difficulty: ${difficulty}
-Language: ${language}
+    const testPrompt = `You are a senior CBSE Board Examiner creating an official exam test paper.
+Generate a complete test paper containing EXACTLY ${questionCount} multiple-choice questions (MCQs).
 
-STRICT INSTRUCTIONS:
-1. Stay strictly on the topic: ${subject} - ${chapter}.
-2. Provide exactly 4 options per question.
-3. For math/physics symbols, use clean Unicode (e.g. θ, λ, μ, Ω, ε, π, √, x²).
-4. Do NOT use unescaped double quotes or raw line breaks inside JSON string values. Keep each question and explanation as a single continuous line.`;
+Target Parameters:
+- Class: ${className}
+- Subject: ${subject}
+- Chapter/Topic: ${chapter}
+- Difficulty: ${difficulty}
+- Language: ${language}
+
+STRICT COUNT & FORMAT RULES:
+1. ARRAY LENGTH: The 'questions' array MUST contain EXACTLY ${questionCount} question items (from 1 to ${questionCount}). Do not stop early.
+2. Subject-Fenced: Stay strictly on ${subject} - ${chapter}.
+3. Exactly 4 Options: Every question must contain exactly 4 choices in the 'options' array.
+4. Concise Explanations: Keep each explanation to 1 short sentence (under 15 words) to ensure rapid completion of all ${questionCount} questions.
+5. Unicode Symbols: Use clean Unicode characters (e.g. θ, λ, μ, Ω, ε, π, √, x²).
+6. Clean Strings: Do NOT use raw newlines or unescaped double quotes inside string values.`;
 
     const jsonSchema = {
       type: "OBJECT",
@@ -56,7 +62,6 @@ STRICT INSTRUCTIONS:
       required: ["questions"]
     };
 
-    // Bulletproof JSON parser that handles unterminated strings and unescaped newlines
     function extractQuestionsFromRaw(raw) {
       if (!raw) return [];
       let clean = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -67,19 +72,16 @@ STRICT INSTRUCTIONS:
         clean = clean.substring(firstBrace, lastBrace + 1);
       }
 
-      // Method 1: Standard JSON parse
       try {
         const parsed = JSON.parse(clean);
         if (Array.isArray(parsed?.questions)) return parsed.questions;
         if (Array.isArray(parsed)) return parsed;
       } catch (e1) {
-        // Method 2: Sanitize control characters and unescaped newlines
         try {
           const sanitized = clean.replace(/[\u0000-\u001F]+/g, " ");
           const parsed = JSON.parse(sanitized);
           if (Array.isArray(parsed?.questions)) return parsed.questions;
         } catch (e2) {
-          // Method 3: Regex chunk extraction (extracts all complete question objects individually)
           const questions = [];
           const blockRegex = /\{\s*"question"\s*:\s*"((?:[^"\\]|\\.)*)"[\s\S]*?"options"\s*:\s*\[([\s\S]*?)\][\s\S]*?"correctAnswer"\s*:\s*(\d+)[\s\S]*?"explanation"\s*:\s*"((?:[^"\\]|\\.)*)"\s*\}/g;
           let match;
@@ -161,7 +163,7 @@ STRICT INSTRUCTIONS:
               });
             }
 
-            if (finalQuestions.length >= 5) {
+            if (finalQuestions.length >= 10) {
               usedProvider = "Gemini 3.6 Flash";
               break keyLoop;
             } else {
@@ -192,7 +194,7 @@ STRICT INSTRUCTIONS:
           body: JSON.stringify({
             model: "claude-3-5-sonnet-20241022",
             max_tokens: 4096,
-            system: "You are a CBSE test generator. Return strictly a raw JSON object with a 'questions' array. No markdown.",
+            system: `You are a CBSE test generator. Return strictly a raw JSON object with a 'questions' array containing exactly ${questionCount} questions. No markdown.`,
             messages: [{ role: "user", content: testPrompt }]
           })
         });
@@ -222,7 +224,7 @@ STRICT INSTRUCTIONS:
             });
           }
 
-          if (finalQuestions.length >= 5) {
+          if (finalQuestions.length >= 10) {
             usedProvider = "Anthropic Claude";
           }
         } else {
