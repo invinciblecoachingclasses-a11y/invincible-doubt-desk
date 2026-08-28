@@ -5,19 +5,21 @@ window.handleGetBlitzPass = function() {
   const nameInput = document.getElementById('studentName')?.value?.trim();
   const studentName = nameInput || localStorage.getItem('studentName') || localStorage.getItem('student_name') || 'Champion';
   const passId = 'BLITZ-' + Math.floor(100000 + Math.random() * 900000);
-  
+
   localStorage.setItem('blitz_pass_active', 'true');
   localStorage.setItem('blitz_pass_id', passId);
-  
+
   const xpEl = document.getElementById('xpCounter');
   let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
   currentXP += 100;
   if (xpEl) xpEl.textContent = currentXP;
   localStorage.setItem('student_xp', currentXP.toString());
 
-  rechargeBlitzPowerup('fiftyFifty');
-  rechargeBlitzPowerup('timeFreeze');
-  rechargeBlitzPowerup('shield');
+  if(typeof rechargeBlitzPowerup === 'function') {
+    rechargeBlitzPowerup('fiftyFifty');
+    rechargeBlitzPowerup('timeFreeze');
+    rechargeBlitzPowerup('shield');
+  }
 
   if (typeof playWin === 'function') playWin();
   if (typeof triggerHaptic === 'function') triggerHaptic([50, 50, 100]);
@@ -42,7 +44,7 @@ window.renderBlitzPassModal = function(name, passId) {
   const modalHtml = `
     <div id="blitzPassModal" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);">
       <div style="max-width:380px; width:100%; background:#0f172a; border:2px solid #f59e0b; border-radius:24px; padding:24px; text-align:center; position:relative; box-shadow:0 0 30px rgba(245,158,11,0.3); animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
-        
+
         <div style="width:60px; height:60px; margin:0 auto 12px; background:linear-gradient(135deg, #f59e0b, #d97706); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(245,158,11,0.4);">
           🎟️
         </div>
@@ -97,14 +99,14 @@ let blitzState = {
   powerups: { fiftyFifty: 1, timeFreeze: 1, shield: 1 }
 };
 
-function rechargeBlitzPowerup(type) {
+window.rechargeBlitzPowerup = function(type) {
   let count = parseInt(localStorage.getItem(`blitz_pup_${type}`) || '1', 10);
   count = Math.min(count + 1, 3);
   localStorage.setItem(`blitz_pup_${type}`, count);
-  updatePowerupUI();
+  if(typeof updatePowerupUI === 'function') updatePowerupUI();
 }
 
-function updatePowerupUI() {
+window.updatePowerupUI = function() {
   ['fiftyFifty', 'timeFreeze', 'shield'].forEach(p => {
     const val = parseInt(localStorage.getItem(`blitz_pup_${p}`) || '1', 10);
     const badge = document.getElementById(`pupBadge_${p}`);
@@ -112,14 +114,14 @@ function updatePowerupUI() {
   });
 }
 
-function initBlitzCountdown() {
+window.initBlitzCountdown = function() {
   const tickerEl = document.getElementById('blitzCountdownTicker');
   if (!tickerEl) return;
 
   setInterval(() => {
     const now = new Date();
     const target = new Date();
-    target.setHours(21, 0, 0, 0); 
+    target.setHours(21, 0, 0, 0);
     if (now > target) { target.setDate(target.getDate() + 1); }
 
     const diff = target - now;
@@ -131,14 +133,14 @@ function initBlitzCountdown() {
   }, 1000);
 }
 
-function renderDailyPuzzle(puzzle) {
+window.renderDailyPuzzle = function(puzzle) {
   if (!puzzle) return;
   const pBox = document.getElementById('puzzleBox');
   if (pBox) pBox.style.display = 'flex';
 
   const rawQ = puzzle.question || puzzle.question_en || "Is √(-4) × √(-9) equal to +6 or -6?";
   const formattedQ = typeof formatMathText === 'function' ? formatMathText(rawQ) : rawQ;
-  
+
   let enText = formattedQ;
   let hiText = "";
   if (formattedQ.includes(" / ")) {
@@ -182,11 +184,11 @@ function renderDailyPuzzle(puzzle) {
 }
 
 let clashTimerInterval = null;
-function startDailyClashTimer() {
+window.startDailyClashTimer = function() {
   let timeLeft = 15;
   const numDisplay = document.getElementById('survivalTimerNum');
   const barDisplay = document.getElementById('survivalTimerBar');
-  
+
   clearInterval(clashTimerInterval);
   clashTimerInterval = setInterval(() => {
     timeLeft--;
@@ -202,12 +204,12 @@ function startDailyClashTimer() {
   }, 1000);
 }
 
-function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
+window.handleDailyClashAnswer = function(selectedIdx, correctIdx, timedOut = false) {
   clearInterval(clashTimerInterval);
-  
+
   const fb = document.getElementById('puzzleFeedback');
   const optsContainer = document.getElementById('puzzleOptionsContainer');
-  
+
   if (optsContainer) {
     Array.from(optsContainer.children).forEach((btn, idx) => {
       btn.disabled = true;
@@ -306,21 +308,26 @@ function updateTimerUI() {
 
 if (startTestBtn) {
   startTestBtn.addEventListener("click", async function(){
-    const name = document.getElementById("studentName").value.trim();
-    const mobile = document.getElementById("studentMobile").value.trim();
-    const org = testOrg.value;
-    const cls = testClass.value; 
-    const subject = testSubject.value; 
-    const chapter = testChapter.value.trim() || "Full Syllabus Overview";
+    let name = document.getElementById("studentName")?.value?.trim();
+    if (!name) name = localStorage.getItem("studentName") || "Student"; // Auto-resolve name so it doesn't block
+
+    const mobile = document.getElementById("studentMobile")?.value?.trim();
     
-    // Capture the new difficulty dropdown
+    let org = testOrg?.value;
+    if (!org) org = localStorage.getItem("userSchool"); // Try fetching from storage
+
+    const cls = testClass?.value; 
+    const subject = testSubject?.value; 
+    const chapter = testChapter?.value?.trim() || "Full Syllabus Overview";
     const difficultyLevel = document.getElementById("testDifficulty")?.value || "Moderate";
 
-    if(!name || !org || !cls || !subject){ 
-      return alert("Please fill your Name, School, Class, and Subject."); 
-    }
+    // SMART VALIDATION: Tell the user EXACTLY what they missed
+    if(!org) return alert("Please select your School/Institute from the dropdown.");
+    if(!cls) return alert("Please select your Grade/Class.");
+    if(!subject) return alert("Please select your Subject.\n\nNote: Whenever you change the Class, the Subject dropdown resets automatically. Please select it again.");
+
     if(mobile && !/^[0-9]{10}$/.test(mobile)){ 
-      return alert("Please enter a valid 10-digit mobile number."); 
+      return alert("Please enter a valid 10-digit mobile number, or leave it blank."); 
     }
 
     if(org) {
@@ -333,7 +340,6 @@ if (startTestBtn) {
     document.getElementById('testWarmupBox')?.classList.remove('hidden');
 
     try {
-        // Updated to pass the selected difficulty directly to the API
         const response = await fetch("/api/generate-test", {
             method: "POST", 
             headers: {"Content-Type": "application/json"},
@@ -441,10 +447,10 @@ if (submitTestBtn) {
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    const studentName = document.getElementById("studentName").value.trim();
-    const studentMobile = document.getElementById("studentMobile").value.trim();
-    const org = document.getElementById("testOrg").value || "Other School";
-    const chapterName = testChapter.value.trim() || "Chapter Assessment";
+    const studentName = document.getElementById("studentName")?.value?.trim() || localStorage.getItem("studentName") || "Student";
+    const studentMobile = document.getElementById("studentMobile")?.value?.trim() || "";
+    const org = document.getElementById("testOrg")?.value || "Other School";
+    const chapterName = testChapter?.value?.trim() || "Chapter Assessment";
 
     try {
         await fetch("/api/save-test-attempt", {
@@ -473,5 +479,5 @@ if (whatsappShareBtn) {
 
 // Ensure the Mega Blitz Countdown actually starts when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    initBlitzCountdown();
+    if(typeof initBlitzCountdown === 'function') initBlitzCountdown();
 });
