@@ -127,7 +127,7 @@
                 <div class="survival-timer-track"><div class="survival-timer-fill" id="survivalTimerBar"></div></div>
                 <div class="survival-tagline">⚡ Can you solve this before time runs out?</div>
                 <div class="survival-q" id="puzzleQuestionEn">Loading challenge question...</div>
-                <div class="survival-q-hi" id="puzzleQuestionHi"></div>
+                <div class="survival-q-hi"></div>
             </div>
             <div>
                 <div class="survival-options" id="puzzleOptionsContainer"></div>
@@ -272,7 +272,6 @@
             <input id="studentName" type="text" placeholder="Full Name">
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number (Optional)">
 
-            <!-- ALL SCHOOLS OPTION ADDED HERE -->
             <select id="testOrg" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select School / Institute</option>
                 <option value="ALL">All Schools (Global)</option>
@@ -640,359 +639,80 @@
 </div>
 
 <!-- =====================================================
-     FULL UNIFIED JAVASCRIPT ENGINE (ALL BUGS FIXED)
+     CORE ENGINES - LINKED CORRECTLY
 ===================================================== -->
+<script src="utils.js"></script>
+<script src="audio.js"></script>
+<script src="navigation.js"></script>
+<script src="reels-stories.js"></script>
+<script src="campus-hub.js"></script>
+<script src="doubt-notes.js"></script>
+<script src="tests-clash.js"></script>
+<script src="arena.js"></script>
+<script src="lab.js"></script>
+<script src="main.js"></script>
+
+<!-- Security & Verification Handler -->
 <script>
-/* 1. UTILS & HELPERS */
-function escapeHTML(str) { return str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : ''; }
-function formatMathText(text) { return text ? String(text).replace(/\\text\{([^}]*)\}/g, "$1").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "$1/$2").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\times/g, " × ").replace(/\$\$/g, "").replace(/\$/g, "").trim() : ""; }
-function triggerHaptic(pattern = [40]) { if ('vibrate' in navigator) try { navigator.vibrate(pattern); } catch(e){} }
+  const verified = localStorage.getItem('student_verified');
+  if (!verified || verified !== 'true') {
+    const lockStyle = document.createElement('style');
+    lockStyle.innerHTML = `
+      #onboardingModal { display: none !important; }
+      #studentInviteModal { display: flex !important; z-index: 2147483647 !important; pointer-events: auto !important; }
+      body { overflow: hidden !important; }
+    `;
+    document.head.appendChild(lockStyle);
+  }
 
-let doubtTimerInterval = null, factIdx = 0, chargedBonusXP = 0;
-const doubtFacts = [
-  "💡 Total Internal Reflection happens only when light travels from denser to rarer medium.",
-  "💡 In lens formula, focal length of convex lens is ALWAYS positive (+f).",
-  "💡 Ohm's law is NOT universal—it fails for diodes and semiconductors!"
-];
+  window.handleGuestSkip = function() {
+      localStorage.setItem('studentName', 'Guest Explorer');
+      localStorage.setItem('student_verified', 'true'); 
+      localStorage.setItem('userSchool', 'ALL'); 
+      window.unlockScreenAndShowTutorial();
+  };
 
-function startDoubtWaitingPipeline() {
-  const steps = ["🔍 Scanning question tokens...", "📐 Mapping CBSE marking scheme...", "🚨 Checking examiner traps...", "✨ Compiling step-by-step breakdown..."];
-  let sIdx = 0, progress = 10;
-  const label = document.getElementById('doubtPipelineText'), bar = document.getElementById('doubtProgressFill'), fact = document.getElementById('doubtFactTicker');
-  clearInterval(doubtTimerInterval);
-  doubtTimerInterval = setInterval(() => {
-    sIdx = (sIdx + 1) % steps.length; factIdx = (factIdx + 1) % doubtFacts.length; progress = Math.min(progress + 22, 92);
-    if (label) label.textContent = steps[sIdx]; if (bar) bar.style.width = progress + '%'; if (fact) fact.textContent = doubtFacts[factIdx];
-  }, 2200);
-}
-function stopDoubtWaitingPipeline() { clearInterval(doubtTimerInterval); }
-function chargeSupercharger() {
-  chargedBonusXP += 1;
-  const display = document.getElementById('chargeBonusDisplay');
-  if (display) display.textContent = `+${chargedBonusXP} Bonus XP Charged! ⚡`;
-  const xpEl = document.getElementById('xpCounter');
-  if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '680', 10) + 1;
-}
-function answerWarmup(btn, isCorrect) {
-  const fb = document.getElementById('warmupFeedback');
-  if (isCorrect) { btn.style.background = 'rgba(16, 185, 129, 0.2)'; if(fb) fb.innerHTML = '<span style="color:var(--accent-emerald);">✓ Correct! +10 XP</span>'; playDing(); } 
-  else { btn.style.borderColor = 'var(--accent-rose)'; if(fb) fb.innerHTML = '<span style="color:var(--accent-rose);">Incorrect!</span>'; playBuzz(); }
-}
-function checkDailyStreak() {
-    const today = new Date().toDateString(), lastVisit = localStorage.getItem('invincible_last_visit');
-    let streak = parseInt(localStorage.getItem('invincible_streak') || '1', 10);
-    if (lastVisit) {
-        const diff = Math.floor((new Date(today) - new Date(lastVisit)) / (1000 * 60 * 60 * 24));
-        if (diff === 1) streak += 1; else if (diff > 1) streak = 1;
-    }
-    localStorage.setItem('invincible_last_visit', today); localStorage.setItem('invincible_streak', streak);
-    const el = document.getElementById('streakCounter'); if (el) el.textContent = streak;
-}
-
-/* 2. AUDIO SYNTHESIS & TTS */
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-let audioCtx, activeLofiNodes = [], currentTtsAudio = null, currentLofiMode = 0;
-function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
-function playSound(type, freq, duration, vol=0.1) { try { initAudio(); const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration); } catch(e){} }
-function playDing() { playSound('sine', 880, 0.1); setTimeout(()=>playSound('sine', 1760, 0.25), 90); }
-function playBuzz() { playSound('sawtooth', 140, 0.25, 0.2); }
-function playWin() { playSound('square', 440, 0.15); setTimeout(()=>playSound('square', 554, 0.15), 150); }
-function stopLofiAudio() { activeLofiNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} }); activeLofiNodes = []; }
-function toggleLofiAudio() {
-    initAudio(); stopLofiAudio(); currentLofiMode = (currentLofiMode + 1) % 4;
-    const labels = ["Sound: Off", "Alpha 108Hz", "Brown Noise", "Pulse 528Hz"];
-    const label = document.getElementById('lofiLabel'); if(label) label.textContent = labels[currentLofiMode];
-    if(currentLofiMode===0) return;
-    let gainNode = audioCtx.createGain(); gainNode.connect(audioCtx.destination);
-    if(currentLofiMode===1) { let o=audioCtx.createOscillator(); o.type='sine'; o.frequency.value=108; gainNode.gain.value=0.05; o.connect(gainNode); o.start(); activeLofiNodes.push(o); }
-}
-
-/* 3. NAVIGATION */
-function switchTab(tab) {
-    document.querySelectorAll('.dock-btn').forEach(b => b.classList.remove('active'));
-    const map = { 'home':0, 'reels':1, 'lab':2, 'doubt':3, 'test':4, 'arena':5, 'feed':6, 'notes':7 };
-    const btns = document.querySelectorAll('.dock-btn'); if(btns[map[tab]]) btns[map[tab]].classList.add('active');
-    ['home','reels','lab','doubt','test','arena','feed','notes'].forEach(s => { const el = document.getElementById(s+'Section'); if(el) el.classList.add('hidden'); });
-    const target = document.getElementById(tab+'Section'); if(target) target.classList.remove('hidden');
-    if(tab==='reels') renderReelsDeck();
-    if(tab!=='lab' && typeof closeLabSim==='function') closeLabSim();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-function selectStartingQuest(quest) {
-    localStorage.setItem('invincible_onboarded', 'true');
-    const modal = document.getElementById('onboardingModal'); if(modal) modal.style.display = 'none';
-    switchTab(quest);
-}
-
-/* 4. REELS ENGINE (FIXED ID QUOTES) */
-const defaultReelDeck = [
-    { id: 101, class_name: "10", type: "mcq", subject: "Physics", topic: "Light & Optics", q_en: "If magnification m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)", "Between F and P"], answer: 2 },
-    { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant." },
-    { id: 901, class_name: "9", type: "mcq", subject: "Physics", topic: "Gravitation", q_en: "The value of acceleration due to gravity (g) at the center of the Earth is:", options: ["9.8 m/s²", "Zero (0)", "Infinite", "4.9 m/s²"], answer: 1 },
-    { id: 1101, class_name: "11", type: "mcq", subject: "Physics", topic: "Kinematics", q_en: "For a projectile, the angle of projection for maximum horizontal range is:", options: ["30°", "45°", "60°", "90°"], answer: 1 },
-    { id: 1201, class_name: "12", type: "mcq", subject: "Physics", topic: "Electrostatics", q_en: "Electric flux through a closed Gaussian surface enclosing an electric dipole is:", options: ["q / ε₀", "2q / ε₀", "Zero (0)", "Infinite"], answer: 2 }
-];
-
-let currentReelsClass = "10";
-let reelStreak = 0;
-
-function setReelsClass(cls, btn) {
-    currentReelsClass = String(cls);
-    document.querySelectorAll('.reel-class-btn').forEach(b => b.classList.remove('active'));
-    if(btn) btn.classList.add('active');
-    renderReelsDeck();
-}
-
-async function renderReelsDeck() {
-    const container = document.getElementById('studyReelsDeck'); if(!container) return;
-    let deck = [];
-    try {
-        const res = await fetch(`/api/get-questions?target_class=${currentReelsClass}`);
-        const data = await res.json();
-        if (data && Array.isArray(data.reelDeck) && data.reelDeck.length > 0) deck = data.reelDeck;
-    } catch(e) {}
-
-    if (deck.length === 0) deck = defaultReelDeck.filter(item => String(item.class_name) === currentReelsClass);
-    if (deck.length === 0) deck = defaultReelDeck;
-
-    container.innerHTML = deck.map((card, idx) => {
-        let opts = card.options || [];
-        if (typeof opts === 'string') { try { opts = JSON.parse(opts); } catch(e) { opts = []; } }
-
-        return `
-          <div class="reel-card" id="reelCard_${card.id || idx}" style="border-left:3px solid var(--accent-cyan); margin-bottom:12px; background:#090e1d; padding:16px; border-radius:20px;">
-            <div class="reel-content-box">
-                <div class="reel-q-title" style="color:#fff; font-weight:800; font-size:15px;">${card.q_en || card.title}</div>
-                <div style="font-size:12px; color:#cbd5e1; margin-top:10px;">${card.content || ''}</div>
-                <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
-                    <!-- FIX: Added quotes around card.id to prevent JS syntax error on click -->
-                    ${opts.map((opt, oIdx) => `
-                      <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${card.id || idx}', ${oIdx}, ${card.answer || 0}, this)" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:#fff; padding:10px; border-radius:10px; text-align:left; cursor:pointer; font-weight:700;">${opt}</button>
-                    `).join('')}
-                </div>
-                <div id="reelFeedback_${card.id || idx}" style="font-size:11px; margin-top:4px; display:none;"></div>
-            </div>
-          </div>
-        `;
-    }).join('');
-    container.scrollTop = 0;
-}
-
-function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
-    const card = document.getElementById(`reelCard_${cardId}`);
-    if (!card) return;
-
-    const buttons = card.querySelectorAll('.reel-opt-btn');
-    buttons.forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
-
-    const fb = document.getElementById(`reelFeedback_${cardId}`);
-    const isCorrect = Number(selectedIdx) === Number(correctIdx);
-
-    if (isCorrect) {
-        playDing();
-        btnEl.classList.add('correct');
-        btnEl.style.background = 'rgba(16,185,129,0.2)';
-        btnEl.style.borderColor = 'var(--accent-emerald)';
-        reelStreak++;
-        if (fb) { fb.style.display = 'block'; fb.innerHTML = `<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct! +15 XP</span>`; }
-        const xpEl = document.getElementById('xpCounter');
-        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '680', 10) + 15;
-    } else {
-        playBuzz();
-        btnEl.classList.add('wrong');
-        btnEl.style.background = 'rgba(244,63,94,0.15)';
-        btnEl.style.borderColor = 'var(--accent-rose)';
-        if (buttons[correctIdx]) {
-            buttons[correctIdx].classList.add('correct');
-            buttons[correctIdx].style.background = 'rgba(16,185,129,0.2)';
-            buttons[correctIdx].style.borderColor = 'var(--accent-emerald)';
-        }
-        reelStreak = 0;
-        if (fb) { fb.style.display = 'block'; fb.innerHTML = `<span style="color:var(--accent-rose); font-weight:800;">✗ Incorrect.</span>`; }
-    }
-}
-
-/* 5. NOTES STUDIO (FIXED GENERATOR) */
-const generateNotesBtn = document.getElementById("generateNotesBtn");
-if(generateNotesBtn) {
-    generateNotesBtn.addEventListener("click", () => {
-        const chapter = document.getElementById("notesChapter").value.trim();
-        if(!chapter) return alert("Please type a Chapter Name to generate notes.");
-        
-        document.getElementById("notesLoading").classList.remove("hidden");
-        document.getElementById("notesResultContainer").classList.add("hidden");
-        
-        // Simulate API Fetch to unfreeze button visually
-        setTimeout(() => {
-            document.getElementById("notesLoading").classList.add("hidden");
-            document.getElementById("notesResultContainer").classList.remove("hidden");
-            
-            const cls = document.getElementById("notesClass").options[document.getElementById("notesClass").selectedIndex].text;
-            const sub = document.getElementById("notesSubject").value;
-            document.getElementById("notesResultTitle").innerText = `${cls} • ${sub.toUpperCase()}`;
-            
-            document.getElementById("notesContentBody").innerHTML = `
-                <h2 style="color:#0f172a; font-weight:900;">${chapter} - Topper Module</h2>
-                <p><strong>1. Core Definition:</strong><br>The fundamental principles of ${chapter} state that energy and momentum are conserved within a closed system.</p>
-                <div style="background:rgba(244,63,94,0.1); border-left:3px solid #f43f5e; padding:10px; margin:10px 0; border-radius:8px;">
-                    <strong>🚨 Examiner Trap:</strong> Students often forget to convert units to SI before calculation.
-                </div>
-                <p><strong>2. Key Formula:</strong></p>
-                <div style="background:#0f172a; color:#00e5ff; padding:10px; border-radius:8px; text-align:center; font-family:monospace; margin-bottom:10px;">X = Y² / Z</div>
-                <p><i>(AI generation successful. To fully connect this to your Gemini backend, ensure your external files are completely removed from GitHub).</i></p>
-            `;
-        }, 1500);
-    });
-}
-
-function downloadPDF() {
-  const content = document.getElementById('notesContentBody')?.innerHTML;
-  if (!content) return alert("Generate notes first.");
-  const w = window.open('', '_blank');
-  w.document.write(`<html><head><title>Notes PDF</title><style>body{font-family:sans-serif; padding:20px;}</style></head><body>${content}</body></html>`);
-  w.document.close();
-  setTimeout(() => { w.print(); w.close(); }, 500);
-}
-
-/* 6. TEST SECTION (BYPASSED VALIDATION FOR SEAMLESS START) */
-const startTestBtn = document.getElementById("startTestBtn");
-if(startTestBtn) {
-    startTestBtn.addEventListener("click", () => {
-        const name = document.getElementById("studentName").value.trim();
-        const testClass = document.getElementById("testClass").value;
-        
-        if(!name || !testClass) {
-            return alert("Please enter your Name and select a Grade to start!");
-        }
-
-        document.getElementById("testSetup").classList.add("hidden");
-        document.getElementById("testArea").classList.remove("hidden");
-        document.getElementById("testHeader").innerText = `Practice Exam • Class ${testClass} • Good luck, ${name}!`;
-        
-        document.getElementById("questionsContainer").innerHTML = `
-            <div style="background:rgba(255,255,255,0.03); padding:16px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); margin-bottom:12px;">
-                <p style="font-weight:700; color:#fff; margin-top:0;">Q1. Which of the following is correct?</p>
-                <label style="display:block; padding:8px; background:rgba(0,0,0,0.3); margin-top:4px; border-radius:8px; cursor:pointer;"><input type="radio" name="q1"> Option A</label>
-                <label style="display:block; padding:8px; background:rgba(0,0,0,0.3); margin-top:4px; border-radius:8px; cursor:pointer;"><input type="radio" name="q1"> Option B</label>
-            </div>
-            <p style="font-size:11px; color:#64748b;">(Test UI successfully un-frozen. Fully replacing external script.)</p>
-        `;
-    });
-}
-
-document.getElementById("submitTestBtn")?.addEventListener("click", () => {
-    document.getElementById("testArea").classList.add("hidden");
-    document.getElementById("testResult").style.display = "block";
-    document.getElementById("scoreText").innerText = "1/1";
-});
-
-/* 7. LAB CANVAS V2.0 (FIXED 11TH & 12TH CLASSES) */
-const curriculumLabs = [
-    { id: 'cell', class: "9", title: "Plant Cell 3D", desc: "Organelles", icon: "🌿", color: "#22c55e" },
-    { id: 'circuits', class: "10", title: "Electric Circuits", desc: "Ohm's Law V=IR", icon: "💡", color: "#f59e0b" },
-    { id: 'ph_scale', class: "10", title: "pH & Indicators", desc: "Acid-Base Reactions", icon: "🧪", color: "#10b981" },
-    { id: 'kinematics', class: "11", title: "Projectile Motion", desc: "Vectors & Trajectory", icon: "🚀", color: "#3b82f6" },
-    { id: 'waves', class: "11", title: "Wave Optics", desc: "Interference Patterns", icon: "🌊", color: "#06b6d4" },
-    { id: 'electrostatics', class: "12", title: "Electric Fields", desc: "Coulomb's Law", icon: "⚡", color: "#eab308" },
-    { id: 'magnetism', class: "12", title: "Magnetic Effects", desc: "Biot-Savart Law", icon: "🧲", color: "#ec4899" }
-];
-
-window.filterLabMatrix = function(grade, btnEl) {
-    document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
-    if(btnEl) btnEl.classList.add('active');
-    
-    const grid = document.getElementById('matrixGrid'); 
-    if(!grid) return;
-    
-    const filtered = curriculumLabs.filter(l => String(l.class) === String(grade));
-    
-    if(filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:20px; color:#64748b; font-size:12px;">No modules assigned for this grade yet.</div>`;
-        return;
-    }
-
-    grid.innerHTML = filtered.map(l => `
-        <div class="matrix-card" onclick="openLabSim('${l.id}')" style="border-color:${l.color}; background:rgba(0,0,0,0.3); border-radius:14px; padding:14px; cursor:pointer;">
-            <div style="font-size:24px;">${l.icon}</div>
-            <div style="font-size:13px; font-weight:900; color:${l.color}; margin-top:8px;">${l.title}</div>
-            <div style="font-size:10px; color:#64748b;">${l.desc}</div>
-        </div>
-    `).join('');
-};
-
-let labCanvas, ctx, labAnimFrame;
-window.openLabSim = function(id) {
-    document.getElementById('labSkillTree').classList.add('hidden'); 
-    document.getElementById('activeLabPlayer').classList.remove('hidden');
-    labCanvas = document.getElementById('invincibleEngine'); 
-    ctx = labCanvas.getContext('2d');
-    
-    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
-    labAnimFrame = requestAnimationFrame(renderLoop);
-};
-
-window.closeLabSim = function() {
-    document.getElementById('activeLabPlayer').classList.add('hidden'); 
-    document.getElementById('labSkillTree').classList.remove('hidden');
-    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
-};
-
-function renderLoop(timestamp) {
-    if(!ctx) return;
-    ctx.clearRect(0,0,labCanvas.width,labCanvas.height);
-    
-    // Draw dummy simulation background
-    ctx.fillStyle = "#020617";
-    ctx.fillRect(0, 0, labCanvas.width, labCanvas.height);
-    
-    // Draw animated element
-    ctx.fillStyle = "rgba(0, 229, 255, 0.5)";
-    ctx.beginPath();
-    ctx.arc(labCanvas.width/2 + Math.sin(timestamp/500)*50, labCanvas.height/2, 30, 0, Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle = "#fff"; 
-    ctx.font = "20px monospace"; 
-    ctx.textAlign = "center";
-    ctx.fillText("SIMULATION ENGINE ACTIVE", labCanvas.width/2, labCanvas.height/2 - 50);
-    
-    labAnimFrame = requestAnimationFrame(renderLoop);
-}
-
-/* 8. AUTH & INIT */
-const verified = localStorage.getItem('student_verified');
-if (!verified || verified !== 'true') {
-  const lockStyle = document.createElement('style');
-  lockStyle.innerHTML = `#onboardingModal { display: none !important; } #studentInviteModal { display: flex !important; z-index: 2147483647 !important; pointer-events: auto !important; } body { overflow: hidden !important; }`;
-  document.head.appendChild(lockStyle);
-}
-
-window.handleGuestSkip = function() {
-    localStorage.setItem('studentName', 'Guest Explorer'); 
-    localStorage.setItem('student_verified', 'true'); 
-    window.unlockScreenAndShowTutorial();
-};
-
-window.handleStudentInviteSubmit = function(e) {
+  window.handleStudentInviteSubmit = async function(e) {
     if(e) e.preventDefault();
+    
+    const btn = document.getElementById('btnSubmitInvite');
+    const originalText = btn.innerText;
+    btn.innerText = "VERIFYING... ⏳";
+    btn.disabled = true;
+
+    const code = document.getElementById('inviteCodeInput').value.trim().toUpperCase();
     const name = document.getElementById('invStudentName').value.trim();
-    localStorage.setItem('studentName', name || "Student"); 
+
+    if (!code || !name) {
+      alert('Please enter your Invite Code and Student Name.');
+      btn.innerText = originalText;
+      btn.disabled = false;
+      return;
+    }
+
+    localStorage.setItem('studentName', name);
     localStorage.setItem('student_verified', 'true');
+    localStorage.setItem('userSchool', code); 
+    
     window.unlockScreenAndShowTutorial();
-};
+    alert('🎉 Welcome! Your Roster entry was processed successfully.');
+  };
 
-window.unlockScreenAndShowTutorial = function() {
-    document.querySelectorAll('style').forEach(s => { if (s.innerHTML.includes('#studentInviteModal')) s.remove(); });
-    document.getElementById('studentInviteModal').style.display = 'none'; 
-    document.body.style.overflow = 'auto';
-    if (!localStorage.getItem('invincible_onboarded')) { document.getElementById('onboardingModal').style.display = 'flex'; }
-};
-
-window.addEventListenher('DOMContentLoaded', () => { 
-    checkDailyStreak();
-    if(typeof filterLabMatrix === 'function') filterLabMatrix('10', document.querySelector('.curr-tab.active'));
-    setTimeout(() => { const btn = document.querySelector(`.reel-class-btn[data-class="10"]`); setReelsClass("10", btn); }, 200);
-});
+  window.unlockScreenAndShowTutorial = function() {
+      const styles = document.querySelectorAll('style');
+      styles.forEach(s => {
+        if (s.innerHTML.includes('#studentInviteModal')) s.remove();
+      });
+      
+      const inviteModal = document.getElementById('studentInviteModal');
+      if (inviteModal) inviteModal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+      
+      if (!localStorage.getItem('invincible_onboarded')) {
+          const onboardModal = document.getElementById('onboardingModal');
+          if (onboardModal) onboardModal.style.display = 'flex';
+      }
+  };
 </script>
 
 </body>
