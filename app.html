@@ -52,7 +52,6 @@
      HOME DECK
 ===================================================== -->
 <div id="homeSection">
-    <!-- 9:00 PM MEGA BLITZ LIVE COUNTDOWN & WHATSAPP PASS BANNER -->
     <section style="background: linear-gradient(135deg, rgba(244,63,94,0.08), rgba(0,229,255,0.05)); border: 1px solid rgba(255,255,255,0.06); padding: 18px 20px; margin-bottom: 20px; border-radius: 20px; backdrop-filter: blur(12px);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -80,7 +79,6 @@
         </div>
     </section>
 
-    <!-- DAILY MISSION TRACKER -->
     <section class="mission-card">
         <div class="mission-top">
             <span style="font-size:11px; font-weight:800; color:var(--text-muted);">TODAY'S MISSION</span>
@@ -96,7 +94,6 @@
         </div>
     </section>
 
-    <!-- STORIES TRAY -->
     <div class="stories-tray-container" id="storiesTray">
         <div class="story-circle-item" id="btnAddStory">
             <div class="story-avatar-wrap add-story">
@@ -107,7 +104,6 @@
         <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
     </div>
 
-    <!-- KNOWLEDGE MARKET -->
     <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:16px; margin-bottom:20px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <span style="font-size:12px; font-weight:900; color:var(--accent-cyan);">🌐 THE KNOWLEDGE MARKET (BOUNTIES)</span>
@@ -116,7 +112,6 @@
       <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
     </div>
 
-    <!-- DAILY CLASH BENTO -->
     <div class="bento-grid">
         <section class="survival-card" id="puzzleBox" style="display:none;">
             <div>
@@ -136,7 +131,6 @@
             </div>
         </section>
 
-        <!-- LIVE LEADERBOARD -->
         <section class="clout-card" id="leaderboardBox" style="display:none;">
             <div style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:var(--accent-cyan); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
                 <span>🏆 CLOUT LEADERBOARD</span>
@@ -256,7 +250,7 @@
 </section>
 
 <!-- =====================================================
-     TEST SECTION (UPDATED FOR LOCAL SCHOOLS)
+     TEST SECTION (WITH 22 LOCAL SCHOOLS)
 ===================================================== -->
 <section class="card hidden" id="testSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -273,14 +267,32 @@
             
             <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number (Optional)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
 
-            <!-- ADDED LOCAL SCHOOL HOOKS HERE -->
             <select id="testOrg" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select School / Institute</option>
                 <option value="ALL">All Schools (Global)</option>
-                <option value="Invincible Coaching Classes">Invincible Coaching Classes (Local)</option>
-                <option value="DVM Public School">DVM Public School (Local)</option>
-                <option value="Kendriya Vidyalaya">Kendriya Vidyalaya (Local)</option>
-                <option value="Delhi Public School">Delhi Public School (Local)</option>
+                <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+                <option value="DVM Public School">DVM Public School</option>
+                <option value="The Ideal Public School">The Ideal Public School</option>
+                <option value="DSR School">DSR School</option>
+                <option value="RSP Global School">RSP Global School</option>
+                <option value="Modern DAV Public School">Modern DAV Public School</option>
+                <option value="H.R. International School">H.R. International School</option>
+                <option value="Composite School Kulesra">Composite School Kulesra</option>
+                <option value="Upper Primary School Kulesra">Upper Primary School Kulesra</option>
+                <option value="Immanuel International Public School">Immanuel International Public School</option>
+                <option value="Greater Noida Public School">Greater Noida Public School</option>
+                <option value="Bharat Public School">Bharat Public School</option>
+                <option value="SMPN Public School">SMPN Public School</option>
+                <option value="Swami Dayanand Higher Secondary School">Swami Dayanand Higher Secondary School</option>
+                <option value="Yashdeep Public School">Yashdeep Public School</option>
+                <option value="RVM Public School">RVM Public School</option>
+                <option value="P.D. Memorial School">P.D. Memorial School</option>
+                <option value="Pt. Salagram Inter College">Pt. Salagram Inter College</option>
+                <option value="Government Primary School, Kulesra">Government Primary School, Kulesra</option>
+                <option value="The Heritage Public School">The Heritage Public School</option>
+                <option value="Horizon Public School">Horizon Public School</option>
+                <option value="Sun Shine Public School">Sun Shine Public School</option>
+                <option value="The One-Step Modern School">The One-Step Modern School</option>
                 <option value="Other School">Other School</option>
             </select>
 
@@ -292,7 +304,6 @@
                 <option value="12">Class 12</option>
             </select>
 
-            <!-- DYNAMIC SUBJECT DROPDOWN -->
             <select id="testSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="">Select Subject</option>
                 <option value="Mathematics">Mathematics</option>
@@ -302,7 +313,6 @@
                 <option value="Biology">Biology</option>
             </select>
 
-            <!-- NEW DIFFICULTY DROPDOWN -->
             <select id="testDifficulty" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
                 <option value="Easy">Difficulty: Easy (Board Level)</option>
                 <option value="Moderate">Difficulty: Moderate (JEE/NEET Prep)</option>
@@ -478,7 +488,7 @@
 </section>
 
 <!-- =====================================================
-     SCHOOL FEED SECTION
+     SCHOOL FEED SECTION (WITH 22 LOCAL SCHOOLS)
 ===================================================== -->
 <section class="card hidden" id="feedSection">
   <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -495,7 +505,30 @@
   </div>
 
   <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; outline: none; margin-bottom: 10px;">
-    <option value="ALL">📍 Sabhi Local Schools</option>
+      <option value="ALL">📍 Sabhi Local Schools</option>
+      <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+      <option value="DVM Public School">DVM Public School</option>
+      <option value="The Ideal Public School">The Ideal Public School</option>
+      <option value="DSR School">DSR School</option>
+      <option value="RSP Global School">RSP Global School</option>
+      <option value="Modern DAV Public School">Modern DAV Public School</option>
+      <option value="H.R. International School">H.R. International School</option>
+      <option value="Composite School Kulesra">Composite School Kulesra</option>
+      <option value="Upper Primary School Kulesra">Upper Primary School Kulesra</option>
+      <option value="Immanuel International Public School">Immanuel International Public School</option>
+      <option value="Greater Noida Public School">Greater Noida Public School</option>
+      <option value="Bharat Public School">Bharat Public School</option>
+      <option value="SMPN Public School">SMPN Public School</option>
+      <option value="Swami Dayanand Higher Secondary School">Swami Dayanand Higher Secondary School</option>
+      <option value="Yashdeep Public School">Yashdeep Public School</option>
+      <option value="RVM Public School">RVM Public School</option>
+      <option value="P.D. Memorial School">P.D. Memorial School</option>
+      <option value="Pt. Salagram Inter College">Pt. Salagram Inter College</option>
+      <option value="Government Primary School, Kulesra">Government Primary School, Kulesra</option>
+      <option value="The Heritage Public School">The Heritage Public School</option>
+      <option value="Horizon Public School">Horizon Public School</option>
+      <option value="Sun Shine Public School">Sun Shine Public School</option>
+      <option value="The One-Step Modern School">The One-Step Modern School</option>
   </select>
 
   <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px;" id="hubCategoryPills">
