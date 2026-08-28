@@ -1,395 +1,711 @@
-/* =====================================================
-   🔬 CURRICULUM MATRIX & HTML5 CANVAS ENGINE V2.0
-===================================================== */
-const curriculumLabs = [
-    { id: 'circuits', class: "10", title: "Electric Circuits", desc: "Ohm's Law V=IR", icon: "💡", color: "#f59e0b", locked: false },
-    { id: 'ph_scale', class: "10", title: "pH & Indicators", desc: "Acid-Base Reactions", icon: "🧪", color: "#10b981", locked: false },
-    { id: 'optics', class: "10", title: "Ray Optics", desc: "Mirrors & Lenses", icon: "🔍", color: "#00e5ff", locked: true },
-    
-    { id: 'projectile', class: "11", title: "Projectile Motion", desc: "2D Kinematics Vectors", icon: "☄️", color: "#f43f5e", locked: false },
-    { id: 'pendulum', class: "11", title: "Simple Pendulum", desc: "SHM & Gravity", icon: "⏱️", color: "#8b5cf6", locked: true },
-    
-    { id: 'electrostatics', class: "12", title: "Electric Fields", desc: "Coulomb's Law Force", icon: "⚡", color: "#eab308", locked: false },
-    { id: 'genetics', class: "12", title: "DNA WOW", desc: "Molecular Genetics", icon: "🧬", color: "#ec4899", locked: true }
-];
+/**
+ * INVINCIBLE 360 - INTERACTIVE SCIENCE LAB ENGINE
+ * "Don't just learn it. Make it happen."
+ */
 
-window.filterLabMatrix = function(grade, btnEl) {
-    document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
-    if(btnEl) btnEl.classList.add('active');
+(function() {
+  // --- STATE STORE ---
+  const labState = {
+    selectedClass: '10',
+    selectedSubject: 'physics',
+    activeSim: null,
+    animFrameId: null,
+    audioCtx: null,
+    streak: parseInt(localStorage.getItem('invincible_lab_streak') || '3', 10),
+    xp: parseInt(localStorage.getItem('student_xp') || '680', 10),
+    completedSims: JSON.parse(localStorage.getItem('invincible_lab_completed') || '[]'),
+    notebook: JSON.parse(localStorage.getItem('invincible_lab_notebook') || '[]'),
+    loggedData: [],
+    predictionMade: false
+  };
 
-    const grid = document.getElementById('matrixGrid');
-    if(!grid) return;
-
-    // FIX: Force both to strings so '11' matches 11
-    const filtered = curriculumLabs.filter(l => String(l.class) === String(grade));
-    
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column: span 2; text-align:center; color:#64748b; font-size:12px; padding:20px;">Curriculum modules for Class ${grade} are syncing...</div>`;
-        return;
+  // --- AUDIO SYNTHESIS HELPER (Web Audio API) ---
+  function getAudioCtx() {
+    if (!labState.audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) labState.audioCtx = new AudioContext();
     }
+    if (labState.audioCtx && labState.audioCtx.state === 'suspended') {
+      labState.audioCtx.resume();
+    }
+    return labState.audioCtx;
+  }
 
-    grid.innerHTML = filtered.map(l => `
-        <div class="matrix-card ${l.locked ? 'locked' : ''}" role="button" tabindex="0" 
-             onclick="${l.locked ? `alert('🔒 Unlock Level 5 to access ${l.title}.')` : `window.openLabSim('${l.id}')`}" 
-             style="border-color:${l.locked ? 'rgba(255,255,255,0.1)' : l.color};">
-            <div>
-                <div style="font-size:24px; margin-bottom:6px; text-shadow:0 0 10px ${l.color};">${l.icon}</div>
-                <div style="font-size:13px; font-weight:900; color:${l.locked ? '#94a3b8' : l.color};">${l.title}</div>
-            </div>
-            <div style="font-size:10px; color:#64748b; margin-top:8px;">${l.desc}</div>
+  function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function triggerLabHaptic(pattern = [40]) {
+    if (typeof triggerHaptic === 'function') triggerHaptic(pattern);
+    else if (navigator.vibrate) navigator.vibrate(pattern);
+  }
+
+  // --- EXPERIMENT REGISTRY ---
+  const SIMULATIONS = {
+    // 1. OHM'S LAW & CIRCUIT MESH
+    'ohms_law': {
+      id: 'ohms_law',
+      title: "Ohm's Law & Circuit Overload",
+      subject: 'physics',
+      class: ['9', '10', '12'],
+      badge: '⚡ Physics Core',
+      desc: 'Manipulate Voltage (V) and Resistance (R). Observe current flow, bulb brightness, and avoid circuit burnout.',
+      realLife: 'Automobile headlights, household dimmers, CPU power rails.',
+      viva: [
+        { q: "Why is an ammeter always connected in series?", a: "To measure total circuit current without altering resistance (ideal ammeter resistance = 0)." },
+        { q: "What does the slope of a V-I graph represent?", a: "The electrical resistance (R = ΔV / ΔI) of the conductor." }
+      ],
+      prediction: {
+        prompt: "If Voltage is quadrupled (4×) while Resistance remains constant, what happens to Current?",
+        options: [
+          { text: "Current becomes 4× higher", correct: true, exp: "By Ohm's law, I = V / R. Current is directly proportional to voltage." },
+          { text: "Current drops to 1/4th", correct: false, exp: "Current increases linearly with applied voltage." },
+          { text: "Current remains unchanged", correct: false, exp: "Current always scales with voltage across fixed ohmic resistors." }
+        ]
+      },
+      params: { v: 6, r: 10, blown: false },
+      controls: [
+        { id: 'ctrl_v', label: 'Voltage (V)', min: 1, max: 24, step: 0.5, default: 6, unit: 'V' },
+        { id: 'ctrl_r', label: 'Resistance (R)', min: 1, max: 50, step: 1, default: 10, unit: 'Ω' }
+      ],
+      init: function(canvas, ctx) {
+        this.params.v = 6;
+        this.params.r = 10;
+        this.params.blown = false;
+        labState.loggedData = [];
+      },
+      update: function(paramId, value) {
+        if (paramId === 'ctrl_v') this.params.v = parseFloat(value);
+        if (paramId === 'ctrl_r') this.params.r = parseFloat(value);
+        
+        const i = this.params.v / this.params.r;
+        if (i > 3.5 && !this.params.blown) {
+          this.params.blown = true;
+          playTone(180, 'sawtooth', 0.4, 0.3);
+          triggerLabHaptic([120, 80, 200]);
+        } else if (i <= 3.5 && this.params.blown) {
+          this.params.blown = false;
+        } else {
+          playTone(200 + (this.params.v * 30), 'sine', 0.08, 0.05);
+        }
+      },
+      render: function(canvas, ctx) {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const v = this.params.v;
+        const r = this.params.r;
+        const current = this.params.blown ? 0 : (v / r);
+        const power = current * v;
+
+        // Circuit Wires (Glow Effect)
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = this.params.blown ? '#ef4444' : (current > 0 ? '#00e5ff' : '#334155');
+        ctx.shadowColor = this.params.blown ? '#ef4444' : '#00e5ff';
+        ctx.shadowBlur = this.params.blown ? 15 : Math.min(25, current * 8);
+
+        const padX = w * 0.15;
+        const padY = h * 0.2;
+        const cW = w * 0.7;
+        const cH = h * 0.6;
+
+        ctx.strokeRect(padX, padY, cW, cH);
+        ctx.shadowBlur = 0; // Reset shadow
+
+        // Battery / DC Source (Left)
+        const bX = padX;
+        const bY = padY + cH / 2;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(bX - 25, bY - 30, 50, 60);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.strokeRect(bX - 25, bY - 30, 50, 60);
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 12px "Space Grotesk", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`+ ${v.toFixed(1)}V -`, bX, bY + 4);
+
+        // Resistor (Bottom)
+        const rX = padX + cW / 2;
+        const rY = padY + cH;
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(rX - 45, rY - 18, 90, 36);
+        ctx.strokeStyle = '#05ffa1';
+        ctx.strokeRect(rX - 45, rY - 18, 90, 36);
+        ctx.fillStyle = '#05ffa1';
+        ctx.fillText(`R = ${r.toFixed(0)} Ω`, rX, rY + 5);
+
+        // Light Bulb / Load (Top)
+        const bulbX = padX + cW / 2;
+        const bulbY = padY;
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(bulbX, bulbY, 26, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (this.params.blown) {
+          ctx.strokeStyle = '#ef4444';
+          ctx.stroke();
+          ctx.fillStyle = '#ef4444';
+          ctx.font = '900 16px sans-serif';
+          ctx.fillText('💥 FUSE BLOWN!', bulbX, bulbY - 35);
+          ctx.fillText('✕', bulbX, bulbY + 5);
+        } else {
+          const glowAlpha = Math.min(1, current / 2.5);
+          ctx.fillStyle = `rgba(251, 191, 36, ${glowAlpha})`;
+          ctx.shadowColor = '#f59e0b';
+          ctx.shadowBlur = glowAlpha * 40;
+          ctx.beginPath();
+          ctx.arc(bulbX, bulbY, 20, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = '#fbbf24';
+          ctx.stroke();
+          ctx.fillStyle = '#060913';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('💡 BULB', bulbX, bulbY + 4);
+        }
+
+        // Live HUD Metrics (Top-Right)
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.85)';
+        ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)';
+        ctx.lineWidth = 1;
+        ctx.fillRect(w - 210, 16, 195, 100);
+        ctx.strokeRect(w - 210, 16, 195, 100);
+
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px "Space Grotesk", monospace';
+        ctx.fillText('MULTIMETER READOUT:', w - 198, 34);
+
+        ctx.fillStyle = '#00e5ff';
+        ctx.font = 'bold 13px "Space Grotesk", monospace';
+        ctx.fillText(`CURRENT (I): ${current.toFixed(2)} A`, w - 198, 56);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillText(`POWER (P):   ${power.toFixed(1)} W`, w - 198, 76);
+
+        ctx.fillStyle = '#05ffa1';
+        ctx.fillText(`STATUS:      ${this.params.blown ? 'CIRCUIT TRIPPED' : 'NOMINAL'}`, w - 198, 96);
+      }
+    },
+
+    // 2. RAY OPTICS & CONCAVE/CONVEX MIRRORS
+    'ray_optics': {
+      id: 'ray_optics',
+      title: "Ray Optics & Focal Mapping Bench",
+      subject: 'physics',
+      class: ['10', '12'],
+      badge: '🔬 CBSE Practical #1',
+      desc: 'Move an object along the optical bench to visualize real-time ray tracing, image inversion, and focal points.',
+      realLife: 'Car headlights (concave), rear-view mirrors (convex), astronomical telescopes.',
+      viva: [
+        { q: "What is the mirror formula?", a: "1/f = 1/v + 1/u, following Cartesian sign conventions." },
+        { q: "Why is a convex mirror used as a rear-view mirror in vehicles?", a: "It always produces an erect, diminished image and provides a wide field of view." }
+      ],
+      prediction: {
+        prompt: "For a concave mirror with focal length f = 15 cm, if an object is placed at the Center of Curvature (u = 30 cm), where will the image form?",
+        options: [
+          { text: "At C (v = 30 cm), same size & inverted", correct: true, exp: "When u = 2f (Center of Curvature), the image forms at 2f with magnification m = -1." },
+          { text: "Between F and C, magnified", correct: false, exp: "Image only forms between F and C when object is beyond C." },
+          { text: "At Infinity", correct: false, exp: "Image only forms at infinity when object is precisely at Focus (F)." }
+        ]
+      },
+      params: { u: 35, f: 15, type: 'concave' },
+      controls: [
+        { id: 'ctrl_u', label: 'Object Distance (u)', min: 5, max: 60, step: 1, default: 35, unit: 'cm' },
+        { id: 'ctrl_f', label: 'Focal Length (f)', min: 10, max: 25, step: 1, default: 15, unit: 'cm' }
+      ],
+      init: function(canvas, ctx) {
+        this.params.u = 35;
+        this.params.f = 15;
+        labState.loggedData = [];
+      },
+      update: function(paramId, value) {
+        if (paramId === 'ctrl_u') this.params.u = parseFloat(value);
+        if (paramId === 'ctrl_f') this.params.f = parseFloat(value);
+        playTone(300 + (this.params.u * 8), 'sine', 0.05, 0.03);
+      },
+      render: function(canvas, ctx) {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const centerY = h / 2;
+        const mirrorX = w * 0.75;
+        const scale = 6; // 1 cm = 6 canvas pixels
+
+        // Principal Axis
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, centerY);
+        ctx.lineTo(w, centerY);
+        ctx.stroke();
+
+        // Concave Mirror Arc
+        ctx.strokeStyle = '#00e5ff';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(mirrorX + 250, centerY, 250, Math.PI * 0.85, Math.PI * 1.15);
+        ctx.stroke();
+
+        // Focal Point (F) and Center of Curvature (C)
+        const fX = mirrorX - (this.params.f * scale);
+        const cX = mirrorX - (this.params.f * 2 * scale);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath(); ctx.arc(fX, centerY, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('F', fX - 4, centerY + 18);
+
+        ctx.fillStyle = '#05ffa1';
+        ctx.beginPath(); ctx.arc(cX, centerY, 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillText('C (2F)', cX - 10, centerY + 18);
+
+        // Object Arrow
+        const uX = mirrorX - (this.params.u * scale);
+        const objHeight = 50;
+        ctx.strokeStyle = '#05ffa1';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(uX, centerY);
+        ctx.lineTo(uX, centerY - objHeight);
+        ctx.lineTo(uX - 5, centerY - objHeight + 10);
+        ctx.moveTo(uX, centerY - objHeight);
+        ctx.lineTo(uX + 5, centerY - objHeight + 10);
+        ctx.stroke();
+        ctx.fillStyle = '#05ffa1';
+        ctx.fillText('Object (AB)', uX - 25, centerY - objHeight - 8);
+
+        // Mirror Formula Math: 1/v = 1/f - 1/u (with sign convention: f = -f, u = -u)
+        // 1/(-v) = 1/(-f) - 1/(-u) => 1/v = 1/f - 1/u => v = (u*f)/(u - f)
+        const u = this.params.u;
+        const f = this.params.f;
+        let v = 0;
+        let m = 0;
+        let isVirtual = false;
+
+        if (Math.abs(u - f) < 0.1) {
+          v = Infinity;
+        } else if (u > f) {
+          v = (u * f) / (u - f);
+          m = -v / u;
+        } else {
+          v = (u * f) / (f - u);
+          m = v / u;
+          isVirtual = true;
+        }
+
+        // Ray 1: Parallel to Principal Axis -> Reflects through Focus (F)
+        ctx.strokeStyle = 'rgba(255, 42, 95, 0.7)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(uX, centerY - objHeight);
+        ctx.lineTo(mirrorX, centerY - objHeight);
+        ctx.lineTo(fX, centerY);
+        ctx.lineTo(0, centerY + ((centerY - (centerY - objHeight)) / (mirrorX - fX)) * (fX));
+        ctx.stroke();
+
+        // Ray 2: Ray through Focus -> Reflects Parallel
+        ctx.strokeStyle = 'rgba(0, 229, 255, 0.7)';
+        ctx.beginPath();
+        ctx.moveTo(uX, centerY - objHeight);
+        ctx.lineTo(fX, centerY);
+        ctx.lineTo(mirrorX, centerY + objHeight);
+        ctx.lineTo(0, centerY + objHeight);
+        ctx.stroke();
+
+        // Render Image Arrow
+        if (Number.isFinite(v)) {
+          const imgX = isVirtual ? mirrorX + (v * scale) : mirrorX - (v * scale);
+          const imgHeight = objHeight * m;
+
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(imgX, centerY);
+          ctx.lineTo(imgX, centerY - imgHeight);
+          ctx.stroke();
+
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillText(`Image (A'B')`, imgX - 25, centerY - imgHeight + (m < 0 ? 15 : -8));
+        }
+
+        // Readout Box
+        ctx.fillStyle = 'rgba(2, 6, 23, 0.9)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(16, 16, 210, 96);
+        ctx.strokeRect(16, 16, 210, 96);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10px "Space Grotesk", monospace';
+        ctx.fillText('OPTICAL BENCH COMPUTATION:', 26, 34);
+
+        ctx.fillStyle = '#00e5ff';
+        ctx.font = 'bold 12px "Space Grotesk", monospace';
+        ctx.fillText(`IMAGE DIST (v): ${Number.isFinite(v) ? v.toFixed(1) + ' cm' : '∞ (Infinity)'}`, 26, 54);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.fillText(`MAGNIFICATION:  ${Number.isFinite(m) ? m.toFixed(2) + '×' : 'N/A'}`, 26, 72);
+
+        ctx.fillStyle = isVirtual ? '#f43f5e' : '#05ffa1';
+        ctx.fillText(`NATURE:         ${isVirtual ? 'Virtual & Erect' : 'Real & Inverted'}`, 26, 90);
+      }
+    },
+
+    // 3. ACID-BASE TITRATION & PH INDICATOR
+    'titration_ph': {
+      id: 'titration_ph',
+      title: "Acid-Base Titration & pH Curve",
+      subject: 'chemistry',
+      class: ['10', '11', '12'],
+      badge: '🧪 Chemistry Practical',
+      desc: 'Add 0.1M NaOH dropwise into 0.1M HCl. Watch pH jump at equivalence point and observe indicator color change.',
+      realLife: 'Soil acidity treatment, swimming pool balance, antacid formulation.',
+      viva: [
+        { q: "What is the pH at the equivalence point of a strong acid - strong base titration?", a: "Precisely pH 7.0 at 25°C because complete neutralization forms neutral salt (NaCl) and water." },
+        { q: "What is the color change of Phenolphthalein?", a: "Colorless in acidic medium, sharply shifts to vivid pink at pH 8.2 - 10.0." }
+      ],
+      prediction: {
+        prompt: "When 25 mL of 0.1M NaOH is added to exactly 25 mL of 0.1M HCl, what will be the resulting solution pH?",
+        options: [
+          { text: "pH = 7.0 (Neutral)", correct: true, exp: "Equal moles of strong acid (H+) and strong base (OH-) neutralize completely to pH 7.0." },
+          { text: "pH = 1.0 (Strongly Acidic)", correct: false, exp: "Both reactants have equal molarity and volume, so all acid is neutralized." },
+          { text: "pH = 14.0 (Strongly Basic)", correct: false, exp: "Excess base is required to reach pH 14." }
+        ]
+      },
+      params: { addedVol: 0 },
+      controls: [
+        { id: 'ctrl_vol', label: 'Added 0.1M NaOH (mL)', min: 0, max: 50, step: 0.5, default: 0, unit: 'mL' }
+      ],
+      init: function(canvas, ctx) {
+        this.params.addedVol = 0;
+        labState.loggedData = [];
+      },
+      update: function(paramId, value) {
+        if (paramId === 'ctrl_vol') this.params.addedVol = parseFloat(value);
+        playTone(400 + (this.params.addedVol * 15), 'triangle', 0.06, 0.05);
+      },
+      render: function(canvas, ctx) {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const vol = this.params.addedVol;
+        // Compute pH curve: Initial 25 mL of 0.1M HCl (0.0025 mol)
+        let ph = 1.0;
+        if (vol < 24.8) {
+          const remMoles = 0.0025 - (vol * 0.001 * 0.1);
+          const totalVol = (25 + vol) * 0.001;
+          const hConc = Math.max(0.0000001, remMoles / totalVol);
+          ph = -Math.log10(hConc);
+        } else if (vol >= 24.8 && vol <= 25.2) {
+          ph = 7.0;
+        } else {
+          const excessMoles = (vol - 25) * 0.001 * 0.1;
+          const totalVol = (25 + vol) * 0.001;
+          const ohConc = excessMoles / totalVol;
+          const pOH = -Math.log10(ohConc);
+          ph = 14 - pOH;
+        }
+
+        // Determine Beaker Liquid Color based on Phenolphthalein
+        let liquidColor = 'rgba(240, 249, 255, 0.3)'; // Colorless
+        if (ph >= 8.2) {
+          const pinkIntensity = Math.min(0.85, (ph - 8.2) / 3);
+          liquidColor = `rgba(244, 63, 94, ${pinkIntensity})`; // Vivid Pink
+        }
+
+        // Draw Burette (Top Center)
+        const bX = w * 0.35;
+        ctx.fillStyle = '#1e293b';
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2;
+        ctx.fillRect(bX - 12, 30, 24, 180);
+        ctx.strokeRect(bX - 12, 30, 24, 180);
+
+        // Burette Liquid
+        const buretteFillHeight = Math.max(0, 170 - (vol * 3.4));
+        ctx.fillStyle = 'rgba(0, 229, 255, 0.3)';
+        ctx.fillRect(bX - 10, 35 + (170 - buretteFillHeight), 20, buretteFillHeight);
+
+        // Conical Flask (Bottom)
+        const fX = bX;
+        const fY = 270;
+        ctx.fillStyle = liquidColor;
+        ctx.strokeStyle = '#00e5ff';
+        ctx.beginPath();
+        ctx.moveTo(fX - 15, fY - 50);
+        ctx.lineTo(fX + 15, fY - 50);
+        ctx.lineTo(fX + 60, fY + 60);
+        ctx.lineTo(fX - 60, fY + 60);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Digital pH Meter Display (Right side)
+        const mX = w * 0.65;
+        const mY = 50;
+        ctx.fillStyle = '#0f172a';
+        ctx.strokeStyle = '#05ffa1';
+        ctx.lineWidth = 2;
+        ctx.fillRect(mX, mY, 180, 100);
+        ctx.strokeRect(mX, mY, 180, 100);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 11px "Space Grotesk", sans-serif';
+        ctx.fillText('DIGITAL pH PROBE', mX + 25, mY + 24);
+
+        ctx.fillStyle = ph < 7 ? '#ef4444' : (ph === 7 ? '#05ffa1' : '#f43f5e');
+        ctx.font = '900 32px "Space Grotesk", monospace';
+        ctx.fillText(`pH ${ph.toFixed(2)}`, mX + 25, mY + 68);
+
+        ctx.font = '10px sans-serif';
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText(ph < 7 ? 'Acidic Medium' : (ph === 7 ? 'Neutralized (Equivalence)' : 'Basic Medium'), mX + 25, mY + 88);
+      }
+    }
+  };
+
+  // --- CONTROLLER FUNCTIONS ---
+
+  window.initLabSection = function() {
+    renderLabHome();
+  };
+
+  window.renderLabHome = function() {
+    const matrixGrid = document.getElementById('matrixGrid');
+    if (!matrixGrid) return;
+
+    // Filter based on selected class and subject
+    const available = Object.values(SIMULATIONS).filter(s => 
+      s.class.includes(labState.selectedClass) && 
+      (labState.selectedSubject === 'all' || s.subject === labState.selectedSubject)
+    );
+
+    let html = '';
+    available.forEach(sim => {
+      const isCompleted = labState.completedSims.includes(sim.id);
+      html += `
+        <div class="lab-card" onclick="launchSimulation('${sim.id}')" style="background:rgba(15,23,42,0.8); border:1px solid ${isCompleted ? 'var(--accent-emerald)' : 'rgba(0,229,255,0.2)'}; border-radius:18px; padding:18px; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; position:relative; overflow:hidden;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:4px 8px; border-radius:8px;">${sim.badge}</span>
+            <span style="font-size:11px; font-weight:800; color:${isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">${isCompleted ? '✓ MASTERED' : '+50 XP'}</span>
+          </div>
+          <h3 style="font-size:15px; font-weight:900; color:#fff; margin:0 0 6px 0;">${sim.title}</h3>
+          <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.4;">${sim.desc}</p>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:10px; color:#64748b;">Class ${labState.selectedClass} CBSE Curriculum</span>
+            <button style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#060913; border:none; border-radius:10px; padding:6px 12px; font-size:11px; font-weight:900; cursor:pointer;">▶ Launch</button>
+          </div>
         </div>
-    `).join('');
-};
+      `;
+    });
 
-let labCanvas, ctx, labAnimFrame;
-let currentLabId = null;
-let lastTime = 0;
-let simState = {};
+    matrixGrid.innerHTML = html || `<div style="color:#94a3b8; font-size:13px; text-align:center; grid-column: 1/-1; padding:30px;">No simulations found for this grade filter.</div>`;
+  };
 
-window.openLabSim = function(id) {
-    currentLabId = id;
+  window.filterLabClass = function(cls, btn) {
+    labState.selectedClass = String(cls);
+    document.querySelectorAll('.curr-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderLabHome();
+  };
+
+  window.filterLabSubject = function(subj, btn) {
+    labState.selectedSubject = subj;
+    document.querySelectorAll('.lab-subj-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderLabHome();
+  };
+
+  window.launchSimulation = function(simId) {
+    const sim = SIMULATIONS[simId];
+    if (!sim) return;
+
+    labState.activeSim = sim;
+    labState.predictionMade = false;
+
     document.getElementById('labSkillTree').classList.add('hidden');
     document.getElementById('activeLabPlayer').classList.remove('hidden');
-    
-    labCanvas = document.getElementById('invincibleEngine');
-    ctx = labCanvas.getContext('2d');
-    
-    setupLabEnvironment(id);
-    
-    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
-    lastTime = performance.now();
-    labAnimFrame = requestAnimationFrame(renderLoop);
-};
 
-window.closeLabSim = function() {
-    const player = document.getElementById('activeLabPlayer');
-    const tree = document.getElementById('labSkillTree');
-    if (player) player.classList.add('hidden');
-    if (tree) tree.classList.remove('hidden');
-    if(labAnimFrame) cancelAnimationFrame(labAnimFrame);
-};
+    document.getElementById('labTitle').innerHTML = `🔬 ${sim.title} <span style="font-size:12px; color:var(--accent-cyan); font-weight:700;">[Class ${labState.selectedClass} Lab]</span>`;
 
-function setupLabEnvironment(id) {
-    const titleEl = document.getElementById('labTitle');
-    const controlsEl = document.getElementById('labControls');
-    const qEl = document.getElementById('labQuestionText');
-    const optGrid = document.getElementById('labOptionsGrid');
-
-    if (id === 'circuits') {
-        titleEl.textContent = "💡 Electric Circuits (Ohm's Law)";
-        qEl.textContent = "If Voltage is 12V and Resistance is 4Ω, what is the Current (I)?";
-        optGrid.innerHTML = ['2 Amperes', '3 Amperes', '48 Amperes', '0.33 Amperes'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 1)">${o}</button>`).join('');
-        controlsEl.innerHTML = `
-            <div class="slider-container">
-                <div class="slider-label"><span>Voltage (V): <span id="valV">12</span> V</span></div>
-                <input type="range" id="slV" min="0" max="24" value="12" oninput="simState.voltage=this.value; document.getElementById('valV').textContent=this.value">
-            </div>
-            <div class="slider-container">
-                <div class="slider-label"><span>Resistance (R): <span id="valR">4</span> Ω</span></div>
-                <input type="range" id="slR" min="1" max="20" value="4" oninput="simState.resistance=this.value; document.getElementById('valR').textContent=this.value">
-            </div>
-        `;
-        simState = { voltage: 12, resistance: 4, electrons: Array.from({length: 20}, (_, i) => ({ offset: i * 40 })) };
-    } 
-    else if (id === 'projectile') {
-        titleEl.textContent = "☄️ Projectile Motion";
-        qEl.textContent = "Which angle provides the maximum horizontal range?";
-        optGrid.innerHTML = ['30°', '45°', '60°', '90°'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 1)">${o}</button>`).join('');
-        controlsEl.innerHTML = `
-            <div class="slider-container">
-                <div class="slider-label"><span>Angle (θ): <span id="valA">45</span>°</span></div>
-                <input type="range" id="slA" min="0" max="90" value="45" oninput="simState.angle=this.value; document.getElementById('valA').textContent=this.value">
-            </div>
-            <div class="slider-container">
-                <div class="slider-label"><span>Velocity (v): <span id="valVel">60</span> m/s</span></div>
-                <input type="range" id="slVel" min="10" max="100" value="60" oninput="simState.velocity=this.value; document.getElementById('valVel').textContent=this.value">
-            </div>
-            <button type="button" onclick="simState.time=0; simState.firing=true;" class="submit-test-btn" style="margin-top:8px;">▶ FIRE CANNON</button>
-        `;
-        simState = { angle: 45, velocity: 60, time: 0, firing: false, trail: [] };
-    }
-    else if (id === 'ph_scale') {
-        titleEl.textContent = "🧪 pH & Indicators";
-        qEl.textContent = "What color does Universal Indicator turn in a strong acid (pH 1)?";
-        optGrid.innerHTML = ['Green', 'Blue', 'Red', 'Purple'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 2)">${o}</button>`).join('');
-        controlsEl.innerHTML = `
-            <div class="slider-container">
-                <div class="slider-label"><span>Add Solution (pH): <span id="valPH">7</span></span></div>
-                <input type="range" id="slPH" min="1" max="14" value="7" oninput="simState.targetPH=this.value; document.getElementById('valPH').textContent=this.value">
-            </div>
-        `;
-        simState = { currentPH: 7, targetPH: 7, drops: [] };
-    }
-    else if (id === 'electrostatics') {
-        titleEl.textContent = "⚡ Electric Fields";
-        qEl.textContent = "What happens to the force if you double the distance between charges?";
-        optGrid.innerHTML = ['Doubles', 'Halves', 'Quartered (1/4)', 'No Change'].map((o,i) => `<button type="button" onclick="checkPrediction(${i}, 2)">${o}</button>`).join('');
-        controlsEl.innerHTML = `
-            <div class="slider-container">
-                <div class="slider-label"><span>Distance (r): <span id="valD">50</span></span></div>
-                <input type="range" id="slD" min="30" max="150" value="50" oninput="simState.distance=this.value; document.getElementById('valD').textContent=this.value">
-            </div>
-        `;
-        simState = { distance: 50 };
-    }
-    else {
-        // FIX: Fallback to prevent freezing if a visual isn't mapped yet
-        titleEl.textContent = "🔬 Module Loading...";
-        qEl.textContent = "This simulation is currently updating assets.";
-        optGrid.innerHTML = "";
-        controlsEl.innerHTML = "<div style='color:#64748b; font-size:12px; text-align:center;'>Check back later.</div>";
-        simState = {};
-    }
-
-    document.querySelectorAll('#labOptionsGrid button').forEach(b => {
-        b.style.cssText = "background:#020617; border:1px solid #1e293b; color:#fff; padding:12px; border-radius:8px; text-align:left; font-weight:700; cursor:pointer; width:100%; margin-bottom:6px;";
+    // Render Controls
+    const ctrlBox = document.getElementById('labControls');
+    let controlsHTML = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">';
+    sim.controls.forEach(ctrl => {
+      controlsHTML += `
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; font-weight:800; color:#cbd5e1;">
+            <span>${ctrl.label}</span>
+            <span id="val_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.default} ${ctrl.unit}</span>
+          </div>
+          <input type="range" id="${ctrl.id}" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.default}" 
+                 style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;"
+                 oninput="handleParamChange('${ctrl.id}', this.value, '${ctrl.unit}')">
+        </div>
+      `;
     });
-}
+    controlsHTML += '</div>';
 
-function renderLoop(timestamp) {
-    if (document.getElementById('activeLabPlayer').classList.contains('hidden')) {
-        cancelAnimationFrame(labAnimFrame);
-        return;
+    // Real-Life Connection & Data Logging Actions
+    controlsHTML += `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; gap:8px;">
+        <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Observation</button>
+          <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce (+30 XP)</button>
+        </div>
+      </div>
+    `;
+    ctrlBox.innerHTML = controlsHTML;
+
+    // Render Predict-First UI
+    renderPredictionUI(sim);
+
+    // Init and Run Canvas
+    const canvas = document.getElementById('invincibleEngine');
+    const ctx = canvas.getContext('2d');
+    sim.init(canvas, ctx);
+
+    if (labState.animFrameId) cancelAnimationFrame(labState.animFrameId);
+    function loop() {
+      sim.render(canvas, ctx);
+      labState.animFrameId = requestAnimationFrame(loop);
     }
+    loop();
+  };
 
-    const dt = (timestamp - lastTime) / 1000;
-    lastTime = timestamp;
+  window.handleParamChange = function(paramId, value, unit) {
+    const label = document.getElementById(`val_${paramId}`);
+    if (label) label.textContent = `${value} ${unit}`;
+    if (labState.activeSim) labState.activeSim.update(paramId, value);
+  };
 
-    ctx.clearRect(0, 0, labCanvas.width, labCanvas.height);
-
-    if (currentLabId === 'circuits') drawCircuits(dt);
-    else if (currentLabId === 'projectile') drawProjectile(dt);
-    else if (currentLabId === 'ph_scale') drawPH(dt);
-    else if (currentLabId === 'electrostatics') drawElectrostatics(dt);
-    else drawFallback();
-
-    const fpsEl = document.getElementById('simOverlayStats');
-    if(fpsEl) fpsEl.textContent = `FPS: ${Math.max(10, Math.min(60, Math.round(1/dt)))} | MATH ENGINE`;
-
-    labAnimFrame = requestAnimationFrame(renderLoop);
-}
-
-function drawFallback() {
-    const cx = labCanvas.width / 2;
-    const cy = labCanvas.height / 2;
-    ctx.fillStyle = "#fff"; 
-    ctx.font = "16px monospace"; 
-    ctx.textAlign = "center";
-    ctx.fillText("SIMULATION DATA SYNCING...", cx, cy);
-}
-
-function drawElectrostatics(dt) {
-    const cx = labCanvas.width / 2;
-    const cy = labCanvas.height / 2;
-    const dist = Number(simState.distance) || 50;
-
-    // Draw center charge (+)
-    ctx.beginPath(); ctx.arc(cx - dist, cy, 20, 0, Math.PI*2); 
-    ctx.fillStyle = "#eab308"; ctx.fill();
-    ctx.fillStyle = "#000"; ctx.font = "24px monospace"; ctx.textAlign = "center"; ctx.fillText("+", cx - dist, cy + 8);
-
-    // Draw interacting charge (-)
-    ctx.beginPath(); ctx.arc(cx + dist, cy, 20, 0, Math.PI*2);
-    ctx.fillStyle = "#38bdf8"; ctx.fill();
-    ctx.fillStyle = "#000"; ctx.fillText("-", cx + dist, cy + 8);
-
-    // Draw field line
-    ctx.strokeStyle = "rgba(234, 179, 8, 0.4)";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath(); ctx.moveTo(cx - dist + 25, cy); ctx.lineTo(cx + dist - 25, cy); ctx.stroke();
-    ctx.setLineDash([]);
-    
-    // Draw force value
-    const force = (10000 / (dist * dist)).toFixed(2);
-    ctx.fillStyle = "#fff";
-    ctx.font = "14px monospace";
-    ctx.fillText(`Relative Force (F ∝ 1/r²): ${force} N`, cx, cy - 50);
-}
-
-function drawCircuits(dt) {
-    const cx = labCanvas.width / 2;
-    const cy = labCanvas.height / 2;
-    const w = 400, h = 200;
-    const I = simState.voltage / simState.resistance;
-
-    ctx.strokeStyle = "#475569";
-    ctx.lineWidth = 6;
-    ctx.strokeRect(cx - w/2, cy - h/2, w, h);
-
-    ctx.fillStyle = "#020617"; ctx.fillRect(cx - 30, cy + h/2 - 15, 60, 30);
-    ctx.fillStyle = "#f43f5e"; ctx.fillRect(cx - 30, cy + h/2 - 10, 20, 20);
-    ctx.fillStyle = "#38bdf8"; ctx.fillRect(cx + 10, cy + h/2 - 10, 20, 20);
-    ctx.fillStyle = "#fff"; ctx.font = "12px monospace"; ctx.textAlign = "center"; ctx.fillText(`${simState.voltage}V`, cx, cy + h/2 + 30);
-
-    ctx.fillStyle = "#f59e0b"; ctx.fillRect(cx - w/2 - 10, cy - 30, 20, 60);
-    ctx.fillText(`${simState.resistance}Ω`, cx - w/2 - 35, cy + 5);
-
-    ctx.beginPath(); ctx.arc(cx, cy - h/2, 30, 0, Math.PI * 2);
-    ctx.fillStyle = "#334155"; ctx.fill();
-    
-    if (I > 0) {
-        const glowRadius = 30 + (I * 15);
-        const gradient = ctx.createRadialGradient(cx, cy - h/2, 10, cx, cy - h/2, glowRadius);
-        gradient.addColorStop(0, "rgba(252, 211, 77, 1)");
-        gradient.addColorStop(1, "rgba(252, 211, 77, 0)");
-        ctx.beginPath(); ctx.arc(cx, cy - h/2, glowRadius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient; ctx.fill();
+  function renderPredictionUI(sim) {
+    const predBox = document.getElementById('labPredictionBox');
+    if (!predBox || !sim.prediction) {
+      if (predBox) predBox.style.display = 'none';
+      return;
     }
-    
-    ctx.fillStyle = "#fff"; ctx.fillText(`I = ${I.toFixed(1)}A`, cx, cy - h/2 - 40);
+    predBox.style.display = 'block';
 
-    const speed = I * 50; 
-    const perimeter = (w * 2) + (h * 2);
-    ctx.fillStyle = "#00e5ff";
-    
-    simState.electrons.forEach(e => {
-        e.offset = (e.offset + speed * dt) % perimeter;
-        let ex, ey;
-        if (e.offset < w) { ex = cx - w/2 + e.offset; ey = cy + h/2; } 
-        else if (e.offset < w + h) { ex = cx + w/2; ey = cy + h/2 - (e.offset - w); } 
-        else if (e.offset < w*2 + h) { ex = cx + w/2 - (e.offset - w - h); ey = cy - h/2; } 
-        else { ex = cx - w/2; ey = cy - h/2 + (e.offset - w*2 - h); }
-        ctx.beginPath(); ctx.arc(ex, ey, 4, 0, Math.PI*2); ctx.fill();
+    document.getElementById('labQuestionText').textContent = sim.prediction.prompt;
+    const grid = document.getElementById('labOptionsGrid');
+    grid.innerHTML = '';
+
+    sim.prediction.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.style.cssText = 'background:#0f172a; border:1px solid #1e293b; color:#fff; text-align:left; padding:10px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; transition:border-color 0.2s;';
+      btn.textContent = opt.text;
+      btn.onclick = () => submitPrediction(opt, btn);
+      grid.appendChild(btn);
     });
-}
+  }
 
-function drawProjectile(dt) {
-    const gravity = 9.8;
-    const scale = 3; 
-    const startX = 50, startY = labCanvas.height - 50;
+  window.submitPrediction = function(opt, btn) {
+    if (labState.predictionMade) return;
+    labState.predictionMade = true;
 
-    ctx.strokeStyle = "#1e293b"; ctx.lineWidth = 1;
-    for(let i=0; i<labCanvas.width; i+=50) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,labCanvas.height); ctx.stroke(); }
-    for(let i=0; i<labCanvas.height; i+=50) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(labCanvas.width,i); ctx.stroke(); }
-    ctx.strokeStyle = "#fff"; ctx.beginPath(); ctx.moveTo(startX, 0); ctx.lineTo(startX, startY); ctx.lineTo(labCanvas.width, startY); ctx.stroke();
+    const grid = document.getElementById('labOptionsGrid');
+    Array.from(grid.children).forEach(b => b.disabled = true);
 
-    const rad = simState.angle * (Math.PI / 180);
-    const v0x = simState.velocity * Math.cos(rad);
-    const v0y = simState.velocity * Math.sin(rad);
-
-    if (simState.firing) {
-        simState.time += dt * 3;
-        const t = simState.time;
-        const currentX = startX + (v0x * t * scale);
-        const currentY = startY - ((v0y * t - 0.5 * gravity * t * t) * scale);
-
-        if (currentY >= startY && t > 0.1) {
-            simState.firing = false;
-        } else {
-            // Cap trail to prevent performance drop
-            if (simState.trail.length < 150) {
-                simState.trail.push({x: currentX, y: currentY});
-            }
-        }
-    }
-
-    ctx.fillStyle = "rgba(244, 63, 94, 0.5)";
-    simState.trail.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill(); });
-
-    const lastPos = simState.trail.length > 0 ? simState.trail[simState.trail.length-1] : {x: startX, y: startY};
-    ctx.fillStyle = "#00e5ff";
-    ctx.beginPath(); ctx.arc(lastPos.x, lastPos.y, 8, 0, Math.PI*2); ctx.fill();
-
-    ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(startX + Math.cos(rad)*40, startY - Math.sin(rad)*40); ctx.stroke();
-}
-
-function drawPH(dt) {
-    const cx = labCanvas.width / 2;
-    const cy = labCanvas.height / 2 + 50;
-    
-    simState.currentPH += (simState.targetPH - simState.currentPH) * dt * 2;
-    
-    const hue = (simState.currentPH - 1) * (270 / 13);
-    const liquidColor = `hsla(${hue}, 80%, 50%, 0.7)`;
-
-    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 4;
-    ctx.beginPath(); ctx.moveTo(cx - 80, cy - 150); ctx.lineTo(cx - 80, cy);
-    ctx.arcTo(cx - 80, cy + 20, cx - 60, cy + 20, 20); ctx.lineTo(cx + 60, cy + 20);
-    ctx.arcTo(cx + 80, cy + 20, cx + 80, cy, 20); ctx.lineTo(cx + 80, cy - 150); ctx.stroke();
-
-    ctx.fillStyle = liquidColor;
-    ctx.beginPath(); ctx.moveTo(cx - 78, cy - 50); ctx.lineTo(cx - 78, cy);
-    ctx.arcTo(cx - 78, cy + 18, cx - 60, cy + 18, 18); ctx.lineTo(cx + 60, cy + 18);
-    ctx.arcTo(cx + 78, cy + 18, cx + 78, cy, 18); ctx.lineTo(cx + 78, cy - 50);
-    ctx.fill();
-
-    ctx.fillStyle = "#fff"; ctx.font = "20px monospace"; ctx.textAlign = "center";
-    ctx.fillText(`pH: ${simState.currentPH.toFixed(1)}`, cx, cy - 10);
-
-    if (Math.abs(simState.targetPH - simState.currentPH) > 0.1) {
-        if(Math.random() > 0.5) simState.drops.push({y: cy - 200, x: cx + (Math.random()*40 - 20)});
-    }
-    
-    ctx.fillStyle = `hsl(${hue}, 80%, 60%)`;
-    simState.drops.forEach((d, i) => {
-        d.y += 200 * dt;
-        ctx.beginPath(); ctx.arc(d.x, d.y, 4, 0, Math.PI*2); ctx.fill();
-        if (d.y > cy - 50) simState.drops.splice(i, 1);
-    });
-}
-
-window.checkPrediction = function(selectedIdx, correctIdx) {
-    const btns = document.querySelectorAll('#labOptionsGrid button');
-    btns.forEach(b => b.disabled = true);
-    
-    if (selectedIdx === correctIdx) {
-        btns[selectedIdx].style.background = 'rgba(16,185,129,0.2)';
-        btns[selectedIdx].style.borderColor = 'var(--accent-emerald)';
-        if(typeof playWin === 'function') playWin();
-        setTimeout(() => window.triggerGacha(), 500);
+    if (opt.correct) {
+      btn.style.borderColor = 'var(--accent-emerald)';
+      btn.style.background = 'rgba(5, 255, 161, 0.15)';
+      if (typeof playDing === 'function') playDing();
+      triggerLabHaptic([40, 50, 40]);
+      if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 40 });
+      awardLabXP(30);
     } else {
-        btns[selectedIdx].style.background = 'rgba(239,68,68,0.2)';
-        btns[selectedIdx].style.borderColor = 'var(--accent-rose)';
-        btns[correctIdx].style.borderColor = 'var(--accent-emerald)';
-        if(typeof playBuzz === 'function') playBuzz();
+      btn.style.borderColor = 'var(--accent-rose)';
+      btn.style.background = 'rgba(244, 63, 94, 0.15)';
+      if (typeof playBuzz === 'function') playBuzz();
+      triggerLabHaptic([100]);
     }
-};
 
-window.triggerGacha = function() {
-    const modal = document.getElementById('lootCrateModal');
-    const crate = document.getElementById('crateBox');
-    const prompt = document.getElementById('cratePrompt');
-    const reward = document.getElementById('crateReward');
-    
-    if(modal && crate && prompt && reward) {
-        modal.style.display = 'flex';
-        crate.style.display = 'block';
-        prompt.style.display = 'block';
-        reward.classList.add('hidden');
-        if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 40 });
-    }
-};
+    const expDiv = document.createElement('div');
+    expDiv.style.cssText = 'margin-top:10px; font-size:12px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:8px; border-left:3px solid var(--accent-cyan);';
+    expDiv.innerHTML = `<strong>${opt.correct ? '🎯 Correct Prediction!' : '💡 Master Explanation:'}</strong> ${opt.exp}`;
+    grid.appendChild(expDiv);
+  };
 
-window.openCrate = function() {
-    const crate = document.getElementById('crateBox');
-    const prompt = document.getElementById('cratePrompt');
-    const reward = document.getElementById('crateReward');
+  window.logDataPoint = function() {
+    if (!labState.activeSim) return;
+    const p = labState.activeSim.params;
+    const entry = { timestamp: new Date().toLocaleTimeString(), ...p };
+    labState.notebook.push({ experiment: labState.activeSim.title, data: entry });
+    localStorage.setItem('invincible_lab_notebook', JSON.stringify(labState.notebook));
     
-    if(crate) crate.style.display = 'none';
-    if(prompt) prompt.style.display = 'none';
-    if(reward) reward.classList.remove('hidden');
-    
-    const icon = document.getElementById('rewardIcon');
-    const title = document.getElementById('rewardTitle');
-    const desc = document.getElementById('rewardDesc');
-    
-    if(typeof confetti === 'function') confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+    playTone(600, 'sine', 0.1, 0.08);
+    triggerLabHaptic([30]);
+    alert(`📝 Observation point logged in your Personal Lab Record!\n${JSON.stringify(entry)}`);
+  };
 
-    const roll = Math.random();
-    if (roll > 0.95 && icon && title && desc) { 
-        icon.textContent = '☢️'; title.style.color = '#d946ef'; title.textContent = "Uranium-235";
-        desc.textContent = "Mythic Element Added to Vault!";
-    } else if (roll > 0.70 && icon && title && desc) { 
-        icon.textContent = '🛡️'; title.style.color = '#f59e0b'; title.textContent = "Arena Shield";
-        desc.textContent = "Blocks 1 wrong answer in 1v1 Clash.";
-        let shields = parseInt(localStorage.getItem('blitz_pup_shield') || '0') + 1;
-        localStorage.setItem('blitz_pup_shield', shields);
-    } else if (icon && title && desc) { 
-        icon.textContent = '✨'; title.style.color = '#00e5ff'; title.textContent = "+100 XP";
-        desc.textContent = "Lab Mastery Reward.";
-        const xpEl = document.getElementById('xpCounter');
-        if(xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0') + 100;
-    }
-};
+  window.openVivaModal = function() {
+    if (!labState.activeSim) return;
+    const viva = labState.activeSim.viva;
+    let vivaHTML = `
+      <div id="vivaModal" style="position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:16px;">
+        <div style="background:#0f172a; border:2px solid var(--accent-amber); border-radius:24px; padding:24px; max-width:420px; width:100%;">
+          <div style="font-size:14px; font-weight:900; color:var(--accent-amber); margin-bottom:12px;">🎓 CBSE Practical Viva-Voce Checker</div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
+    `;
+
+    viva.forEach((v, i) => {
+      vivaHTML += `
+        <div style="background:#020617; padding:12px; border-radius:12px; border:1px solid #1e293b;">
+          <div style="font-size:12px; font-weight:800; color:#fff; margin-bottom:4px;">Q${i+1}: ${v.q}</div>
+          <div style="font-size:11px; color:var(--accent-cyan);">Ans: ${v.a}</div>
+        </div>
+      `;
+    });
+
+    vivaHTML += `
+          </div>
+          <button onclick="document.getElementById('vivaModal').remove(); awardLabXP(30);" style="width:100%; background:var(--accent-amber); color:#000; border:none; padding:12px; border-radius:12px; font-weight:900; cursor:pointer;">
+            Claim +30 Practical XP &amp; Close
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', vivaHTML);
+  };
+
+  function awardLabXP(amount) {
+    const xpEl = document.getElementById('xpCounter');
+    let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
+    currentXP += amount;
+    if (xpEl) xpEl.textContent = currentXP;
+    localStorage.setItem('student_xp', currentXP.toString());
+  }
+
+  window.closeLabSim = function() {
+    if (labState.animFrameId) cancelAnimationFrame(labState.animFrameId);
+    labState.activeSim = null;
+    document.getElementById('activeLabPlayer').classList.add('hidden');
+    document.getElementById('labSkillTree').classList.remove('hidden');
+    renderLabHome();
+  };
+
+  // Auto-init on load
+  document.addEventListener('DOMContentLoaded', () => {
+    initLabSection();
+  });
+})();
