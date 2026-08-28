@@ -11,29 +11,29 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
-    const className = body.className || body.class || "10";
-    const subject = body.subject || "Science";
-    const chapter = body.chapter || "Full Syllabus Overview";
+    const className = body.className || body.class || "12";
+    const subject = body.subject || "Physics";
+    const chapter = body.chapter || "Full Syllabus";
     const requestedCount = Number(body.count || body.numberOfQuestions || 20);
     const difficulty = body.difficulty || "Moderate";
     const language = body.language || "English and Hindi";
 
     const questionCount = Math.min(Math.max(requestedCount, 1), 25);
 
-    const testPrompt = `You are a senior CBSE board exam paper creator.
-Generate EXACTLY ${questionCount} multiple-choice questions (MCQs).
+    const testPrompt = `You are a CBSE Board Examiner creating an exam paper.
+Generate exactly ${questionCount} multiple-choice questions (MCQs).
 
-Target Parameters:
-- Class: ${className}
-- Subject: ${subject}
-- Chapter/Topic: ${chapter}
-- Difficulty: ${difficulty}
-- Language: ${language}
+Class: ${className}
+Subject: ${subject}
+Topic: ${chapter}
+Difficulty: ${difficulty}
+Language: ${language}
 
-Strict Rules:
-1. Every question must belong exclusively to ${subject} - ${chapter}.
-2. Exactly 4 options per question.
-3. Return ONLY a valid JSON object matching this schema without any markdown formatting:
+Rules:
+1. Stay strictly on the topic: ${subject} - ${chapter}.
+2. Provide exactly 4 options per question.
+3. For math/physics formulas, use plain text or standard LaTeX symbols.
+4. Output MUST be valid JSON matching this schema:
 {
   "questions": [
     {
@@ -55,13 +55,7 @@ Strict Rules:
     const rawGeminiKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY;
     if (rawGeminiKeys) {
       const geminiKeys = rawGeminiKeys.split(",").map(k => k.trim()).filter(Boolean);
-      
-      // Exact model hierarchy from your working api/ask.js
-      const geminiModels = [
-        "gemini-3.6-flash",
-        "gemini-1.5-flash",
-        "gemini-1.5-pro"
-      ];
+      const geminiModels = ["gemini-3.6-flash"];
 
       keyLoop: for (const apiKey of geminiKeys) {
         for (const model of geminiModels) {
@@ -75,7 +69,8 @@ Strict Rules:
                   contents: [{ parts: [{ text: testPrompt }] }],
                   generationConfig: {
                     temperature: 0.2,
-                    maxOutputTokens: 8192
+                    maxOutputTokens: 8192,
+                    responseMimeType: "application/json" // Enforces native JSON formatting from Google
                   }
                 })
               }
@@ -85,6 +80,7 @@ Strict Rules:
             if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
               let rawText = data.candidates[0].content.parts[0].text;
               
+              // Clean markdown wraps
               rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
               const firstBrace = rawText.indexOf('{');
               const lastBrace = rawText.lastIndexOf('}');
@@ -92,7 +88,15 @@ Strict Rules:
                 rawText = rawText.substring(firstBrace, lastBrace + 1);
               }
 
-              const parsed = JSON.parse(rawText);
+              let parsed = null;
+              try {
+                parsed = JSON.parse(rawText);
+              } catch (parseErr) {
+                // LaTeX Sanitizer: fix unescaped backslashes commonly found in Class 11/12 math formulas
+                const sanitized = rawText.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
+                parsed = JSON.parse(sanitized);
+              }
+
               const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
 
               for (const q of qList) {
@@ -111,7 +115,7 @@ Strict Rules:
                   question: String(q.question),
                   options: indexed.map(x => x.opt),
                   correctAnswer: indexed.findIndex(x => x.isCorrect),
-                  explanation: String(q.explanation || "Review NCERT chapter summary.")
+                  explanation: String(q.explanation || "Review NCERT concepts.")
                 });
               }
 
@@ -163,7 +167,14 @@ Strict Rules:
             rawText = rawText.substring(firstBrace, lastBrace + 1);
           }
 
-          const parsed = JSON.parse(rawText);
+          let parsed = null;
+          try {
+            parsed = JSON.parse(rawText);
+          } catch(e) {
+            const sanitized = rawText.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
+            parsed = JSON.parse(sanitized);
+          }
+
           const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
 
           for (const q of qList) {
