@@ -20,6 +20,7 @@ export default async function handler(req, res) {
 
     const questionCount = Math.min(Math.max(requestedCount, 1), 25);
 
+    // CRITICAL: Explicit instruction to avoid LaTeX backslashes that corrupt JSON strings
     const testPrompt = `You are a CBSE Board Examiner creating an exam paper.
 Generate exactly ${questionCount} multiple-choice questions (MCQs).
 
@@ -29,11 +30,11 @@ Topic: ${chapter}
 Difficulty: ${difficulty}
 Language: ${language}
 
-Rules:
+STRICT FORMATTING RULES:
 1. Stay strictly on the topic: ${subject} - ${chapter}.
 2. Provide exactly 4 options per question.
-3. For math/physics formulas, use plain text or standard LaTeX symbols.
-4. Output MUST be valid JSON matching this schema:
+3. FORMULAS & MATH: DO NOT use LaTeX backslashes (NO \\frac, NO \\sqrt, NO \\epsilon, NO \\theta). Write formulas in clean plain text with Unicode symbols: e.g., θ, λ, μ, Ω, ε0, π, √, x², F = q(E + v × B), V = IR.
+4. Output MUST be ONLY valid JSON matching this schema:
 {
   "questions": [
     {
@@ -44,6 +45,47 @@ Rules:
     }
   ]
 }`;
+
+    // Helper to sanitize broken JSON escape sequences
+    function robustJsonParse(text) {
+      let cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      const firstBrace = cleaned.indexOf('{');
+      const lastBrace = cleaned.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (e1) {
+        // Fix invalid escape characters (e.g., \e, \O, \s, \m, invalid \u sequences)
+        try {
+          let sanitized = cleaned
+            .replace(/\\u(?![0-9a-fA-F]{4})/g, "\\\\u")
+            .replace(/\\([^"\\\/bfnrtu])/g, "\\\\$1");
+          return JSON.parse(sanitized);
+        } catch (e2) {
+          // If JSON.parse still fails, extract question blocks via Regex
+          const questions = [];
+          const qRegex = /"question"\s*:\s*"([^"]+)"[\s\S]*?"options"\s*:\s*\[([\s\S]*?)\][\s\S]*?"correctAnswer"\s*:\s*(\d+)[\s\S]*?"explanation"\s*:\s*"([^"]*)"/g;
+          let match;
+          while ((match = qRegex.exec(cleaned)) !== null) {
+            const rawOptions = match[2].match(/"([^"]+)"/g) || [];
+            const parsedOptions = rawOptions.map(o => o.replace(/^"|"$/g, '').trim());
+            if (parsedOptions.length >= 2) {
+              questions.push({
+                question: match[1],
+                options: parsedOptions,
+                correctAnswer: parseInt(match[3], 10),
+                explanation: match[4] || "Review NCERT concepts."
+              });
+            }
+          }
+          if (questions.length >= 5) return { questions };
+          throw new Error("Unable to parse structured JSON from model response.");
+        }
+      }
+    }
 
     let finalQuestions = [];
     let errorLog = [];
@@ -70,7 +112,7 @@ Rules:
                   generationConfig: {
                     temperature: 0.2,
                     maxOutputTokens: 8192,
-                    responseMimeType: "application/json" // Enforces native JSON formatting from Google
+                    responseMimeType: "application/json"
                   }
                 })
               }
@@ -78,25 +120,8 @@ Rules:
 
             const data = await response.json();
             if (response.ok && data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-              let rawText = data.candidates[0].content.parts[0].text;
-              
-              // Clean markdown wraps
-              rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-              const firstBrace = rawText.indexOf('{');
-              const lastBrace = rawText.lastIndexOf('}');
-              if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-                rawText = rawText.substring(firstBrace, lastBrace + 1);
-              }
-
-              let parsed = null;
-              try {
-                parsed = JSON.parse(rawText);
-              } catch (parseErr) {
-                // LaTeX Sanitizer: fix unescaped backslashes commonly found in Class 11/12 math formulas
-                const sanitized = rawText.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
-                parsed = JSON.parse(sanitized);
-              }
-
+              const rawText = data.candidates[0].content.parts[0].text;
+              const parsed = robustJsonParse(rawText);
               const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
 
               for (const q of qList) {
@@ -158,23 +183,8 @@ Rules:
 
         const claudeData = await claudeRes.json();
         if (claudeRes.ok && claudeData?.content?.[0]?.text) {
-          let rawText = claudeData.content[0].text;
-          rawText = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
-
-          const firstBrace = rawText.indexOf('{');
-          const lastBrace = rawText.lastIndexOf('}');
-          if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-            rawText = rawText.substring(firstBrace, lastBrace + 1);
-          }
-
-          let parsed = null;
-          try {
-            parsed = JSON.parse(rawText);
-          } catch(e) {
-            const sanitized = rawText.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
-            parsed = JSON.parse(sanitized);
-          }
-
+          const rawText = claudeData.content[0].text;
+          const parsed = robustJsonParse(rawText);
           const qList = Array.isArray(parsed?.questions) ? parsed.questions : (Array.isArray(parsed) ? parsed : []);
 
           for (const q of qList) {
