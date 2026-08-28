@@ -220,7 +220,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
   }
 
   if (timedOut) {
-    triggerHaptic([80]);
+    if(typeof triggerHaptic === 'function') triggerHaptic([80]);
     if (fb) fb.innerHTML = `<div style="color:var(--accent-rose); font-weight:800; margin-top:8px;">⏱ Time's up! Clash closed.</div>`;
     return;
   }
@@ -230,7 +230,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
 
   if (isCorrect) {
     if(typeof playDing === 'function') playDing();
-    triggerHaptic([30, 40, 30]);
+    if(typeof triggerHaptic === 'function') triggerHaptic([30, 40, 30]);
     const newXp = currentXp + 50;
     const xpEl = document.getElementById('xpCounter');
     const userXpEl = document.getElementById('userXpDisplay');
@@ -248,7 +248,7 @@ function handleDailyClashAnswer(selectedIdx, correctIdx, timedOut = false) {
     if(typeof confetti === 'function') confetti({ particleCount: 70, spread: 50, origin: { y: 0.6 } });
   } else {
     if(typeof playBuzz === 'function') playBuzz();
-    triggerHaptic([100]);
+    if(typeof triggerHaptic === 'function') triggerHaptic([100]);
     const pBox = document.getElementById('puzzleBox');
     if (pBox) {
       pBox.classList.add('arena-shake');
@@ -313,8 +313,13 @@ if (startTestBtn) {
     const subject = testSubject.value; 
     const chapter = testChapter.value.trim() || "Full Syllabus Overview";
 
-    if(!name || !mobile || !org || !cls || !subject){ return alert("Please fill your Name, Mobile Number, School, Class, and Subject."); }
-    if(!/^[0-9]{10}$/.test(mobile)){ return alert("Please enter a valid 10-digit mobile number."); }
+    // FIX: Made mobile number optional so the form doesn't block users.
+    if(!name || !org || !cls || !subject){ 
+      return alert("Please fill your Name, School, Class, and Subject."); 
+    }
+    if(mobile && !/^[0-9]{10}$/.test(mobile)){ 
+      return alert("Please enter a valid 10-digit mobile number."); 
+    }
 
     if(org) {
         localStorage.setItem('userSchool', org);
@@ -444,3 +449,8 @@ if (whatsappShareBtn) {
     window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(rawMsg), "_blank");
   });
 }
+
+// FIX: Ensure the Mega Blitz Countdown actually starts when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    initBlitzCountdown();
+});
