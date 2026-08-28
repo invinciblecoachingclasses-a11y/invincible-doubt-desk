@@ -26,7 +26,7 @@ Target: Class ${className}, Subject: ${subject}, Topic: ${chapter}, Difficulty: 
 Rules:
 1. Stay strictly within the topic.
 2. Exactly 4 options per question.
-3. Return ONLY a valid JSON object starting with { and ending with }. No markdown, no backticks.
+3. Return ONLY a valid JSON object starting with { and ending with }. No markdown.
 Format:
 {
   "questions": [
@@ -39,12 +39,12 @@ Format:
   ]
 }`;
 
-    const MODELS = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-flash-8b"];
+    // FIX: Using ONLY the globally stable model to prevent the 404 Not Found error
+    const MODELS = ["gemini-1.5-flash"];
+    
     let validQuestions = [];
     let usedModel = "database-fallback";
-    
-    // Default error message if keys are missing completely
-    let lastErrorMsg = apiKeyList.length === 0 ? "No API Keys found in Vercel Environment Variables" : "Unknown Error";
+    let lastErrorMsg = apiKeyList.length === 0 ? "No API Keys found in Vercel" : "Unknown Error";
 
     if (apiKeyList.length > 0) {
       keyLoop: for (const key of apiKeyList) {
@@ -62,8 +62,9 @@ Format:
             });
 
             if (!googleResponse.ok) {
-              lastErrorMsg = `API HTTP ${googleResponse.status}: ${googleResponse.statusText}`;
-              continue; // Jump to next model if API rejects
+              const errText = await googleResponse.text();
+              lastErrorMsg = `HTTP ${googleResponse.status}: ${errText.substring(0, 40)}`;
+              continue; // If 404 or 400, skip
             }
 
             const geminiData = await googleResponse.json();
@@ -87,7 +88,7 @@ Format:
             for (const q of questionsArray) {
               if (!q || typeof q !== "object") continue;
               const question = typeof q.question === "string" ? q.question.trim() : "";
-              const explanation = typeof q.explanation === "string" ? q.explanation.trim() : "Review chapter concepts.";
+              const explanation = typeof q.explanation === "string" ? q.explanation.trim() : "Review concepts.";
               let options = Array.isArray(q.options) ? q.options.map(opt => typeof opt === "string" ? opt.trim() : "").filter(Boolean) : [];
               let correctAnswer = Number(q.correctAnswer);
 
@@ -106,30 +107,27 @@ Format:
               }
             }
 
-            // Accept if we get at least half the requested amount
             if (validQuestions.length >= (questionCount / 2)) {
               usedModel = model;
               lastErrorMsg = "Success";
               break keyLoop;
             } else {
-              lastErrorMsg = `Only extracted ${validQuestions.length} valid questions.`;
+              lastErrorMsg = `Extracted only ${validQuestions.length} valid Qs.`;
               validQuestions = []; 
             }
           } catch (modelErr) {
-            lastErrorMsg = `Code Parse Error: ${modelErr.message}`;
+            lastErrorMsg = `Parse Error: ${modelErr.message.substring(0, 30)}`;
           }
         }
       }
     }
 
-    // ON-SCREEN DIAGNOSTIC FALLBACK
-    // If it fails, the UI will print EXACTLY why it failed in the question text and explanation!
     if (validQuestions.length === 0) {
       validQuestions = Array.from({length: questionCount}).map((_, i) => ({
-          question: `[Diagnostic Q${i+1}] AI connection failed for ${chapter} (${subject}). See explanation below.`,
-          options: ["Fix API Key", "Fix Vercel Settings", "Check Logs", `Error: ${lastErrorMsg.substring(0, 15)}...`],
+          question: `[Diagnostic Q${i+1}] AI failed for ${chapter} (${subject}).`,
+          options: ["Check Logs", "Try Again", "Error Below", `Err: ${lastErrorMsg}`],
           correctAnswer: 0,
-          explanation: `System Diagnostic - Keys Available: ${apiKeyList.length}. Fatal Error Reason: ${lastErrorMsg}`
+          explanation: `System Diagnostic - Keys: ${apiKeyList.length}. Reason: ${lastErrorMsg}`
       }));
     }
 
