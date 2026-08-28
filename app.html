@@ -638,6 +638,96 @@
   </div>
 </div>
 
+<!-- STORY STUDIO MODAL -->
+<div class="modal-overlay" id="storyModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(5,11,20,0.92); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:16px;">
+    <div class="modal-card" style="width:min(480px, 96%); background:#0f172a; border:1px solid rgba(0,229,255,0.4); border-radius:24px; padding:20px; box-shadow:0 0 40px rgba(0,229,255,0.18); max-height:90vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <h3 style="margin:0; font-size:16px; color:var(--accent-cyan); font-weight:900;">📸 Story Studio</h3>
+            <button type="button" style="background:none; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="document.getElementById('storyModal').style.display='none'">✕</button>
+        </div>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <input type="text" id="storyAuthorName" placeholder="Your Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+          <input type="number" id="storyAuthorAge" placeholder="Age" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+          <input type="text" id="storyAuthorClass" placeholder="Class/Batch (e.g. 10)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+          <input type="text" id="storyInstitution" placeholder="School Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px;">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <button type="button" class="photo-btn" onclick="document.getElementById('storyCameraInput').click()" style="background:rgba(0,229,255,0.1); border:1px solid var(--accent-cyan); color:var(--accent-cyan); padding:10px; border-radius:10px; font-weight:800; font-size:12px; cursor:pointer;">📷 Camera</button>
+          <button type="button" class="photo-btn" onclick="document.getElementById('storyGalleryInput').click()" style="background:rgba(0,229,255,0.1); border:1px solid var(--accent-cyan); color:var(--accent-cyan); padding:10px; border-radius:10px; font-weight:800; font-size:12px; cursor:pointer;">📁 Gallery</button>
+        </div>
+        <input type="file" id="storyCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleStoryImage(event)">
+        <input type="file" id="storyGalleryInput" accept="image/*" style="display:none;" onchange="handleStoryImage(event)">
+
+        <div style="width:100%; height:180px; background:#020617; border:1px dashed #334155; border-radius:14px; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom:10px;">
+          <span id="storyPlaceholderText" style="color:var(--text-muted); font-size:12px; font-weight:700;">No photo selected</span>
+          <img id="storyImagePreview" alt="Story Preview" style="display:none; width:100%; height:100%; object-fit:contain;">
+        </div>
+
+        <div class="filter-tray" id="filterTray" style="display:flex; gap:8px; overflow-x:auto; margin-bottom:10px; padding-bottom:6px;"></div>
+
+        <textarea id="storyCaption" placeholder="Type your hack, formula, or thought here..." rows="2" style="width:100%; background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none; box-sizing:border-box;"></textarea>
+        <button type="button" class="submit-test-btn" id="btnPublishStory" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; width:100%; margin-top:10px;">🚀 POST STORY</button>
+    </div>
+</div>
+
+<!-- FULLSCREEN REELS/STORY VIEWER -->
+<div class="story-viewer-modal" id="storyViewer" style="display:none; position:fixed; inset:0; z-index:100000; background:rgba(0,0,0,0.95); align-items:center; justify-content:center;">
+    <div class="story-card-view" style="position:relative; width:min(440px, 100vw); height:100vh; max-height:850px; background:#020617; display:flex; flex-direction:column; overflow:hidden;">
+        <img id="viewerImageBg" class="story-image-bg" src="" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1;">
+        <div class="story-content-layer" style="position:relative; z-index:2; display:flex; flex-direction:column; justify-content:space-between; height:100%; padding:16px; background:linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.9) 100%);">
+            <div>
+                <div class="story-progress-bar" id="storyProgressContainer" style="display:flex; gap:4px; margin-bottom:10px;"></div>
+                <div class="story-view-header" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                    <div style="font-size:13px; font-weight:900; color:#fff; text-shadow:0 2px 4px rgba(0,0,0,0.8);">Invincible Stories</div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button id="viewerDeleteBtn" style="display:none; background:rgba(239,68,68,0.3); border:1px solid rgba(239,68,68,0.6); color:#fff; border-radius:8px; padding:4px 10px; font-size:12px; font-weight:700; cursor:pointer;">🗑️ Delete</button>
+                        <button class="story-close-btn" onclick="closeStoryViewer()" style="background:rgba(255,255,255,0.15); border:none; color:#fff; border-radius:50%; width:30px; height:30px; font-size:16px; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="position:absolute; inset:60px 0 100px 0; display:flex;">
+              <div style="width:50%; height:100%;" onclick="prevStorySlide()"></div>
+              <div style="width:50%; height:100%;" onclick="nextStorySlide()"></div>
+            </div>
+            
+            <div class="story-body-content" style="position:relative; z-index:3;">
+                <div id="viewerCaption" class="story-caption-text" style="background:rgba(0,0,0,0.6); color:#fff; font-size:14px; font-weight:700; padding:12px 14px; border-radius:12px; backdrop-filter:blur(8px); margin-bottom:12px;"></div>
+                
+                <div class="story-id-card" style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                  <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--accent-rose), var(--accent-cyan)); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:#fff;" id="viewerAvatar"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px; font-weight:900; color:#fff;" id="viewerAuthorDetails">Name</div>
+                    <div style="font-size:10px; font-weight:700; color:var(--accent-cyan);" id="viewerSchoolDetails">School</div>
+                  </div>
+                  <button type="button" id="storyActivityBadge" onclick="openStoryViewersDrawer()" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:5px 10px; border-radius:12px; cursor:pointer;">
+                    👁️ <span id="storyViewCount">0</span>
+                  </button>
+                </div>
+
+                <div class="story-action-bar" style="display:flex; gap:8px;">
+                    <button class="reaction-emoji-btn" onclick="reactStory('fire')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:8px 12px; font-size:14px; cursor:pointer;">🔥 <span id="reactCountFire" style="font-size:10px; color:#fff;"></span></button>
+                    <button class="reaction-emoji-btn" onclick="reactStory('mind')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:8px 12px; font-size:14px; cursor:pointer;">🤯 <span id="reactCountMind" style="font-size:10px; color:#fff;"></span></button>
+                    <button class="reaction-emoji-btn" onclick="reactStory('100')" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:10px; padding:8px 12px; font-size:14px; cursor:pointer;">💯 <span id="reactCount100" style="font-size:10px; color:#fff;"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STORY VIEWERS DRAWER -->
+<div id="storyViewersDrawer" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100010; align-items:flex-end; justify-content:center;">
+  <div style="background:#0f172a; border-top:1px solid rgba(255,255,255,0.15); border-radius:24px 24px 0 0; width:min(440px, 100%); max-height:65vh; padding:18px 16px; display:flex; flex-direction:column;">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; margin-bottom:12px;">
+      <div style="font-size:14px; font-weight:900; color:#fff;">👀 Story Activity &amp; Viewers</div>
+      <button type="button" onclick="closeStoryViewersDrawer()" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <div id="storyViewersList" style="overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+  </div>
+</div>
+
 <!-- =====================================================
      CORE ENGINES - LINKED CORRECTLY
 ===================================================== -->
