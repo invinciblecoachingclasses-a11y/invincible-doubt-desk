@@ -312,8 +312,10 @@ if (startTestBtn) {
     const cls = testClass.value; 
     const subject = testSubject.value; 
     const chapter = testChapter.value.trim() || "Full Syllabus Overview";
+    
+    // Capture the new difficulty dropdown
+    const difficultyLevel = document.getElementById("testDifficulty")?.value || "Moderate";
 
-    // FIX: Made mobile number optional so the form doesn't block users.
     if(!name || !org || !cls || !subject){ 
       return alert("Please fill your Name, School, Class, and Subject."); 
     }
@@ -331,21 +333,40 @@ if (startTestBtn) {
     document.getElementById('testWarmupBox')?.classList.remove('hidden');
 
     try {
+        // Updated to pass the selected difficulty directly to the API
         const response = await fetch("/api/generate-test", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ className: cls, subject: subject, chapter: chapter, numberOfQuestions: 20, difficulty: "Easy", questionType: "MCQ", language: "English and Pure Devanagari Hindi" })
+            method: "POST", 
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ 
+                className: cls, 
+                subject: subject, 
+                chapter: chapter, 
+                numberOfQuestions: 20, 
+                difficulty: difficultyLevel, 
+                questionType: "MCQ", 
+                language: "English and Pure Devanagari Hindi" 
+            })
         });
-        const data = await response.json();
+        
+        const textResponse = await response.text();
+        let data;
+        try {
+            data = JSON.parse(textResponse);
+        } catch(e) {
+            throw new Error("Server timeout while generating 20 questions. Please try a more specific chapter.");
+        }
+        
         if(!response.ok) throw new Error(data.error || "Preparation error.");
         
         const generated = extractQuestions(data);
-        if(!generated || !generated.length) throw new Error("Unable to load questions.");
+        if(!generated || !generated.length) throw new Error("Unable to load questions from AI.");
 
         activeTestClass = cls; activeTestSubject = subject;
         activeTestTitle = `${subject}:${chapter}`;
-        startQuestions(generated, `Class ${cls} ${subject}`, chapter);
-    } catch(error) { alert("Assessment System: " + error.message); }
-    finally { 
+        startQuestions(generated, `Class ${cls} ${subject} (${difficultyLevel})`, chapter);
+    } catch(error) { 
+        alert("Assessment System: " + error.message); 
+    } finally { 
         startTestBtn.disabled = false; 
         startTestBtn.textContent = originalText; 
         document.getElementById('testWarmupBox')?.classList.add('hidden');
@@ -450,7 +471,7 @@ if (whatsappShareBtn) {
   });
 }
 
-// FIX: Ensure the Mega Blitz Countdown actually starts when the page loads
+// Ensure the Mega Blitz Countdown actually starts when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     initBlitzCountdown();
 });
