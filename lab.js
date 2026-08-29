@@ -452,7 +452,35 @@ const SIMULATIONS = {
       { id: 'ctrl_adr', label: 'Adrenaline (Epinephrine)', min: 0, max: 100, step: 1, default: 0, unit: '%' },
       { id: 'ctrl_blk', label: 'Aortic Valve Blockage', min: 0, max: 100, step: 1, default: 0, unit: '%' }
     ]
+  },
+    'bio_dna': {
+    id: 'bio_dna',
+    title: "DNA Replication & Mutation",
+    subject: 'biology',
+    class: ['11', '12'],
+    badge: '🧬 Genetics Engine',
+    desc: 'Manipulate temperature to denature (unzip) the helix. Blast it with UV radiation to trigger frame-shift mutations and break nucleotide bonds.',
+    realLife: 'CRISPR gene editing, cancer development, PCR testing.',
+    moduleUrl: 'bio_dna.js',
+    viva: [
+      { q: "What are the complementary base pairing rules?", a: "Adenine (A) always pairs with Thymine (T) via 2 hydrogen bonds. Cytosine (C) pairs with Guanine (G) via 3." },
+      { q: "What happens during a frame-shift mutation?", a: "The insertion or deletion of a nucleotide alters the entire downstream reading frame of codons." }
+    ],
+    prediction: {
+      prompt: "If UV radiation breaks a Thymine dimer and deletes one base pair, how does it affect the final protein?",
+      options: [
+        { text: "Every downstream amino acid changes (Frame-shift)", correct: true, exp: "Deleting one base shifts the entire 3-letter codon sequence, completely altering the resulting protein." },
+        { text: "Only one amino acid changes (Point mutation)", correct: false, exp: "That only happens in a substitution mutation, not a deletion." },
+        { text: "The helix repairs itself instantly", correct: false, exp: "Unrepaired deletions lead to severe structural anomalies." }
+      ]
+    },
+    params: { temp: 37, uvLevel: 0, phase: 0 },
+    controls: [
+      { id: 'ctrl_tmp', label: 'Cell Temp / Helicase (°C)', min: 30, max: 100, step: 1, default: 37, unit: '°C' },
+      { id: 'ctrl_uv', label: 'UV Radiation Exposure', min: 0, max: 100, step: 1, default: 0, unit: 'mSv' }
+    ]
   }
+
 };
 
 // --- CORE CONTROLLER FUNCTIONS WITH CRASH ALERTS ---
