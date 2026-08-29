@@ -887,21 +887,29 @@
       }
   };
   </script>
-<script src="lab.js?v=v3_engine"></script>
+</script> <!-- Safety Net: Ensures no previous scripts are left open -->
+
+<!-- 1. X-Ray for Syntax Errors -->
 <script>
-  // This forces the phone to check if the Lab Engine actually arrived
-  setTimeout(() => {
-    if (typeof window.renderLabHome !== 'function') {
-       alert("CRITICAL ERROR: lab.js is completely disconnected or failing to load.");
-    } else {
-       window.renderLabHome();
+  window.addEventListener('error', function(e) {
+    if(e.filename && e.filename.includes('lab.js')) {
+       alert("🚨 SYNTAX ERROR inside lab.js!\nLine " + e.lineno + ": " + e.message + "\n\n(A bracket or comma was likely deleted when pasting)");
     }
-  }, 1000);
+  });
 </script>
 
+<!-- 2. X-Ray for Missing Files -->
+<script src="lab.js?v=v4_xray" onerror="alert('🚨 404 NOT FOUND!\n\nVercel cannot find lab.js. Make sure the file is actually committed to your GitHub repository and named exactly lab.js')"></script>
 
-
-
+<!-- 3. Engine Starter -->
+<script>
+  setTimeout(() => {
+    if (typeof window.renderLabHome === 'function') {
+       window.renderLabHome(); // Success!
+    }
+  }, 800);
+</script>
 
 </body>
 </html>
+
