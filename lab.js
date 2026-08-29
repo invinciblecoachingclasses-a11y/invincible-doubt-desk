@@ -591,7 +591,94 @@ const SIMULATIONS = {
       { id: 'ctrl_fine', label: 'Fine Focus Dial', min: 0, max: 100, step: 1, default: 15, unit: '%' },
       { id: 'ctrl_stain', label: 'Stain Applied (Iodine / Blue)', min: 0, max: 100, step: 5, default: 0, unit: '%' }
     ]
+  },
+    'phy_orbits': {
+    id: 'phy_orbits',
+    title: "Gravitation & Orbital Mechanics",
+    subject: 'physics',
+    class: ['9', '11'],
+    badge: '🌍 Astrophysics',
+    desc: 'Launch a satellite around Earth. Adjust tangential velocity and altitude to achieve stable circular orbits, elliptical paths, or escape velocity.',
+    realLife: 'ISRO satellite launches, GPS networks, lunar trajectories.',
+    moduleUrl: 'phy_orbits.js',
+    viva: [{ q: "What is escape velocity?", a: "The minimum velocity needed to overcome a planet's gravitational pull infinitely (v = √(2GM/R))." }],
+    prediction: { prompt: "If satellite velocity is exactly √(GM/R), what orbit is formed?", options: [{ text: "Perfectly Circular Orbit", correct: true, exp: "Centripetal force exactly balances gravitational pull at a constant radius." }, { text: "Elliptical Orbit", correct: false, exp: "Elliptical orbits happen when velocity is between circular and escape velocity." }] },
+    params: { v: 7.9, alt: 400 },
+    controls: [
+      { id: 'ctrl_v', label: 'Orbital Velocity (km/s)', min: 3, max: 12, step: 0.1, default: 7.9, unit: 'km/s' },
+      { id: 'ctrl_alt', label: 'Altitude (km)', min: 200, max: 20000, step: 100, default: 400, unit: 'km' }
+    ]
+  },
+  'chem_rutherford': {
+    id: 'chem_rutherford',
+    title: "Rutherford's Gold Foil",
+    subject: 'chemistry',
+    class: ['9', '11'],
+    badge: '⚛️ Atomic Structure',
+    desc: 'Fire alpha particles at a gold nucleus. Observe electrostatic repulsion, hyperbolic scattering angles, and discover the atomic nucleus.',
+    realLife: 'Particle accelerators, nuclear radiation shielding.',
+    moduleUrl: 'chem_rutherford.js',
+    viva: [{ q: "Why did 1 in 20,000 alpha particles bounce straight back?", a: "They hit the dense, positively charged nucleus head-on." }],
+    prediction: { prompt: "What happens if we replace the Gold nucleus (79 protons) with Aluminum (13 protons)?", options: [{ text: "Scattering angles become much smaller", correct: true, exp: "Fewer protons mean weaker electrostatic repulsion, so alpha particles deviate less." }, { text: "More particles bounce back", correct: false, exp: "A lighter nucleus repels alpha particles less strongly." }] },
+    params: { energy: 5, targetZ: 79 },
+    controls: [
+      { id: 'ctrl_en', label: 'Alpha Beam Energy (MeV)', min: 2, max: 10, step: 0.5, default: 5, unit: 'MeV' },
+      { id: 'ctrl_tz', label: 'Target Protons (Atomic No.)', min: 10, max: 100, step: 1, default: 79, unit: 'Z' }
+    ]
+  },
+  'bio_neuron': {
+    id: 'bio_neuron',
+    title: "Synapse & Action Potential",
+    subject: 'biology',
+    class: ['10', '11'],
+    badge: '🧠 Neurobiology',
+    desc: 'Trigger an electrical nerve impulse. Watch calcium ions flood the terminal, vesicles dock, and neurotransmitters bridge the synaptic cleft.',
+    realLife: 'Anesthesia mechanisms, neurotoxins, reflex arc delays.',
+    moduleUrl: 'bio_neuron.js',
+    viva: [{ q: "What role do Calcium (Ca2+) ions play?", a: "They trigger synaptic vesicles to fuse with the presynaptic membrane and release neurotransmitters." }],
+    prediction: { prompt: "If a neurotoxin blocks post-synaptic sodium channels, what occurs?", options: [{ text: "No action potential in the next neuron", correct: true, exp: "Neurotransmitters bind, but no Na+ can enter, preventing depolarization." }, { text: "Excessive continuous firing", correct: false, exp: "Blocking channels stops firing; preventing neurotransmitter breakdown causes excessive firing." }] },
+    params: { voltage: -70, toxin: 0 },
+    controls: [
+      { id: 'ctrl_mv', label: 'Stimulus Voltage (mV)', min: -70, max: 40, step: 5, default: -70, unit: 'mV' },
+      { id: 'ctrl_tox', label: 'Neurotoxin Blockade', min: 0, max: 100, step: 10, default: 0, unit: '%' }
+    ]
+  },
+  'phy_photoelectric': {
+    id: 'phy_photoelectric',
+    title: "Photoelectric Effect",
+    subject: 'physics',
+    class: ['11', '12'],
+    badge: '💡 Quantum Physics',
+    desc: 'Shine variable wavelengths of light onto a metal plate. Observe photon-electron collisions, work functions, and the emission of photoelectrons.',
+    realLife: 'Solar panels, night-vision goggles, digital camera sensors.',
+    moduleUrl: 'phy_photoelectric.js',
+    viva: [{ q: "What is threshold frequency?", a: "The minimum frequency of incident light required to eject an electron from a specific metal." }],
+    prediction: { prompt: "If incident light frequency is below threshold, but intensity is maximized to 100%, what happens?", options: [{ text: "Zero electrons are ejected", correct: true, exp: "Intensity just means more photons. If no single photon has enough energy (E=hf), no electrons are freed." }, { text: "Electrons eject slowly", correct: false, exp: "It is an all-or-nothing quantum event." }] },
+    params: { wl: 400, intensity: 50, metal: 2.1 },
+    controls: [
+      { id: 'ctrl_wl', label: 'Light Wavelength (λ)', min: 200, max: 800, step: 10, default: 400, unit: 'nm' },
+      { id: 'ctrl_int', label: 'Beam Intensity', min: 0, max: 100, step: 5, default: 50, unit: '%' },
+      { id: 'ctrl_met', label: 'Metal Work Function (Φ)', min: 1.5, max: 5.0, step: 0.1, default: 2.1, unit: 'eV' }
+    ]
+  },
+  'chem_kinetics': {
+    id: 'chem_kinetics',
+    title: "Chemical Kinetics & Collisions",
+    subject: 'chemistry',
+    class: ['11', '12'],
+    badge: '🔥 Reaction Rates',
+    desc: 'Simulate molecular collision theory. Adjust temperature and add catalysts to overcome activation energy and trigger a color-changing chemical reaction.',
+    realLife: 'Catalytic converters in cars, enzyme actions, food spoilage.',
+    moduleUrl: 'chem_kinetics.js',
+    viva: [{ q: "How does a catalyst increase reaction rate?", a: "By providing an alternative reaction pathway with a lower Activation Energy (Ea)." }],
+    prediction: { prompt: "Why doesn't every collision result in a reaction?", options: [{ text: "Molecules lack sufficient kinetic energy", correct: true, exp: "Collisions must meet or exceed the activation energy barrier with the correct orientation." }, { text: "Molecules repel each other completely", correct: false, exp: "They do repel, but high-energy collisions overcome this to form transition states." }] },
+    params: { temp: 300, catalyst: 0, reacted: 0 },
+    controls: [
+      { id: 'ctrl_t', label: 'Reactor Temp (K)', min: 200, max: 800, step: 10, default: 300, unit: 'K' },
+      { id: 'ctrl_cat', label: 'Catalyst Added', min: 0, max: 100, step: 10, default: 0, unit: '%' }
+    ]
   }
+
 
 
 
