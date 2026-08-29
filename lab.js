@@ -479,7 +479,35 @@ const SIMULATIONS = {
       { id: 'ctrl_tmp', label: 'Cell Temp / Helicase (°C)', min: 30, max: 100, step: 1, default: 37, unit: '°C' },
       { id: 'ctrl_uv', label: 'UV Radiation Exposure', min: 0, max: 100, step: 1, default: 0, unit: 'mSv' }
     ]
+  },
+    'phy_induction': {
+    id: 'phy_induction',
+    title: "Faraday's Law & Induction",
+    subject: 'physics',
+    class: ['10', '12'],
+    badge: '⚡ Electromagnetism',
+    desc: 'Move a neodymium bar magnet through a copper solenoid. Observe induced EMF, magnetic flux change, and galvanometer deflection.',
+    realLife: 'Electric generators, induction cooktops, wireless phone chargers.',
+    moduleUrl: 'phy_induction.js',
+    viva: [
+      { q: "What does Lenz's Law state?", a: "The direction of induced EMF always opposes the change in magnetic flux that produces it." },
+      { q: "How does increasing the number of turns affect induced EMF?", a: "Induced EMF scales directly with the number of turns (E = -N * dΦ/dt)." }
+    ],
+    prediction: {
+      prompt: "If a magnet is held completely stationary inside the solenoid coil, what will the galvanometer show?",
+      options: [
+        { text: "Zero deflection (0V induced)", correct: true, exp: "Faraday's Law requires a changing magnetic flux (dΦ/dt != 0) to induce EMF." },
+        { text: "Maximum positive deflection", correct: false, exp: "Flux is present, but the rate of change is zero." },
+        { text: "Continuous AC oscillation", correct: false, exp: "Oscillation requires continuous physical motion." }
+      ]
+    },
+    params: { magnetX: 120, turns: 4, speed: 2, isMoving: true, inducedV: 0, flux: 0 },
+    controls: [
+      { id: 'ctrl_turns', label: 'Coil Turns (N)', min: 1, max: 8, step: 1, default: 4, unit: 'turns' },
+      { id: 'ctrl_speed', label: 'Magnet Oscillation Speed', min: 0, max: 5, step: 0.5, default: 2, unit: 'x' }
+    ]
   }
+
 
 };
 
