@@ -3,8 +3,9 @@
  * Dynamically injected into SIMULATIONS['bio_heart']
  */
 
-if (window.SIMULATIONS && window.SIMULATIONS['bio_heart']) {
-  const heartSim = window.SIMULATIONS['bio_heart'];
+// FIXED: Perfectly targets the global SIMULATIONS database
+if (typeof SIMULATIONS !== 'undefined' && SIMULATIONS['bio_heart']) {
+  const heartSim = SIMULATIONS['bio_heart'];
 
   heartSim.init = function(canvas, ctx) {
     this.params.bpm = 70;
@@ -23,7 +24,8 @@ if (window.SIMULATIONS && window.SIMULATIONS['bio_heart']) {
       const forcedBPM = Math.max(this.params.bpm, 70 + (this.params.adrenaline * 0.8));
       this.params.bpm = forcedBPM;
       document.getElementById('ctrl_bpm').value = forcedBPM;
-      document.getElementById('val_ctrl_bpm').innerText = forcedBPM.toFixed(0) + ' bpm';
+      const bpmLabel = document.getElementById('val_ctrl_bpm');
+      if (bpmLabel) bpmLabel.innerText = forcedBPM.toFixed(0) + ' bpm';
     }
     if (paramId === 'ctrl_blk') this.params.blockage = parseFloat(value);
   };
@@ -67,7 +69,7 @@ if (window.SIMULATIONS && window.SIMULATIONS['bio_heart']) {
 
     // Visual calculations
     const systolicContraction = (cyclePos >= 0.28 && cyclePos < 0.45) ? (1 - (cyclePos - 0.28)*4) : 1;
-    const visualScale = 1.0 - (0.15 * (1 - systolicContraction));
+    const visualScale = 1.0 - (0.15 * (1 - Math.max(0, systolicContraction)));
     const stressColor = this.params.blockage > 60 ? '#ef4444' : '#f43f5e';
 
     // --- DRAW HEART CROSS-SECTION ---
