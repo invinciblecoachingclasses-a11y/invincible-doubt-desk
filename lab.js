@@ -562,7 +562,37 @@ const SIMULATIONS = {
       { id: 'ctrl_d', label: 'Slit Separation (d)', min: 0.10, max: 0.60, step: 0.02, default: 0.25, unit: 'mm' },
       { id: 'ctrl_bigD', label: 'Screen Distance (D)', min: 0.5, max: 2.5, step: 0.1, default: 1.2, unit: 'm' }
     ]
+  },
+    'bio_microscope': {
+    id: 'bio_microscope',
+    title: "Compound Microscope & Cell Staining",
+    subject: 'biology',
+    class: ['9', '10', '11'],
+    badge: '🔬 Cytology Bench',
+    desc: 'Mount biological specimens (Onion Peel vs. Human Cheek Cells). Tune Coarse and Fine focus dials, apply stains (Iodine/Methylene Blue), and resolve organelles under variable magnification.',
+    realLife: 'Histopathology biopsies, clinical blood smears, forensic cytology.',
+    moduleUrl: 'bio_microscope.js',
+    viva: [
+      { q: "Why is a temporary mount stained before observation under a compound microscope?", a: "Stains like Iodine or Methylene Blue bind to specific cellular structures (nucleus, cell wall), increasing optical contrast." },
+      { q: "What is the key structural difference visible between onion peel and human cheek cells?", a: "Onion cells possess a rigid outer cellulose cell wall and large central vacuole; cheek cells lack cell walls and have centrally located nuclei." }
+    ],
+    prediction: {
+      prompt: "What will happen if an unstained onion peel slide is viewed under high magnification (40×) with excess condenser light?",
+      options: [
+        { text: "Organelles wash out due to lack of optical contrast", correct: true, exp: "Cellular components are largely transparent; without differential staining and proper light contrast, subcellular boundaries wash out." },
+        { text: "The nucleus glows naturally without staining", correct: false, exp: "Nuclei lack endogenous luminescence and require basic dyes like Methylene Blue or Iodine." },
+        { text: "The cell wall disintegrates under bright light", correct: false, exp: "Visible light has no destructive effect on rigid cellulose cell walls." }
+      ]
+    },
+    params: { specimen: 'onion', coarse: 20, fine: 15, stain: 0, mag: 10 },
+    controls: [
+      { id: 'ctrl_specimen', label: 'Specimen Mount (0: Onion, 1: Cheek)', min: 0, max: 1, step: 1, default: 0, unit: 'mode' },
+      { id: 'ctrl_coarse', label: 'Coarse Adjustment Knob', min: 0, max: 100, step: 1, default: 20, unit: '%' },
+      { id: 'ctrl_fine', label: 'Fine Focus Dial', min: 0, max: 100, step: 1, default: 15, unit: '%' },
+      { id: 'ctrl_stain', label: 'Stain Applied (Iodine / Blue)', min: 0, max: 100, step: 5, default: 0, unit: '%' }
+    ]
   }
+
 
 
 
