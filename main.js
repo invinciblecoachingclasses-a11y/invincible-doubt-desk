@@ -81,9 +81,13 @@ window.addEventListener('DOMContentLoaded', () => {
     if (typeof updatePowerupUI === 'function') updatePowerupUI();
     if (typeof loadBountyMarket === 'function') loadBountyMarket(); 
     
-    // Initialize Lab Matrix (FIXED: Passed as string)
-    if (typeof window.filterLabMatrix === 'function') {
-        window.filterLabMatrix("10", document.querySelector('.curr-tab.active'));
+    // ==========================================
+    // LAB V3.0 ENGINE INITIALIZATION
+    // ==========================================
+    if (typeof window.initLabSection === 'function') {
+        window.initLabSection();
+    } else if (typeof window.renderLabHome === 'function') {
+        window.renderLabHome();
     }
     
     const isVerified = localStorage.getItem('student_verified') === 'true';
@@ -105,4 +109,20 @@ window.addEventListener('DOMContentLoaded', () => {
         const btn = document.querySelector(`.reel-class-btn[data-class="${savedClass}"]`);
         if (typeof setReelsClass === 'function') setReelsClass(savedClass, btn);
     }, 200);
+});
+
+/* =====================================================
+   LIFECYCLE SYNC: FORCE RENDER ON LAB TAB CLICK
+===================================================== */
+document.addEventListener('click', (e) => {
+    // Detect if the user clicked the Lab icon in the bottom navigation
+    const labTabBtn = e.target.closest('[onclick*="switchTab(\'lab\')"], [onclick*="switchTab(\\"lab\\")"]');
+    if (labTabBtn) {
+        setTimeout(() => {
+            // Forces the cards to draw 50ms after the section unhides
+            if (typeof window.renderLabHome === 'function') {
+                window.renderLabHome();
+            }
+        }, 50);
+    }
 });
