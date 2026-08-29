@@ -3,10 +3,14 @@
  * "Don't just learn it. Make it happen."
  */
 
-// --- SAFE STATE INITIALIZATION (Prevents Silent Crashes) ---
-function safeLoad(key) {
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); } 
-  catch(e) { return []; }
+// --- ULTRA-SAFE STATE INITIALIZATION (Prevents Memory Crashes) ---
+function safeLoadArray(key) {
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || '[]');
+    return Array.isArray(data) ? data : [];
+  } catch(e) {
+    return [];
+  }
 }
 
 window.labState = {
@@ -15,8 +19,8 @@ window.labState = {
   activeSim: null,
   animFrameId: null,
   audioCtx: null,
-  completedSims: safeLoad('invincible_lab_completed'),
-  notebook: safeLoad('invincible_lab_notebook'),
+  completedSims: safeLoadArray('invincible_lab_completed'),
+  notebook: safeLoadArray('invincible_lab_notebook'),
   predictionMade: false
 };
 
@@ -50,13 +54,14 @@ function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
 }
 
 function triggerLabHaptic(pattern = [40]) {
-  if (typeof triggerHaptic === 'function') triggerHaptic(pattern);
-  else if (navigator.vibrate) navigator.vibrate(pattern);
+  try {
+    if (typeof triggerHaptic === 'function') triggerHaptic(pattern);
+    else if (navigator.vibrate) navigator.vibrate(pattern);
+  } catch(e) {}
 }
 
 // --- FULL 5-SIMULATION DATABASE ---
 const SIMULATIONS = {
-  // 1. OHM'S LAW & CIRCUIT OVERLOAD
   'ohms_law': {
     id: 'ohms_law',
     title: "Ohm's Law & Circuit Overload",
@@ -66,7 +71,7 @@ const SIMULATIONS = {
     desc: 'Manipulate Voltage (V) and Resistance (R). Observe current flow, bulb brightness, and avoid circuit burnout.',
     realLife: 'Automobile headlights, household dimmers, CPU power rails.',
     viva: [
-      { q: "Why is an ammeter always connected in series?", a: "To measure total circuit current without altering resistance (ideal ammeter resistance = 0)." },
+      { q: "Why is an ammeter always connected in series?", a: "To measure total circuit current without altering resistance." },
       { q: "What does the slope of a V-I graph represent?", a: "The electrical resistance (R = ΔV / ΔI) of the conductor." }
     ],
     prediction: {
@@ -113,18 +118,15 @@ const SIMULATIONS = {
       ctx.strokeRect(padX, padY, cW, cH);
       ctx.shadowBlur = 0;
 
-      // Battery
       ctx.fillStyle = '#0f172a'; ctx.fillRect(padX - 25, padY + cH / 2 - 30, 50, 60);
       ctx.strokeStyle = '#f59e0b'; ctx.strokeRect(padX - 25, padY + cH / 2 - 30, 50, 60);
       ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
       ctx.fillText(`+ ${v.toFixed(1)}V -`, padX, padY + cH / 2 + 4);
 
-      // Resistor
       ctx.fillStyle = '#0f172a'; ctx.fillRect(padX + cW / 2 - 45, padY + cH - 18, 90, 36);
       ctx.strokeStyle = '#05ffa1'; ctx.strokeRect(padX + cW / 2 - 45, padY + cH - 18, 90, 36);
       ctx.fillStyle = '#05ffa1'; ctx.fillText(`R = ${r.toFixed(0)} Ω`, padX + cW / 2, padY + cH + 5);
 
-      // Bulb
       const bulbX = padX + cW / 2; const bulbY = padY;
       ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.arc(bulbX, bulbY, 26, 0, Math.PI * 2); ctx.fill();
 
@@ -139,7 +141,6 @@ const SIMULATIONS = {
         ctx.fillStyle = '#060913'; ctx.font = 'bold 11px sans-serif'; ctx.fillText('💡 BULB', bulbX, bulbY + 4);
       }
 
-      // Readout
       ctx.fillStyle = 'rgba(2, 6, 23, 0.85)'; ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 210, 16, 195, 100); ctx.strokeRect(w - 210, 16, 195, 100);
       ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
@@ -151,7 +152,6 @@ const SIMULATIONS = {
     }
   },
 
-  // 2. RAY OPTICS & CONCAVE MIRROR BENCH
   'ray_optics': {
     id: 'ray_optics',
     title: "Ray Optics & Focal Bench",
@@ -231,7 +231,6 @@ const SIMULATIONS = {
     }
   },
 
-  // 3. PROJECTILE MOTION & TRAJECTORY
   'projectile_motion': {
     id: 'projectile_motion',
     title: "Kinematics & Projectile Arc",
@@ -241,15 +240,15 @@ const SIMULATIONS = {
     desc: 'Launch a projectile by varying velocity (v₀), launch angle (θ), and gravitational acceleration (g).',
     realLife: 'Rocket launches, football trajectory, satellite orbit injection.',
     viva: [
-      { q: "At what angle is the horizontal range of a projectile maximum?", a: "At θ = 45° (since sin(2θ) reaches its maximum value of 1)." },
-      { q: "What happens to the vertical velocity at the highest point?", a: "Vertical component becomes zero (vy = 0), while horizontal component remains v₀ cos(θ)." }
+      { q: "At what angle is the horizontal range of a projectile maximum?", a: "At θ = 45°." },
+      { q: "What happens to the vertical velocity at the highest point?", a: "Vertical component becomes zero." }
     ],
     prediction: {
-      prompt: "If a projectile is launched at θ = 45° versus θ = 60° with the same velocity, which angle achieves the maximum horizontal range?",
+      prompt: "If launched at θ = 45° versus θ = 60°, which achieves maximum horizontal range?",
       options: [
-        { text: "θ = 45° achieves maximum range", correct: true, exp: "R = (v₀² sin 2θ) / g. For θ = 45°, sin(90°) = 1, giving the absolute maximum range." },
+        { text: "θ = 45° achieves maximum range", correct: true, exp: "R = (v₀² sin 2θ) / g. sin(90°) = 1 gives absolute maximum." },
         { text: "θ = 60° achieves maximum range", correct: false, exp: "60° gives higher altitude, but lower horizontal range." },
-        { text: "Both achieve identical range", correct: false, exp: "Complementary angles (30° and 60°) have equal range, but 45° is greater than both." }
+        { text: "Both achieve identical range", correct: false, exp: "Complementary angles have equal range, but 45° is greater." }
       ]
     },
     params: { v0: 25, theta: 45, g: 9.8 },
@@ -272,14 +271,10 @@ const SIMULATIONS = {
       ctx.strokeStyle = '#334155'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
 
-      const v0 = this.params.v0;
-      const rad = (this.params.theta * Math.PI) / 180;
-      const g = this.params.g;
-
+      const v0 = this.params.v0; const rad = (this.params.theta * Math.PI) / 180; const g = this.params.g;
       const tFlight = (2 * v0 * Math.sin(rad)) / g;
       const hMax = (v0 * v0 * Math.sin(rad) * Math.sin(rad)) / (2 * g);
       const range = (v0 * v0 * Math.sin(2 * rad)) / g;
-
       const scaleX = (w - 140) / Math.max(100, range);
       const scaleY = (h - 140) / Math.max(40, hMax);
 
@@ -295,24 +290,19 @@ const SIMULATIONS = {
       ctx.stroke();
 
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 5; ctx.beginPath();
-      ctx.moveTo(startX, groundY);
-      ctx.lineTo(startX + (25 * Math.cos(rad)), groundY - (25 * Math.sin(rad)));
-      ctx.stroke();
+      ctx.moveTo(startX, groundY); ctx.lineTo(startX + (25 * Math.cos(rad)), groundY - (25 * Math.sin(rad))); ctx.stroke();
 
       ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 220, 16, 205, 100); ctx.strokeRect(w - 220, 16, 205, 100);
       ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
       ctx.fillText('FLIGHT KINEMATICS:', w - 208, 34);
       ctx.fillStyle = '#00e5ff'; ctx.font = 'bold 12px monospace';
-      ctx.fillText(`MAX RANGE (R): ${range.toFixed(1)} m`, w - 208, 54);
-      ctx.fillStyle = '#fbbf24';
-      ctx.fillText(`MAX HEIGHT (H): ${hMax.toFixed(1)} m`, w - 208, 72);
-      ctx.fillStyle = '#05ffa1';
-      ctx.fillText(`TIME OF FLIGHT: ${tFlight.toFixed(2)} s`, w - 208, 90);
+      ctx.fillText(`MAX RANGE: ${range.toFixed(1)} m`, w - 208, 54);
+      ctx.fillStyle = '#fbbf24'; ctx.fillText(`MAX HEIGHT: ${hMax.toFixed(1)} m`, w - 208, 72);
+      ctx.fillStyle = '#05ffa1'; ctx.fillText(`FLIGHT TIME: ${tFlight.toFixed(2)} s`, w - 208, 90);
     }
   },
 
-  // 4. ACID-BASE TITRATION
   'titration_ph': {
     id: 'titration_ph',
     title: "Acid-Base Titration & pH Curve",
@@ -352,7 +342,6 @@ const SIMULATIONS = {
       } else {
         ph = 14 + Math.log10(((vol - 25) * 0.001 * 0.1) / ((25 + vol) * 0.001));
       }
-
       let liquidColor = 'rgba(240, 249, 255, 0.3)';
       if (ph >= 8.2) liquidColor = `rgba(244, 63, 94, ${Math.min(0.85, (ph - 8.2) / 3)})`;
 
@@ -379,31 +368,28 @@ const SIMULATIONS = {
     }
   },
 
-  // 5. OSMOSIS & CELL TURGOR PRESSURE
   'osmosis_cell': {
     id: 'osmosis_cell',
     title: "Osmosis & Cell Plasmolysis",
     subject: 'biology',
     class: ['9', '10', '11', '12'],
     badge: '🧬 Cellular Bio',
-    desc: 'Change the surrounding solution molarity to observe Endosmosis (Turgid), Isotonic Equilibrium, or Plasmolysis (Shrinkage).',
+    desc: 'Change the surrounding solution molarity to observe Endosmosis, Equilibrium, or Plasmolysis.',
     realLife: 'Kidney dialysis, plant root water uptake, pickling preservation.',
     viva: [
-      { q: "What is plasmolysis?", a: "The shrinkage of cytoplasm away from the cell wall when placed in a hypertonic solution (exosmosis)." },
-      { q: "Why do plant cells not burst in a hypotonic medium?", a: "Due to the presence of a rigid cellulose cell wall that exerts counter turgor pressure." }
+      { q: "What is plasmolysis?", a: "The shrinkage of cytoplasm away from the cell wall in a hypertonic solution." },
+      { q: "Why do plant cells not burst in a hypotonic medium?", a: "The rigid cellulose cell wall exerts counter turgor pressure." }
     ],
     prediction: {
-      prompt: "When a plant cell is placed in a concentrated 20% NaCl hypertonic solution, what will occur?",
+      prompt: "When placed in a concentrated 20% NaCl solution, what will occur?",
       options: [
-        { text: "Exosmosis: Cytoplasm shrinks (Plasmolysis)", correct: true, exp: "Water moves out of the cell toward the region of higher solute concentration (lower water potential)." },
-        { text: "Endosmosis: Cell swells and bursts", correct: false, exp: "Endosmosis occurs only in hypotonic (dilute) solutions." },
+        { text: "Exosmosis (Plasmolysis)", correct: true, exp: "Water moves out of the cell toward the higher solute concentration." },
+        { text: "Endosmosis (Cell Swells)", correct: false, exp: "Endosmosis occurs only in hypotonic (dilute) solutions." },
         { text: "No movement of water", correct: false, exp: "Water always moves down its chemical potential gradient." }
       ]
     },
     params: { soluteConc: 0.9 },
-    controls: [
-      { id: 'ctrl_solute', label: 'Solution Concentration (NaCl %)', min: 0.1, max: 5.0, step: 0.1, default: 0.9, unit: '%' }
-    ],
+    controls: [{ id: 'ctrl_solute', label: 'Solution Concentration (NaCl %)', min: 0.1, max: 5.0, step: 0.1, default: 0.9, unit: '%' }],
     init: function() { this.params.soluteConc = 0.9; },
     update: function(paramId, value) {
       if (paramId === 'ctrl_solute') this.params.soluteConc = parseFloat(value);
@@ -411,39 +397,23 @@ const SIMULATIONS = {
     },
     render: function(canvas, ctx) {
       const w = canvas.width; const h = canvas.height; ctx.clearRect(0, 0, w, h);
-      const conc = this.params.soluteConc;
+      const conc = this.params.soluteConc; const cX = w * 0.4; const cY = h / 2;
+      let shrinkFactor = 1.0; let stateLabel = "Isotonic (Equilibrium)"; let stateColor = "#05ffa1";
 
-      const cX = w * 0.4; const cY = h / 2;
-      let shrinkFactor = 1.0;
-      let stateLabel = "Isotonic (Equilibrium)";
-      let stateColor = "#05ffa1";
+      if (conc < 0.8) { shrinkFactor = 1.15; stateLabel = "Hypotonic (Endosmosis)"; stateColor = "#00e5ff"; } 
+      else if (conc > 1.2) { shrinkFactor = Math.max(0.6, 1.0 - ((conc - 1.2) * 0.1)); stateLabel = "Hypertonic (Exosmosis)"; stateColor = "#ef4444"; }
 
-      if (conc < 0.8) {
-        shrinkFactor = 1.15; 
-        stateLabel = "Hypotonic (Turgid / Endosmosis)";
-        stateColor = "#00e5ff";
-      } else if (conc > 1.2) {
-        shrinkFactor = Math.max(0.6, 1.0 - ((conc - 1.2) * 0.1)); 
-        stateLabel = "Hypertonic (Plasmolyzed / Exosmosis)";
-        stateColor = "#ef4444";
-      }
-
-      ctx.strokeStyle = '#10b981'; ctx.lineWidth = 6;
-      ctx.strokeRect(cX - 110, cY - 110, 220, 220);
+      ctx.strokeStyle = '#10b981'; ctx.lineWidth = 6; ctx.strokeRect(cX - 110, cY - 110, 220, 220);
 
       const memW = 200 * shrinkFactor; const memH = 200 * shrinkFactor;
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
-      ctx.strokeStyle = stateColor; ctx.lineWidth = 3;
-      ctx.fillRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
-      ctx.strokeRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.2)'; ctx.strokeStyle = stateColor; ctx.lineWidth = 3;
+      ctx.fillRect(cX - (memW / 2), cY - (memH / 2), memW, memH); ctx.strokeRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
 
       const vacW = 90 * shrinkFactor; const vacH = 90 * shrinkFactor;
       ctx.fillStyle = 'rgba(0, 229, 255, 0.35)'; ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.ellipse(cX, cY, vacW / 2, vacH / 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-      ctx.fillStyle = '#fbbf24'; ctx.beginPath();
-      ctx.arc(cX + (40 * shrinkFactor), cY - (40 * shrinkFactor), 16 * shrinkFactor, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cX + (40 * shrinkFactor), cY - (40 * shrinkFactor), 16 * shrinkFactor, 0, Math.PI * 2); ctx.fill();
 
       ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 230, 16, 215, 100); ctx.strokeRect(w - 230, 16, 215, 100);
@@ -451,121 +421,128 @@ const SIMULATIONS = {
       ctx.fillText('CELLULAR OSMOMETER:', w - 218, 34);
       ctx.fillStyle = stateColor; ctx.font = 'bold 12px monospace';
       ctx.fillText(`STATE: ${stateLabel.split(' ')[0]}`, w - 218, 54);
-      ctx.fillStyle = '#fbbf24';
-      ctx.fillText(`MEDIUM CONC: ${conc.toFixed(1)}% NaCl`, w - 218, 72);
-      ctx.fillStyle = '#05ffa1';
-      ctx.fillText(`WATER FLUX:  ${conc < 0.8 ? 'INTO CELL' : (conc > 1.2 ? 'OUT OF CELL' : 'BALANCED')}`, w - 218, 90);
+      ctx.fillStyle = '#fbbf24'; ctx.fillText(`MEDIUM CONC: ${conc.toFixed(1)}% NaCl`, w - 218, 72);
     }
   }
 };
 
-// --- CONTROLLER FUNCTIONS ---
-
+// --- CORE CONTROLLER FUNCTIONS WITH CRASH ALERTS ---
 window.renderLabHome = function() {
-  const matrixGrid = document.getElementById('matrixGrid');
-  if (!matrixGrid) return;
+  try {
+    const matrixGrid = document.getElementById('matrixGrid');
+    if (!matrixGrid) return;
 
-  const currentClass = window.labState.selectedClass;
-  const currentSubj = window.labState.selectedSubject;
+    const currentClass = window.labState.selectedClass || '10';
+    const currentSubj = window.labState.selectedSubject || 'all';
 
-  const available = Object.values(SIMULATIONS).filter(s => 
-    s.class.includes(currentClass) && 
-    (currentSubj === 'all' || s.subject === currentSubj)
-  );
+    const available = Object.values(SIMULATIONS).filter(s => 
+      s.class.includes(currentClass) && 
+      (currentSubj === 'all' || s.subject === currentSubj)
+    );
 
-  let html = '';
-  available.forEach(sim => {
-    const isCompleted = window.labState.completedSims.includes(sim.id);
-    html += `
-      <div class="lab-card" onclick="launchSimulation('${sim.id}')" style="background:rgba(15,23,42,0.8); border:1px solid ${isCompleted ? 'var(--accent-emerald)' : 'rgba(0,229,255,0.2)'}; border-radius:18px; padding:18px; cursor:pointer; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:4px 8px; border-radius:8px;">${sim.badge}</span>
-          <span style="font-size:11px; font-weight:900; color:${isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">${isCompleted ? '✓ MASTERED' : '+XP LOOT'}</span>
-        </div>
-        <h3 style="font-size:15px; font-weight:900; color:#fff; margin:0 0 6px 0;">${sim.title}</h3>
-        <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.4;">${sim.desc}</p>
-        <div style="display:flex; align-items:center; justify-content:space-between;">
-          <span style="font-size:10px; color:#64748b; font-weight:700;">Class ${currentClass} Syllabus</span>
-          <button style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#060913; border:none; border-radius:10px; padding:6px 12px; font-size:11px; font-weight:900; cursor:pointer;">▶ Launch</button>
-        </div>
-      </div>
-    `;
-  });
-
-  matrixGrid.innerHTML = html || `<div style="color:#94a3b8; font-size:13px; text-align:center; grid-column: 1/-1; padding:30px;">No simulations found for this filter.</div>`;
-};
-
-window.filterLabClass = function(cls, btn) {
-  window.labState.selectedClass = String(cls);
-  document.querySelectorAll('#labSection .curr-tab').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  window.renderLabHome();
-};
-
-window.filterLabSubject = function(subj, btn) {
-  window.labState.selectedSubject = subj;
-  document.querySelectorAll('#labSection .lab-subj-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  window.renderLabHome();
-};
-
-window.launchSimulation = function(simId) {
-  const sim = SIMULATIONS[simId];
-  if (!sim) return;
-
-  window.labState.activeSim = sim;
-  window.labState.predictionMade = false;
-
-  document.getElementById('labSkillTree')?.classList.add('hidden');
-  document.getElementById('activeLabPlayer')?.classList.remove('hidden');
-  
-  const titleEl = document.getElementById('labTitle');
-  if (titleEl) {
-    titleEl.innerHTML = `🔬 ${sim.title} <span style="font-size:12px; color:var(--accent-cyan); font-weight:700;">[Class ${window.labState.selectedClass} Lab]</span>`;
-  }
-
-  const ctrlBox = document.getElementById('labControls');
-  if (ctrlBox) {
-    let controlsHTML = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">';
-    sim.controls.forEach(ctrl => {
-      controlsHTML += `
-        <div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; font-weight:800; color:#cbd5e1;">
-            <span>${ctrl.label}</span>
-            <span id="val_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.default} ${ctrl.unit}</span>
+    let html = '';
+    available.forEach(sim => {
+      const isCompleted = window.labState.completedSims.includes(sim.id);
+      html += `
+        <div class="lab-card" onclick="launchSimulation('${sim.id}')" style="background:rgba(15,23,42,0.8); border:1px solid ${isCompleted ? 'var(--accent-emerald)' : 'rgba(0,229,255,0.2)'}; border-radius:18px; padding:18px; cursor:pointer; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:4px 8px; border-radius:8px;">${sim.badge}</span>
+            <span style="font-size:11px; font-weight:900; color:${isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">${isCompleted ? '✓ MASTERED' : '+XP LOOT'}</span>
           </div>
-          <input type="range" id="${ctrl.id}" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.default}" 
-                 style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;"
-                 oninput="handleParamChange('${ctrl.id}', this.value, '${ctrl.unit}')">
+          <h3 style="font-size:15px; font-weight:900; color:#fff; margin:0 0 6px 0;">${sim.title}</h3>
+          <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.4;">${sim.desc}</p>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:10px; color:#64748b; font-weight:700;">Class ${currentClass} Syllabus</span>
+            <button style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#060913; border:none; border-radius:10px; padding:6px 12px; font-size:11px; font-weight:900; cursor:pointer;">▶ Launch</button>
+          </div>
         </div>
       `;
     });
-    controlsHTML += '</div>';
-    controlsHTML += `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; gap:8px;">
-        <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
-        <div style="display:flex; gap:8px;">
-          <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Observation</button>
-          <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce</button>
-        </div>
-      </div>
-    `;
-    ctrlBox.innerHTML = controlsHTML;
+
+    matrixGrid.innerHTML = html || `<div style="color:#94a3b8; font-size:13px; text-align:center; grid-column: 1/-1; padding:30px;">No simulations found for this filter.</div>`;
+  } catch (err) {
+    alert("Lab Interface Error: " + err.message);
   }
+};
 
-  renderPredictionUI(sim);
+window.filterLabClass = function(cls, btn) {
+  try {
+    window.labState.selectedClass = String(cls);
+    document.querySelectorAll('#labSection .curr-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    window.renderLabHome();
+  } catch(err) { alert("Filter Error: " + err.message); }
+};
 
-  const canvas = document.getElementById('invincibleEngine');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    sim.init(canvas, ctx);
+window.filterLabSubject = function(subj, btn) {
+  try {
+    window.labState.selectedSubject = subj;
+    document.querySelectorAll('#labSection .lab-subj-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    window.renderLabHome();
+  } catch(err) { alert("Filter Error: " + err.message); }
+};
 
-    if (window.labState.animFrameId) cancelAnimationFrame(window.labState.animFrameId);
-    function loop() {
-      sim.render(canvas, ctx);
-      window.labState.animFrameId = requestAnimationFrame(loop);
+window.launchSimulation = function(simId) {
+  try {
+    const sim = SIMULATIONS[simId];
+    if (!sim) return;
+
+    window.labState.activeSim = sim;
+    window.labState.predictionMade = false;
+
+    document.getElementById('labSkillTree')?.classList.add('hidden');
+    document.getElementById('activeLabPlayer')?.classList.remove('hidden');
+    
+    const titleEl = document.getElementById('labTitle');
+    if (titleEl) {
+      titleEl.innerHTML = `🔬 ${sim.title} <span style="font-size:12px; color:var(--accent-cyan); font-weight:700;">[Class ${window.labState.selectedClass} Lab]</span>`;
     }
-    loop();
+
+    const ctrlBox = document.getElementById('labControls');
+    if (ctrlBox) {
+      let controlsHTML = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">';
+      sim.controls.forEach(ctrl => {
+        controlsHTML += `
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; font-weight:800; color:#cbd5e1;">
+              <span>${ctrl.label}</span>
+              <span id="val_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.default} ${ctrl.unit}</span>
+            </div>
+            <input type="range" id="${ctrl.id}" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.default}" 
+                   style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;"
+                   oninput="handleParamChange('${ctrl.id}', this.value, '${ctrl.unit}')">
+          </div>
+        `;
+      });
+      controlsHTML += '</div>';
+      controlsHTML += `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; gap:8px;">
+          <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
+          <div style="display:flex; gap:8px;">
+            <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Data</button>
+            <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce</button>
+          </div>
+        </div>
+      `;
+      ctrlBox.innerHTML = controlsHTML;
+    }
+
+    renderPredictionUI(sim);
+
+    const canvas = document.getElementById('invincibleEngine');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      sim.init(canvas, ctx);
+      if (window.labState.animFrameId) cancelAnimationFrame(window.labState.animFrameId);
+      function loop() {
+        sim.render(canvas, ctx);
+        window.labState.animFrameId = requestAnimationFrame(loop);
+      }
+      loop();
+    }
+  } catch (err) {
+    alert("Simulation Engine Crash: " + err.message);
   }
 };
 
@@ -575,22 +552,19 @@ window.handleParamChange = function(paramId, value, unit) {
   if (window.labState.activeSim) window.labState.activeSim.update(paramId, value);
 };
 
-// --- VARIABLE REWARD ENGINE (DOPAMINE LOOT CRATE) ---
+// --- VARIABLE REWARD ENGINE ---
 function triggerLootDrop() {
-  const randomXP = Math.floor(Math.random() * (150 - 30 + 1)) + 30; // Random XP between 30 and 150
-  
+  const randomXP = Math.floor(Math.random() * (150 - 30 + 1)) + 30; 
   const xpEl = document.getElementById('xpCounter');
   let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
   currentXP += randomXP;
   if (xpEl) xpEl.textContent = currentXP;
   localStorage.setItem('student_xp', currentXP.toString());
 
-  // Mark simulation as complete
   if (window.labState.activeSim && !window.labState.completedSims.includes(window.labState.activeSim.id)) {
     window.labState.completedSims.push(window.labState.activeSim.id);
     localStorage.setItem('invincible_lab_completed', JSON.stringify(window.labState.completedSims));
   }
-
   alert(`🎁 QUANTUM CRATE UNLOCKED!\n\nYou earned +${randomXP} XP for your mastery!`);
 }
 
@@ -618,14 +592,11 @@ function renderPredictionUI(sim) {
 
       if (opt.correct) {
         btn.style.borderColor = 'var(--accent-emerald)'; btn.style.background = 'rgba(5, 255, 161, 0.15)';
-        if (typeof playDing === 'function') playDing(); triggerLabHaptic([40, 50, 40]);
-        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
-        
-        // Execute Dopamine Loot Drop Instead of Static XP
+        triggerLabHaptic([40, 50, 40]);
         triggerLootDrop();
       } else {
         btn.style.borderColor = 'var(--accent-rose)'; btn.style.background = 'rgba(244, 63, 94, 0.15)';
-        if (typeof playBuzz === 'function') playBuzz(); triggerLabHaptic([100]);
+        triggerLabHaptic([100]);
       }
 
       const expDiv = document.createElement('div');
@@ -643,8 +614,6 @@ window.logDataPoint = function() {
   const entry = { timestamp: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'}), ...p };
   window.labState.notebook.push({ experiment: window.labState.activeSim.title, data: entry });
   localStorage.setItem('invincible_lab_notebook', JSON.stringify(window.labState.notebook));
-  
-  playTone(600, 'sine', 0.1, 0.08);
   triggerLabHaptic([30]);
   alert('📝 Observation point logged successfully!');
 };
@@ -685,9 +654,13 @@ window.closeLabSim = function() {
   window.renderLabHome();
 };
 
-// Immediate Self-Execution on Load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => window.renderLabHome());
-} else {
-  window.renderLabHome();
+// Immediate Self-Execution on Load with Boot Alert
+try {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.renderLabHome());
+  } else {
+    window.renderLabHome();
+  }
+} catch(err) {
+  alert("Lab Boot Sequence Failed: " + err.message);
 }
