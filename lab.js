@@ -60,7 +60,7 @@ function triggerLabHaptic(pattern = [40]) {
   } catch(e) {}
 }
 
-// --- FULL 5-SIMULATION DATABASE ---
+// --- FULL SIMULATION DATABASE (Including Lazy-Loaded Bio Heart) ---
 const SIMULATIONS = {
   'ohms_law': {
     id: 'ohms_law',
@@ -423,8 +423,9 @@ const SIMULATIONS = {
       ctx.fillText(`STATE: ${stateLabel.split(' ')[0]}`, w - 218, 54);
       ctx.fillStyle = '#fbbf24'; ctx.fillText(`MEDIUM CONC: ${conc.toFixed(1)}% NaCl`, w - 218, 72);
     }
-  }
-    'bio_heart': {
+  },
+
+  'bio_heart': {
     id: 'bio_heart',
     title: "The Human Heart & ECG",
     subject: 'biology',
@@ -432,7 +433,7 @@ const SIMULATIONS = {
     badge: '🫀 Anatomy Engine',
     desc: 'Manipulate heart rate, adrenaline, and valve integrity. Observe real-time blood flow, cardiac cycles, and live ECG traces.',
     realLife: 'Pacemakers, stress tests, detecting arrhythmias.',
-    moduleUrl: 'bio_heart.js', // The Lazy-Load Trigger
+    moduleUrl: 'bio_heart.js',
     viva: [
       { q: "What causes the 'lub-dub' sound of the heart?", a: "The closing of the atrioventricular (lub) and semilunar (dub) valves." },
       { q: "What does the QRS complex in an ECG represent?", a: "Ventricular depolarization right before the ventricles contract." }
@@ -452,7 +453,6 @@ const SIMULATIONS = {
       { id: 'ctrl_blk', label: 'Aortic Valve Blockage', min: 0, max: 100, step: 1, default: 0, unit: '%' }
     ]
   }
-
 };
 
 // --- CORE CONTROLLER FUNCTIONS WITH CRASH ALERTS ---
@@ -511,15 +511,15 @@ window.filterLabSubject = function(subj, btn) {
     window.renderLabHome();
   } catch(err) { alert("Filter Error: " + err.message); }
 };
+
 window.launchSimulation = function(simId) {
   try {
     const sim = SIMULATIONS[simId];
     if (!sim) return;
 
-    // The Lazy-Loader: If the math isn't loaded yet, fetch it from the cloud
     if (sim.moduleUrl && typeof sim.init !== 'function') {
       const script = document.createElement('script');
-      script.src = sim.moduleUrl + '?v=' + Date.now(); // Cache buster
+      script.src = sim.moduleUrl + '?v=' + Date.now();
       script.onload = () => executeLaunch(sim);
       script.onerror = () => alert(`🚨 ERROR: Could not load ${sim.moduleUrl}. Make sure the file is uploaded to GitHub!`);
       document.body.appendChild(script);
@@ -584,12 +584,6 @@ function executeLaunch(sim) {
     loop();
   }
 }
-
-
- catch (err) {
-    alert("Simulation Engine Crash: " + err.message);
-  }
-};
 
 window.handleParamChange = function(paramId, value, unit) {
   const label = document.getElementById(`val_${paramId}`);
