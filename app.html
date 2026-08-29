@@ -19,6 +19,100 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="lab.css"> 
 
+<!-- ADVANCED LAB ENGINE UI STYLES -->
+<style>
+  .lab-dashboard {
+      position: relative;
+      width: 100%;
+      margin: 16px auto;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #05050A;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+  }
+
+  .lab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 13px;
+  }
+
+  .lab-control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+  }
+
+  .lab-slider-input {
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255, 255, 255, 0.15);
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      width: 120px;
+      cursor: pointer;
+  }
+
+  .lab-slider-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-cyan, #00e5ff);
+      box-shadow: 0 0 10px var(--accent-cyan, #00e5ff);
+      cursor: pointer;
+  }
+
+  .lab-action-btn {
+      background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(2,132,199,0.3));
+      border: 1px solid var(--accent-cyan, #00e5ff);
+      color: #fff;
+      font-weight: 800;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+  }
+
+  .lab-action-btn:hover {
+      background: var(--accent-cyan, #00e5ff);
+      color: #060913;
+      box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+  }
+
+  .lab-card-preview {
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+
+  .lab-card-preview:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-cyan, #00e5ff);
+      box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15);
+  }
+</style>
 
 <!-- Markdown Parser & MathJax Rendering -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -590,7 +684,7 @@
 </section>
 
 <!-- =====================================================
-     INVINCIBLE LAB SECTION (UPGRADED PLAYGROUND)
+     INVINCIBLE LAB SECTION (UPGRADED PLAYGROUND & ADVANCED ENGINES)
 ===================================================== -->
 <section class="card hidden" id="labSection">
     <div class="quick-hub-banner" onclick="switchTab('home')">
@@ -603,7 +697,7 @@
           <h2 class="section-h2" style="margin:0;">🔬 Invincible Science Lab</h2>
           <div style="font-size:11px; color:var(--text-muted); font-weight:700;">"Don't just learn it. Make it happen."</div>
         </div>
-        <span style="font-size:10px; font-weight:900; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">SIMULATION ENGINE V3.0</span>
+        <span style="font-size:10px; font-weight:900; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">SIMULATION ENGINE V3.0 (ADVANCED)</span>
     </div>
 
     <!-- LAB NAVIGATION & FILTER SYSTEM -->
@@ -617,10 +711,11 @@
         </div>
 
         <!-- Subject Switcher -->
-        <div style="display:flex; gap:6px; margin-bottom:16px;">
+        <div style="display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;">
             <button type="button" class="lab-subj-btn active" onclick="filterLabSubject('all', this)" style="background:#0f172a; border:1px solid rgba(0,229,255,0.3); color:#fff; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ All Labs</button>
             <button type="button" class="lab-subj-btn" onclick="filterLabSubject('physics', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ Physics</button>
             <button type="button" class="lab-subj-btn" onclick="filterLabSubject('chemistry', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">🧪 Chemistry</button>
+            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('advanced', this)" style="background:linear-gradient(135deg, rgba(0,229,255,0.15), rgba(244,63,94,0.15)); border:1px solid var(--accent-cyan); color:#fff; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:900; cursor:pointer;">🚀 10 Advanced Sims</button>
         </div>
 
         <!-- Dynamic Experiment Matrix Grid -->
@@ -632,22 +727,20 @@
         <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--accent-cyan); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation to Lab Deck</button>
         <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:12px;">Lab Simulator</div>
 
-        <div class="canvas-player-container" style="background:#020617; border:1px solid rgba(0,229,255,0.3); border-radius:16px; overflow:hidden; margin-bottom:14px; position:relative;">
+        <div class="lab-dashboard">
             <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
+            <!-- Real-time HUD Controls Drawer -->
+            <div id="labControls" class="lab-controls"></div>
         </div>
 
-        <!-- Touch Controls Drawer -->
-        <div id="labControls" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:16px; border-radius:14px; margin-bottom:14px;"></div>
-
         <!-- Predict -> Play -> Discover Card -->
-        <div id="labPredictionBox" style="background:#0f172a; border:1px solid var(--accent-cyan); padding:16px; border-radius:14px;">
+        <div id="labPredictionBox" style="background:#0f172a; border:1px solid var(--accent-cyan); padding:16px; border-radius:14px; margin-top:14px;">
             <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:6px;">🤔 PREDICT FIRST (+30 XP)</div>
             <div id="labQuestionText" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
             <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
     </div>
 </section>
-
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -797,7 +890,7 @@
 </div>
 
 <!-- =====================================================
-     CORE ENGINES - LINKED CORRECTLY
+     CORE ENGINES - LINKED IN SEQUENCE
 ===================================================== -->
 <script src="utils.js"></script>
 <script src="audio.js"></script>
@@ -807,13 +900,13 @@
 <script src="doubt-notes.js"></script>
 <script src="tests-clash.js"></script>
 <script src="arena.js"></script>
-<script src="lab.js"></script>          <!-- Your old labs -->
-<script src="advanced-labs.js"></script> <!-- The new highly advanced labs -->
-
+<script src="lab.js"></script>
+<script src="advanced-labs.js"></script>
 <script src="main.js"></script>
 
-<!-- Security & Verification Handler -->
+<!-- Security, Verification, & Advanced Lab Controller -->
 <script>
+  // Security Verification Guard
   const verified = localStorage.getItem('student_verified');
   if (!verified || verified !== 'true') {
     const lockStyle = document.createElement('style');
@@ -874,7 +967,6 @@
       }
   };
 
-  // Helper function to dynamically update subject list based on Class
   window.updateTestSubjects = function() {
       const cls = document.getElementById('testClass').value;
       const subj = document.getElementById('testSubject');
@@ -888,30 +980,183 @@
           subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="Science">Science</option>';
       }
   };
-  </script>
-</script> <!-- Safety Net: Ensures no previous scripts are left open -->
 
-<!-- 1. X-Ray for Syntax Errors -->
-<script>
-  window.addEventListener('error', function(e) {
-    if(e.filename && e.filename.includes('lab.js')) {
-       alert("🚨 SYNTAX ERROR inside lab.js!\nLine " + e.lineno + ": " + e.message + "\n\n(A bracket or comma was likely deleted when pasting)");
+  // ==========================================
+  // ADVANCED LAB INTEGRATION & SUITE RUNNER
+  // ==========================================
+  const ADVANCED_LABS_CATALOG = [
+    { id: 'gravity', name: '🪐 Orbital Gravity & Vectors', tag: 'Physics', desc: 'Drag to shoot orbital bodies. Live collision & momentum.' },
+    { id: 'thermo', name: '🔥 Kinetic Gas Chamber', tag: 'Chemistry', desc: 'Elastic particle collisions with thermal color mapping.' },
+    { id: 'fluid', name: '🌪️ Vector Wind Tunnel', tag: 'Physics', desc: '2000-particle fluid turbulence field with cursor deflection.' },
+    { id: 'boids', name: '🐺 Flocking Ecosystem (Predator vs Prey)', tag: 'Biology/Math', desc: 'Autonomous boids steering with separation & evasion dynamics.' },
+    { id: 'ai', name: '🧠 Neural Decision Heatmap', tag: 'CS/AI', desc: 'Perceptron boundary convergence trained in real-time.' },
+    { id: 'optics', name: '💡 Raytracing & Refraction Bench', tag: 'Physics', desc: '50-beam laser array refracting through spherical glass lenses.' },
+    { id: 'fourier', name: '〰️ Fourier Epicycles Synthesizer', tag: 'Math/Signal', desc: 'Rotating harmonic epicycles drawing complex wave forms.' },
+    { id: 'wave', name: '🌊 Wave Interference Shader', tag: 'Physics', desc: 'Double-source constructive and destructive ripple patterns.' },
+    { id: 'rockets', name: '🚀 Genetic Algorithm Smart Rockets', tag: 'CS/AI', desc: 'Autonomous evolutionary rocket swarm pathfinding.' },
+    { id: 'network', name: '🕸️ Epidemic Topology (Spring Physics)', tag: 'Epidemiology', desc: 'Dynamic force-directed graph modeling viral transmission.' }
+  ];
+
+  window.renderAdvancedLabSuite = function() {
+    const matrix = document.getElementById('matrixGrid');
+    if (!matrix) return;
+    matrix.innerHTML = '';
+
+    ADVANCED_LABS_CATALOG.forEach(lab => {
+      const card = document.createElement('div');
+      card.className = 'lab-card-preview';
+      card.innerHTML = `
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:2px 6px; border-radius:4px;">${lab.tag}</span>
+            <span style="font-size:11px; color:#f59e0b; font-weight:800;">✨ Interactive</span>
+          </div>
+          <div style="font-size:14px; font-weight:900; color:#fff; margin-bottom:6px;">${lab.name}</div>
+          <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">${lab.desc}</div>
+        </div>
+        <button class="lab-action-btn" style="margin-top:12px; width:100%;" onclick="launchAdvancedSim('${lab.id}', '${lab.name}')">LAUNCH EXPERIMENT 🚀</button>
+      `;
+      matrix.appendChild(card);
+    });
+  };
+
+  window.launchAdvancedSim = function(simId, simName) {
+    document.getElementById('labSkillTree').classList.add('hidden');
+    const player = document.getElementById('activeLabPlayer');
+    player.classList.remove('hidden');
+    document.getElementById('labTitle').innerText = simName;
+    document.getElementById('labPredictionBox').style.display = 'none';
+
+    const controls = document.getElementById('labControls');
+    controls.innerHTML = '';
+
+    const oldCanvas = document.getElementById('invincibleEngine');
+    const newCanvas = oldCanvas.cloneNode(true);
+    oldCanvas.parentNode.replaceChild(newCanvas, oldCanvas);
+
+    switch(simId) {
+      case 'gravity':
+        controls.innerHTML = `
+          <span>Drag mouse across canvas to launch satellite with custom velocity vector</span>
+          <button class="lab-action-btn" onclick="initAdvancedGravity('invincibleEngine')">Reset Orbit</button>
+        `;
+        initAdvancedGravity('invincibleEngine');
+        break;
+      case 'thermo':
+        controls.innerHTML = `
+          <div class="lab-control-group">
+            <span>Heat Source Active: Move or Click cursor over atoms</span>
+          </div>
+          <button class="lab-action-btn" onclick="initThermodynamics('invincibleEngine')">Reset Gas Chamber</button>
+        `;
+        initThermodynamics('invincibleEngine');
+        break;
+      case 'fluid':
+        controls.innerHTML = `
+          <span>Fluid Flow: Drag cursor across screen to disrupt stream</span>
+          <button class="lab-action-btn" onclick="initFluidVectors('invincibleEngine')">Clear Flow</button>
+        `;
+        initFluidVectors('invincibleEngine');
+        break;
+      case 'boids':
+        controls.innerHTML = `
+          <span>Predators (Red) chase Preys (Cyan). Move cursor to scatter flock.</span>
+          <button class="lab-action-btn" onclick="initBoids('invincibleEngine')">Regenerate Flocks</button>
+        `;
+        initBoids('invincibleEngine');
+        break;
+      case 'ai':
+        controls.innerHTML = `
+          <span>Real-time Perceptron training against non-linear data distributions</span>
+          <button class="lab-action-btn" onclick="initNeuralHeatmap('invincibleEngine')">Re-seed Data</button>
+        `;
+        initNeuralHeatmap('invincibleEngine');
+        break;
+      case 'optics':
+        controls.innerHTML = `
+          <span>Move cursor vertically to steer the 50-beam laser through the lens</span>
+          <button class="lab-action-btn" onclick="initAdvancedOptics('invincibleEngine')">Calibrate Lenses</button>
+        `;
+        initAdvancedOptics('invincibleEngine');
+        break;
+      case 'fourier':
+        controls.innerHTML = `
+          <span>Harmonic synthesis: 7 rotating epicycles generating wave decomposition</span>
+          <button class="lab-action-btn" onclick="initFourierNeon('invincibleEngine')">Restart Synthesis</button>
+        `;
+        initFourierNeon('invincibleEngine');
+        break;
+      case 'wave':
+        controls.innerHTML = `
+          <span>Move cursor to reposition wave sources and observe constructive interference</span>
+          <button class="lab-action-btn" onclick="initWaveShader('invincibleEngine')">Re-center Waves</button>
+        `;
+        initWaveShader('invincibleEngine');
+        break;
+      case 'rockets':
+        controls.innerHTML = `
+          <span>Autonomous genetic pathfinding over generations past obstacle</span>
+          <button class="lab-action-btn" onclick="initEvolution('invincibleEngine')">New Generation</button>
+        `;
+        initEvolution('invincibleEngine');
+        break;
+      case 'network':
+        controls.innerHTML = `
+          <span>Spring physics network: Drag nodes to isolate infected clusters</span>
+          <button class="lab-action-btn" onclick="initNetwork('invincibleEngine')">Reset Topology</button>
+        `;
+        initNetwork('invincibleEngine');
+        break;
     }
-  });
-</script>
+  };
 
-<!-- 2. X-Ray for Missing Files -->
-<script src="lab.js?v=v4_xray" onerror="alert('🚨 404 NOT FOUND!\n\nVercel cannot find lab.js. Make sure the file is actually committed to your GitHub repository and named exactly lab.js')"></script>
+  window.closeLabSim = function() {
+    const player = document.getElementById('activeLabPlayer');
+    player.classList.add('hidden');
+    document.getElementById('labSkillTree').classList.remove('hidden');
 
-<!-- 3. Engine Starter -->
-<script>
+    const canvas = document.getElementById('invincibleEngine');
+    const newCanvas = canvas.cloneNode(true);
+    canvas.parentNode.replaceChild(newCanvas, canvas);
+  };
+
+  const originalFilterSubj = window.filterLabSubject;
+  window.filterLabSubject = function(subj, btn) {
+    if (typeof originalFilterSubj === 'function') {
+      originalFilterSubj(subj, btn);
+    }
+    document.querySelectorAll('.lab-subj-btn').forEach(b => {
+      b.classList.remove('active');
+      b.style.borderColor = 'rgba(255,255,255,0.08)';
+      b.style.color = '#94a3b8';
+    });
+    if (btn) {
+      btn.classList.add('active');
+      btn.style.borderColor = 'var(--accent-cyan)';
+      btn.style.color = '#fff';
+    }
+    if (subj === 'advanced') {
+      window.renderAdvancedLabSuite();
+    }
+  };
+
+  // Battery-saver intersection observer for all animated canvases
+  const labObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.isPaused = !entry.isIntersecting;
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('canvas').forEach(c => labObserver.observe(c));
+
+  // Boot loader
   setTimeout(() => {
     if (typeof window.renderLabHome === 'function') {
-       window.renderLabHome(); // Success!
+      window.renderLabHome();
+    } else {
+      window.renderAdvancedLabSuite();
     }
-  }, 800);
+  }, 500);
 </script>
 
 </body>
 </html>
-
