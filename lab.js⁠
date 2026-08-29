@@ -3,19 +3,24 @@
  * "Don't just learn it. Make it happen."
  */
 
-// --- STATE STORE ---
+// --- SAFE STATE INITIALIZATION (Prevents Silent Crashes) ---
+function safeLoad(key) {
+  try { return JSON.parse(localStorage.getItem(key) || '[]'); } 
+  catch(e) { return []; }
+}
+
 window.labState = {
   selectedClass: '10',
   selectedSubject: 'all',
   activeSim: null,
   animFrameId: null,
   audioCtx: null,
-  completedSims: JSON.parse(localStorage.getItem('invincible_lab_completed') || '[]'),
-  notebook: JSON.parse(localStorage.getItem('invincible_lab_notebook') || '[]'),
+  completedSims: safeLoad('invincible_lab_completed'),
+  notebook: safeLoad('invincible_lab_notebook'),
   predictionMade: false
 };
 
-// --- AUDIO HELPER ---
+// --- AUDIO & HAPTIC ENGINE ---
 function getAudioCtx() {
   if (!window.labState.audioCtx) {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -226,7 +231,7 @@ const SIMULATIONS = {
     }
   },
 
-  // 3. PROJECTILE MOTION & TRAJECTORY (Physics 9 & 11)
+  // 3. PROJECTILE MOTION & TRAJECTORY
   'projectile_motion': {
     id: 'projectile_motion',
     title: "Kinematics & Projectile Arc",
@@ -264,7 +269,6 @@ const SIMULATIONS = {
       const w = canvas.width; const h = canvas.height; ctx.clearRect(0, 0, w, h);
       const groundY = h - 50; const startX = 60;
 
-      // Ground plane
       ctx.strokeStyle = '#334155'; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(w, groundY); ctx.stroke();
 
@@ -272,7 +276,6 @@ const SIMULATIONS = {
       const rad = (this.params.theta * Math.PI) / 180;
       const g = this.params.g;
 
-      // Kinematic Calculations
       const tFlight = (2 * v0 * Math.sin(rad)) / g;
       const hMax = (v0 * v0 * Math.sin(rad) * Math.sin(rad)) / (2 * g);
       const range = (v0 * v0 * Math.sin(2 * rad)) / g;
@@ -280,7 +283,6 @@ const SIMULATIONS = {
       const scaleX = (w - 140) / Math.max(100, range);
       const scaleY = (h - 140) / Math.max(40, hMax);
 
-      // Trajectory Path
       ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 3; ctx.beginPath();
       ctx.moveTo(startX, groundY);
       const steps = 60;
@@ -292,13 +294,11 @@ const SIMULATIONS = {
       }
       ctx.stroke();
 
-      // Launch Cannon Indicator
       ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 5; ctx.beginPath();
       ctx.moveTo(startX, groundY);
       ctx.lineTo(startX + (25 * Math.cos(rad)), groundY - (25 * Math.sin(rad)));
       ctx.stroke();
 
-      // Metrics HUD
       ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 220, 16, 205, 100); ctx.strokeRect(w - 220, 16, 205, 100);
       ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
@@ -312,7 +312,7 @@ const SIMULATIONS = {
     }
   },
 
-  // 4. ACID-BASE TITRATION & PH CURVE
+  // 4. ACID-BASE TITRATION
   'titration_ph': {
     id: 'titration_ph',
     title: "Acid-Base Titration & pH Curve",
@@ -379,7 +379,7 @@ const SIMULATIONS = {
     }
   },
 
-  // 5. OSMOSIS & CELL TURGOR PRESSURE (Biology 9, 10, 11, 12)
+  // 5. OSMOSIS & CELL TURGOR PRESSURE
   'osmosis_cell': {
     id: 'osmosis_cell',
     title: "Osmosis & Cell Plasmolysis",
@@ -400,7 +400,7 @@ const SIMULATIONS = {
         { text: "No movement of water", correct: false, exp: "Water always moves down its chemical potential gradient." }
       ]
     },
-    params: { soluteConc: 0.9 }, // 0.9% is physiological saline (isotonic)
+    params: { soluteConc: 0.9 },
     controls: [
       { id: 'ctrl_solute', label: 'Solution Concentration (NaCl %)', min: 0.1, max: 5.0, step: 0.1, default: 0.9, unit: '%' }
     ],
@@ -414,43 +414,37 @@ const SIMULATIONS = {
       const conc = this.params.soluteConc;
 
       const cX = w * 0.4; const cY = h / 2;
-      // Isotonic is ~0.9%. Lower -> Swell, Higher -> Shrink
       let shrinkFactor = 1.0;
       let stateLabel = "Isotonic (Equilibrium)";
       let stateColor = "#05ffa1";
 
       if (conc < 0.8) {
-        shrinkFactor = 1.15; // Swollen/Turgid
+        shrinkFactor = 1.15; 
         stateLabel = "Hypotonic (Turgid / Endosmosis)";
         stateColor = "#00e5ff";
       } else if (conc > 1.2) {
-        shrinkFactor = Math.max(0.6, 1.0 - ((conc - 1.2) * 0.1)); // Plasmolyzed
+        shrinkFactor = Math.max(0.6, 1.0 - ((conc - 1.2) * 0.1)); 
         stateLabel = "Hypertonic (Plasmolyzed / Exosmosis)";
         stateColor = "#ef4444";
       }
 
-      // Outer Rigid Cell Wall (Static)
       ctx.strokeStyle = '#10b981'; ctx.lineWidth = 6;
       ctx.strokeRect(cX - 110, cY - 110, 220, 220);
 
-      // Cytoplasm / Plasma Membrane (Dynamic Shrink/Expand)
       const memW = 200 * shrinkFactor; const memH = 200 * shrinkFactor;
       ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
       ctx.strokeStyle = stateColor; ctx.lineWidth = 3;
       ctx.fillRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
       ctx.strokeRect(cX - (memW / 2), cY - (memH / 2), memW, memH);
 
-      // Central Vacuole
       const vacW = 90 * shrinkFactor; const vacH = 90 * shrinkFactor;
       ctx.fillStyle = 'rgba(0, 229, 255, 0.35)'; ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.ellipse(cX, cY, vacW / 2, vacH / 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 
-      // Nucleus
       ctx.fillStyle = '#fbbf24'; ctx.beginPath();
       ctx.arc(cX + (40 * shrinkFactor), cY - (40 * shrinkFactor), 16 * shrinkFactor, 0, Math.PI * 2);
       ctx.fill();
 
-      // HUD
       ctx.fillStyle = 'rgba(2, 6, 23, 0.9)'; ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 1;
       ctx.fillRect(w - 230, 16, 215, 100); ctx.strokeRect(w - 230, 16, 215, 100);
       ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8'; ctx.font = '10px monospace';
@@ -486,7 +480,7 @@ window.renderLabHome = function() {
       <div class="lab-card" onclick="launchSimulation('${sim.id}')" style="background:rgba(15,23,42,0.8); border:1px solid ${isCompleted ? 'var(--accent-emerald)' : 'rgba(0,229,255,0.2)'}; border-radius:18px; padding:18px; cursor:pointer; position:relative; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
           <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:4px 8px; border-radius:8px;">${sim.badge}</span>
-          <span style="font-size:11px; font-weight:900; color:${isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">${isCompleted ? '✓ MASTERED' : '+50 XP'}</span>
+          <span style="font-size:11px; font-weight:900; color:${isCompleted ? 'var(--accent-emerald)' : 'var(--accent-amber)'};">${isCompleted ? '✓ MASTERED' : '+XP LOOT'}</span>
         </div>
         <h3 style="font-size:15px; font-weight:900; color:#fff; margin:0 0 6px 0;">${sim.title}</h3>
         <p style="font-size:12px; color:#94a3b8; margin:0 0 14px 0; line-height:1.4;">${sim.desc}</p>
@@ -552,7 +546,7 @@ window.launchSimulation = function(simId) {
         <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
         <div style="display:flex; gap:8px;">
           <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Observation</button>
-          <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce (+30 XP)</button>
+          <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce</button>
         </div>
       </div>
     `;
@@ -581,6 +575,25 @@ window.handleParamChange = function(paramId, value, unit) {
   if (window.labState.activeSim) window.labState.activeSim.update(paramId, value);
 };
 
+// --- VARIABLE REWARD ENGINE (DOPAMINE LOOT CRATE) ---
+function triggerLootDrop() {
+  const randomXP = Math.floor(Math.random() * (150 - 30 + 1)) + 30; // Random XP between 30 and 150
+  
+  const xpEl = document.getElementById('xpCounter');
+  let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
+  currentXP += randomXP;
+  if (xpEl) xpEl.textContent = currentXP;
+  localStorage.setItem('student_xp', currentXP.toString());
+
+  // Mark simulation as complete
+  if (window.labState.activeSim && !window.labState.completedSims.includes(window.labState.activeSim.id)) {
+    window.labState.completedSims.push(window.labState.activeSim.id);
+    localStorage.setItem('invincible_lab_completed', JSON.stringify(window.labState.completedSims));
+  }
+
+  alert(`🎁 QUANTUM CRATE UNLOCKED!\n\nYou earned +${randomXP} XP for your mastery!`);
+}
+
 function renderPredictionUI(sim) {
   const predBox = document.getElementById('labPredictionBox');
   if (!sim.prediction) { if (predBox) predBox.style.display = 'none'; return; }
@@ -606,8 +619,10 @@ function renderPredictionUI(sim) {
       if (opt.correct) {
         btn.style.borderColor = 'var(--accent-emerald)'; btn.style.background = 'rgba(5, 255, 161, 0.15)';
         if (typeof playDing === 'function') playDing(); triggerLabHaptic([40, 50, 40]);
-        if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 40 });
-        awardLabXP(30);
+        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
+        
+        // Execute Dopamine Loot Drop Instead of Static XP
+        triggerLootDrop();
       } else {
         btn.style.borderColor = 'var(--accent-rose)'; btn.style.background = 'rgba(244, 63, 94, 0.15)';
         if (typeof playBuzz === 'function') playBuzz(); triggerLabHaptic([100]);
@@ -653,22 +668,14 @@ window.openVivaModal = function() {
   });
   vivaHTML += `
         </div>
-        <button onclick="document.getElementById('vivaModal').remove(); awardLabXP(30);" style="width:100%; background:var(--accent-amber); color:#000; border:none; padding:12px; border-radius:12px; font-weight:900; cursor:pointer;">
-          Claim +30 Practical XP &amp; Close
+        <button onclick="document.getElementById('vivaModal').remove(); triggerLootDrop();" style="width:100%; background:var(--accent-amber); color:#000; border:none; padding:12px; border-radius:12px; font-weight:900; cursor:pointer;">
+          Claim XP Reward &amp; Close
         </button>
       </div>
     </div>
   `;
   document.body.insertAdjacentHTML('beforeend', vivaHTML);
 };
-
-function awardLabXP(amount) {
-  const xpEl = document.getElementById('xpCounter');
-  let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
-  currentXP += amount;
-  if (xpEl) xpEl.textContent = currentXP;
-  localStorage.setItem('student_xp', currentXP.toString());
-}
 
 window.closeLabSim = function() {
   if (window.labState.animFrameId) cancelAnimationFrame(window.labState.animFrameId);
