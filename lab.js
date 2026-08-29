@@ -424,6 +424,35 @@ const SIMULATIONS = {
       ctx.fillStyle = '#fbbf24'; ctx.fillText(`MEDIUM CONC: ${conc.toFixed(1)}% NaCl`, w - 218, 72);
     }
   }
+    'bio_heart': {
+    id: 'bio_heart',
+    title: "The Human Heart & ECG",
+    subject: 'biology',
+    class: ['10', '11'],
+    badge: '🫀 Anatomy Engine',
+    desc: 'Manipulate heart rate, adrenaline, and valve integrity. Observe real-time blood flow, cardiac cycles, and live ECG traces.',
+    realLife: 'Pacemakers, stress tests, detecting arrhythmias.',
+    moduleUrl: 'bio_heart.js', // The Lazy-Load Trigger
+    viva: [
+      { q: "What causes the 'lub-dub' sound of the heart?", a: "The closing of the atrioventricular (lub) and semilunar (dub) valves." },
+      { q: "What does the QRS complex in an ECG represent?", a: "Ventricular depolarization right before the ventricles contract." }
+    ],
+    prediction: {
+      prompt: "If a patient's aortic valve is 80% blocked (stenosis), what immediately happens to their stroke volume (blood pumped per beat)?",
+      options: [
+        { text: "Stroke volume plummets, causing erratic ECG", correct: true, exp: "Severe blockage prevents blood exit, lowering stroke volume and forcing the heart to overwork, leading to arrhythmias." },
+        { text: "Stroke volume increases to compensate", correct: false, exp: "The heart works harder, but actual output drops because the exit pathway is physically blocked." },
+        { text: "It remains completely unchanged", correct: false, exp: "Blockages severely alter fluid dynamics and cardiac output." }
+      ]
+    },
+    params: { bpm: 70, adrenaline: 0, blockage: 0, time: 0, ecgData: [] },
+    controls: [
+      { id: 'ctrl_bpm', label: 'Heart Rate (BPM)', min: 40, max: 200, step: 1, default: 70, unit: 'bpm' },
+      { id: 'ctrl_adr', label: 'Adrenaline (Epinephrine)', min: 0, max: 100, step: 1, default: 0, unit: '%' },
+      { id: 'ctrl_blk', label: 'Aortic Valve Blockage', min: 0, max: 100, step: 1, default: 0, unit: '%' }
+    ]
+  }
+
 };
 
 // --- CORE CONTROLLER FUNCTIONS WITH CRASH ALERTS ---
