@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome | Invincible 360 Campus OS</title>
   
-  <!-- ⚡ THIS WAS THE MISSING PIECE: Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- CSS Stylesheet -->
+  <!-- External Stylesheets -->
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="lab.css">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,75 +25,103 @@
         radial-gradient(at 10% 10%, rgba(0, 229, 255, 0.08) 0px, transparent 40%),
         radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.08) 0px, transparent 40%);
       background-attachment: fixed;
+      overflow-x: hidden;
     }
     .font-heading { font-family: 'Space Grotesk', sans-serif; }
     
     .gateway-card {
-      background: rgba(13, 19, 36, 0.45);
+      background: rgba(13, 19, 36, 0.55);
       border: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(20px);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .gateway-card:hover {
-      background: rgba(13, 19, 36, 0.8);
-      transform: translateY(-5px) scale(1.02);
+      background: rgba(13, 19, 36, 0.85);
+      transform: translateY(-6px) scale(1.02);
     }
     .card-student:hover {
       border-color: rgba(0, 229, 255, 0.5);
-      box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
+      box-shadow: 0 20px 40px rgba(0, 229, 255, 0.18);
     }
     .card-teacher:hover {
       border-color: rgba(245, 158, 11, 0.5);
-      box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15);
+      box-shadow: 0 20px 40px rgba(245, 158, 11, 0.18);
+    }
+    .card-lab:hover {
+      border-color: rgba(244, 63, 94, 0.5);
+      box-shadow: 0 20px 40px rgba(244, 63, 94, 0.18);
+    }
+
+    #bgParticleCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 text-slate-100 antialiased">
+<body class="min-h-screen flex flex-col items-center justify-center p-6 text-slate-100 antialiased relative">
 
-  <!-- Branding -->
-  <div class="text-center mb-10 animation-fade-in">
-    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-4 shadow-2xl">
-      <span class="text-3xl">⚡</span>
+  <!-- Interactive Ambient Physics Backdrop -->
+  <canvas id="bgParticleCanvas"></canvas>
+
+  <div class="relative z-10 w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Branding -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-4 shadow-2xl backdrop-blur-md">
+        <span class="text-3xl animate-pulse">⚡</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight font-heading mb-2">Invincible 360</h1>
+      <p class="text-xs md:text-sm text-cyan-400 font-bold uppercase tracking-widest">Next-Gen Academic &amp; Physics OS</p>
     </div>
-    <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight font-heading mb-2">Invincible 360</h1>
-    <p class="text-sm text-slate-400 font-semibold uppercase tracking-widest">Next-Gen Campus OS</p>
+
+    <!-- Gateway Selection Matrix -->
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- STUDENT ROUTE -->
+      <a href="app.html" class="gateway-card card-student p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
+        <div class="w-20 h-20 mx-auto bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300 shadow-[0_0_20px_rgba(0,229,255,0.2)]">
+          🎓
+        </div>
+        <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Student</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Enter the Study Deck, solve doubts with AI, explore 10 interactive physics labs, and battle in the 1v1 Arena.</p>
+        <div class="inline-block bg-cyan-500 text-slate-950 font-black text-xs uppercase tracking-wider px-7 py-3.5 rounded-full shadow-lg shadow-cyan-500/25 group-hover:bg-cyan-400 transition">
+          Enter Student Deck →
+        </div>
+      </a>
+
+      <!-- TEACHER ROUTE -->
+      <a href="login.html" class="gateway-card card-teacher p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
+        <div class="w-20 h-20 mx-auto bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+          👨‍🏫
+        </div>
+        <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Teacher</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">Access the Faculty Studio, supervise mock assessments, track student clout analytics, and publish chapter reels.</p>
+        <div class="inline-block bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider px-7 py-3.5 rounded-full shadow-lg shadow-amber-500/25 group-hover:bg-amber-400 transition">
+          Faculty Login →
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Quick Lab Feature Callout -->
+    <div class="mt-8 flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-900/60 border border-slate-700/60 backdrop-blur-md text-xs font-bold text-slate-300">
+      <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>10 Advanced Real-time Physics &amp; AI Simulation Labs Live</span>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-xs font-bold text-slate-500 tracking-wide text-center">
+      Secure Multi-Tenant Architecture &bull; Powered by Invincible Coaching Classes &copy; 2026
+    </div>
+
   </div>
 
-  <!-- Gateway Selection -->
-  <div class="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6">
-    
-    <!-- STUDENT ROUTE -->
-    <a href="app.html" class="gateway-card card-student p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
-      <div class="w-20 h-20 mx-auto bg-cyan-500/10 border border-cyan-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300">
-        🎓
-      </div>
-      <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Student</h2>
-      <p class="text-sm text-slate-400 mb-6">Enter the Study Deck, solve doubts with AI, and join the 1v1 Arena.</p>
-      <div class="inline-block bg-cyan-500 text-slate-950 font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-cyan-500/20 group-hover:bg-cyan-400 transition">
-        Enter Study Deck →
-      </div>
-    </a>
-
-    <!-- TEACHER ROUTE -->
-    <a href="login.html" class="gateway-card card-teacher p-8 rounded-3xl text-center cursor-pointer block group decoration-transparent">
-      <div class="w-20 h-20 mx-auto bg-amber-500/10 border border-amber-500/30 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition duration-300">
-        👨‍🏫
-      </div>
-      <h2 class="text-2xl font-black text-white font-heading mb-2">I am a Teacher</h2>
-      <p class="text-sm text-slate-400 mb-6">Access the Faculty Studio, manage attendance, and generate marksheets.</p>
-      <div class="inline-block bg-amber-500 text-slate-950 font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-amber-500/20 group-hover:bg-amber-400 transition">
-        Faculty Login →
-      </div>
-    </a>
-
-  </div>
-
-  <!-- Footer -->
-  <div class="mt-16 text-xs font-bold text-slate-500">
-    Secure Multi-Tenant Architecture • Powered by Invincible
-  </div>
-
-  <!-- Core Engines -->
+  <!-- Core Utility Engines -->
   <script src="utils.js"></script>
   <script src="audio.js"></script>
   <script src="navigation.js"></script>
@@ -104,9 +133,71 @@
   <script src="tests-clash.js"></script>
   <script src="arena.js"></script>
   <script src="lab.js"></script>
+  <script src="advanced-labs.js"></script>
 
   <!-- Main Initializer -->
   <script src="main.js"></script>
+
+  <!-- Ambient Physics Vector Flow on Landing -->
+  <script>
+    (function initLandingCanvas() {
+      const canvas = document.getElementById('bgParticleCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        r: Math.random() * 2 + 1,
+        color: Math.random() > 0.5 ? 'rgba(0, 229, 255, 0.4)' : 'rgba(168, 85, 247, 0.4)'
+      }));
+
+      function render() {
+        ctx.clearRect(0, 0, w, h);
+        
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0) p.x = w;
+          if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h;
+          if (p.y > h) p.y = 0;
+
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p2.x - p.x, p2.y - p.y);
+            if (dist < 120) {
+              ctx.strokeStyle = `rgba(0, 229, 255, ${0.15 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(render);
+      }
+      render();
+    })();
+  </script>
 
 </body>
 </html>
