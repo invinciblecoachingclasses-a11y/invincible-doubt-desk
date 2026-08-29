@@ -1037,78 +1037,126 @@
     switch(simId) {
       case 'gravity':
         controls.innerHTML = `
-          <span>Drag mouse across canvas to launch satellite with custom velocity vector</span>
-          <button class="lab-action-btn" onclick="initAdvancedGravity('invincibleEngine')">Reset Orbit</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">👆 <b>Touch & Drag</b> across space to slingshot a planet</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="lab-action-btn" onclick="spawnRandomPlanet()">🚀 Launch Satellite</button>
+              <button class="lab-action-btn" style="border-color:#f43f5e;" onclick="initAdvancedGravity('invincibleEngine')">🔄 Reset Sun</button>
+            </div>
+          </div>
         `;
         initAdvancedGravity('invincibleEngine');
         break;
+
       case 'thermo':
         controls.innerHTML = `
-          <div class="lab-control-group">
-            <span>Heat Source Active: Move or Click cursor over atoms</span>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🔥 Drag finger through atoms to inject thermal energy</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initThermodynamics('invincibleEngine')">🔄 Reset Chamber</button>
+            </div>
           </div>
-          <button class="lab-action-btn" onclick="initThermodynamics('invincibleEngine')">Reset Gas Chamber</button>
         `;
         initThermodynamics('invincibleEngine');
         break;
+
       case 'fluid':
         controls.innerHTML = `
-          <span>Fluid Flow: Drag cursor across screen to disrupt stream</span>
-          <button class="lab-action-btn" onclick="initFluidVectors('invincibleEngine')">Clear Flow</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🌪️ Hold and drag across the current to create vortex wakes</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initFluidVectors('invincibleEngine')">Clear Wake</button>
+            </div>
+          </div>
         `;
         initFluidVectors('invincibleEngine');
         break;
+
       case 'boids':
         controls.innerHTML = `
-          <span>Predators (Red) chase Preys (Cyan). Move cursor to scatter flock.</span>
-          <button class="lab-action-btn" onclick="initBoids('invincibleEngine')">Regenerate Flocks</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🐺 Cyan = Prey, Red = Predators. Touch screen to scatter the flock.</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initBoids('invincibleEngine')">Regenerate Flocks</button>
+            </div>
+          </div>
         `;
         initBoids('invincibleEngine');
         break;
+
       case 'ai':
         controls.innerHTML = `
-          <span>Real-time Perceptron training against non-linear data distributions</span>
-          <button class="lab-action-btn" onclick="initNeuralHeatmap('invincibleEngine')">Re-seed Data</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🧠 Neural weights re-calibrating live against blue/red clusters</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initNeuralHeatmap('invincibleEngine')">🎲 Re-seed Data Points</button>
+            </div>
+          </div>
         `;
         initNeuralHeatmap('invincibleEngine');
         break;
+
       case 'optics':
         controls.innerHTML = `
-          <span>Move cursor vertically to steer the 50-beam laser through the lens</span>
-          <button class="lab-action-btn" onclick="initAdvancedOptics('invincibleEngine')">Calibrate Lenses</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">💡 Drag finger up and down to adjust laser entry angle</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initAdvancedOptics('invincibleEngine')">Reset Lenses</button>
+            </div>
+          </div>
         `;
         initAdvancedOptics('invincibleEngine');
         break;
+
       case 'fourier':
         controls.innerHTML = `
-          <span>Harmonic synthesis: 7 rotating epicycles generating wave decomposition</span>
-          <button class="lab-action-btn" onclick="initFourierNeon('invincibleEngine')">Restart Synthesis</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">〰️ 7 Harmonic epicycles synthesizing square wave approximation</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initFourierNeon('invincibleEngine')">🔄 Restart Wave</button>
+            </div>
+          </div>
         `;
         initFourierNeon('invincibleEngine');
         break;
+
       case 'wave':
         controls.innerHTML = `
-          <span>Move cursor to reposition wave sources and observe constructive interference</span>
-          <button class="lab-action-btn" onclick="initWaveShader('invincibleEngine')">Re-center Waves</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🌊 Drag finger across canvas to reposition interference emitters</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initWaveShader('invincibleEngine')">Re-center</button>
+            </div>
+          </div>
         `;
         initWaveShader('invincibleEngine');
         break;
+
       case 'rockets':
         controls.innerHTML = `
-          <span>Autonomous genetic pathfinding over generations past obstacle</span>
-          <button class="lab-action-btn" onclick="initEvolution('invincibleEngine')">New Generation</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🚀 Genetic rocket swarm evolving flight paths around obstacle</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initEvolution('invincibleEngine')">Next Generation</button>
+            </div>
+          </div>
         `;
         initEvolution('invincibleEngine');
         break;
+
       case 'network':
         controls.innerHTML = `
-          <span>Spring physics network: Drag nodes to isolate infected clusters</span>
-          <button class="lab-action-btn" onclick="initNetwork('invincibleEngine')">Reset Topology</button>
+          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+            <div style="font-size:12px; color:#cbd5e1;">🕸️ Force-directed graph. Drag clusters to inspect transmission nodes.</div>
+            <div style="display:flex; gap:8px;">
+              <button class="lab-action-btn" onclick="initNetwork('invincibleEngine')">🔄 Reset Nodes</button>
+            </div>
+          </div>
         `;
         initNetwork('invincibleEngine');
         break;
     }
-  };
+};
 
   window.closeLabSim = function() {
     const player = document.getElementById('activeLabPlayer');
