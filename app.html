@@ -886,9 +886,19 @@
           subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="Science">Science</option>';
       }
   };
+<script src="lab.js?v=v3_engine"></script>
+<script>
+  // This forces the phone to check if the Lab Engine actually arrived
+  setTimeout(() => {
+    if (typeof window.renderLabHome !== 'function') {
+       alert("CRITICAL ERROR: lab.js is completely disconnected or failing to load.");
+    } else {
+       window.renderLabHome();
+    }
+  }, 1000);
 </script>
 
-<script src="lab.js"></script>
+
 
 
 
