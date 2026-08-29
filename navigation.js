@@ -23,6 +23,11 @@ function switchTab(tab) {
     if (tab === 'reels') renderReelsDeck();
     if (tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
     
+    // WAKE UP THE LAB ENGINE
+    if (tab === 'lab' && typeof window.renderLabHome === 'function') {
+        window.renderLabHome();
+    }
+
     // Stop canvas render loop if navigating away from lab
     if (tab !== 'lab' && typeof window.closeLabSim === 'function') window.closeLabSim();
 
