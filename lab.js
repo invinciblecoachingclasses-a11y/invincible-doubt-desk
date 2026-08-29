@@ -511,66 +511,82 @@ window.filterLabSubject = function(subj, btn) {
     window.renderLabHome();
   } catch(err) { alert("Filter Error: " + err.message); }
 };
-
 window.launchSimulation = function(simId) {
   try {
     const sim = SIMULATIONS[simId];
     if (!sim) return;
 
-    window.labState.activeSim = sim;
-    window.labState.predictionMade = false;
-
-    document.getElementById('labSkillTree')?.classList.add('hidden');
-    document.getElementById('activeLabPlayer')?.classList.remove('hidden');
-    
-    const titleEl = document.getElementById('labTitle');
-    if (titleEl) {
-      titleEl.innerHTML = `🔬 ${sim.title} <span style="font-size:12px; color:var(--accent-cyan); font-weight:700;">[Class ${window.labState.selectedClass} Lab]</span>`;
-    }
-
-    const ctrlBox = document.getElementById('labControls');
-    if (ctrlBox) {
-      let controlsHTML = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">';
-      sim.controls.forEach(ctrl => {
-        controlsHTML += `
-          <div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; font-weight:800; color:#cbd5e1;">
-              <span>${ctrl.label}</span>
-              <span id="val_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.default} ${ctrl.unit}</span>
-            </div>
-            <input type="range" id="${ctrl.id}" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.default}" 
-                   style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;"
-                   oninput="handleParamChange('${ctrl.id}', this.value, '${ctrl.unit}')">
-          </div>
-        `;
-      });
-      controlsHTML += '</div>';
-      controlsHTML += `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; gap:8px;">
-          <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
-          <div style="display:flex; gap:8px;">
-            <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Data</button>
-            <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce</button>
-          </div>
-        </div>
-      `;
-      ctrlBox.innerHTML = controlsHTML;
-    }
-
-    renderPredictionUI(sim);
-
-    const canvas = document.getElementById('invincibleEngine');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      sim.init(canvas, ctx);
-      if (window.labState.animFrameId) cancelAnimationFrame(window.labState.animFrameId);
-      function loop() {
-        sim.render(canvas, ctx);
-        window.labState.animFrameId = requestAnimationFrame(loop);
-      }
-      loop();
+    // The Lazy-Loader: If the math isn't loaded yet, fetch it from the cloud
+    if (sim.moduleUrl && typeof sim.init !== 'function') {
+      const script = document.createElement('script');
+      script.src = sim.moduleUrl + '?v=' + Date.now(); // Cache buster
+      script.onload = () => executeLaunch(sim);
+      script.onerror = () => alert(`🚨 ERROR: Could not load ${sim.moduleUrl}. Make sure the file is uploaded to GitHub!`);
+      document.body.appendChild(script);
+    } else {
+      executeLaunch(sim);
     }
   } catch (err) {
+    alert("Simulation Loader Crash: " + err.message);
+  }
+};
+
+function executeLaunch(sim) {
+  window.labState.activeSim = sim;
+  window.labState.predictionMade = false;
+
+  document.getElementById('labSkillTree')?.classList.add('hidden');
+  document.getElementById('activeLabPlayer')?.classList.remove('hidden');
+  
+  const titleEl = document.getElementById('labTitle');
+  if (titleEl) titleEl.innerHTML = `🔬 ${sim.title} <span style="font-size:12px; color:var(--accent-cyan); font-weight:700;">[Class ${window.labState.selectedClass} Lab]</span>`;
+
+  const ctrlBox = document.getElementById('labControls');
+  if (ctrlBox) {
+    let controlsHTML = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:14px;">';
+    sim.controls.forEach(ctrl => {
+      controlsHTML += `
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; font-weight:800; color:#cbd5e1;">
+            <span>${ctrl.label}</span>
+            <span id="val_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.default} ${ctrl.unit}</span>
+          </div>
+          <input type="range" id="${ctrl.id}" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.default}" 
+                 style="width:100%; accent-color:var(--accent-cyan); cursor:pointer;"
+                 oninput="handleParamChange('${ctrl.id}', this.value, '${ctrl.unit}')">
+        </div>
+      `;
+    });
+    controlsHTML += '</div>';
+    controlsHTML += `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; gap:8px;">
+        <div style="font-size:11px; color:#94a3b8;"><strong style="color:#fbbf24;">🌍 Real World:</strong> ${sim.realLife}</div>
+        <div style="display:flex; gap:8px;">
+          <button onclick="logDataPoint()" style="background:rgba(5,255,161,0.15); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">📊 Log Data</button>
+          <button onclick="openVivaModal()" style="background:rgba(245,158,11,0.15); border:1px solid var(--accent-amber); color:var(--accent-amber); padding:6px 12px; border-radius:10px; font-weight:800; font-size:11px; cursor:pointer;">🎓 Viva-Voce</button>
+        </div>
+      </div>
+    `;
+    ctrlBox.innerHTML = controlsHTML;
+  }
+
+  renderPredictionUI(sim);
+
+  const canvas = document.getElementById('invincibleEngine');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    if (typeof sim.init === 'function') sim.init(canvas, ctx);
+    if (window.labState.animFrameId) cancelAnimationFrame(window.labState.animFrameId);
+    function loop() {
+      if (typeof sim.render === 'function') sim.render(canvas, ctx);
+      window.labState.animFrameId = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+}
+
+
+ catch (err) {
     alert("Simulation Engine Crash: " + err.message);
   }
 };
