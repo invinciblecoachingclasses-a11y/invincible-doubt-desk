@@ -3,29 +3,55 @@
  * Features: High-DPI Scaling, Kinetic Bloom Shading, Real-time Vector Physics
  */
 
+/**
+ * lab.js - Advanced Educational Physics & AI Engine (iOS Touch & Retina Ready)
+ */
+
 const AdvancedLab = {
     setup: (canvasId) => {
         const canvas = document.getElementById(canvasId);
-        const ctx = canvas.getContext('2d', { alpha: false }); // Optimize for dark backgrounds
+        const ctx = canvas.getContext('2d', { alpha: false });
         const dpr = window.devicePixelRatio || 1;
         const rect = canvas.parentElement.getBoundingClientRect();
         
-        canvas.width = rect.width * dpr;
-        canvas.height = 400 * dpr;
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = '400px';
-        
+        canvas.width = (rect.width || window.innerWidth - 32) * dpr;
+        canvas.height = 380 * dpr;
+        canvas.style.width = '100%';
+        canvas.style.height = '380px';
+        canvas.style.touchAction = 'none'; // Critical for iOS: prevents screen scrolling while dragging
+
         ctx.scale(dpr, dpr);
         
         const io = { x: canvas.width / (2 * dpr), y: canvas.height / (2 * dpr), active: false, vx: 0, vy: 0 };
-        canvas.addEventListener('mousedown', () => io.active = true);
-        canvas.addEventListener('mouseup', () => io.active = false);
-        canvas.addEventListener('mousemove', (e) => {
+        
+        const updatePos = (clientX, clientY) => {
             const r = canvas.getBoundingClientRect();
-            let nx = e.clientX - r.left; let ny = e.clientY - r.top;
-            io.vx = nx - io.x; io.vy = ny - io.y;
-            io.x = nx; io.y = ny;
-        });
+            const nx = clientX - r.left;
+            const ny = clientY - r.top;
+            io.vx = nx - io.x;
+            io.vy = ny - io.y;
+            io.x = nx;
+            io.y = ny;
+        };
+
+        // Desktop Mouse Listeners
+        canvas.addEventListener('mousedown', (e) => { io.active = true; updatePos(e.clientX, e.clientY); });
+        window.addEventListener('mouseup', () => io.active = false);
+        canvas.addEventListener('mousemove', (e) => updatePos(e.clientX, e.clientY));
+
+        // iOS Touchscreen Listeners
+        canvas.addEventListener('touchstart', (e) => {
+            io.active = true;
+            if (e.touches.length > 0) updatePos(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Locks canvas in place during touch gesture
+            if (e.touches.length > 0) updatePos(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+
+        window.addEventListener('touchend', () => io.active = false);
+        window.addEventListener('touchcancel', () => io.active = false);
 
         return { 
             canvas, ctx, io, 
@@ -35,54 +61,72 @@ const AdvancedLab = {
                 ctx.globalCompositeOperation = 'source-over';
                 ctx.fillStyle = `rgba(5, 5, 10, ${alpha})`;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.globalCompositeOperation = 'lighter'; // Neon effect
+                ctx.globalCompositeOperation = 'lighter';
             }
         };
     }
 };
 
 // ==========================================
-// 1. N-Body Orbital Gravity (Vector Drag & Merge)
+// 1. N-Body Orbital Gravity (iOS Touch Slingshot)
 // ==========================================
 function initAdvancedGravity(canvasId) {
-    const { ctx, io, w, h, fade } = AdvancedLab.setup(canvasId);
-    let bodies = [{ x: w/2, y: h/2, vx: 0, vy: 0, mass: 2000, radius: 25, color: '#ffcc00' }];
+    const { canvas, ctx, io, w, h, fade } = AdvancedLab.setup(canvasId);
+    let bodies = [{ x: w/2, y: h/2, vx: 0, vy: 0, mass: 2000, radius: 24, color: '#ffcc00' }];
     let dragStart = null;
 
-    window.addEventListener('mousedown', () => dragStart = { ...io });
-    window.addEventListener('mouseup', () => {
+    const onStart = (cx, cy) => {
+        const r = canvas.getBoundingClientRect();
+        dragStart = { x: cx - r.left, y: cy - r.top };
+    };
+
+    const onEnd = () => {
         if (dragStart) {
             bodies.push({
                 x: dragStart.x, y: dragStart.y,
-                vx: (dragStart.x - io.x) * 0.05, vy: (dragStart.y - io.y) * 0.05,
-                mass: Math.random() * 50 + 10, radius: Math.random() * 4 + 2,
-                color: `hsl(${Math.random()*60 + 180}, 100%, 60%)` // Cyan/Blue planets
+                vx: (dragStart.x - io.x) * 0.06, vy: (dragStart.y - io.y) * 0.06,
+                mass: Math.random() * 50 + 15, radius: Math.random() * 4 + 3,
+                color: `hsl(${Math.random()*60 + 180}, 100%, 60%)`
             });
             dragStart = null;
         }
-    });
+    };
+
+    canvas.addEventListener('mousedown', (e) => onStart(e.clientX, e.clientY));
+    window.addEventListener('mouseup', onEnd);
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) onStart(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('touchend', onEnd);
+
+    // Global hook for the "Spawn Planet" button
+    window.spawnRandomPlanet = () => {
+        bodies.push({
+            x: Math.random() * w, y: Math.random() * (h/3),
+            vx: (Math.random() - 0.5) * 5 + 2, vy: (Math.random() - 0.5) * 2,
+            mass: 20, radius: 4,
+            color: '#00e5ff'
+        });
+    };
 
     (function loop() {
         fade(0.15);
         
-        // Physics & Merging
         for (let i = bodies.length - 1; i >= 0; i--) {
             for (let j = i - 1; j >= 0; j--) {
                 let a = bodies[i], b = bodies[j];
                 let dx = b.x - a.x, dy = b.y - a.y, distSq = dx*dx + dy*dy;
                 let dist = Math.sqrt(distSq);
                 
-                // Collision & Momentum Conservation
                 if (dist < a.radius + b.radius) {
                     let totalMass = a.mass + b.mass;
                     b.vx = (a.vx * a.mass + b.vx * b.mass) / totalMass;
                     b.vy = (a.vy * a.mass + b.vy * b.mass) / totalMass;
                     b.mass = totalMass;
-                    b.radius = Math.sqrt(b.radius**2 + a.radius**2); // Accurate volume scaling
+                    b.radius = Math.sqrt(b.radius**2 + a.radius**2);
                     bodies.splice(i, 1);
                     break;
                 }
-                // Gravity Force
                 let force = (0.2 * a.mass * b.mass) / (distSq + 100);
                 let ax = (force * dx / dist), ay = (force * dy / dist);
                 a.vx += ax / a.mass; a.vy += ay / a.mass;
@@ -90,7 +134,6 @@ function initAdvancedGravity(canvasId) {
             }
         }
 
-        // Render
         bodies.forEach(b => {
             b.x += b.vx; b.y += b.vy;
             ctx.shadowBlur = b.radius * 2;
@@ -99,14 +142,17 @@ function initAdvancedGravity(canvasId) {
             ctx.beginPath(); ctx.arc(b.x, b.y, b.radius, 0, Math.PI*2); ctx.fill();
         });
 
-        // Drag Visualizer
         if (dragStart && io.active) {
-            ctx.strokeStyle = '#ff3366'; ctx.lineWidth = 2; ctx.shadowBlur = 10;
+            ctx.strokeStyle = '#ff3366'; ctx.lineWidth = 3; ctx.shadowBlur = 10;
             ctx.beginPath(); ctx.moveTo(dragStart.x, dragStart.y); ctx.lineTo(io.x, io.y); ctx.stroke();
+            // Slingshot guide dot
+            ctx.fillStyle = '#00e5ff';
+            ctx.beginPath(); ctx.arc(dragStart.x, dragStart.y, 6, 0, Math.PI*2); ctx.fill();
         }
         requestAnimationFrame(loop);
     })();
 }
+
 
 // ==========================================
 // 2. Thermodynamic Real-Collision Gas Engine
