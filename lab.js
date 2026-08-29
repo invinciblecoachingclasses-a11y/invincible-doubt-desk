@@ -534,7 +534,36 @@ const SIMULATIONS = {
       { id: 'ctrl_vol', label: 'Chamber Volume (V)', min: 30, max: 100, step: 5, default: 80, unit: '%' },
       { id: 'ctrl_count', label: 'Molecule Quantity (n)', min: 10, max: 80, step: 5, default: 40, unit: 'mol' }
     ]
+  },
+    'phy_wave_optics': {
+    id: 'phy_wave_optics',
+    title: "Young's Double-Slit & Wave Optics",
+    subject: 'physics',
+    class: ['12'],
+    badge: '🌊 Wave Optics',
+    desc: 'Manipulate laser wavelength (λ), slit separation (d), and screen distance (D). Observe constructive/destructive wave interference, fringe spacing (β), and intensity distribution.',
+    realLife: 'Anti-reflective optical coatings, laser diffraction gratings, holography.',
+    moduleUrl: 'phy_wave_optics.js',
+    viva: [
+      { q: "What is the formula for fringe width (β) in Young's Double Slit Experiment?", a: "β = (λ * D) / d, where λ is wavelength, D is screen distance, and d is slit separation." },
+      { q: "What occurs to fringe width if the apparatus is submerged in water (refractive index μ)?", a: "Fringe width decreases by a factor of μ (β' = β / μ) because wavelength shortens in a denser medium." }
+    ],
+    prediction: {
+      prompt: "If the slit separation (d) is doubled while wavelength (λ) and screen distance (D) remain constant, what happens to the fringe width (β)?",
+      options: [
+        { text: "Fringe width is halved (β becomes 0.5×)", correct: true, exp: "By β = (λ * D) / d, fringe width is inversely proportional to slit distance d." },
+        { text: "Fringe width doubles (β becomes 2×)", correct: false, exp: "Fringe width decreases when slits are moved further apart." },
+        { text: "Fringe width remains unchanged", correct: false, exp: "Fringe width directly depends on slit spacing." }
+      ]
+    },
+    params: { wavelength: 532, slitD: 0.25, screenD: 1.2, phase: 0 },
+    controls: [
+      { id: 'ctrl_wl', label: 'Laser Wavelength (λ)', min: 380, max: 750, step: 2, default: 532, unit: 'nm' },
+      { id: 'ctrl_d', label: 'Slit Separation (d)', min: 0.10, max: 0.60, step: 0.02, default: 0.25, unit: 'mm' },
+      { id: 'ctrl_bigD', label: 'Screen Distance (D)', min: 0.5, max: 2.5, step: 0.1, default: 1.2, unit: 'm' }
+    ]
   }
+
 
 
 
