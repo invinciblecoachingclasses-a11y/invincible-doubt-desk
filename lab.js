@@ -506,7 +506,36 @@ const SIMULATIONS = {
       { id: 'ctrl_turns', label: 'Coil Turns (N)', min: 1, max: 8, step: 1, default: 4, unit: 'turns' },
       { id: 'ctrl_speed', label: 'Magnet Oscillation Speed', min: 0, max: 5, step: 0.5, default: 2, unit: 'x' }
     ]
+  },
+    'chem_gas_laws': {
+    id: 'chem_gas_laws',
+    title: "Gas Laws & Kinetic Sandbox",
+    subject: 'chemistry',
+    class: ['9', '11'],
+    badge: '🧪 Kinetic Theory',
+    desc: 'Compress the movable piston, adjust temperature, and add molecules. Observe kinetic velocity shifts, ideal gas laws (PV = nRT), and chamber blowout.',
+    realLife: 'Piston engines, aerosol can safety thresholds, SCUBA tank compression.',
+    moduleUrl: 'chem_gas_laws.js',
+    viva: [
+      { q: "State Boyle's Law mathematically.", a: "At constant temperature, Pressure is inversely proportional to Volume (P ∝ 1/V or P₁V₁ = P₂V₂)." },
+      { q: "What is the physical significance of Absolute Zero (0 Kelvin)?", a: "The theoretical temperature at which all molecular kinetic energy and motion cease." }
+    ],
+    prediction: {
+      prompt: "If container volume is halved (0.5×) at a fixed temperature, what occurs to the internal gas pressure?",
+      options: [
+        { text: "Pressure doubles (2× higher)", correct: true, exp: "By Boyle's Law (P₁V₁ = P₂V₂), halving volume doubles collision frequency against walls." },
+        { text: "Pressure drops to half (0.5×)", correct: false, exp: "Compressing a fixed mass of gas increases collision density, raising pressure." },
+        { text: "Pressure remains constant", correct: false, exp: "Pressure changes inversely with volume unless molecules or temperature change." }
+      ]
+    },
+    params: { temp: 300, volFactor: 80, count: 40, pressure: 1.0, ruptured: false },
+    controls: [
+      { id: 'ctrl_temp', label: 'Temperature (T)', min: 100, max: 600, step: 10, default: 300, unit: 'K' },
+      { id: 'ctrl_vol', label: 'Chamber Volume (V)', min: 30, max: 100, step: 5, default: 80, unit: '%' },
+      { id: 'ctrl_count', label: 'Molecule Quantity (n)', min: 10, max: 80, step: 5, default: 40, unit: 'mol' }
+    ]
   }
+
 
 
 };
