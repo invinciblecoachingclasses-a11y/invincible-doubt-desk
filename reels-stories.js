@@ -408,25 +408,34 @@ async function loadActiveStories() {
     let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
 
     try {
-        const res = await fetch(`/api/stories?school_id=${encodeURIComponent(studentSchool)}`);
+        // Cache Busting added here:
+        const res = await fetch(`/api/stories?school_id=${encodeURIComponent(studentSchool)}&t=${Date.now()}`);
         const data = await res.json();
         const dbStories = Array.isArray(data.stories) ? data.stories : (Array.isArray(data) ? data : []);
 
         activeStories = dbStories.filter(s => studentSchool === 'ALL' || s.institution === studentSchool || !s.institution);
+        renderStoryCircles();
+    } catch(e) { 
+        console.error("Story load error:", e); 
+    }
+}
 
-        container.innerHTML = activeStories.map((s, idx) => {
-            const author = String(s.author_name || s.author || s.name || "Student");
-            const initial = author.charAt(0).toUpperCase() || "S";
-            return `
-            <div class="story-circle-item" onclick="openStoryViewer(${idx})" style="cursor:pointer;">
-                <div class="story-avatar-wrap" style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan), #0284c7); padding:2px; margin-bottom:4px;">
-                    <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#020617; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:900; color:#fff;">${initial}</div>
-                </div>
-                <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeEscapeHTML(author)}</div>
+function renderStoryCircles() {
+    const container = document.getElementById('dynamicStoryCircles');
+    if (!container) return;
+
+    container.innerHTML = activeStories.map((s, idx) => {
+        const author = String(s.author_name || s.author || s.name || "Student");
+        const initial = author.charAt(0).toUpperCase() || "S";
+        return `
+        <div class="story-circle-item" onclick="openStoryViewer(${idx})" style="cursor:pointer;">
+            <div class="story-avatar-wrap" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan), #0284c7); padding:2px; margin-bottom:4px; border:1px solid rgba(0,229,255,0.3);">
+                <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#05070D; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:900; color:#fff;">${initial}</div>
             </div>
-            `;
-        }).join('');
-    } catch(e) { container.innerHTML = ''; }
+            <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeEscapeHTML(author)}</div>
+        </div>
+        `;
+    }).join('');
 }
 
 async function bakeImageWithFilter(base64Image, cssFilter) {
@@ -462,9 +471,27 @@ if (pubStoryBtn) {
 
     try {
         const finalImage = await bakeImageWithFilter(currentStoryImageBase64, selectedFilterCSS);
-        
         pubStoryBtn.textContent = "UPLOADING... 🚀";
-        const res = await fetch('/api/stories', {
+
+        // 1. OPTIMISTIC INJECTION: Force it onto the screen instantly
+        const optimisticStory = {
+            id: Date.now(),
+            author_name: name,
+            institution: inst || 'Invincible Coaching',
+            caption: caption || '',
+            media_url: finalImage || null,
+            age: age,
+            class_name: stuClass
+        };
+        activeStories.unshift(optimisticStory);
+        renderStoryCircles(); 
+        
+        // Hide Modal immediately so the user sees the new circle
+        const storyModal = document.getElementById('storyModal');
+        if (storyModal) storyModal.style.display = 'none';
+
+        // 2. Send to backend invisibly
+        fetch('/api/stories', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
@@ -475,18 +502,18 @@ if (pubStoryBtn) {
               caption: caption || '',
               media_url: finalImage || null
             })
-        });
-        const data = await res.json();
-        if (!res.ok || data.error) throw new Error(data.error || "Upload failed");
+        }).then(async (res) => {
+            const data = await res.json();
+            if (data.story && data.story.id) {
+              let myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
+              myStoryIds.push(data.story.id);
+              localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
+            }
+            // Silently fetch real DB IDs in the background
+            loadActiveStories(); 
+        }).catch(err => console.error(err));
 
-        if (data.story && data.story.id) {
-          let myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]');
-          myStoryIds.push(data.story.id);
-          localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
-        }
-
-        document.getElementById('storyModal').style.display = 'none';
-        
+        // 3. Clean up the form
         currentStoryImageBase64 = null;
         selectedFilterCSS = "none";
         const preview = document.getElementById('storyImagePreview');
@@ -495,7 +522,6 @@ if (pubStoryBtn) {
         if (placeholder) placeholder.style.display = 'block';
         if (document.getElementById('storyCaption')) document.getElementById('storyCaption').value = '';
         
-        await loadActiveStories();
         if(typeof playWin === 'function') playWin();
         alert("🎉 Story Posted Successfully!");
     } catch(err) { 
