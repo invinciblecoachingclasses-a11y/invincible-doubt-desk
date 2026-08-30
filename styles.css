@@ -883,20 +883,21 @@ textarea:focus, input:focus, select:focus {
   padding-bottom: 0 !important;
 }
 
-/* Perfect Viewport-Aware Container */
+/* Perfect Viewport-Aware Container (Fixes Mobile Freeze) */
 .study-reels-container {
   position: relative;
   width: 100%;
-  height: calc(100dvh - 170px);
-  min-height: 480px;
-  max-height: 680px;
+  height: 550px; /* Fallback static height for mobile reliability */
+  height: calc(100vh - 180px);
   border-radius: 24px;
   overflow: hidden;
-  touch-action: none !important;
+  touch-action: pan-y !important; /* Allows vertical scrolling/swiping without locking */
+  -webkit-overflow-scrolling: touch;
   user-select: none;
   -webkit-user-select: none;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
 }
+
 
 .virtual-reel-slot {
   position: absolute;
