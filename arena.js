@@ -15,7 +15,8 @@ let arena = {
   interval: null, 
   pollInterval: null, 
   isBotMatch: false, 
-  botScore: 0 
+  botScore: 0,
+  botFrozenUntil: 0 // New state to track if opponent is frozen in ice
 };
 
 /* =====================================================
@@ -35,7 +36,6 @@ const ArenaVisualEngine = {
         const wrap = document.querySelector('.vs-progress-bar-wrap');
         if (!wrap) return;
         
-        // Setup Canvas Overlay
         if (!this.canvas) {
             this.canvas = document.createElement('canvas');
             this.canvas.style.position = 'absolute';
@@ -49,11 +49,9 @@ const ArenaVisualEngine = {
             wrap.appendChild(this.canvas);
         }
 
-        // Hide old CSS fills
         const cssFills = wrap.querySelectorAll('div');
         cssFills.forEach(d => { if (d !== this.canvas) d.style.display = 'none'; });
 
-        // Retina Scaling
         const dpr = window.devicePixelRatio || 1;
         const rect = wrap.getBoundingClientRect();
         this.canvas.width = rect.width * dpr;
@@ -78,14 +76,12 @@ const ArenaVisualEngine = {
         if (total === 0) {
             this.targetTug = 0.5;
         } else {
-            // Calculate ratio and clamp so both colors are always slightly visible
             let ratio = p1 / total;
             this.targetTug = Math.max(0.10, Math.min(0.90, ratio));
         }
     },
 
     triggerShockwave: function(playerNum) {
-        // Shoots a pulse from the player's side to the center clash point
         this.shockwaves.push({
             x: playerNum === 1 ? 0 : this.w,
             radius: 5,
@@ -96,13 +92,12 @@ const ArenaVisualEngine = {
     },
 
     triggerGlitch: function(playerNum) {
-        // Emits sparks backwards if a player gets it wrong
         const clashX = this.tugPos * this.w;
         for(let i=0; i<8; i++) {
             this.particles.push({
                 x: clashX,
                 y: this.h / 2,
-                vx: (Math.random() * 8) * (playerNum === 1 ? -1 : 1), // Push backwards
+                vx: (Math.random() * 8) * (playerNum === 1 ? -1 : 1),
                 vy: (Math.random() - 0.5) * 6,
                 life: 1.0,
                 color: playerNum === 1 ? '#00e5ff' : '#f43f5e'
@@ -114,11 +109,10 @@ const ArenaVisualEngine = {
         if (!this.ctx) return;
         this.ctx.clearRect(0, 0, this.w, this.h);
 
-        // Smooth Physics Interpolation for the clash point
         this.tugPos += (this.targetTug - this.tugPos) * 0.08;
         const clashX = this.tugPos * this.w;
 
-        // Draw Player 1 Beam (Cyan)
+        // Player 1 Beam
         this.ctx.fillStyle = 'rgba(0, 229, 255, 0.25)';
         this.ctx.fillRect(0, 0, clashX, this.h);
         this.ctx.fillStyle = '#00e5ff';
@@ -126,7 +120,7 @@ const ArenaVisualEngine = {
         this.ctx.shadowColor = '#00e5ff';
         this.ctx.fillRect(0, this.h/2 - 2, clashX, 4);
 
-        // Draw Player 2 Beam (Rose)
+        // Player 2 Beam
         this.ctx.fillStyle = 'rgba(244, 63, 94, 0.25)';
         this.ctx.shadowBlur = 0;
         this.ctx.fillRect(clashX, 0, this.w - clashX, this.h);
@@ -137,17 +131,14 @@ const ArenaVisualEngine = {
 
         this.ctx.shadowBlur = 0;
 
-        // Render traveling shockwaves
         for (let i = this.shockwaves.length - 1; i >= 0; i--) {
             let sw = this.shockwaves[i];
-            sw.x += sw.dir * 18; // Velocity
+            sw.x += sw.dir * 18; 
             sw.radius += 1;
             sw.life -= 0.04;
 
-            // Collision with clash point
             if (sw.life <= 0 || (sw.dir === 1 && sw.x >= clashX) || (sw.dir === -1 && sw.x <= clashX)) {
                 this.shockwaves.splice(i, 1);
-                // Explode into particles
                 for(let p = 0; p < 12; p++) {
                     this.particles.push({
                         x: clashX, 
@@ -167,7 +158,6 @@ const ArenaVisualEngine = {
             this.ctx.fill();
         }
 
-        // Render chaotic particles
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
             p.x += p.vx; p.y += p.vy;
@@ -184,7 +174,6 @@ const ArenaVisualEngine = {
             this.ctx.globalAlpha = 1.0;
         }
 
-        // Clash Point Core Orb
         this.ctx.beginPath();
         this.ctx.arc(clashX, this.h / 2, 8 + Math.random() * 4, 0, Math.PI * 2);
         this.ctx.fillStyle = '#fff';
@@ -217,6 +206,7 @@ function startBotMatch() {
     arena.botScore = 0;
     arena.timeLimit = timerSec;
     arena.streak = 0;
+    arena.botFrozenUntil = 0;
 
     const samplePool = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0, explanation: "Force = mass × acceleration, measured in Newtons." },
@@ -256,15 +246,7 @@ if (btnCreate) {
         const res = await fetch('/api/arena', { 
             method: 'POST', 
             headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify({ 
-                action: 'create', 
-                player_name: name, 
-                class_name: className,
-                subject: subject,
-                chapter: chapter,
-                time_per_question: timePerQ,
-                question_count: qCount
-            }) 
+            body: JSON.stringify({ action: 'create', player_name: name, class_name: className, subject: subject, chapter: chapter, time_per_question: timePerQ, question_count: qCount }) 
         });
         const data = await res.json();
         if(data.error) throw new Error(data.error);
@@ -283,12 +265,8 @@ if (btnCreate) {
         
         startArenaVoiceChat(arena.code);
         arena.pollInterval = setInterval(pollRoomState, 2000);
-    } catch(err) { 
-        alert("Arena Error: " + err.message); 
-    } finally {
-        btnCreate.disabled = false;
-        btnCreate.textContent = originalText;
-    }
+    } catch(err) { alert("Arena Error: " + err.message); } 
+    finally { btnCreate.disabled = false; btnCreate.textContent = originalText; }
   };
 }
 
@@ -348,8 +326,44 @@ async function pollRoomState() {
 }
 
 function updateClashBar(p1Score, p2Score) {
-    // Sends live score to the Canvas Engine
     ArenaVisualEngine.setTug(p1Score, p2Score);
+}
+
+// INJECT TACTICAL POWER-UP DOCK INTO THE UI
+function injectPowerupDock() {
+    let dock = document.getElementById('arenaPowerupDock');
+    if (!dock) {
+        dock = document.createElement('div');
+        dock.id = 'arenaPowerupDock';
+        dock.style.cssText = "position:absolute; bottom:120px; right:16px; display:flex; flex-direction:column; gap:16px; z-index:50;";
+        
+        const battleArea = document.getElementById('arenaBattle');
+        if (battleArea) {
+            battleArea.style.position = "relative";
+            battleArea.appendChild(dock);
+        }
+    }
+
+    const count50 = parseInt(localStorage.getItem('blitz_pup_fiftyFifty') || '1', 10);
+    const countFreeze = parseInt(localStorage.getItem('blitz_pup_timeFreeze') || '1', 10);
+
+    dock.innerHTML = `
+        <button onclick="activateArena5050()" style="position:relative; width:48px; height:48px; border-radius:50%; background:rgba(244,63,94,0.15); border:2px solid var(--accent-rose); font-size:22px; box-shadow:0 0 15px rgba(244,63,94,0.4); display:flex; justify-content:center; align-items:center; cursor:pointer; backdrop-filter:blur(8px);">
+            ✂️
+            <span id="badge50" style="position:absolute; top:-6px; right:-6px; background:var(--accent-rose); color:#fff; font-size:11px; font-weight:900; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">${count50}</span>
+        </button>
+        <button onclick="activateArenaTimeFreeze()" style="position:relative; width:48px; height:48px; border-radius:50%; background:rgba(0,229,255,0.15); border:2px solid var(--accent-cyan); font-size:22px; box-shadow:0 0 15px rgba(0,229,255,0.4); display:flex; justify-content:center; align-items:center; cursor:pointer; backdrop-filter:blur(8px);">
+            ❄️
+            <span id="badgeFreeze" style="position:absolute; top:-6px; right:-6px; background:var(--accent-cyan); color:#000; font-size:11px; font-weight:900; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">${countFreeze}</span>
+        </button>
+    `;
+}
+
+window.updateArenaPowerupBadges = function() {
+    const badge50 = document.getElementById('badge50');
+    const badgeFreeze = document.getElementById('badgeFreeze');
+    if (badge50) badge50.textContent = localStorage.getItem('blitz_pup_fiftyFifty') || '0';
+    if (badgeFreeze) badgeFreeze.textContent = localStorage.getItem('blitz_pup_timeFreeze') || '0';
 }
 
 function startArenaGame() {
@@ -357,8 +371,8 @@ function startArenaGame() {
     document.getElementById('arenaWaiting').classList.add('hidden');
     document.getElementById('arenaBattle').classList.remove('hidden');
     
-    // Boot up the visual clash engine
     ArenaVisualEngine.init();
+    injectPowerupDock();
 
     arena.currentQ = 0; 
     loadArenaQuestion();
@@ -374,7 +388,7 @@ function loadArenaQuestion() {
     const q = arena.questions[arena.currentQ];
     
     let streakEmoji = '';
-    if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE STREAK x' + arena.streak;
+    if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE x' + arena.streak;
     else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
 
     const qNumEl = document.getElementById('arenaQNum');
@@ -397,9 +411,6 @@ function loadArenaQuestion() {
     const timerDisplay = document.getElementById('arenaTimerDisplay');
     if (timerDisplay) {
       timerDisplay.textContent = `⏱ ${arena.timer}s`;
-      timerDisplay.classList.remove('panic', 'frozen');
-      timerDisplay.style.color = '';
-      timerDisplay.style.textShadow = '';
     }
     
     clearInterval(arena.interval);
@@ -426,11 +437,9 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         if(typeof playDing === 'function') playDing(); 
         
         arena.streak++;
-        
         const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
         arena.score += (10 + arena.timer + speedBonus);
 
-        // Fire positive visual shockwave across the beam
         ArenaVisualEngine.triggerShockwave(arena.playerNum);
 
         if (arena.streak >= 3) {
@@ -448,12 +457,16 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
           setTimeout(() => card.classList.remove('arena-shake'), 400);
         }
 
-        // Fire negative glitch spark on the beam
         ArenaVisualEngine.triggerGlitch(arena.playerNum);
     }
 
     if (arena.isBotMatch) {
-        if (Math.random() > 0.35) arena.botScore += (10 + Math.floor(Math.random() * 8));
+        // Apply Ice Freeze logic to Bot
+        const isBotFrozen = arena.botFrozenUntil && Date.now() < arena.botFrozenUntil;
+        if (!isBotFrozen && Math.random() > 0.35) {
+            arena.botScore += (10 + Math.floor(Math.random() * 8));
+        }
+
         const p1s = document.getElementById('uiP1Score'); if (p1s) p1s.textContent = arena.score;
         const p2s = document.getElementById('uiP2Score'); if (p2s) p2s.textContent = arena.botScore;
         updateClashBar(arena.score, arena.botScore);
@@ -473,7 +486,11 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
-    ArenaVisualEngine.stop(); // Turn off canvas rendering to save battery
+    ArenaVisualEngine.stop(); 
+
+    // Remove ice if active
+    const oldIce = document.getElementById('iceOverlayEffect');
+    if (oldIce) oldIce.remove();
 
     if (arena.isBotMatch) {
         showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible AI", player2_score: arena.botScore });
@@ -505,60 +522,110 @@ function showArenaResult(room) {
         if(typeof playWin === 'function') playWin();
         if(typeof triggerHaptic === 'function') triggerHaptic([40, 60, 80]);
         if (resultTextEl) {
-          resultTextEl.innerHTML = `
-              <div style="font-size:42px; margin-bottom:4px;">👑</div>
-              <div style="font-size:26px; font-weight:900; color:var(--accent-emerald); letter-spacing:1px;">DOMINANT VICTORY</div>
-              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">You crushed the arena duel! +100 Clout XP 🔥</div>
-          `;
+          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">👑</div><div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">DOMINANT VICTORY</div>`;
         }
         if(typeof confetti === 'function') confetti({ particleCount: 140, spread: 80, origin: { y: 0.5 } });
     } else if(myScore === opScore) {
         if (resultTextEl) {
-          resultTextEl.innerHTML = `
-              <div style="font-size:42px; margin-bottom:4px;">🤝</div>
-              <div style="font-size:24px; font-weight:900; color:var(--accent-amber); letter-spacing:1px;">STALEMATE TIE</div>
-              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Evenly matched gladiators. +50 XP</div>
-          `;
+          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">🤝</div><div style="font-size:24px; font-weight:900; color:var(--accent-amber);">STALEMATE TIE</div>`;
         }
     } else {
         if (resultTextEl) {
-          resultTextEl.innerHTML = `
-              <div style="font-size:42px; margin-bottom:4px;">💥</div>
-              <div style="font-size:24px; font-weight:900; color:var(--accent-rose); letter-spacing:1px;">DEFEATED</div>
-              <div style="color:var(--text-muted); font-size:13px; margin-top:4px;">Review formulas and seek redemption.</div>
-          `;
+          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">💥</div><div style="font-size:24px; font-weight:900; color:var(--accent-rose);">DEFEATED</div>`;
         }
     }
 }
 
 /* =====================================================
-   POWER-UP HOOKS (Trigger these from HTML UI)
+   TACTICAL VISUAL WEAPONS (POWER-UPS)
 ===================================================== */
+
 window.activateArena5050 = function() {
+    let count = parseInt(localStorage.getItem('blitz_pup_fiftyFifty') || '0', 10);
+    if (count <= 0) return alert("No 50:50 power-ups left! Win matches to recharge.");
+    
+    localStorage.setItem('blitz_pup_fiftyFifty', count - 1);
+    updateArenaPowerupBadges();
+
     const opts = document.querySelectorAll('.arena-option');
     if (!opts || opts.length < 4 || arena.correctAnswerIndex < 0) return;
     
+    if(typeof playDing === 'function') playDing(); 
+    if(typeof triggerHaptic === 'function') triggerHaptic([50, 100]);
+
     let removed = 0;
     opts.forEach((opt, idx) => {
         if (idx !== arena.correctAnswerIndex && removed < 2) {
-            opt.style.transition = 'all 0.4s ease';
-            opt.style.transform = 'scale(0.95)';
-            opt.style.opacity = '0.3';
+            opt.style.position = 'relative';
+            opt.style.overflow = 'hidden';
             opt.style.pointerEvents = 'none';
-            opt.innerHTML = `<span style="text-decoration: line-through; color: #f43f5e;">${opt.innerHTML}</span>`;
+            
+            // Generate the neon laser slice
+            const laser = document.createElement('div');
+            laser.style.cssText = "position:absolute; top:50%; left:-10%; width:0%; height:3px; background:#f43f5e; box-shadow:0 0 15px #f43f5e, 0 0 30px #f43f5e; z-index:10; transition:width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);";
+            opt.appendChild(laser);
+
+            setTimeout(() => { laser.style.width = '120%'; }, 50);
+
+            // Option break animation
+            setTimeout(() => {
+                opt.style.transition = 'all 0.4s ease';
+                opt.style.transform = 'scale(0.95) rotate(-2deg)';
+                opt.style.opacity = '0.3';
+                opt.innerHTML = `<span style="text-decoration: line-through; color: #f43f5e;">${opt.innerText}</span>`;
+            }, 350);
+
             removed++;
         }
     });
 };
 
 window.activateArenaTimeFreeze = function() {
-    const timerDisplay = document.getElementById('arenaTimerDisplay');
-    if (timerDisplay) {
-        timerDisplay.classList.add('frozen');
-        timerDisplay.style.color = '#00e5ff';
-        timerDisplay.style.textShadow = '0 0 15px #00e5ff';
+    let count = parseInt(localStorage.getItem('blitz_pup_timeFreeze') || '0', 10);
+    if (count <= 0) return alert("No Time Freeze power-ups left! Win matches to recharge.");
+    
+    localStorage.setItem('blitz_pup_timeFreeze', count - 1);
+    updateArenaPowerupBadges();
+
+    if(typeof playWin === 'function') playWin(); 
+    if(typeof triggerHaptic === 'function') triggerHaptic([100, 50, 100]);
+
+    // 1. Add time globally
+    arena.timer += 10;
+    
+    // 2. Freeze Bot scoring engine for 5 seconds
+    arena.botFrozenUntil = Date.now() + 5000; 
+
+    // 3. Screen Ice Overlay
+    const battleArea = document.getElementById('arenaBattle');
+    if (battleArea) {
+        const oldIce = document.getElementById('iceOverlayEffect');
+        if (oldIce) oldIce.remove();
+
+        const ice = document.createElement('div');
+        ice.id = 'iceOverlayEffect';
+        ice.style.cssText = "position:fixed; inset:0; pointer-events:none; z-index:9999; box-shadow:inset 0 0 120px 40px rgba(0, 229, 255, 0.4); border:12px solid rgba(0,229,255,0.5); background:rgba(0, 229, 255, 0.05); backdrop-filter:blur(3px); transition:opacity 0.5s ease;";
+        document.body.appendChild(ice);
+
+        const timerDisplay = document.getElementById('arenaTimerDisplay');
+        if (timerDisplay) {
+            timerDisplay.classList.remove('panic');
+            timerDisplay.classList.add('frozen');
+            timerDisplay.style.color = '#00e5ff';
+            timerDisplay.style.textShadow = '0 0 20px #00e5ff';
+        }
+
+        // Melt Ice
+        setTimeout(() => {
+            ice.style.opacity = '0';
+            if (timerDisplay) {
+                timerDisplay.classList.remove('frozen');
+                timerDisplay.style.color = '';
+                timerDisplay.style.textShadow = '';
+            }
+            setTimeout(() => ice.remove(), 500);
+        }, 5000);
     }
-    arena.timer += 5; // Adds 5 seconds globally to the current question limit
 };
 
 /* =====================================================
