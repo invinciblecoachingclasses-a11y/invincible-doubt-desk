@@ -1,5 +1,5 @@
 /* =====================================================
-   DOUBT DESK LOGIC
+   DOUBT DESK LOGIC & INTERACTIVE BLACKBOARD ENGINE
 ===================================================== */
 let selectedSubject = "Mathematics";
 let currentTone = "step";
@@ -96,6 +96,185 @@ async function renderAnswerContent(container, markdownText) {
   }
 }
 
+/* =====================================================
+   🧠 DOUBT VISUAL ENGINE (INTERACTIVE BLACKBOARD)
+===================================================== */
+const DoubtVisualEngine = {
+    loop: null,
+    canvasId: 'doubtBlackboardCanvas',
+    
+    mount: function(container, subject) {
+        const old = document.getElementById('doubtBlackboardWrapper');
+        if(old) {
+            if (this.loop) cancelAnimationFrame(this.loop);
+            old.remove();
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.id = 'doubtBlackboardWrapper';
+        wrapper.style.cssText = "background:linear-gradient(180deg, #0b0f19 0%, #020617 100%); border:1px solid rgba(0,229,255,0.3); border-radius:16px; padding:16px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);";
+
+        let controlsHTML = '';
+        let simType = 'math';
+
+        if (subject === 'Physics') {
+            simType = 'physics';
+            controlsHTML = `
+                <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:11px; font-weight:800; margin-top:12px;">
+                    <label>Vector Distance (r): <span id="bb_val_r" style="color:#00e5ff;">80</span></label>
+                </div>
+                <input type="range" class="lab-slider-input" id="bb_slider_r" min="30" max="150" value="80" style="width:100%; margin-top:8px;">
+            `;
+        } else if (subject === 'Chemistry' || subject === 'Biology') {
+            simType = 'chem';
+            controlsHTML = `
+                <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:11px; font-weight:800; margin-top:12px;">
+                    <label>Thermal Energy (T): <span id="bb_val_t" style="color:#f43f5e;">50</span></label>
+                </div>
+                <input type="range" class="lab-slider-input" id="bb_slider_t" min="10" max="100" value="50" style="width:100%; margin-top:8px; background:rgba(244,63,94,0.2);">
+            `;
+        } else {
+            simType = 'math';
+            controlsHTML = `
+                <div style="display:flex; justify-content:space-between; color:#94a3b8; font-size:11px; font-weight:800; margin-top:12px;">
+                    <label>Freq (f): <span id="bb_val_f" style="color:#00e5ff;">1.0</span></label>
+                    <label>Amp (A): <span id="bb_val_a" style="color:#f59e0b;">50</span></label>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:8px;">
+                    <input type="range" class="lab-slider-input" id="bb_slider_f" min="1" max="10" value="1" style="width:50%;">
+                    <input type="range" class="lab-slider-input" id="bb_slider_a" min="10" max="80" value="50" style="width:50%; background:rgba(245,158,11,0.2);">
+                </div>
+            `;
+        }
+
+        wrapper.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:12px; font-weight:900; color:var(--accent-cyan); letter-spacing:1px; display:flex; align-items:center; gap:6px;">
+                    <span>🧠</span> <span>INTERACTIVE BLACKBOARD</span>
+                </div>
+                <div style="font-size:9px; color:#fff; background:rgba(0,229,255,0.15); border:1px solid rgba(0,229,255,0.3); padding:3px 8px; border-radius:8px; font-weight:800;">LIVE VARS</div>
+            </div>
+            <div style="background:#020617; border-radius:12px; overflow:hidden; border:1px dashed #334155;">
+                <canvas id="${this.canvasId}" style="width:100%; height:160px; display:block; touch-action:none;"></canvas>
+            </div>
+            ${controlsHTML}
+        `;
+
+        container.insertBefore(wrapper, container.firstChild);
+        this.initCanvas(simType);
+    },
+
+    initCanvas: function(simType) {
+        const canvas = document.getElementById(this.canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        
+        canvas.width = (rect.width || 320) * dpr;
+        canvas.height = 160 * dpr;
+        ctx.scale(dpr, dpr);
+        const w = canvas.width / dpr;
+        const h = canvas.height / dpr;
+
+        let frame = 0;
+        let particles = Array.from({length: 40}, () => ({
+            x: Math.random()*w, y: Math.random()*h, 
+            vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2
+        }));
+
+        const render = () => {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, w, h);
+            frame++;
+
+            if (simType === 'math') {
+                const sliderF = document.getElementById('bb_slider_f');
+                const sliderA = document.getElementById('bb_slider_a');
+                const freq = sliderF ? parseFloat(sliderF.value) : 1;
+                const amp = sliderA ? parseFloat(sliderA.value) : 50;
+                
+                if(document.getElementById('bb_val_f')) document.getElementById('bb_val_f').innerText = freq;
+                if(document.getElementById('bb_val_a')) document.getElementById('bb_val_a').innerText = amp;
+
+                // Cartesian Grid
+                ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h); ctx.stroke();
+
+                // Animated Math Tracer
+                ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 2;
+                ctx.beginPath();
+                for (let x = 0; x <= w; x += 2) {
+                    const mathX = (x - w/2) * 0.05;
+                    const mathY = Math.sin(mathX * freq - frame*0.05) * amp;
+                    if (x === 0) ctx.moveTo(x, h/2 - mathY); else ctx.lineTo(x, h/2 - mathY);
+                }
+                ctx.stroke();
+
+                // Equation Text
+                ctx.fillStyle = '#fff'; ctx.font = '12px Space Grotesk';
+                ctx.fillText(`y = ${amp} · sin(${freq}x - ωt)`, 10, 20);
+
+            } else if (simType === 'physics') {
+                const sliderR = document.getElementById('bb_slider_r');
+                const r = sliderR ? parseFloat(sliderR.value) : 80;
+                if(document.getElementById('bb_val_r')) document.getElementById('bb_val_r').innerText = r;
+
+                const cx = w/2; const cy = h/2;
+                const m1x = cx - r/2; const m2x = cx + r/2;
+                const force = Math.min(100, 5000 / (r*r)); // F ~ 1/r^2 approximation
+
+                // Draw Field Lines
+                ctx.strokeStyle = 'rgba(0, 229, 255, 0.1)';
+                ctx.beginPath(); ctx.arc(m1x, cy, 30 + force*5, 0, Math.PI*2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(m2x, cy, 30 + force*5, 0, Math.PI*2); ctx.stroke();
+
+                // Masses
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath(); ctx.arc(m1x, cy, 12, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#00e5ff';
+                ctx.beginPath(); ctx.arc(m2x, cy, 12, 0, Math.PI*2); ctx.fill();
+
+                // Force Vectors
+                ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(m1x, cy); ctx.lineTo(m1x + force*20, cy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(m2x, cy); ctx.lineTo(m2x - force*20, cy); ctx.stroke();
+
+                // Data Text
+                ctx.fillStyle = '#fff'; ctx.font = '12px Space Grotesk';
+                ctx.fillText(`Distance: ${r}m`, 10, 20);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText(`Force ∝ 1/r² = ${(force*10).toFixed(2)} N`, 10, 40);
+
+            } else if (simType === 'chem') {
+                const sliderT = document.getElementById('bb_slider_t');
+                const temp = sliderT ? parseFloat(sliderT.value) : 50;
+                if(document.getElementById('bb_val_t')) document.getElementById('bb_val_t').innerText = temp;
+
+                particles.forEach(p => {
+                    p.x += p.vx * (temp/20); p.y += p.vy * (temp/20);
+                    if(p.x < 0 || p.x > w) p.vx *= -1;
+                    if(p.y < 0 || p.y > h) p.vy *= -1;
+                    
+                    const speed = Math.hypot(p.vx * (temp/20), p.vy * (temp/20));
+                    ctx.fillStyle = `hsl(${Math.max(0, 240 - speed*15)}, 100%, 60%)`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+                });
+
+                ctx.fillStyle = '#fff'; ctx.font = '12px Space Grotesk';
+                ctx.fillText(`System Temperature: ${temp}°C`, 10, 20);
+            }
+
+            this.loop = requestAnimationFrame(render);
+        };
+        render();
+    }
+};
+
+/* =====================================================
+   DOUBT DESK EXECUTION LOGIC
+===================================================== */
 if (document.getElementById("askBtn")) {
   document.getElementById("askBtn").onclick = async () => {
       const q = questionInput.value.trim();
@@ -123,7 +302,6 @@ if (document.getElementById("askBtn")) {
               })
           });
           
-          // Safe JSON parsing to prevent silent crashes on Vercel timeouts
           const textResponse = await res.text();
           let data;
           try {
@@ -146,6 +324,10 @@ if (document.getElementById("askBtn")) {
           }
           
           document.getElementById("answerBox").style.display = "block"; 
+          
+          // INJECT INTERACTIVE VISUAL BLACKBOARD
+          DoubtVisualEngine.mount(document.getElementById("doubtConversationThread"), selectedSubject);
+
           if (typeof playDing === 'function') playDing();
       } catch(err) {
           alert("Doubt Engine: " + err.message);
@@ -284,7 +466,6 @@ if (genNotesBtn) {
             }) 
         });
         
-        // Safe JSON parsing to prevent silent crashes on Vercel timeouts
         const textResponse = await res.text();
         let data;
         try {
