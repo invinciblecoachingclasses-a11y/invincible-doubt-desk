@@ -1,5 +1,5 @@
 /* =====================================================
-   ARENA 1v1 LOGIC (ANIMATED, MULTI-TOPIC & DYNAMIC TIMER)
+   ARENA 1v1 LOGIC (NEON BEAM-CLASH TUG-OF-WAR ENGINE)
 ===================================================== */
 let arena = { 
   code: null, 
@@ -7,7 +7,8 @@ let arena = {
   name: '', 
   score: 0, 
   questions: [], 
-  currentQ: 0, 
+  currentQ: 0,
+  correctAnswerIndex: -1, 
   timer: 15, 
   timeLimit: 15,
   streak: 0,
@@ -17,6 +18,193 @@ let arena = {
   botScore: 0 
 };
 
+/* =====================================================
+   VISUAL ENGINE: CANVAS BEAM CLASH
+===================================================== */
+const ArenaVisualEngine = {
+    canvas: null,
+    ctx: null,
+    w: 0, h: 0,
+    tugPos: 0.5,
+    targetTug: 0.5,
+    particles: [],
+    shockwaves: [],
+    loop: null,
+    
+    init: function() {
+        const wrap = document.querySelector('.vs-progress-bar-wrap');
+        if (!wrap) return;
+        
+        // Setup Canvas Overlay
+        if (!this.canvas) {
+            this.canvas = document.createElement('canvas');
+            this.canvas.style.position = 'absolute';
+            this.canvas.style.inset = '0';
+            this.canvas.style.width = '100%';
+            this.canvas.style.height = '100%';
+            this.canvas.style.borderRadius = '8px';
+            this.canvas.style.pointerEvents = 'none';
+            this.canvas.style.zIndex = '10';
+            wrap.style.position = 'relative';
+            wrap.appendChild(this.canvas);
+        }
+
+        // Hide old CSS fills
+        const cssFills = wrap.querySelectorAll('div');
+        cssFills.forEach(d => { if (d !== this.canvas) d.style.display = 'none'; });
+
+        // Retina Scaling
+        const dpr = window.devicePixelRatio || 1;
+        const rect = wrap.getBoundingClientRect();
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        this.w = this.canvas.width;
+        this.h = this.canvas.height;
+        this.ctx = this.canvas.getContext('2d');
+        this.ctx.scale(dpr, dpr);
+        this.w /= dpr;
+        this.h /= dpr;
+
+        this.particles = [];
+        this.shockwaves = [];
+        this.tugPos = 0.5;
+        this.targetTug = 0.5;
+
+        if (!this.loop) this.render();
+    },
+
+    setTug: function(p1, p2) {
+        const total = p1 + p2;
+        if (total === 0) {
+            this.targetTug = 0.5;
+        } else {
+            // Calculate ratio and clamp so both colors are always slightly visible
+            let ratio = p1 / total;
+            this.targetTug = Math.max(0.10, Math.min(0.90, ratio));
+        }
+    },
+
+    triggerShockwave: function(playerNum) {
+        // Shoots a pulse from the player's side to the center clash point
+        this.shockwaves.push({
+            x: playerNum === 1 ? 0 : this.w,
+            radius: 5,
+            color: playerNum === 1 ? '#00e5ff' : '#f43f5e',
+            dir: playerNum === 1 ? 1 : -1,
+            life: 1.0
+        });
+    },
+
+    triggerGlitch: function(playerNum) {
+        // Emits sparks backwards if a player gets it wrong
+        const clashX = this.tugPos * this.w;
+        for(let i=0; i<8; i++) {
+            this.particles.push({
+                x: clashX,
+                y: this.h / 2,
+                vx: (Math.random() * 8) * (playerNum === 1 ? -1 : 1), // Push backwards
+                vy: (Math.random() - 0.5) * 6,
+                life: 1.0,
+                color: playerNum === 1 ? '#00e5ff' : '#f43f5e'
+            });
+        }
+    },
+
+    render: function() {
+        if (!this.ctx) return;
+        this.ctx.clearRect(0, 0, this.w, this.h);
+
+        // Smooth Physics Interpolation for the clash point
+        this.tugPos += (this.targetTug - this.tugPos) * 0.08;
+        const clashX = this.tugPos * this.w;
+
+        // Draw Player 1 Beam (Cyan)
+        this.ctx.fillStyle = 'rgba(0, 229, 255, 0.25)';
+        this.ctx.fillRect(0, 0, clashX, this.h);
+        this.ctx.fillStyle = '#00e5ff';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#00e5ff';
+        this.ctx.fillRect(0, this.h/2 - 2, clashX, 4);
+
+        // Draw Player 2 Beam (Rose)
+        this.ctx.fillStyle = 'rgba(244, 63, 94, 0.25)';
+        this.ctx.shadowBlur = 0;
+        this.ctx.fillRect(clashX, 0, this.w - clashX, this.h);
+        this.ctx.fillStyle = '#f43f5e';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#f43f5e';
+        this.ctx.fillRect(clashX, this.h/2 - 2, this.w - clashX, 4);
+
+        this.ctx.shadowBlur = 0;
+
+        // Render traveling shockwaves
+        for (let i = this.shockwaves.length - 1; i >= 0; i--) {
+            let sw = this.shockwaves[i];
+            sw.x += sw.dir * 18; // Velocity
+            sw.radius += 1;
+            sw.life -= 0.04;
+
+            // Collision with clash point
+            if (sw.life <= 0 || (sw.dir === 1 && sw.x >= clashX) || (sw.dir === -1 && sw.x <= clashX)) {
+                this.shockwaves.splice(i, 1);
+                // Explode into particles
+                for(let p = 0; p < 12; p++) {
+                    this.particles.push({
+                        x: clashX, 
+                        y: this.h / 2,
+                        vx: (Math.random() - 0.5) * 12 + (sw.dir * 4), 
+                        vy: (Math.random() - 0.5) * 12,
+                        life: 1.0, 
+                        color: sw.color
+                    });
+                }
+                continue;
+            }
+
+            this.ctx.beginPath();
+            this.ctx.arc(sw.x, this.h / 2, sw.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = `rgba(${sw.color === '#00e5ff' ? '0,229,255' : '244,63,94'}, ${sw.life})`;
+            this.ctx.fill();
+        }
+
+        // Render chaotic particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            let p = this.particles[i];
+            p.x += p.vx; p.y += p.vy;
+            p.life -= 0.05;
+            if (p.life <= 0) {
+                this.particles.splice(i, 1);
+                continue;
+            }
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            this.ctx.fillStyle = p.color;
+            this.ctx.globalAlpha = p.life;
+            this.ctx.fill();
+            this.ctx.globalAlpha = 1.0;
+        }
+
+        // Clash Point Core Orb
+        this.ctx.beginPath();
+        this.ctx.arc(clashX, this.h / 2, 8 + Math.random() * 4, 0, Math.PI * 2);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.shadowBlur = 20;
+        this.ctx.shadowColor = '#fff';
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+
+        this.loop = requestAnimationFrame(() => this.render());
+    },
+
+    stop: function() {
+        if (this.loop) cancelAnimationFrame(this.loop);
+        this.loop = null;
+    }
+};
+
+/* =====================================================
+   CORE ARENA GAMEPLAY LOGIC
+===================================================== */
 function startBotMatch() {
     const name = document.getElementById('arenaPlayerName')?.value.trim() || 'Player 1';
     const timerSec = parseInt(document.getElementById('arenaTimePerQ')?.value, 10) || 15;
@@ -43,6 +231,7 @@ function startBotMatch() {
     const p2 = document.getElementById('uiP2Name'); if(p2) p2.textContent = "Invincible AI 🤖";
     const s1 = document.getElementById('uiP1Score'); if(s1) s1.textContent = "0";
     const s2 = document.getElementById('uiP2Score'); if(s2) s2.textContent = "0";
+    
     updateClashBar(0, 0);
     startArenaGame();
 }
@@ -159,21 +348,18 @@ async function pollRoomState() {
 }
 
 function updateClashBar(p1Score, p2Score) {
-    const total = p1Score + p2Score;
-    let p1Percent = 50;
-    if (total > 0) {
-        p1Percent = Math.min(Math.max((p1Score / total) * 100, 15), 85);
-    }
-    const fill1 = document.getElementById('vsFillP1');
-    const fill2 = document.getElementById('vsFillP2');
-    if (fill1) fill1.style.width = p1Percent + '%';
-    if (fill2) fill2.style.width = (100 - p1Percent) + '%';
+    // Sends live score to the Canvas Engine
+    ArenaVisualEngine.setTug(p1Score, p2Score);
 }
 
 function startArenaGame() {
     document.getElementById('arenaSetup').classList.add('hidden');
     document.getElementById('arenaWaiting').classList.add('hidden');
     document.getElementById('arenaBattle').classList.remove('hidden');
+    
+    // Boot up the visual clash engine
+    ArenaVisualEngine.init();
+
     arena.currentQ = 0; 
     loadArenaQuestion();
 }
@@ -197,11 +383,12 @@ function loadArenaQuestion() {
     const qTextEl = document.getElementById('arenaQText');
     if (qTextEl) qTextEl.textContent = q.question_text || q.question;
     
+    arena.correctAnswerIndex = q.correct_option !== undefined ? q.correct_option : q.answer;
+
     let optsHTML = '';
     const opts = q.options || [q.option_1, q.option_2, q.option_3, q.option_4];
     opts.forEach((opt, idx) => {
-        const correctIdx = q.correct_option !== undefined ? q.correct_option : q.answer;
-        optsHTML += `<div class="arena-option" onclick="handleArenaAnswer(this, ${idx}, ${correctIdx})">${opt}</div>`;
+        optsHTML += `<div class="arena-option" id="arenaOpt_${idx}" onclick="handleArenaAnswer(this, ${idx}, ${arena.correctAnswerIndex})">${opt}</div>`;
     });
     const optsEl = document.getElementById('arenaOptions');
     if (optsEl) optsEl.innerHTML = optsHTML;
@@ -210,7 +397,9 @@ function loadArenaQuestion() {
     const timerDisplay = document.getElementById('arenaTimerDisplay');
     if (timerDisplay) {
       timerDisplay.textContent = `⏱ ${arena.timer}s`;
-      timerDisplay.classList.remove('panic');
+      timerDisplay.classList.remove('panic', 'frozen');
+      timerDisplay.style.color = '';
+      timerDisplay.style.textShadow = '';
     }
     
     clearInterval(arena.interval);
@@ -235,10 +424,14 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
     if (selectedIdx === Number(correctIdx)) {
         if(element) element.classList.add('hit-correct');
         if(typeof playDing === 'function') playDing(); 
+        
         arena.streak++;
         
         const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
         arena.score += (10 + arena.timer + speedBonus);
+
+        // Fire positive visual shockwave across the beam
+        ArenaVisualEngine.triggerShockwave(arena.playerNum);
 
         if (arena.streak >= 3) {
           if(typeof playComboDrop === 'function') playComboDrop(arena.streak);
@@ -248,11 +441,15 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         if(typeof playBuzz === 'function') playBuzz();
         if(typeof triggerHaptic === 'function') triggerHaptic([90]);
         arena.streak = 0;
+        
         const card = document.getElementById('arenaCardContainer');
         if (card) {
           card.classList.add('arena-shake');
           setTimeout(() => card.classList.remove('arena-shake'), 400);
         }
+
+        // Fire negative glitch spark on the beam
+        ArenaVisualEngine.triggerGlitch(arena.playerNum);
     }
 
     if (arena.isBotMatch) {
@@ -276,6 +473,8 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
 
 function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
+    ArenaVisualEngine.stop(); // Turn off canvas rendering to save battery
+
     if (arena.isBotMatch) {
         showArenaResult({ player1_name: arena.name, player1_score: arena.score, player2_name: "Invincible AI", player2_score: arena.botScore });
     } else {
@@ -331,6 +530,36 @@ function showArenaResult(room) {
         }
     }
 }
+
+/* =====================================================
+   POWER-UP HOOKS (Trigger these from HTML UI)
+===================================================== */
+window.activateArena5050 = function() {
+    const opts = document.querySelectorAll('.arena-option');
+    if (!opts || opts.length < 4 || arena.correctAnswerIndex < 0) return;
+    
+    let removed = 0;
+    opts.forEach((opt, idx) => {
+        if (idx !== arena.correctAnswerIndex && removed < 2) {
+            opt.style.transition = 'all 0.4s ease';
+            opt.style.transform = 'scale(0.95)';
+            opt.style.opacity = '0.3';
+            opt.style.pointerEvents = 'none';
+            opt.innerHTML = `<span style="text-decoration: line-through; color: #f43f5e;">${opt.innerHTML}</span>`;
+            removed++;
+        }
+    });
+};
+
+window.activateArenaTimeFreeze = function() {
+    const timerDisplay = document.getElementById('arenaTimerDisplay');
+    if (timerDisplay) {
+        timerDisplay.classList.add('frozen');
+        timerDisplay.style.color = '#00e5ff';
+        timerDisplay.style.textShadow = '0 0 15px #00e5ff';
+    }
+    arena.timer += 5; // Adds 5 seconds globally to the current question limit
+};
 
 /* =====================================================
    1v1 ARENA PEER-TO-PEER LIVE VOICE CHAT ENGINE
