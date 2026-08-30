@@ -28,6 +28,21 @@ const defaultReelDeck = [
       trap: "Fringe Width β = λD/d. Decreasing slit gap d increases fringe separation!", 
       difficulty: "medium" 
     },
+    { 
+  id: 501, 
+  class_name: "10", 
+  type: "draw", 
+  sim_id: "phy_ray_draw", 
+  hook: "✏️ SKETCH THE RAY", 
+  title: "Law of Reflection", 
+  subject: "Physics", 
+  topic: "Light", 
+  q_en: "Drag on the canvas to draw the reflected ray for θ_i = 45°.", 
+  time: 20, 
+  trap: "Law of Reflection: Angle of incidence (θ_i) strictly equals angle of reflection (θ_r) with the normal.", 
+  difficulty: "medium" 
+},
+
 
     { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Drag or tap the correct terms to construct the formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
