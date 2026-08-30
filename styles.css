@@ -909,12 +909,10 @@ textarea:focus, input:focus, select:focus {
 /* Reels Main Container */
 .study-reels-container {
   height: calc(100dvh - 180px);
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   border-radius: 26px;
-  scrollbar-width: none;
+  position: relative;
+  touch-action: none;
 }
 
 .study-reels-container::-webkit-scrollbar {
@@ -924,8 +922,6 @@ textarea:focus, input:focus, select:focus {
 /* Authentic Full-Screen Reels Card */
 .reel-card {
   height: calc(100dvh - 180px);
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   position: relative;
   background: linear-gradient(175deg, #090e1d 0%, #050811 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -936,7 +932,6 @@ textarea:focus, input:focus, select:focus {
   justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-  margin-bottom: 12px;
   overflow: hidden;
 }
 
@@ -1108,6 +1103,7 @@ textarea:focus, input:focus, select:focus {
 .reel-card mjx-container > svg {
   max-width: 100% !important;
 }
+
 /* =====================================================
    🔥 GEN-Z PREMIUM UI OVERRIDES (SAFE APPEND) 🔥
 ===================================================== */
@@ -1225,9 +1221,9 @@ input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%;
   background: var(--accent-cyan); margin-top: -5px; cursor: pointer; box-shadow: 0 0 10px var(--accent-cyan);
 }
+
 /* =====================================================
    🔥 PREMIUM "GLASS & AIR" UI OVERRIDES (SAFE APPEND) 🔥
-   This instantly modernizes the UI without breaking existing code.
 ===================================================== */
 
 :root {
@@ -1309,4 +1305,133 @@ textarea:focus, input:focus, select:focus {
   margin-bottom: 120px !important; 
 }
 
+/* =====================================================
+   🧩 PHASE 2: INTERACTIVE DRAG-AND-DROP ENGINE & MAGNETIC SLOTS
+===================================================== */
+.build-matrix {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
 
+.build-slots-tray {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.build-slot {
+  width: 48px;
+  height: 48px;
+  border: 2px dashed rgba(0, 229, 255, 0.35);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.04);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+  will-change: transform, border-color, box-shadow;
+}
+
+/* Magnetic proximity glow when hovering over a drop target */
+.build-slot.slot-hover {
+  transform: scale(1.14);
+  border-style: solid;
+  border-color: var(--accent-cyan) !important;
+  background: rgba(0, 229, 255, 0.22) !important;
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.65), inset 0 0 10px rgba(0, 229, 255, 0.3);
+  animation: slotPulse 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes slotPulse {
+  from { box-shadow: 0 0 16px rgba(0, 229, 255, 0.5); }
+  to { box-shadow: 0 0 28px rgba(0, 229, 255, 0.9); }
+}
+
+.build-slot.slot-filled {
+  border-style: solid;
+  border-color: var(--accent-cyan);
+  background: rgba(0, 229, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 229, 255, 0.15);
+}
+
+.build-slot.slot-correct {
+  border-style: solid;
+  border-color: var(--accent-emerald) !important;
+  background: rgba(16, 185, 129, 0.22) !important;
+  color: var(--accent-emerald) !important;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+}
+
+.build-slot.slot-wrong {
+  border-style: solid;
+  border-color: var(--accent-rose) !important;
+  background: rgba(244, 63, 94, 0.2) !important;
+  color: var(--accent-rose) !important;
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.45);
+}
+
+.build-choices-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Draggable Choice Chip */
+.build-choice-btn {
+  padding: 12px 22px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  color: #fff;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: grab;
+  touch-action: none !important;
+  user-select: none;
+  -webkit-user-select: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s, box-shadow 0.2s;
+  will-change: transform;
+}
+
+.build-choice-btn:active {
+  cursor: grabbing;
+}
+
+/* Floating Physics State when Dragged */
+.build-choice-btn.is-dragging {
+  position: fixed !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+  z-index: 999999 !important;
+  transform: scale(1.15) translate3d(0, 0, 0) !important;
+  border-color: var(--accent-cyan) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 229, 255, 0.5) !important;
+  cursor: grabbing !important;
+}
+
+/* Docked Placeholder State */
+.build-choice-btn.is-docked-ghost {
+  opacity: 0.18 !important;
+  pointer-events: none !important;
+  transform: scale(0.92) !important;
+  border-style: dashed !important;
+}
