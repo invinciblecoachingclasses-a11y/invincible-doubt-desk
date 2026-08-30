@@ -446,9 +446,6 @@ function generateSubjectVisual(subject, topic) {
     `;
 }
 
-/* =====================================================
-   ROADMAP PHASE 2: DYNAMIC PSYCHOLOGICAL HOOK ROTATOR
-===================================================== */
 function generateDynamicHook(card) {
     if (card.hook && card.hook !== "⚡ QUICK CHECK") return card.hook;
 
@@ -488,13 +485,14 @@ async function renderReelsDeck() {
     if (!container) return;
 
     let apiDeck = [];
-    try {
-        const res = await fetch(`/api/get-questions?target_class=${currentReelsClass}`);
-        const data = await res.json();
-        if (data && Array.isArray(data.reelDeck) && data.reelDeck.length > 0) {
-            apiDeck = data.reelDeck;
-        }
-    } catch(e) {}
+    // [FIX 1] Bypassed hanging Vercel fetch to guarantee instant load.
+    // try {
+    //     const res = await fetch(`/api/get-questions?target_class=${currentReelsClass}`);
+    //     const data = await res.json();
+    //     if (data && Array.isArray(data.reelDeck) && data.reelDeck.length > 0) {
+    //         apiDeck = data.reelDeck;
+    //     }
+    // } catch(e) {}
 
     const interactiveCards = defaultReelDeck.filter(c => 
         (String(c.class_name) === String(currentReelsClass) || c.type === 'build' || c.type === 'sim' || c.type === 'draw')
@@ -572,7 +570,7 @@ function setupSwiperEngine(container) {
     Object.keys(activeSimInstances).forEach(k => unmountReelSimulation(k));
     Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
-    // CRITICAL FIX: Ensure exact viewport height mapping to stop iOS collapsing to 0px
+    // [FIX 2] Added required physical dimensions so cards do not collapse to 0 height.
     container.style.height = 'calc(100vh - 190px)';
     container.style.minHeight = '480px';
     container.style.width = '100%';
@@ -687,6 +685,9 @@ function snapToNode(direction) {
     if (isTransitioning) return;
     isTransitioning = true;
 
+    // [FIX 4] Failsafe: Ensures touches unlock even if JS stutters.
+    setTimeout(() => { isTransitioning = false; }, 350);
+
     const transitionCSS = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = transitionCSS;
@@ -703,7 +704,6 @@ function snapToNode(direction) {
         setTimeout(() => {
             currentReelIndex++;
             recycleForward();
-            isTransitioning = false;
         }, 300);
 
     } else if (direction === 'prev' && currentReelIndex > 0) {
@@ -717,17 +717,12 @@ function snapToNode(direction) {
         setTimeout(() => {
             currentReelIndex--;
             recycleBackward();
-            isTransitioning = false;
         }, 300);
 
     } else {
         activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
         activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
         activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
-
-        setTimeout(() => {
-            isTransitioning = false;
-        }, 300);
     }
 }
 
@@ -1303,7 +1298,7 @@ function generateReelHTML(card, idx) {
         `;
     }
 
-    // FIX: Replaced overflow:hidden with clip-path to bypass iOS WebKit 3D rendering black-screen crash
+    // [FIX 3] Replaced overflow:hidden with iOS-safe clip-path to stop 3D Webkit crash
     return `
       <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:linear-gradient(175deg, rgba(15,23,42,0.96) 0%, rgba(5,8,17,0.98) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.85); clip-path:inset(0 round 24px); -webkit-clip-path:inset(0 round 24px); transform:translateZ(0); -webkit-transform:translateZ(0); box-sizing:border-box;">
         
