@@ -1,17 +1,17 @@
 /* =====================================================
-   ⚡ ZERO-TOKEN STUDY REELS ENGINE (VIRTUALIZED UI)
+   ⚡ ZERO-TOKEN STUDY REELS ENGINE (VIRTUALIZED UI + BUILDER)
 ===================================================== */
 const defaultReelDeck = [
-    { id: 101, class_name: "10", type: "mcq", subject: "Physics", topic: "Light & Optics", q_en: "If magnification m = -1 for a spherical mirror, where is the object placed?", q_hi: "यदि किसी गोलीय दर्पण के लिए m = -1 है, तो वस्तु कहाँ स्थित है?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)", "Between F and P"], answer: 2, trap: "Negative magnification signifies a real and inverted image of identical size, which only happens at C." },
+    { id: 101, class_name: "10", type: "mcq", hook: "⚡ 5 SECOND CHALLENGE", title: "Only 18% got this right.", subject: "Physics", topic: "Light", q_en: "If m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)"], answer: 2, time: 5, trap: "Negative magnification means real & inverted. Size is same only at C.", difficulty: "easy" },
+    
+    // NEW PHASE 2: INTERACTIVE BUILDER REEL
+    { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Construct the correct formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
+    
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
-    { id: 103, class_name: "10", type: "formula", subject: "Physics", topic: "Electricity", title: "🧠 Power Vault", formula: "P = VI = I^2R = \\frac{V^2}{R}", tip: "In series circuits use P = I²R. In parallel household circuits use P = V²/R." },
-    { id: 104, class_name: "10", type: "mcq", subject: "Chemistry", topic: "Chemical Reactions", q_en: "When lead nitrate powder is heated in a boiling tube, brown fumes are emitted. The gas is:", q_hi: "लेड नाइट्रेट को गर्म करने पर भूरे रंग का धुआँ निकलता है। वह गैस कौन सी है?", options: ["NO", "NO₂ (Nitrogen Dioxide)", "N₂O", "O₂"], answer: 1, trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. Brown fumes are strictly NO₂." },
-    { id: 105, class_name: "10", type: "trap", subject: "Chemistry", topic: "Acids & Bases", title: "🚨 Acid Dilution Danger", content: "NEVER add water to concentrated acid! It causes violent exothermic splashing.", rule: "Always add Acid to Water drop by drop with continuous stirring." },
-    { id: 106, class_name: "10", type: "mcq", subject: "Mathematics", topic: "Trigonometry", q_en: "If sin θ + sin² θ = 1, then the value of cos² θ + cos⁴ θ is:", q_hi: "यदि sin θ + sin² θ = 1 है, तो cos² θ + cos⁴ θ का मान क्या होगा?", options: ["0", "1", "2", "-1"], answer: 1, trap: "sin θ = 1 - sin² θ = cos² θ. Squaring both sides: sin² θ = cos⁴ θ. So cos² θ + cos⁴ θ = sin θ + sin² θ = 1." },
-    { id: 901, class_name: "9", type: "mcq", subject: "Physics", topic: "Gravitation", q_en: "The value of acceleration due to gravity (g) at the center of the Earth is:", q_hi: "पृथ्वी के केंद्र पर गुरुत्वीय त्वरण (g) का मान कितना होता है?", options: ["9.8 m/s²", "Zero (0)", "Infinite", "4.9 m/s²"], answer: 1, trap: "At Earth's center, mass attracts equally in all directions, so net gravitational force is zero." },
-    { id: 902, class_name: "9", type: "trap", subject: "Physics", topic: "Work & Energy", title: "🚨 Centripetal Work Trap", content: "Work done by centripetal force is ALWAYS ZERO because force is perpendicular to displacement (θ = 90°, cos 90° = 0).", rule: "Satellites orbiting Earth do zero net work." },
-    { id: 1101, class_name: "11", type: "mcq", subject: "Physics", topic: "Kinematics", q_en: "For a projectile, the angle of projection for maximum horizontal range is:", q_hi: "प्रक्षेप्य के लिए अधिकतम क्षैतिज परास का प्रक्षेपण कोण क्या है?", options: ["30°", "45°", "60°", "90°"], answer: 1, trap: "Range R = (u² sin 2θ)/g. Maximum when sin 2θ = 1 ⇒ θ = 45°." },
-    { id: 1201, class_name: "12", type: "mcq", subject: "Physics", topic: "Electrostatics", q_en: "Electric flux through a closed Gaussian surface enclosing an electric dipole is:", q_hi: "किसी बंद गॉसियन सतह के भीतर विद्युत द्विध्रुव होने पर कुल विद्युत फ्लक्स क्या होगा?", options: ["q / ε₀", "2q / ε₀", "Zero (0)", "Infinite"], answer: 2, trap: "Net enclosed charge inside a dipole is (+q - q) = 0. By Gauss's Law, flux = 0." }
+    { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
+    { id: 301, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Power Equation", subject: "Physics", topic: "Electricity", q_en: "Construct the formula for electrical power in terms of Current and Resistance.", template: ["slot", "=", "slot", "²", "×", "slot"], choices: ["P", "V", "I", "R", "t"], answer: ["P", "I", "R"], time: 20, trap: "Power is I²R for series circuits. P = V²/R is for parallel.", difficulty: "medium" },
+    { id: 104, class_name: "10", type: "mcq", hook: "🧠 THINK BEFORE YOU TAP", title: "Don't calculate. Just look.", subject: "Mathematics", topic: "Trig", q_en: "If sin θ + sin² θ = 1, what is cos² θ + cos⁴ θ?", options: ["0", "1", "2"], answer: 1, time: 15, trap: "sin θ = 1 - sin² θ = cos² θ. Square it: sin² θ = cos⁴ θ. Thus cos² θ + cos⁴ θ = 1.", difficulty: "medium" },
+    { id: 901, class_name: "9", type: "mcq", hook: "⚡ QUICK CHECK", title: "Core Concept", subject: "Physics", topic: "Gravitation", q_en: "The value of acceleration due to gravity (g) at the center of the Earth is:", options: ["9.8 m/s²", "Zero (0)", "Infinite"], answer: 1, time: 10, trap: "At Earth's center, mass attracts equally in all directions, so net force is zero." }
 ];
 
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
@@ -21,6 +21,7 @@ let reelStreak = 0;
 let activeReelDeck = [];
 let currentReelIndex = 0;
 let scrollDebounceTimer = null;
+let activeReelTimers = {};
 
 function safeEscapeHTML(str) {
     if (typeof escapeHTML === 'function') return escapeHTML(str);
@@ -83,23 +84,34 @@ async function renderReelsDeck() {
     updateVirtualizedWindow();
 
     // 3. Attach smart scroll listener
-    container.addEventListener('scroll', () => {
+    container.onscroll = () => {
         clearTimeout(scrollDebounceTimer);
         scrollDebounceTimer = setTimeout(() => {
-            // Find current index based on wrapper heights
             const cardHeight = container.clientHeight;
             const newIndex = Math.round(container.scrollTop / cardHeight);
             
             if (newIndex !== currentReelIndex && newIndex >= 0 && newIndex < activeReelDeck.length) {
+                // Stop timer for old card
+                const oldCard = activeReelDeck[currentReelIndex];
+                if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
+                
                 currentReelIndex = newIndex;
                 updateVirtualizedWindow();
+
+                // Start timer for new card
+                const newCard = activeReelDeck[currentReelIndex];
+                if (newCard) startReelTimer(newCard.id || currentReelIndex);
             }
-        }, 50); // Slight debounce to prevent mid-swipe thrashing
-    }, { passive: true });
+        }, 50); 
+    };
+
+    // Start timer for very first card
+    setTimeout(() => {
+        if (activeReelDeck[0]) startReelTimer(activeReelDeck[0].id || 0);
+    }, 500);
 }
 
 function updateVirtualizedWindow() {
-    // Only keep Current-1, Current, and Current+1 in the DOM
     const startIdx = Math.max(0, currentReelIndex - 1);
     const endIdx = Math.min(activeReelDeck.length - 1, currentReelIndex + 1);
 
@@ -113,10 +125,9 @@ function updateVirtualizedWindow() {
         if (isInWindow && !hasContent) {
             // INJECT HTML
             wrapper.innerHTML = generateReelHTML(card, idx);
-            // Typeset MathJax instantly for the newly injected card
-            try {
+            try { 
                 if (window.MathJax && MathJax.typesetPromise) {
-                    MathJax.typesetPromise([wrapper]).catch(() => {});
+                    MathJax.typesetPromise([wrapper]).catch(() => {}); 
                 }
             } catch(e) {}
         } else if (!isInWindow && hasContent) {
@@ -127,89 +138,84 @@ function updateVirtualizedWindow() {
 }
 
 function generateReelHTML(card, idx) {
-    const rawTitle = String(card.q_en || card.title || '');
-    const rawSub = String(card.subject || 'Science');
-    const rawFormula = String(card.formula || '');
-    
-    const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-    const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-    const formulaJS = rawFormula.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-    
     const sub = card.subject || 'Science';
-    const hook = card.topic || 'NCERT Concept';
+    const hook = card.hook || '⚡ QUICK CHECK';
     const author = card.author_name || 'Faculty Topper';
     const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:3px 8px; border-radius:8px;">⚡ By ${safeEscapeHTML(author)}</span>`;
-    
     const safeCardId = String(card.id || idx);
+    const timeLimit = card.time || 15;
+    const isBoss = card.difficulty === 'boss';
+    const hookColor = isBoss ? 'var(--accent-rose)' : 'var(--accent-cyan)';
+    
+    let contentHTML = '';
+
+    const rawTitle = String(card.q_en || card.title || '');
+    const rawSub = String(card.subject || 'Science');
+    const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
     const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
     const dockBtnStyle = `width:42px; height:42px; border-radius:50%; background:rgba(15,23,42,0.85); border:1px solid rgba(0,229,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(8px); box-shadow:0 4px 14px rgba(0,0,0,0.6); transition:transform 0.2s;`;
     const dockLabelStyle = `font-size:9.5px; color:#cbd5e1; font-weight:800; margin-top:3px; text-shadow:0 1px 3px #000;`;
 
+    // --- MCQ LOGIC ---
     if (card.type === 'mcq') {
-        let opts = card.options;
-        if (typeof opts === 'string') {
-            try { opts = JSON.parse(opts); } catch(e) { opts = []; }
+        let opts = Array.isArray(card.options) ? card.options : [];
+        if (typeof card.options === 'string') {
+            try { opts = JSON.parse(card.options); } catch(e) { opts = []; }
         }
-        if (!Array.isArray(opts)) opts = [];
-
-        return `
-          <div class="reel-card" id="reelCard_${safeCardId}" style="position:relative; width: 100%; height: 100%; padding-right:65px; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
-            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
-              <span class="reel-hook-badge" style="background:rgba(0,229,255,0.12); color:var(--accent-cyan); border:1px solid rgba(0,229,255,0.3); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
-              ${creatorBadge}
-            </div>
-            
-            <div class="reel-content-box" style="margin-top: 40px;">
-              <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
-              ${card.q_hi ? `<div class="reel-q-sub" style="font-size:13px; color:#94a3b8; margin-bottom:16px; line-height:1.4;">${card.q_hi}</div>` : ''}
-
-              <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px;">
-                ${opts.map((opt, oIdx) => `
-                  <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, this)" style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); color:#f1f5f9; padding:14px 16px; border-radius:12px; font-size:14px; font-weight:700; text-align:left; cursor:pointer; transition:all 0.2s;">
-                    <span>${safeFormatMath(String(opt))}</span>
-                    <span style="font-size:14px; opacity:0.4; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; width: 18px; height: 18px; display: inline-block;"></span>
-                  </button>
-                `).join('')}
-              </div>
-              <div id="reelFeedback_${safeCardId}" style="font-size:13px; margin-top:12px; display:none; padding:12px; border-radius:12px; background:rgba(0,0,0,0.4);"></div>
-            </div>
-
-            <div style="${dockStyle}">
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
-                <div style="${dockLabelStyle}">Doubt</div>
-              </div>
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle}" onclick="reactStory('fire')">🔥</div>
-                <div style="${dockLabelStyle}">Clout</div>
-              </div>
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
-                <div style="${dockLabelStyle}">Share</div>
-              </div>
-            </div>
-
-            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">
-              <span>⚡ Swipe up for next challenge</span>
-            </div>
+        
+        contentHTML = `
+          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            ${opts.map((opt, oIdx) => `
+              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:14px; font-weight:700; padding:14px 18px; border-radius:14px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:all 0.2s;">
+                  <span>${safeFormatMath(String(opt))}</span>
+                  <span class="opt-indicator" style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.2);"></span>
+              </button>
+            `).join('')}
           </div>
         `;
-    } else if (card.type === 'trap' || card.type === 'hack') {
-        return `
-          <div class="reel-card" style="position:relative; width: 100%; height: 100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'}; border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
-            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
-              <span class="reel-hook-badge" style="color:#fda4af; border:1px solid rgba(244,63,94,0.4); background:rgba(244,63,94,0.15); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${card.type === 'trap' ? '🚨 EXAMINER TRAP' : '💡 TOPPER HACK'} • ${sub.toUpperCase()}</span>
-              ${creatorBadge}
-            </div>
-            
-            <div class="reel-content-box" style="margin-top: 40px;">
-              <div class="reel-q-title" style="font-size:17px; font-weight:900; color:${card.type === 'trap' ? '#f43f5e' : 'var(--accent-cyan)'}; margin:0 0 10px 0;">${card.title || hook}</div>
-              <div style="font-size:14px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.03); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
-              
-              ${card.rule ? `<div style="font-size:13px; color:var(--accent-emerald); font-weight:800; margin-top:12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:12px; border-radius:12px;">✅ GOLDEN RULE: ${card.rule}</div>` : ''}
-            </div>
+    } 
+    // --- PHASE 2: TAP-TO-BUILD LOGIC ---
+    else if (card.type === 'build') {
+        const templateArray = Array.isArray(card.template) ? card.template : [];
+        const choicesArray = Array.isArray(card.choices) ? card.choices : [];
+        
+        const builderHTML = templateArray.map((item) => {
+            if (item === 'slot') {
+                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled="" style="width:45px; height:45px; border:2px dashed rgba(0,229,255,0.4); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.05); cursor:pointer; transition:0.2s;"></div>`;
+            } else {
+                return `<div style="font-size:22px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
+            }
+        }).join('');
 
+        const choicesHTML = choicesArray.map((choice, cIdx) => `
+            <button class="build-choice-btn" id="choice_${safeCardId}_${cIdx}" onclick="window.handleBuildTap('${safeCardId}', '${choice}', ${cIdx})" style="padding:12px 20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:14px; color:#fff; font-size:16px; font-weight:800; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.2);">${choice}</button>
+        `).join('');
+
+        contentHTML = `
+          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+          
+          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}' style="margin-top:30px;">
+              <div style="display:flex; gap:12px; justify-content:center; margin-bottom:40px; align-items:center; flex-wrap:wrap;">
+                  ${builderHTML}
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+                  ${choicesHTML}
+              </div>
+          </div>
+        `;
+    }
+    // --- TRAP / HACK LOGIC ---
+    else if (card.type === 'trap' || card.type === 'hack') {
+        const isTrap = card.type === 'trap';
+        return `
+          <div class="reel-card" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose)' : 'var(--accent-cyan)'}; border-radius:20px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center;">
+            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#f43f5e' : 'var(--accent-cyan)'}; margin:0 0 16px 0;">${card.title}</div>
+            <div style="font-size:15px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.03); padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
+            ${card.rule ? `<div style="font-size:14px; color:var(--accent-emerald); font-weight:800; margin-top:16px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:16px; border-radius:14px;">✅ RULE: ${card.rule}</div>` : ''}
+            
             <div style="${dockStyle}">
               <div style="text-align:center;">
                 <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
@@ -225,47 +231,267 @@ function generateReelHTML(card, idx) {
               </div>
             </div>
 
-            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">
-              <span>⚡ Swipe up for next hack</span>
-            </div>
-          </div>
-        `;
-    } else {
-        return `
-          <div class="reel-card" style="position:relative; width: 100%; height: 100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid var(--accent-cyan); border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
-            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
-              <span class="reel-hook-badge" style="color:#bae6fd; border:1px solid rgba(0,229,255,0.4); background:rgba(0,229,255,0.12); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
-              ${creatorBadge}
-            </div>
-            
-            <div class="reel-content-box" style="text-align:center; margin-top: 40px;">
-              <div class="reel-q-title" style="font-size:17px; font-weight:900; color:var(--accent-cyan); margin:0 0 10px 0;">${card.title || 'Core Formula'}</div>
-              <div class="reel-formula-box" style="background:#020617; border:1px solid rgba(0,229,255,0.3); border-radius:12px; padding:16px; font-size:18px; margin:12px 0;">$$${card.formula || ''}$$</div>
-              
-              <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-top:10px; text-align:left; background:rgba(255,255,255,0.03); padding:12px; border-radius:12px;">💡 ${card.tip || ''}</div>
-            </div>
-
-            <div style="${dockStyle}">
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">🧠</div>
-                <div style="${dockLabelStyle}">Derive</div>
-              </div>
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle}" onclick="reactStory('100')">💯</div>
-                <div style="${dockLabelStyle}">Save</div>
-              </div>
-              <div style="text-align:center;">
-                <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
-                <div style="${dockLabelStyle}">Share</div>
-              </div>
-            </div>
-
-            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800; text-align:left;">
-              <span>⚡ Swipe up for next hack</span>
-            </div>
+            <div style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">⚡ Swipe up for next</div>
           </div>
         `;
     }
+
+    // Wrap Active Formats (MCQ & BUILD)
+    return `
+      <div class="reel-card" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; padding:0; background:linear-gradient(175deg, #090e1d 0%, #050811 100%); border:1px solid rgba(255,255,255,0.05); border-radius:26px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.9); overflow:hidden; box-sizing:border-box;">
+        
+        <!-- Timer Bar -->
+        <div style="width:100%; height:4px; background:rgba(255,255,255,0.05);">
+            <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; box-shadow:0 0 10px ${hookColor}; transition:width 0.1s linear;"></div>
+        </div>
+
+        <div style="padding:24px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+            <div style="margin-bottom:20px;">
+                <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:10px;">
+                    ${hook}
+                </div>
+                <div style="font-family:'Space Grotesk'; font-size:24px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:8px;">${card.title || 'Can you solve this?'}</div>
+                <div style="font-size:12px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
+            </div>
+            
+            <div style="position:relative; z-index:10;">
+                ${contentHTML}
+            </div>
+        </div>
+
+        <!-- TWO-STAGE REVEAL CARD -->
+        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.95); backdrop-filter:blur(20px); border-top:1px solid rgba(255,255,255,0.1); padding:24px 20px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:20; border-radius:26px;">
+            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; margin-bottom:6px;"></div>
+            <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px; padding:12px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+                ${card.trap || 'Review the core concepts in the Study Hub.'}
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <div style="display:flex; gap:8px;">
+                    <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:var(--accent-amber); font-weight:900; font-size:11px; padding:6px 10px; border-radius:8px;">+0 XP</span>
+                    <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:var(--accent-rose); font-weight:900; font-size:11px; padding:6px 10px; border-radius:8px;">🔥 STREAK</span>
+                </div>
+            </div>
+            <div style="text-align:center; font-size:11px; font-weight:800; color:var(--text-muted); animation:pulse 1.5s infinite; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
+        </div>
+
+        <div style="${dockStyle}">
+          <div style="text-align:center;">
+            <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+            <div style="${dockLabelStyle}">Doubt</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="${dockBtnStyle}" onclick="reactStory('fire')">🔥</div>
+            <div style="${dockLabelStyle}">Clout</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+            <div style="${dockLabelStyle}">Share</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+// ---------------------------------------------------
+// TIMERS
+// ---------------------------------------------------
+function startReelTimer(cardId) {
+    if (activeReelTimers[cardId]) return; 
+    const card = document.getElementById(`reelCard_${cardId}`);
+    const fill = document.getElementById(`timerFill_${cardId}`);
+    if (!card || !fill) return;
+
+    const timeLimit = parseInt(card.getAttribute('data-time'), 10) * 1000;
+    let timeLeft = timeLimit;
+    
+    activeReelTimers[cardId] = setInterval(() => {
+        timeLeft -= 100;
+        const percentage = (timeLeft / timeLimit) * 100;
+        fill.style.width = `${percentage}%`;
+
+        if (timeLeft <= 0) {
+            stopReelTimer(cardId);
+            const grid = document.getElementById(`optionsGrid_${cardId}`);
+            if (grid) handleReelAnswer(cardId, -1, -1, false, null); // Auto-fail MCQ
+            const matrix = card.querySelector('.build-matrix');
+            if (matrix) window.checkBuildAnswer(cardId); // Auto-fail Builder
+        }
+    }, 100);
+}
+
+function stopReelTimer(cardId) {
+    if (activeReelTimers[cardId]) {
+        clearInterval(activeReelTimers[cardId]);
+        activeReelTimers[cardId] = null;
+    }
+}
+
+// ---------------------------------------------------
+// PHASE 2: BUILDER ENGINE LOGIC
+// ---------------------------------------------------
+window.handleBuildTap = function(cardId, choiceStr, choiceIdx) {
+    const card = document.getElementById(`reelCard_${cardId}`);
+    const slots = card.querySelectorAll('.build-slot');
+    const btn = card.querySelector(`#choice_${cardId}_${choiceIdx}`);
+
+    let emptySlot = null;
+    for (let slot of slots) {
+        if (!slot.getAttribute('data-filled')) {
+            emptySlot = slot;
+            break;
+        }
+    }
+
+    if (!emptySlot) return;
+
+    if(typeof playDing === 'function') playDing();
+    emptySlot.innerHTML = choiceStr;
+    emptySlot.setAttribute('data-filled', choiceStr);
+    emptySlot.setAttribute('data-source', choiceIdx);
+    emptySlot.style.borderStyle = 'solid';
+    emptySlot.style.borderColor = 'var(--accent-cyan)';
+    emptySlot.style.background = 'rgba(0,229,255,0.2)';
+
+    btn.style.visibility = 'hidden';
+
+    const allFilled = Array.from(slots).every(s => s.getAttribute('data-filled'));
+    if (allFilled) {
+        window.checkBuildAnswer(cardId);
+    }
+}
+
+window.removeBuildTap = function(cardId, slotEl) {
+    const sourceIdx = slotEl.getAttribute('data-source');
+    if (sourceIdx !== null) {
+        const btn = document.getElementById(`reelCard_${cardId}`).querySelector(`#choice_${cardId}_${sourceIdx}`);
+        if (btn) btn.style.visibility = 'visible';
+        slotEl.innerHTML = '';
+        slotEl.removeAttribute('data-filled');
+        slotEl.removeAttribute('data-source');
+        slotEl.style.borderStyle = 'dashed';
+        slotEl.style.borderColor = 'rgba(0,229,255,0.4)';
+        slotEl.style.background = 'rgba(0,229,255,0.05)';
+    }
+}
+
+window.checkBuildAnswer = function(cardId) {
+    stopReelTimer(cardId);
+    const card = document.getElementById(`reelCard_${cardId}`);
+    const matrix = card.querySelector('.build-matrix');
+    const correctAnswer = JSON.parse(matrix.getAttribute('data-answer'));
+    const isBoss = matrix.getAttribute('data-boss') === 'true';
+
+    const slots = card.querySelectorAll('.build-slot');
+    const currentAnswer = Array.from(slots).map(s => s.getAttribute('data-filled'));
+    const isCorrect = JSON.stringify(currentAnswer) === JSON.stringify(correctAnswer);
+
+    slots.forEach(s => s.onclick = null);
+    card.querySelectorAll('.build-choice-btn').forEach(b => b.onclick = null);
+
+    const reveal = document.getElementById(`revealState_${cardId}`);
+    const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
+    const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
+    const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
+
+    if (isCorrect) {
+        slots.forEach(s => { s.style.borderColor = 'var(--accent-emerald)'; s.style.background = 'rgba(16,185,129,0.2)'; s.style.color = 'var(--accent-emerald)'; });
+        if(typeof playDing === 'function') playDing();
+        if(typeof triggerHaptic === 'function') triggerHaptic([30,50]);
+        if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{y:0.6} });
+        
+        reelStreak++;
+        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
+        revealTitle.innerHTML = `<span style="color:var(--accent-emerald);">✓ PERFECT BUILD</span>`;
+        xpBadge.innerText = `+${totalXP} XP`;
+        
+        if (reelStreak > 2) {
+            streakBadge.style.display = 'inline-block';
+            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+        }
+        const xpEl = document.getElementById('xpCounter');
+        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
+    } else {
+        slots.forEach(s => { s.style.borderColor = 'var(--accent-rose)'; s.style.background = 'rgba(244,63,94,0.15)'; s.style.color = 'var(--accent-rose)'; });
+        if(typeof playBuzz === 'function') playBuzz();
+        if(typeof triggerHaptic === 'function') triggerHaptic([80]);
+        reelStreak = 0;
+        revealTitle.innerHTML = `<span style="color:var(--accent-rose);">✕ CIRCUIT BROKEN</span>`;
+        xpBadge.innerText = `+0 XP`;
+        xpBadge.style.background = 'rgba(255,255,255,0.05)';
+        xpBadge.style.color = '#94a3b8';
+    }
+
+    setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 400);
+}
+
+// ---------------------------------------------------
+// TWO-STAGE MCQ REVEAL LOGIC
+// ---------------------------------------------------
+function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
+    stopReelTimer(cardId);
+    const card = document.getElementById(`reelCard_${cardId}`);
+    const reveal = document.getElementById(`revealState_${cardId}`);
+    const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
+    const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
+    const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
+    
+    if (!card || !reveal) return;
+
+    const buttons = card.querySelectorAll('.reel-opt-btn');
+    buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        if (idx === correctIdx) {
+            btn.style.opacity = '1';
+            btn.style.borderColor = 'var(--accent-emerald)';
+            btn.style.background = 'rgba(16,185,129,0.1)';
+        }
+    });
+
+    const isCorrect = Number(selectedIdx) === Number(correctIdx);
+
+    if (isCorrect) {
+        if (typeof playDing === 'function') playDing();
+        if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
+        if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: {y: 0.6} });
+
+        if (selectedIdx >= 0 && btnEl) {
+            btnEl.style.borderColor = 'var(--accent-emerald)';
+            btnEl.style.background = 'rgba(16,185,129,0.2)';
+            btnEl.querySelector('.opt-indicator').style.background = 'var(--accent-emerald)';
+            btnEl.querySelector('.opt-indicator').style.borderColor = 'var(--accent-emerald)';
+        }
+
+        reelStreak++;
+        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
+        revealTitle.innerHTML = `<span style="color:var(--accent-emerald);">✓ CORRECT</span>`;
+        xpBadge.innerText = `+${totalXP} XP`;
+        if (reelStreak > 2) {
+            streakBadge.style.display = 'inline-block';
+            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+        }
+        const xpEl = document.getElementById('xpCounter');
+        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
+    } else {
+        if (typeof playBuzz === 'function') playBuzz();
+        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
+
+        if (selectedIdx >= 0 && btnEl) {
+            btnEl.style.opacity = '1';
+            btnEl.style.borderColor = 'var(--accent-rose)';
+            btnEl.style.background = 'rgba(244,63,94,0.15)';
+            btnEl.querySelector('.opt-indicator').style.background = 'var(--accent-rose)';
+            btnEl.querySelector('.opt-indicator').style.borderColor = 'var(--accent-rose)';
+        }
+
+        reelStreak = 0;
+        revealTitle.innerHTML = `<span style="color:var(--accent-rose);">✕ MISSED</span>`;
+        xpBadge.innerText = `+0 XP`;
+        xpBadge.style.background = 'rgba(255,255,255,0.05)';
+        xpBadge.style.color = '#94a3b8';
+    }
+
+    setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 400);
 }
 
 function shareReel(text) {
@@ -274,69 +500,6 @@ function shareReel(text) {
     } else {
         navigator.clipboard.writeText(`${text} - Solve on Invincible 360: ${window.location.href}`);
         alert('📋 Reel link copied to clipboard!');
-    }
-}
-
-function handleReelAnswer(cardId, selectedIdx, correctIdx, btnEl) {
-    const card = document.getElementById(`reelCard_${cardId}`);
-    if (!card) return;
-
-    const buttons = card.querySelectorAll('.reel-opt-btn');
-    buttons.forEach(b => { b.disabled = true; b.style.cursor = 'default'; });
-
-    const fb = document.getElementById(`reelFeedback_${cardId}`);
-    const comboBadge = document.getElementById('reelsComboBadge');
-    const isCorrect = Number(selectedIdx) === Number(correctIdx);
-
-    if (isCorrect) {
-        if (typeof playDing === 'function') playDing();
-        if (typeof triggerHaptic === 'function') triggerHaptic([30, 40, 30]);
-        btnEl.style.background = 'linear-gradient(135deg, rgba(16,185,129,0.3), rgba(5,150,105,0.4))';
-        btnEl.style.borderColor = 'var(--accent-emerald)';
-        btnEl.innerHTML = btnEl.innerHTML.replace('</span>', '</span><span style="font-weight:900; color:var(--accent-emerald);">✓</span>');
-        
-        reelStreak++;
-
-        if (comboBadge) {
-            comboBadge.classList.remove('hidden');
-            comboBadge.textContent = `🔥 x${reelStreak} STREAK`;
-        }
-
-        if (fb) {
-            fb.style.display = 'block';
-            fb.innerHTML = `<span style="color:var(--accent-emerald); font-weight:900;">✓ Correct! +15 XP</span>`;
-        }
-
-        const xpEl = document.getElementById('xpCounter');
-        if (xpEl) {
-            const currentXp = parseInt(xpEl.textContent || '680', 10);
-            xpEl.textContent = currentXp + (reelStreak >= 3 ? 25 : 15);
-        }
-
-        if (typeof rechargeBlitzPowerup === 'function') rechargeBlitzPowerup('fiftyFifty');
-
-        if (reelStreak >= 3) {
-            if (typeof confetti === 'function') confetti({ particleCount: 35, spread: 45, origin: { y: 0.8 } });
-        }
-    } else {
-        if (typeof playBuzz === 'function') playBuzz();
-        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
-        btnEl.style.background = 'linear-gradient(135deg, rgba(244,63,94,0.3), rgba(225,29,72,0.4))';
-        btnEl.style.borderColor = 'var(--accent-rose)';
-        btnEl.innerHTML = btnEl.innerHTML.replace('</span>', '</span><span style="font-weight:900; color:var(--accent-rose);">✗</span>');
-        
-        if (buttons[correctIdx]) {
-            buttons[correctIdx].style.background = 'rgba(16,185,129,0.2)';
-            buttons[correctIdx].style.borderColor = 'var(--accent-emerald)';
-        }
-        reelStreak = 0;
-
-        if (comboBadge) comboBadge.classList.add('hidden');
-
-        if (fb) {
-            fb.style.display = 'block';
-            fb.innerHTML = `<span style="color:var(--accent-rose); font-weight:800;">✗ Incorrect. Check concepts in Study Notes!</span>`;
-        }
     }
 }
 
