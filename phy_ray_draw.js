@@ -2,6 +2,7 @@
  * =====================================================
  * MODULE: RAY OPTICS PREDICTION & DRAWING ENGINE
  * Type: Interactive Vector / Ray Sketchpad
+ * Architecture: Micro-Engine Plugin (DevicePixelRatio Aware)
  * =====================================================
  */
 
@@ -14,16 +15,13 @@ class RayDrawEngine {
     this.cardId = canvas.getAttribute('data-sim-card-id');
     this.isDestroyed = false;
 
-    // Simulation Setup: Light striking a flat mirror or boundary
     this.params = {
-      incidentAngleDeg: 45, // Angle of incidence with normal
-      toleranceDeg: 5,       // Allowable margin of error
-      mode: 'reflection',    // 'reflection' or 'refraction'
-      refractiveIndex: 1.5,
+      incidentAngleDeg: 45, // Target reflection angle
+      toleranceDeg: 6,       // Angular error tolerance (±6°)
       ...customParams
     };
 
-    this.userRay = null; // { endX, endY, drawnAngleDeg, isSubmitted }
+    this.userRay = null;
     this.isDrawing = false;
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -35,16 +33,16 @@ class RayDrawEngine {
   resize() {
     if (!this.canvas) return;
     const rect = this.canvas.getBoundingClientRect();
-    this.width = rect.width;
-    this.height = rect.height;
+    this.width = rect.width || 320;
+    this.height = rect.height || 165;
 
     this.canvas.width = this.width * this.dpr;
     this.canvas.height = this.height * this.dpr;
     this.ctx.scale(this.dpr, this.dpr);
 
-    // Coordinate Anchors
+    // Anchor origin at the center-bottom reflective surface
     this.originX = this.width * 0.5;
-    this.originY = this.height * 0.65;
+    this.originY = this.height * 0.72;
   }
 
   bindDrawingEvents() {
@@ -72,7 +70,7 @@ class RayDrawEngine {
       const dx = pos.x - this.originX;
       const dy = pos.y - this.originY;
 
-      // Calculate drawn angle relative to Normal (Upward Y-axis)
+      // Calculate angle relative to Normal (Upward normal vector)
       let drawnAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
       if (drawnAngle < 0) drawnAngle += 360;
 
@@ -108,7 +106,7 @@ class RayDrawEngine {
   }
 
   verifyPrediction() {
-    const expectedAngle = this.params.incidentAngleDeg; // Law of Reflection: θ_i = θ_r
+    const expectedAngle = this.params.incidentAngleDeg;
     const error = Math.abs(this.userRay.angleDeg - expectedAngle);
     const isCorrect = error <= this.params.toleranceDeg;
 
@@ -131,47 +129,47 @@ class RayDrawEngine {
     const ox = this.originX;
     const oy = this.originY;
 
-    // --- 1. REFLECTIVE SURFACE / INTERFACE ---
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    ctx.lineWidth = 3;
+    // --- 1. REFLECTING PLANE / MIRROR ---
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(20, oy);
-    ctx.lineTo(w - 20, oy);
+    ctx.moveTo(16, oy);
+    ctx.lineTo(w - 16, oy);
     ctx.stroke();
 
     // Mirror Hatch Lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 1;
-    for (let x = 25; x < w - 20; x += 12) {
+    for (let x = 20; x < w - 16; x += 10) {
       ctx.beginPath();
       ctx.moveTo(x, oy);
-      ctx.lineTo(x - 8, oy + 10);
+      ctx.lineTo(x - 6, oy + 8);
       ctx.stroke();
     }
 
     // --- 2. NORMAL LINE (DASHED) ---
     ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
     ctx.moveTo(ox, oy - 90);
-    ctx.lineTo(ox, oy + 20);
+    ctx.lineTo(ox, oy + 12);
     ctx.stroke();
-    ctx.setLineDash([]); // Reset
+    ctx.setLineDash([]);
 
-    ctx.fillStyle = '#94a3b8';
+    ctx.fillStyle = '#64748b';
     ctx.font = '9px monospace';
-    ctx.fillText('Normal (N)', ox + 6, oy - 75);
+    ctx.fillText('Normal (N)', ox + 6, oy - 70);
 
-    // --- 3. INCIDENT RAY (EMITTER) ---
+    // --- 3. INCIDENT LASER BEAM ---
     const incRad = (this.params.incidentAngleDeg * Math.PI) / 180;
-    const rayLength = 80;
+    const rayLength = 75;
     const sourceX = ox - Math.sin(incRad) * rayLength;
     const sourceY = oy - Math.cos(incRad) * rayLength;
 
-    ctx.strokeStyle = '#ff007f'; // Neon Rose Laser
-    ctx.shadowColor = 'rgba(255, 0, 127, 0.6)';
-    ctx.shadowBlur = 10;
+    ctx.strokeStyle = '#ff007f';
+    ctx.shadowColor = 'rgba(255, 0, 127, 0.5)';
+    ctx.shadowBlur = 8;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(sourceX, sourceY);
@@ -179,21 +177,21 @@ class RayDrawEngine {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Point of Incidence Glow Dot
+    // Point of incidence beacon
     ctx.fillStyle = '#00f3ff';
     ctx.beginPath();
-    ctx.arc(ox, oy, 4, 0, Math.PI * 2);
+    ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // --- 4. USER DRAWN RAY ---
+    // --- 4. USER DRAWN / SUBMITTED RAY ---
     if (this.userRay) {
       const isCorrect = this.userRay.isSubmitted && Math.abs(this.userRay.angleDeg - this.params.incidentAngleDeg) <= this.params.toleranceDeg;
       const rayColor = !this.userRay.isSubmitted ? '#00f3ff' : (isCorrect ? '#10b981' : '#f43f5e');
 
       ctx.strokeStyle = rayColor;
       ctx.shadowColor = rayColor;
-      ctx.shadowBlur = 12;
-      ctx.lineWidth = 3;
+      ctx.shadowBlur = 10;
+      ctx.lineWidth = 2.5;
 
       ctx.beginPath();
       ctx.moveTo(ox, oy);
@@ -205,7 +203,7 @@ class RayDrawEngine {
       ctx.strokeStyle = rayColor;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.arc(this.userRay.endX, this.userRay.endY, 8, 0, Math.PI * 2);
+      ctx.arc(this.userRay.endX, this.userRay.endY, 7, 0, Math.PI * 2);
       ctx.stroke();
     }
   }
@@ -217,5 +215,5 @@ class RayDrawEngine {
   }
 }
 
-// Register Plugin
+// Register into Invincible 360 Plugin Registry
 window.ReelSimRegistry['phy_ray_draw'] = RayDrawEngine;
