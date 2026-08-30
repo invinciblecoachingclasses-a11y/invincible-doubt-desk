@@ -267,11 +267,19 @@ window.handleDailyClashAnswer = function(selectedIdx, correctIdx, timedOut = fal
 }
 
 /* =====================================================
-   TEST GENERATOR & TIME ATTACK ENGINE
+   TEST GENERATOR & ENGINEERING PUZZLE MATRIX
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = ""; let activeTestClass = ""; let activeTestSubject = ""; let finalScoreData = {};
 let testTimerInterval = null; let totalTimeLimit = 600; let timeRemaining = 600;
+let activeTestSims = {};
+
+// Intersection Observer to prevent battery drain from off-screen canvases
+const testSimObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        entry.target.isPaused = !entry.isIntersecting;
+    });
+}, { threshold: 0.1 });
 
 const testOrg = document.getElementById("testOrg");
 const testClass = document.getElementById("testClass");
@@ -391,31 +399,30 @@ window.handleTestOptionSelect = function(qId, selectedIdx, correctIdx) {
   const card = document.getElementById(`qCard_${qId}`);
   if (!card) return;
 
-  const labels = card.querySelectorAll('.option');
+  const labels = card.querySelectorAll('.engineering-snap-block');
   const isCorrect = Number(selectedIdx) === Number(correctIdx);
+  const inputs = card.querySelectorAll('input[type="radio"]');
+  
+  if (inputs[selectedIdx]) inputs[selectedIdx].checked = true;
 
   labels.forEach((lbl, idx) => {
-    if (idx === Number(correctIdx)) {
-      lbl.style.borderColor = 'var(--accent-emerald)';
-      lbl.style.background = 'rgba(5, 255, 161, 0.15)';
-    } else if (idx === Number(selectedIdx) && !isCorrect) {
-      lbl.style.borderColor = 'var(--accent-rose)';
-      lbl.style.background = 'rgba(255, 42, 95, 0.15)';
+    lbl.style.transform = 'scale(1)';
+    if (idx === Number(selectedIdx)) {
+        lbl.style.borderColor = 'var(--accent-cyan)';
+        lbl.style.background = 'rgba(0, 229, 255, 0.1)';
+        lbl.style.boxShadow = '0 0 15px rgba(0, 229, 255, 0.2)';
     } else {
-      lbl.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-      lbl.style.background = 'rgba(255, 255, 255, 0.02)';
+        lbl.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+        lbl.style.background = 'rgba(255, 255, 255, 0.02)';
+        lbl.style.boxShadow = 'none';
     }
   });
 
-  if (isCorrect) {
-    if (typeof playDing === 'function') playDing();
-    if (typeof triggerHaptic === 'function') triggerHaptic([30, 40, 30]);
-  } else {
-    if (typeof playBuzz === 'function') playBuzz();
-    if (typeof triggerHaptic === 'function') triggerHaptic([100]);
-    card.classList.add('arena-shake');
-    setTimeout(() => card.classList.remove('arena-shake'), 400);
-  }
+  if (typeof playDing === 'function') playDing();
+  if (typeof triggerHaptic === 'function') triggerHaptic([20]);
+  
+  card.style.transform = 'scale(0.99)';
+  setTimeout(() => card.style.transform = 'scale(1)', 150);
 };
 
 function startQuestions(questions, headerTitle, testTitle){
@@ -425,25 +432,207 @@ function startQuestions(questions, headerTitle, testTitle){
     testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
     questionsContainer.innerHTML = "";
 
+    // Clear previous simulation loops
+    Object.keys(activeTestSims).forEach(k => cancelAnimationFrame(activeTestSims[k]));
+    activeTestSims = {};
+
+    const simTypes = ['circuit_snap', 'math_tracer', 'chem_balance'];
+
     questions.forEach(function(q, index){
         const card = document.createElement("div"); 
         card.className = "question-card";
         card.id = `qCard_${q.id}`;
+        card.style.position = "relative";
+        card.style.transition = "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
         
-        let optionsHTML = "";
+        const simType = simTypes[index % simTypes.length];
+        const canvasId = `testCanvas_${q.id}`;
+
+        const microSimHTML = `
+            <div style="position:relative; width:100%; height:120px; background:#020617; border-radius:12px; margin-bottom:16px; border:1px solid rgba(0,229,255,0.15); box-shadow:inset 0 0 20px rgba(0,0,0,0.5); overflow:hidden;">
+                <canvas id="${canvasId}" style="width:100%; height:100%; touch-action:none; display:block;"></canvas>
+                <div style="position:absolute; top:8px; right:8px; font-size:9px; font-weight:900; color:var(--accent-cyan); background:rgba(0,0,0,0.7); padding:3px 8px; border-radius:6px; border:1px solid rgba(0,229,255,0.3); letter-spacing:0.5px;">⚙️ TACTILE ENGINE</div>
+            </div>
+        `;
+
+        let optionsHTML = '<div style="display:flex; flex-direction:column; gap:8px;">';
         q.options.forEach(function(option, optionIndex){
             optionsHTML += `
-              <label class="option" onclick="handleTestOptionSelect(${q.id}, ${optionIndex}, ${q.answer})">
-                <input type="radio" name="q${q.id}" value="${optionIndex}">
-                <span>${formatMathText(escapeHTML(String(option)))}</span>
-              </label>
+              <div class="engineering-snap-block" onclick="handleTestOptionSelect(${q.id}, ${optionIndex}, ${q.answer})" style="display:flex; align-items:center; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); padding:12px 16px; border-radius:12px; cursor:pointer; transition:all 0.2s;">
+                <input type="radio" name="q${q.id}" value="${optionIndex}" style="display:none;">
+                <div style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); margin-right:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <div class="snap-dot" style="width:8px; height:8px; border-radius:50%; background:var(--accent-cyan); opacity:0; transition:opacity 0.2s;"></div>
+                </div>
+                <span style="font-size:13px; font-weight:700; color:#e2e8f0; line-height:1.4;">${formatMathText(escapeHTML(String(option)))}</span>
+              </div>
             `;
         });
-        card.innerHTML = '<div style="color:var(--accent-cyan); font-size:11px; font-weight:900;">QUESTION ' + (index + 1) + '</div><div style="font-size:15px; font-weight:700; margin:8px 0;">' + formatMathText(escapeHTML(String(q.question))) + '</div>' + optionsHTML;
+        optionsHTML += '</div>';
+
+        card.innerHTML = `
+          <div style="color:var(--accent-cyan); font-size:11px; font-weight:900; letter-spacing:1px; margin-bottom:8px;">MODULE ${index + 1} / ${questions.length}</div>
+          ${microSimHTML}
+          <div style="font-size:15px; font-weight:800; color:#fff; margin-bottom:14px; line-height:1.5;">${formatMathText(escapeHTML(String(q.question)))}</div>
+          ${optionsHTML}
+        `;
+        
         questionsContainer.appendChild(card);
+        initTestMicroSim(canvasId, simType);
+
+        // Add visual snap effect to the custom radio dots
+        const blocks = card.querySelectorAll('.engineering-snap-block');
+        blocks.forEach(block => {
+            block.addEventListener('click', () => {
+                blocks.forEach(b => b.querySelector('.snap-dot').style.opacity = '0');
+                block.querySelector('.snap-dot').style.opacity = '1';
+            });
+        });
     });
+
+    try {
+        if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([questionsContainer]).catch(() => {});
+        }
+    } catch(e) {}
+
     window.scrollTo({ top: 0, behavior: "smooth" });
     startTimer();
+}
+
+/* =====================================================
+   ENGINEERING TACTILE MICRO-SIMS
+===================================================== */
+function initTestMicroSim(canvasId, simType) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    testSimObserver.observe(canvas);
+    canvas.isPaused = false;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    
+    canvas.width = (rect.width || 320) * dpr;
+    canvas.height = 120 * dpr;
+    ctx.scale(dpr, dpr);
+
+    const w = canvas.width / dpr;
+    const h = canvas.height / dpr;
+
+    let touchX = w / 2;
+    let touchY = h / 2;
+    let isTouching = false;
+
+    const updateTouch = (clientX, clientY) => {
+        const r = canvas.getBoundingClientRect();
+        touchX = Math.max(0, Math.min(w, clientX - r.left));
+        touchY = Math.max(0, Math.min(h, clientY - r.top));
+    };
+
+    canvas.addEventListener('touchstart', (e) => { isTouching = true; if(e.touches.length) updateTouch(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    canvas.addEventListener('touchmove', (e) => { if(e.touches.length) updateTouch(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    window.addEventListener('touchend', () => isTouching = false);
+    
+    canvas.addEventListener('mousedown', (e) => { isTouching = true; updateTouch(e.clientX, e.clientY); });
+    canvas.addEventListener('mousemove', (e) => { if(isTouching) updateTouch(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', () => isTouching = false);
+
+    let frame = 0;
+
+    function render() {
+        if (!canvas.isPaused) {
+            ctx.clearRect(0, 0, w, h);
+            frame++;
+
+            if (simType === 'circuit_snap') {
+                // Interactive Rheostat Slider
+                const sliderX = isTouching ? touchX : w / 2 + Math.sin(frame * 0.05) * (w / 4);
+                const currentIntensity = sliderX / w;
+
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(20, h/2); ctx.lineTo(w - 20, h/2); ctx.stroke();
+
+                ctx.strokeStyle = `hsl(${180 + currentIntensity * 60}, 100%, 60%)`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = ctx.strokeStyle;
+                ctx.beginPath(); ctx.moveTo(20, h/2); ctx.lineTo(sliderX, h/2); ctx.stroke();
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(sliderX - 8, h/2 - 12, 16, 24);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px Space Grotesk';
+                ctx.fillText(`Resistance: ${((1 - currentIntensity) * 100).toFixed(0)} Ω`, 20, h/2 + 25);
+                
+                // Particle flow
+                for(let i=0; i<5; i++) {
+                    const px = (frame * (1 + currentIntensity * 3) + i * 40) % sliderX;
+                    if (px > 20) {
+                        ctx.fillStyle = '#fff';
+                        ctx.beginPath(); ctx.arc(px, h/2, 2, 0, Math.PI*2); ctx.fill();
+                    }
+                }
+
+            } else if (simType === 'math_tracer') {
+                // Sine Wave Phase Shifter
+                const phase = isTouching ? (touchX / w) * Math.PI * 2 : frame * 0.05;
+                
+                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
+
+                ctx.strokeStyle = '#00e5ff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                for (let x = 0; x < w; x += 2) {
+                    const y = h/2 + Math.sin(x * 0.05 + phase) * 30;
+                    if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                ctx.fillStyle = '#f43f5e';
+                const dotY = h/2 + Math.sin((w/2) * 0.05 + phase) * 30;
+                ctx.beginPath(); ctx.arc(w/2, dotY, 4, 0, Math.PI*2); ctx.fill();
+
+            } else if (simType === 'chem_balance') {
+                // Chemical Equation Balancer (Tilt)
+                const tilt = isTouching ? (touchX / w) - 0.5 : Math.sin(frame * 0.04) * 0.2;
+                
+                ctx.save();
+                ctx.translate(w/2, h/2 + 20);
+                ctx.rotate(tilt);
+
+                // Fulcrum Bar
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(-60, 0); ctx.lineTo(60, 0); ctx.stroke();
+
+                // Left Pan
+                ctx.fillStyle = 'rgba(0, 229, 255, 0.2)';
+                ctx.strokeStyle = '#00e5ff';
+                ctx.beginPath(); ctx.arc(-60, -10, 15, 0, Math.PI, false); ctx.fill(); ctx.stroke();
+                
+                // Right Pan
+                ctx.fillStyle = 'rgba(244, 63, 94, 0.2)';
+                ctx.strokeStyle = '#f43f5e';
+                ctx.beginPath(); ctx.arc(60, -10, 15, 0, Math.PI, false); ctx.fill(); ctx.stroke();
+
+                ctx.restore();
+
+                // Base Pivot
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath(); ctx.moveTo(w/2, h/2 + 20); ctx.lineTo(w/2 - 10, h/2 + 40); ctx.lineTo(w/2 + 10, h/2 + 40); ctx.fill();
+
+                ctx.fillStyle = '#fff';
+                ctx.font = '10px Space Grotesk';
+                ctx.fillText(`Eq: ${tilt > 0.05 ? 'RHS Heavy' : (tilt < -0.05 ? 'LHS Heavy' : 'Balanced ⚖️')}`, 10, 20);
+            }
+        }
+        activeTestSims[canvasId] = requestAnimationFrame(render);
+    }
+    render();
 }
 
 if (submitTestBtn) {
@@ -462,12 +651,26 @@ if (submitTestBtn) {
             if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
         }
         answers.push({ questionNumber: index + 1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
-        let statusBadge = isCorrect ? '<span style="color:var(--accent-emerald); font-weight:800;">✓ Correct</span>' : '<span style="color:var(--accent-rose); font-weight:800;">✗ Incorrect</span>';
-        reviewHTML += `<div class="review-card"><div style="font-size:11px; font-weight:800; color:var(--text-muted);">Q${index+1} &bull; ${statusBadge}</div><div style="font-size:14px; font-weight:700; margin:6px 0;">${formatMathText(escapeHTML(q.question))}</div><div style="font-size:12px;">Correct: <strong>${formatMathText(escapeHTML(q.options[q.answer]))}</strong></div></div>`;
+        let statusBadge = isCorrect ? '<span style="color:var(--accent-emerald); font-weight:800; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">✓ Correct</span>' : '<span style="color:var(--accent-rose); font-weight:800; background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px;">✗ Incorrect</span>';
+        
+        let correctStr = q.options[q.answer] !== undefined ? q.options[q.answer] : "N/A";
+        
+        reviewHTML += `
+          <div class="review-card" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); padding:16px; border-radius:12px; margin-bottom:12px;">
+            <div style="font-size:11px; font-weight:900; color:var(--text-muted); margin-bottom:6px; display:flex; justify-content:space-between;">
+              <span>MODULE ${index+1}</span> ${statusBadge}
+            </div>
+            <div style="font-size:14px; font-weight:700; color:#fff; margin:8px 0; line-height:1.4;">${formatMathText(escapeHTML(q.question))}</div>
+            <div style="font-size:12px; color:var(--accent-cyan); background:rgba(0,229,255,0.05); border-left:3px solid var(--accent-cyan); padding:8px; border-radius:0 8px 8px 0;">
+              Correct: <strong>${formatMathText(escapeHTML(String(correctStr)))}</strong>
+            </div>
+          </div>
+        `;
     });
 
     const percentage = Math.round((correct / questions.length) * 100);
     if (percentage >= 80) { if(typeof playWin === 'function') playWin(); if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } }); }
+    else { if(typeof playBuzz === 'function') playBuzz(); }
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
     scoreText.textContent = correct + "/" + questions.length;
@@ -475,6 +678,10 @@ if (submitTestBtn) {
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Stop physics sims to save battery
+    Object.keys(activeTestSims).forEach(k => cancelAnimationFrame(activeTestSims[k]));
+    activeTestSims = {};
 
     const studentName = document.getElementById("studentName")?.value?.trim() || localStorage.getItem("studentName") || "Student";
     const studentMobile = document.getElementById("studentMobile")?.value?.trim() || "";
