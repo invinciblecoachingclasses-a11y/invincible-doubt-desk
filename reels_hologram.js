@@ -1,25 +1,23 @@
 /**
  * =====================================================
  * MODULE: 3D HOLOGRAPHIC TILT & SPECULAR GLARE ENGINE
- * Architecture: Standalone Gyro & Touch-Reactive 3D Card Physics
+ * Architecture: iOS Safari Safe Non-Clipping 3D Foil Engine
  * =====================================================
  */
 
 (function() {
-  // 1. Inject Holographic Foil & Glare CSS Styles
+  // 1. Inject Holographic Foil & Glare CSS Styles (iOS Safe)
   const styleEl = document.createElement('style');
   styleEl.id = 'holoEngineStyles';
   styleEl.innerHTML = `
     .study-reels-container {
-      perspective: 1200px !important;
-      transform-style: preserve-3d !important;
+      perspective: 1000px !important;
     }
     .virtual-reel-slot {
-      perspective: 1200px !important;
+      perspective: 1000px !important;
     }
     .reel-card-inner {
       position: relative;
-      transform-style: preserve-3d;
       will-change: transform;
       transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 243, 255, 0.08) !important;
@@ -55,9 +53,10 @@
       background-position: 50% 50%;
       transition: background-position 0.15s ease, opacity 0.3s ease;
     }
+    /* Fake parallax using scale instead of translateZ to avoid iOS Safari black screen */
     .holo-depth-content {
-      transform: translateZ(26px);
-      transform-style: preserve-3d;
+      transform: scale(1.02);
+      transition: transform 0.2s ease;
     }
   `;
   document.head.appendChild(styleEl);
@@ -101,7 +100,7 @@
       cardEl.appendChild(glare);
       cardEl.appendChild(foil);
 
-      // Elevate text title and interactive HUD for physical parallax depth
+      // Elevate text title and interactive HUD with safe 2D scaling
       const innerContainers = cardEl.querySelectorAll('.reel-q-title, .reel-options-grid, .build-matrix, canvas, .subject-ambient-visual');
       innerContainers.forEach(el => el.classList.add('holo-depth-content'));
     }
@@ -200,7 +199,8 @@
         this.currentPy += (this.targetPy - this.currentPy) * 0.14;
 
         if (this.currentCard) {
-          this.currentCard.style.transform = `rotateX(${this.currentRx.toFixed(2)}deg) rotateY(${this.currentRy.toFixed(2)}deg) translateZ(0)`;
+          // iOS Safe Rotation (No Z-Translation on the card inner)
+          this.currentCard.style.transform = `rotateX(${this.currentRx.toFixed(2)}deg) rotateY(${this.currentRy.toFixed(2)}deg)`;
 
           if (this.glareEl) {
             this.glareEl.style.background = `radial-gradient(circle at ${this.currentPx.toFixed(1)}% ${this.currentPy.toFixed(1)}%, rgba(255, 255, 255, 0.45) 0%, rgba(0, 243, 255, 0.22) 30%, transparent 70%)`;
@@ -226,3 +226,54 @@
 })();
 
 
+/* =====================================================
+   CLEAN SEPARATION 8-TAB NAVIGATION ENGINE
+===================================================== */
+function switchTab(tab) {
+    const dockButtons = document.querySelectorAll('.dock-btn');
+    dockButtons.forEach(b => b.classList.remove('active'));
+    
+    const tabMap = { 'home': 0, 'reels': 1, 'lab': 2, 'doubt': 3, 'test': 4, 'arena': 5, 'feed': 6, 'notes': 7 };
+    if (tabMap[tab] !== undefined && dockButtons[tabMap[tab]]) {
+        dockButtons[tabMap[tab]].classList.add('active');
+    }
+
+    const sections = ['home', 'reels', 'lab', 'doubt', 'test', 'arena', 'feed', 'notes'];
+    sections.forEach(s => {
+        const el = document.getElementById(s + 'Section');
+        if (el) el.classList.add('hidden');
+    });
+
+    const targetId = tab + 'Section';
+    const target = document.getElementById(targetId);
+    if (target) target.classList.remove('hidden');
+    
+    if (tab === 'reels') renderReelsDeck();
+    if (tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
+    
+    // WAKE UP THE LAB ENGINE
+    if (tab === 'lab' && typeof window.renderLabHome === 'function') {
+        window.renderLabHome();
+    }
+
+    // Stop canvas render loop if navigating away from lab
+    if (tab !== 'lab' && typeof window.closeLabSim === 'function') window.closeLabSim();
+
+    if (typeof playDing === 'function') playDing();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectStartingQuest(quest) {
+    localStorage.setItem('invincible_onboarded', 'true');
+    const modal = document.getElementById('onboardingModal');
+    if (modal) modal.style.display = 'none';
+    switchTab(quest);
+}
+
+setTimeout(() => { 
+    const isVerified = localStorage.getItem('student_verified') === 'true';
+    if (isVerified && !localStorage.getItem('invincible_onboarded')) { 
+        const m = document.getElementById('onboardingModal'); 
+        if(m) m.style.display = 'flex'; 
+    } 
+}, 800);
