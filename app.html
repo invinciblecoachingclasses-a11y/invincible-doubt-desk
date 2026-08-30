@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="google-site-verification" content="yEcQlIaULG627YzE34MuDr7zJZ7VGSbtLbyGH0_6Clc" />
 
 <title>Invincible 360 | CBSE Exam Engine, Study Reels & 1v1 Arena</title>
@@ -19,99 +19,201 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="lab.css"> 
 
-<!-- ADVANCED LAB ENGINE UI STYLES -->
+<!-- PREMIUM UI OVERHAUL STYLES (Glass & Air) -->
 <style>
-  .lab-dashboard {
-      position: relative;
-      width: 100%;
-      margin: 16px auto;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #05050A;
-      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 229, 255, 0.12);
-      border: 1px solid rgba(0, 229, 255, 0.2);
+  :root {
+      --bg-base: #05070D;
+      --bg-surface: #0B1120;
+      --bg-surface-elevated: #10182A;
+      --accent-cyan: #00D9FF;
+      --accent-rose: #FF3D6E;
+      --accent-amber: #FFB000;
+      --text-main: #F4F7FB;
+      --text-muted: #8793A8;
   }
 
-  .lab-controls {
+  body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      padding-top: 70px; 
+      padding-bottom: 90px; 
+  }
+
+  /* Global Container Softening */
+  .card, section, .post-card, .lab-card-preview {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 1px solid rgba(255, 255, 255, 0.04) !important;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+      border-radius: 20px !important;
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      margin-bottom: 20px;
+  }
+
+  /* Premium Top HUD */
+  .premium-hud {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: rgba(5, 7, 13, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .premium-hud .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+  }
+
+  .premium-hud .stats {
+      display: flex;
+      align-items: center;
       gap: 12px;
-      padding: 14px 18px;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #fff;
-      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 800;
       font-size: 13px;
   }
 
-  .lab-control-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+  /* Premium Solid CTAs */
+  .solid-cta {
+      background: var(--accent-cyan) !important;
+      color: #000 !important;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 900 !important;
+      font-size: 14px;
+      padding: 14px !important;
+      border: none !important;
+      border-radius: 14px !important;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(0, 217, 255, 0.25) !important;
+      transition: transform 0.2s, box-shadow 0.2s;
   }
+  .solid-cta:active { transform: scale(0.97); }
 
-  .lab-slider-input {
-      -webkit-appearance: none;
-      appearance: none;
-      background: rgba(255, 255, 255, 0.15);
-      height: 6px;
-      border-radius: 3px;
+  /* Premium Form Inputs */
+  .premium-input, select.premium-input {
+      background: rgba(255, 255, 255, 0.04) !important;
+      border: none !important;
+      color: #fff !important;
+      border-radius: 12px !important;
+      padding: 14px 16px !important;
+      font-size: 14px !important;
+      width: 100%;
+      margin-bottom: 12px;
       outline: none;
-      width: 120px;
-      cursor: pointer;
-  }
-
-  .lab-slider-input::-webkit-slider-thumb {
       -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--accent-cyan, #00e5ff);
-      box-shadow: 0 0 10px var(--accent-cyan, #00e5ff);
-      cursor: pointer;
   }
+  .premium-input:focus { background: rgba(255, 255, 255, 0.08) !important; box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.3); }
 
-  .lab-action-btn {
-      background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(2,132,199,0.3));
-      border: 1px solid var(--accent-cyan, #00e5ff);
-      color: #fff;
-      font-weight: 800;
-      font-size: 11px;
-      padding: 6px 12px;
+  /* Segmented Controls */
+  .segmented-control {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 16px;
+  }
+  .segmented-btn {
+      flex: 1;
+      background: transparent;
+      color: var(--text-muted);
+      border: none;
+      padding: 10px;
       border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
+  }
+  .segmented-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   }
 
-  .lab-action-btn:hover {
-      background: var(--accent-cyan, #00e5ff);
-      color: #060913;
-      box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
-  }
-
-  .lab-card-preview {
-      background: #0f172a;
+  /* 5-Item Premium Dock */
+  .premium-dock {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px;
-      cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      border-radius: 24px;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 12px;
+      z-index: 1000;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  }
+  .premium-dock-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 14px;
+      transition: all 0.2s;
   }
+  .premium-dock-btn.active {
+      color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.1);
+  }
+  .premium-dock-icon { font-size: 20px; margin-bottom: 2px; }
 
-  .lab-card-preview:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent-cyan, #00e5ff);
-      box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15);
+  /* iOS Bottom Sheet */
+  .bottom-sheet-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      display: flex; flex-direction: column; justify-content: flex-end;
   }
+  .bottom-sheet-overlay.open { opacity: 1; pointer-events: auto; }
+  .bottom-sheet-content {
+      background: var(--bg-surface-elevated);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px 28px 0 0;
+      padding: 24px 20px 40px 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .bottom-sheet-overlay.open .bottom-sheet-content { transform: translateY(0); }
+  .sheet-handle { width: 40px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; margin: 0 auto 20px auto; }
+  
+  .hub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hub-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px; padding: 16px; text-align: center; color: #fff; font-weight: 800;
+      cursor: pointer; display: flex; flex-direction: column; gap: 8px; align-items: center;
+  }
+  .hub-card:active { background: rgba(255,255,255,0.08); }
+
+  /* LAB OVERRIDES (PRESERVED) */
+  .lab-dashboard { position: relative; width: 100%; margin: 16px auto; border-radius: 16px; overflow: hidden; background: #05050A; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.2); }
+  .lab-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 13px; }
+  .lab-control-group { display: flex; align-items: center; gap: 8px; }
+  .lab-slider-input { -webkit-appearance: none; appearance: none; background: rgba(255, 255, 255, 0.15); height: 6px; border-radius: 3px; outline: none; width: 120px; cursor: pointer; }
+  .lab-slider-input::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-cyan, #00e5ff); box-shadow: 0 0 10px var(--accent-cyan, #00e5ff); cursor: pointer; }
+  .lab-action-btn { background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(2,132,199,0.3)); border: 1px solid var(--accent-cyan, #00e5ff); color: #fff; font-weight: 800; font-size: 11px; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+  .lab-action-btn:hover { background: var(--accent-cyan, #00e5ff); color: #060913; box-shadow: 0 0 12px rgba(0, 229, 255, 0.5); }
+  .lab-card-preview:hover { transform: translateY(-3px); border-color: var(--accent-cyan, #00e5ff); box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15); }
 </style>
 
 <!-- Markdown Parser & MathJax Rendering -->
@@ -128,19 +230,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+<!-- Custom Global Alert Overlay -->
+<div id="customAlertOverlay" class="bottom-sheet-overlay" onclick="closeCustomAlert()">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <h3 style="margin:0 0 12px 0; color:var(--accent-cyan); font-family:'Space Grotesk';">System Message</h3>
+        <div id="customAlertMessage" style="font-size:14px; color:#fff; line-height:1.5; margin-bottom:20px;"></div>
+        <button onclick="closeCustomAlert()" class="solid-cta">Got it</button>
+    </div>
+</div>
+
 <main class="container">
 
-<!-- 1. TOP DYNAMIC HUD -->
-<header class="slim-hud">
-    <div class="slim-logo" onclick="switchTab('home')" style="cursor:pointer;">
-        <span>⚡</span> <span>INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
+<!-- 1. TOP PREMIUM HUD -->
+<header class="premium-hud">
+    <div class="logo" onclick="switchTab('home')" style="cursor:pointer;">
+        <span style="color:#fff;">⚡ INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
     </div>
-    <div class="slim-hud-stats">
-        <button type="button" id="lofiToggleBtn" onclick="toggleLofiAudio()" style="background:rgba(0,229,255,0.06); border:1px solid rgba(0,229,255,0.18); color:var(--accent-cyan); border-radius:12px; padding:4px 10px; font-size:11px; font-weight:800; display:flex; align-items:center; gap:5px; cursor:pointer; backdrop-filter:blur(8px);">
-          🎧 <span id="lofiLabel">Sound: Off</span>
-        </button>
-        <span class="hud-stat-badge">🔥 <span id="streakCounter">2</span>d</span>
-        <span class="hud-stat-badge hud-xp-badge">✨ <span id="xpCounter">680</span> XP</span>
+    <div class="stats">
+        <button type="button" id="lofiToggleBtn" onclick="toggleLofiAudio()" style="background:transparent; border:none; color:var(--text-muted); font-size:16px; cursor:pointer;">🎧</button>
+        <span style="color:var(--accent-rose);">🔥 <span id="streakCounter">2</span>d</span>
+        <span style="color:var(--accent-amber);">✨ <span id="xpCounter">680</span> XP</span>
     </div>
 </header>
 
@@ -148,67 +259,75 @@
      HOME DECK
 ===================================================== -->
 <div id="homeSection">
-    <section style="background: linear-gradient(135deg, rgba(244,63,94,0.08), rgba(0,229,255,0.05)); border: 1px solid rgba(255,255,255,0.06); padding: 18px 20px; margin-bottom: 20px; border-radius: 20px; backdrop-filter: blur(12px);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-rose); box-shadow:0 0 12px var(--accent-rose); animation: pulse 1.5s infinite;"></span>
-                <span id="blitzCountdownTicker" style="font-family:'Space Grotesk', sans-serif; font-size:12px; font-weight:900; color:#fff; letter-spacing:0.5px;">⚡ 9:00 PM MEGA BLITZ IN: CALCULATING...</span>
-            </div>
-           <button type="button" id="blitzPassBtn" onclick="handleGetBlitzPass()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#000; font-weight:900; font-size:11px; padding:8px 14px; border-radius:12px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 4px 15px rgba(245,158,11,0.25);">
-              <span>📲</span> <span>Get WhatsApp Blitz Pass</span>
-           </button>
-        </div>
-
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
-            <span style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.8px;">Tactical Power-Ups</span>
-            <div style="display:flex; gap:8px;">
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(0,229,255,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-cyan); display:flex; align-items:center; gap:5px;">
-                    <span>✂️ 50:50</span> <span id="pupBadge_fiftyFifty" style="background:var(--accent-cyan); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
-                </div>
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-amber); display:flex; align-items:center; gap:5px;">
-                    <span>❄️ +3s</span> <span id="pupBadge_timeFreeze" style="background:var(--accent-amber); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
-                </div>
-                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(5,255,161,0.2); border-radius:10px; padding:4px 10px; font-size:11px; font-weight:800; color:var(--accent-emerald); display:flex; align-items:center; gap:5px;">
-                    <span>🛡️ Shield</span> <span id="pupBadge_shield" style="background:var(--accent-emerald); color:#060913; border-radius:4px; padding:0 4px; font-size:10px;">1</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="mission-card">
-        <div class="mission-top">
-            <span style="font-size:11px; font-weight:800; color:var(--text-muted);">TODAY'S MISSION</span>
-            <span style="font-size:11px; font-weight:900; color:var(--accent-cyan);" id="missionCount">3 / 5 COMPLETED</span>
-        </div>
-        <div class="mission-track"><div class="mission-fill" id="missionBar" style="width:60%;"></div></div>
-        <div class="mission-items">
-            <span class="mission-pill done">✓ Daily Clash</span>
-            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('reels')">○ 10 Reels ⚡</span>
-            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('lab')">○ Lab Sim 🔬</span>
-            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('arena')">○ 1v1 Arena</span>
-            <span class="mission-pill" style="cursor:pointer;" onclick="switchTab('test')">○ Practice Test</span>
-        </div>
-    </section>
-
-    <div class="stories-tray-container" id="storiesTray">
-        <div class="story-circle-item" id="btnAddStory">
-            <div class="story-avatar-wrap add-story">
-                <div class="story-avatar-inner" style="color:var(--accent-cyan); font-size:18px;">+</div>
-            </div>
-            <div class="story-username">Drop Hack</div>
-        </div>
-        <div id="dynamicStoryCircles" style="display:flex; gap:12px;"></div>
+    
+    <div style="margin-bottom: 24px; padding: 0 10px;">
+        <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0;">Welcome back.</h1>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Let's master the syllabus today.</p>
     </div>
 
-    <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:16px; margin-bottom:20px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-size:12px; font-weight:900; color:var(--accent-cyan);">🌐 THE KNOWLEDGE MARKET (BOUNTIES)</span>
-        <button onclick="switchTab('doubt')" style="background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:10px; font-weight:800; padding:4px 8px; border-radius:8px; cursor:pointer;">+ Ask Peer</button>
+    <!-- Today's Mission -->
+    <section class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 16px;">
+            <div>
+                <span style="font-size:11px; font-weight:800; color:var(--text-muted); letter-spacing: 1px;">TODAY'S MISSION</span>
+                <h3 style="margin: 4px 0 0 0; font-size:18px;">Keep the streak alive.</h3>
+            </div>
+            <span style="font-size:14px; font-weight:900; color:var(--accent-cyan);" id="missionCount">3 / 5 COMPLETED</span>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.05); height:6px; border-radius:3px; margin-bottom:20px; overflow:hidden;">
+            <div id="missionBar" style="width:60%; height:100%; background:var(--accent-cyan); box-shadow:0 0 10px var(--accent-cyan);"></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; gap:10px; color:var(--text-muted); font-size:14px; font-weight:600;"><span style="color:var(--accent-emerald);">✓</span> Daily Clash Completed</div>
+            <div style="display:flex; align-items:center; gap:10px; color:#fff; font-size:14px; font-weight:600; cursor:pointer;" onclick="switchTab('reels')"><span style="color:var(--text-muted);">□</span> Watch 10 Study Reels</div>
+            <div style="display:flex; align-items:center; gap:10px; color:#fff; font-size:14px; font-weight:600; cursor:pointer;" onclick="switchTab('arena')"><span style="color:var(--text-muted);">□</span> Win 1v1 Arena Match</div>
+        </div>
+    </section>
+
+    <!-- Blitz & Power-ups -->
+    <section class="card">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom: 12px;">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent-rose); box-shadow:0 0 10px var(--accent-rose); animation: pulse 1.5s infinite;"></span>
+            <span id="blitzCountdownTicker" style="font-family:'Space Grotesk'; font-size:13px; font-weight:800; color:#fff;">⚡ 9:00 PM MEGA BLITZ IN: CALCULATING...</span>
+        </div>
+        <button type="button" id="blitzPassBtn" onclick="handleGetBlitzPass()" style="background:rgba(255,255,255,0.05); color:#fff; font-weight:800; font-size:12px; padding:12px; border-radius:12px; border:none; width:100%; cursor:pointer; margin-bottom: 16px;">📲 Get WhatsApp Pass (+100 XP)</button>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px;">
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted);">TACTICAL ARSENAL</div>
+            <div style="display:flex; gap:10px;">
+                <span style="font-size:12px;">✂️ <span id="pupBadge_fiftyFifty" style="font-weight:800; color:var(--accent-cyan);">1</span></span>
+                <span style="font-size:12px;">❄️ <span id="pupBadge_timeFreeze" style="font-weight:800; color:var(--accent-amber);">1</span></span>
+                <span style="font-size:12px;">🛡️ <span id="pupBadge_shield" style="font-weight:800; color:var(--accent-emerald);">1</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stories Tray -->
+    <div style="margin: 24px 0;">
+        <div class="stories-tray-container" id="storiesTray" style="padding:0 10px;">
+            <div class="story-circle-item" id="btnAddStory">
+                <div class="story-avatar-wrap add-story" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);">
+                    <div class="story-avatar-inner" style="color:var(--text-main); font-size:20px;">+</div>
+                </div>
+                <div class="story-username">Drop Hack</div>
+            </div>
+            <div id="dynamicStoryCircles" style="display:flex; gap:16px;"></div>
+        </div>
+    </div>
+
+    <!-- Bounties -->
+    <section class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <span style="font-size:14px; font-weight:800;">🌐 Peer Bounties</span>
+        <button onclick="switchTab('doubt')" style="background:transparent; color:var(--accent-cyan); border:none; font-size:12px; font-weight:800; cursor:pointer;">+ Ask</button>
       </div>
-      <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto;"></div>
-    </div>
+      <div id="bountyMarketFeed" style="display:flex; flex-direction:column; gap:12px; max-height:200px; overflow-y:auto;"></div>
+    </section>
 
-    <div class="bento-grid">
+    <!-- Hidden Survival Elements -->
+    <div class="bento-grid" style="display:none;">
         <section class="survival-card" id="puzzleBox" style="display:none;">
             <div>
                 <div class="survival-top">
@@ -249,519 +368,431 @@
      STUDY REELS SECTION
 ===================================================== -->
 <section id="reelsSection" class="hidden">
-  <div class="reels-header-bar">
-    <div style="font-size:13px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">
-      <span>⚡ STUDY REELS</span>
-      <span id="reelsComboBadge" class="reels-combo-pill hidden">🔥 x2 STREAK</span>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding:0 10px;">
+    <div>
+      <h2 style="font-family:'Space Grotesk'; font-size:24px; margin:0;">Study Reels</h2>
+      <span id="reelsComboBadge" style="font-size:12px; color:var(--accent-amber); font-weight:800;" class="hidden">🔥 x2 STREAK</span>
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <button onclick="document.getElementById('reelCreatorModal').style.display='flex'" style="background:var(--accent-cyan); color:#000; font-size:11px; font-weight:900; padding:6px 12px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 10px rgba(0,229,255,0.3);">+ Create Hack</button>
-      <div class="reels-class-pills">
-        <button class="reel-class-btn" data-class="9" onclick="setReelsClass('9', this)">9</button>
-        <button class="reel-class-btn active" data-class="10" onclick="setReelsClass('10', this)">10</button>
-        <button class="reel-class-btn" data-class="11" onclick="setReelsClass('11', this)">11</button>
-        <button class="reel-class-btn" data-class="12" onclick="setReelsClass('12', this)">12</button>
-      </div>
+    
+    <div class="segmented-control" style="margin:0; width:160px;">
+        <button class="segmented-btn reel-class-btn" data-class="10" onclick="setReelsClass('10', this)">10</button>
+        <button class="segmented-btn reel-class-btn" data-class="11" onclick="setReelsClass('11', this)">11</button>
+        <button class="segmented-btn reel-class-btn active" data-class="12" onclick="setReelsClass('12', this)">12</button>
     </div>
   </div>
   <div class="study-reels-container" id="studyReelsDeck"></div>
 </section>
 
 <!-- =====================================================
-     DOUBT SECTION
+     DOUBT SECTION (AI DESK)
 ===================================================== -->
-<section class="card hidden" id="doubtSection">
-    <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+<section id="doubtSection" class="hidden">
+    <div style="margin-bottom: 24px; padding: 0 10px;">
+        <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0;">AI Doubt Desk</h1>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Instant step-by-step solutions.</p>
     </div>
+    
+    <div class="card">
+        <div class="segmented-control">
+            <button type="button" class="segmented-btn active subject" data-subject="Mathematics" onclick="document.querySelectorAll('.subject').forEach(b=>b.classList.remove('active')); this.classList.add('active'); selectedSubject='Mathematics';">Math</button>
+            <button type="button" class="segmented-btn subject" data-subject="Physics" onclick="document.querySelectorAll('.subject').forEach(b=>b.classList.remove('active')); this.classList.add('active'); selectedSubject='Physics';">Physics</button>
+            <button type="button" class="segmented-btn subject" data-subject="Chemistry" onclick="document.querySelectorAll('.subject').forEach(b=>b.classList.remove('active')); this.classList.add('active'); selectedSubject='Chemistry';">Chem</button>
+        </div>
 
-    <h2 class="section-h2">Step-by-Step Doubt Resolution Desk</h2>
-    
-    <label>Pick your subject</label>
-    <div class="subjects">
-        <button type="button" class="subject active" data-subject="Mathematics">Mathematics</button>
-        <button type="button" class="subject" data-subject="Physics">Physics</button>
-        <button type="button" class="subject" data-subject="Chemistry">Chemistry</button>
-        <button type="button" class="subject" data-subject="Biology">Biology</button>
-    </div>
+        <div class="segmented-control">
+            <button type="button" class="segmented-btn tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ Formula</button>
+            <button type="button" class="segmented-btn tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Steps</button>
+            <button type="button" class="segmented-btn tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Concept</button>
+        </div>
 
-    <label>Explanation Mode</label>
-    <div class="tone-switch-bar">
-        <button type="button" class="tone-btn" data-tone="tldr" onclick="setExplanationTone('tldr', this)">⚡ Key Formulas</button>
-        <button type="button" class="tone-btn active" data-tone="step" onclick="setExplanationTone('step', this)">🧠 Step-by-Step</button>
-        <button type="button" class="tone-btn" data-tone="eli10" onclick="setExplanationTone('eli10', this)">🐣 Conceptual</button>
-    </div>
+        <textarea id="question" class="premium-input" rows="4" placeholder="Type your academic problem or paste text here..."></textarea>
+        
+        <input id="imageInput" type="file" accept="image/*" style="display:none;">
+        <div style="display:flex; gap:12px; margin-bottom: 20px;">
+            <button type="button" id="cameraBtn" style="flex:1; background:rgba(255,255,255,0.05); color:#fff; border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">📷 Snap Photo</button>
+            <button type="button" id="uploadBtn" style="flex:1; background:rgba(255,255,255,0.05); color:#fff; border:none; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">📁 Upload</button>
+        </div>
+        
+        <div id="imagePreviewContainer" style="display:none; margin-bottom:20px; text-align:center;">
+          <img id="imagePreview" alt="Cropped Question" style="width:100%; max-height:200px; object-fit:contain; border-radius:12px;">
+          <button type="button" id="removeImage" style="margin-top:10px; background:none; border:none; color:var(--accent-rose); font-weight:800; cursor:pointer;">✕ Remove Photo</button>
+        </div>
 
-    <label for="question">Your Question</label>
-    <textarea id="question" placeholder="Type your academic problem or paste text here..."></textarea>
-    <input id="imageInput" type="file" accept="image/*" style="display:none;">
-    
-    <div class="photo-buttons">
-        <button type="button" class="photo-btn" id="cameraBtn">📷 Capture &amp; Crop</button>
-        <button type="button" class="photo-btn" id="uploadBtn">📁 Select &amp; Crop</button>
+        <button type="button" class="solid-cta" id="askBtn">SOLVE NOW 🚀</button>
     </div>
     
-    <div id="imagePreviewContainer" style="display:none; margin-bottom:12px; text-align:center;">
-      <img id="imagePreview" alt="Cropped Question" style="width:100%; max-height:220px; object-fit:contain; border-radius:14px; border:1px solid var(--accent-cyan); background:#000;">
-      <button type="button" id="removeImage" style="margin-top:6px; background:none; border:none; color:var(--accent-rose); font-weight:800; cursor:pointer; font-size:12px;">✕ Remove Question Photo</button>
-    </div>
-
-    <button type="button" class="ask-btn" id="askBtn">VIEW SOLUTION 🚀</button>
-    
-    <div id="loadingDoubt" class="hidden waiting-container">
-      <div class="pipeline-step-text" id="doubtPipelineText">🔍 Scanning problem tokens...</div>
-      <div class="pipeline-progress-bar"><div class="pipeline-progress-fill" id="doubtProgressFill"></div></div>
-      <div class="fact-ticker-card" id="doubtFactTicker">💡 While AI computes: Did you know that Total Internal Reflection only occurs from a denser to rarer medium?</div>
+    <div id="loadingDoubt" class="hidden waiting-container" style="margin-top: 20px;">
+      <div style="text-align:center; padding: 20px;">
+          <div style="font-size:24px; animation: pulse 1s infinite;">🧠</div>
+          <div style="margin-top:10px; font-weight:700; color:var(--accent-cyan);" id="doubtPipelineText">Analyzing logic...</div>
+          <div class="pipeline-progress-bar" style="display:none;"><div class="pipeline-progress-fill" id="doubtProgressFill"></div></div>
+          <div class="fact-ticker-card" id="doubtFactTicker" style="display:none;"></div>
+      </div>
     </div>
     
-    <div class="answer-box" id="answerBox">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-subtle); padding-bottom:8px; margin-bottom:12px;">
-          <div class="logic-title">🎯 Master Teacher Solution</div>
+    <div class="answer-box card" id="answerBox" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div style="font-family:'Space Grotesk'; font-size:16px; font-weight:800; color:var(--accent-cyan);">Master Solution</div>
           <div style="display:flex; gap:6px;">
             <button type="button" onclick="playAudioExplanation(document.getElementById('answerText').innerText, this)" style="background:rgba(0,229,255,0.12); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; padding:4px 10px; border-radius:8px; cursor:pointer;">🔊 Listen</button>
-            <button type="button" onclick="clearDoubtThread()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-subtle); color:var(--text-muted); font-size:11px; font-weight:700; padding:3px 8px; border-radius:8px; cursor:pointer;">New Question</button>
+            <button type="button" onclick="clearDoubtThread()" style="background:transparent; border:none; color:var(--text-muted); font-size:12px; font-weight:700; cursor:pointer;">Clear</button>
           </div>
         </div>
 
-        <div id="doubtConversationThread" style="display:flex; flex-direction:column; gap:14px;">
+        <div id="doubtConversationThread" style="display:flex; flex-direction:column; gap:16px; font-size:14px; line-height:1.6;">
           <div class="topper-content" id="answerText"></div>
         </div>
 
-        <div style="margin-top:18px; padding-top:14px; border-top:1px dashed var(--border-subtle);">
-          <label style="color:var(--accent-cyan);">💬 Have a doubt in this step? Ask Follow-up:</label>
-          <div style="display:flex; gap:8px;">
-            <input type="text" id="followUpInput" placeholder="e.g. Why did we substitute t = x² - 1 here?" style="margin-bottom:0; font-size:13px;">
-            <button type="button" id="sendFollowUpBtn" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); border:none; color:#060913; font-weight:900; padding:0 16px; border-radius:14px; cursor:pointer; font-size:13px;">Ask</button>
+        <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="followUpInput" class="premium-input" placeholder="Ask a follow-up..." style="margin:0;">
+            <button type="button" id="sendFollowUpBtn" class="solid-cta" style="width:auto; padding:14px 20px !important;">Ask</button>
           </div>
         </div>
 
         <div class="feedback" id="feedback" style="display:block; margin-top:14px;">
             <div class="feedback-buttons">
-                <button type="button" class="feedback-btn" id="againBtn">🐣 Explain Simpler</button>
-                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn">👨‍🏫 Send to Faculty</button>
+                <button type="button" class="feedback-btn" id="againBtn" style="background:rgba(255,255,255,0.05); color:#fff; border:none; padding:8px 12px; border-radius:8px; font-size:11px; cursor:pointer;">🐣 Explain Simpler</button>
+                <button type="button" class="feedback-btn teacher-btn" id="teacherBtn" style="background:rgba(255,255,255,0.05); color:#fff; border:none; padding:8px 12px; border-radius:8px; font-size:11px; cursor:pointer;">👨‍🏫 Send to Faculty</button>
             </div>
         </div>
     </div>
 </section>
 
 <!-- =====================================================
-     TEST SECTION (WITH 22 LOCAL SCHOOLS)
+     TEST SECTION
 ===================================================== -->
-<section class="card hidden" id="testSection">
-    <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+<section id="testSection" class="hidden">
+    <div style="margin-bottom: 24px; padding: 0 10px;">
+        <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0;">Mock Tests</h1>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Algorithmic chapter assessments.</p>
     </div>
-
-    <h2 class="section-h2">CBSE Mock &amp; Chapter Practice Suite</h2>
     
-    <div id="testSetup">
-        <label style="margin-bottom: 6px; display: block; font-weight: 800; color: #cbd5e1; font-size: 13px;">Tell us your batch &amp; details</label>
-        <div>
-            <input id="studentName" type="text" placeholder="Full Name" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
-            
-            <input id="studentMobile" type="tel" inputmode="numeric" placeholder="10-Digit Mobile Number (Optional)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
+    <div id="testSetup" class="card">
+        <select id="testOrg" class="premium-input">
+            <option value="">Select School / Institute</option>
+            <option value="ALL">All Schools (Global)</option>
+            <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
+            <option value="DVM Public School">DVM Public School</option>
+        </select>
 
-            <select id="testOrg" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
-                <option value="">Select School / Institute</option>
-                <option value="ALL">All Schools (Global)</option>
-                <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
-                <option value="DVM Public School">DVM Public School</option>
-                <option value="The Ideal Public School">The Ideal Public School</option>
-                <option value="DSR School">DSR School</option>
-                <option value="RSP Global School">RSP Global School</option>
-                <option value="Modern DAV Public School">Modern DAV Public School</option>
-                <option value="H.R. International School">H.R. International School</option>
-                <option value="Composite School Kulesra">Composite School Kulesra</option>
-                <option value="Upper Primary School Kulesra">Upper Primary School Kulesra</option>
-                <option value="Immanuel International Public School">Immanuel International Public School</option>
-                <option value="Greater Noida Public School">Greater Noida Public School</option>
-                <option value="Bharat Public School">Bharat Public School</option>
-                <option value="SMPN Public School">SMPN Public School</option>
-                <option value="Swami Dayanand Higher Secondary School">Swami Dayanand Higher Secondary School</option>
-                <option value="Yashdeep Public School">Yashdeep Public School</option>
-                <option value="RVM Public School">RVM Public School</option>
-                <option value="P.D. Memorial School">P.D. Memorial School</option>
-                <option value="Pt. Salagram Inter College">Pt. Salagram Inter College</option>
-                <option value="Government Primary School, Kulesra">Government Primary School, Kulesra</option>
-                <option value="The Heritage Public School">The Heritage Public School</option>
-                <option value="Horizon Public School">Horizon Public School</option>
-                <option value="Sun Shine Public School">Sun Shine Public School</option>
-                <option value="The One-Step Modern School">The One-Step Modern School</option>
-                <option value="Other School">Other School</option>
+        <div style="display:flex; gap:12px;">
+            <select id="testClass" class="premium-input" onchange="window.updateTestSubjects()">
+                <option value="">Grade</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
             </select>
-
-            <select id="testClass" onchange="window.updateTestSubjects()" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
-                <option value="">Select Grade</option>
-                <option value="9">Class 9</option>
-                <option value="10">Class 10</option>
-                <option value="11">Class 11</option>
-                <option value="12">Class 12</option>
-            </select>
-
-            <select id="testSubject" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
-                <option value="">Select Subject</option>
-                <option value="Mathematics">Mathematics</option>
+            <select id="testSubject" class="premium-input">
+                <option value="">Subject</option>
                 <option value="Science">Science</option>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Biology">Biology</option>
+                <option value="Mathematics">Math</option>
             </select>
-
-            <select id="testDifficulty" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
-                <option value="Easy">Difficulty: Easy (Board Level)</option>
-                <option value="Moderate">Difficulty: Moderate (JEE/NEET Prep)</option>
-                <option value="Hard">Difficulty: Hard (Advanced)</option>
-            </select>
-
-            <input id="testChapter" type="text" placeholder="Chapter Name (Optional)" style="background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:13px; width:100%; margin-bottom:12px;">
         </div>
 
-        <button type="button" class="submit-test-btn" id="startTestBtn">START 10-MIN TIMED TEST</button>
+        <input id="testChapter" class="premium-input" type="text" placeholder="Chapter Name (Optional)">
+        
+        <select id="testDifficulty" class="premium-input">
+            <option value="Easy">Difficulty: Board Level</option>
+            <option value="Moderate">Difficulty: JEE/NEET</option>
+            <option value="Hard">Difficulty: Advanced</option>
+        </select>
 
-        <div id="testWarmupBox" class="hidden waiting-container" style="margin-top:14px;">
-            <div style="font-size:12px; font-weight:800; color:var(--accent-cyan); margin-bottom:4px;">🔥 COMPILING EXAM... QUICK REACTION CHECK (+10 XP)</div>
-            <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:8px;" id="warmupQuestionText">Unit of Electric Potential Difference:</div>
-            <div id="warmupOptions">
-                <button type="button" class="warmup-trivia-btn" onclick="answerWarmup(this, true)">Volt (V)</button>
-                <button type="button" class="warmup-trivia-btn" onclick="answerWarmup(this, false)">Ampere (A)</button>
-            </div>
-            <div id="warmupFeedback" style="font-size:11px; margin-top:6px;"></div>
+        <button type="button" class="solid-cta" id="startTestBtn" style="margin-top: 10px;">START MOCK TEST ⏱️</button>
+
+        <div id="testWarmupBox" class="hidden" style="margin-top:20px; text-align:center;">
+            <div style="color:var(--text-muted); font-size:13px; font-weight:700;">Compiling AI Exam...</div>
         </div>
     </div>
 
     <div id="testArea" class="hidden">
-        <div class="timer-box" id="timerDisplay">⏳ 10:00</div>
-        <div id="testHeader" style="font-size:13px; color:var(--text-muted); margin-bottom:12px;"></div>
+        <div style="position:sticky; top:80px; z-index:50; background:rgba(11,17,32,0.9); backdrop-filter:blur(10px); padding:12px; border-radius:16px; text-align:center; font-family:'Space Grotesk'; font-size:18px; font-weight:800; color:var(--accent-cyan); margin-bottom:20px; border:1px solid rgba(255,255,255,0.05);" id="timerDisplay">⏳ 10:00</div>
+        
+        <div id="testHeader" style="font-size:14px; color:var(--text-muted); margin-bottom:16px; padding:0 10px;"></div>
         <div id="questionsContainer"></div>
-        <button type="button" class="submit-test-btn" id="submitTestBtn">SUBMIT ANSWERS</button>
+        
+        <button type="button" class="solid-cta" id="submitTestBtn" style="margin-top:20px;">SUBMIT TEST</button>
     </div>
 
-    <div class="test-result" id="testResult">
-        <div style="text-align:center; padding-bottom:16px; border-bottom:1px solid var(--border-subtle); margin-bottom:16px;">
-            <div style="font-size:12px; font-weight:800; color:var(--text-muted);">FINAL ASSESSMENT SCORE</div>
-            <div class="score" id="scoreText">0/0</div>
-            <div id="badgesContainer" style="display:flex; justify-content:center; gap:6px; margin:10px 0;"></div>
-            <div id="resultDetail" style="font-size:13px;"></div>
+    <div id="testResult" class="hidden card">
+        <div style="text-align:center; margin-bottom:24px;">
+            <div style="font-size:12px; font-weight:800; color:var(--text-muted);">ASSESSMENT SCORE</div>
+            <div id="scoreText" style="font-family:'Space Grotesk'; font-size:48px; font-weight:900; color:var(--accent-cyan);">0/0</div>
+            <div id="resultDetail" style="font-size:14px; color:#fff; margin-top:8px;"></div>
         </div>
         <div id="reviewContainer"></div>
-        <button type="button" class="restart-btn" id="restartTestBtn">TAKE ANOTHER TEST</button>
-        <button type="button" class="restart-btn whatsapp-btn" id="whatsappShareBtn" style="margin-top:8px;">SHARE ON WHATSAPP</button>
+        <button type="button" class="solid-cta" id="restartTestBtn" style="margin-top:20px; background:rgba(255,255,255,0.1) !important; color:#fff !important;">TAKE ANOTHER TEST</button>
     </div>
 </section>
 
 <!-- =====================================================
      ARENA SECTION
 ===================================================== -->
-<section class="card hidden" id="arenaSection">
-    <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-rose);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
+<section id="arenaSection" class="hidden">
+    <div style="margin-bottom: 24px; padding: 0 10px; display:flex; justify-content:space-between; align-items:flex-end;">
+        <div>
+            <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0; color:var(--accent-rose);">Arena</h1>
+            <p style="color:var(--text-muted); margin:0; font-size:14px;">Live 1v1 battles.</p>
+        </div>
+        <div id="arenaVoiceHUD" style="text-align:right;">
+            <span id="voiceStatusDot" style="display:none;"></span>
+            <span id="voiceStatusText" style="font-size: 10px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
+            <div style="display:flex; gap: 8px; justify-content:flex-end; margin-top:4px;">
+                <button type="button" id="voiceToggleMicBtn" onclick="toggleArenaVoiceMute()" style="background:rgba(255,255,255,0.05); border:none; border-radius:8px; padding:6px; font-size:12px; cursor:pointer;">🎙️</button>
+                <button type="button" id="voiceToggleSpeakerBtn" onclick="toggleArenaSpeaker()" style="background:rgba(255,255,255,0.05); border:none; border-radius:8px; padding:6px; font-size:12px; cursor:pointer;">🔊</button>
+            </div>
+        </div>
     </div>
-
-    <div style="text-align:center; margin-bottom:16px;">
-        <h2 class="section-h2" style="color:var(--accent-rose); margin:0; letter-spacing:1px;">⚔️ 1v1 LIVE KNOWLEDGE ARENA</h2>
-    </div>
-
-    <div id="arenaVoiceHUD" class="arena-voice-bar">
-      <div style="display:flex; align-items:center;">
-        <span id="voiceStatusDot" class="voice-status-dot"></span>
-        <span id="voiceStatusText" style="font-size: 11px; font-weight: 700; color: #94a3b8;">Voice: Standby</span>
-      </div>
-      <div style="display:flex; gap: 8px;">
-        <button type="button" id="voiceToggleMicBtn" class="voice-ctrl-btn" onclick="toggleArenaVoiceMute()">🎙️</button>
-        <button type="button" id="voiceToggleSpeakerBtn" class="voice-ctrl-btn" onclick="toggleArenaSpeaker()">🔊</button>
-      </div>
-    </div>
+    
     <audio id="remoteArenaAudio" autoplay playsinline webkit-playsinline></audio>
 
-    <div id="arenaSetup">
-        <label>What's your battle tag, legend?</label>
-        <input type="text" id="arenaPlayerName" placeholder="Enter Your Display Name">
+    <div id="arenaSetup" class="card">
+        <input type="text" id="arenaPlayerName" class="premium-input" placeholder="Enter Your Battle Tag">
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-          <div>
-            <label>Grade</label>
-            <select id="arenaClass">
+        <div style="display:flex; gap:12px;">
+            <select id="arenaClass" class="premium-input">
               <option value="9">Class 9</option>
               <option value="10" selected>Class 10</option>
               <option value="11">Class 11</option>
               <option value="12">Class 12</option>
             </select>
-          </div>
-          <div>
-            <label>Subject</label>
-            <select id="arenaSubject">
-              <option value="Science & Maths">Science & Maths (Mix)</option>
-              <option value="Science">Science (PCB)</option>
+            <select id="arenaSubject" class="premium-input">
+              <option value="Science & Maths">Sci & Math</option>
+              <option value="Science">Science</option>
+              <option value="Physics">Physics</option>
               <option value="Mathematics">Mathematics</option>
             </select>
-          </div>
         </div>
 
-        <label>Specific Chapter / Topic (Optional)</label>
-        <input type="text" id="arenaChapter" placeholder="e.g. Light">
+        <input type="text" id="arenaChapter" class="premium-input" placeholder="Specific Chapter (Optional)">
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
-          <div>
-            <label>Time Per Question</label>
-            <select id="arenaTimePerQ">
+        <div style="display:flex; gap:12px; margin-bottom: 20px;">
+            <select id="arenaTimePerQ" class="premium-input" style="margin:0;">
                 <option value="10">⚡ 10s</option>
                 <option value="15" selected>⏱ 15s</option>
                 <option value="20">🐢 20s</option>
             </select>
-          </div>
-          <div>
-            <label>Total Questions</label>
-            <select id="arenaQuestionCount">
+            <select id="arenaQuestionCount" class="premium-input" style="margin:0;">
                 <option value="5">5 Qs</option>
                 <option value="10" selected>10 Qs</option>
                 <option value="15">15 Qs</option>
             </select>
-          </div>
         </div>
         
-        <div class="arena-grid">
-            <button type="button" class="arena-btn-create" id="btnCreateRoom">⚡ CREATE MATCH</button>
-            <div>
-                <input type="text" id="arenaJoinCode" placeholder="4-Digit Code" maxlength="4" style="text-align:center; font-weight:900; letter-spacing:4px; margin-bottom:8px;">
-                <button type="button" class="arena-btn-join" id="btnJoinRoom">🚀 JOIN ROOM</button>
-            </div>
+        <button type="button" class="solid-cta" id="btnCreateRoom" style="background:var(--accent-rose) !important; margin-bottom:12px;">⚡ CREATE MATCH</button>
+        
+        <div style="display:flex; gap:12px; align-items:center;">
+            <input type="text" id="arenaJoinCode" class="premium-input" placeholder="4-Digit Code" maxlength="4" style="margin:0; text-align:center; font-weight:900; letter-spacing:4px;">
+            <button type="button" class="solid-cta" id="btnJoinRoom" style="width:auto; padding:14px 24px !important;">JOIN</button>
         </div>
-        <button type="button" class="restart-btn" id="btnPlayBot" style="margin-top:14px; border-color:var(--accent-cyan); color:var(--accent-cyan);" onclick="startBotMatch()">🤖 Instant Practice Match (vs AI)</button>
+        
+        <button type="button" style="width:100%; background:transparent; border:1px solid rgba(255,255,255,0.1); color:#fff; font-weight:700; padding:14px; border-radius:12px; margin-top:20px; cursor:pointer;" id="btnPlayBot" onclick="startBotMatch()">🤖 Practice vs AI Bot</button>
     </div>
 
-    <div id="arenaWaiting" class="hidden lobby-box">
-        <div class="lobby-radar"></div>
-        <div style="font-size:13px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; position:relative; z-index:2;">Share Room Match Code</div>
-        <div class="room-code-display" id="displayRoomCode">0000</div>
+    <div id="arenaWaiting" class="hidden card" style="text-align:center;">
+        <div style="font-size:13px; color:var(--text-muted); font-weight:700; margin-bottom:8px;">SHARE ROOM CODE</div>
+        <div id="displayRoomCode" style="font-family:'Space Grotesk'; font-size:48px; font-weight:900; letter-spacing:8px; color:var(--accent-cyan);">0000</div>
+        <div style="margin-top:20px; font-size:12px; color:var(--text-muted); animation:pulse 1.5s infinite;">Waiting for opponent...</div>
     </div>
 
     <div id="arenaBattle" class="hidden">
-        <div class="vs-header">
-            <div class="player-tag" style="color:var(--accent-cyan);">
-              <span>🔵</span> <span id="uiP1Name">Player 1</span>
-              <span class="player-score-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan);" id="uiP1Score">0</span>
-            </div>
-            <div style="background:var(--accent-rose); color:#fff; font-weight:900; padding:2px 8px; border-radius:6px; font-size:11px; letter-spacing:1px;">VS</div>
-            <div class="player-tag" style="color:var(--accent-rose);">
-              <span class="player-score-badge" style="background:rgba(244,63,94,0.2); color:var(--accent-rose);" id="uiP2Score">0</span>
-              <span id="uiP2Name">Player 2</span> <span>🔴</span>
-            </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:0 10px;">
+            <div style="font-weight:800; color:var(--accent-cyan); font-size:14px;"><span id="uiP1Name">P1</span> <span id="uiP1Score" style="background:rgba(0,229,255,0.1); padding:2px 6px; border-radius:6px; margin-left:6px;">0</span></div>
+            <div style="font-size:10px; font-weight:900; color:var(--text-muted);">VS</div>
+            <div style="font-weight:800; color:var(--accent-rose); font-size:14px;"><span id="uiP2Score" style="background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:6px; margin-right:6px;">0</span> <span id="uiP2Name">P2</span></div>
         </div>
 
-        <div class="vs-progress-bar-wrap">
-            <div class="vs-fill-p1" id="vsFillP1"></div>
-            <div class="vs-fill-p2" id="vsFillP2"></div>
+        <div class="vs-progress-bar-wrap" style="height:12px; background:rgba(255,255,255,0.05); border-radius:6px; overflow:hidden; margin-bottom:20px;">
+            <div class="vs-fill-p1" id="vsFillP1" style="display:none;"></div>
+            <div class="vs-fill-p2" id="vsFillP2" style="display:none;"></div>
         </div>
 
-        <div class="arena-timer" id="arenaTimerDisplay">⏱ 10s</div>
+        <div style="text-align:center; font-family:'Space Grotesk'; font-size:24px; font-weight:900; margin-bottom:20px;" id="arenaTimerDisplay">⏱ 15s</div>
 
-        <div class="question-card" id="arenaCardContainer">
-            <div style="color:var(--accent-cyan); font-size:11px; font-weight:900; letter-spacing:1px;" id="arenaQNum">QUESTION 1/10</div>
-            <div style="font-size:16px; font-weight:800; margin:12px 0; color:#fff;" id="arenaQText">Loading Challenge...</div>
-            <div id="arenaOptions"></div>
+        <div class="card" id="arenaCardContainer">
+            <div style="color:var(--text-muted); font-size:11px; font-weight:800; margin-bottom:12px;" id="arenaQNum">QUESTION 1</div>
+            <div style="font-size:16px; font-weight:700; line-height:1.5; margin-bottom:20px; color:#fff;" id="arenaQText">Loading Challenge...</div>
+            <div id="arenaOptions" style="display:flex; flex-direction:column; gap:10px;"></div>
         </div>
     </div>
 
-    <div id="arenaResult" class="hidden" style="text-align:center; padding:10px;">
-        <div class="arena-winner-podium">
-            <div id="arenaResultText"></div>
-            <div class="arena-stat-grid">
-                <div class="arena-stat-card">
-                    <div style="font-size:11px; font-weight:800; color:var(--text-muted);">FINAL SCORE</div>
-                    <div id="finalP1" style="font-size:16px; font-weight:900; color:var(--accent-cyan); margin-top:4px;">0</div>
-                </div>
-                <div class="arena-stat-card">
-                    <div style="font-size:11px; font-weight:800; color:var(--text-muted);">OPPONENT SCORE</div>
-                    <div id="finalP2" style="font-size:16px; font-weight:900; color:var(--accent-rose); margin-top:4px;">0</div>
-                </div>
+    <div id="arenaResult" class="hidden card" style="text-align:center;">
+        <div id="arenaResultText"></div>
+        <div style="display:flex; justify-content:space-around; margin:30px 0;">
+            <div>
+                <div style="font-size:11px; color:var(--text-muted); font-weight:700;">YOU</div>
+                <div id="finalP1" style="font-size:24px; font-weight:900; color:var(--accent-cyan);">0</div>
+            </div>
+            <div>
+                <div style="font-size:11px; color:var(--text-muted); font-weight:700;">OPPONENT</div>
+                <div id="finalP2" style="font-size:24px; font-weight:900; color:var(--accent-rose);">0</div>
             </div>
         </div>
-        <button type="button" class="submit-test-btn" onclick="location.reload()" style="background:linear-gradient(135deg, var(--accent-rose), #be123c);">⚔️ PLAY ANOTHER MATCH</button>
+        <button type="button" class="solid-cta" onclick="location.reload()" style="background:var(--accent-rose) !important;">PLAY AGAIN</button>
     </div>
 </section>
 
 <!-- =====================================================
-     SCHOOL FEED SECTION (WITH 22 LOCAL SCHOOLS)
+     SCHOOL FEED SECTION
 ===================================================== -->
-<section class="card hidden" id="feedSection">
-  <div class="quick-hub-banner" onclick="switchTab('home')">
-      <span style="font-size:12px; font-weight:800; color:#22c55e;">← Return to Home Deck</span>
+<section id="feedSection" class="hidden">
+  <div style="margin-bottom: 24px; padding: 0 10px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+          <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0; color:#10b981;">Campus Feed</h1>
+          <p style="color:var(--text-muted); margin:0; font-size:14px;">Local school intelligence.</p>
+      </div>
+      <button type="button" onclick="openCreatePostModal()" style="background: #10b981; color: #000; border: none; font-weight: 800; font-size: 13px; padding: 10px 16px; border-radius: 12px; cursor: pointer; box-shadow:0 4px 15px rgba(16,185,129,0.3);">+ Post</button>
   </div>
 
-  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-    <div>
-      <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0;">📢 School Charcha</h3>
-    </div>
-    <button type="button" onclick="openCreatePostModal()" style="background: #22c55e; color: #052e16; border: none; font-weight: 800; font-size: 12px; padding: 9px 15px; border-radius: 10px; cursor: pointer;">
-      + Post Karo
-    </button>
-  </div>
-
-  <select id="hubSchoolSelect" onchange="filterSchoolPosts()" style="width: 100%; background: #1f2937; color: #f9fafb; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 10px; font-size: 13px; font-weight: 700; outline: none; margin-bottom: 10px;">
-      <option value="ALL">📍 Sabhi Local Schools</option>
+  <select id="hubSchoolSelect" class="premium-input" onchange="filterSchoolPosts()">
+      <option value="ALL">📍 All Greater Noida Schools</option>
       <option value="Invincible Coaching Classes">Invincible Coaching Classes</option>
       <option value="DVM Public School">DVM Public School</option>
-      <option value="The Ideal Public School">The Ideal Public School</option>
-      <option value="DSR School">DSR School</option>
-      <option value="RSP Global School">RSP Global School</option>
-      <option value="Modern DAV Public School">Modern DAV Public School</option>
-      <option value="H.R. International School">H.R. International School</option>
-      <option value="Composite School Kulesra">Composite School Kulesra</option>
-      <option value="Upper Primary School Kulesra">Upper Primary School Kulesra</option>
-      <option value="Immanuel International Public School">Immanuel International Public School</option>
-      <option value="Greater Noida Public School">Greater Noida Public School</option>
-      <option value="Bharat Public School">Bharat Public School</option>
-      <option value="SMPN Public School">SMPN Public School</option>
-      <option value="Swami Dayanand Higher Secondary School">Swami Dayanand Higher Secondary School</option>
-      <option value="Yashdeep Public School">Yashdeep Public School</option>
-      <option value="RVM Public School">RVM Public School</option>
-      <option value="P.D. Memorial School">P.D. Memorial School</option>
-      <option value="Pt. Salagram Inter College">Pt. Salagram Inter College</option>
-      <option value="Government Primary School, Kulesra">Government Primary School, Kulesra</option>
-      <option value="The Heritage Public School">The Heritage Public School</option>
-      <option value="Horizon Public School">Horizon Public School</option>
-      <option value="Sun Shine Public School">Sun Shine Public School</option>
-      <option value="The One-Step Modern School">The One-Step Modern School</option>
   </select>
 
-  <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 4px;" id="hubCategoryPills">
-    <button class="hub-pill active" onclick="setCategoryFilter('ALL', this)">🔥 Sabhi</button>
-    <button class="hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teachers</button>
+  <div class="segmented-control" id="hubCategoryPills">
+    <button class="segmented-btn active hub-pill" onclick="setCategoryFilter('ALL', this)">🔥 All</button>
+    <button class="segmented-btn hub-pill" onclick="setCategoryFilter('teacher_intel', this)">👨‍🏫 Teachers</button>
+    <button class="segmented-btn hub-pill" onclick="setCategoryFilter('syllabus_notes', this)">📚 Notes</button>
   </div>
 
-  <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 10px;"></div>
+  <div id="schoolPostsFeed" style="display: flex; flex-direction: column; gap: 16px;"></div>
 </section>
 
 <!-- =====================================================
      NOTES STUDIO SECTION
 ===================================================== -->
-<section class="card hidden" id="notesSection">
-    <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-amber);">← Return to Home Deck</span>
+<section id="notesSection" class="hidden">
+    <div style="margin-bottom: 24px; padding: 0 10px;">
+        <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0; color:var(--accent-amber);">Topper Notes</h1>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Turn any chapter into a study module.</p>
     </div>
-
-    <h2 class="section-h2" style="color:var(--accent-amber);">📝 Topper Notes Studio</h2>
     
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-bottom:12px;">
-        <select id="notesClass">
-            <option value="9">Class 9</option>
-            <option value="10">Class 10</option>
-            <option value="11">Class 11</option>
-            <option value="12">Class 12</option>
-        </select>
-        <select id="notesSubject">
-            <option value="Science">Science</option>
-            <option value="Physics">Physics</option>
-            <option value="Chemistry">Chemistry</option>
-            <option value="Mathematics">Mathematics</option>
-            <option value="Biology">Biology</option>
-        </select>
-        <select id="notesLanguage">
+    <div class="card">
+        <div style="display:flex; gap:12px;">
+            <select id="notesClass" class="premium-input">
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+            <select id="notesSubject" class="premium-input">
+                <option value="Science">Science</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
+            </select>
+        </div>
+        
+        <select id="notesLanguage" class="premium-input">
             <option value="English">English</option>
             <option value="Hindi">Hindi</option>
             <option value="Hinglish">Hinglish</option>
         </select>
+        
+        <input type="text" id="notesChapter" class="premium-input" placeholder="What are you studying? (e.g. Gravitation)">
+
+        <button type="button" class="solid-cta" id="generateNotesBtn" style="background:var(--accent-amber) !important; color:#000 !important; margin-top:10px;">GENERATE NOTES</button>
     </div>
     
-    <input type="text" id="notesChapter" placeholder="e.g. Gravitation, Sound">
-    <button type="button" class="submit-test-btn" id="generateNotesBtn" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0f172a; margin-top:10px;">GENERATE TOPPER NOTES</button>
-    
-    <div id="notesLoading" class="hidden waiting-container">
+    <div id="notesLoading" class="hidden" style="text-align:center; padding:30px;">
       <div class="charger-orb" onclick="chargeSupercharger()">⚡</div>
-      <div id="chargeBonusDisplay">+0 Bonus XP Charged</div>
+      <div id="chargeBonusDisplay" style="margin-top:10px; font-weight:800; color:var(--accent-amber);">+0 Bonus XP Charged</div>
     </div>
     
-    <div id="notesResultContainer" class="hidden topper-paper-container">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom: 2px solid #0f172a; padding-bottom: 10px;">
-            <div id="notesResultTitle">CLASS • SUBJECT</div>
-            <button type="button" onclick="downloadPDF()" style="background:#0f172a; color:#fff; border:none; padding:8px 16px; border-radius:10px; font-weight:800; cursor:pointer;">🖨️ Download PDF</button>
+    <div id="notesResultContainer" class="hidden" style="margin-top:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:0 10px;">
+            <div id="notesResultTitle" style="font-size:14px; font-weight:800;">CLASS • SUBJECT</div>
+            <button type="button" onclick="downloadPDF()" style="background:rgba(255,255,255,0.1); color:#fff; border:none; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer;">📥 PDF</button>
         </div>
-        <div id="notesContentBody" class="topper-content"></div>
+        <div id="notesContentBody" class="card topper-content" style="font-size:14px; line-height:1.6;"></div>
     </div>
 </section>
 
 <!-- =====================================================
-     INVINCIBLE LAB SECTION (UPGRADED PLAYGROUND & ADVANCED ENGINES)
+     INVINCIBLE LAB SECTION
 ===================================================== -->
-<section class="card hidden" id="labSection">
-    <div class="quick-hub-banner" onclick="switchTab('home')">
-        <span style="font-size:12px; font-weight:800; color:var(--accent-cyan);">← Return to Home Deck</span>
-        <span style="font-size:11px; color:#9ca3af;">🔥 Clash &amp; Leaderboard</span>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-        <div>
-          <h2 class="section-h2" style="margin:0;">🔬 Invincible Science Lab</h2>
-          <div style="font-size:11px; color:var(--text-muted); font-weight:700;">"Don't just learn it. Make it happen."</div>
-        </div>
-        <span style="font-size:10px; font-weight:900; color:var(--accent-emerald); background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:8px;">SIMULATION ENGINE V3.0 (ADVANCED)</span>
+<section id="labSection" class="hidden">
+    <div style="margin-bottom: 24px; padding: 0 10px;">
+        <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0; color:#c084fc;">Science Lab</h1>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Advanced physics & chem engines.</p>
     </div>
 
     <!-- LAB NAVIGATION & FILTER SYSTEM -->
     <div id="labSkillTree">
-        <!-- Grade Pills -->
-        <div class="curriculum-tabs" style="margin-bottom:10px;">
-            <button type="button" class="curr-tab" onclick="filterLabClass('9', this)">Class 9</button>
-            <button type="button" class="curr-tab active" onclick="filterLabClass('10', this)">Class 10</button>
-            <button type="button" class="curr-tab" onclick="filterLabClass('11', this)">Class 11</button>
-            <button type="button" class="curr-tab" onclick="filterLabClass('12', this)">Class 12</button>
+        <div class="segmented-control">
+            <button type="button" class="segmented-btn" onclick="filterLabClass('9', this)">Class 9</button>
+            <button type="button" class="segmented-btn active" onclick="filterLabClass('10', this)">Class 10</button>
+            <button type="button" class="segmented-btn" onclick="filterLabClass('11', this)">Class 11</button>
+            <button type="button" class="segmented-btn" onclick="filterLabClass('12', this)">Class 12</button>
         </div>
 
-        <!-- Subject Switcher -->
-        <div style="display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap;">
-            <button type="button" class="lab-subj-btn active" onclick="filterLabSubject('all', this)" style="background:#0f172a; border:1px solid rgba(0,229,255,0.3); color:#fff; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ All Labs</button>
-            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('physics', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">⚡ Physics</button>
-            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('chemistry', this)" style="background:#0f172a; border:1px solid rgba(255,255,255,0.08); color:#94a3b8; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:800; cursor:pointer;">🧪 Chemistry</button>
-            <button type="button" class="lab-subj-btn" onclick="filterLabSubject('advanced', this)" style="background:linear-gradient(135deg, rgba(0,229,255,0.15), rgba(244,63,94,0.15)); border:1px solid var(--accent-cyan); color:#fff; border-radius:10px; padding:6px 14px; font-size:11px; font-weight:900; cursor:pointer;">🚀 10 Advanced Sims</button>
+        <div class="segmented-control" style="margin-bottom:24px;">
+            <button type="button" class="segmented-btn active lab-subj-btn" onclick="filterLabSubject('all', this)">All</button>
+            <button type="button" class="segmented-btn lab-subj-btn" onclick="filterLabSubject('physics', this)">Physics</button>
+            <button type="button" class="segmented-btn lab-subj-btn" onclick="filterLabSubject('chemistry', this)">Chemistry</button>
+            <button type="button" class="segmented-btn lab-subj-btn" onclick="filterLabSubject('advanced', this)" style="color:#c084fc;">🚀 Pro Sims</button>
         </div>
 
-        <!-- Dynamic Experiment Matrix Grid -->
-        <div class="lab-matrix-grid" id="matrixGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;"></div>
+        <div class="lab-matrix-grid" id="matrixGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px;"></div>
     </div>
 
     <!-- ACTIVE INTERACTIVE SIMULATION PLAYER -->
-    <div id="activeLabPlayer" class="hidden" style="margin-top:10px;">
-        <button type="button" onclick="closeLabSim()" style="background:none; border:none; color:var(--accent-cyan); font-size:12px; font-weight:800; cursor:pointer; margin-bottom:12px; padding:0;">← Exit Simulation to Lab Deck</button>
-        <div id="labTitle" style="font-size:16px; font-weight:900; color:#fff; margin-bottom:12px;">Lab Simulator</div>
+    <div id="activeLabPlayer" class="hidden">
+        <button type="button" onclick="closeLabSim()" style="background:rgba(255,255,255,0.05); border:none; padding:10px 16px; border-radius:12px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; margin-bottom:16px;">← Back to Lab Menu</button>
+        <div id="labTitle" style="font-family:'Space Grotesk'; font-size:20px; font-weight:900; color:#fff; margin-bottom:16px; padding:0 10px;">Lab Simulator</div>
 
-        <div class="lab-dashboard">
+        <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192,132,252,0.3) !important;">
             <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
-            <!-- Real-time HUD Controls Drawer -->
-            <div id="labControls" class="lab-controls"></div>
+            <div id="labControls" class="lab-controls" style="padding:16px; background:rgba(0,0,0,0.5); border-top:1px solid rgba(255,255,255,0.05);"></div>
         </div>
 
-        <!-- Predict -> Play -> Discover Card -->
-        <div id="labPredictionBox" style="background:#0f172a; border:1px solid var(--accent-cyan); padding:16px; border-radius:14px; margin-top:14px;">
-            <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); margin-bottom:6px;">🤔 PREDICT FIRST (+30 XP)</div>
-            <div id="labQuestionText" style="font-size:13px; font-weight:700; color:#fff; margin-bottom:12px;">Question...</div>
-            <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
+        <div id="labPredictionBox" class="card" style="margin-top:20px;">
+            <div style="font-size:11px; font-weight:900; color:#c084fc; margin-bottom:8px;">🤔 PREDICT FIRST</div>
+            <div id="labQuestionText" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:16px;">Question...</div>
+            <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:10px;"></div>
         </div>
     </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-    <strong style="color:#cbd5e1;">Invincible 360 Ecosystem</strong><br>
-    Academic Assessment Platform &bull; CBSE Class 9 to 12<br>
-    &copy; 2026 Invincible Coaching Classes.
-</footer>
-
 </main>
 
-<!-- BOTTOM DOCK -->
-<nav class="floating-dock">
-    <button type="button" class="dock-btn home-tab active" onclick="switchTab('home')"><span class="dock-icon">🏠</span> Home</button>
-    <button type="button" class="dock-btn reels-tab" onclick="switchTab('reels')"><span class="dock-icon">⚡</span> Reels</button>
-    <button type="button" class="dock-btn lab-tab" onclick="switchTab('lab')"><span class="dock-icon">🔬</span> Lab</button>
-    <button type="button" class="dock-btn" onclick="switchTab('doubt')"><span class="dock-icon">🧠</span> Doubt</button>
-    <button type="button" class="dock-btn" onclick="switchTab('test')"><span class="dock-icon">⏱️</span> Tests</button>
-    <button type="button" class="dock-btn arena-tab" onclick="switchTab('arena')"><span class="dock-icon">⚔️</span> Arena</button>
-    <button type="button" class="dock-btn feed-tab" onclick="switchTab('feed')"><span class="dock-icon">📢</span> Feed</button>
-    <button type="button" class="dock-btn notes-tab" onclick="switchTab('notes')"><span class="dock-icon">📝</span> Notes</button>
+<!-- BOTTOM DOCK (Premium 5-Item) -->
+<nav class="premium-dock">
+    <button type="button" class="premium-dock-btn active" onclick="switchTab('home')"><span class="premium-dock-icon">🏠</span> Home</button>
+    <button type="button" class="premium-dock-btn" onclick="switchTab('reels')"><span class="premium-dock-icon">⚡</span> Reels</button>
+    <button type="button" class="premium-dock-btn" onclick="switchTab('doubt')"><span class="premium-dock-icon">🧠</span> AI Desk</button>
+    <button type="button" class="premium-dock-btn" onclick="switchTab('arena')"><span class="premium-dock-icon">⚔️</span> Arena</button>
+    <button type="button" class="premium-dock-btn" onclick="openStudyHub()"><span class="premium-dock-icon">🚀</span> Hub</button>
 </nav>
+
+<!-- STUDY HUB SLIDE-UP SHEET -->
+<div id="studyHubSheet" class="bottom-sheet-overlay" onclick="closeStudyHub()">
+    <div class="bottom-sheet-content" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <h3 style="margin:0 0 20px 0; font-family:'Space Grotesk'; font-size:22px;">Study Hub</h3>
+        <div class="hub-grid">
+            <div class="hub-card" onclick="closeStudyHub(); switchTab('lab')">
+                <span style="font-size:28px;">🔬</span>
+                <span>Science Lab</span>
+            </div>
+            <div class="hub-card" onclick="closeStudyHub(); switchTab('test')">
+                <span style="font-size:28px;">⏱️</span>
+                <span>Mock Tests</span>
+            </div>
+            <div class="hub-card" onclick="closeStudyHub(); switchTab('notes')">
+                <span style="font-size:28px;">📝</span>
+                <span>Topper Notes</span>
+            </div>
+            <div class="hub-card" onclick="closeStudyHub(); switchTab('feed')">
+                <span style="font-size:28px;">📢</span>
+                <span>Campus Feed</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- MODALS -->
 <div id="lootCrateModal" style="display:none; position:fixed; inset:0; z-index:999999; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); align-items:center; justify-content:center; flex-direction:column;">
@@ -775,7 +806,7 @@
     </div>
 </div>
 
-<div class="quest-modal-overlay" id="onboardingModal">
+<div class="quest-modal-overlay" id="onboardingModal" style="display:none;">
     <div class="quest-modal-card">
         <h2 style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:0 0 8px 0;">🎮 WELCOME TO INVINCIBLE 360</h2>
         <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">What would you like to explore?</div>
@@ -791,10 +822,10 @@
       <h3 style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#fff; margin:0;">Join Your School Roster</h3>
     </div>
     <div style="display:flex; flex-direction:column; gap:12px;">
-      <input type="text" id="inviteCodeInput" placeholder="Code (e.g. DVM10A)">
-      <input type="text" id="invStudentName" placeholder="Full Name">
-      <button type="button" id="btnSubmitInvite" onclick="handleStudentInviteSubmit(event)" style="background:linear-gradient(135deg, #00e5ff, #0284c7); padding:12px; border-radius:12px; cursor:pointer; font-weight:900;">SUBMIT</button>
-      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; border:none; cursor:pointer; font-weight:700;">Skip & Explore as Guest →</button>
+      <input type="text" id="inviteCodeInput" class="premium-input" placeholder="Code (e.g. DVM10A)">
+      <input type="text" id="invStudentName" class="premium-input" placeholder="Full Name">
+      <button type="button" id="btnSubmitInvite" onclick="handleStudentInviteSubmit(event)" class="solid-cta">SUBMIT</button>
+      <button type="button" onclick="handleGuestSkip()" style="background:transparent; color:#94a3b8; border:none; cursor:pointer; font-weight:700; padding:10px;">Skip & Explore as Guest →</button>
     </div>
   </div>
 </div>
@@ -829,7 +860,7 @@
         <div class="filter-tray" id="filterTray" style="display:flex; gap:8px; overflow-x:auto; margin-bottom:10px; padding-bottom:6px;"></div>
 
         <textarea id="storyCaption" placeholder="Type your hack, formula, or thought here..." rows="2" style="width:100%; background:#020617; border:1px solid #1e293b; color:#fff; border-radius:10px; padding:10px; font-size:12px; resize:none; box-sizing:border-box;"></textarea>
-        <button type="button" class="submit-test-btn" id="btnPublishStory" style="background:linear-gradient(135deg, #00e5ff, #0284c7); color:#060913; font-weight:900; font-size:13px; border:none; padding:12px; border-radius:12px; cursor:pointer; width:100%; margin-top:10px;">🚀 POST STORY</button>
+        <button type="button" class="solid-cta" id="btnPublishStory" style="margin-top:10px;">🚀 POST STORY</button>
     </div>
 </div>
 
@@ -904,8 +935,20 @@
 <script src="advanced-labs.js"></script>
 <script src="main.js"></script>
 
-<!-- Security, Verification, & Advanced Lab Controller -->
+<!-- Security, Verification, & Custom UI Logic -->
 <script>
+  // Custom Alert Interceptor
+  window.alert = function(message) {
+      const alertMsg = document.getElementById('customAlertMessage');
+      if (alertMsg) alertMsg.innerText = message;
+      const overlay = document.getElementById('customAlertOverlay');
+      if (overlay) overlay.classList.add('open');
+  };
+  window.closeCustomAlert = function() {
+      const overlay = document.getElementById('customAlertOverlay');
+      if (overlay) overlay.classList.remove('open');
+  };
+
   // Security Verification Guard
   const verified = localStorage.getItem('student_verified');
   if (!verified || verified !== 'true') {
@@ -967,34 +1010,62 @@
       }
   };
 
+  // Study Hub Logic
+  window.openStudyHub = function() {
+      document.getElementById('studyHubSheet').classList.add('open');
+  }
+  window.closeStudyHub = function() {
+      document.getElementById('studyHubSheet').classList.remove('open');
+  }
+
+  // Intercept Navigation to update the new 5-item dock
+  const originalSwitchTab = window.switchTab;
+  window.switchTab = function(tabId) {
+      if (typeof originalSwitchTab === 'function') {
+          originalSwitchTab(tabId);
+      }
+      
+      // Update Premium Dock UI
+      document.querySelectorAll('.premium-dock-btn').forEach(btn => btn.classList.remove('active'));
+      
+      const tabMap = {
+          'home': 0, 'reels': 1, 'doubt': 2, 'arena': 3, 
+          'lab': 4, 'test': 4, 'notes': 4, 'feed': 4
+      };
+      
+      const index = tabMap[tabId];
+      if (index !== undefined) {
+          const dockBtns = document.querySelectorAll('.premium-dock-btn');
+          if (dockBtns[index]) dockBtns[index].classList.add('active');
+      }
+      
+      // Scroll to top automatically
+      window.scrollTo(0,0);
+  };
+
   window.updateTestSubjects = function() {
       const cls = document.getElementById('testClass').value;
       const subj = document.getElementById('testSubject');
       if (!subj) return;
       
       if (cls === '9' || cls === '10') {
-          subj.innerHTML = '<option value="">Select Subject</option><option value="Mathematics">Mathematics</option><option value="Science">Science</option>';
-      } else if (cls === '11' || cls === '12') {
-          subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option>';
+          subj.innerHTML = '<option value="">Subject</option><option value="Mathematics">Math</option><option value="Science">Science</option>';
       } else {
-          subj.innerHTML = '<option value="">Select Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Mathematics</option><option value="Biology">Biology</option><option value="Science">Science</option>';
+          subj.innerHTML = '<option value="">Subject</option><option value="Physics">Physics</option><option value="Chemistry">Chemistry</option><option value="Mathematics">Math</option><option value="Biology">Biology</option>';
       }
   };
 
-  // ==========================================
-  // ADVANCED LAB INTEGRATION & SUITE RUNNER
-  // ==========================================
   const ADVANCED_LABS_CATALOG = [
-    { id: 'gravity', name: '🪐 Orbital Gravity & Vectors', tag: 'Physics', desc: 'Drag to shoot orbital bodies. Live collision & momentum.' },
-    { id: 'thermo', name: '🔥 Kinetic Gas Chamber', tag: 'Chemistry', desc: 'Elastic particle collisions with thermal color mapping.' },
-    { id: 'fluid', name: '🌪️ Vector Wind Tunnel', tag: 'Physics', desc: '2000-particle fluid turbulence field with cursor deflection.' },
-    { id: 'boids', name: '🐺 Flocking Ecosystem (Predator vs Prey)', tag: 'Biology/Math', desc: 'Autonomous boids steering with separation & evasion dynamics.' },
-    { id: 'ai', name: '🧠 Neural Decision Heatmap', tag: 'CS/AI', desc: 'Perceptron boundary convergence trained in real-time.' },
-    { id: 'optics', name: '💡 Raytracing & Refraction Bench', tag: 'Physics', desc: '50-beam laser array refracting through spherical glass lenses.' },
-    { id: 'fourier', name: '〰️ Fourier Epicycles Synthesizer', tag: 'Math/Signal', desc: 'Rotating harmonic epicycles drawing complex wave forms.' },
-    { id: 'wave', name: '🌊 Wave Interference Shader', tag: 'Physics', desc: 'Double-source constructive and destructive ripple patterns.' },
-    { id: 'rockets', name: '🚀 Genetic Algorithm Smart Rockets', tag: 'CS/AI', desc: 'Autonomous evolutionary rocket swarm pathfinding.' },
-    { id: 'network', name: '🕸️ Epidemic Topology (Spring Physics)', tag: 'Epidemiology', desc: 'Dynamic force-directed graph modeling viral transmission.' }
+    { id: 'gravity', name: '🪐 Orbital Vectors', tag: 'Physics', desc: 'Drag to shoot orbital bodies.' },
+    { id: 'thermo', name: '🔥 Kinetic Gas', tag: 'Chemistry', desc: 'Elastic particle collisions.' },
+    { id: 'fluid', name: '🌪️ Vector Tunnel', tag: 'Physics', desc: 'Fluid turbulence field.' },
+    { id: 'boids', name: '🐺 Flocking Ecosystem', tag: 'Bio', desc: 'Autonomous boids steering.' },
+    { id: 'ai', name: '🧠 Neural Heatmap', tag: 'AI', desc: 'Perceptron boundary training.' },
+    { id: 'optics', name: '💡 Raytracing Bench', tag: 'Physics', desc: 'Refracting laser array.' },
+    { id: 'fourier', name: '〰️ Fourier Epicycles', tag: 'Math', desc: 'Rotating harmonic drawing.' },
+    { id: 'wave', name: '🌊 Interference Shader', tag: 'Physics', desc: 'Constructive ripple patterns.' },
+    { id: 'rockets', name: '🚀 Genetic Rockets', tag: 'AI', desc: 'Evolutionary rocket swarm.' },
+    { id: 'network', name: '🕸️ Epidemic Topology', tag: 'Bio', desc: 'Force-directed transmission.' }
   ];
 
   window.renderAdvancedLabSuite = function() {
@@ -1004,17 +1075,15 @@
 
     ADVANCED_LABS_CATALOG.forEach(lab => {
       const card = document.createElement('div');
-      card.className = 'lab-card-preview';
+      card.className = 'card';
+      card.style.padding = '16px';
       card.innerHTML = `
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:10px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.1); padding:2px 6px; border-radius:4px;">${lab.tag}</span>
-            <span style="font-size:11px; color:#f59e0b; font-weight:800;">✨ Interactive</span>
-          </div>
-          <div style="font-size:14px; font-weight:900; color:#fff; margin-bottom:6px;">${lab.name}</div>
-          <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">${lab.desc}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:10px; font-weight:900; color:#c084fc; background:rgba(192,132,252,0.1); padding:4px 8px; border-radius:6px;">${lab.tag}</span>
         </div>
-        <button class="lab-action-btn" style="margin-top:12px; width:100%;" onclick="launchAdvancedSim('${lab.id}', '${lab.name}')">LAUNCH EXPERIMENT 🚀</button>
+        <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">${lab.name}</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${lab.desc}</div>
+        <button class="solid-cta" style="background:#c084fc !important; padding:10px !important;" onclick="launchAdvancedSim('${lab.id}', '${lab.name}')">LAUNCH 🚀</button>
       `;
       matrix.appendChild(card);
     });
@@ -1156,7 +1225,7 @@
         initNetwork('invincibleEngine');
         break;
     }
-};
+  };
 
   window.closeLabSim = function() {
     const player = document.getElementById('activeLabPlayer');
@@ -1175,13 +1244,9 @@
     }
     document.querySelectorAll('.lab-subj-btn').forEach(b => {
       b.classList.remove('active');
-      b.style.borderColor = 'rgba(255,255,255,0.08)';
-      b.style.color = '#94a3b8';
     });
     if (btn) {
       btn.classList.add('active');
-      btn.style.borderColor = 'var(--accent-cyan)';
-      btn.style.color = '#fff';
     }
     if (subj === 'advanced') {
       window.renderAdvancedLabSuite();
@@ -1204,7 +1269,7 @@
       window.renderAdvancedLabSuite();
     }
   }, 500);
-</script>
 
+</script>
 </body>
 </html>
