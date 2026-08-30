@@ -1,5 +1,5 @@
 /* =====================================================
-   ⚡ ZERO-TOKEN STUDY REELS ENGINE (CLEAN TACTILE UI)
+   ⚡ ZERO-TOKEN STUDY REELS ENGINE (VIRTUALIZED UI)
 ===================================================== */
 const defaultReelDeck = [
     { id: 101, class_name: "10", type: "mcq", subject: "Physics", topic: "Light & Optics", q_en: "If magnification m = -1 for a spherical mirror, where is the object placed?", q_hi: "यदि किसी गोलीय दर्पण के लिए m = -1 है, तो वस्तु कहाँ स्थित है?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)", "Between F and P"], answer: 2, trap: "Negative magnification signifies a real and inverted image of identical size, which only happens at C." },
@@ -14,9 +14,13 @@ const defaultReelDeck = [
     { id: 1201, class_name: "12", type: "mcq", subject: "Physics", topic: "Electrostatics", q_en: "Electric flux through a closed Gaussian surface enclosing an electric dipole is:", q_hi: "किसी बंद गॉसियन सतह के भीतर विद्युत द्विध्रुव होने पर कुल विद्युत फ्लक्स क्या होगा?", options: ["q / ε₀", "2q / ε₀", "Zero (0)", "Infinite"], answer: 2, trap: "Net enclosed charge inside a dipole is (+q - q) = 0. By Gauss's Law, flux = 0." }
 ];
 
-let cachedReelDeck = defaultReelDeck;
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
 let reelStreak = 0;
+
+/* --- PHASE 1 VIRTUALIZATION STATE --- */
+let activeReelDeck = [];
+let currentReelIndex = 0;
+let scrollDebounceTimer = null;
 
 function safeEscapeHTML(str) {
     if (typeof escapeHTML === 'function') return escapeHTML(str);
@@ -46,6 +50,9 @@ async function setReelsClass(cls, btn) {
     }
 }
 
+/* =====================================================
+   PHASE 1: VIRTUALIZED SCROLL ENGINE
+===================================================== */
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
@@ -64,156 +71,201 @@ async function renderReelsDeck() {
         if (deck.length === 0) deck = defaultReelDeck;
     }
 
-    container.innerHTML = deck.map((card, idx) => {
-        const rawTitle = String(card.q_en || card.title || '');
-        const rawSub = String(card.subject || 'Science');
-        const rawFormula = String(card.formula || '');
-        
-        const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-        const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-        const formulaJS = rawFormula.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-        
-        const sub = card.subject || 'Science';
-        const hook = card.topic || 'NCERT Concept';
-        const author = card.author_name || 'Faculty Topper';
-        const school = card.school_name || 'Invincible 360';
-        const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:3px 8px; border-radius:8px;">⚡ By ${safeEscapeHTML(author)}</span>`;
-        
-        const safeCardId = String(card.id || idx);
+    activeReelDeck = deck;
+    currentReelIndex = 0;
 
-        const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
-        const dockBtnStyle = `width:42px; height:42px; border-radius:50%; background:rgba(15,23,42,0.85); border:1px solid rgba(0,229,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(8px); box-shadow:0 4px 14px rgba(0,0,0,0.6); transition:transform 0.2s;`;
-        const dockLabelStyle = `font-size:9.5px; color:#cbd5e1; font-weight:800; margin-top:3px; text-shadow:0 1px 3px #000;`;
-
-        if (card.type === 'mcq') {
-            let opts = card.options;
-            if (typeof opts === 'string') {
-                try { opts = JSON.parse(opts); } catch(e) { opts = []; }
-            }
-            if (!Array.isArray(opts)) opts = [];
-
-            return `
-              <div class="reel-card" id="reelCard_${safeCardId}" style="position:relative; padding-right:65px; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px 65px 20px 20px; margin-bottom:16px;">
-                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-                  <span class="reel-hook-badge" style="background:rgba(0,229,255,0.12); color:var(--accent-cyan); border:1px solid rgba(0,229,255,0.3); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
-                  ${creatorBadge}
-                </div>
-                
-                <div class="reel-content-box">
-                  <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
-                  ${card.q_hi ? `<div class="reel-q-sub" style="font-size:13px; color:#94a3b8; margin-bottom:16px; line-height:1.4;">${card.q_hi}</div>` : ''}
-
-                  <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px;">
-                    ${opts.map((opt, oIdx) => `
-                      <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, this)" style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); color:#f1f5f9; padding:14px 16px; border-radius:12px; font-size:14px; font-weight:700; text-align:left; cursor:pointer; transition:all 0.2s;">
-                        <span>${safeFormatMath(String(opt))}</span>
-                        <span style="font-size:14px; opacity:0.4; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; width: 18px; height: 18px; display: inline-block;"></span>
-                      </button>
-                    `).join('')}
-                  </div>
-                  <div id="reelFeedback_${safeCardId}" style="font-size:13px; margin-top:12px; display:none; padding:12px; border-radius:12px; background:rgba(0,0,0,0.4);"></div>
-                </div>
-
-                <div style="${dockStyle}">
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
-                    <div style="${dockLabelStyle}">Doubt</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="reactStory('fire')">🔥</div>
-                    <div style="${dockLabelStyle}">Clout</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
-                    <div style="${dockLabelStyle}">Share</div>
-                  </div>
-                </div>
-
-                <div class="reel-footer-status" style="margin-top:16px; font-size:11px; color:#64748b; font-weight:800;">
-                  <span>⚡ Swipe up for next challenge</span>
-                </div>
-              </div>
-            `;
-        } else if (card.type === 'trap' || card.type === 'hack') {
-            return `
-              <div class="reel-card" style="position:relative; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'}; border-radius:20px; padding:20px 65px 20px 20px; margin-bottom:16px;">
-                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-                  <span class="reel-hook-badge" style="color:#fda4af; border:1px solid rgba(244,63,94,0.4); background:rgba(244,63,94,0.15); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${card.type === 'trap' ? '🚨 EXAMINER TRAP' : '💡 TOPPER HACK'} • ${sub.toUpperCase()}</span>
-                  ${creatorBadge}
-                </div>
-                
-                <div class="reel-content-box">
-                  <div class="reel-q-title" style="font-size:17px; font-weight:900; color:${card.type === 'trap' ? '#f43f5e' : 'var(--accent-cyan)'}; margin:0 0 10px 0;">${card.title || hook}</div>
-                  <div style="font-size:14px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.03); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
-                  
-                  ${card.rule ? `<div style="font-size:13px; color:var(--accent-emerald); font-weight:800; margin-top:12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:12px; border-radius:12px;">✅ GOLDEN RULE: ${card.rule}</div>` : ''}
-                </div>
-
-                <div style="${dockStyle}">
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
-                    <div style="${dockLabelStyle}">Explain</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="reactStory('mind')">🤯</div>
-                    <div style="${dockLabelStyle}">Clout</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
-                    <div style="${dockLabelStyle}">Share</div>
-                  </div>
-                </div>
-
-                <div class="reel-footer-status" style="margin-top:16px; font-size:11px; color:#64748b; font-weight:800;">
-                  <span>⚡ Swipe up for next hack</span>
-                </div>
-              </div>
-            `;
-        } else {
-            return `
-              <div class="reel-card" style="position:relative; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid var(--accent-cyan); border-radius:20px; padding:20px 65px 20px 20px; margin-bottom:16px;">
-                <div class="reel-tag-bar" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-                  <span class="reel-hook-badge" style="color:#bae6fd; border:1px solid rgba(0,229,255,0.4); background:rgba(0,229,255,0.12); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
-                  ${creatorBadge}
-                </div>
-                
-                <div class="reel-content-box" style="text-align:center;">
-                  <div class="reel-q-title" style="font-size:17px; font-weight:900; color:var(--accent-cyan); margin:0 0 10px 0;">${card.title || 'Core Formula'}</div>
-                  <div class="reel-formula-box" style="background:#020617; border:1px solid rgba(0,229,255,0.3); border-radius:12px; padding:16px; font-size:18px; margin:12px 0;">$$${card.formula || ''}$$</div>
-                  
-                  <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-top:10px; text-align:left; background:rgba(255,255,255,0.03); padding:12px; border-radius:12px;">💡 ${card.tip || ''}</div>
-                </div>
-
-                <div style="${dockStyle}">
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">🧠</div>
-                    <div style="${dockLabelStyle}">Derive</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="reactStory('100')">💯</div>
-                    <div style="${dockLabelStyle}">Save</div>
-                  </div>
-                  <div style="text-align:center;">
-                    <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
-                    <div style="${dockLabelStyle}">Share</div>
-                  </div>
-                </div>
-
-                <div class="reel-footer-status" style="margin-top:16px; font-size:11px; color:#64748b; font-weight:800; text-align:left;">
-                  <span>⚡ Swipe up for next hack</span>
-                </div>
-              </div>
-            `;
-        }
+    // 1. Render permanent ghost wrappers to maintain perfect scrolling physics
+    container.innerHTML = activeReelDeck.map((_, idx) => {
+        return `<div id="reelWrapper_${idx}" style="height: calc(100dvh - 180px); width: 100%; scroll-snap-align: start; flex-shrink: 0; margin-bottom: 16px; position: relative;"></div>`;
     }).join('');
 
-    container.scrollTop = 0;
+    // 2. Hydrate the initial 3 active reels
+    updateVirtualizedWindow();
 
-    try {
-        if (window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise([container]).catch(() => {});
+    // 3. Attach smart scroll listener
+    container.addEventListener('scroll', () => {
+        clearTimeout(scrollDebounceTimer);
+        scrollDebounceTimer = setTimeout(() => {
+            // Find current index based on wrapper heights
+            const cardHeight = container.clientHeight;
+            const newIndex = Math.round(container.scrollTop / cardHeight);
+            
+            if (newIndex !== currentReelIndex && newIndex >= 0 && newIndex < activeReelDeck.length) {
+                currentReelIndex = newIndex;
+                updateVirtualizedWindow();
+            }
+        }, 50); // Slight debounce to prevent mid-swipe thrashing
+    }, { passive: true });
+}
+
+function updateVirtualizedWindow() {
+    // Only keep Current-1, Current, and Current+1 in the DOM
+    const startIdx = Math.max(0, currentReelIndex - 1);
+    const endIdx = Math.min(activeReelDeck.length - 1, currentReelIndex + 1);
+
+    activeReelDeck.forEach((card, idx) => {
+        const wrapper = document.getElementById(`reelWrapper_${idx}`);
+        if (!wrapper) return;
+
+        const isInWindow = (idx >= startIdx && idx <= endIdx);
+        const hasContent = wrapper.hasChildNodes();
+
+        if (isInWindow && !hasContent) {
+            // INJECT HTML
+            wrapper.innerHTML = generateReelHTML(card, idx);
+            // Typeset MathJax instantly for the newly injected card
+            try {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise([wrapper]).catch(() => {});
+                }
+            } catch(e) {}
+        } else if (!isInWindow && hasContent) {
+            // DESTROY HTML TO SAVE RAM
+            wrapper.innerHTML = '';
         }
-    } catch(e) {}
+    });
+}
+
+function generateReelHTML(card, idx) {
+    const rawTitle = String(card.q_en || card.title || '');
+    const rawSub = String(card.subject || 'Science');
+    const rawFormula = String(card.formula || '');
+    
+    const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    const formulaJS = rawFormula.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    
+    const sub = card.subject || 'Science';
+    const hook = card.topic || 'NCERT Concept';
+    const author = card.author_name || 'Faculty Topper';
+    const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:3px 8px; border-radius:8px;">⚡ By ${safeEscapeHTML(author)}</span>`;
+    
+    const safeCardId = String(card.id || idx);
+
+    const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
+    const dockBtnStyle = `width:42px; height:42px; border-radius:50%; background:rgba(15,23,42,0.85); border:1px solid rgba(0,229,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(8px); box-shadow:0 4px 14px rgba(0,0,0,0.6); transition:transform 0.2s;`;
+    const dockLabelStyle = `font-size:9.5px; color:#cbd5e1; font-weight:800; margin-top:3px; text-shadow:0 1px 3px #000;`;
+
+    if (card.type === 'mcq') {
+        let opts = card.options;
+        if (typeof opts === 'string') {
+            try { opts = JSON.parse(opts); } catch(e) { opts = []; }
+        }
+        if (!Array.isArray(opts)) opts = [];
+
+        return `
+          <div class="reel-card" id="reelCard_${safeCardId}" style="position:relative; width: 100%; height: 100%; padding-right:65px; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
+            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+              <span class="reel-hook-badge" style="background:rgba(0,229,255,0.12); color:var(--accent-cyan); border:1px solid rgba(0,229,255,0.3); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${sub.toUpperCase()} • ${hook.toUpperCase()}</span>
+              ${creatorBadge}
+            </div>
+            
+            <div class="reel-content-box" style="margin-top: 40px;">
+              <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+              ${card.q_hi ? `<div class="reel-q-sub" style="font-size:13px; color:#94a3b8; margin-bottom:16px; line-height:1.4;">${card.q_hi}</div>` : ''}
+
+              <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px;">
+                ${opts.map((opt, oIdx) => `
+                  <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, this)" style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); color:#f1f5f9; padding:14px 16px; border-radius:12px; font-size:14px; font-weight:700; text-align:left; cursor:pointer; transition:all 0.2s;">
+                    <span>${safeFormatMath(String(opt))}</span>
+                    <span style="font-size:14px; opacity:0.4; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; width: 18px; height: 18px; display: inline-block;"></span>
+                  </button>
+                `).join('')}
+              </div>
+              <div id="reelFeedback_${safeCardId}" style="font-size:13px; margin-top:12px; display:none; padding:12px; border-radius:12px; background:rgba(0,0,0,0.4);"></div>
+            </div>
+
+            <div style="${dockStyle}">
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+                <div style="${dockLabelStyle}">Doubt</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="reactStory('fire')">🔥</div>
+                <div style="${dockLabelStyle}">Clout</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                <div style="${dockLabelStyle}">Share</div>
+              </div>
+            </div>
+
+            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">
+              <span>⚡ Swipe up for next challenge</span>
+            </div>
+          </div>
+        `;
+    } else if (card.type === 'trap' || card.type === 'hack') {
+        return `
+          <div class="reel-card" style="position:relative; width: 100%; height: 100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid ${card.type === 'trap' ? 'var(--accent-rose)' : 'var(--accent-cyan)'}; border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
+            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+              <span class="reel-hook-badge" style="color:#fda4af; border:1px solid rgba(244,63,94,0.4); background:rgba(244,63,94,0.15); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">${card.type === 'trap' ? '🚨 EXAMINER TRAP' : '💡 TOPPER HACK'} • ${sub.toUpperCase()}</span>
+              ${creatorBadge}
+            </div>
+            
+            <div class="reel-content-box" style="margin-top: 40px;">
+              <div class="reel-q-title" style="font-size:17px; font-weight:900; color:${card.type === 'trap' ? '#f43f5e' : 'var(--accent-cyan)'}; margin:0 0 10px 0;">${card.title || hook}</div>
+              <div style="font-size:14px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.03); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
+              
+              ${card.rule ? `<div style="font-size:13px; color:var(--accent-emerald); font-weight:800; margin-top:12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:12px; border-radius:12px;">✅ GOLDEN RULE: ${card.rule}</div>` : ''}
+            </div>
+
+            <div style="${dockStyle}">
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+                <div style="${dockLabelStyle}">Explain</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="reactStory('mind')">🤯</div>
+                <div style="${dockLabelStyle}">Clout</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                <div style="${dockLabelStyle}">Share</div>
+              </div>
+            </div>
+
+            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">
+              <span>⚡ Swipe up for next hack</span>
+            </div>
+          </div>
+        `;
+    } else {
+        return `
+          <div class="reel-card" style="position:relative; width: 100%; height: 100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left: 4px solid var(--accent-cyan); border-radius:20px; padding:20px 65px 20px 20px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;">
+            <div class="reel-tag-bar" style="position:absolute; top:20px; left:20px; right:65px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
+              <span class="reel-hook-badge" style="color:#bae6fd; border:1px solid rgba(0,229,255,0.4); background:rgba(0,229,255,0.12); font-size:10px; font-weight:900; padding:4px 8px; border-radius:8px;">🧠 FORMULA VAULT • ${sub.toUpperCase()}</span>
+              ${creatorBadge}
+            </div>
+            
+            <div class="reel-content-box" style="text-align:center; margin-top: 40px;">
+              <div class="reel-q-title" style="font-size:17px; font-weight:900; color:var(--accent-cyan); margin:0 0 10px 0;">${card.title || 'Core Formula'}</div>
+              <div class="reel-formula-box" style="background:#020617; border:1px solid rgba(0,229,255,0.3); border-radius:12px; padding:16px; font-size:18px; margin:12px 0;">$$${card.formula || ''}$$</div>
+              
+              <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-top:10px; text-align:left; background:rgba(255,255,255,0.03); padding:12px; border-radius:12px;">💡 ${card.tip || ''}</div>
+            </div>
+
+            <div style="${dockStyle}">
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('Derive formula: ${formulaJS}', '${subJS}')">🧠</div>
+                <div style="${dockLabelStyle}">Derive</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="reactStory('100')">💯</div>
+                <div style="${dockLabelStyle}">Save</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="${dockBtnStyle}" onclick="shareReel('${qJS}')">🚀</div>
+                <div style="${dockLabelStyle}">Share</div>
+              </div>
+            </div>
+
+            <div class="reel-footer-status" style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800; text-align:left;">
+              <span>⚡ Swipe up for next hack</span>
+            </div>
+          </div>
+        `;
+    }
 }
 
 function shareReel(text) {
@@ -408,7 +460,6 @@ async function loadActiveStories() {
     let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
 
     try {
-        // Cache Busting added here:
         const res = await fetch(`/api/stories?school_id=${encodeURIComponent(studentSchool)}&t=${Date.now()}`);
         const data = await res.json();
         const dbStories = Array.isArray(data.stories) ? data.stories : (Array.isArray(data) ? data : []);
@@ -473,7 +524,6 @@ if (pubStoryBtn) {
         const finalImage = await bakeImageWithFilter(currentStoryImageBase64, selectedFilterCSS);
         pubStoryBtn.textContent = "UPLOADING... 🚀";
 
-        // 1. OPTIMISTIC INJECTION: Force it onto the screen instantly
         const optimisticStory = {
             id: Date.now(),
             author_name: name,
@@ -486,11 +536,9 @@ if (pubStoryBtn) {
         activeStories.unshift(optimisticStory);
         renderStoryCircles(); 
         
-        // Hide Modal immediately so the user sees the new circle
         const storyModal = document.getElementById('storyModal');
         if (storyModal) storyModal.style.display = 'none';
 
-        // 2. Send to backend invisibly
         fetch('/api/stories', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -509,11 +557,9 @@ if (pubStoryBtn) {
               myStoryIds.push(data.story.id);
               localStorage.setItem('my_created_stories', JSON.stringify(myStoryIds));
             }
-            // Silently fetch real DB IDs in the background
             loadActiveStories(); 
         }).catch(err => console.error(err));
 
-        // 3. Clean up the form
         currentStoryImageBase64 = null;
         selectedFilterCSS = "none";
         const preview = document.getElementById('storyImagePreview');
