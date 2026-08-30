@@ -20,54 +20,58 @@ async function checkAuth() {
 }
 
 async function loadPlatformData(){
-    try{
-        await checkAuth(); 
-        const response = await fetch('/api/get-questions');
-        const data = await response.json();
+    // Run auth check asynchronously without blocking UI rendering
+    checkAuth().catch(() => {});
 
-        if (data && data.reelDeck && Array.isArray(data.reelDeck)) {
-            if (typeof cachedReelDeck !== 'undefined') {
-                cachedReelDeck = data.reelDeck;
-            }
-        }
-
-        if (data && data.dailyPuzzle && typeof renderDailyPuzzle === 'function') {
-          renderDailyPuzzle(data.dailyPuzzle);
-        }
-
-        if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
-            const top3 = data.leaderboard.slice(0, 3);
-            const rest = data.leaderboard.slice(3, 7);
-
-            const getSchool = (item) => item.organization || item.school_name || item.school || item.institution || `Class ${item.student_class || '10'}`;
-
-            const podiumEl = document.getElementById("podiumContainer");
-            if (podiumEl) {
-              podiumEl.innerHTML = top3.map((item, idx) => `
-                  <div class="podium-item podium-${idx+1}">
-                      <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
-                      <div class="podium-name">${escapeHTML(item.student_name)}</div>
-                      <div style="font-size:8px; color:var(--accent-cyan); max-width:70px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(getSchool(item))}</div>
-                      <div class="podium-score">${item.percentage}%</div>
-                  </div>
-              `).join('');
+    // Non-blocking background fetch
+    fetch('/api/get-questions')
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.reelDeck && Array.isArray(data.reelDeck)) {
+                if (typeof cachedReelDeck !== 'undefined') {
+                    cachedReelDeck = data.reelDeck;
+                }
             }
 
-            const listEl = document.getElementById("leaderboardList");
-            if (listEl) {
-              listEl.innerHTML = rest.map((item, idx) => `
-                  <div class="clout-row">
-                      <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--accent-cyan); font-size:10px;">(${escapeHTML(getSchool(item))})</span></span>
-                      <span style="color:var(--accent-emerald);">${item.percentage}%</span>
-                  </div>
-              `).join('');
+            if (data && data.dailyPuzzle && typeof renderDailyPuzzle === 'function') {
+              renderDailyPuzzle(data.dailyPuzzle);
             }
 
-            const lb = document.getElementById("leaderboardBox");
-            if (lb) lb.style.display = "block";
-        }
-    }catch(error){ console.error(error); }
+            if(data && Array.isArray(data.leaderboard) && data.leaderboard.length > 0){
+                const top3 = data.leaderboard.slice(0, 3);
+                const rest = data.leaderboard.slice(3, 7);
+
+                const getSchool = (item) => item.organization || item.school_name || item.school || item.institution || `Class ${item.student_class || '10'}`;
+
+                const podiumEl = document.getElementById("podiumContainer");
+                if (podiumEl) {
+                  podiumEl.innerHTML = top3.map((item, idx) => `
+                      <div class="podium-item podium-${idx+1}">
+                          <div class="podium-avatar">${idx === 0 ? '👑' : (idx === 1 ? '🥈' : '🥉')}</div>
+                          <div class="podium-name">${escapeHTML(item.student_name)}</div>
+                          <div style="font-size:8px; color:var(--accent-cyan); max-width:70px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(getSchool(item))}</div>
+                          <div class="podium-score">${item.percentage}%</div>
+                      </div>
+                  `).join('');
+                }
+
+                const listEl = document.getElementById("leaderboardList");
+                if (listEl) {
+                  listEl.innerHTML = rest.map((item, idx) => `
+                      <div class="clout-row">
+                          <span>#${idx+4} ${escapeHTML(item.student_name)} <span style="color:var(--accent-cyan); font-size:10px;">(${escapeHTML(getSchool(item))})</span></span>
+                          <span style="color:var(--accent-emerald);">${item.percentage}%</span>
+                      </div>
+                  `).join('');
+                }
+
+                const lb = document.getElementById("leaderboardBox");
+                if (lb) lb.style.display = "block";
+            }
+        })
+        .catch(error => { console.error("Background data fetch skipped:", error); });
 }
+
 
 /* =====================================================
    INITIALIZATION & EVENT BINDING
