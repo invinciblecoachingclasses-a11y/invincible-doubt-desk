@@ -1,11 +1,12 @@
 /* =====================================================
-   ⚡ INVINCIBLE 360 - STUDY REELS ENGINE (PHASE 1 VIRTUALIZED SWIPER)
-   UI: Glass & Air | Recycler: Strict 3-DOM Node Pool
+   ⚡ INVINCIBLE 360 - STUDY REELS ENGINE
+   PHASE 1: 3-Node Virtualized Recycler
+   PHASE 2: Interactive Drag & Drop / Magnetic Snap Engine
 ===================================================== */
 
 const defaultReelDeck = [
     { id: 101, class_name: "10", type: "mcq", hook: "⚡ 5 SECOND CHALLENGE", title: "Only 18% got this right.", subject: "Physics", topic: "Light", q_en: "If m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)"], answer: 2, time: 5, trap: "Negative magnification means real & inverted. Size is same only at C.", difficulty: "easy" },
-    { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Construct the correct formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
+    { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Drag or tap the correct terms to construct the formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
     { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
     { id: 301, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Power Equation", subject: "Physics", topic: "Electricity", q_en: "Construct the formula for electrical power in terms of Current and Resistance.", template: ["slot", "=", "slot", "²", "×", "slot"], choices: ["P", "V", "I", "R", "t"], answer: ["P", "I", "R"], time: 20, trap: "Power is I²R for series circuits. P = V²/R is for parallel.", difficulty: "medium" },
@@ -16,13 +17,14 @@ const defaultReelDeck = [
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
 let reelStreak = 0;
 
-/* --- PHASE 1 VIRTUALIZATION ENGINE STATE --- */
+/* --- ENGINE STATE --- */
 let activeReelDeck = [];
 let currentReelIndex = 0;
 let activeReelTimers = {};
 let activeNodes = { prev: null, current: null, next: null };
 let isTransitioning = false;
-let isDragging = false;
+let isDraggingReel = false;
+let isTokenDragging = false; // Lock Virtual Swiper during token drag
 let touchStartY = 0;
 let currentDeltaY = 0;
 
@@ -105,7 +107,6 @@ function createReelNode(index, initialOffsetPct) {
 }
 
 function setupSwiperEngine(container) {
-    // 1. Prepare Viewport Container
     container.innerHTML = '';
     container.style.position = 'relative';
     container.style.overflow = 'hidden';
@@ -113,10 +114,8 @@ function setupSwiperEngine(container) {
     container.style.userSelect = 'none';
     container.style.webkitUserSelect = 'none';
 
-    // 2. Clear Active Timers
     Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
-    // 3. Build Strict 3-Node Matrix (-100%, 0%, 100%)
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     activeNodes.current = createReelNode(currentReelIndex, 0);
     activeNodes.next = createReelNode(currentReelIndex + 1, 100);
@@ -125,20 +124,22 @@ function setupSwiperEngine(container) {
     container.appendChild(activeNodes.current);
     container.appendChild(activeNodes.next);
 
-    // 4. Start Timer for Current Reel
     const currentCard = activeReelDeck[currentReelIndex];
     if (currentCard) {
         setTimeout(() => startReelTimer(currentCard.id || currentReelIndex), 400);
     }
 
-    // 5. Attach Touch & Gesture Listeners
     attachGestureListeners(container);
+    attachTokenDragEngine(container);
 }
 
 function attachGestureListeners(container) {
-    const onStart = (clientY) => {
-        if (isTransitioning) return;
-        isDragging = true;
+    const onStart = (clientY, target) => {
+        // Lock out virtual swiping if interacting with drag tokens or buttons
+        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .reel-dock-action-btn, button'))) {
+            return;
+        }
+        isDraggingReel = true;
         touchStartY = clientY;
         currentDeltaY = 0;
 
@@ -148,12 +149,11 @@ function attachGestureListeners(container) {
     };
 
     const onMove = (clientY, e) => {
-        if (!isDragging || isTransitioning) return;
+        if (!isDraggingReel || isTransitioning || isTokenDragging) return;
         currentDeltaY = clientY - touchStartY;
 
         if (e && e.cancelable) e.preventDefault();
 
-        // Feed boundary resistance
         let dampedDelta = currentDeltaY;
         if ((currentReelIndex === 0 && currentDeltaY > 0) || 
             (currentReelIndex === activeReelDeck.length - 1 && currentDeltaY < 0)) {
@@ -166,8 +166,8 @@ function attachGestureListeners(container) {
     };
 
     const onEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
+        if (!isDraggingReel) return;
+        isDraggingReel = false;
 
         const containerHeight = container.clientHeight || window.innerHeight;
         const threshold = Math.max(60, containerHeight * 0.16);
@@ -182,9 +182,8 @@ function attachGestureListeners(container) {
         currentDeltaY = 0;
     };
 
-    // Mobile Touch
     container.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) onStart(e.touches[0].clientY);
+        if (e.touches.length === 1) onStart(e.touches[0].clientY, e.target);
     }, { passive: false });
 
     container.addEventListener('touchmove', (e) => {
@@ -194,10 +193,9 @@ function attachGestureListeners(container) {
     container.addEventListener('touchend', onEnd);
     container.addEventListener('touchcancel', onEnd);
 
-    // Desktop Drag Testing
     container.addEventListener('mousedown', (e) => {
         if (e.button !== 0) return;
-        onStart(e.clientY);
+        onStart(e.clientY, e.target);
         
         const onMouseMove = (ev) => onMove(ev.clientY, ev);
         const onMouseUp = () => {
@@ -209,9 +207,8 @@ function attachGestureListeners(container) {
         window.addEventListener('mouseup', onMouseUp);
     });
 
-    // Keyboard & Wheel Control
     container.onwheel = (e) => {
-        if (isTransitioning) return;
+        if (isTransitioning || isTokenDragging) return;
         if (Math.abs(e.deltaY) > 35) {
             if (e.deltaY > 0 && currentReelIndex < activeReelDeck.length - 1) snapToNode('next');
             else if (e.deltaY < 0 && currentReelIndex > 0) snapToNode('prev');
@@ -268,7 +265,6 @@ function snapToNode(direction) {
         }, 300);
 
     } else {
-        // Revert to rest positions
         activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
         activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
         activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
@@ -283,18 +279,14 @@ function recycleForward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    // 1. Destroy Top Node
     if (activeNodes.prev) activeNodes.prev.remove();
 
-    // 2. Rotate Reference Pointers
     activeNodes.prev = activeNodes.current;
     activeNodes.current = activeNodes.next;
 
-    // 3. Append Fresh Bottom Node
     activeNodes.next = createReelNode(currentReelIndex + 1, 100);
     container.appendChild(activeNodes.next);
 
-    // 4. Instantly Reset Offsets without transition delay
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = 'none';
     });
@@ -302,7 +294,6 @@ function recycleForward() {
     activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
     activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
 
-    // 5. Activate Next Timer
     const newCard = activeReelDeck[currentReelIndex];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
 }
@@ -311,18 +302,14 @@ function recycleBackward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    // 1. Destroy Bottom Node
     if (activeNodes.next) activeNodes.next.remove();
 
-    // 2. Rotate Reference Pointers
     activeNodes.next = activeNodes.current;
     activeNodes.current = activeNodes.prev;
 
-    // 3. Prepend Fresh Top Node
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     container.insertBefore(activeNodes.prev, activeNodes.current);
 
-    // 4. Instantly Reset Offsets without transition delay
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = 'none';
     });
@@ -330,10 +317,233 @@ function recycleBackward() {
     activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
     activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
 
-    // 5. Activate Prev Timer
     const newCard = activeReelDeck[currentReelIndex];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
 }
+
+/* =====================================================
+   PHASE 2: DRAG-AND-DROP & MAGNETIC COLLISION ENGINE
+===================================================== */
+
+function attachTokenDragEngine(container) {
+    let dragGhost = null;
+    let sourceBtn = null;
+    let cardId = null;
+    let choiceVal = null;
+    let choiceIdx = null;
+    let startX = 0, startY = 0;
+    let currentHoveredSlot = null;
+    let hasMovedSignificantly = false;
+
+    container.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest('.build-choice-btn');
+        if (!btn || btn.classList.contains('is-docked-ghost')) return;
+
+        e.stopPropagation();
+        isTokenDragging = true;
+        hasMovedSignificantly = false;
+
+        sourceBtn = btn;
+        cardId = btn.getAttribute('data-card-id');
+        choiceVal = btn.getAttribute('data-choice');
+        choiceIdx = btn.getAttribute('data-choice-idx');
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        const rect = sourceBtn.getBoundingClientRect();
+        
+        // Create Floating Drag Ghost
+        dragGhost = sourceBtn.cloneNode(true);
+        dragGhost.classList.add('is-dragging');
+        dragGhost.style.width = `${rect.width}px`;
+        dragGhost.style.height = `${rect.height}px`;
+        dragGhost.style.left = `${rect.left}px`;
+        dragGhost.style.top = `${rect.top}px`;
+        document.body.appendChild(dragGhost);
+
+        sourceBtn.classList.add('is-docked-ghost');
+
+        const onPointerMove = (ev) => {
+            if (!dragGhost) return;
+            ev.preventDefault();
+
+            const deltaX = ev.clientX - startX;
+            const deltaY = ev.clientY - startY;
+
+            if (Math.hypot(deltaX, deltaY) > 6) {
+                hasMovedSignificantly = true;
+            }
+
+            dragGhost.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(1.15)`;
+
+            // Sniff element directly below pointer (pointer-events: none on ghost ensures transparency)
+            const elBelow = document.elementFromPoint(ev.clientX, ev.clientY);
+            const slot = elBelow ? elBelow.closest('.build-slot') : null;
+
+            if (slot && !slot.getAttribute('data-filled')) {
+                if (currentHoveredSlot !== slot) {
+                    clearSlotHover();
+                    currentHoveredSlot = slot;
+                    currentHoveredSlot.classList.add('slot-hover');
+                    if (typeof triggerHaptic === 'function') triggerHaptic([15]);
+                }
+            } else {
+                clearSlotHover();
+            }
+        };
+
+        const onPointerUp = (ev) => {
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerUp);
+
+            if (!dragGhost) return;
+
+            // Check if dropped into a valid empty slot
+            const elBelow = document.elementFromPoint(ev.clientX, ev.clientY);
+            const targetSlot = elBelow ? elBelow.closest('.build-slot') : null;
+
+            if (targetSlot && !targetSlot.getAttribute('data-filled')) {
+                // Drop Success
+                dropTokenIntoSlot(cardId, targetSlot, choiceVal, choiceIdx);
+            } else if (!hasMovedSignificantly) {
+                // User simply tapped the token -> Auto-fill first available slot
+                autoFillNextSlot(cardId, choiceVal, choiceIdx, sourceBtn);
+            } else {
+                // Missed target -> Snap token back
+                sourceBtn.classList.remove('is-docked-ghost');
+                if (typeof triggerHaptic === 'function') triggerHaptic([30]);
+            }
+
+            clearSlotHover();
+            if (dragGhost) dragGhost.remove();
+            dragGhost = null;
+            sourceBtn = null;
+            isTokenDragging = false;
+        };
+
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+    });
+
+    function clearSlotHover() {
+        if (currentHoveredSlot) {
+            currentHoveredSlot.classList.remove('slot-hover');
+            currentHoveredSlot = null;
+        }
+    }
+}
+
+function dropTokenIntoSlot(cardId, slotEl, choiceStr, choiceIdx) {
+    if (typeof playDing === 'function') playDing();
+    if (typeof triggerHaptic === 'function') triggerHaptic([30, 40]);
+
+    slotEl.innerHTML = choiceStr;
+    slotEl.setAttribute('data-filled', choiceStr);
+    slotEl.setAttribute('data-source', choiceIdx);
+    slotEl.classList.add('slot-filled');
+
+    const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) return;
+
+    const slots = card.querySelectorAll('.build-slot');
+    const allFilled = Array.from(slots).every(s => s.getAttribute('data-filled'));
+    if (allFilled) {
+        window.checkBuildAnswer(cardId);
+    }
+}
+
+function autoFillNextSlot(cardId, choiceStr, choiceIdx, btnEl) {
+    const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) {
+        if (btnEl) btnEl.classList.remove('is-docked-ghost');
+        return;
+    }
+
+    const slots = card.querySelectorAll('.build-slot');
+    let emptySlot = null;
+    for (let slot of slots) {
+        if (!slot.getAttribute('data-filled')) {
+            emptySlot = slot;
+            break;
+        }
+    }
+
+    if (emptySlot) {
+        dropTokenIntoSlot(cardId, emptySlot, choiceStr, choiceIdx);
+    } else {
+        if (btnEl) btnEl.classList.remove('is-docked-ghost');
+    }
+}
+
+window.removeBuildTap = function(cardId, slotEl) {
+    const sourceIdx = slotEl.getAttribute('data-source');
+    if (sourceIdx !== null) {
+        const card = document.getElementById(`reelCard_${cardId}`);
+        if (card) {
+            const btn = card.querySelector(`.build-choice-btn[data-choice-idx="${sourceIdx}"]`);
+            if (btn) btn.classList.remove('is-docked-ghost');
+        }
+        slotEl.innerHTML = '';
+        slotEl.removeAttribute('data-filled');
+        slotEl.removeAttribute('data-source');
+        slotEl.classList.remove('slot-filled', 'slot-hover');
+    }
+};
+
+window.checkBuildAnswer = function(cardId) {
+    stopReelTimer(cardId);
+    const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) return;
+
+    const matrix = card.querySelector('.build-matrix');
+    const correctAnswer = JSON.parse(matrix.getAttribute('data-answer'));
+    const isBoss = matrix.getAttribute('data-boss') === 'true';
+
+    const slots = card.querySelectorAll('.build-slot');
+    const currentAnswer = Array.from(slots).map(s => s.getAttribute('data-filled'));
+    const isCorrect = JSON.stringify(currentAnswer) === JSON.stringify(correctAnswer);
+
+    slots.forEach(s => s.onclick = null);
+    card.querySelectorAll('.build-choice-btn').forEach(b => b.style.pointerEvents = 'none');
+
+    const reveal = document.getElementById(`revealState_${cardId}`);
+    const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
+    const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
+    const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
+
+    if (isCorrect) {
+        slots.forEach(s => s.classList.add('slot-correct'));
+        if (typeof playDing === 'function') playDing();
+        if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
+        if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
+        
+        reelStreak++;
+        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
+        revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ PERFECT BUILD</span>`;
+        xpBadge.innerText = `+${totalXP} XP`;
+        
+        if (reelStreak > 2) {
+            streakBadge.style.display = 'inline-block';
+            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+        }
+        const xpEl = document.getElementById('xpCounter');
+        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
+    } else {
+        slots.forEach(s => s.classList.add('slot-wrong'));
+        if (typeof playBuzz === 'function') playBuzz();
+        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
+        reelStreak = 0;
+        revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ CIRCUIT BROKEN</span>`;
+        xpBadge.innerText = `+0 XP`;
+        xpBadge.style.background = 'rgba(255,255,255,0.05)';
+        xpBadge.style.color = '#94a3b8';
+    }
+
+    setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
+};
 
 /* =====================================================
    UI TEMPLATING (GLASS & AIR DESIGN SYSTEM)
@@ -369,7 +579,7 @@ function generateReelHTML(card, idx) {
           <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 12px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
           <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
             ${opts.map((opt, oIdx) => `
-              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:14px; font-weight:700; padding:14px 18px; border-radius:14px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); transition:all 0.2s;">
+              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)">
                   <span>${safeFormatMath(String(opt))}</span>
                   <span class="opt-indicator" style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.3);"></span>
               </button>
@@ -377,31 +587,31 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     } 
-    // BUILDER
+    // BUILDER (PHASE 2 INTERACTIVE DRAG & DROP)
     else if (card.type === 'build') {
         const templateArray = Array.isArray(card.template) ? card.template : [];
         const choicesArray = Array.isArray(card.choices) ? card.choices : [];
         
-        const builderHTML = templateArray.map((item) => {
+        const builderSlotsHTML = templateArray.map((item) => {
             if (item === 'slot') {
-                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled="" style="width:46px; height:46px; border:2px dashed rgba(0,243,255,0.4); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:var(--accent-cyan, #00f3ff); background:rgba(0,243,255,0.06); cursor:pointer; transition:0.2s;"></div>`;
+                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled=""></div>`;
             } else {
-                return `<div style="font-size:22px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
+                return `<div style="font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
             }
         }).join('');
 
         const choicesHTML = choicesArray.map((choice, cIdx) => `
-            <button class="build-choice-btn" id="choice_${safeCardId}_${cIdx}" onclick="window.handleBuildTap('${safeCardId}', '${choice}', ${cIdx})" style="padding:12px 20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:14px; color:#fff; font-size:16px; font-weight:800; cursor:pointer; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition:0.2s; box-shadow:0 4px 14px rgba(0,0,0,0.3);">${choice}</button>
+            <button type="button" class="build-choice-btn" data-card-id="${safeCardId}" data-choice="${choice}" data-choice-idx="${cIdx}">${choice}</button>
         `).join('');
 
         contentHTML = `
           <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}' style="margin-top:24px;">
-              <div style="display:flex; gap:10px; justify-content:center; margin-bottom:32px; align-items:center; flex-wrap:wrap;">
-                  ${builderHTML}
+          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}'>
+              <div class="build-slots-tray">
+                  ${builderSlotsHTML}
               </div>
-              <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+              <div class="build-choices-tray">
                   ${choicesHTML}
               </div>
           </div>
@@ -436,7 +646,6 @@ function generateReelHTML(card, idx) {
         `;
     }
 
-    // Active Interactive Wrap (MCQ & BUILD)
     return `
       <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; padding:0; background:linear-gradient(175deg, rgba(15,23,42,0.92) 0%, rgba(5,8,17,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 24px 60px rgba(0,0,0,0.85); overflow:hidden; box-sizing:border-box;">
         
@@ -527,111 +736,6 @@ function stopReelTimer(cardId) {
 }
 
 // ---------------------------------------------------
-// BUILDER LOGIC
-// ---------------------------------------------------
-window.handleBuildTap = function(cardId, choiceStr, choiceIdx) {
-    const card = document.getElementById(`reelCard_${cardId}`);
-    if (!card) return;
-
-    const slots = card.querySelectorAll('.build-slot');
-    const btn = card.querySelector(`#choice_${cardId}_${choiceIdx}`);
-
-    let emptySlot = null;
-    for (let slot of slots) {
-        if (!slot.getAttribute('data-filled')) {
-            emptySlot = slot;
-            break;
-        }
-    }
-
-    if (!emptySlot) return;
-
-    if (typeof playDing === 'function') playDing();
-    emptySlot.innerHTML = choiceStr;
-    emptySlot.setAttribute('data-filled', choiceStr);
-    emptySlot.setAttribute('data-source', choiceIdx);
-    emptySlot.style.borderStyle = 'solid';
-    emptySlot.style.borderColor = 'var(--accent-cyan, #00f3ff)';
-    emptySlot.style.background = 'rgba(0,243,255,0.18)';
-
-    if (btn) btn.style.visibility = 'hidden';
-
-    const allFilled = Array.from(slots).every(s => s.getAttribute('data-filled'));
-    if (allFilled) {
-        window.checkBuildAnswer(cardId);
-    }
-};
-
-window.removeBuildTap = function(cardId, slotEl) {
-    const sourceIdx = slotEl.getAttribute('data-source');
-    if (sourceIdx !== null) {
-        const card = document.getElementById(`reelCard_${cardId}`);
-        if (card) {
-            const btn = card.querySelector(`#choice_${cardId}_${sourceIdx}`);
-            if (btn) btn.style.visibility = 'visible';
-        }
-        slotEl.innerHTML = '';
-        slotEl.removeAttribute('data-filled');
-        slotEl.removeAttribute('data-source');
-        slotEl.style.borderStyle = 'dashed';
-        slotEl.style.borderColor = 'rgba(0,243,255,0.4)';
-        slotEl.style.background = 'rgba(0,243,255,0.06)';
-    }
-};
-
-window.checkBuildAnswer = function(cardId) {
-    stopReelTimer(cardId);
-    const card = document.getElementById(`reelCard_${cardId}`);
-    if (!card) return;
-
-    const matrix = card.querySelector('.build-matrix');
-    const correctAnswer = JSON.parse(matrix.getAttribute('data-answer'));
-    const isBoss = matrix.getAttribute('data-boss') === 'true';
-
-    const slots = card.querySelectorAll('.build-slot');
-    const currentAnswer = Array.from(slots).map(s => s.getAttribute('data-filled'));
-    const isCorrect = JSON.stringify(currentAnswer) === JSON.stringify(correctAnswer);
-
-    slots.forEach(s => s.onclick = null);
-    card.querySelectorAll('.build-choice-btn').forEach(b => b.onclick = null);
-
-    const reveal = document.getElementById(`revealState_${cardId}`);
-    const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
-    const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
-    const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
-
-    if (isCorrect) {
-        slots.forEach(s => { s.style.borderColor = '#10b981'; s.style.background = 'rgba(16,185,129,0.2)'; s.style.color = '#10b981'; });
-        if (typeof playDing === 'function') playDing();
-        if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
-        if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
-        
-        reelStreak++;
-        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
-        revealTitle.innerHTML = `<span style="color:#10b981;">✓ PERFECT BUILD</span>`;
-        xpBadge.innerText = `+${totalXP} XP`;
-        
-        if (reelStreak > 2) {
-            streakBadge.style.display = 'inline-block';
-            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
-        }
-        const xpEl = document.getElementById('xpCounter');
-        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
-    } else {
-        slots.forEach(s => { s.style.borderColor = '#ff007f'; s.style.background = 'rgba(244,63,94,0.15)'; s.style.color = '#ff007f'; });
-        if (typeof playBuzz === 'function') playBuzz();
-        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
-        reelStreak = 0;
-        revealTitle.innerHTML = `<span style="color:#ff007f;">✕ CIRCUIT BROKEN</span>`;
-        xpBadge.innerText = `+0 XP`;
-        xpBadge.style.background = 'rgba(255,255,255,0.05)';
-        xpBadge.style.color = '#94a3b8';
-    }
-
-    setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
-};
-
-// ---------------------------------------------------
 // TWO-STAGE MCQ REVEAL
 // ---------------------------------------------------
 function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
@@ -650,8 +754,7 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
         btn.style.opacity = '0.5';
         if (idx === correctIdx) {
             btn.style.opacity = '1';
-            btn.style.borderColor = '#10b981';
-            btn.style.background = 'rgba(16,185,129,0.15)';
+            btn.classList.add('correct');
         }
     });
 
@@ -663,8 +766,7 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
         if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
 
         if (selectedIdx >= 0 && btnEl) {
-            btnEl.style.borderColor = '#10b981';
-            btnEl.style.background = 'rgba(16,185,129,0.2)';
+            btnEl.classList.add('correct');
             const indicator = btnEl.querySelector('.opt-indicator');
             if (indicator) {
                 indicator.style.background = '#10b981';
@@ -687,9 +789,7 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
         if (typeof triggerHaptic === 'function') triggerHaptic([80]);
 
         if (selectedIdx >= 0 && btnEl) {
-            btnEl.style.opacity = '1';
-            btnEl.style.borderColor = '#ff007f';
-            btnEl.style.background = 'rgba(244,63,94,0.15)';
+            btnEl.classList.add('wrong');
             const indicator = btnEl.querySelector('.opt-indicator');
             if (indicator) {
                 indicator.style.background = '#ff007f';
