@@ -1,31 +1,72 @@
 /**
+ * =====================================================
  * MODULE: WAVE OPTICS & YOUNG'S DOUBLE-SLIT INTERFERENCE
- * Dynamically injected into SIMULATIONS['phy_wave_optics']
+ * Engine: Canvas2D Micro-Sim Plugin (HiDPI + Lifecycle Aware)
+ * =====================================================
  */
 
-if (typeof SIMULATIONS !== 'undefined' && SIMULATIONS['phy_wave_optics']) {
-  const waveSim = SIMULATIONS['phy_wave_optics'];
+window.ReelSimRegistry = window.ReelSimRegistry || {};
 
-  waveSim.init = function(canvas, ctx) {
-    this.params.wavelength = 532; // nm (Green Laser)
-    this.params.slitD = 0.25;      // mm
-    this.params.screenD = 1.2;     // m
-    this.params.phase = 0;
-  };
+class WaveOpticsMiniEngine {
+  constructor(canvas, customParams = {}) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.animId = null;
+    this.isDestroyed = false;
 
-  waveSim.update = function(paramId, value) {
+    // Physics Parameters
+    this.params = {
+      wavelength: 532, // nm (Green Laser)
+      slitD: 0.25,     // mm
+      screenD: 1.2,    // m
+      phase: 0,
+      ...customParams
+    };
+
+    this.dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for mobile GPU efficiency
+    this.resize();
+    this.start();
+  }
+
+  resize() {
+    if (!this.canvas) return;
+    const rect = this.canvas.getBoundingClientRect();
+    this.width = rect.width;
+    this.height = rect.height;
+
+    this.canvas.width = this.width * this.dpr;
+    this.canvas.height = this.height * this.dpr;
+    this.ctx.scale(this.dpr, this.dpr);
+  }
+
+  update(paramId, value) {
+    const val = parseFloat(value);
     if (paramId === 'ctrl_wl') {
-      this.params.wavelength = parseFloat(value);
+      this.params.wavelength = val;
       if (typeof playTone === 'function') {
-        playTone(200 + (this.params.wavelength - 380) * 0.8, 'sine', 0.05, 0.03);
+        playTone(200 + (this.params.wavelength - 380) * 0.8, 'sine', 0.04, 0.02);
       }
+    } else if (paramId === 'ctrl_d') {
+      this.params.slitD = val;
+    } else if (paramId === 'ctrl_bigD') {
+      this.params.screenD = val;
     }
-    if (paramId === 'ctrl_d') this.params.slitD = parseFloat(value);
-    if (paramId === 'ctrl_bigD') this.params.screenD = parseFloat(value);
-  };
+  }
 
-  // Converts wavelength (nm) to an exact RGB color representation
-  waveSim.nmToRGB = function(wl) {
+  getTelemetry() {
+    const lambdaM = this.params.wavelength * 1e-9;
+    const DM = this.params.screenD;
+    const dM = Math.max(0.01, this.params.slitD) * 1e-3;
+    const betaMM = (lambdaM * DM / dM) * 1000;
+    return {
+      fringeWidthMM: betaMM,
+      wavelength: this.params.wavelength,
+      slitD: this.params.slitD,
+      screenD: this.params.screenD
+    };
+  }
+
+  nmToRGB(wl) {
     let r = 0, g = 0, b = 0;
     if (wl >= 380 && wl < 440) {
       r = -(wl - 440) / (440 - 380);
@@ -50,13 +91,24 @@ if (typeof SIMULATIONS !== 'undefined' && SIMULATIONS['phy_wave_optics']) {
       g: Math.round(g * 255),
       b: Math.round(b * 255)
     };
-  };
+  }
 
-  waveSim.render = function(canvas, ctx) {
-    const w = canvas.width;
-    const h = canvas.height;
+  start() {
+    const loop = () => {
+      if (this.isDestroyed) return;
+      this.render();
+      this.animId = requestAnimationFrame(loop);
+    };
+    this.animId = requestAnimationFrame(loop);
+  }
+
+  render() {
+    const ctx = this.ctx;
+    const w = this.width;
+    const h = this.height;
+    if (!ctx || w === 0 || h === 0) return;
+
     ctx.clearRect(0, 0, w, h);
-
     this.params.phase += 0.08;
 
     const centerY = h * 0.5;
@@ -65,145 +117,122 @@ if (typeof SIMULATIONS !== 'undefined' && SIMULATIONS['phy_wave_optics']) {
 
     const rgb = this.nmToRGB(this.params.wavelength);
     const laserColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
-    const glowColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.6)`;
+    const glowColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`;
 
-    // Calculate Fringe Width: beta = (lambda * D) / d
-    // lambda in m (nm * 1e-9), D in m, d in m (mm * 1e-3) -> beta in mm
     const lambdaM = this.params.wavelength * 1e-9;
     const DM = this.params.screenD;
-    const dM = this.params.slitD * 1e-3;
+    const dM = Math.max(0.01, this.params.slitD) * 1e-3;
     const betaMM = (lambdaM * DM / dM) * 1000;
 
-    // --- 1. LASER SOURCE & INCIDENT PLANE WAVES ---
-    ctx.strokeStyle = laserColor;
+    // --- 1. LASER SOURCE ---
     ctx.fillStyle = laserColor;
     ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 12;
-
-    // Laser Emitter Box
-    ctx.fillRect(15, centerY - 14, 28, 28);
+    ctx.shadowBlur = 10;
+    ctx.fillRect(10, centerY - 10, 18, 20);
     ctx.shadowBlur = 0;
 
-    // Incident Parallel Wavefronts
-    ctx.lineWidth = 2;
-    for (let x = 55; x < slitBarrierX - 5; x += 18) {
-      const pOffset = (x + (this.params.phase * 15)) % 18;
-      ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.2 + (pOffset / 18) * 0.6})`;
+    // Incident Plane Wavefronts
+    ctx.lineWidth = 1.5;
+    for (let x = 36; x < slitBarrierX - 4; x += 14) {
+      const pOffset = (x + (this.params.phase * 12)) % 14;
+      ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.15 + (pOffset / 14) * 0.55})`;
       ctx.beginPath();
-      ctx.moveTo(x, centerY - 60);
-      ctx.lineTo(x, centerY + 60);
+      ctx.moveTo(x, centerY - 45);
+      ctx.lineTo(x, centerY + 45);
       ctx.stroke();
     }
 
     // --- 2. DOUBLE-SLIT BARRIER ---
-    const slitGapVisual = this.params.slitD * 120; // Visual scaling for slit distance
+    const slitGapVisual = Math.min(h * 0.6, this.params.slitD * 90);
     const s1Y = centerY - (slitGapVisual / 2);
     const s2Y = centerY + (slitGapVisual / 2);
 
-    ctx.fillStyle = '#1e293b';
-    ctx.strokeStyle = '#475569';
-    ctx.lineWidth = 3;
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 2;
 
-    // Top Barrier
-    ctx.fillRect(slitBarrierX - 4, 20, 8, s1Y - 26);
-    ctx.strokeRect(slitBarrierX - 4, 20, 8, s1Y - 26);
+    // Top, Middle, Bottom barrier segments
+    ctx.fillRect(slitBarrierX - 3, 10, 6, Math.max(0, s1Y - 14));
+    ctx.strokeRect(slitBarrierX - 3, 10, 6, Math.max(0, s1Y - 14));
 
-    // Middle Barrier between slits
-    ctx.fillRect(slitBarrierX - 4, s1Y + 6, 8, (s2Y - 6) - (s1Y + 6));
-    ctx.strokeRect(slitBarrierX - 4, s1Y + 6, 8, (s2Y - 6) - (s1Y + 6));
+    if (s2Y - s1Y > 10) {
+      ctx.fillRect(slitBarrierX - 3, s1Y + 5, 6, (s2Y - 5) - (s1Y + 5));
+      ctx.strokeRect(slitBarrierX - 3, s1Y + 5, 6, (s2Y - 5) - (s1Y + 5));
+    }
 
-    // Bottom Barrier
-    ctx.fillRect(slitBarrierX - 4, s2Y + 6, 8, h - s2Y - 26);
-    ctx.strokeRect(slitBarrierX - 4, s2Y + 6, 8, h - s2Y - 26);
+    ctx.fillRect(slitBarrierX - 3, s2Y + 5, 6, Math.max(0, h - s2Y - 15));
+    ctx.strokeRect(slitBarrierX - 3, s2Y + 5, 6, Math.max(0, h - s2Y - 15));
 
     // Slit labels
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '9px monospace';
-    ctx.fillText('S₁', slitBarrierX - 16, s1Y + 3);
-    ctx.fillText('S₂', slitBarrierX - 16, s2Y + 3);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '8px monospace';
+    ctx.fillText('S₁', slitBarrierX - 14, s1Y + 3);
+    ctx.fillText('S₂', slitBarrierX - 14, s2Y + 3);
 
     // --- 3. CIRCULAR INTERFERING WAVEFRONTS ---
-    const numRipples = 6;
-    ctx.lineWidth = 1.5;
+    const numRipples = 5;
+    ctx.lineWidth = 1.2;
+    const maxRadius = screenX - slitBarrierX;
     for (let r = 1; r <= numRipples; r++) {
-      const radius = ((r * 22) + (this.params.phase * 10)) % (screenX - slitBarrierX);
-      const alpha = Math.max(0, 1 - (radius / (screenX - slitBarrierX)));
-      ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.45})`;
+      const radius = ((r * 18) + (this.params.phase * 8)) % maxRadius;
+      const alpha = Math.max(0, 1 - (radius / maxRadius));
+      ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha * 0.4})`;
 
-      // Wavefront from Slit 1
       ctx.beginPath();
       ctx.arc(slitBarrierX, s1Y, radius, -Math.PI / 2.3, Math.PI / 2.3);
       ctx.stroke();
 
-      // Wavefront from Slit 2
       ctx.beginPath();
       ctx.arc(slitBarrierX, s2Y, radius, -Math.PI / 2.3, Math.PI / 2.3);
       ctx.stroke();
     }
 
-    // --- 4. DETECTOR SCREEN WITH REALISTIC INTERFERENCE PATTERN ---
-    const screenWidth = 24;
+    // --- 4. DETECTOR SCREEN ---
+    const screenWidth = 16;
     ctx.fillStyle = '#020617';
-    ctx.fillRect(screenX, 20, screenWidth, h - 40);
-    ctx.strokeStyle = '#334155';
-    ctx.strokeRect(screenX, 20, screenWidth, h - 40);
+    ctx.fillRect(screenX, 10, screenWidth, h - 20);
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.strokeRect(screenX, 10, screenWidth, h - 20);
 
-    // Render continuous fringe pattern across screen height
-    const fringeScale = 14 / Math.max(0.4, betaMM);
-    for (let y = 22; y < h - 22; y += 2) {
+    const fringeScale = 12 / Math.max(0.3, betaMM);
+    for (let y = 12; y < h - 12; y += 2) {
       const dy = y - centerY;
-      // Intensity formula: I = I_0 * cos^2(pi * d * y / (lambda * D))
       const phaseDiff = (Math.PI * dy) / fringeScale;
       const intensity = Math.pow(Math.cos(phaseDiff), 2);
 
       ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${intensity * 0.95})`;
-      ctx.fillRect(screenX + 2, y, screenWidth - 4, 2);
+      ctx.fillRect(screenX + 1, y, screenWidth - 2, 2);
     }
 
-    // --- 5. INTENSITY DISTRIBUTION PROFILE (Right side curve) ---
-    const plotStartX = screenX + screenWidth + 8;
+    // --- 5. INTENSITY DISTRIBUTION CURVE ---
+    const plotStartX = screenX + screenWidth + 4;
     ctx.strokeStyle = laserColor;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    for (let y = 22; y < h - 22; y += 3) {
+    for (let y = 12; y < h - 12; y += 3) {
       const dy = y - centerY;
       const phaseDiff = (Math.PI * dy) / fringeScale;
       const intensity = Math.pow(Math.cos(phaseDiff), 2);
-      const plotX = plotStartX + (intensity * 40);
+      const plotX = plotStartX + (intensity * 26);
 
-      if (y === 22) ctx.moveTo(plotX, y);
+      if (y === 12) ctx.moveTo(plotX, y);
       else ctx.lineTo(plotX, y);
     }
     ctx.stroke();
+  }
 
-    // --- 6. TELEMETRY READOUT ---
-    const hudX = 14;
-    const hudY = 14;
-    const hudW = 205;
-    const hudH = 102;
+  destroy() {
+    this.isDestroyed = true;
+    if (this.animId) cancelAnimationFrame(this.animId);
+    this.canvas = null;
+    this.ctx = null;
+  }
+}
 
-    ctx.fillStyle = 'rgba(2, 6, 23, 0.9)';
-    ctx.strokeStyle = 'rgba(0, 229, 255, 0.3)';
-    ctx.lineWidth = 1;
-    ctx.fillRect(hudX, hudY, hudW, hudH);
-    ctx.strokeRect(hudX, hudY, hudW, hudH);
+// Register into Invincible 360 Plugin Registry
+window.ReelSimRegistry['phy_wave_optics'] = WaveOpticsMiniEngine;
 
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px monospace';
-    ctx.fillText('WAVE OPTICS INTERFEROMETER:', hudX + 10, hudY + 20);
-
-    ctx.fillStyle = laserColor;
-    ctx.font = 'bold 12px monospace';
-    ctx.fillText(`FRINGE WIDTH (β): ${betaMM.toFixed(2)} mm`, hudX + 10, hudY + 40);
-
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillText(`WAVELENGTH (λ):   ${this.params.wavelength.toFixed(0)} nm`, hudX + 10, hudY + 58);
-
-    ctx.fillStyle = '#05ffa1';
-    ctx.fillText(`SLIT GAP (d):     ${this.params.slitD.toFixed(2)} mm`, hudX + 10, hudY + 76);
-
-    ctx.fillStyle = '#00e5ff';
-    ctx.fillText(`DISTANCE (D):     ${this.params.screenD.toFixed(1)} m`, hudX + 10, hudY + 94);
-  };
+// Backward Compatibility Hook for Lab Studio
+if (typeof SIMULATIONS !== 'undefined' && SIMULATIONS['phy_wave_optics']) {
+  SIMULATIONS['phy_wave_optics'].engineClass = WaveOpticsMiniEngine;
 }
