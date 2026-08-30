@@ -176,6 +176,37 @@ const defaultReelDeck = [
       trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. The brown fumes are strictly NO₂.", 
       difficulty: "boss" 
     },
+        { 
+      id: 104, 
+      class_name: "10", 
+      type: "sim", 
+      sim_id: "phy_circuits", 
+      hook: "⚡ CLOSE THE LOOP", 
+      title: "DC Circuit & Ohm's Law", 
+      subject: "Physics", 
+      topic: "Electricity", 
+      q_en: "Toggle the knife switch to close the circuit and power the filament load.", 
+      controls: [], 
+      time: 20, 
+      trap: "Current flows only in a closed conductive loop: I = V/R = 12V / 4Ω = 3.0A.", 
+      difficulty: "easy" 
+    },
+    { 
+      id: 105, 
+      class_name: "10", 
+      type: "sim", 
+      sim_id: "bio_dna", 
+      hook: "🧬 DNA REPLICATION", 
+      title: "Base-Pairing Match", 
+      subject: "Biology", 
+      topic: "Heredity", 
+      q_en: "Tap complementary nucleotide bases in sequence to replicate: A-T-G-C.", 
+      controls: [], 
+      time: 25, 
+      trap: "Chargaff's Rule: Adenine pairs with Thymine (A=T), and Guanine pairs with Cytosine (G≡C).", 
+      difficulty: "medium" 
+    },
+
 
     // --- CLASS 11 & 12 ADVANCED SUITE ---
     { 
