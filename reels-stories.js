@@ -1093,49 +1093,69 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     }
-    // 3. INTERACTIVE SIMULATION REEL
+        // 3. INTERACTIVE SIMULATION REEL
     else if (card.type === 'sim') {
         const controls = Array.isArray(card.controls) ? card.controls : [];
         const isAlgebra = card.sim_id === 'math_algebra_drag';
+        const isDna = card.sim_id === 'bio_dna';
+        const isCircuit = card.sim_id === 'phy_circuits';
         
         const slidersHTML = controls.map(ctrl => `
-          <div style="margin-bottom:6px;">
-            <div style="display:flex; justify-content:space-between; font-size:10.5px; font-weight:800; color:#cbd5e1; margin-bottom:2px;">
+          <div style="margin-bottom:4px;">
+            <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:800; color:#cbd5e1; margin-bottom:1px;">
               <span>${ctrl.label}</span>
               <span id="valBadge_${safeCardId}_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.val} ${ctrl.unit}</span>
             </div>
             <input type="range" class="sim-slider" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.val}" 
               oninput="window.updateReelSimParam('${safeCardId}', '${ctrl.id}', this.value, '${ctrl.unit}')"
-              style="width:100%; height:5px; accent-color:var(--accent-cyan); cursor:pointer;">
+              style="width:100%; height:4px; accent-color:var(--accent-cyan); cursor:pointer;">
           </div>
         `).join('');
 
         const algebraControlsHTML = `
-          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '-6')">-6 Both Sides</button>
-            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '÷2')">÷2 Both Sides</button>
-            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '+6')">+6 Both Sides</button>
+          <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:8px 10px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '-6')">-6 Both Sides</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:8px 10px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '÷2')">÷2 Both Sides</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:8px 10px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '+6')">+6 Both Sides</button>
           </div>
         `;
 
+        const dnaControlsHTML = `
+          <div style="display:flex; gap:8px; justify-content:center; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'A')">A</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'T')">T</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'G')">G</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'C')">C</button>
+          </div>
+        `;
+
+        const circuitControlsHTML = `
+          <div style="display:flex; justify-content:center; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="width:100%; justify-content:center; padding:9px 12px; font-size:11px; font-weight:800; background:rgba(0,229,255,0.08); border-color:var(--accent-cyan);" onclick="window.toggleCircuitSwitch('${safeCardId}')">🔌 TOGGLE KNIFE SWITCH</button>
+          </div>
+        `;
+
+        let activeSimControlsHTML = '';
+        if (isAlgebra) activeSimControlsHTML = algebraControlsHTML;
+        else if (isDna) activeSimControlsHTML = dnaControlsHTML;
+        else if (isCircuit) activeSimControlsHTML = circuitControlsHTML;
+        else if (controls.length > 0) activeSimControlsHTML = `<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:6px 10px;">${slidersHTML}</div>`;
+
         contentHTML = `
-          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 6px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div style="position:relative; width:100%; height:155px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:10px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
+          <div style="position:relative; width:100%; height:130px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:14px; overflow:hidden; margin-bottom:8px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
              
-             <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:9.5px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
+             <div style="position:absolute; top:6px; right:6px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:6px; padding:2px 6px; font-size:9px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
                <span id="angleReadout_${safeCardId}">β = <span id="telemetryVal_${safeCardId}">-- mm</span></span>
              </div>
           </div>
 
-          ${isAlgebra ? algebraControlsHTML : (controls.length > 0 ? `
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px;">
-              ${slidersHTML}
-            </div>
-          ` : '')}
+          ${activeSimControlsHTML}
         `;
     }
+
     // 4. PREDICTION & TOUCH DRAWING ENGINE
     else if (card.type === 'draw') {
         contentHTML = `
