@@ -1,11 +1,34 @@
 /* =====================================================
    ⚡ INVINCIBLE 360 - STUDY REELS ENGINE
    PHASE 1: 3-Node Virtualized Recycler
-   PHASE 2: Interactive Drag & Drop / Magnetic Snap Engine
+   PHASE 2: Interactive Drag & Drop Engine
+   PHASE 3: Canvas Mini-Sim Lifecycle Orchestrator
 ===================================================== */
 
 const defaultReelDeck = [
     { id: 101, class_name: "10", type: "mcq", hook: "⚡ 5 SECOND CHALLENGE", title: "Only 18% got this right.", subject: "Physics", topic: "Light", q_en: "If m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)"], answer: 2, time: 5, trap: "Negative magnification means real & inverted. Size is same only at C.", difficulty: "easy" },
+    
+    // PHASE 3: INTERACTIVE CANVAS MINI-SIM REEL
+    { 
+      id: 401, 
+      class_name: "12", 
+      type: "sim", 
+      sim_id: "phy_wave_optics", 
+      hook: "🔬 INTERACTIVE LAB", 
+      title: "Young's Double-Slit Experiment", 
+      subject: "Physics", 
+      topic: "Wave Optics", 
+      q_en: "Adjust Slit Gap (d) & Wavelength (λ) to observe fringe compression.", 
+      controls: [
+        { id: "ctrl_wl", label: "Wavelength (λ)", min: 380, max: 750, step: 1, val: 532, unit: "nm" },
+        { id: "ctrl_d", label: "Slit Gap (d)", min: 0.1, max: 0.8, step: 0.01, val: 0.25, unit: "mm" },
+        { id: "ctrl_bigD", label: "Screen Dist (D)", min: 0.5, max: 2.5, step: 0.1, val: 1.2, unit: "m" }
+      ],
+      time: 30, 
+      trap: "Fringe Width β = λD/d. Decreasing slit gap d increases fringe separation!", 
+      difficulty: "medium" 
+    },
+
     { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Drag or tap the correct terms to construct the formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
     { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
@@ -22,9 +45,10 @@ let activeReelDeck = [];
 let currentReelIndex = 0;
 let activeReelTimers = {};
 let activeNodes = { prev: null, current: null, next: null };
+let activeSimInstances = {}; // CardId -> Engine Instance
 let isTransitioning = false;
 let isDraggingReel = false;
-let isTokenDragging = false; // Lock Virtual Swiper during token drag
+let isTokenDragging = false;
 let touchStartY = 0;
 let currentDeltaY = 0;
 
@@ -93,7 +117,14 @@ function createReelNode(index, initialOffsetPct) {
     node.dataset.index = index;
 
     if (index >= 0 && index < activeReelDeck.length) {
-        node.innerHTML = generateReelHTML(activeReelDeck[index], index);
+        const card = activeReelDeck[index];
+        node.innerHTML = generateReelHTML(card, index);
+        
+        // Mount Canvas Micro-Sim if card is a Simulation
+        if (card.type === 'sim') {
+          setTimeout(() => mountReelSimulation(card.id || index, card.sim_id), 50);
+        }
+
         try {
             if (window.MathJax && MathJax.typesetPromise) {
                 MathJax.typesetPromise([node]).catch(() => {});
@@ -106,15 +137,26 @@ function createReelNode(index, initialOffsetPct) {
     return node;
 }
 
+function destroyReelNodeSim(node) {
+  if (!node) return;
+  const canvas = node.querySelector('canvas[data-sim-card-id]');
+  if (canvas) {
+    const cardId = canvas.getAttribute('data-sim-card-id');
+    unmountReelSimulation(cardId);
+  }
+}
+
 function setupSwiperEngine(container) {
+    // 1. Teardown any running loops
+    Object.keys(activeSimInstances).forEach(k => unmountReelSimulation(k));
+    Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
+
     container.innerHTML = '';
     container.style.position = 'relative';
     container.style.overflow = 'hidden';
     container.style.touchAction = 'none';
     container.style.userSelect = 'none';
     container.style.webkitUserSelect = 'none';
-
-    Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     activeNodes.current = createReelNode(currentReelIndex, 0);
@@ -135,8 +177,8 @@ function setupSwiperEngine(container) {
 
 function attachGestureListeners(container) {
     const onStart = (clientY, target) => {
-        // Lock out virtual swiping if interacting with drag tokens or buttons
-        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .reel-dock-action-btn, button'))) {
+        // Lock out virtual swiping when touching draggables, canvas, sliders, or interactive buttons
+        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .sim-slider, .reel-dock-action-btn, button, input[type="range"]'))) {
             return;
         }
         isDraggingReel = true;
@@ -279,7 +321,11 @@ function recycleForward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    if (activeNodes.prev) activeNodes.prev.remove();
+    // Destroy Top Node & Its Canvas Loop
+    if (activeNodes.prev) {
+      destroyReelNodeSim(activeNodes.prev);
+      activeNodes.prev.remove();
+    }
 
     activeNodes.prev = activeNodes.current;
     activeNodes.current = activeNodes.next;
@@ -302,7 +348,11 @@ function recycleBackward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    if (activeNodes.next) activeNodes.next.remove();
+    // Destroy Bottom Node & Its Canvas Loop
+    if (activeNodes.next) {
+      destroyReelNodeSim(activeNodes.next);
+      activeNodes.next.remove();
+    }
 
     activeNodes.next = activeNodes.current;
     activeNodes.current = activeNodes.prev;
@@ -319,6 +369,61 @@ function recycleBackward() {
 
     const newCard = activeReelDeck[currentReelIndex];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
+}
+
+/* =====================================================
+   PHASE 3: SIMULATION LIFECYCLE & TELEMETRY MANAGER
+===================================================== */
+
+function mountReelSimulation(cardId, simId) {
+  const canvas = document.querySelector(`canvas[data-sim-card-id="${cardId}"]`);
+  if (!canvas) return;
+
+  const EngineClass = window.ReelSimRegistry ? window.ReelSimRegistry[simId] : null;
+  if (!EngineClass) {
+    console.warn(`[Invincible 360] Sim Engine "${simId}" not found in ReelSimRegistry.`);
+    return;
+  }
+
+  // Teardown existing instance if present
+  if (activeSimInstances[cardId]) {
+    activeSimInstances[cardId].destroy();
+  }
+
+  const instance = new EngineClass(canvas);
+  activeSimInstances[cardId] = instance;
+
+  // Initial Telemetry Sync
+  updateSimTelemetryHUD(cardId, instance);
+}
+
+function unmountReelSimulation(cardId) {
+  if (activeSimInstances[cardId]) {
+    activeSimInstances[cardId].destroy();
+    delete activeSimInstances[cardId];
+  }
+}
+
+window.updateReelSimParam = function(cardId, paramId, value, unit) {
+  const instance = activeSimInstances[cardId];
+  if (instance) {
+    instance.update(paramId, value);
+    updateSimTelemetryHUD(cardId, instance);
+  }
+  const valBadge = document.getElementById(`valBadge_${cardId}_${paramId}`);
+  if (valBadge) {
+    valBadge.innerText = `${value} ${unit || ''}`;
+  }
+};
+
+function updateSimTelemetryHUD(cardId, instance) {
+  const telemetry = instance.getTelemetry ? instance.getTelemetry() : null;
+  if (!telemetry) return;
+
+  const hudEl = document.getElementById(`telemetryVal_${cardId}`);
+  if (hudEl && telemetry.fringeWidthMM !== undefined) {
+    hudEl.innerText = `${telemetry.fringeWidthMM.toFixed(2)} mm`;
+  }
 }
 
 /* =====================================================
@@ -353,7 +458,6 @@ function attachTokenDragEngine(container) {
 
         const rect = sourceBtn.getBoundingClientRect();
         
-        // Create Floating Drag Ghost
         dragGhost = sourceBtn.cloneNode(true);
         dragGhost.classList.add('is-dragging');
         dragGhost.style.width = `${rect.width}px`;
@@ -377,7 +481,6 @@ function attachTokenDragEngine(container) {
 
             dragGhost.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) scale(1.15)`;
 
-            // Sniff element directly below pointer (pointer-events: none on ghost ensures transparency)
             const elBelow = document.elementFromPoint(ev.clientX, ev.clientY);
             const slot = elBelow ? elBelow.closest('.build-slot') : null;
 
@@ -400,18 +503,14 @@ function attachTokenDragEngine(container) {
 
             if (!dragGhost) return;
 
-            // Check if dropped into a valid empty slot
             const elBelow = document.elementFromPoint(ev.clientX, ev.clientY);
             const targetSlot = elBelow ? elBelow.closest('.build-slot') : null;
 
             if (targetSlot && !targetSlot.getAttribute('data-filled')) {
-                // Drop Success
                 dropTokenIntoSlot(cardId, targetSlot, choiceVal, choiceIdx);
             } else if (!hasMovedSignificantly) {
-                // User simply tapped the token -> Auto-fill first available slot
                 autoFillNextSlot(cardId, choiceVal, choiceIdx, sourceBtn);
             } else {
-                // Missed target -> Snap token back
                 sourceBtn.classList.remove('is-docked-ghost');
                 if (typeof triggerHaptic === 'function') triggerHaptic([30]);
             }
@@ -568,7 +667,7 @@ function generateReelHTML(card, idx) {
     const dockBtnStyle = `width:44px; height:44px; border-radius:50%; background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.6); transition:transform 0.2s;`;
     const dockLabelStyle = `font-size:10px; color:#cbd5e1; font-weight:800; margin-top:4px; text-shadow:0 1px 3px #000;`;
 
-    // MCQ
+    // 1. MCQ
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
@@ -587,7 +686,7 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     } 
-    // BUILDER (PHASE 2 INTERACTIVE DRAG & DROP)
+    // 2. BUILDER (PHASE 2)
     else if (card.type === 'build') {
         const templateArray = Array.isArray(card.template) ? card.template : [];
         const choicesArray = Array.isArray(card.choices) ? card.choices : [];
@@ -617,7 +716,42 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     }
-    // TRAP / HACK
+    // 3. CANVAS MINI-SIM (PHASE 3)
+    else if (card.type === 'sim') {
+        const controls = Array.isArray(card.controls) ? card.controls : [];
+        
+        const slidersHTML = controls.map(ctrl => `
+          <div style="margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:#cbd5e1; margin-bottom:2px;">
+              <span>${ctrl.label}</span>
+              <span id="valBadge_${safeCardId}_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.val} ${ctrl.unit}</span>
+            </div>
+            <input type="range" class="sim-slider" min="${ctrl.min}" max="${ctrl.max}" step="${ctrl.step}" value="${ctrl.val}" 
+              oninput="window.updateReelSimParam('${safeCardId}', '${ctrl.id}', this.value, '${ctrl.unit}')"
+              style="width:100%; height:5px; accent-color:var(--accent-cyan); cursor:pointer;">
+          </div>
+        `).join('');
+
+        contentHTML = `
+          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          
+          <!-- Viewport Container -->
+          <div style="position:relative; width:100%; height:160px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:12px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
+             <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
+             
+             <!-- Telemetry Floating Pill -->
+             <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:10px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
+               β = <span id="telemetryVal_${safeCardId}">-- mm</span>
+             </div>
+          </div>
+
+          <!-- Controls Tray -->
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px 14px;">
+            ${slidersHTML}
+          </div>
+        `;
+    }
+    // 4. TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
@@ -655,12 +789,12 @@ function generateReelHTML(card, idx) {
         </div>
 
         <div style="padding:24px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
-            <div style="margin-bottom:18px;">
-                <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:10px;">
+            <div style="margin-bottom:14px;">
+                <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:8px;">
                     ${hook}
                 </div>
-                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:24px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:6px;">${card.title || 'Can you solve this?'}</div>
-                <div style="font-size:12px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
+                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:4px;">${card.title || 'Can you solve this?'}</div>
+                <div style="font-size:11.5px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
             </div>
             
             <div style="position:relative; z-index:10;">
