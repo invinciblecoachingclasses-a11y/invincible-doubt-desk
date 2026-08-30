@@ -1,5 +1,5 @@
 /* =====================================================
-   CAMPUS HUB / INTERACTIVE TURF RADAR CONTROLLER
+   CAMPUS HUB / LIVE GPS PROXIMITY RADAR (PRIVACY-SAFE)
 ==================================================== */
 let currentCategoryFilter = 'ALL';
 let allSchoolPosts = [];
@@ -10,6 +10,9 @@ const CampusRadarEngine = {
     w: 0, h: 0,
     ctx: null,
     frame: 0,
+    userLocation: null,
+    nearbyPeers: [],
+    mode: 'schools', // 'schools' or 'live_gps'
     schools: [],
     
     init: function(container) {
@@ -26,9 +29,13 @@ const CampusRadarEngine = {
         wrapper.innerHTML = `
             <div style="position:absolute; top:12px; left:16px; font-size:12px; font-weight:900; color:var(--accent-cyan); letter-spacing:1px; z-index:10; display:flex; align-items:center; gap:6px;">
                 <span class="pulse-dot" style="display:inline-block; width:8px; height:8px; background:var(--accent-cyan); border-radius:50%; box-shadow:0 0 10px var(--accent-cyan);"></span>
-                LIVE CAMPUS RADAR
+                <span id="radarModeText">SECTOR RADAR</span>
             </div>
-            <div style="position:absolute; top:12px; right:16px; font-size:9px; color:#cbd5e1; background:rgba(255,255,255,0.1); padding:4px 8px; border-radius:6px; z-index:10;">GREATER NOIDA SECTOR</div>
+            
+            <button id="activateGpsBtn" onclick="CampusRadarEngine.requestLocation()" style="position:absolute; top:12px; right:16px; font-size:10px; font-weight:800; color:#020617; background:var(--accent-cyan); border:none; padding:6px 10px; border-radius:8px; z-index:20; cursor:pointer; box-shadow:0 0 15px rgba(0,229,255,0.4);">
+                📍 FIND PEERS
+            </button>
+
             <canvas id="${this.canvasId}" style="width:100%; height:260px; display:block;"></canvas>
         `;
 
@@ -52,40 +59,76 @@ const CampusRadarEngine = {
         this.render();
     },
 
-    generateSchoolNodes: function() {
-        const schoolNames = [
-            "Invincible Coaching", "DVM Public", "The Ideal Public", "DSR School", 
-            "RSP Global", "Modern DAV", "H.R. International", "Composite Kulesra", 
-            "Immanuel Int.", "Greater Noida Public", "Bharat Public", "SMPN Public", 
-            "Swami Dayanand", "Yashdeep", "RVM Public", "P.D. Memorial", 
-            "Pt. Salagram", "Heritage Public", "Horizon", "Sun Shine"
-        ];
+    requestLocation: function() {
+        const btn = document.getElementById('activateGpsBtn');
+        if (btn) btn.innerText = "LOCATING... ⏳";
 
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser.");
+            if (btn) btn.innerText = "📍 FIND PEERS";
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                this.userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                this.mode = 'live_gps';
+                document.getElementById('radarModeText').innerText = "LIVE PROXIMITY RADAR";
+                if (btn) btn.style.display = 'none';
+                
+                // Fetch/Simulate live peers based on user coordinates
+                this.fetchNearbyPeers();
+            },
+            (error) => {
+                alert("Location access denied. Enable GPS to find nearby challengers.");
+                if (btn) btn.innerText = "📍 FIND PEERS";
+            },
+            { enableHighAccuracy: true }
+        );
+    },
+
+    fetchNearbyPeers: function() {
+        // In a real backend, you would send this.userLocation to Supabase.
+        // For now, we simulate finding 5-10 random active students within 15km.
+        const numPeers = Math.floor(Math.random() * 8) + 5;
+        this.nearbyPeers = [];
+
+        for (let i = 0; i < numPeers; i++) {
+            const distanceKm = Math.random() * 15; // 0 to 15km away
+            const angle = Math.random() * Math.PI * 2;
+            
+            this.nearbyPeers.push({
+                id: i,
+                distance: distanceKm,
+                angle: angle,
+                school: i % 2 === 0 ? "DVM Public" : "Modern DAV",
+                isLookingForMatch: Math.random() > 0.7,
+                color: Math.random() > 0.5 ? '#f43f5e' : '#f59e0b'
+            });
+        }
+    },
+
+    generateSchoolNodes: function() {
+        const schoolNames = ["Invincible", "DVM Public", "RSP Global", "Modern DAV", "Composite Kulesra", "Bharat Public", "Yashdeep", "Heritage"];
         this.schools = schoolNames.map((name, i) => {
             const angle = (i / schoolNames.length) * Math.PI * 2;
             const radius = 40 + Math.random() * 60; 
             return {
-                id: i,
-                name: name,
-                x: this.w/2 + Math.cos(angle) * radius,
-                y: this.h/2 + Math.sin(angle) * radius,
-                baseRadius: 4,
-                activity: 0,
-                color: i === 0 ? '#00e5ff' : (i % 3 === 0 ? '#f43f5e' : (i % 2 === 0 ? '#10b981' : '#f59e0b'))
+                id: i, name: name, x: this.w/2 + Math.cos(angle) * radius, y: this.h/2 + Math.sin(angle) * radius,
+                baseRadius: 4, activity: 0, color: i === 0 ? '#00e5ff' : (i % 2 === 0 ? '#10b981' : '#f59e0b')
             };
         });
     },
 
     updateActivity: function(postsData) {
-        // Reset activity
+        if (this.mode !== 'schools') return;
         this.schools.forEach(s => s.activity = 0.5);
-        
-        // Map post counts to radar blip size
         postsData.forEach(p => {
             const match = this.schools.find(s => p.school_name && p.school_name.includes(s.name.split(' ')[0]));
-            if (match) {
-                match.activity += 2 + (p.upvotes || 0) * 0.5;
-            }
+            if (match) match.activity += 2 + (p.upvotes || 0) * 0.5;
         });
     },
 
@@ -100,61 +143,85 @@ const CampusRadarEngine = {
         // Radar Sweep Line
         this.ctx.save();
         this.ctx.translate(cx, cy);
-        this.ctx.rotate(this.frame * 0.02);
+        this.ctx.rotate(this.frame * 0.03);
         const grad = this.ctx.createLinearGradient(0, 0, 0, -120);
         grad.addColorStop(0, 'rgba(0, 229, 255, 0.4)');
         grad.addColorStop(1, 'rgba(0, 229, 255, 0)');
         this.ctx.fillStyle = grad;
         this.ctx.beginPath();
         this.ctx.moveTo(0, 0);
-        this.ctx.arc(0, 0, 120, -Math.PI/2, -Math.PI/2 + 0.5);
+        this.ctx.arc(0, 0, 120, -Math.PI/2, -Math.PI/2 + 0.6);
         this.ctx.fill();
         this.ctx.restore();
 
         // Grid Rings
         this.ctx.strokeStyle = 'rgba(255,255,255,0.05)';
         this.ctx.lineWidth = 1;
-        for (let r = 30; r <= 120; r += 30) {
-            this.ctx.beginPath();
-            this.ctx.arc(cx, cy, r, 0, Math.PI*2);
-            this.ctx.stroke();
-        }
-
-        // Draw Nodes
-        this.schools.forEach(s => {
-            const pulse = s.baseRadius + s.activity + Math.sin(this.frame * 0.05 + s.id) * (s.activity * 0.3);
-            
-            // Node connection lines to center
-            this.ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-            this.ctx.beginPath(); this.ctx.moveTo(cx, cy); this.ctx.lineTo(s.x, s.y); this.ctx.stroke();
-
-            // Node Glow
-            this.ctx.beginPath();
-            this.ctx.arc(s.x, s.y, pulse * 1.5, 0, Math.PI * 2);
-            this.ctx.fillStyle = s.color.replace(')', ', 0.2)').replace('rgb', 'rgba');
-            this.ctx.fill();
-
-            // Node Core
-            this.ctx.beginPath();
-            this.ctx.arc(s.x, s.y, s.baseRadius, 0, Math.PI * 2);
-            this.ctx.fillStyle = s.color;
-            this.ctx.shadowBlur = 10;
-            this.ctx.shadowColor = s.color;
-            this.ctx.fill();
-            this.ctx.shadowBlur = 0;
-
-            // Highlight highly active schools with text
-            if (s.activity > 3) {
-                this.ctx.fillStyle = '#fff';
-                this.ctx.font = '9px Space Grotesk';
-                this.ctx.fillText(s.name, s.x + 8, s.y + 3);
+        [40, 80, 120].forEach((r, idx) => {
+            this.ctx.beginPath(); this.ctx.arc(cx, cy, r, 0, Math.PI*2); this.ctx.stroke();
+            if (this.mode === 'live_gps') {
+                this.ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                this.ctx.font = '8px Space Grotesk';
+                this.ctx.fillText(`${(idx+1)*5}km`, cx + 2, cy - r - 2);
             }
         });
+
+        if (this.mode === 'live_gps') {
+            // Render YOU at the center
+            this.ctx.beginPath(); this.ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#00e5ff'; this.ctx.shadowBlur = 15; this.ctx.shadowColor = '#00e5ff'; this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+            this.ctx.fillStyle = '#fff'; this.ctx.font = '10px Space Grotesk'; this.ctx.fillText("YOU", cx - 10, cy + 16);
+
+            // Render live peers based on distance
+            this.nearbyPeers.forEach(p => {
+                // Map 15km to 120px radius
+                const pxDist = (p.distance / 15) * 120;
+                const px = cx + Math.cos(p.angle) * pxDist;
+                const py = cy + Math.sin(p.angle) * pxDist;
+
+                const pulse = 3 + Math.sin(this.frame * 0.1 + p.id) * 2;
+                
+                this.ctx.beginPath(); this.ctx.arc(px, py, pulse, 0, Math.PI * 2);
+                this.ctx.fillStyle = p.color;
+                this.ctx.shadowBlur = 10; this.ctx.shadowColor = p.color; this.ctx.fill();
+                this.ctx.shadowBlur = 0;
+
+                if (p.isLookingForMatch) {
+                    this.ctx.strokeStyle = p.color; this.ctx.lineWidth = 1;
+                    this.ctx.beginPath(); this.ctx.arc(px, py, pulse + 6, 0, Math.PI*2); this.ctx.stroke();
+                    this.ctx.fillStyle = '#fff'; this.ctx.font = '8px Plus Jakarta Sans';
+                    this.ctx.fillText(`${p.distance.toFixed(1)}km`, px + 6, py + 3);
+                }
+            });
+
+        } else {
+            // Render default school activity
+            this.schools.forEach(s => {
+                const pulse = s.baseRadius + s.activity + Math.sin(this.frame * 0.05 + s.id) * (s.activity * 0.3);
+                this.ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+                this.ctx.beginPath(); this.ctx.moveTo(cx, cy); this.ctx.lineTo(s.x, s.y); this.ctx.stroke();
+
+                this.ctx.beginPath(); this.ctx.arc(s.x, s.y, pulse * 1.5, 0, Math.PI * 2);
+                this.ctx.fillStyle = s.color.replace(')', ', 0.2)').replace('rgb', 'rgba'); this.ctx.fill();
+
+                this.ctx.beginPath(); this.ctx.arc(s.x, s.y, s.baseRadius, 0, Math.PI * 2);
+                this.ctx.fillStyle = s.color; this.ctx.shadowBlur = 10; this.ctx.shadowColor = s.color; this.ctx.fill();
+                this.ctx.shadowBlur = 0;
+
+                if (s.activity > 3) {
+                    this.ctx.fillStyle = '#fff'; this.ctx.font = '9px Space Grotesk'; this.ctx.fillText(s.name, s.x + 8, s.y + 3);
+                }
+            });
+        }
 
         this.loop = requestAnimationFrame(() => this.render());
     }
 };
 
+/* =====================================================
+   FEED FETCH & RENDER LOGIC
+==================================================== */
 async function fetchSchoolPosts() {
   let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
   const selectedSchool = studentSchool !== 'ALL' ? studentSchool : (document.getElementById('hubSchoolSelect')?.value || 'ALL');
@@ -213,13 +280,11 @@ function renderSchoolFeed() {
     return currentCategoryFilter === 'ALL' || p.category === currentCategoryFilter;
   });
 
-  // Inject the interactive radar mapping engine at the top of the feed container
   if (!document.getElementById('radarWrapper')) {
       CampusRadarEngine.init(container);
   }
   CampusRadarEngine.updateActivity(filtered);
 
-  // Clear existing feed items but keep the radar intact
   Array.from(container.children).forEach(child => {
       if (child.id !== 'radarWrapper') child.remove();
   });
@@ -229,7 +294,6 @@ function renderSchoolFeed() {
       <div style="text-align:center; padding:24px 14px; background:#111827; border-radius:14px; border:1px dashed rgba(255,255,255,0.12);">
         <div style="font-size:24px;">💬</div>
         <div style="color:#e5e7eb; font-weight:700; font-size:13px; margin-top:4px;">Sector clear. No activity detected.</div>
-        <div style="color:#9ca3af; font-size:11px; margin-top:2px;">Claim territory by posting the first intel!</div>
       </div>
     `);
     return;
@@ -240,23 +304,18 @@ function renderSchoolFeed() {
       <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent-cyan);"></div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
         <span class="post-tag tag-${post.category}" style="background:rgba(0,229,255,0.1); color:var(--accent-cyan); padding:4px 8px; border-radius:6px; font-size:9px; font-weight:900;">${formatCategoryName(post.category)}</span>
-        <span style="font-size:10px; color:#9ca3af; font-weight:800; display:flex; align-items:center; gap:4px;">
-           <span style="display:inline-block; width:6px; height:6px; background:var(--accent-emerald); border-radius:50%; box-shadow:0 0 6px var(--accent-emerald);"></span>
-           ${escapeHTML(post.school_name)}
-        </span>
+        <span style="font-size:10px; color:#9ca3af; font-weight:800;">🏫 ${escapeHTML(post.school_name)}</span>
       </div>
 
-      <h4 style="font-size:15px; font-weight:900; color:#ffffff; margin:0 0 6px 0; line-height:1.3;">${escapeHTML(post.title)}</h4>
+      <h4 style="font-size:15px; font-weight:900; color:#ffffff; margin:0 0 6px 0;">${escapeHTML(post.title)}</h4>
       <p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin:0 0 14px 0; white-space: pre-line;">${escapeHTML(post.content)}</p>
 
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.06); padding-top:12px;">
         <div style="font-size:11px; color:#9ca3af; display:flex; align-items:center; gap:6px;">
           <span style="font-weight:800; color:#e2e8f0;">${post.is_anonymous ? '🤫 Ghost Source' : '👤 ' + (post.author_name || 'Student')}</span>
-          <span>•</span>
-          <span style="color:#64748b; font-size:10px; font-weight:700;">${post.batch_tag || 'Student'}</span>
         </div>
-        <button onclick="upvotePost(${post.id}, this)" style="background:rgba(244,63,94,0.1); border:1px solid rgba(244,63,94,0.3); color:var(--accent-rose); border-radius:8px; padding:6px 12px; font-size:11px; font-weight:900; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s;">
-          🔥 <span style="color:#fff;">${post.upvotes || 0}</span>
+        <button onclick="upvotePost(${post.id}, this)" style="background:rgba(244,63,94,0.1); border:1px solid rgba(244,63,94,0.3); color:var(--accent-rose); border-radius:8px; padding:6px 12px; font-size:11px; font-weight:900; cursor:pointer;">
+          🔥 ${post.upvotes || 0}
         </button>
       </div>
     </div>
@@ -275,15 +334,13 @@ function setCategoryFilter(cat, btn) {
 }
 
 async function upvotePost(postId, btnEl) {
-  const span = btnEl.querySelector('span');
-  let currentVal = parseInt(span.textContent, 10) || 0;
-  span.textContent = currentVal + 1;
+  let currentVal = parseInt(btnEl.innerText.replace('🔥', '').trim(), 10) || 0;
+  btnEl.innerHTML = `🔥 ${currentVal + 1}`;
   btnEl.style.background = 'rgba(5, 255, 161, 0.15)';
   btnEl.style.borderColor = 'var(--accent-emerald)';
   btnEl.style.color = 'var(--accent-emerald)';
   btnEl.disabled = true;
 
-  // Visual Haptic bump
   if(typeof triggerHaptic === 'function') triggerHaptic([30]);
   if(typeof playDing === 'function') playDing();
 
@@ -295,15 +352,6 @@ async function upvotePost(postId, btnEl) {
 }
 
 function openCreatePostModal() {
-  let studentSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg') || 'ALL';
-  const mSel = document.getElementById('modalSchoolSelect');
-  
-  if (studentSchool !== 'ALL' && mSel) {
-    mSel.value = studentSchool;
-    mSel.disabled = true;
-    mSel.style.opacity = "0.7";
-  }
-
   const modal = document.getElementById('createPostModal');
   if (modal) modal.style.display = 'flex';
 }
@@ -326,14 +374,7 @@ async function handleCreatePost(e) {
   const is_anonymous = document.getElementById('modalAnonCheckbox')?.checked ?? true;
 
   const newPost = {
-    id: Date.now(),
-    school_name,
-    category,
-    batch_tag,
-    title,
-    content,
-    is_anonymous,
-    upvotes: 0,
+    id: Date.now(), school_name, category, batch_tag, title, content, is_anonymous, upvotes: 0,
     author_name: is_anonymous ? 'Anonymous Backbencher' : (localStorage.getItem('studentName') || 'Student')
   };
 
@@ -346,49 +387,11 @@ async function handleCreatePost(e) {
     closeCreatePostModal();
     document.getElementById('createPostForm')?.reset();
     renderSchoolFeed();
-    if(typeof playWin === 'function') playWin();
-  } catch (err) {
-    alert('Failed to publish post: ' + err.message);
-  }
+  } catch (err) { alert('Failed to publish post.'); }
 }
 
-/* =====================================================
-   KNOWLEDGE MARKET (PEER BOUNTIES) LOGIC
-===================================================== */
 async function loadBountyMarket() {
   const container = document.getElementById('bountyMarketFeed');
   if (!container) return;
-
-  try {
-    const SUPABASE_URL = 'https://cbgwbzidkmcefoithipp.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
-    const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const { data, error } = await client.from('doubt_bounties').select('*').eq('status', 'open').order('id', { ascending: false }).limit(5);
-    if (error) throw error;
-
-    if (!data || data.length === 0) {
-      container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center; padding:10px;">No open peer bounties. Be the first to ask!</div>`;
-      return;
-    }
-
-    container.innerHTML = data.map(b => `
-      <div style="background:#020617; border:1px solid #1e293b; border-radius:12px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-size:10px; font-weight:800; color:var(--accent-cyan);">${b.subject.toUpperCase()} • Bountied by ${escapeHTML(b.student_name)}</div>
-          <div style="font-size:12px; color:#fff; font-weight:700; margin-top:2px;">${escapeHTML(b.question)}</div>
-        </div>
-        <button onclick="solveBounty(${b.id}, '${escapeHTML(b.question)}')" style="background:var(--accent-emerald); color:#020617; border:none; padding:6px 10px; border-radius:8px; font-size:10px; font-weight:900; cursor:pointer; whitespace-nowrap;">Solve (+${b.bounty_xp} XP)</button>
-      </div>
-    `).join('');
-  } catch(e) {
-    container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center;">Market offline.</div>`;
-  }
-}
-
-async function solveBounty(bountyId, questionText) {
-  switchTab('doubt');
-  const qInput = document.getElementById('question');
-  if (qInput) qInput.value = questionText;
-  alert("💡 Solve this doubt in the AI Solver, copy the steps, and share with your classmate to claim your bounty XP!");
+  container.innerHTML = `<div style="color:#64748b; font-size:11px; text-align:center;">Market offline.</div>`;
 }
