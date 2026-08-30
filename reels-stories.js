@@ -57,6 +57,23 @@ const defaultReelDeck = [
       trap: "Inverse-Square Law: F ∝ 1/r². Halving r multiplies F by 4.", 
       difficulty: "boss" 
     },
+    {
+      id: 904,
+      class_name: "9",
+      type: "sim",
+      sim_id: "chem_rutherford",
+      hook: "🔬 ATOMIC LAB",
+      title: "Rutherford Alpha Scattering",
+      subject: "Chemistry",
+      topic: "Structure of the Atom",
+      q_en: "Observe positive alpha particles repelling off the heavy Gold Nucleus (+Ze).",
+      controls: [
+        { id: "ctrl_z", label: "Nucleus Charge (+Z)", min: 20, max: 120, step: 1, val: 79, unit: "e" }
+      ],
+      time: 25,
+      trap: "Most alpha particles pass undeflected, proving most atomic volume is empty space.",
+      difficulty: "medium"
+    },
 
     // --- CLASS 10 INTERACTIVE SUITE ---
     { 
@@ -87,6 +104,21 @@ const defaultReelDeck = [
       time: 20, 
       trap: "First Law: Angle of incidence strictly equals angle of reflection (θ_i = θ_r).", 
       difficulty: "medium" 
+    },
+    {
+      id: 502,
+      class_name: "10",
+      type: "sim",
+      sim_id: "bio_heart",
+      hook: "🫀 ANATOMY TAP",
+      title: "Double Circulation",
+      subject: "Biology",
+      topic: "Life Processes",
+      q_en: "Tap the Left Ventricle (the thickest chamber pumping oxygenated blood to the body).",
+      controls: [],
+      time: 20,
+      trap: "The Left Ventricle has the thickest muscular walls to pump blood at high pressure throughout systemic circulation.",
+      difficulty: "medium"
     },
     { 
       id: 201, 
@@ -915,7 +947,7 @@ window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAn
 
     reelStreak++;
     const totalXP = 25 + (reelStreak > 2 ? 10 : 0);
-    revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ RAY LOCKED (${drawnAngle}°)</span>`;
+    revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ LOCKED (${drawnAngle})</span>`;
     xpBadge.innerText = `+${totalXP} XP`;
     if (reelStreak > 2) {
       streakBadge.style.display = 'inline-block';
@@ -928,7 +960,7 @@ window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAn
     if (typeof triggerHaptic === 'function') triggerHaptic([80]);
 
     reelStreak = 0;
-    revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ OFF TARGET (${drawnAngle}° vs ${expectedAngle}°)</span>`;
+    revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ MISSED (${drawnAngle} vs ${expectedAngle})</span>`;
     xpBadge.innerText = `+0 XP`;
     xpBadge.style.background = 'rgba(255,255,255,0.05)';
     xpBadge.style.color = '#94a3b8';
@@ -1042,9 +1074,11 @@ function generateReelHTML(card, idx) {
              </div>
           </div>
 
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px;">
-            ${slidersHTML}
-          </div>
+          ${controls.length > 0 ? `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px;">
+              ${slidersHTML}
+            </div>
+          ` : ''}
         `;
     }
     // 4. PREDICTION & TOUCH DRAWING ENGINE
@@ -1052,7 +1086,7 @@ function generateReelHTML(card, idx) {
         contentHTML = `
           <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="draw-canvas-container" style="position:relative; width:100%; height:165px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:10px;">
+          <div class="draw-canvas-container" style="position:relative; width:100%; height:165px; background:#020617; border:1px solid rgba(0,243,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:10px;">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block; cursor:crosshair;"></canvas>
              <div style="position:absolute; top:8px; left:10px; background:rgba(8,13,26,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:3px 8px; font-size:9.5px; font-weight:800; color:#cbd5e1;">👆 Drag reflected ray</div>
              <div style="position:absolute; top:8px; right:10px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.35); border-radius:8px; padding:3px 8px; font-size:10px; font-family:monospace; font-weight:900; color:var(--accent-cyan);" id="angleReadout_${safeCardId}">θ_drawn = --°</div>
