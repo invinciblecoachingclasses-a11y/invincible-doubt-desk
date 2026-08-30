@@ -419,6 +419,177 @@ if (document.getElementById("teacherBtn")) {
 }
 
 /* =====================================================
+   NOTES STUDIO: SPATIAL MIND-PALACE ENGINE (NODE GRAPH)
+===================================================== */
+const MindPalaceEngine = {
+    canvasId: 'mindPalaceCanvas',
+    loop: null,
+    ctx: null,
+    w: 0, h: 0,
+    nodes: [],
+    edges: [],
+    draggedNode: null,
+    
+    mount: function(container, chapterName) {
+        const old = document.getElementById('mindPalaceWrapper');
+        if (old) {
+            if (this.loop) cancelAnimationFrame(this.loop);
+            old.remove();
+        }
+
+        const wrapper = document.createElement('div');
+        wrapper.id = 'mindPalaceWrapper';
+        wrapper.style.cssText = "background:#020617; border:1px solid rgba(245,158,11,0.3); border-radius:16px; padding:16px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);";
+
+        wrapper.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:12px; font-weight:900; color:var(--accent-amber); letter-spacing:1px; display:flex; align-items:center; gap:6px;">
+                    <span>🌌</span> <span>CONCEPT CONSTELLATION</span>
+                </div>
+                <div style="font-size:9px; color:#fff; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); padding:3px 8px; border-radius:8px; font-weight:800;">INTERACTIVE</div>
+            </div>
+            <div style="font-size:11px; color:#94a3b8; margin-bottom:10px;">Drag the glowing nodes to explore the chapter's neural map.</div>
+            <div style="border-radius:12px; overflow:hidden; border:1px dashed #334155; position:relative;">
+                <canvas id="${this.canvasId}" style="width:100%; height:220px; display:block; touch-action:none;"></canvas>
+            </div>
+        `;
+
+        container.insertBefore(wrapper, container.firstChild);
+        this.initCanvas(chapterName);
+    },
+
+    initCanvas: function(chapterName) {
+        const canvas = document.getElementById(this.canvasId);
+        if (!canvas) return;
+        
+        this.ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        
+        canvas.width = (rect.width || 320) * dpr;
+        canvas.height = 220 * dpr;
+        this.ctx.scale(dpr, dpr);
+        this.w = canvas.width / dpr;
+        this.h = canvas.height / dpr;
+
+        // Generate Nodes
+        const topics = ["Definitions", "Formulas", "Derivations", "Exceptions", "Exam Traps"];
+        this.nodes = [
+            { id: 0, label: chapterName.substring(0, 15), x: this.w/2, y: this.h/2, vx: 0, vy: 0, radius: 25, color: '#f59e0b', isCenter: true }
+        ];
+
+        topics.forEach((t, i) => {
+            const angle = (i / topics.length) * Math.PI * 2;
+            this.nodes.push({
+                id: i + 1, label: t, 
+                x: this.w/2 + Math.cos(angle) * 80, 
+                y: this.h/2 + Math.sin(angle) * 80, 
+                vx: 0, vy: 0, radius: 15, color: '#00e5ff', isCenter: false
+            });
+            this.edges.push({ a: 0, b: i + 1 });
+        });
+
+        // Touch & Drag Logic
+        const getTouchPos = (e) => {
+            const r = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - r.left, y: clientY - r.top };
+        };
+
+        const onDown = (e) => {
+            const pos = getTouchPos(e);
+            this.draggedNode = this.nodes.find(n => Math.hypot(n.x - pos.x, n.y - pos.y) < n.radius + 10);
+        };
+
+        const onMove = (e) => {
+            if (this.draggedNode) {
+                if (e.cancelable) e.preventDefault();
+                const pos = getTouchPos(e);
+                this.draggedNode.x = pos.x;
+                this.draggedNode.y = pos.y;
+                this.draggedNode.vx = 0;
+                this.draggedNode.vy = 0;
+            }
+        };
+
+        const onUp = () => this.draggedNode = null;
+
+        canvas.addEventListener('mousedown', onDown);
+        canvas.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        canvas.addEventListener('touchstart', onDown, { passive: false });
+        canvas.addEventListener('touchmove', onMove, { passive: false });
+        window.addEventListener('touchend', onUp);
+
+        this.render();
+    },
+
+    render: function() {
+        if (!this.ctx) return;
+        this.ctx.fillStyle = '#020617';
+        this.ctx.fillRect(0, 0, this.w, this.h);
+
+        // Spring Physics
+        this.edges.forEach(e => {
+            const a = this.nodes[e.a]; const b = this.nodes[e.b];
+            const dx = b.x - a.x; const dy = b.y - a.y;
+            const dist = Math.hypot(dx, dy);
+            const force = (dist - 90) * 0.02; // Ideal distance = 90
+            
+            if (this.draggedNode !== a && !a.isCenter) { a.vx += (dx/dist)*force; a.vy += (dy/dist)*force; }
+            if (this.draggedNode !== b && !b.isCenter) { b.vx -= (dx/dist)*force; b.vy -= (dy/dist)*force; }
+
+            // Draw Edge
+            this.ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
+            this.ctx.lineWidth = 2;
+            this.ctx.beginPath(); this.ctx.moveTo(a.x, a.y); this.ctx.lineTo(b.x, b.y); this.ctx.stroke();
+            
+            // Draw flowing energy on edge
+            const time = Date.now() * 0.002;
+            const px = a.x + dx * ((time + e.b) % 1);
+            const py = a.y + dy * ((time + e.b) % 1);
+            this.ctx.fillStyle = '#facc15';
+            this.ctx.beginPath(); this.ctx.arc(px, py, 2, 0, Math.PI*2); this.ctx.fill();
+        });
+
+        // Update & Draw Nodes
+        this.nodes.forEach(n => {
+            if (this.draggedNode !== n && !n.isCenter) {
+                // Center gravity
+                n.vx += (this.w/2 - n.x) * 0.001;
+                n.vy += (this.h/2 - n.y) * 0.001;
+                // Friction
+                n.vx *= 0.9; n.vy *= 0.9;
+                n.x += n.vx; n.y += n.vy;
+            }
+
+            // Keep in bounds
+            n.x = Math.max(n.radius, Math.min(this.w - n.radius, n.x));
+            n.y = Math.max(n.radius, Math.min(this.h - n.radius, n.y));
+
+            // Node Glow
+            this.ctx.beginPath(); this.ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI*2);
+            this.ctx.fillStyle = n.color.replace(')', ', 0.2)').replace('rgb', 'rgba').replace('#', '') === n.color ? n.color + '33' : n.color;
+            this.ctx.fill();
+
+            // Node Core
+            this.ctx.beginPath(); this.ctx.arc(n.x, n.y, n.radius, 0, Math.PI*2);
+            this.ctx.fillStyle = '#0f172a'; this.ctx.fill();
+            this.ctx.strokeStyle = n.color; this.ctx.lineWidth = 2; this.ctx.stroke();
+
+            // Label
+            this.ctx.fillStyle = '#fff';
+            this.ctx.font = n.isCenter ? '10px Space Grotesk' : '9px Plus Jakarta Sans';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(n.label, n.x, n.y + 3);
+        });
+
+        this.loop = requestAnimationFrame(() => this.render());
+    }
+};
+
+/* =====================================================
    NOTES STUDIO GENERATOR & PDF ENGINE
 ===================================================== */
 const genNotesBtn = document.getElementById('generateNotesBtn');
@@ -498,6 +669,10 @@ if (genNotesBtn) {
         }
 
         document.getElementById('notesResultContainer')?.classList.remove('hidden');
+        
+        // MOUNT THE MIND-PALACE VISUAL ENGINE HERE
+        MindPalaceEngine.mount(contentBody, chapter);
+
         if (typeof playWin === 'function') playWin();
     } catch(err) {
         alert("Notes Engine Error: " + err.message);
@@ -510,10 +685,16 @@ if (genNotesBtn) {
 }
 
 function downloadPDF() {
+  // Hide the Mind Palace canvas temporarily so it doesn't break the PDF print structure
+  const mindPalace = document.getElementById('mindPalaceWrapper');
+  if (mindPalace) mindPalace.style.display = 'none';
+
   const content = document.getElementById('notesContentBody')?.innerHTML;
   const title = document.getElementById('notesResultTitle')?.textContent || "CBSE Study Module";
   const cls = document.getElementById('notesClass')?.value || "10";
   const chapter = document.getElementById('notesChapter')?.value.trim() || 'Notes';
+
+  if (mindPalace) mindPalace.style.display = 'block';
 
   if (!content) {
     alert("Please generate notes first.");
