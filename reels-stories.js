@@ -1,36 +1,79 @@
 /* =====================================================
    ⚡ INVINCIBLE 360 - STUDY REELS MASTER ENGINE
-   Phase 1: 3-Node Virtualized Recycler
-   Phase 2: Drag & Drop Magnetic Formula Engine
-   Phase 3: Canvas Mini-Sim Lifecycle Orchestrator
-   Phase 4: Ray Prediction & Vector Sketching Engine
+   Core Mandate: "SCROLL. SOLVE. LEVEL UP."
+   - Full-Screen Mobile Viewport (75–85% dedicated focus)
+   - Dynamic Psychological Hook Rotation
+   - Subject-Aware Programmatic Ambient Visuals
+   - Two-Stage State Machine (State A: Challenge -> State B: Reveal)
+   - Multi-Tier Interactive Engine Registry (Build, Sim, Draw, Tap)
+   - Grade Parity across Classes 9, 10, 11, and 12
 ===================================================== */
 
 const defaultReelDeck = [
-    { id: 101, class_name: "10", type: "mcq", hook: "⚡ 5 SECOND CHALLENGE", title: "Only 18% got this right.", subject: "Physics", topic: "Light", q_en: "If m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)"], answer: 2, time: 5, trap: "Negative magnification means real & inverted. Size is same only at C.", difficulty: "easy" },
-    
-    // PHASE 3: INTERACTIVE CANVAS MINI-SIM REEL
+    // --- CLASS 9 INTERACTIVE SUITE ---
     { 
-      id: 401, 
-      class_name: "12", 
-      type: "sim", 
-      sim_id: "phy_wave_optics", 
-      hook: "🔬 INTERACTIVE LAB", 
-      title: "Young's Double-Slit Experiment", 
+      id: 901, 
+      class_name: "9", 
+      type: "mcq", 
+      hook: "⚡ 5 SECOND CHALLENGE", 
+      title: "Inertia of Motion", 
       subject: "Physics", 
-      topic: "Wave Optics", 
-      q_en: "Adjust Slit Gap (d) & Wavelength (λ) to observe fringe compression.", 
-      controls: [
-        { id: "ctrl_wl", label: "Wavelength (λ)", min: 380, max: 750, step: 1, val: 532, unit: "nm" },
-        { id: "ctrl_d", label: "Slit Gap (d)", min: 0.1, max: 0.8, step: 0.01, val: 0.25, unit: "mm" },
-        { id: "ctrl_bigD", label: "Screen Dist (D)", min: 0.5, max: 2.5, step: 0.1, val: 1.2, unit: "m" }
-      ],
-      time: 30, 
-      trap: "Fringe Width β = λD/d. Decreasing slit gap d increases fringe separation!", 
+      topic: "Laws of Motion", 
+      q_en: "When a moving bus stops suddenly, passengers fall forward due to:", 
+      options: ["Inertia of Rest", "Inertia of Motion", "Inertia of Direction"], 
+      answer: 1, 
+      time: 5, 
+      trap: "The upper body continues in its state of motion while feet stop with the bus.", 
+      difficulty: "easy" 
+    },
+    { 
+      id: 902, 
+      class_name: "9", 
+      type: "build", 
+      hook: "🧩 BUILD IT", 
+      title: "Newton's Second Law", 
+      subject: "Physics", 
+      topic: "Force & Momentum", 
+      q_en: "Assemble the equation for Net Force in terms of Mass and Acceleration.", 
+      template: ["slot", "=", "slot", "×", "slot"], 
+      choices: ["F", "m", "a", "v", "p", "t"], 
+      answer: ["F", "m", "a"], 
+      time: 20, 
+      trap: "Force equals the rate of change of momentum: F = ma.", 
       difficulty: "medium" 
     },
+    { 
+      id: 903, 
+      class_name: "9", 
+      type: "mcq", 
+      hook: "💀 BOSS QUESTION", 
+      title: "Universal Gravitation", 
+      subject: "Physics", 
+      topic: "Gravitation", 
+      q_en: "If the distance between two masses is halved, the gravitational force becomes:", 
+      options: ["2 Times", "4 Times", "1/4th", "Half"], 
+      answer: 1, 
+      time: 15, 
+      trap: "Inverse-Square Law: F ∝ 1/r². Halving r multiplies F by 4.", 
+      difficulty: "boss" 
+    },
 
-    // PHASE 4: PREDICTION & DRAWING REEL
+    // --- CLASS 10 INTERACTIVE SUITE ---
+    { 
+      id: 101, 
+      class_name: "10", 
+      type: "mcq", 
+      hook: "⚡ 5 SECOND CHALLENGE", 
+      title: "Spherical Mirrors", 
+      subject: "Physics", 
+      topic: "Light - Reflection", 
+      q_en: "If linear magnification m = -1 for a concave mirror, where is the object?", 
+      options: ["At Infinity", "At Principal Focus (F)", "At Centre of Curvature (C)"], 
+      answer: 2, 
+      time: 5, 
+      trap: "Negative sign = Real/Inverted. Magnitude 1 = Same size. Only occurs at C.", 
+      difficulty: "easy" 
+    },
     { 
       id: 501, 
       class_name: "10", 
@@ -39,20 +82,90 @@ const defaultReelDeck = [
       hook: "✏️ SKETCH THE RAY", 
       title: "Law of Reflection", 
       subject: "Physics", 
-      topic: "Light", 
-      q_en: "Drag on the canvas to draw the reflected ray for θ_i = 45°.", 
+      topic: "Light - Optics", 
+      q_en: "Touch and drag on the sketchpad to aim the reflected ray for θ_i = 45°.", 
       time: 20, 
-      trap: "Law of Reflection: Angle of incidence (θ_i) strictly equals angle of reflection (θ_r) with the normal.", 
+      trap: "First Law: Angle of incidence strictly equals angle of reflection (θ_i = θ_r).", 
       difficulty: "medium" 
     },
+    { 
+      id: 201, 
+      class_name: "10", 
+      type: "build", 
+      hook: "🧩 BUILD IT", 
+      title: "Ohm's Law", 
+      subject: "Physics", 
+      topic: "Electricity", 
+      q_en: "Drag or tap the tokens to construct the formula for Potential Difference.", 
+      template: ["slot", "=", "slot", "×", "slot"], 
+      choices: ["V", "I", "R", "P", "W", "Q"], 
+      answer: ["V", "I", "R"], 
+      time: 20, 
+      trap: "Voltage is the product of Current (I) and Resistance (R) at constant temperature.", 
+      difficulty: "medium" 
+    },
+    { 
+      id: 102, 
+      class_name: "10", 
+      type: "trap", 
+      subject: "Physics", 
+      topic: "Current Electricity", 
+      title: "🚨 The Temperature Trap", 
+      content: "V = IR is NOT universally true for all conductors. It fails completely if conductor temperature changes due to Joule heating!", 
+      rule: "Always write 'At constant temperature' in CBSE Board answers to secure full marks." 
+    },
+    { 
+      id: 103, 
+      class_name: "10", 
+      type: "mcq", 
+      hook: "💀 BOSS QUESTION", 
+      title: "Thermal Decomposition", 
+      subject: "Chemistry", 
+      topic: "Chemical Reactions", 
+      q_en: "Heating dry lead nitrate powder yields brown pungent fumes of which gas?", 
+      options: ["Nitrogen Monoxide (NO)", "Nitrogen Dioxide (NO₂)", "Dinitrogen Oxide (N₂O)"], 
+      answer: 1, 
+      time: 15, 
+      trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. The brown fumes are strictly NO₂.", 
+      difficulty: "boss" 
+    },
 
-    // PHASE 2: INTERACTIVE BUILDER REEL
-    { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Drag or tap the correct terms to construct the formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
-    { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
-    { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
-    { id: 301, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Power Equation", subject: "Physics", topic: "Electricity", q_en: "Construct the formula for electrical power in terms of Current and Resistance.", template: ["slot", "=", "slot", "²", "×", "slot"], choices: ["P", "V", "I", "R", "t"], answer: ["P", "I", "R"], time: 20, trap: "Power is I²R for series circuits. P = V²/R is for parallel.", difficulty: "medium" },
-    { id: 104, class_name: "10", type: "mcq", hook: "🧠 THINK BEFORE YOU TAP", title: "Don't calculate. Just look.", subject: "Mathematics", topic: "Trig", q_en: "If sin θ + sin² θ = 1, what is cos² θ + cos⁴ θ?", options: ["0", "1", "2"], answer: 1, time: 15, trap: "sin θ = 1 - sin² θ = cos² θ. Square it: sin² θ = cos⁴ θ. Thus cos² θ + cos⁴ θ = 1.", difficulty: "medium" },
-    { id: 901, class_name: "9", type: "mcq", hook: "⚡ QUICK CHECK", title: "Core Concept", subject: "Physics", topic: "Gravitation", q_en: "The value of acceleration due to gravity (g) at the center of the Earth is:", options: ["9.8 m/s²", "Zero (0)", "Infinite"], answer: 1, time: 10, trap: "At Earth's center, mass attracts equally in all directions, so net force is zero." }
+    // --- CLASS 11 & 12 ADVANCED SUITE ---
+    { 
+      id: 401, 
+      class_name: "12", 
+      type: "sim", 
+      sim_id: "phy_wave_optics", 
+      hook: "🔬 INTERACTIVE LAB", 
+      title: "Young's Double-Slit", 
+      subject: "Physics", 
+      topic: "Wave Optics", 
+      q_en: "Scrub Slit Gap (d) and Wavelength (λ) to observe interference fringe spacing.", 
+      controls: [
+        { id: "ctrl_wl", label: "Wavelength (λ)", min: 380, max: 750, step: 1, val: 532, unit: "nm" },
+        { id: "ctrl_d", label: "Slit Gap (d)", min: 0.1, max: 0.8, step: 0.01, val: 0.25, unit: "mm" },
+        { id: "ctrl_bigD", label: "Screen Dist (D)", min: 0.5, max: 2.5, step: 0.1, val: 1.2, unit: "m" }
+      ],
+      time: 30, 
+      trap: "Fringe Width β = λD/d. Narrowing slit distance d spreads fringe spacing wider!", 
+      difficulty: "medium" 
+    },
+    { 
+      id: 301, 
+      class_name: "12", 
+      type: "build", 
+      hook: "🧩 BUILD IT", 
+      title: "Joule's Heating Law", 
+      subject: "Physics", 
+      topic: "Current Electricity", 
+      q_en: "Construct the expression for heat dissipated across a series resistor.", 
+      template: ["slot", "=", "slot", "²", "×", "slot", "×", "slot"], 
+      choices: ["H", "I", "R", "t", "V", "P"], 
+      answer: ["H", "I", "R", "t"], 
+      time: 25, 
+      trap: "Heat produced in time t is H = I²Rt.", 
+      difficulty: "medium" 
+    }
 ];
 
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
@@ -94,9 +207,123 @@ async function setReelsClass(cls, btn) {
 }
 
 /* =====================================================
-   PHASE 1: 3-NODE VIRTUALIZED SCROLL RECYCLER
+   ROADMAP PHASE 3: SUBJECT-AWARE PROGRAMMATIC VISUALS
+   Generates distinct ambient visual geometry based on subject & topic
 ===================================================== */
+function generateSubjectVisual(subject, topic) {
+    const s = String(subject || '').toLowerCase();
+    const t = String(topic || '').toLowerCase();
 
+    // 1. Physics: Mechanics / Motion / Vectors
+    if (s.includes('phys') && (t.includes('motion') || t.includes('force') || t.includes('grav') || t.includes('law'))) {
+        return `
+          <div class="subject-ambient-visual physics-mechanics" style="width:100%; height:76px; background:radial-gradient(circle at 50% 50%, rgba(0,243,255,0.06) 0%, transparent 75%); border:1px solid rgba(0,243,255,0.12); border-radius:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 76" preserveAspectRatio="none" style="opacity:0.85;">
+               <line x1="20" y1="58" x2="280" y2="58" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="4 4" />
+               <path d="M 30 58 Q 140 8, 250 58" stroke="#00f3ff" stroke-width="2" fill="none" stroke-linecap="round" />
+               <line x1="140" y1="33" x2="190" y2="15" stroke="#ff007f" stroke-width="2" marker-end="url(#arrow)" />
+               <circle cx="140" cy="33" r="4" fill="#00f3ff" style="filter:drop-shadow(0 0 6px #00f3ff);" />
+               <text x="200" y="20" fill="#ff007f" font-size="10" font-family="monospace" font-weight="bold">v⃗</text>
+             </svg>
+          </div>
+        `;
+    }
+
+    // 2. Physics: Light / Optics
+    if (s.includes('phys') && (t.includes('light') || t.includes('optics') || t.includes('reflect') || t.includes('refract'))) {
+        return `
+          <div class="subject-ambient-visual physics-optics" style="width:100%; height:76px; background:radial-gradient(circle at 50% 50%, rgba(255,0,127,0.06) 0%, transparent 75%); border:1px solid rgba(255,0,127,0.15); border-radius:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 76" preserveAspectRatio="none" style="opacity:0.85;">
+               <line x1="150" y1="10" x2="150" y2="66" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3 3" />
+               <line x1="60" y1="66" x2="240" y2="66" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+               <line x1="80" y1="20" x2="150" y2="66" stroke="#ff007f" stroke-width="2" />
+               <line x1="150" y1="66" x2="220" y2="20" stroke="#00f3ff" stroke-width="2" />
+               <circle cx="150" cy="66" r="3.5" fill="#fff" style="filter:drop-shadow(0 0 6px #fff);" />
+               <text x="156" y="24" fill="#94a3b8" font-size="9" font-family="monospace">Normal</text>
+             </svg>
+          </div>
+        `;
+    }
+
+    // 3. Chemistry: Atoms, Bonding & Reactions
+    if (s.includes('chem')) {
+        return `
+          <div class="subject-ambient-visual chem-bonds" style="width:100%; height:76px; background:radial-gradient(circle at 50% 50%, rgba(16,185,129,0.06) 0%, transparent 75%); border:1px solid rgba(16,185,129,0.15); border-radius:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 76" preserveAspectRatio="none" style="opacity:0.85;">
+               <polygon points="120,38 135,18 165,18 180,38 165,58 135,58" stroke="#10b981" stroke-width="1.8" fill="rgba(16,185,129,0.05)" />
+               <polygon points="180,38 195,18 225,18 240,38 225,58 195,58" stroke="rgba(16,185,129,0.4)" stroke-width="1.2" fill="none" />
+               <circle cx="120" cy="38" r="3" fill="#10b981" />
+               <circle cx="150" cy="38" r="4" fill="#00f3ff" style="filter:drop-shadow(0 0 5px #00f3ff);" />
+               <circle cx="180" cy="38" r="3" fill="#10b981" />
+             </svg>
+          </div>
+        `;
+    }
+
+    // 4. Biology: Cells, Genetics & Anatomy
+    if (s.includes('bio')) {
+        return `
+          <div class="subject-ambient-visual bio-helix" style="width:100%; height:76px; background:radial-gradient(circle at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 75%); border:1px solid rgba(245,158,11,0.15); border-radius:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 76" preserveAspectRatio="none" style="opacity:0.85;">
+               <path d="M 50 20 Q 90 56, 130 20 T 210 20 T 290 20" stroke="#f59e0b" stroke-width="2" fill="none" />
+               <path d="M 50 56 Q 90 20, 130 56 T 210 56 T 290 56" stroke="#00f3ff" stroke-width="2" fill="none" />
+               <line x1="90" y1="38" x2="90" y2="38" stroke="#fff" stroke-width="2" />
+               <line x1="170" y1="38" x2="170" y2="38" stroke="#fff" stroke-width="2" />
+             </svg>
+          </div>
+        `;
+    }
+
+    // 5. Mathematics & Coordinate Geometry Default
+    return `
+      <div class="subject-ambient-visual math-grid" style="width:100%; height:76px; background:radial-gradient(circle at 50% 50%, rgba(192,132,252,0.06) 0%, transparent 75%); border:1px solid rgba(192,132,252,0.15); border-radius:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+         <svg width="100%" height="100%" viewBox="0 0 300 76" preserveAspectRatio="none" style="opacity:0.85;">
+           <line x1="30" y1="38" x2="270" y2="38" stroke="rgba(255,255,255,0.2)" stroke-width="1.2" />
+           <line x1="150" y1="8" x2="150" y2="68" stroke="rgba(255,255,255,0.2)" stroke-width="1.2" />
+           <path d="M 70 60 Q 150 10, 230 60" stroke="#c084fc" stroke-width="2" fill="none" />
+           <circle cx="150" cy="35" r="3.5" fill="#00f3ff" />
+         </svg>
+      </div>
+    `;
+}
+
+/* =====================================================
+   ROADMAP PHASE 2: DYNAMIC PSYCHOLOGICAL HOOK ROTATOR
+===================================================== */
+function generateDynamicHook(card) {
+    if (card.hook && card.hook !== "⚡ QUICK CHECK") return card.hook;
+
+    const diff = String(card.difficulty || '').toLowerCase();
+    const time = parseInt(card.time || 15, 10);
+
+    if (diff === 'boss') return "💀 BOSS QUESTION";
+    if (time <= 5) return "⚡ 5 SECOND CHALLENGE";
+    if (card.type === 'build') return "🧩 BUILD IT";
+    if (card.type === 'draw') return "✏️ SKETCH THE VECTOR";
+    if (card.type === 'sim') return "🔬 INTERACTIVE LAB";
+
+    const hookPool = [
+        "🧠 THINK BEFORE YOU TAP",
+        "⚠️ TOPPER TRAP",
+        "🎯 ONLY 22% GET THIS",
+        "⚡ SPEED CHECK",
+        "🔍 SPOT THE CORE RULE"
+    ];
+    const hash = String(card.q_en || card.id || '0').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return hookPool[hash % hookPool.length];
+}
+
+function generateDynamicTitle(card) {
+    if (card.title && card.title !== "Can you solve this?" && !card.title.toLowerCase().includes("beat the clock")) {
+        return card.title;
+    }
+    const topic = card.topic || card.subject || 'Core Concept';
+    return `${topic} Matrix`;
+}
+
+/* =====================================================
+   ROADMAP PHASE 1 & 5: 3-NODE VIRTUALIZED SWIPER & MIXER
+===================================================== */
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
@@ -110,19 +337,20 @@ async function renderReelsDeck() {
         }
     } catch(e) {}
 
-    // Extract ALL interactive master cards (regardless of class) to guarantee visual gameplay mixing
-    const interactiveCards = defaultReelDeck.filter(c => c.type === 'build' || c.type === 'sim' || c.type === 'draw');
+    const interactiveCards = defaultReelDeck.filter(c => 
+        (String(c.class_name) === String(currentReelsClass) || c.type === 'build' || c.type === 'sim' || c.type === 'draw')
+    );
 
     let finalDeck = [];
 
     if (apiDeck.length > 0) {
-        // The Interactive Mixer: Inject 1 Game/Sim Card after every 2 standard API MCQs
-        let interactiveIdx = 0;
+        // Multi-tier Mixer: Force-interleave 1 Interactive Challenge after every 2 standard items
+        let interIdx = 0;
         for (let i = 0; i < apiDeck.length; i++) {
             finalDeck.push(apiDeck[i]);
-            if ((i + 1) % 2 === 0 && interactiveIdx < interactiveCards.length) {
-                finalDeck.push(interactiveCards[interactiveIdx]);
-                interactiveIdx++;
+            if ((i + 1) % 2 === 0 && interIdx < interactiveCards.length) {
+                finalDeck.push(interactiveCards[interIdx]);
+                interIdx++;
             }
         }
     } else {
@@ -208,7 +436,8 @@ function setupSwiperEngine(container) {
 
 function attachGestureListeners(container) {
     const onStart = (clientY, target) => {
-        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .sim-slider, .reel-dock-action-btn, .draw-canvas-container, button, input[type="range"]'))) {
+        // Lock out virtual swiping when interacting with canvas, range sliders, or token buttons
+        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .sim-slider, .reel-dock-action-btn, .draw-canvas-container, canvas, input[type="range"]'))) {
             return;
         }
         isDraggingReel = true;
@@ -400,9 +629,8 @@ function recycleBackward() {
 }
 
 /* =====================================================
-   PHASE 3 & 4: SIMULATION LIFECYCLE & TELEMETRY
+   ROADMAP PHASE 4: SIMULATION LIFECYCLE & TELEMETRY
 ===================================================== */
-
 function mountReelSimulation(cardId, simId) {
   const canvas = document.querySelector(`canvas[data-sim-card-id="${cardId}"]`);
   if (!canvas) return;
@@ -453,9 +681,8 @@ function updateSimTelemetryHUD(cardId, instance) {
 }
 
 /* =====================================================
-   PHASE 2: DRAG-AND-DROP & MAGNETIC COLLISION ENGINE
+   ROADMAP PHASE 4: TACTILE DRAG-AND-DROP BUILDER ENGINE
 ===================================================== */
-
 function attachTokenDragEngine(container) {
     let dragGhost = null;
     let sourceBtn = null;
@@ -670,9 +897,9 @@ window.checkBuildAnswer = function(cardId) {
     setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
 };
 
-// ---------------------------------------------------
-// PHASE 4: DRAWING / PREDICTION ACCURACY EVALUATOR
-// ---------------------------------------------------
+/* =====================================================
+   ROADMAP PHASE 4: VECTOR & RAY DRAWING EVALUATOR
+===================================================== */
 window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAngle) {
   stopReelTimer(cardId);
   const reveal = document.getElementById(`revealState_${cardId}`);
@@ -713,22 +940,17 @@ window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAn
 };
 
 /* =====================================================
-   UI TEMPLATING (GLASS & AIR DESIGN SYSTEM)
+   ROADMAP PHASE 1 & 2: FULL-VIEWPORT REEL RENDERER (75–85% FOCUS)
 ===================================================== */
-
 function generateReelHTML(card, idx) {
     const sub = card.subject || 'Science';
-    const hook = card.hook || '⚡ QUICK CHECK';
+    const hook = generateDynamicHook(card);
+    const dynamicTitle = generateDynamicTitle(card);
     const safeCardId = String(card.id || idx);
     const timeLimit = card.time || 15;
     const isBoss = card.difficulty === 'boss';
     const hookColor = isBoss ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)';
     
-    // Dynamic Title Generator (Kills the generic "Can you solve this?" fallback)
-    const dynamicTitle = card.title && card.title !== "Can you solve this?" 
-        ? card.title 
-        : `${card.topic ? card.topic + ' Challenge' : 'Concept Mastery'}`;
-
     let contentHTML = '';
 
     const rawTitle = String(card.q_en || card.title || '');
@@ -736,42 +958,34 @@ function generateReelHTML(card, idx) {
     const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
     const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
-    const dockStyle = `position:absolute; right:12px; bottom:24px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
-    const dockBtnStyle = `width:44px; height:44px; border-radius:50%; background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.6); transition:transform 0.2s;`;
-    const dockLabelStyle = `font-size:10px; color:#cbd5e1; font-weight:800; margin-top:4px; text-shadow:0 1px 3px #000;`;
+    // Translucent Dock Controls (Dims during active solving to remove UI clutter)
+    const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:12px; align-items:center; z-index:10;`;
+    const dockBtnStyle = `width:42px; height:42px; border-radius:50%; background:rgba(15,23,42,0.65); border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.5); transition:transform 0.2s;`;
+    const dockLabelStyle = `font-size:9.5px; color:#cbd5e1; font-weight:800; margin-top:3px; text-shadow:0 1px 3px #000;`;
 
-    // 1. STANDARD MCQ (Now with injected Visuals!)
+    // 1. STANDARD MCQ (With Dynamic Subject-Aware Visual Background)
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
             try { opts = JSON.parse(card.options); } catch(e) { opts = []; }
         }
         
-        // Auto-inject a sleek animated SVG diagram above the text so it never looks boring
-        const visualSVG = `
-          <div style="width:100%; height:75px; background:radial-gradient(ellipse at center, rgba(0,243,255,0.08) 0%, transparent 80%); border:1px solid rgba(255,255,255,0.05); border-radius:16px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-             <svg width="100%" height="100%" preserveAspectRatio="none">
-               <path d="M-10 35 Q 50 10, 150 35 T 350 35" stroke="rgba(0, 243, 255, 0.4)" stroke-width="2" fill="none" />
-               <path d="M-10 45 Q 50 20, 150 45 T 350 45" stroke="rgba(244, 63, 94, 0.4)" stroke-width="2" fill="none" />
-               <circle cx="50%" cy="35" r="4" fill="#00f3ff" style="filter:blur(1px);"/>
-             </svg>
-          </div>
-        `;
+        const ambientVisualHTML = generateSubjectVisual(card.subject, card.topic);
 
         contentHTML = `
-          ${visualSVG}
-          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 12px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
-          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
+          ${ambientVisualHTML}
+          <div class="reel-q-title" style="font-size:15px; font-weight:800; color:#ffffff; margin:0 0 12px 0; line-height:1.45;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:9px; margin-top:10px;">
             ${opts.map((opt, oIdx) => `
               <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)">
                   <span>${safeFormatMath(String(opt))}</span>
-                  <span class="opt-indicator" style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.3);"></span>
+                  <span class="opt-indicator" style="width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.3);"></span>
               </button>
             `).join('')}
           </div>
         `;
     } 
-    // 2. BUILDER (PHASE 2)
+    // 2. TACTILE FORMULA BUILDER
     else if (card.type === 'build') {
         const templateArray = Array.isArray(card.template) ? card.template : [];
         const choicesArray = Array.isArray(card.choices) ? card.choices : [];
@@ -780,7 +994,7 @@ function generateReelHTML(card, idx) {
             if (item === 'slot') {
                 return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled=""></div>`;
             } else {
-                return `<div style="font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
+                return `<div style="font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
             }
         }).join('');
 
@@ -789,7 +1003,7 @@ function generateReelHTML(card, idx) {
         `).join('');
 
         contentHTML = `
-          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:15px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.45;">${safeFormatMath(card.q_en || '')}</div>
           
           <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}'>
               <div class="build-slots-tray">
@@ -801,13 +1015,13 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     }
-    // 3. CANVAS MINI-SIM (PHASE 3)
+    // 3. INTERACTIVE SIMULATION REEL
     else if (card.type === 'sim') {
         const controls = Array.isArray(card.controls) ? card.controls : [];
         
         const slidersHTML = controls.map(ctrl => `
-          <div style="margin-bottom:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:#cbd5e1; margin-bottom:2px;">
+          <div style="margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; font-size:10.5px; font-weight:800; color:#cbd5e1; margin-bottom:2px;">
               <span>${ctrl.label}</span>
               <span id="valBadge_${safeCardId}_${ctrl.id}" style="color:var(--accent-cyan); font-family:monospace;">${ctrl.val} ${ctrl.unit}</span>
             </div>
@@ -820,41 +1034,41 @@ function generateReelHTML(card, idx) {
         contentHTML = `
           <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div style="position:relative; width:100%; height:160px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:12px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
+          <div style="position:relative; width:100%; height:155px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:10px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
              
-             <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:10px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
+             <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:9.5px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
                β = <span id="telemetryVal_${safeCardId}">-- mm</span>
              </div>
           </div>
 
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px 14px;">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px;">
             ${slidersHTML}
           </div>
         `;
     }
-    // 4. PREDICTION & DRAWING ENGINE (PHASE 4)
+    // 4. PREDICTION & TOUCH DRAWING ENGINE
     else if (card.type === 'draw') {
         contentHTML = `
-          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="draw-canvas-container">
-             <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
-             <div class="draw-prompt-badge">👆 Drag to aim reflected ray</div>
-             <div class="draw-angle-badge" id="angleReadout_${safeCardId}">θ_drawn = --°</div>
+          <div class="draw-canvas-container" style="position:relative; width:100%; height:165px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:10px;">
+             <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block; cursor:crosshair;"></canvas>
+             <div style="position:absolute; top:8px; left:10px; background:rgba(8,13,26,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:8px; padding:3px 8px; font-size:9.5px; font-weight:800; color:#cbd5e1;">👆 Drag reflected ray</div>
+             <div style="position:absolute; top:8px; right:10px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.35); border-radius:8px; padding:3px 8px; font-size:10px; font-family:monospace; font-weight:900; color:var(--accent-cyan);" id="angleReadout_${safeCardId}">θ_drawn = --°</div>
           </div>
           
-          <div style="font-size:11px; color:#64748b; font-weight:700; text-align:center;">Release finger to submit ray</div>
+          <div style="font-size:10.5px; color:#64748b; font-weight:700; text-align:center;">Release finger to lock prediction</div>
         `;
     }
-    // 5. TRAP / HACK
+    // 5. TOPPER TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
           <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(3,7,18,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:24px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
-            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 16px 0;">${dynamicTitle}</div>
-            <div style="font-size:15px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.04); padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">${card.content || ''}</div>
-            ${card.rule ? `<div style="font-size:14px; color:#10b981; font-weight:800; margin-top:16px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:16px; border-radius:14px;">✅ RULE: ${card.rule}</div>` : ''}
+            <div class="reel-q-title" style="font-size:20px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 14px 0;">${dynamicTitle}</div>
+            <div style="font-size:14px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.04); padding:18px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">${card.content || ''}</div>
+            ${card.rule ? `<div style="font-size:13px; color:#10b981; font-weight:800; margin-top:14px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:14px; border-radius:12px;">✅ NCERT RULE: ${card.rule}</div>` : ''}
             
             <div style="${dockStyle}">
               <div style="text-align:center;">
@@ -871,7 +1085,7 @@ function generateReelHTML(card, idx) {
               </div>
             </div>
 
-            <div style="position:absolute; bottom:20px; left:24px; font-size:11px; color:#64748b; font-weight:800; letter-spacing:0.5px;">⚡ Swipe up for next</div>
+            <div style="position:absolute; bottom:18px; left:20px; font-size:10.5px; color:#64748b; font-weight:800; letter-spacing:0.5px;">⚡ Swipe up for next</div>
           </div>
         `;
     }
@@ -879,19 +1093,18 @@ function generateReelHTML(card, idx) {
     return `
       <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; padding:0; background:linear-gradient(175deg, rgba(15,23,42,0.92) 0%, rgba(5,8,17,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 24px 60px rgba(0,0,0,0.85); overflow:hidden; box-sizing:border-box;">
         
-        <!-- Timer Bar -->
+        <!-- STATE A: Linear Urgency Timer -->
         <div style="width:100%; height:4px; background:rgba(255,255,255,0.05);">
             <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; box-shadow:0 0 12px ${hookColor}; transition:width 0.1s linear;"></div>
         </div>
 
-        <div style="padding:24px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
-            <div style="margin-bottom:14px;">
-                <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:8px;">
+        <div style="padding:20px 18px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+            <div style="margin-bottom:12px;">
+                <div style="font-size:9.5px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 8px; border-radius:8px; margin-bottom:6px;">
                     ${hook}
                 </div>
-                <!-- DYNAMIC TITLE INSTALLED HERE -->
-                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:4px;">${dynamicTitle}</div>
-                <div style="font-size:11.5px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
+                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:20px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:3px;">${dynamicTitle}</div>
+                <div style="font-size:10.5px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">${sub} • ${card.topic || 'Syllabus'} | CLASS ${card.class_name || currentReelsClass}</div>
             </div>
             
             <div style="position:relative; z-index:10;">
@@ -899,19 +1112,20 @@ function generateReelHTML(card, idx) {
             </div>
         </div>
 
-        <!-- TWO-STAGE GLASS REVEAL DRAWER -->
-        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.94); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.12); padding:24px 20px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:20; border-radius:24px 24px 0 0;">
-            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; margin-bottom:8px;"></div>
-            <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px; padding:12px 14px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
-                ${card.trap || 'Review the core concepts in the Study Hub.'}
+        <!-- STATE B: TWO-STAGE GLASS REVEAL DRAWER -->
+        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.95); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.12); padding:20px 18px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:20; border-radius:24px 24px 0 0;">
+            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:20px; font-weight:900; margin-bottom:6px;"></div>
+            <div style="font-size:12.5px; color:#cbd5e1; line-height:1.5; margin-bottom:14px; padding:10px 12px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+                ${card.trap || 'Master the core NCERT definitions in the Science Lab.'}
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <div style="display:flex; gap:8px;">
-                    <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:#fbbf24; font-weight:900; font-size:11px; padding:6px 12px; border-radius:8px; border:1px solid rgba(245,158,11,0.3);">+0 XP</span>
-                    <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:#f43f5e; font-weight:900; font-size:11px; padding:6px 12px; border-radius:8px; border:1px solid rgba(244,63,94,0.3);">🔥 STREAK</span>
+                    <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:#fbbf24; font-weight:900; font-size:11px; padding:5px 10px; border-radius:8px; border:1px solid rgba(245,158,11,0.3);">+0 XP</span>
+                    <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:#f43f5e; font-weight:900; font-size:11px; padding:5px 10px; border-radius:8px; border:1px solid rgba(244,63,94,0.3);">🔥 STREAK</span>
                 </div>
+                <div style="font-size:10px; color:#64748b; font-weight:700;">68% Students Solved</div>
             </div>
-            <div style="text-align:center; font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
+            <div style="text-align:center; font-size:10.5px; font-weight:800; color:#64748b; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
         </div>
 
         <div style="${dockStyle}">
@@ -967,7 +1181,7 @@ function stopReelTimer(cardId) {
 }
 
 // ---------------------------------------------------
-// TWO-STAGE MCQ REVEAL
+// TWO-STAGE MCQ REVEAL EVALUATOR
 // ---------------------------------------------------
 function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     stopReelTimer(cardId);
@@ -982,7 +1196,7 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     const buttons = card.querySelectorAll('.reel-opt-btn');
     buttons.forEach((btn, idx) => {
         btn.disabled = true;
-        btn.style.opacity = '0.5';
+        btn.style.opacity = '0.45';
         if (idx === correctIdx) {
             btn.style.opacity = '1';
             btn.classList.add('correct');
@@ -1029,13 +1243,13 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
         }
 
         reelStreak = 0;
-        revealTitle.innerHTML = `<span style="color:#ff007f;">✕ MISSED</span>`;
+        revealTitle.innerHTML = `<span style="color:#ff007f;">✕ NOT THIS TIME</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
         xpBadge.style.color = '#94a3b8';
     }
 
-    setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 400);
+    setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 350);
 }
 
 function shareReel(text) {
@@ -1062,7 +1276,7 @@ function sendReelToDoubtSolver(questionText, subject) {
 }
 
 /* =====================================================
-   📸 STORIES & INSTA-FILTER STUDIO ENGINE
+   STORIES & COMMUNITY BROADCAST ENGINE
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
@@ -1075,17 +1289,7 @@ const storyFilters = [
   { name: "Topper Glow", css: "contrast(1.2) saturate(1.3)", color: "#f59e0b" },
   { name: "Midnight", css: "brightness(0.8) sepia(0.3) hue-rotate(180deg) saturate(1.5)", color: "#3b82f6" },
   { name: "Backbencher", css: "grayscale(1) contrast(1.2)", color: "#64748b" },
-  { name: "Exam Blur", css: "blur(1px) contrast(1.1)", color: "#14b8a6" },
-  { name: "Vintage", css: "sepia(0.8) contrast(1.1)", color: "#d97706" },
-  { name: "Neon Physics", css: "hue-rotate(280deg) saturate(2) contrast(1.1)", color: "#d946ef" },
-  { name: "X-Ray Vision", css: "invert(1) hue-rotate(180deg)", color: "#06b6d4" },
-  { name: "Focus Mode", css: "brightness(0.9) contrast(1.3)", color: "#ef4444" },
-  { name: "Cyberpunk", css: "hue-rotate(90deg) saturate(2) brightness(0.9)", color: "#10b981" },
-  { name: "Late Night", css: "brightness(0.7) contrast(1.4)", color: "#1e293b" },
-  { name: "Golden Hour", css: "sepia(0.4) saturate(1.5) hue-rotate(-15deg)", color: "#fbbf24" },
-  { name: "Cool Blue", css: "hue-rotate(45deg) saturate(1.2)", color: "#38bdf8" },
-  { name: "Dramatic", css: "contrast(1.5) grayscale(0.5)", color: "#475569" },
-  { name: "Vivid", css: "saturate(2) contrast(1.1)", color: "#f43f5e" }
+  { name: "Exam Blur", css: "blur(1px) contrast(1.1)", color: "#14b8a6" }
 ];
 
 function renderFilters() {
@@ -1154,8 +1358,6 @@ if (addStoryBtn) {
     if (m) { 
       m.style.display = 'flex'; 
       renderFilters(); 
-    } else {
-      alert("Story modal not found in HTML.");
     }
   });
 }
@@ -1187,10 +1389,10 @@ function renderStoryCircles() {
         const initial = author.charAt(0).toUpperCase() || "S";
         return `
         <div class="story-circle-item" onclick="openStoryViewer(${idx})" style="cursor:pointer;">
-            <div class="story-avatar-wrap" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan, #00f3ff), #0284c7); padding:2px; margin-bottom:4px; border:1px solid rgba(0,243,255,0.3);">
-                <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#05070D; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:900; color:#fff;">${initial}</div>
+            <div class="story-avatar-wrap" style="width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan, #00f3ff), #0284c7); padding:2px; margin-bottom:4px; border:1px solid rgba(0,243,255,0.3);">
+                <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#05070D; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:#fff;">${initial}</div>
             </div>
-            <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeEscapeHTML(author)}</div>
+            <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:56px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeEscapeHTML(author)}</div>
         </div>
         `;
     }).join('');
@@ -1348,49 +1550,6 @@ window.nextStorySlide = function() {
   }
 };
 
-async function deleteCurrentStory() {
-  const story = activeStories[currentStoryIdx];
-  if (!story) return;
-
-  const myStoryIds = JSON.parse(localStorage.getItem('my_created_stories') || '[]').map(Number);
-  const isMyStory = story.id && myStoryIds.includes(Number(story.id));
-  const savedAdminPin = localStorage.getItem('story_admin_pin');
-
-  let adminPin = savedAdminPin || null;
-
-  if (!isMyStory && !adminPin) {
-    adminPin = prompt("Enter Admin PIN to delete this story:");
-    if (!adminPin) return;
-  } else {
-    if (!confirm("Are you sure you want to delete this story?")) return;
-  }
-
-  try {
-    const res = await fetch('/api/stories', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'delete_story',
-        story_id: story.id,
-        admin_key: adminPin || undefined
-      })
-    });
-
-    const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || "Failed to delete");
-
-    if (adminPin) {
-      localStorage.setItem('story_admin_pin', adminPin);
-    }
-
-    alert("Story deleted successfully!");
-    closeStoryViewer();
-    loadActiveStories();
-  } catch (err) {
-    alert("Delete failed: " + err.message);
-  }
-}
-
 function renderStorySlide() {
   clearTimeout(storyTimer);
   const story = activeStories[currentStoryIdx];
@@ -1414,15 +1573,6 @@ function renderStorySlide() {
   if (authorDetailsEl) authorDetailsEl.textContent = `${authorName}${ageText}${classText}`;
   if (schoolDetailsEl) schoolDetailsEl.textContent = `📍 ${story.institution || 'Invincible Coaching'}`;
   if (avatarEl) avatarEl.textContent = authorName.charAt(0).toUpperCase() || 'S';
-
-  const deleteBtn = document.getElementById('viewerDeleteBtn');
-  if (deleteBtn) {
-    deleteBtn.style.display = 'inline-flex';
-    deleteBtn.onclick = (e) => {
-      e.stopPropagation();
-      deleteCurrentStory();
-    };
-  }
 
   if (capEl) capEl.innerHTML = String(story.caption || '').replace(/\n/g, '<br>');
 
@@ -1463,56 +1613,10 @@ function renderStorySlide() {
   storyTimer = setTimeout(nextStorySlide, 6000);
 }
 
-window.openStoryViewersDrawer = async function() {
-  clearTimeout(storyTimer);
-  const story = activeStories[currentStoryIdx];
-  if (!story || !story.id) return;
-
-  const drawer = document.getElementById('storyViewersDrawer');
-  const list = document.getElementById('storyViewersList');
-  if (drawer) drawer.style.display = 'flex';
-  if (list) list.innerHTML = '<div style="color:#94a3b8; font-size:12px; text-align:center; padding:16px 0;">Fetching live watchers...</div>';
-
-  const viewers = await fetchStoryViewers(story.id);
-  if (!viewers || viewers.length === 0) {
-    list.innerHTML = `
-      <div style="text-align:center; padding:24px 10px; color:#94a3b8;">
-        <div style="font-size:24px; margin-bottom:4px;">👀</div>
-        <div style="font-weight:700; font-size:13px; color:#fff;">No views yet</div>
-        <div style="font-size:11px;">Be the first to share this story with classmates!</div>
-      </div>
-    `;
-    return;
-  }
-
-  const reactionEmojiMap = { fire: '🔥', mind: '🤯', '100': '💯' };
-  list.innerHTML = viewers.map(v => `
-    <div class="viewer-row-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:12px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,243,255,0.15); border:1px solid var(--accent-cyan, #00f3ff); color:var(--accent-cyan, #00f3ff); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">
-          ${(v.viewer_name || 'S').charAt(0).toUpperCase()}
-        </div>
-        <div>
-          <div style="font-size:12px; font-weight:800; color:#fff;">${safeEscapeHTML(v.viewer_name || 'Student')}</div>
-          <div style="font-size:10px; color:#94a3b8;">${safeEscapeHTML(v.viewer_institution || 'Invincible Coaching')}</div>
-        </div>
-      </div>
-      <div>${v.reaction ? `<span style="font-size:14px;">${reactionEmojiMap[v.reaction] || '🔥'}</span>` : '<span style="font-size:10px; color:#64748b;">Watched</span>'}</div>
-    </div>
-  `).join('');
-};
-
-window.closeStoryViewersDrawer = function() {
-  const drawer = document.getElementById('storyViewersDrawer');
-  if (drawer) drawer.style.display = 'none';
-  storyTimer = setTimeout(nextStorySlide, 3500);
-};
-
 window.closeStoryViewer = function() {
   clearTimeout(storyTimer);
   const v = document.getElementById('storyViewer');
   if (v) v.style.display = 'none';
-  closeStoryViewersDrawer();
 };
 
 window.reactStory = async function(type) {
@@ -1532,133 +1636,8 @@ window.reactStory = async function(type) {
   } catch (e) {}
 };
 
-function saveStoryToVault() {
-  if (typeof playWin === 'function') playWin();
-  alert("💾 Saved to Gallery!");
-}
-
-/* =====================================================
-   MULTI-FORMAT CREATOR STUDIO
-===================================================== */
-let activeCreatorFormat = 'hack';
-
-function switchReelFormat(format) {
-  activeCreatorFormat = format;
-  const formats = ['hack', 'mcq', 'trap', 'formula'];
-  
-  formats.forEach(f => {
-    const tabBtn = document.getElementById(`tabFormat_${f}`);
-    if (tabBtn) {
-      if (f === format) {
-        tabBtn.style.background = 'rgba(0,243,255,0.18)';
-        tabBtn.style.borderColor = 'var(--accent-cyan, #00f3ff)';
-        tabBtn.style.color = 'var(--accent-cyan, #00f3ff)';
-      } else {
-        tabBtn.style.background = '#020617';
-        tabBtn.style.borderColor = '#1e293b';
-        tabBtn.style.color = '#94a3b8';
-      }
-    }
-  });
-
-  const hEl = document.getElementById('formatFields_hack');
-  const mEl = document.getElementById('formatFields_mcq');
-  const fEl = document.getElementById('formatFields_formula');
-
-  if (hEl) hEl.style.display = (format === 'hack' || format === 'trap') ? 'flex' : 'none';
-  if (mEl) mEl.style.display = format === 'mcq' ? 'flex' : 'none';
-  if (fEl) fEl.style.display = format === 'formula' ? 'flex' : 'none';
-}
-
-async function handleMultiFormatReelSubmit(e) {
-  e.preventDefault();
-  const btn = document.getElementById('btnPublishReel');
-  const originalText = btn ? btn.innerText : "PUBLISH";
-  if (btn) {
-    btn.innerText = "PUBLISHING... ⏳";
-    btn.disabled = true;
-  }
-
-  const subject = document.getElementById('creatorSubject')?.value || 'Science';
-  const grade = document.getElementById('creatorGrade')?.value || '10';
-  const topic = document.getElementById('creatorTopic')?.value?.trim() || 'Concept';
-  const author = localStorage.getItem('studentName') || 'Topper Creator';
-  const school = localStorage.getItem('userSchool') || 'Invincible Coaching';
-
-  let payload = {
-    class_name: grade,
-    type: activeCreatorFormat,
-    subject: subject,
-    topic: topic,
-    author_name: author,
-    school_name: school,
-    views_count: 1,
-    likes_count: 0
-  };
-
-  if (activeCreatorFormat === 'mcq') {
-    const qText = document.getElementById('creatorMcqQuestion')?.value?.trim();
-    const optA = document.getElementById('creatorOptA')?.value?.trim();
-    const optB = document.getElementById('creatorOptB')?.value?.trim();
-    const optC = document.getElementById('creatorOptC')?.value?.trim();
-    const optD = document.getElementById('creatorOptD')?.value?.trim();
-
-    if (!qText || !optA || !optB) {
-      alert("Please provide the question and options.");
-      if (btn) { btn.innerText = originalText; btn.disabled = false; }
-      return;
-    }
-
-    payload.q_en = qText;
-    payload.options = JSON.stringify([optA, optB, optC, optD]);
-    payload.answer = 0;
-  } else if (activeCreatorFormat === 'formula') {
-    payload.title = topic;
-    payload.formula = document.getElementById('creatorFormulaLatex')?.value?.trim() || '';
-    payload.tip = document.getElementById('creatorFormulaTip')?.value?.trim() || '';
-  } else {
-    payload.title = document.getElementById('creatorHackTitle')?.value?.trim() || topic;
-    payload.content = document.getElementById('creatorHackContent')?.value?.trim() || '';
-    payload.rule = document.getElementById('creatorHackRule')?.value?.trim() || 'Focus on NCERT definitions.';
-  }
-
-  try {
-    if (window.supabase) {
-      const sbClient = window.supabase.createClient(
-        'https://cbgwbzidkmcefoithipp.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g'
-      );
-
-      const { error } = await sbClient.from('study_reels').insert([payload]);
-      if (error) throw error;
-    }
-
-    const xpEl = document.getElementById('xpCounter');
-    if (xpEl) {
-      const cur = parseInt(xpEl.textContent || '680', 10);
-      xpEl.textContent = cur + 75;
-    }
-
-    const modal = document.getElementById('reelCreatorModal');
-    if (modal) modal.style.display = 'none';
-
-    if (typeof playWin === 'function') playWin();
-    if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
-    
-    alert(`🎉 Published globally! You earned +75 XP as a Topper Creator.`);
-    await renderReelsDeck();
-  } catch (err) {
-    alert("Publishing notice: " + err.message);
-  } finally {
-    if (btn) {
-      btn.innerText = originalText;
-      btn.disabled = false;
-    }
-  }
-}
-
 // ---------------------------------------------------
-// BOOTSTRAP INIT
+// BOOTSTRAP INITIALIZER
 // ---------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     loadActiveStories();
