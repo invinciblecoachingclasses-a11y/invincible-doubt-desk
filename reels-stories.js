@@ -517,7 +517,6 @@ async function renderReelsDeck() {
         finalDeck = classDeck.length > 0 ? classDeck : defaultReelDeck;
     }
 
-    // Deduplicate solved cards using ReelPersistence engine
     if (window.ReelPersistence && typeof window.ReelPersistence.filterUnsolvedDeck === 'function') {
         finalDeck = window.ReelPersistence.filterUnsolvedDeck(finalDeck);
     }
@@ -574,12 +573,17 @@ function setupSwiperEngine(container) {
     Object.keys(activeSimInstances).forEach(k => unmountReelSimulation(k));
     Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
-    container.innerHTML = '';
+    // FIX: Explictly set dimensions so absolute children don't collapse to 0 height
+    container.style.height = 'calc(100vh - 190px)';
+    container.style.minHeight = '480px';
+    container.style.width = '100%';
     container.style.position = 'relative';
     container.style.overflow = 'hidden';
     container.style.touchAction = 'none';
     container.style.userSelect = 'none';
     container.style.webkitUserSelect = 'none';
+
+    container.innerHTML = '';
 
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     activeNodes.current = createReelNode(currentReelIndex, 0);
@@ -1301,8 +1305,9 @@ function generateReelHTML(card, idx) {
         `;
     }
 
+    // FIX: Restored inline styles to prevent iOS height collapse
     return `
-      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}">
+      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:linear-gradient(175deg, rgba(15,23,42,0.96) 0%, rgba(5,8,17,0.98) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.85); overflow:hidden; box-sizing:border-box;">
         
         <!-- STATE A: Linear Urgency Timer -->
         <div style="width:100%; height:3px; background:rgba(255,255,255,0.05); flex-shrink:0;">
