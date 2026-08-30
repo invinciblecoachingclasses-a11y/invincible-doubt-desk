@@ -658,6 +658,47 @@ window.checkBuildAnswer = function(cardId) {
 
     setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
 };
+// ---------------------------------------------------
+// PHASE 4: DRAWING / PREDICTION ACCURACY EVALUATOR
+// ---------------------------------------------------
+window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAngle) {
+  stopReelTimer(cardId);
+  const reveal = document.getElementById(`revealState_${cardId}`);
+  const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
+  const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
+  const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
+  if (!reveal) return;
+
+  if (isCorrect) {
+    if (typeof playDing === 'function') playDing();
+    if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
+    if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
+
+    reelStreak++;
+    const totalXP = 25 + (reelStreak > 2 ? 10 : 0);
+    revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ RAY LOCKED (${drawnAngle}°)</span>`;
+    xpBadge.innerText = `+${totalXP} XP`;
+    if (reelStreak > 2) {
+      streakBadge.style.display = 'inline-block';
+      streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+    }
+    const xpEl = document.getElementById('xpCounter');
+    if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
+  } else {
+    if (typeof playBuzz === 'function') playBuzz();
+    if (typeof triggerHaptic === 'function') triggerHaptic([80]);
+
+    reelStreak = 0;
+    revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ OFF TARGET (${drawnAngle}° vs ${expectedAngle}°)</span>`;
+    xpBadge.innerText = `+0 XP`;
+    xpBadge.style.background = 'rgba(255,255,255,0.05)';
+    xpBadge.style.color = '#94a3b8';
+  }
+
+  setTimeout(() => { 
+    reveal.style.transform = 'translateY(0)'; 
+  }, 400);
+};
 
 /* =====================================================
    UI TEMPLATING (GLASS & AIR DESIGN SYSTEM)
