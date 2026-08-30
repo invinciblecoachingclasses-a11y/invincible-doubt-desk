@@ -766,6 +766,21 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     }
+        // 4. PREDICTION & DRAWING ENGINE (PHASE 4)
+    else if (card.type === 'draw') {
+        contentHTML = `
+          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          
+          <div class="draw-canvas-container">
+             <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
+             <div class="draw-prompt-badge">👆 Drag to aim reflected ray</div>
+             <div class="draw-angle-badge" id="angleReadout_${safeCardId}">θ_drawn = --°</div>
+          </div>
+          
+          <div style="font-size:11px; color:#64748b; font-weight:700; text-align:center;">Release finger to submit ray</div>
+        `;
+    }
+
     // 4. TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
