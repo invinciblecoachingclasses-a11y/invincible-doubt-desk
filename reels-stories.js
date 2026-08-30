@@ -7,6 +7,7 @@
    - Two-Stage State Machine (State A: Challenge -> State B: Reveal)
    - Multi-Tier Interactive Engine Registry (Build, Sim, Draw, Tap)
    - Grade Parity across Classes 9, 10, 11, and 12
+   - Persistence & Telemetry Integration (ReelPersistence Engine)
 ===================================================== */
 
 const defaultReelDeck = [
@@ -57,37 +58,37 @@ const defaultReelDeck = [
       trap: "Inverse-Square Law: F ∝ 1/r². Halving r multiplies F by 4.", 
       difficulty: "boss" 
     },
-    {
-      id: 904,
-      class_name: "9",
-      type: "sim",
-      sim_id: "chem_rutherford",
-      hook: "🔬 ATOMIC LAB",
-      title: "Rutherford Alpha Scattering",
-      subject: "Chemistry",
-      topic: "Structure of the Atom",
-      q_en: "Observe positive alpha particles repelling off the heavy Gold Nucleus (+Ze).",
+    { 
+      id: 904, 
+      class_name: "9", 
+      type: "sim", 
+      sim_id: "chem_rutherford", 
+      hook: "🔬 ATOMIC LAB", 
+      title: "Rutherford Alpha Scattering", 
+      subject: "Chemistry", 
+      topic: "Structure of the Atom", 
+      q_en: "Observe positive alpha particles repelling off the heavy Gold Nucleus (+Ze).", 
       controls: [
         { id: "ctrl_z", label: "Nucleus Charge (+Z)", min: 20, max: 120, step: 1, val: 79, unit: "e" }
-      ],
-      time: 25,
-      trap: "Most alpha particles pass undeflected, proving most atomic volume is empty space.",
-      difficulty: "medium"
+      ], 
+      time: 25, 
+      trap: "Most alpha particles pass undeflected, proving most atomic volume is empty space.", 
+      difficulty: "medium" 
     },
-    {
-      id: 905,
-      class_name: "9",
-      type: "sim",
-      sim_id: "math_algebra_drag",
-      hook: "⚖️ BALANCE THE EQUATION",
-      title: "Algebraic Step Balancing",
-      subject: "Mathematics",
-      topic: "Linear Equations",
-      q_en: "Tap operations in sequence to isolate x in: 2x + 6 = 18.",
-      controls: [],
-      time: 25,
-      trap: "Whatever operation you apply to one side, you must apply equally to the other side to keep the beam balanced.",
-      difficulty: "medium"
+    { 
+      id: 905, 
+      class_name: "9", 
+      type: "sim", 
+      sim_id: "math_algebra_drag", 
+      hook: "⚖️ BALANCE THE EQUATION", 
+      title: "Algebraic Step Balancing", 
+      subject: "Mathematics", 
+      topic: "Linear Equations", 
+      q_en: "Tap operations in sequence to isolate x in: 2x + 6 = 18.", 
+      controls: [], 
+      time: 25, 
+      trap: "Whatever operation you apply to one side, you must apply equally to the other side to keep the beam balanced.", 
+      difficulty: "medium" 
     },
 
     // --- CLASS 10 INTERACTIVE SUITE ---
@@ -252,7 +253,7 @@ const defaultReelDeck = [
         { id: "ctrl_wl", label: "Wavelength (λ)", min: 380, max: 750, step: 1, val: 532, unit: "nm" },
         { id: "ctrl_d", label: "Slit Gap (d)", min: 0.1, max: 0.8, step: 0.01, val: 0.25, unit: "mm" },
         { id: "ctrl_bigD", label: "Screen Dist (D)", min: 0.5, max: 2.5, step: 0.1, val: 1.2, unit: "m" }
-      ],
+      ], 
       time: 30, 
       trap: "Fringe Width β = λD/d. Narrowing slit distance d spreads fringe spacing wider!", 
       difficulty: "medium" 
@@ -516,6 +517,11 @@ async function renderReelsDeck() {
         finalDeck = classDeck.length > 0 ? classDeck : defaultReelDeck;
     }
 
+    // Deduplicate solved cards using ReelPersistence engine
+    if (window.ReelPersistence && typeof window.ReelPersistence.filterUnsolvedDeck === 'function') {
+        finalDeck = window.ReelPersistence.filterUnsolvedDeck(finalDeck);
+    }
+
     activeReelDeck = finalDeck;
     currentReelIndex = 0;
 
@@ -670,17 +676,6 @@ function attachGestureListeners(container) {
         if (Math.abs(e.deltaY) > 35) {
             if (e.deltaY > 0 && currentReelIndex < activeReelDeck.length - 1) snapToNode('next');
             else if (e.deltaY < 0 && currentReelIndex > 0) snapToNode('prev');
-        }
-    };
-
-    window.onkeydown = (e) => {
-        if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
-        if ((e.key === 'ArrowDown' || e.key === 'PageDown') && currentReelIndex < activeReelDeck.length - 1) {
-            e.preventDefault();
-            snapToNode('next');
-        } else if ((e.key === 'ArrowUp' || e.key === 'PageUp') && currentReelIndex > 0) {
-            e.preventDefault();
-            snapToNode('prev');
         }
     };
 }
@@ -1029,22 +1024,30 @@ window.checkBuildAnswer = function(cardId) {
         if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
         if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
         
-        reelStreak++;
-        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
+        let totalXP = isBoss ? 50 : 20;
+        let streakCount = 1;
+        if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
+            const res = window.ReelPersistence.recordSuccess(cardId, isBoss ? 50 : 20, isBoss);
+            totalXP = res.totalEarnedXP;
+            streakCount = res.currentStreak;
+        }
+
         revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ PERFECT BUILD</span>`;
         xpBadge.innerText = `+${totalXP} XP`;
         
-        if (reelStreak > 2) {
+        if (streakCount > 2) {
             streakBadge.style.display = 'inline-block';
-            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+            streakBadge.innerText = `🔥 x${streakCount} STREAK`;
         }
-        const xpEl = document.getElementById('xpCounter');
-        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
     } else {
         slots.forEach(s => s.classList.add('slot-wrong'));
         if (typeof playBuzz === 'function') playBuzz();
         if (typeof triggerHaptic === 'function') triggerHaptic([80]);
-        reelStreak = 0;
+        
+        if (window.ReelPersistence && typeof window.ReelPersistence.recordFailure === 'function') {
+            window.ReelPersistence.recordFailure(cardId);
+        }
+
         revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ CIRCUIT BROKEN</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
@@ -1070,21 +1073,28 @@ window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAn
     if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
     if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
 
-    reelStreak++;
-    const totalXP = 25 + (reelStreak > 2 ? 10 : 0);
+    let totalXP = 25;
+    let streakCount = 1;
+    if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
+        const res = window.ReelPersistence.recordSuccess(cardId, 25, false);
+        totalXP = res.totalEarnedXP;
+        streakCount = res.currentStreak;
+    }
+
     revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ LOCKED (${drawnAngle})</span>`;
     xpBadge.innerText = `+${totalXP} XP`;
-    if (reelStreak > 2) {
+    if (streakCount > 2) {
       streakBadge.style.display = 'inline-block';
-      streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+      streakBadge.innerText = `🔥 x${streakCount} STREAK`;
     }
-    const xpEl = document.getElementById('xpCounter');
-    if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
   } else {
     if (typeof playBuzz === 'function') playBuzz();
     if (typeof triggerHaptic === 'function') triggerHaptic([80]);
 
-    reelStreak = 0;
+    if (window.ReelPersistence && typeof window.ReelPersistence.recordFailure === 'function') {
+        window.ReelPersistence.recordFailure(cardId);
+    }
+
     revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ MISSED (${drawnAngle} vs ${expectedAngle})</span>`;
     xpBadge.innerText = `+0 XP`;
     xpBadge.style.background = 'rgba(255,255,255,0.05)';
@@ -1420,16 +1430,20 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
             }
         }
 
-        reelStreak++;
-        const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
+        let totalXP = isBoss ? 50 : 20;
+        let streakCount = 1;
+        if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
+            const res = window.ReelPersistence.recordSuccess(cardId, isBoss ? 50 : 20, isBoss);
+            totalXP = res.totalEarnedXP;
+            streakCount = res.currentStreak;
+        }
+
         revealTitle.innerHTML = `<span style="color:#10b981;">✓ CORRECT</span>`;
         xpBadge.innerText = `+${totalXP} XP`;
-        if (reelStreak > 2) {
+        if (streakCount > 2) {
             streakBadge.style.display = 'inline-block';
-            streakBadge.innerText = `🔥 x${reelStreak} STREAK`;
+            streakBadge.innerText = `🔥 x${streakCount} STREAK`;
         }
-        const xpEl = document.getElementById('xpCounter');
-        if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
     } else {
         if (typeof playBuzz === 'function') playBuzz();
         if (typeof triggerHaptic === 'function') triggerHaptic([80]);
@@ -1443,7 +1457,10 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
             }
         }
 
-        reelStreak = 0;
+        if (window.ReelPersistence && typeof window.ReelPersistence.recordFailure === 'function') {
+            window.ReelPersistence.recordFailure(cardId);
+        }
+
         revealTitle.innerHTML = `<span style="color:#ff007f;">✕ NOT THIS TIME</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
