@@ -74,6 +74,21 @@ const defaultReelDeck = [
       trap: "Most alpha particles pass undeflected, proving most atomic volume is empty space.",
       difficulty: "medium"
     },
+    {
+      id: 905,
+      class_name: "9",
+      type: "sim",
+      sim_id: "math_algebra_drag",
+      hook: "⚖️ BALANCE THE EQUATION",
+      title: "Algebraic Step Balancing",
+      subject: "Mathematics",
+      topic: "Linear Equations",
+      q_en: "Tap operations in sequence to isolate x in: 2x + 6 = 18.",
+      controls: [],
+      time: 25,
+      trap: "Whatever operation you apply to one side, you must apply equally to the other side to keep the beam balanced.",
+      difficulty: "medium"
+    },
 
     // --- CLASS 10 INTERACTIVE SUITE ---
     { 
@@ -1050,6 +1065,7 @@ function generateReelHTML(card, idx) {
     // 3. INTERACTIVE SIMULATION REEL
     else if (card.type === 'sim') {
         const controls = Array.isArray(card.controls) ? card.controls : [];
+        const isAlgebra = card.sim_id === 'math_algebra_drag';
         
         const slidersHTML = controls.map(ctrl => `
           <div style="margin-bottom:6px;">
@@ -1063,6 +1079,14 @@ function generateReelHTML(card, idx) {
           </div>
         `).join('');
 
+        const algebraControlsHTML = `
+          <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '-6')">-6 Both Sides</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '÷2')">÷2 Both Sides</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; padding:10px 12px; font-size:11px;" onclick="window.triggerAlgebraStep('${safeCardId}', '+6')">+6 Both Sides</button>
+          </div>
+        `;
+
         contentHTML = `
           <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
@@ -1070,15 +1094,15 @@ function generateReelHTML(card, idx) {
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
              
              <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:9.5px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
-               β = <span id="telemetryVal_${safeCardId}">-- mm</span>
+               <span id="angleReadout_${safeCardId}">β = <span id="telemetryVal_${safeCardId}">-- mm</span></span>
              </div>
           </div>
 
-          ${controls.length > 0 ? `
+          ${isAlgebra ? algebraControlsHTML : (controls.length > 0 ? `
             <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:8px 12px;">
               ${slidersHTML}
             </div>
-          ` : ''}
+          ` : '')}
         `;
     }
     // 4. PREDICTION & TOUCH DRAWING ENGINE
