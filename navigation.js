@@ -2,10 +2,10 @@
    CLEAN SEPARATION 8-TAB NAVIGATION ENGINE
 ===================================================== */
 function switchTab(tab) {
-    const dockButtons = document.querySelectorAll('.dock-btn');
+    const dockButtons = document.querySelectorAll('.dock-btn, .premium-dock-btn');
     dockButtons.forEach(b => b.classList.remove('active'));
     
-    const tabMap = { 'home': 0, 'reels': 1, 'lab': 2, 'doubt': 3, 'test': 4, 'arena': 5, 'feed': 6, 'notes': 7 };
+    const tabMap = { 'home': 0, 'reels': 1, 'doubt': 2, 'arena': 3, 'lab': 4, 'test': 4, 'feed': 4, 'notes': 4 };
     if (tabMap[tab] !== undefined && dockButtons[tabMap[tab]]) {
         dockButtons[tabMap[tab]].classList.add('active');
     }
@@ -20,7 +20,7 @@ function switchTab(tab) {
     const target = document.getElementById(targetId);
     if (target) target.classList.remove('hidden');
     
-    if (tab === 'reels') renderReelsDeck();
+    if (tab === 'reels' && typeof renderReelsDeck === 'function') renderReelsDeck();
     if (tab === 'feed' && typeof fetchSchoolPosts === 'function') fetchSchoolPosts();
     
     // WAKE UP THE LAB ENGINE
