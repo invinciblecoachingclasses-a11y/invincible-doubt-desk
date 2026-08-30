@@ -267,19 +267,11 @@ window.handleDailyClashAnswer = function(selectedIdx, correctIdx, timedOut = fal
 }
 
 /* =====================================================
-   TEST GENERATOR & ENGINEERING PUZZLE MATRIX
+   TEST GENERATOR & TACTILE TEST ENGINE (CLEAN UI)
 ===================================================== */
 let activeQuestions = [];
 let activeTestTitle = ""; let activeTestClass = ""; let activeTestSubject = ""; let finalScoreData = {};
 let testTimerInterval = null; let totalTimeLimit = 600; let timeRemaining = 600;
-let activeTestSims = {};
-
-// Intersection Observer to prevent battery drain from off-screen canvases
-const testSimObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        entry.target.isPaused = !entry.isIntersecting;
-    });
-}, { threshold: 0.1 });
 
 const testOrg = document.getElementById("testOrg");
 const testClass = document.getElementById("testClass");
@@ -432,52 +424,42 @@ function startQuestions(questions, headerTitle, testTitle){
     testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
     questionsContainer.innerHTML = "";
 
-    // Clear previous simulation loops
-    Object.keys(activeTestSims).forEach(k => cancelAnimationFrame(activeTestSims[k]));
-    activeTestSims = {};
-
-    const simTypes = ['circuit_snap', 'math_tracer', 'chem_balance'];
-
     questions.forEach(function(q, index){
         const card = document.createElement("div"); 
         card.className = "question-card";
         card.id = `qCard_${q.id}`;
         card.style.position = "relative";
         card.style.transition = "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-        
-        const simType = simTypes[index % simTypes.length];
-        const canvasId = `testCanvas_${q.id}`;
+        card.style.background = "linear-gradient(180deg, #0b0f19 0%, #030712 100%)";
+        card.style.border = "1px solid rgba(255,255,255,0.08)";
+        card.style.borderRadius = "20px";
+        card.style.padding = "20px";
+        card.style.marginBottom = "20px";
 
-        const microSimHTML = `
-            <div style="position:relative; width:100%; height:120px; background:#020617; border-radius:12px; margin-bottom:16px; border:1px solid rgba(0,229,255,0.15); box-shadow:inset 0 0 20px rgba(0,0,0,0.5); overflow:hidden;">
-                <canvas id="${canvasId}" style="width:100%; height:100%; touch-action:none; display:block;"></canvas>
-                <div style="position:absolute; top:8px; right:8px; font-size:9px; font-weight:900; color:var(--accent-cyan); background:rgba(0,0,0,0.7); padding:3px 8px; border-radius:6px; border:1px solid rgba(0,229,255,0.3); letter-spacing:0.5px;">⚙️ TACTILE ENGINE</div>
-            </div>
-        `;
-
-        let optionsHTML = '<div style="display:flex; flex-direction:column; gap:8px;">';
+        let optionsHTML = '<div style="display:flex; flex-direction:column; gap:10px;">';
         q.options.forEach(function(option, optionIndex){
             optionsHTML += `
-              <div class="engineering-snap-block" onclick="handleTestOptionSelect(${q.id}, ${optionIndex}, ${q.answer})" style="display:flex; align-items:center; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); padding:12px 16px; border-radius:12px; cursor:pointer; transition:all 0.2s;">
+              <div class="engineering-snap-block" onclick="handleTestOptionSelect(${q.id}, ${optionIndex}, ${q.answer})" style="display:flex; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); padding:14px 16px; border-radius:12px; cursor:pointer; transition:all 0.2s;">
                 <input type="radio" name="q${q.id}" value="${optionIndex}" style="display:none;">
-                <div style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); margin-right:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                  <div class="snap-dot" style="width:8px; height:8px; border-radius:50%; background:var(--accent-cyan); opacity:0; transition:opacity 0.2s;"></div>
+                <div style="width:18px; height:18px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); margin-right:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <div class="snap-dot" style="width:10px; height:10px; border-radius:50%; background:var(--accent-cyan); opacity:0; transition:opacity 0.2s;"></div>
                 </div>
-                <span style="font-size:13px; font-weight:700; color:#e2e8f0; line-height:1.4;">${formatMathText(escapeHTML(String(option)))}</span>
+                <span style="font-size:14px; font-weight:700; color:#e2e8f0; line-height:1.4;">${formatMathText(escapeHTML(String(option)))}</span>
               </div>
             `;
         });
         optionsHTML += '</div>';
 
         card.innerHTML = `
-          <div style="color:var(--accent-cyan); font-size:11px; font-weight:900; letter-spacing:1px; margin-bottom:8px;">MODULE ${index + 1} / ${questions.length}</div>
-          ${microSimHTML}
-          <div style="font-size:15px; font-weight:800; color:#fff; margin-bottom:14px; line-height:1.5;">${formatMathText(escapeHTML(String(q.question)))}</div>
+          <div style="color:var(--accent-cyan); font-size:11px; font-weight:900; letter-spacing:1px; margin-bottom:12px; display:flex; align-items:center; gap:6px;">
+            <span style="display:inline-block; width:6px; height:6px; background:var(--accent-cyan); border-radius:50%; box-shadow:0 0 8px var(--accent-cyan);"></span>
+            MODULE ${index + 1} / ${questions.length}
+          </div>
+          <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:18px; line-height:1.5;">${formatMathText(escapeHTML(String(q.question)))}</div>
           ${optionsHTML}
         `;
         
         questionsContainer.appendChild(card);
-        initTestMicroSim(canvasId, simType);
 
         // Add visual snap effect to the custom radio dots
         const blocks = card.querySelectorAll('.engineering-snap-block');
@@ -497,142 +479,6 @@ function startQuestions(questions, headerTitle, testTitle){
 
     window.scrollTo({ top: 0, behavior: "smooth" });
     startTimer();
-}
-
-/* =====================================================
-   ENGINEERING TACTILE MICRO-SIMS
-===================================================== */
-function initTestMicroSim(canvasId, simType) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-
-    testSimObserver.observe(canvas);
-    canvas.isPaused = false;
-
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    
-    canvas.width = (rect.width || 320) * dpr;
-    canvas.height = 120 * dpr;
-    ctx.scale(dpr, dpr);
-
-    const w = canvas.width / dpr;
-    const h = canvas.height / dpr;
-
-    let touchX = w / 2;
-    let touchY = h / 2;
-    let isTouching = false;
-
-    const updateTouch = (clientX, clientY) => {
-        const r = canvas.getBoundingClientRect();
-        touchX = Math.max(0, Math.min(w, clientX - r.left));
-        touchY = Math.max(0, Math.min(h, clientY - r.top));
-    };
-
-    canvas.addEventListener('touchstart', (e) => { isTouching = true; if(e.touches.length) updateTouch(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
-    canvas.addEventListener('touchmove', (e) => { if(e.touches.length) updateTouch(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
-    window.addEventListener('touchend', () => isTouching = false);
-    
-    canvas.addEventListener('mousedown', (e) => { isTouching = true; updateTouch(e.clientX, e.clientY); });
-    canvas.addEventListener('mousemove', (e) => { if(isTouching) updateTouch(e.clientX, e.clientY); });
-    window.addEventListener('mouseup', () => isTouching = false);
-
-    let frame = 0;
-
-    function render() {
-        if (!canvas.isPaused) {
-            ctx.clearRect(0, 0, w, h);
-            frame++;
-
-            if (simType === 'circuit_snap') {
-                // Interactive Rheostat Slider
-                const sliderX = isTouching ? touchX : w / 2 + Math.sin(frame * 0.05) * (w / 4);
-                const currentIntensity = sliderX / w;
-
-                ctx.strokeStyle = '#334155';
-                ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.moveTo(20, h/2); ctx.lineTo(w - 20, h/2); ctx.stroke();
-
-                ctx.strokeStyle = `hsl(${180 + currentIntensity * 60}, 100%, 60%)`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = ctx.strokeStyle;
-                ctx.beginPath(); ctx.moveTo(20, h/2); ctx.lineTo(sliderX, h/2); ctx.stroke();
-                ctx.shadowBlur = 0;
-
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(sliderX - 8, h/2 - 12, 16, 24);
-
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '10px Space Grotesk';
-                ctx.fillText(`Resistance: ${((1 - currentIntensity) * 100).toFixed(0)} Ω`, 20, h/2 + 25);
-                
-                // Particle flow
-                for(let i=0; i<5; i++) {
-                    const px = (frame * (1 + currentIntensity * 3) + i * 40) % sliderX;
-                    if (px > 20) {
-                        ctx.fillStyle = '#fff';
-                        ctx.beginPath(); ctx.arc(px, h/2, 2, 0, Math.PI*2); ctx.fill();
-                    }
-                }
-
-            } else if (simType === 'math_tracer') {
-                // Sine Wave Phase Shifter
-                const phase = isTouching ? (touchX / w) * Math.PI * 2 : frame * 0.05;
-                
-                ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-                ctx.beginPath(); ctx.moveTo(0, h/2); ctx.lineTo(w, h/2); ctx.stroke();
-
-                ctx.strokeStyle = '#00e5ff';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                for (let x = 0; x < w; x += 2) {
-                    const y = h/2 + Math.sin(x * 0.05 + phase) * 30;
-                    if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-
-                ctx.fillStyle = '#f43f5e';
-                const dotY = h/2 + Math.sin((w/2) * 0.05 + phase) * 30;
-                ctx.beginPath(); ctx.arc(w/2, dotY, 4, 0, Math.PI*2); ctx.fill();
-
-            } else if (simType === 'chem_balance') {
-                // Chemical Equation Balancer (Tilt)
-                const tilt = isTouching ? (touchX / w) - 0.5 : Math.sin(frame * 0.04) * 0.2;
-                
-                ctx.save();
-                ctx.translate(w/2, h/2 + 20);
-                ctx.rotate(tilt);
-
-                // Fulcrum Bar
-                ctx.strokeStyle = '#94a3b8';
-                ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.moveTo(-60, 0); ctx.lineTo(60, 0); ctx.stroke();
-
-                // Left Pan
-                ctx.fillStyle = 'rgba(0, 229, 255, 0.2)';
-                ctx.strokeStyle = '#00e5ff';
-                ctx.beginPath(); ctx.arc(-60, -10, 15, 0, Math.PI, false); ctx.fill(); ctx.stroke();
-                
-                // Right Pan
-                ctx.fillStyle = 'rgba(244, 63, 94, 0.2)';
-                ctx.strokeStyle = '#f43f5e';
-                ctx.beginPath(); ctx.arc(60, -10, 15, 0, Math.PI, false); ctx.fill(); ctx.stroke();
-
-                ctx.restore();
-
-                // Base Pivot
-                ctx.fillStyle = '#f59e0b';
-                ctx.beginPath(); ctx.moveTo(w/2, h/2 + 20); ctx.lineTo(w/2 - 10, h/2 + 40); ctx.lineTo(w/2 + 10, h/2 + 40); ctx.fill();
-
-                ctx.fillStyle = '#fff';
-                ctx.font = '10px Space Grotesk';
-                ctx.fillText(`Eq: ${tilt > 0.05 ? 'RHS Heavy' : (tilt < -0.05 ? 'LHS Heavy' : 'Balanced ⚖️')}`, 10, 20);
-            }
-        }
-        activeTestSims[canvasId] = requestAnimationFrame(render);
-    }
-    render();
 }
 
 if (submitTestBtn) {
@@ -678,10 +524,6 @@ if (submitTestBtn) {
     reviewContainer.innerHTML = reviewHTML;
     testArea.classList.add("hidden"); testResult.style.display = "block";
     testResult.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    // Stop physics sims to save battery
-    Object.keys(activeTestSims).forEach(k => cancelAnimationFrame(activeTestSims[k]));
-    activeTestSims = {};
 
     const studentName = document.getElementById("studentName")?.value?.trim() || localStorage.getItem("studentName") || "Student";
     const studentMobile = document.getElementById("studentMobile")?.value?.trim() || "";
