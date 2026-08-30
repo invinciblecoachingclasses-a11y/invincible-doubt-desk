@@ -373,7 +373,6 @@ async function setReelsClass(cls, btn) {
 
 /* =====================================================
    ROADMAP PHASE 3: SUBJECT-AWARE PROGRAMMATIC VISUALS
-   Generates distinct ambient visual geometry based on subject & topic
 ===================================================== */
 function generateSubjectVisual(subject, topic) {
     const s = String(subject || '').toLowerCase();
@@ -573,7 +572,7 @@ function setupSwiperEngine(container) {
     Object.keys(activeSimInstances).forEach(k => unmountReelSimulation(k));
     Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
-    // FIX: Explictly set dimensions so absolute children don't collapse to 0 height
+    // CRITICAL FIX: Ensure exact viewport height mapping to stop iOS collapsing to 0px
     container.style.height = 'calc(100vh - 190px)';
     container.style.minHeight = '480px';
     container.style.width = '100%';
@@ -1111,7 +1110,7 @@ window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAn
 };
 
 /* =====================================================
-   ROADMAP PHASE 1 & 2: FULL-VIEWPORT REEL RENDERER (75–85% FOCUS)
+   ROADMAP PHASE 1 & 2: FULL-VIEWPORT REEL RENDERER
 ===================================================== */
 function generateReelHTML(card, idx) {
     const sub = card.subject || 'Science';
@@ -1129,12 +1128,11 @@ function generateReelHTML(card, idx) {
     const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
     const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
-    // Translucent Dock Controls (Pinned safely to avoid clipping)
     const dockStyle = `position:absolute; right:8px; bottom:14px; display:flex; flex-direction:column; gap:8px; align-items:center; z-index:25;`;
-    const dockBtnStyle = `width:36px; height:36px; border-radius:50%; background:rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 6px 18px rgba(0,0,0,0.5); transition:transform 0.2s;`;
+    const dockBtnStyle = `width:36px; height:36px; border-radius:50%; background:rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 6px 18px rgba(0,0,0,0.5);`;
     const dockLabelStyle = `font-size:8.5px; color:#cbd5e1; font-weight:800; margin-top:2px; text-shadow:0 1px 3px #000;`;
 
-    // 1. STANDARD MCQ (With Compact Ambient Visual Background)
+    // 1. STANDARD MCQ
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
@@ -1156,7 +1154,7 @@ function generateReelHTML(card, idx) {
           </div>
         `;
     } 
-    // 2. TACTILE FORMULA BUILDER
+    // 2. FORMULA BUILDER
     else if (card.type === 'build') {
         const templateArray = Array.isArray(card.template) ? card.template : [];
         const choicesArray = Array.isArray(card.choices) ? card.choices : [];
@@ -1262,7 +1260,7 @@ function generateReelHTML(card, idx) {
           ${activeSimControlsHTML}
         `;
     }
-    // 4. PREDICTION & TOUCH DRAWING ENGINE
+    // 4. DRAWING ENGINE
     else if (card.type === 'draw') {
         contentHTML = `
           <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 6px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
@@ -1276,11 +1274,11 @@ function generateReelHTML(card, idx) {
           <div style="font-size:10px; color:#64748b; font-weight:700; text-align:center;">Release finger to lock prediction</div>
         `;
     }
-    // 5. TOPPER TRAP / HACK
+    // 5. TOPPER TRAP
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
-          <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(3,7,18,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
+          <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.95) 0%, rgba(3,7,18,0.98) 100%); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 20px 50px rgba(0,0,0,0.8); transform:translateZ(0); -webkit-transform:translateZ(0);">
             <div class="reel-q-title" style="font-size:18px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 10px 0;">${dynamicTitle}</div>
             <div style="font-size:13.5px; color:#f1f5f9; line-height:1.55; background:rgba(255,255,255,0.04); padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
             ${card.rule ? `<div style="font-size:12px; color:#10b981; font-weight:800; margin-top:10px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:10px; border-radius:10px;">✅ NCERT RULE: ${card.rule}</div>` : ''}
@@ -1305,9 +1303,9 @@ function generateReelHTML(card, idx) {
         `;
     }
 
-    // FIX: Restored inline styles to prevent iOS height collapse
+    // FIX: Replaced overflow:hidden with clip-path to bypass iOS WebKit 3D rendering black-screen crash
     return `
-      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:linear-gradient(175deg, rgba(15,23,42,0.96) 0%, rgba(5,8,17,0.98) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.85); overflow:hidden; box-sizing:border-box;">
+      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:linear-gradient(175deg, rgba(15,23,42,0.96) 0%, rgba(5,8,17,0.98) 100%); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.85); clip-path:inset(0 round 24px); -webkit-clip-path:inset(0 round 24px); transform:translateZ(0); -webkit-transform:translateZ(0); box-sizing:border-box;">
         
         <!-- STATE A: Linear Urgency Timer -->
         <div style="width:100%; height:3px; background:rgba(255,255,255,0.05); flex-shrink:0;">
