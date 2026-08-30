@@ -1,12 +1,11 @@
 /* =====================================================
-   ⚡ ZERO-TOKEN STUDY REELS ENGINE (VIRTUALIZED UI + BUILDER)
+   ⚡ INVINCIBLE 360 - STUDY REELS ENGINE (PHASE 1 VIRTUALIZED SWIPER)
+   UI: Glass & Air | Recycler: Strict 3-DOM Node Pool
 ===================================================== */
+
 const defaultReelDeck = [
     { id: 101, class_name: "10", type: "mcq", hook: "⚡ 5 SECOND CHALLENGE", title: "Only 18% got this right.", subject: "Physics", topic: "Light", q_en: "If m = -1 for a spherical mirror, where is the object placed?", options: ["At Infinity", "At Focus (F)", "At Centre of Curvature (C)"], answer: 2, time: 5, trap: "Negative magnification means real & inverted. Size is same only at C.", difficulty: "easy" },
-    
-    // NEW PHASE 2: INTERACTIVE BUILDER REEL
     { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Construct the correct formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
-    
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
     { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
     { id: 301, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Power Equation", subject: "Physics", topic: "Electricity", q_en: "Construct the formula for electrical power in terms of Current and Resistance.", template: ["slot", "=", "slot", "²", "×", "slot"], choices: ["P", "V", "I", "R", "t"], answer: ["P", "I", "R"], time: 20, trap: "Power is I²R for series circuits. P = V²/R is for parallel.", difficulty: "medium" },
@@ -17,11 +16,15 @@ const defaultReelDeck = [
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
 let reelStreak = 0;
 
-/* --- PHASE 1 VIRTUALIZATION STATE --- */
+/* --- PHASE 1 VIRTUALIZATION ENGINE STATE --- */
 let activeReelDeck = [];
 let currentReelIndex = 0;
-let scrollDebounceTimer = null;
 let activeReelTimers = {};
+let activeNodes = { prev: null, current: null, next: null };
+let isTransitioning = false;
+let isDragging = false;
+let touchStartY = 0;
+let currentDeltaY = 0;
 
 function safeEscapeHTML(str) {
     if (typeof escapeHTML === 'function') return escapeHTML(str);
@@ -44,16 +47,12 @@ async function setReelsClass(cls, btn) {
         if (matchingBtn) matchingBtn.classList.add('active');
     }
     await renderReelsDeck();
-    
-    const container = document.getElementById('studyReelsDeck');
-    if (container) {
-        container.scrollTop = 0;
-    }
 }
 
 /* =====================================================
-   PHASE 1: VIRTUALIZED SCROLL ENGINE
+   PHASE 1: 3-NODE VIRTUALIZED SCROLL RECYCLER
 ===================================================== */
+
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
@@ -75,77 +74,278 @@ async function renderReelsDeck() {
     activeReelDeck = deck;
     currentReelIndex = 0;
 
-    // 1. Render permanent ghost wrappers to maintain perfect scrolling physics
-    container.innerHTML = activeReelDeck.map((_, idx) => {
-        return `<div id="reelWrapper_${idx}" style="height: calc(100dvh - 180px); width: 100%; scroll-snap-align: start; flex-shrink: 0; margin-bottom: 16px; position: relative;"></div>`;
-    }).join('');
+    setupSwiperEngine(container);
+}
 
-    // 2. Hydrate the initial 3 active reels
-    updateVirtualizedWindow();
+function createReelNode(index, initialOffsetPct) {
+    const node = document.createElement('div');
+    node.className = 'virtual-reel-slot';
+    node.style.position = 'absolute';
+    node.style.top = '0';
+    node.style.left = '0';
+    node.style.width = '100%';
+    node.style.height = '100%';
+    node.style.willChange = 'transform';
+    node.style.transform = `translate3d(0, ${initialOffsetPct}%, 0)`;
+    node.style.transition = 'none';
+    node.dataset.index = index;
 
-    // 3. Attach smart scroll listener
-    container.onscroll = () => {
-        clearTimeout(scrollDebounceTimer);
-        scrollDebounceTimer = setTimeout(() => {
-            const cardHeight = container.clientHeight;
-            const newIndex = Math.round(container.scrollTop / cardHeight);
-            
-            if (newIndex !== currentReelIndex && newIndex >= 0 && newIndex < activeReelDeck.length) {
-                // Stop timer for old card
-                const oldCard = activeReelDeck[currentReelIndex];
-                if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
-                
-                currentReelIndex = newIndex;
-                updateVirtualizedWindow();
-
-                // Start timer for new card
-                const newCard = activeReelDeck[currentReelIndex];
-                if (newCard) startReelTimer(newCard.id || currentReelIndex);
+    if (index >= 0 && index < activeReelDeck.length) {
+        node.innerHTML = generateReelHTML(activeReelDeck[index], index);
+        try {
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([node]).catch(() => {});
             }
-        }, 50); 
+        } catch(e) {}
+    } else {
+        node.innerHTML = '';
+        node.style.visibility = 'hidden';
+    }
+    return node;
+}
+
+function setupSwiperEngine(container) {
+    // 1. Prepare Viewport Container
+    container.innerHTML = '';
+    container.style.position = 'relative';
+    container.style.overflow = 'hidden';
+    container.style.touchAction = 'none';
+    container.style.userSelect = 'none';
+    container.style.webkitUserSelect = 'none';
+
+    // 2. Clear Active Timers
+    Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
+
+    // 3. Build Strict 3-Node Matrix (-100%, 0%, 100%)
+    activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
+    activeNodes.current = createReelNode(currentReelIndex, 0);
+    activeNodes.next = createReelNode(currentReelIndex + 1, 100);
+
+    container.appendChild(activeNodes.prev);
+    container.appendChild(activeNodes.current);
+    container.appendChild(activeNodes.next);
+
+    // 4. Start Timer for Current Reel
+    const currentCard = activeReelDeck[currentReelIndex];
+    if (currentCard) {
+        setTimeout(() => startReelTimer(currentCard.id || currentReelIndex), 400);
+    }
+
+    // 5. Attach Touch & Gesture Listeners
+    attachGestureListeners(container);
+}
+
+function attachGestureListeners(container) {
+    const onStart = (clientY) => {
+        if (isTransitioning) return;
+        isDragging = true;
+        touchStartY = clientY;
+        currentDeltaY = 0;
+
+        ['prev', 'current', 'next'].forEach(k => {
+            if (activeNodes[k]) activeNodes[k].style.transition = 'none';
+        });
     };
 
-    // Start timer for very first card
-    setTimeout(() => {
-        if (activeReelDeck[0]) startReelTimer(activeReelDeck[0].id || 0);
-    }, 500);
-}
+    const onMove = (clientY, e) => {
+        if (!isDragging || isTransitioning) return;
+        currentDeltaY = clientY - touchStartY;
 
-function updateVirtualizedWindow() {
-    const startIdx = Math.max(0, currentReelIndex - 1);
-    const endIdx = Math.min(activeReelDeck.length - 1, currentReelIndex + 1);
+        if (e && e.cancelable) e.preventDefault();
 
-    activeReelDeck.forEach((card, idx) => {
-        const wrapper = document.getElementById(`reelWrapper_${idx}`);
-        if (!wrapper) return;
-
-        const isInWindow = (idx >= startIdx && idx <= endIdx);
-        const hasContent = wrapper.hasChildNodes();
-
-        if (isInWindow && !hasContent) {
-            // INJECT HTML
-            wrapper.innerHTML = generateReelHTML(card, idx);
-            try { 
-                if (window.MathJax && MathJax.typesetPromise) {
-                    MathJax.typesetPromise([wrapper]).catch(() => {}); 
-                }
-            } catch(e) {}
-        } else if (!isInWindow && hasContent) {
-            // DESTROY HTML TO SAVE RAM
-            wrapper.innerHTML = '';
+        // Feed boundary resistance
+        let dampedDelta = currentDeltaY;
+        if ((currentReelIndex === 0 && currentDeltaY > 0) || 
+            (currentReelIndex === activeReelDeck.length - 1 && currentDeltaY < 0)) {
+            dampedDelta = currentDeltaY * 0.22;
         }
+
+        if (activeNodes.prev) activeNodes.prev.style.transform = `translate3d(0, calc(-100% + ${dampedDelta}px), 0)`;
+        if (activeNodes.current) activeNodes.current.style.transform = `translate3d(0, ${dampedDelta}px, 0)`;
+        if (activeNodes.next) activeNodes.next.style.transform = `translate3d(0, calc(100% + ${dampedDelta}px), 0)`;
+    };
+
+    const onEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const containerHeight = container.clientHeight || window.innerHeight;
+        const threshold = Math.max(60, containerHeight * 0.16);
+
+        if (currentDeltaY < -threshold && currentReelIndex < activeReelDeck.length - 1) {
+            snapToNode('next');
+        } else if (currentDeltaY > threshold && currentReelIndex > 0) {
+            snapToNode('prev');
+        } else {
+            snapToNode('center');
+        }
+        currentDeltaY = 0;
+    };
+
+    // Mobile Touch
+    container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) onStart(e.touches[0].clientY);
+    }, { passive: false });
+
+    container.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 1) onMove(e.touches[0].clientY, e);
+    }, { passive: false });
+
+    container.addEventListener('touchend', onEnd);
+    container.addEventListener('touchcancel', onEnd);
+
+    // Desktop Drag Testing
+    container.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        onStart(e.clientY);
+        
+        const onMouseMove = (ev) => onMove(ev.clientY, ev);
+        const onMouseUp = () => {
+            onEnd();
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
     });
+
+    // Keyboard & Wheel Control
+    container.onwheel = (e) => {
+        if (isTransitioning) return;
+        if (Math.abs(e.deltaY) > 35) {
+            if (e.deltaY > 0 && currentReelIndex < activeReelDeck.length - 1) snapToNode('next');
+            else if (e.deltaY < 0 && currentReelIndex > 0) snapToNode('prev');
+        }
+    };
+
+    window.onkeydown = (e) => {
+        if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+        if ((e.key === 'ArrowDown' || e.key === 'PageDown') && currentReelIndex < activeReelDeck.length - 1) {
+            e.preventDefault();
+            snapToNode('next');
+        } else if ((e.key === 'ArrowUp' || e.key === 'PageUp') && currentReelIndex > 0) {
+            e.preventDefault();
+            snapToNode('prev');
+        }
+    };
 }
+
+function snapToNode(direction) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    const transitionCSS = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+    ['prev', 'current', 'next'].forEach(k => {
+        if (activeNodes[k]) activeNodes[k].style.transition = transitionCSS;
+    });
+
+    if (direction === 'next' && currentReelIndex < activeReelDeck.length - 1) {
+        activeNodes.prev.style.transform = 'translate3d(0, -200%, 0)';
+        activeNodes.current.style.transform = 'translate3d(0, -100%, 0)';
+        activeNodes.next.style.transform = 'translate3d(0, 0%, 0)';
+
+        const oldCard = activeReelDeck[currentReelIndex];
+        if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
+
+        setTimeout(() => {
+            currentReelIndex++;
+            recycleForward();
+            isTransitioning = false;
+        }, 300);
+
+    } else if (direction === 'prev' && currentReelIndex > 0) {
+        activeNodes.prev.style.transform = 'translate3d(0, 0%, 0)';
+        activeNodes.current.style.transform = 'translate3d(0, 100%, 0)';
+        activeNodes.next.style.transform = 'translate3d(0, 200%, 0)';
+
+        const oldCard = activeReelDeck[currentReelIndex];
+        if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
+
+        setTimeout(() => {
+            currentReelIndex--;
+            recycleBackward();
+            isTransitioning = false;
+        }, 300);
+
+    } else {
+        // Revert to rest positions
+        activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
+        activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
+        activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 300);
+    }
+}
+
+function recycleForward() {
+    const container = document.getElementById('studyReelsDeck');
+    if (!container) return;
+
+    // 1. Destroy Top Node
+    if (activeNodes.prev) activeNodes.prev.remove();
+
+    // 2. Rotate Reference Pointers
+    activeNodes.prev = activeNodes.current;
+    activeNodes.current = activeNodes.next;
+
+    // 3. Append Fresh Bottom Node
+    activeNodes.next = createReelNode(currentReelIndex + 1, 100);
+    container.appendChild(activeNodes.next);
+
+    // 4. Instantly Reset Offsets without transition delay
+    ['prev', 'current', 'next'].forEach(k => {
+        if (activeNodes[k]) activeNodes[k].style.transition = 'none';
+    });
+    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
+    activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
+    activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+
+    // 5. Activate Next Timer
+    const newCard = activeReelDeck[currentReelIndex];
+    if (newCard) startReelTimer(newCard.id || currentReelIndex);
+}
+
+function recycleBackward() {
+    const container = document.getElementById('studyReelsDeck');
+    if (!container) return;
+
+    // 1. Destroy Bottom Node
+    if (activeNodes.next) activeNodes.next.remove();
+
+    // 2. Rotate Reference Pointers
+    activeNodes.next = activeNodes.current;
+    activeNodes.current = activeNodes.prev;
+
+    // 3. Prepend Fresh Top Node
+    activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
+    container.insertBefore(activeNodes.prev, activeNodes.current);
+
+    // 4. Instantly Reset Offsets without transition delay
+    ['prev', 'current', 'next'].forEach(k => {
+        if (activeNodes[k]) activeNodes[k].style.transition = 'none';
+    });
+    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
+    activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
+    activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+
+    // 5. Activate Prev Timer
+    const newCard = activeReelDeck[currentReelIndex];
+    if (newCard) startReelTimer(newCard.id || currentReelIndex);
+}
+
+/* =====================================================
+   UI TEMPLATING (GLASS & AIR DESIGN SYSTEM)
+===================================================== */
 
 function generateReelHTML(card, idx) {
     const sub = card.subject || 'Science';
     const hook = card.hook || '⚡ QUICK CHECK';
-    const author = card.author_name || 'Faculty Topper';
-    const creatorBadge = `<span style="font-size:9.5px; font-weight:800; color:var(--accent-cyan); background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); padding:3px 8px; border-radius:8px;">⚡ By ${safeEscapeHTML(author)}</span>`;
     const safeCardId = String(card.id || idx);
     const timeLimit = card.time || 15;
     const isBoss = card.difficulty === 'boss';
-    const hookColor = isBoss ? 'var(--accent-rose)' : 'var(--accent-cyan)';
+    const hookColor = isBoss ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)';
     
     let contentHTML = '';
 
@@ -154,11 +354,11 @@ function generateReelHTML(card, idx) {
     const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
     const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
-    const dockStyle = `position:absolute; right:10px; bottom:20px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
-    const dockBtnStyle = `width:42px; height:42px; border-radius:50%; background:rgba(15,23,42,0.85); border:1px solid rgba(0,229,255,0.25); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(8px); box-shadow:0 4px 14px rgba(0,0,0,0.6); transition:transform 0.2s;`;
-    const dockLabelStyle = `font-size:9.5px; color:#cbd5e1; font-weight:800; margin-top:3px; text-shadow:0 1px 3px #000;`;
+    const dockStyle = `position:absolute; right:12px; bottom:24px; display:flex; flex-direction:column; gap:14px; align-items:center; z-index:10;`;
+    const dockBtnStyle = `width:44px; height:44px; border-radius:50%; background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.6); transition:transform 0.2s;`;
+    const dockLabelStyle = `font-size:10px; color:#cbd5e1; font-weight:800; margin-top:4px; text-shadow:0 1px 3px #000;`;
 
-    // --- MCQ LOGIC ---
+    // MCQ
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
@@ -166,59 +366,59 @@ function generateReelHTML(card, idx) {
         }
         
         contentHTML = `
-          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
-          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 12px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
             ${opts.map((opt, oIdx) => `
-              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:14px; font-weight:700; padding:14px 18px; border-radius:14px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:all 0.2s;">
+              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:14px; font-weight:700; padding:14px 18px; border-radius:14px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); transition:all 0.2s;">
                   <span>${safeFormatMath(String(opt))}</span>
-                  <span class="opt-indicator" style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.2);"></span>
+                  <span class="opt-indicator" style="width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.3);"></span>
               </button>
             `).join('')}
           </div>
         `;
     } 
-    // --- PHASE 2: TAP-TO-BUILD LOGIC ---
+    // BUILDER
     else if (card.type === 'build') {
         const templateArray = Array.isArray(card.template) ? card.template : [];
         const choicesArray = Array.isArray(card.choices) ? card.choices : [];
         
         const builderHTML = templateArray.map((item) => {
             if (item === 'slot') {
-                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled="" style="width:45px; height:45px; border:2px dashed rgba(0,229,255,0.4); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:var(--accent-cyan); background:rgba(0,229,255,0.05); cursor:pointer; transition:0.2s;"></div>`;
+                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled="" style="width:46px; height:46px; border:2px dashed rgba(0,243,255,0.4); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900; color:var(--accent-cyan, #00f3ff); background:rgba(0,243,255,0.06); cursor:pointer; transition:0.2s;"></div>`;
             } else {
                 return `<div style="font-size:22px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
             }
         }).join('');
 
         const choicesHTML = choicesArray.map((choice, cIdx) => `
-            <button class="build-choice-btn" id="choice_${safeCardId}_${cIdx}" onclick="window.handleBuildTap('${safeCardId}', '${choice}', ${cIdx})" style="padding:12px 20px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:14px; color:#fff; font-size:16px; font-weight:800; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.2);">${choice}</button>
+            <button class="build-choice-btn" id="choice_${safeCardId}_${cIdx}" onclick="window.handleBuildTap('${safeCardId}', '${choice}', ${cIdx})" style="padding:12px 20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18); border-radius:14px; color:#fff; font-size:16px; font-weight:800; cursor:pointer; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); transition:0.2s; box-shadow:0 4px 14px rgba(0,0,0,0.3);">${choice}</button>
         `).join('');
 
         contentHTML = `
-          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}' style="margin-top:30px;">
-              <div style="display:flex; gap:12px; justify-content:center; margin-bottom:40px; align-items:center; flex-wrap:wrap;">
+          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}' style="margin-top:24px;">
+              <div style="display:flex; gap:10px; justify-content:center; margin-bottom:32px; align-items:center; flex-wrap:wrap;">
                   ${builderHTML}
               </div>
-              <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+              <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
                   ${choicesHTML}
               </div>
           </div>
         `;
     }
-    // --- TRAP / HACK LOGIC ---
+    // TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
-          <div class="reel-card" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, #0b0f19 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose)' : 'var(--accent-cyan)'}; border-radius:20px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center;">
-            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#f43f5e' : 'var(--accent-cyan)'}; margin:0 0 16px 0;">${card.title}</div>
-            <div style="font-size:15px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.03); padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
-            ${card.rule ? `<div style="font-size:14px; color:var(--accent-emerald); font-weight:800; margin-top:16px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:16px; border-radius:14px;">✅ RULE: ${card.rule}</div>` : ''}
+          <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(3,7,18,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:24px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
+            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 16px 0;">${card.title}</div>
+            <div style="font-size:15px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.04); padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">${card.content || ''}</div>
+            ${card.rule ? `<div style="font-size:14px; color:#10b981; font-weight:800; margin-top:16px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:16px; border-radius:14px;">✅ RULE: ${card.rule}</div>` : ''}
             
             <div style="${dockStyle}">
               <div style="text-align:center;">
-                <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+                <div style="${dockBtnStyle} border-color:var(--accent-cyan, #00f3ff); box-shadow:0 0 15px rgba(0,243,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
                 <div style="${dockLabelStyle}">Explain</div>
               </div>
               <div style="text-align:center;">
@@ -231,27 +431,27 @@ function generateReelHTML(card, idx) {
               </div>
             </div>
 
-            <div style="position:absolute; bottom:20px; left:20px; font-size:11px; color:#64748b; font-weight:800;">⚡ Swipe up for next</div>
+            <div style="position:absolute; bottom:20px; left:24px; font-size:11px; color:#64748b; font-weight:800; letter-spacing:0.5px;">⚡ Swipe up for next</div>
           </div>
         `;
     }
 
-    // Wrap Active Formats (MCQ & BUILD)
+    // Active Interactive Wrap (MCQ & BUILD)
     return `
-      <div class="reel-card" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; padding:0; background:linear-gradient(175deg, #090e1d 0%, #050811 100%); border:1px solid rgba(255,255,255,0.05); border-radius:26px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 20px 50px rgba(0,0,0,0.9); overflow:hidden; box-sizing:border-box;">
+      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; padding:0; background:linear-gradient(175deg, rgba(15,23,42,0.92) 0%, rgba(5,8,17,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-radius:24px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 24px 60px rgba(0,0,0,0.85); overflow:hidden; box-sizing:border-box;">
         
         <!-- Timer Bar -->
         <div style="width:100%; height:4px; background:rgba(255,255,255,0.05);">
-            <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; box-shadow:0 0 10px ${hookColor}; transition:width 0.1s linear;"></div>
+            <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; box-shadow:0 0 12px ${hookColor}; transition:width 0.1s linear;"></div>
         </div>
 
         <div style="padding:24px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
-            <div style="margin-bottom:20px;">
+            <div style="margin-bottom:18px;">
                 <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:10px;">
                     ${hook}
                 </div>
-                <div style="font-family:'Space Grotesk'; font-size:24px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:8px;">${card.title || 'Can you solve this?'}</div>
-                <div style="font-size:12px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
+                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:24px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:6px;">${card.title || 'Can you solve this?'}</div>
+                <div style="font-size:12px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
             </div>
             
             <div style="position:relative; z-index:10;">
@@ -259,24 +459,24 @@ function generateReelHTML(card, idx) {
             </div>
         </div>
 
-        <!-- TWO-STAGE REVEAL CARD -->
-        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.95); backdrop-filter:blur(20px); border-top:1px solid rgba(255,255,255,0.1); padding:24px 20px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:20; border-radius:26px;">
-            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk'; font-size:22px; font-weight:900; margin-bottom:6px;"></div>
-            <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px; padding:12px; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.05);">
+        <!-- TWO-STAGE GLASS REVEAL DRAWER -->
+        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.94); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.12); padding:24px 20px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:20; border-radius:24px 24px 0 0;">
+            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; margin-bottom:8px;"></div>
+            <div style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:16px; padding:12px 14px; background:rgba(255,255,255,0.04); border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
                 ${card.trap || 'Review the core concepts in the Study Hub.'}
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                 <div style="display:flex; gap:8px;">
-                    <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:var(--accent-amber); font-weight:900; font-size:11px; padding:6px 10px; border-radius:8px;">+0 XP</span>
-                    <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:var(--accent-rose); font-weight:900; font-size:11px; padding:6px 10px; border-radius:8px;">🔥 STREAK</span>
+                    <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:#fbbf24; font-weight:900; font-size:11px; padding:6px 12px; border-radius:8px; border:1px solid rgba(245,158,11,0.3);">+0 XP</span>
+                    <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:#f43f5e; font-weight:900; font-size:11px; padding:6px 12px; border-radius:8px; border:1px solid rgba(244,63,94,0.3);">🔥 STREAK</span>
                 </div>
             </div>
-            <div style="text-align:center; font-size:11px; font-weight:800; color:var(--text-muted); animation:pulse 1.5s infinite; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
+            <div style="text-align:center; font-size:11px; font-weight:800; color:#64748b; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
         </div>
 
         <div style="${dockStyle}">
           <div style="text-align:center;">
-            <div style="${dockBtnStyle} border-color:var(--accent-cyan); box-shadow:0 0 15px rgba(0,229,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+            <div style="${dockBtnStyle} border-color:var(--accent-cyan, #00f3ff); box-shadow:0 0 15px rgba(0,243,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
             <div style="${dockLabelStyle}">Doubt</div>
           </div>
           <div style="text-align:center;">
@@ -293,7 +493,7 @@ function generateReelHTML(card, idx) {
 }
 
 // ---------------------------------------------------
-// TIMERS
+// TIMERS & GAMEPLAY CONTROLS
 // ---------------------------------------------------
 function startReelTimer(cardId) {
     if (activeReelTimers[cardId]) return; 
@@ -306,15 +506,15 @@ function startReelTimer(cardId) {
     
     activeReelTimers[cardId] = setInterval(() => {
         timeLeft -= 100;
-        const percentage = (timeLeft / timeLimit) * 100;
+        const percentage = Math.max(0, (timeLeft / timeLimit) * 100);
         fill.style.width = `${percentage}%`;
 
         if (timeLeft <= 0) {
             stopReelTimer(cardId);
-            const grid = document.getElementById(`optionsGrid_${cardId}`);
-            if (grid) handleReelAnswer(cardId, -1, -1, false, null); // Auto-fail MCQ
+            const grid = card.querySelector('.reel-options-grid');
+            if (grid) handleReelAnswer(cardId, -1, -1, false, null);
             const matrix = card.querySelector('.build-matrix');
-            if (matrix) window.checkBuildAnswer(cardId); // Auto-fail Builder
+            if (matrix) window.checkBuildAnswer(cardId);
         }
     }, 100);
 }
@@ -322,15 +522,17 @@ function startReelTimer(cardId) {
 function stopReelTimer(cardId) {
     if (activeReelTimers[cardId]) {
         clearInterval(activeReelTimers[cardId]);
-        activeReelTimers[cardId] = null;
+        delete activeReelTimers[cardId];
     }
 }
 
 // ---------------------------------------------------
-// PHASE 2: BUILDER ENGINE LOGIC
+// BUILDER LOGIC
 // ---------------------------------------------------
 window.handleBuildTap = function(cardId, choiceStr, choiceIdx) {
     const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) return;
+
     const slots = card.querySelectorAll('.build-slot');
     const btn = card.querySelector(`#choice_${cardId}_${choiceIdx}`);
 
@@ -344,39 +546,44 @@ window.handleBuildTap = function(cardId, choiceStr, choiceIdx) {
 
     if (!emptySlot) return;
 
-    if(typeof playDing === 'function') playDing();
+    if (typeof playDing === 'function') playDing();
     emptySlot.innerHTML = choiceStr;
     emptySlot.setAttribute('data-filled', choiceStr);
     emptySlot.setAttribute('data-source', choiceIdx);
     emptySlot.style.borderStyle = 'solid';
-    emptySlot.style.borderColor = 'var(--accent-cyan)';
-    emptySlot.style.background = 'rgba(0,229,255,0.2)';
+    emptySlot.style.borderColor = 'var(--accent-cyan, #00f3ff)';
+    emptySlot.style.background = 'rgba(0,243,255,0.18)';
 
-    btn.style.visibility = 'hidden';
+    if (btn) btn.style.visibility = 'hidden';
 
     const allFilled = Array.from(slots).every(s => s.getAttribute('data-filled'));
     if (allFilled) {
         window.checkBuildAnswer(cardId);
     }
-}
+};
 
 window.removeBuildTap = function(cardId, slotEl) {
     const sourceIdx = slotEl.getAttribute('data-source');
     if (sourceIdx !== null) {
-        const btn = document.getElementById(`reelCard_${cardId}`).querySelector(`#choice_${cardId}_${sourceIdx}`);
-        if (btn) btn.style.visibility = 'visible';
+        const card = document.getElementById(`reelCard_${cardId}`);
+        if (card) {
+            const btn = card.querySelector(`#choice_${cardId}_${sourceIdx}`);
+            if (btn) btn.style.visibility = 'visible';
+        }
         slotEl.innerHTML = '';
         slotEl.removeAttribute('data-filled');
         slotEl.removeAttribute('data-source');
         slotEl.style.borderStyle = 'dashed';
-        slotEl.style.borderColor = 'rgba(0,229,255,0.4)';
-        slotEl.style.background = 'rgba(0,229,255,0.05)';
+        slotEl.style.borderColor = 'rgba(0,243,255,0.4)';
+        slotEl.style.background = 'rgba(0,243,255,0.06)';
     }
-}
+};
 
 window.checkBuildAnswer = function(cardId) {
     stopReelTimer(cardId);
     const card = document.getElementById(`reelCard_${cardId}`);
+    if (!card) return;
+
     const matrix = card.querySelector('.build-matrix');
     const correctAnswer = JSON.parse(matrix.getAttribute('data-answer'));
     const isBoss = matrix.getAttribute('data-boss') === 'true';
@@ -394,14 +601,14 @@ window.checkBuildAnswer = function(cardId) {
     const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
 
     if (isCorrect) {
-        slots.forEach(s => { s.style.borderColor = 'var(--accent-emerald)'; s.style.background = 'rgba(16,185,129,0.2)'; s.style.color = 'var(--accent-emerald)'; });
-        if(typeof playDing === 'function') playDing();
-        if(typeof triggerHaptic === 'function') triggerHaptic([30,50]);
-        if(typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{y:0.6} });
+        slots.forEach(s => { s.style.borderColor = '#10b981'; s.style.background = 'rgba(16,185,129,0.2)'; s.style.color = '#10b981'; });
+        if (typeof playDing === 'function') playDing();
+        if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
+        if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
         
         reelStreak++;
         const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
-        revealTitle.innerHTML = `<span style="color:var(--accent-emerald);">✓ PERFECT BUILD</span>`;
+        revealTitle.innerHTML = `<span style="color:#10b981;">✓ PERFECT BUILD</span>`;
         xpBadge.innerText = `+${totalXP} XP`;
         
         if (reelStreak > 2) {
@@ -411,21 +618,21 @@ window.checkBuildAnswer = function(cardId) {
         const xpEl = document.getElementById('xpCounter');
         if (xpEl) xpEl.textContent = parseInt(xpEl.textContent || '0', 10) + totalXP;
     } else {
-        slots.forEach(s => { s.style.borderColor = 'var(--accent-rose)'; s.style.background = 'rgba(244,63,94,0.15)'; s.style.color = 'var(--accent-rose)'; });
-        if(typeof playBuzz === 'function') playBuzz();
-        if(typeof triggerHaptic === 'function') triggerHaptic([80]);
+        slots.forEach(s => { s.style.borderColor = '#ff007f'; s.style.background = 'rgba(244,63,94,0.15)'; s.style.color = '#ff007f'; });
+        if (typeof playBuzz === 'function') playBuzz();
+        if (typeof triggerHaptic === 'function') triggerHaptic([80]);
         reelStreak = 0;
-        revealTitle.innerHTML = `<span style="color:var(--accent-rose);">✕ CIRCUIT BROKEN</span>`;
+        revealTitle.innerHTML = `<span style="color:#ff007f;">✕ CIRCUIT BROKEN</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
         xpBadge.style.color = '#94a3b8';
     }
 
-    setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 400);
-}
+    setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
+};
 
 // ---------------------------------------------------
-// TWO-STAGE MCQ REVEAL LOGIC
+// TWO-STAGE MCQ REVEAL
 // ---------------------------------------------------
 function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     stopReelTimer(cardId);
@@ -443,8 +650,8 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
         btn.style.opacity = '0.5';
         if (idx === correctIdx) {
             btn.style.opacity = '1';
-            btn.style.borderColor = 'var(--accent-emerald)';
-            btn.style.background = 'rgba(16,185,129,0.1)';
+            btn.style.borderColor = '#10b981';
+            btn.style.background = 'rgba(16,185,129,0.15)';
         }
     });
 
@@ -453,18 +660,21 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     if (isCorrect) {
         if (typeof playDing === 'function') playDing();
         if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
-        if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: {y: 0.6} });
+        if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
 
         if (selectedIdx >= 0 && btnEl) {
-            btnEl.style.borderColor = 'var(--accent-emerald)';
+            btnEl.style.borderColor = '#10b981';
             btnEl.style.background = 'rgba(16,185,129,0.2)';
-            btnEl.querySelector('.opt-indicator').style.background = 'var(--accent-emerald)';
-            btnEl.querySelector('.opt-indicator').style.borderColor = 'var(--accent-emerald)';
+            const indicator = btnEl.querySelector('.opt-indicator');
+            if (indicator) {
+                indicator.style.background = '#10b981';
+                indicator.style.borderColor = '#10b981';
+            }
         }
 
         reelStreak++;
         const totalXP = (isBoss ? 50 : 20) + (reelStreak > 2 ? 10 : 0);
-        revealTitle.innerHTML = `<span style="color:var(--accent-emerald);">✓ CORRECT</span>`;
+        revealTitle.innerHTML = `<span style="color:#10b981;">✓ CORRECT</span>`;
         xpBadge.innerText = `+${totalXP} XP`;
         if (reelStreak > 2) {
             streakBadge.style.display = 'inline-block';
@@ -478,14 +688,17 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
 
         if (selectedIdx >= 0 && btnEl) {
             btnEl.style.opacity = '1';
-            btnEl.style.borderColor = 'var(--accent-rose)';
+            btnEl.style.borderColor = '#ff007f';
             btnEl.style.background = 'rgba(244,63,94,0.15)';
-            btnEl.querySelector('.opt-indicator').style.background = 'var(--accent-rose)';
-            btnEl.querySelector('.opt-indicator').style.borderColor = 'var(--accent-rose)';
+            const indicator = btnEl.querySelector('.opt-indicator');
+            if (indicator) {
+                indicator.style.background = '#ff007f';
+                indicator.style.borderColor = '#ff007f';
+            }
         }
 
         reelStreak = 0;
-        revealTitle.innerHTML = `<span style="color:var(--accent-rose);">✕ MISSED</span>`;
+        revealTitle.innerHTML = `<span style="color:#ff007f;">✕ MISSED</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
         xpBadge.style.color = '#94a3b8';
@@ -643,7 +856,7 @@ function renderStoryCircles() {
         const initial = author.charAt(0).toUpperCase() || "S";
         return `
         <div class="story-circle-item" onclick="openStoryViewer(${idx})" style="cursor:pointer;">
-            <div class="story-avatar-wrap" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan), #0284c7); padding:2px; margin-bottom:4px; border:1px solid rgba(0,229,255,0.3);">
+            <div class="story-avatar-wrap" style="width:54px; height:54px; border-radius:50%; background:linear-gradient(135deg, var(--accent-cyan, #00f3ff), #0284c7); padding:2px; margin-bottom:4px; border:1px solid rgba(0,243,255,0.3);">
                 <div class="story-avatar-inner" style="width:100%; height:100%; border-radius:50%; background:#05070D; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:900; color:#fff;">${initial}</div>
             </div>
             <div class="story-username" style="font-size:10px; color:#94a3b8; text-align:center; max-width:60px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${safeEscapeHTML(author)}</div>
@@ -672,7 +885,7 @@ async function bakeImageWithFilter(base64Image, cssFilter) {
 const pubStoryBtn = document.getElementById('btnPublishStory');
 if (pubStoryBtn) {
   pubStoryBtn.onclick = async () => {
-    const name = document.getElementById('storyAuthorName').value.trim();
+    const name = document.getElementById('storyAuthorName')?.value.trim();
     const age = document.getElementById('storyAuthorAge')?.value.trim();
     const stuClass = document.getElementById('storyAuthorClass')?.value.trim();
     const inst = document.getElementById('storyInstitution')?.value.trim();
@@ -731,7 +944,7 @@ if (pubStoryBtn) {
         if (placeholder) placeholder.style.display = 'block';
         if (document.getElementById('storyCaption')) document.getElementById('storyCaption').value = '';
         
-        if(typeof playWin === 'function') playWin();
+        if (typeof playWin === 'function') playWin();
         alert("🎉 Story Posted Successfully!");
     } catch(err) { 
         alert("Upload failed: " + err.message); 
@@ -786,14 +999,14 @@ window.openStoryViewer = function(idx) {
     viewer.style.display = 'flex';
     renderStorySlide();
   }
-}
+};
 
 window.prevStorySlide = function() {
   if (currentStoryIdx > 0) {
     currentStoryIdx--;
     renderStorySlide();
   }
-}
+};
 
 window.nextStorySlide = function() {
   if (currentStoryIdx < activeStories.length - 1) {
@@ -802,7 +1015,7 @@ window.nextStorySlide = function() {
   } else {
     closeStoryViewer();
   }
-}
+};
 
 async function deleteCurrentStory() {
   const story = activeStories[currentStoryIdx];
@@ -945,7 +1158,7 @@ window.openStoryViewersDrawer = async function() {
   list.innerHTML = viewers.map(v => `
     <div class="viewer-row-item" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:10px; border-radius:12px;">
       <div style="display:flex; align-items:center; gap:8px;">
-        <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,229,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">
+        <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,243,255,0.15); border:1px solid var(--accent-cyan, #00f3ff); color:var(--accent-cyan, #00f3ff); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">
           ${(v.viewer_name || 'S').charAt(0).toUpperCase()}
         </div>
         <div>
@@ -956,20 +1169,20 @@ window.openStoryViewersDrawer = async function() {
       <div>${v.reaction ? `<span style="font-size:14px;">${reactionEmojiMap[v.reaction] || '🔥'}</span>` : '<span style="font-size:10px; color:#64748b;">Watched</span>'}</div>
     </div>
   `).join('');
-}
+};
 
 window.closeStoryViewersDrawer = function() {
   const drawer = document.getElementById('storyViewersDrawer');
   if (drawer) drawer.style.display = 'none';
   storyTimer = setTimeout(nextStorySlide, 3500);
-}
+};
 
 window.closeStoryViewer = function() {
   clearTimeout(storyTimer);
   const v = document.getElementById('storyViewer');
   if (v) v.style.display = 'none';
   closeStoryViewersDrawer();
-}
+};
 
 window.reactStory = async function(type) {
   if (typeof playDing === 'function') playDing();
@@ -986,7 +1199,7 @@ window.reactStory = async function(type) {
       body: JSON.stringify({ action: 'react', story_id: story.id, reaction_type: type, viewer_name: name, viewer_institution: school })
     });
   } catch (e) {}
-}
+};
 
 function saveStoryToVault() {
   if (typeof playWin === 'function') playWin();
@@ -994,7 +1207,7 @@ function saveStoryToVault() {
 }
 
 /* =====================================================
-   MULTI-FORMAT CREATOR STUDIO LOGIC
+   MULTI-FORMAT CREATOR STUDIO
 ===================================================== */
 let activeCreatorFormat = 'hack';
 
@@ -1006,9 +1219,9 @@ function switchReelFormat(format) {
     const tabBtn = document.getElementById(`tabFormat_${f}`);
     if (tabBtn) {
       if (f === format) {
-        tabBtn.style.background = 'rgba(0,229,255,0.18)';
-        tabBtn.style.borderColor = 'var(--accent-cyan)';
-        tabBtn.style.color = 'var(--accent-cyan)';
+        tabBtn.style.background = 'rgba(0,243,255,0.18)';
+        tabBtn.style.borderColor = 'var(--accent-cyan, #00f3ff)';
+        tabBtn.style.color = 'var(--accent-cyan, #00f3ff)';
       } else {
         tabBtn.style.background = '#020617';
         tabBtn.style.borderColor = '#1e293b';
@@ -1112,3 +1325,11 @@ async function handleMultiFormatReelSubmit(e) {
     }
   }
 }
+
+// ---------------------------------------------------
+// BOOTSTRAP INIT
+// ---------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    loadActiveStories();
+    renderReelsDeck();
+});
