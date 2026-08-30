@@ -1,8 +1,9 @@
 /* =====================================================
-   ⚡ INVINCIBLE 360 - STUDY REELS ENGINE
-   PHASE 1: 3-Node Virtualized Recycler
-   PHASE 2: Interactive Drag & Drop Engine
-   PHASE 3: Canvas Mini-Sim Lifecycle Orchestrator
+   ⚡ INVINCIBLE 360 - STUDY REELS MASTER ENGINE
+   Phase 1: 3-Node Virtualized Recycler
+   Phase 2: Drag & Drop Magnetic Formula Engine
+   Phase 3: Canvas Mini-Sim Lifecycle Orchestrator
+   Phase 4: Ray Prediction & Vector Sketching Engine
 ===================================================== */
 
 const defaultReelDeck = [
@@ -28,22 +29,24 @@ const defaultReelDeck = [
       trap: "Fringe Width β = λD/d. Decreasing slit gap d increases fringe separation!", 
       difficulty: "medium" 
     },
+
+    // PHASE 4: PREDICTION & DRAWING REEL
     { 
-  id: 501, 
-  class_name: "10", 
-  type: "draw", 
-  sim_id: "phy_ray_draw", 
-  hook: "✏️ SKETCH THE RAY", 
-  title: "Law of Reflection", 
-  subject: "Physics", 
-  topic: "Light", 
-  q_en: "Drag on the canvas to draw the reflected ray for θ_i = 45°.", 
-  time: 20, 
-  trap: "Law of Reflection: Angle of incidence (θ_i) strictly equals angle of reflection (θ_r) with the normal.", 
-  difficulty: "medium" 
-},
+      id: 501, 
+      class_name: "10", 
+      type: "draw", 
+      sim_id: "phy_ray_draw", 
+      hook: "✏️ SKETCH THE RAY", 
+      title: "Law of Reflection", 
+      subject: "Physics", 
+      topic: "Light", 
+      q_en: "Drag on the canvas to draw the reflected ray for θ_i = 45°.", 
+      time: 20, 
+      trap: "Law of Reflection: Angle of incidence (θ_i) strictly equals angle of reflection (θ_r) with the normal.", 
+      difficulty: "medium" 
+    },
 
-
+    // PHASE 2: INTERACTIVE BUILDER REEL
     { id: 201, class_name: "10", type: "build", hook: "🧩 BUILD IT", title: "Ohm's Law", subject: "Physics", topic: "Electricity", q_en: "Drag or tap the correct terms to construct the formula for Voltage.", template: ["slot", "=", "slot", "×", "slot"], choices: ["V", "I", "R", "P", "+", "W"], answer: ["V", "I", "R"], time: 20, trap: "Voltage (V) is the product of Current (I) and Resistance (R).", difficulty: "medium" },
     { id: 102, class_name: "10", type: "trap", subject: "Physics", topic: "Electricity", title: "🚨 Ohm's Law Trap", content: "V = IR is ONLY valid when physical conditions like temperature remain constant. If the wire heats up, resistance changes!", rule: "Always state 'at constant temperature' in CBSE board questions to get full marks." },
     { id: 103, class_name: "10", type: "mcq", hook: "💀 BOSS QUESTION", title: "Can you beat the clock?", subject: "Chemistry", topic: "Reactions", q_en: "Heating lead nitrate powder produces brown fumes. What is the gas?", options: ["Nitrogen Monoxide", "Nitrogen Dioxide", "Oxygen"], answer: 1, time: 15, trap: "The brown fumes are strictly NO₂. 2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂.", difficulty: "boss" },
@@ -60,7 +63,7 @@ let activeReelDeck = [];
 let currentReelIndex = 0;
 let activeReelTimers = {};
 let activeNodes = { prev: null, current: null, next: null };
-let activeSimInstances = {}; // CardId -> Engine Instance
+let activeSimInstances = {};
 let isTransitioning = false;
 let isDraggingReel = false;
 let isTokenDragging = false;
@@ -98,21 +101,36 @@ async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    let deck = [];
+    let apiDeck = [];
     try {
         const res = await fetch(`/api/get-questions?target_class=${currentReelsClass}`);
         const data = await res.json();
         if (data && Array.isArray(data.reelDeck) && data.reelDeck.length > 0) {
-            deck = data.reelDeck;
+            apiDeck = data.reelDeck;
         }
     } catch(e) {}
 
-    if (!deck || deck.length === 0) {
-        deck = defaultReelDeck.filter(item => String(item.class_name) === String(currentReelsClass));
-        if (deck.length === 0) deck = defaultReelDeck;
+    // Extract ALL interactive master cards (regardless of class) to guarantee visual gameplay mixing
+    const interactiveCards = defaultReelDeck.filter(c => c.type === 'build' || c.type === 'sim' || c.type === 'draw');
+
+    let finalDeck = [];
+
+    if (apiDeck.length > 0) {
+        // The Interactive Mixer: Inject 1 Game/Sim Card after every 2 standard API MCQs
+        let interactiveIdx = 0;
+        for (let i = 0; i < apiDeck.length; i++) {
+            finalDeck.push(apiDeck[i]);
+            if ((i + 1) % 2 === 0 && interactiveIdx < interactiveCards.length) {
+                finalDeck.push(interactiveCards[interactiveIdx]);
+                interactiveIdx++;
+            }
+        }
+    } else {
+        const classDeck = defaultReelDeck.filter(item => String(item.class_name) === String(currentReelsClass));
+        finalDeck = classDeck.length > 0 ? classDeck : defaultReelDeck;
     }
 
-    activeReelDeck = deck;
+    activeReelDeck = finalDeck;
     currentReelIndex = 0;
 
     setupSwiperEngine(container);
@@ -134,9 +152,8 @@ function createReelNode(index, initialOffsetPct) {
     if (index >= 0 && index < activeReelDeck.length) {
         const card = activeReelDeck[index];
         node.innerHTML = generateReelHTML(card, index);
-        
-        // Mount Canvas Micro-Sim if card is a Simulation
-        if (card.type === 'sim') {
+
+        if (card.type === 'sim' || card.type === 'draw') {
           setTimeout(() => mountReelSimulation(card.id || index, card.sim_id), 50);
         }
 
@@ -162,7 +179,6 @@ function destroyReelNodeSim(node) {
 }
 
 function setupSwiperEngine(container) {
-    // 1. Teardown any running loops
     Object.keys(activeSimInstances).forEach(k => unmountReelSimulation(k));
     Object.keys(activeReelTimers).forEach(id => stopReelTimer(id));
 
@@ -192,8 +208,7 @@ function setupSwiperEngine(container) {
 
 function attachGestureListeners(container) {
     const onStart = (clientY, target) => {
-        // Lock out virtual swiping when touching draggables, canvas, sliders, or interactive buttons
-        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .sim-slider, .reel-dock-action-btn, button, input[type="range"]'))) {
+        if (isTransitioning || isTokenDragging || (target && target.closest('.build-choice-btn, .build-slot, .reel-opt-btn, .sim-slider, .reel-dock-action-btn, .draw-canvas-container, button, input[type="range"]'))) {
             return;
         }
         isDraggingReel = true;
@@ -336,7 +351,6 @@ function recycleForward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    // Destroy Top Node & Its Canvas Loop
     if (activeNodes.prev) {
       destroyReelNodeSim(activeNodes.prev);
       activeNodes.prev.remove();
@@ -363,7 +377,6 @@ function recycleBackward() {
     const container = document.getElementById('studyReelsDeck');
     if (!container) return;
 
-    // Destroy Bottom Node & Its Canvas Loop
     if (activeNodes.next) {
       destroyReelNodeSim(activeNodes.next);
       activeNodes.next.remove();
@@ -387,7 +400,7 @@ function recycleBackward() {
 }
 
 /* =====================================================
-   PHASE 3: SIMULATION LIFECYCLE & TELEMETRY MANAGER
+   PHASE 3 & 4: SIMULATION LIFECYCLE & TELEMETRY
 ===================================================== */
 
 function mountReelSimulation(cardId, simId) {
@@ -400,7 +413,6 @@ function mountReelSimulation(cardId, simId) {
     return;
   }
 
-  // Teardown existing instance if present
   if (activeSimInstances[cardId]) {
     activeSimInstances[cardId].destroy();
   }
@@ -408,7 +420,6 @@ function mountReelSimulation(cardId, simId) {
   const instance = new EngineClass(canvas);
   activeSimInstances[cardId] = instance;
 
-  // Initial Telemetry Sync
   updateSimTelemetryHUD(cardId, instance);
 }
 
@@ -658,6 +669,7 @@ window.checkBuildAnswer = function(cardId) {
 
     setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
 };
+
 // ---------------------------------------------------
 // PHASE 4: DRAWING / PREDICTION ACCURACY EVALUATOR
 // ---------------------------------------------------
@@ -712,6 +724,11 @@ function generateReelHTML(card, idx) {
     const isBoss = card.difficulty === 'boss';
     const hookColor = isBoss ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)';
     
+    // Dynamic Title Generator (Kills the generic "Can you solve this?" fallback)
+    const dynamicTitle = card.title && card.title !== "Can you solve this?" 
+        ? card.title 
+        : `${card.topic ? card.topic + ' Challenge' : 'Concept Mastery'}`;
+
     let contentHTML = '';
 
     const rawTitle = String(card.q_en || card.title || '');
@@ -723,14 +740,26 @@ function generateReelHTML(card, idx) {
     const dockBtnStyle = `width:44px; height:44px; border-radius:50%; background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 8px 24px rgba(0,0,0,0.6); transition:transform 0.2s;`;
     const dockLabelStyle = `font-size:10px; color:#cbd5e1; font-weight:800; margin-top:4px; text-shadow:0 1px 3px #000;`;
 
-    // 1. MCQ
+    // 1. STANDARD MCQ (Now with injected Visuals!)
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
             try { opts = JSON.parse(card.options); } catch(e) { opts = []; }
         }
         
+        // Auto-inject a sleek animated SVG diagram above the text so it never looks boring
+        const visualSVG = `
+          <div style="width:100%; height:75px; background:radial-gradient(ellipse at center, rgba(0,243,255,0.08) 0%, transparent 80%); border:1px solid rgba(255,255,255,0.05); border-radius:16px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" preserveAspectRatio="none">
+               <path d="M-10 35 Q 50 10, 150 35 T 350 35" stroke="rgba(0, 243, 255, 0.4)" stroke-width="2" fill="none" />
+               <path d="M-10 45 Q 50 20, 150 45 T 350 45" stroke="rgba(244, 63, 94, 0.4)" stroke-width="2" fill="none" />
+               <circle cx="50%" cy="35" r="4" fill="#00f3ff" style="filter:blur(1px);"/>
+             </svg>
+          </div>
+        `;
+
         contentHTML = `
+          ${visualSVG}
           <div class="reel-q-title" style="font-size:16px; font-weight:800; color:#ffffff; margin:0 0 12px 0; line-height:1.5;">${safeFormatMath(card.q_en || '')}</div>
           <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:10px; margin-top:16px;">
             ${opts.map((opt, oIdx) => `
@@ -791,23 +820,20 @@ function generateReelHTML(card, idx) {
         contentHTML = `
           <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
-          <!-- Viewport Container -->
           <div style="position:relative; width:100%; height:160px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:16px; overflow:hidden; margin-bottom:12px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
              
-             <!-- Telemetry Floating Pill -->
              <div style="position:absolute; top:8px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:8px; padding:3px 8px; font-size:10px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
                β = <span id="telemetryVal_${safeCardId}">-- mm</span>
              </div>
           </div>
 
-          <!-- Controls Tray -->
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:10px 14px;">
             ${slidersHTML}
           </div>
         `;
     }
-        // 4. PREDICTION & DRAWING ENGINE (PHASE 4)
+    // 4. PREDICTION & DRAWING ENGINE (PHASE 4)
     else if (card.type === 'draw') {
         contentHTML = `
           <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
@@ -821,13 +847,12 @@ function generateReelHTML(card, idx) {
           <div style="font-size:11px; color:#64748b; font-weight:700; text-align:center;">Release finger to submit ray</div>
         `;
     }
-
-    // 4. TRAP / HACK
+    // 5. TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
           <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(3,7,18,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:24px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
-            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 16px 0;">${card.title}</div>
+            <div class="reel-q-title" style="font-size:22px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 16px 0;">${dynamicTitle}</div>
             <div style="font-size:15px; color:#f1f5f9; line-height:1.6; background:rgba(255,255,255,0.04); padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">${card.content || ''}</div>
             ${card.rule ? `<div style="font-size:14px; color:#10b981; font-weight:800; margin-top:16px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:16px; border-radius:14px;">✅ RULE: ${card.rule}</div>` : ''}
             
@@ -864,7 +889,8 @@ function generateReelHTML(card, idx) {
                 <div style="font-size:10px; font-weight:900; letter-spacing:1px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:4px 10px; border-radius:8px; margin-bottom:8px;">
                     ${hook}
                 </div>
-                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:4px;">${card.title || 'Can you solve this?'}</div>
+                <!-- DYNAMIC TITLE INSTALLED HERE -->
+                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:22px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:4px;">${dynamicTitle}</div>
                 <div style="font-size:11.5px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic}</div>
             </div>
             
