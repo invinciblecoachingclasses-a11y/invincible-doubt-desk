@@ -2,7 +2,7 @@
  * =====================================================
  * MODULE: RUTHERFORD ALPHA SCATTERING SIMULATION
  * Subject: Chemistry / Physics (Atomic Structure)
- * Architecture: Kinetic Particle Collision Engine
+ * Architecture: Kinetic Particle Collision Engine (Crash-Proof)
  * =====================================================
  */
 
@@ -11,12 +11,13 @@ window.ReelSimRegistry = window.ReelSimRegistry || {};
 class ChemRutherfordEngine {
   constructor(canvas, customParams = {}) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
+    this.ctx = canvas.getContext('2d', { alpha: false });
     this.cardId = canvas.getAttribute('data-sim-card-id');
     this.isDestroyed = false;
+    this.isVisible = false;
 
     this.params = {
-      nucleusCharge: 79, // Gold nucleus (Z=79)
+      nucleusCharge: 79,
       beamEnergy: 5,
       ...customParams
     };
@@ -25,14 +26,23 @@ class ChemRutherfordEngine {
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
     this.resize();
     this.initParticles();
-    this.loop();
+    
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        this.isVisible = entry.isIntersecting;
+        if (this.isVisible && !this.animationFrame) {
+          this.loop();
+        }
+      });
+    }, { threshold: 0.1 });
+    this.observer.observe(this.canvas);
   }
 
   resize() {
     if (!this.canvas) return;
     const rect = this.canvas.getBoundingClientRect();
-    this.width = rect.width || 320;
-    this.height = rect.height || 165;
+    this.width = Math.max(100, rect.width || 320);
+    this.height = Math.max(100, rect.height || 165);
 
     this.canvas.width = this.width * this.dpr;
     this.canvas.height = this.height * this.dpr;
@@ -62,31 +72,22 @@ class ChemRutherfordEngine {
   update(paramId, value) {
     if (paramId === 'ctrl_z') {
       this.params.nucleusCharge = parseFloat(value);
-    } else if (paramId === 'ctrl_energy') {
-      this.params.beamEnergy = parseFloat(value);
     }
-  }
-
-  getTelemetry() {
-    return {
-      fringeWidthMM: this.params.nucleusCharge
-    };
   }
 
   render() {
     const ctx = this.ctx;
     const w = this.width;
     const h = this.height;
-    if (!ctx || w === 0 || h === 0) return;
+    if (!ctx) return;
 
-    ctx.fillStyle = 'rgba(2, 6, 23, 0.25)';
+    ctx.fillStyle = '#05070D'; // Solid background prevents transparency compounding bugs
     ctx.fillRect(0, 0, w, h);
 
     const nx = this.nucleusX;
     const ny = this.nucleusY;
     const k = this.params.nucleusCharge * 12;
 
-    // 1. RENDER GOLD NUCLEUS (+Ze)
     ctx.beginPath();
     ctx.arc(nx, ny, 10, 0, Math.PI * 2);
     ctx.fillStyle = '#f59e0b';
@@ -100,13 +101,13 @@ class ChemRutherfordEngine {
     ctx.textAlign = 'center';
     ctx.fillText('+79e', nx, ny + 3);
 
-    // 2. SIMULATE & DRAW ALPHA PARTICLES (Coulomb Repulsion)
     for (let i = this.particles.length - 1; i >= 0; i--) {
       const p = this.particles[i];
 
       const dx = p.x - nx;
       const dy = p.y - ny;
-      const r2 = dx * dx + dy * dy;
+      // Prevent division by strictly 0 which poisons the particle array with NaN
+      const r2 = Math.max(0.1, dx * dx + dy * dy); 
       const r = Math.sqrt(r2);
 
       if (r > 8) {
@@ -124,7 +125,6 @@ class ChemRutherfordEngine {
       p.history.push({ x: p.x, y: p.y });
       if (p.history.length > 8) p.history.shift();
 
-      // Render Trajectory Tail
       ctx.beginPath();
       for (let j = 0; j < p.history.length; j++) {
         const pt = p.history[j];
@@ -135,13 +135,11 @@ class ChemRutherfordEngine {
       ctx.lineWidth = 1.2;
       ctx.stroke();
 
-      // Render Alpha Particle
       ctx.beginPath();
       ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
       ctx.fillStyle = '#00e5ff';
       ctx.fill();
 
-      // Recycle particles leaving the screen
       if (p.x > w + 20 || p.x < -30 || p.y < -30 || p.y > h + 30) {
         this.particles.splice(i, 1);
         this.spawnParticle(false);
@@ -151,15 +149,23 @@ class ChemRutherfordEngine {
 
   loop() {
     if (this.isDestroyed) return;
-    this.render();
-    this.animationFrame = requestAnimationFrame(() => this.loop());
+    if (this.isVisible) this.render();
+    
+    if (this.isVisible) {
+      this.animationFrame = requestAnimationFrame(() => this.loop());
+    } else {
+      this.animationFrame = null;
+    }
   }
 
   destroy() {
     this.isDestroyed = true;
+    this.isVisible = false;
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+    if (this.observer && this.canvas) this.observer.unobserve(this.canvas);
     this.canvas = null;
     this.ctx = null;
+    this.particles = [];
   }
 }
 
