@@ -223,23 +223,20 @@
   .lab-action-btn:hover { background: var(--accent-cyan, #00e5ff); color: #060913; box-shadow: 0 0 12px rgba(0, 229, 255, 0.5); }
   .lab-card-preview:hover { transform: translateY(-3px); border-color: var(--accent-cyan, #00e5ff); box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15); }
   
-  /* CHALLENGE-BASED LAB HUD */
+  /* NON-OVERLAPPING CLEAN INLINE MISSION HUD */
   .lab-mission-hud {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      background: rgba(11, 17, 32, 0.88);
-      border: 1px solid rgba(192, 132, 252, 0.35);
-      border-radius: 12px;
+      position: relative;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      border-radius: 14px;
       padding: 10px 14px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 20;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-sizing: border-box;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
   }
 </style>
 
@@ -777,27 +774,25 @@
         <div id="labTitle" style="font-family:'Space Grotesk'; font-size:20px; font-weight:900; color:#fff; margin-bottom:12px; padding:0 4px;">Lab Simulator</div>
 
         <!-- STAGE 1: HYPOTHESIS & PREDICTION BOX -->
-        <div id="labPredictionBox" class="card" style="border:1px solid rgba(192,132,252,0.3) !important; margin-bottom:16px; background:rgba(192,132,252,0.03) !important;">
+        <div id="labPredictionBox" class="card" style="border:1px solid rgba(192,132,252,0.3) !important; margin-bottom:14px; background:rgba(192,132,252,0.03) !important;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <span style="font-size:10px; font-weight:900; color:#c084fc; letter-spacing:1px;">STEP 1: PREDICT OUTCOME</span>
                 <span style="font-size:10px; font-weight:800; color:#10b981;">+25 XP BONUS</span>
             </div>
-            <div id="labQuestionText" style="font-size:14px; font-weight:800; color:#fff; margin-bottom:14px; line-height:1.4;">Formulate your hypothesis before running the experiment:</div>
+            <div id="labQuestionText" style="font-size:14px; font-weight:800; color:#fff; margin-bottom:12px; line-height:1.4;">Formulate your hypothesis before running the experiment:</div>
             <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
 
-        <!-- STAGE 2: LIVE SIMULATION CANVAS WITH MISSION HUD -->
-        <div id="labSandboxStage" class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192,132,252,0.3) !important; position:relative;">
-            
-            <!-- Live Mission Objectives Tracker -->
-            <div class="lab-mission-hud" id="labMissionHud">
-                <div>
-                   <div style="font-size:9px; font-weight:900; color:#c084fc; letter-spacing:1px; text-transform:uppercase;" id="labMissionStep">🎯 ACTIVE OBJECTIVE</div>
-                   <div style="font-size:12px; font-weight:800; color:#fff;" id="labMissionGoal">Meet the required physical threshold</div>
-                </div>
-                <div id="labGoalStatusBadge" style="font-size:10px; font-weight:900; color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); padding:4px 8px; border-radius:6px;">0%</div>
+        <!-- STAGE 2: LIVE SIMULATION CANVAS WITH CLEAN SEPARATE MISSION BAR -->
+        <div id="labMissionHud" class="lab-mission-hud">
+            <div>
+               <div style="font-size:9px; font-weight:900; color:#c084fc; letter-spacing:1px; text-transform:uppercase;" id="labMissionStep">🎯 ACTIVE OBJECTIVE</div>
+               <div style="font-size:12px; font-weight:800; color:#fff;" id="labMissionGoal">Meet the required physical threshold</div>
             </div>
+            <div id="labGoalStatusBadge" style="font-size:10px; font-weight:900; color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); padding:4px 8px; border-radius:6px; flex-shrink:0;">0%</div>
+        </div>
 
+        <div id="labSandboxStage" class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192,132,252,0.3) !important;">
             <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
             <div id="labControls" class="lab-controls" style="padding:14px 16px; background:rgba(11,17,32,0.95); border-top:1px solid rgba(255,255,255,0.06);"></div>
         </div>
@@ -1143,7 +1138,7 @@
       options: ['Forms an escape hyperbola into deep space', 'Orbits faster in a tighter circular loop', 'Immediately crashes into the host star', 'Trajectory remains completely unchanged'],
       correctOption: 0,
       rewardXP: 50,
-      ruleSummary: 'When tangential speed exceeds escape velocity ($v > \sqrt{2} v_{orbit}$), kinetic energy overcomes gravitational potential, escaping closed orbit.'
+      ruleSummary: 'When tangential speed exceeds escape velocity (v > √2 v_orbit), kinetic energy overcomes gravitational potential, escaping closed orbit.'
     },
     { 
       id: 'thermo', 
@@ -1155,7 +1150,7 @@
       options: ['Increases by 4 Times', 'Doubles (2 Times)', 'Remains Constant', 'Increases by 16 Times'],
       correctOption: 0,
       rewardXP: 50,
-      ruleSummary: 'Average translational kinetic energy is directly proportional to absolute temperature: $KE_{avg} = \\frac{3}{2} k_B T$.'
+      ruleSummary: 'Average translational kinetic energy is directly proportional to absolute temperature: KE_avg = (3/2) k_B T.'
     },
     { 
       id: 'optics', 
@@ -1167,7 +1162,7 @@
       options: ['Optically denser to rarer medium (θ > θ_c)', 'Optically rarer to denser medium', 'Any medium at exactly 90 degrees', 'Vacuum into diamond at 0 degrees'],
       correctOption: 0,
       rewardXP: 50,
-      ruleSummary: 'TIR occurs strictly when light travels from denser to rarer medium and the angle of incidence exceeds the critical angle ($\sin\\theta_c = 1/n$).'
+      ruleSummary: 'TIR occurs strictly when light travels from denser to rarer medium and the angle of incidence exceeds the critical angle (sin θ_c = 1/n).'
     },
     { 
       id: 'fluid', 
@@ -1179,7 +1174,7 @@
       options: ['Increase (Transition to turbulence)', 'Decrease (Stabilize to laminar)', 'Remain strictly zero', 'Drop exponentially'],
       correctOption: 0,
       rewardXP: 50,
-      ruleSummary: 'Reynolds number $Re = \\frac{\\rho v D}{\\mu}$. Higher flow velocity increases inertial forces over viscous dampening, inducing turbulence.'
+      ruleSummary: 'Reynolds number Re = (ρ v D) / μ. Higher flow velocity increases inertial forces over viscous dampening, inducing turbulence.'
     },
     { 
       id: 'boids', 
@@ -1250,7 +1245,6 @@
     document.getElementById('labGoalStatusBadge').innerText = "0% (IN PROGRESS)";
     document.getElementById('labGoalStatusBadge').style.color = "#fbbf24";
 
-    // Reset Victory & Sandbox Stages
     document.getElementById('labVictoryDrawer').style.display = 'none';
     const pBox = document.getElementById('labPredictionBox');
     pBox.style.display = 'block';
@@ -1269,7 +1263,6 @@
       optsGrid.appendChild(btn);
     });
 
-    // Mount Canvas
     launchAdvancedSim(lab.id, lab.name);
     startLabMissionEvaluator(lab);
   };
@@ -1324,7 +1317,6 @@
       if (progressCounter < 5) {
         if (statusBadge) statusBadge.innerText = `${progressCounter * 20}%`;
       } else if (progressCounter === 5) {
-        // Goal Reached!
         clearInterval(labMissionPollInterval);
         if (statusBadge) {
           statusBadge.innerText = "100% (GOAL COMPLETED)";
@@ -1342,7 +1334,6 @@
     if (typeof triggerHaptic === 'function') triggerHaptic([50, 50, 100]);
     if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
 
-    // Award Mission Completion XP
     let curXP = parseInt(localStorage.getItem('student_xp') || '680', 10);
     curXP += lab.rewardXP;
     localStorage.setItem('student_xp', curXP.toString());
