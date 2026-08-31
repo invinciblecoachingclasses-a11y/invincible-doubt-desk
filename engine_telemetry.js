@@ -285,3 +285,57 @@
   window.InvincibleTelemetry = new TelemetryEngine();
 
 })(window);
+/* =====================================================
+   DASHBOARD INTELLIGENCE & NEXT BEST MOVE SYNC
+===================================================== */
+let currentNextAction = { tab: 'reels', topic: 'General' };
+
+window.renderNextBestMove = function() {
+  if (!window.InvincibleTelemetry) return;
+
+  const nbm = window.InvincibleTelemetry.getNextBestMove();
+  if (!nbm) return;
+
+  const titleEl = document.getElementById('nbmTitle');
+  const reasonEl = document.getElementById('nbmReason');
+  const badgeEl = document.getElementById('nbmMasteryBadge');
+  const tagEl = document.getElementById('nbmTag');
+  const btnEl = document.getElementById('nbmActionBtn');
+
+  if (titleEl) titleEl.innerText = `${nbm.subject}: ${nbm.topic}`;
+  if (reasonEl) reasonEl.innerText = nbm.reason;
+  if (badgeEl) badgeEl.innerText = `${nbm.mastery}% MASTERY`;
+  
+  if (tagEl) {
+    if (nbm.type === 'MASTERY_RECOVERY') {
+      tagEl.innerText = "WEAK SPOT";
+      tagEl.style.color = "var(--accent-rose)";
+      tagEl.style.borderColor = "var(--accent-rose)";
+      tagEl.style.background = "rgba(244,63,94,0.15)";
+    } else {
+      tagEl.innerText = "HIGH YIELD";
+      tagEl.style.color = "var(--accent-cyan)";
+      tagEl.style.borderColor = "var(--accent-cyan)";
+      tagEl.style.background = "rgba(0,229,255,0.15)";
+    }
+  }
+
+  if (btnEl) btnEl.innerText = `${nbm.actionTitle.toUpperCase()} 🚀`;
+  currentNextAction = { tab: nbm.actionTab || 'reels', topic: nbm.topic };
+};
+
+window.executeNextBestMove = function() {
+  if (typeof switchTab === 'function') {
+    switchTab(currentNextAction.tab);
+  }
+};
+
+// Re-evaluate when tab switches or page loads
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(window.renderNextBestMove, 200);
+});
+
+window.addEventListener('invincible:event', () => {
+  setTimeout(window.renderNextBestMove, 150);
+});
+
