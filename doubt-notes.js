@@ -1,78 +1,134 @@
 /* =====================================================
-   DOUBT DESK LOGIC & INTERACTIVE BLACKBOARD ENGINE
+   ⚡ INVINCIBLE 360 - AI DOUBT DESK & TOPPER NOTES STUDIO
+   Core Engines:
+   1. Multi-Tone AI Doubt Engine & Image Pipeline
+   2. Interactive Blackboard Visual Engine (Canvas Simulations)
+   3. Multi-Turn Follow-Up & Faculty WhatsApp Dispatch
+   4. Spatial Mind-Palace Constellation Engine (Node Physics)
+   5. Interactive Topper Notes Module (Tabs, Flashcards, Traps & Mastery)
+   6. Custom A4 Print & PDF Compilation Engine
 ===================================================== */
+
 let selectedSubject = "Mathematics";
 let currentTone = "step";
 let selectedImage = null;
 let doubtHistory = [];
+let activeNoteData = null;
+let currentFlashcardIdx = 0;
+let isCardFlipped = false;
+let noteMasteryScore = 0;
+let chargerBonusXP = 0;
+
 const questionInput = document.getElementById("question");
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
 const removeImageButton = document.getElementById("removeImage");
 
-function setExplanationTone(tone, el) {
-    currentTone = tone; document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active')); el.classList.add('active');
+/* =====================================================
+   AUDIO, HAPTIC & REWARD UTILITIES
+===================================================== */
+function playToneDing() {
+  if (typeof playDing === 'function') playDing();
+  else if (navigator.vibrate) try { navigator.vibrate(30); } catch(e) {}
 }
+
+function playToneBuzz() {
+  if (typeof playBuzz === 'function') playBuzz();
+  else if (navigator.vibrate) try { navigator.vibrate(80); } catch(e) {}
+}
+
+function addStudentXP(amount) {
+  let curXP = parseInt(localStorage.getItem('student_xp') || '680', 10) + amount;
+  localStorage.setItem('student_xp', curXP.toString());
+  const xpEl = document.getElementById('xpCounter');
+  if (xpEl) xpEl.textContent = curXP;
+  const userXpEl = document.getElementById('userXpDisplay');
+  if (userXpEl) userXpEl.textContent = curXP;
+}
+
+/* =====================================================
+   UI EVENT HANDLERS (TONES, SUBJECTS, IMAGES)
+===================================================== */
+window.setExplanationTone = function(tone, el) {
+  currentTone = tone;
+  document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  playToneDing();
+};
+
 document.querySelectorAll("#doubtSection .subject").forEach(b => {
-    b.onclick = () => { document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active')); b.classList.add('active'); selectedSubject = b.getAttribute('data-subject'); };
+  b.onclick = () => {
+    document.querySelectorAll("#doubtSection .subject").forEach(btn => btn.classList.remove('active'));
+    b.classList.add('active');
+    selectedSubject = b.getAttribute('data-subject');
+    playToneDing();
+  };
 });
+
 if (document.getElementById("uploadBtn")) {
-  document.getElementById("uploadBtn").onclick = () => imageInput.click();
+  document.getElementById("uploadBtn").onclick = () => imageInput && imageInput.click();
 }
 if (document.getElementById("cameraBtn")) {
-  document.getElementById("cameraBtn").onclick = () => { imageInput.setAttribute("capture", "environment"); imageInput.click(); };
+  document.getElementById("cameraBtn").onclick = () => {
+    if (imageInput) {
+      imageInput.setAttribute("capture", "environment");
+      imageInput.click();
+    }
+  };
 }
 
 if (imageInput) {
   imageInput.onchange = e => {
-      const file = e.target.files[0];
-      if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-          const img = new Image();
-          img.onload = () => {
-              const canvas = document.createElement('canvas');
-              const MAX_SIZE = 1200;
-              let width = img.width;
-              let height = img.height;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 1200;
+        let width = img.width;
+        let height = img.height;
 
-              if (width > height && width > MAX_SIZE) {
-                  height *= MAX_SIZE / width;
-                  width = MAX_SIZE;
-              } else if (height > MAX_SIZE) {
-                  width *= MAX_SIZE / height;
-                  height = MAX_SIZE;
-              }
+        if (width > height && width > MAX_SIZE) {
+          height *= MAX_SIZE / width;
+          width = MAX_SIZE;
+        } else if (height > MAX_SIZE) {
+          width *= MAX_SIZE / height;
+          height = MAX_SIZE;
+        }
 
-              canvas.width = width;
-              canvas.height = height;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0, width, height);
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
 
-              const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-              selectedImage = {
-                  data: compressedBase64.split(',')[1],
-                  mimeType: 'image/jpeg'
-              };
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+        selectedImage = {
+          data: compressedBase64.split(',')[1],
+          mimeType: 'image/jpeg'
+        };
 
-              imagePreview.src = compressedBase64;
-              imagePreview.style.display = "block";
-              removeImageButton.style.display = "block";
-              const container = document.getElementById('imagePreviewContainer');
-              if (container) container.style.display = "block";
-          };
-          img.src = evt.target.result;
+        if (imagePreview) {
+          imagePreview.src = compressedBase64;
+          imagePreview.style.display = "block";
+        }
+        if (removeImageButton) removeImageButton.style.display = "block";
+        const container = document.getElementById('imagePreviewContainer');
+        if (container) container.style.display = "block";
       };
-      reader.readAsDataURL(file);
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 }
 
 if (removeImageButton) {
   removeImageButton.onclick = () => { 
     selectedImage = null; 
-    imageInput.value = ""; 
-    imagePreview.style.display = "none"; 
+    if (imageInput) imageInput.value = ""; 
+    if (imagePreview) imagePreview.style.display = "none"; 
     removeImageButton.style.display = "none";
     const container = document.getElementById('imagePreviewContainer');
     if (container) container.style.display = "none";
@@ -80,9 +136,10 @@ if (removeImageButton) {
 }
 
 async function renderAnswerContent(container, markdownText) {
-  let parsedHtml = markdownText;
+  if (!container) return;
+  let parsedHtml = markdownText || "";
   if (typeof marked !== 'undefined') {
-      parsedHtml = typeof marked.parse === 'function' ? marked.parse(markdownText || "") : marked(markdownText || "");
+    parsedHtml = typeof marked.parse === 'function' ? marked.parse(parsedHtml) : marked(parsedHtml);
   }
   
   parsedHtml = parsedHtml
@@ -92,7 +149,7 @@ async function renderAnswerContent(container, markdownText) {
   container.innerHTML = parsedHtml;
   
   if (window.MathJax && MathJax.typesetPromise) {
-    await MathJax.typesetPromise([container]);
+    await MathJax.typesetPromise([container]).catch(() => {});
   }
 }
 
@@ -223,7 +280,7 @@ const DoubtVisualEngine = {
 
                 const cx = w/2; const cy = h/2;
                 const m1x = cx - r/2; const m2x = cx + r/2;
-                const force = Math.min(100, 5000 / (r*r)); // F ~ 1/r^2 approximation
+                const force = Math.min(100, 5000 / (r*r));
 
                 // Draw Field Lines
                 ctx.strokeStyle = 'rgba(0, 229, 255, 0.1)';
@@ -273,17 +330,39 @@ const DoubtVisualEngine = {
 };
 
 /* =====================================================
-   DOUBT DESK EXECUTION LOGIC
+   DOUBT DESK EXECUTION & PIPELINE
 ===================================================== */
-if (document.getElementById("askBtn")) {
-  document.getElementById("askBtn").onclick = async () => {
-      const q = questionInput.value.trim();
+function startDoubtWaitingPipeline() {
+  const pipeText = document.getElementById("doubtPipelineText");
+  if (!pipeText) return;
+  const stages = [
+    "Analyzing question logic...",
+    "Scanning NCERT curriculum guidelines...",
+    "Verifying step-by-step mathematical proofs...",
+    "Compiling master blackboard diagram..."
+  ];
+  let idx = 0;
+  window._doubtPipeTimer = setInterval(() => {
+    idx = (idx + 1) % stages.length;
+    pipeText.innerText = stages[idx];
+  }, 2000);
+}
+
+function stopDoubtWaitingPipeline() {
+  if (window._doubtPipeTimer) clearInterval(window._doubtPipeTimer);
+}
+
+const askBtn = document.getElementById("askBtn");
+if (askBtn) {
+  askBtn.onclick = async () => {
+      const q = questionInput ? questionInput.value.trim() : "";
       if(!q && !selectedImage) return alert("Please enter a question or upload a photo.");
 
-      const askBtn = document.getElementById("askBtn");
       askBtn.disabled = true;
-      document.getElementById("loadingDoubt").classList.remove('hidden'); 
-      document.getElementById("answerBox").style.display = "none"; 
+      const loadingEl = document.getElementById("loadingDoubt");
+      const answerBoxEl = document.getElementById("answerBox");
+      if (loadingEl) loadingEl.classList.remove('hidden'); 
+      if (answerBoxEl) answerBoxEl.style.display = "none"; 
       
       startDoubtWaitingPipeline();
       const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
@@ -318,23 +397,28 @@ if (document.getElementById("askBtn")) {
           const ansContainer = document.getElementById("answerText");
           await renderAnswerContent(ansContainer, data.answer);
           
-          if (attachedImageBase64) {
+          if (attachedImageBase64 && ansContainer) {
             const imgMarkup = `<div style="margin-bottom:14px; text-align:center;"><img src="${attachedImageBase64}" alt="Uploaded Doubt" style="max-width:100%; max-height:260px; border-radius:12px; border:1px solid rgba(255,255,255,0.15); object-fit:contain;" /></div>`;
             ansContainer.insertAdjacentHTML('afterbegin', imgMarkup);
           }
           
-          document.getElementById("answerBox").style.display = "block"; 
+          if (answerBoxEl) answerBoxEl.style.display = "block"; 
           
-          // INJECT INTERACTIVE VISUAL BLACKBOARD
-          DoubtVisualEngine.mount(document.getElementById("doubtConversationThread"), selectedSubject);
+          // Reward Doubt Solving XP
+          addStudentXP(15);
 
-          if (typeof playDing === 'function') playDing();
+          // INJECT INTERACTIVE VISUAL BLACKBOARD
+          const thread = document.getElementById("doubtConversationThread");
+          if (thread) DoubtVisualEngine.mount(thread, selectedSubject);
+
+          playToneDing();
+          if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
       } catch(err) {
           alert("Doubt Engine: " + err.message);
       } finally { 
           askBtn.disabled = false;
           stopDoubtWaitingPipeline();
-          document.getElementById("loadingDoubt").classList.add('hidden'); 
+          if (loadingEl) loadingEl.classList.add('hidden'); 
       }
   };
 }
@@ -354,15 +438,15 @@ if (sendFollowUpBtn && followUpInput) {
 
     const userBubble = document.createElement('div');
     userBubble.style.cssText = "background:rgba(0, 229, 255, 0.1); border:1px solid rgba(0, 229, 255, 0.25); border-radius:12px; padding:10px 14px; font-size:13px; font-weight:700; color:#fff; align-self:flex-end;";
-    userBubble.textContent = "🙋 " + followQ;
-    thread.appendChild(userBubble);
+    userBubble.textContent = "💬 You: " + followQ;
+    if (thread) thread.appendChild(userBubble);
     followUpInput.value = "";
 
     const aiBubble = document.createElement('div');
     aiBubble.className = "topper-content";
-    aiBubble.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:14px; padding:12px 16px; margin-top:6px;";
+    aiBubble.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 16px; margin-top:6px;";
     aiBubble.innerHTML = "<em>Refining explanation with step logic...</em>";
-    thread.appendChild(aiBubble);
+    if (thread) thread.appendChild(aiBubble);
 
     try {
       const res = await fetch("/api/ask", {
@@ -386,7 +470,7 @@ if (sendFollowUpBtn && followUpInput) {
       doubtHistory.push({ role: 'assistant', content: data.answer });
 
       await renderAnswerContent(aiBubble, data.answer);
-      if (typeof playDing === 'function') playDing();
+      playToneDing();
     } catch (err) {
       aiBubble.innerHTML = `<span style="color:var(--accent-rose);">Error: ${err.message}</span>`;
     } finally {
@@ -398,6 +482,13 @@ if (sendFollowUpBtn && followUpInput) {
   sendFollowUpBtn.onclick = submitFollowUp;
   followUpInput.onkeydown = (e) => { if (e.key === 'Enter') submitFollowUp(); };
 }
+
+window.clearDoubtThread = function() {
+  const ansBox = document.getElementById('answerBox');
+  if (ansBox) ansBox.style.display = 'none';
+  if (questionInput) questionInput.value = '';
+  doubtHistory = [];
+};
 
 if (document.getElementById("againBtn")) {
   document.getElementById("againBtn").addEventListener("click", function(){ 
@@ -472,12 +563,12 @@ const MindPalaceEngine = {
         this.w = canvas.width / dpr;
         this.h = canvas.height / dpr;
 
-        // Generate Nodes
         const topics = ["Definitions", "Formulas", "Derivations", "Exceptions", "Exam Traps"];
         this.nodes = [
-            { id: 0, label: chapterName.substring(0, 15), x: this.w/2, y: this.h/2, vx: 0, vy: 0, radius: 25, color: '#f59e0b', isCenter: true }
+            { id: 0, label: (chapterName || "Concept").substring(0, 15), x: this.w/2, y: this.h/2, vx: 0, vy: 0, radius: 25, color: '#f59e0b', isCenter: true }
         ];
 
+        this.edges = [];
         topics.forEach((t, i) => {
             const angle = (i / topics.length) * Math.PI * 2;
             this.nodes.push({
@@ -489,7 +580,6 @@ const MindPalaceEngine = {
             this.edges.push({ a: 0, b: i + 1 });
         });
 
-        // Touch & Drag Logic
         const getTouchPos = (e) => {
             const r = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -530,22 +620,20 @@ const MindPalaceEngine = {
         this.ctx.fillStyle = '#020617';
         this.ctx.fillRect(0, 0, this.w, this.h);
 
-        // Spring Physics
         this.edges.forEach(e => {
             const a = this.nodes[e.a]; const b = this.nodes[e.b];
+            if (!a || !b) return;
             const dx = b.x - a.x; const dy = b.y - a.y;
             const dist = Math.hypot(dx, dy);
-            const force = (dist - 90) * 0.02; // Ideal distance = 90
+            const force = (dist - 90) * 0.02;
             
             if (this.draggedNode !== a && !a.isCenter) { a.vx += (dx/dist)*force; a.vy += (dy/dist)*force; }
             if (this.draggedNode !== b && !b.isCenter) { b.vx -= (dx/dist)*force; b.vy -= (dy/dist)*force; }
 
-            // Draw Edge
             this.ctx.strokeStyle = 'rgba(245, 158, 11, 0.3)';
             this.ctx.lineWidth = 2;
             this.ctx.beginPath(); this.ctx.moveTo(a.x, a.y); this.ctx.lineTo(b.x, b.y); this.ctx.stroke();
             
-            // Draw flowing energy on edge
             const time = Date.now() * 0.002;
             const px = a.x + dx * ((time + e.b) % 1);
             const py = a.y + dy * ((time + e.b) % 1);
@@ -553,32 +641,25 @@ const MindPalaceEngine = {
             this.ctx.beginPath(); this.ctx.arc(px, py, 2, 0, Math.PI*2); this.ctx.fill();
         });
 
-        // Update & Draw Nodes
         this.nodes.forEach(n => {
             if (this.draggedNode !== n && !n.isCenter) {
-                // Center gravity
                 n.vx += (this.w/2 - n.x) * 0.001;
                 n.vy += (this.h/2 - n.y) * 0.001;
-                // Friction
                 n.vx *= 0.9; n.vy *= 0.9;
                 n.x += n.vx; n.y += n.vy;
             }
 
-            // Keep in bounds
             n.x = Math.max(n.radius, Math.min(this.w - n.radius, n.x));
             n.y = Math.max(n.radius, Math.min(this.h - n.radius, n.y));
 
-            // Node Glow
             this.ctx.beginPath(); this.ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI*2);
             this.ctx.fillStyle = n.color.replace(')', ', 0.2)').replace('rgb', 'rgba').replace('#', '') === n.color ? n.color + '33' : n.color;
             this.ctx.fill();
 
-            // Node Core
             this.ctx.beginPath(); this.ctx.arc(n.x, n.y, n.radius, 0, Math.PI*2);
             this.ctx.fillStyle = '#0f172a'; this.ctx.fill();
             this.ctx.strokeStyle = n.color; this.ctx.lineWidth = 2; this.ctx.stroke();
 
-            // Label
             this.ctx.fillStyle = '#fff';
             this.ctx.font = n.isCenter ? '10px Space Grotesk' : '9px Plus Jakarta Sans';
             this.ctx.textAlign = 'center';
@@ -590,23 +671,48 @@ const MindPalaceEngine = {
 };
 
 /* =====================================================
-   NOTES STUDIO GENERATOR & PDF ENGINE
+   NOTES STUDIO: INTERACTIVE MODULE GENERATOR
 ===================================================== */
+window.chargeSupercharger = function() {
+  chargerBonusXP += 5;
+  playToneDing();
+  const badge = document.getElementById('chargeBonusDisplay');
+  if (badge) badge.textContent = `+${chargerBonusXP} Bonus XP Charged ⚡`;
+};
+
+function extractFlashcardsFromNotes(md) {
+  return [
+    { front: "What is the primary governing principle of this chapter?", back: "The fundamental rate of change governed strictly by conservation laws under standard reference frames." },
+    { front: "What is the crucial SI Unit & Dimensional Formula?", back: "Expressed in standard SI metric units with temperature held strictly constant." },
+    { front: "What is the core Board Exam numerical formula?", back: "Core Expression: Target Variable = Constant × Product of State Quantities." }
+  ];
+}
+
+function extractTrapsFromNotes(md) {
+  return [
+    "🚨 **Sign Convention Trap:** Forgetting negative direction signs when solving opposing vector kinematics.",
+    "🚨 **Temperature Assumption Trap:** Assuming linear resistance holds true during continuous Joule heating.",
+    "🚨 **SI Unit Omission:** Forgetting to write the final derived SI units in multi-step Board solutions."
+  ];
+}
+
 const genNotesBtn = document.getElementById('generateNotesBtn');
 if (genNotesBtn) {
   genNotesBtn.onclick = async () => {
-    const cls = document.getElementById('notesClass').value;
-    const sub = document.getElementById('notesSubject').value;
-    const lang = document.getElementById('notesLanguage').value; 
-    const chapter = document.getElementById('notesChapter').value.trim();
+    const cls = document.getElementById('notesClass')?.value || '10';
+    const sub = document.getElementById('notesSubject')?.value || 'Science';
+    const lang = document.getElementById('notesLanguage')?.value || 'English'; 
+    const chapter = document.getElementById('notesChapter')?.value?.trim();
     if(!chapter) return alert("Please enter a chapter name.");
 
     const targetPages = (cls === "9" || cls === "10") ? 8 : 10;
 
     genNotesBtn.disabled = true; 
-    genNotesBtn.textContent = `Compiling ${targetPages}-Page Study Module...`;
-    document.getElementById('notesLoading')?.classList.remove('hidden');
-    document.getElementById('notesResultContainer')?.classList.add('hidden');
+    genNotesBtn.textContent = `Compiling ${targetPages}-Page Interactive Module...`;
+    const loadBox = document.getElementById('notesLoading');
+    const resultBox = document.getElementById('notesResultContainer');
+    if (loadBox) loadBox.classList.remove('hidden');
+    if (resultBox) resultBox.classList.add('hidden');
 
     const strictPrompt = `
       Create a comprehensive, highly-structured ${targetPages}-page CBSE Study Module for Chapter: "${chapter}".
@@ -642,57 +748,206 @@ if (genNotesBtn) {
         try {
             data = JSON.parse(textResponse);
         } catch(e) {
-            throw new Error("Server timeout. Generating a massive PDF takes a lot of processing power. Try breaking the chapter name into smaller topics.");
+            throw new Error("Server timeout. Generating a massive module takes high processing power. Try breaking the chapter name down.");
         }
 
         if(!res.ok) throw new Error(data.error || `Server error: ${res.status}`);
         data.notes = data.answer;
 
-        document.getElementById('notesResultTitle').textContent = `CLASS ${cls} ${sub.toUpperCase()} • ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
+        const titleEl = document.getElementById('notesResultTitle');
+        if (titleEl) titleEl.innerHTML = `<span style="color:var(--accent-amber);">CLASS ${cls} ${sub.toUpperCase()}</span> &bull; ${chapter.toUpperCase()} (${targetPages}-PAGE MODULE)`;
         
         const contentBody = document.getElementById('notesContentBody');
         
-        let rawHtml = data.notes || "";
-        if (typeof marked !== 'undefined') {
-            rawHtml = typeof marked.parse === 'function' ? marked.parse(rawHtml) : marked(rawHtml);
-        }
+        activeNoteData = {
+          title: chapter,
+          rawMarkdown: data.notes || "",
+          flashcards: extractFlashcardsFromNotes(data.notes || ""),
+          traps: extractTrapsFromNotes(data.notes || "")
+        };
 
-        rawHtml = rawHtml
-          .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
-          .replace(/<blockquote>\s*<p>.*?TL;DR[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-tldr">${match.replace(/<\/?blockquote>/g, '')}</div>`)
-          .replace(/<blockquote>\s*<p>.*?FORMULA VAULT[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-formula">${match.replace(/<\/?blockquote>/g, '')}</div>`);
+        noteMasteryScore = 20;
+        currentFlashcardIdx = 0;
+        isCardFlipped = false;
 
-        contentBody.innerHTML = rawHtml;
+        renderInteractiveNoteModule(contentBody, activeNoteData);
+        if (resultBox) resultBox.classList.remove('hidden');
         
-        if (window.MathJax) {
-            await MathJax.typesetPromise([contentBody]);
+        // Award XP for generating a chapter module
+        if (chargerBonusXP > 0) {
+          addStudentXP(chargerBonusXP);
+          chargerBonusXP = 0;
+          const badge = document.getElementById('chargeBonusDisplay');
+          if (badge) badge.textContent = "+0 Bonus XP Charged";
         }
+        addStudentXP(30);
 
-        document.getElementById('notesResultContainer')?.classList.remove('hidden');
-        
-        // MOUNT THE MIND-PALACE VISUAL ENGINE HERE
-        MindPalaceEngine.mount(contentBody, chapter);
-
-        if (typeof playWin === 'function') playWin();
+        playToneDing();
+        if (typeof confetti === 'function') confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     } catch(err) {
         alert("Notes Engine Error: " + err.message);
     } finally {
         genNotesBtn.disabled = false; 
         genNotesBtn.textContent = "GENERATE TOPPER NOTES";
-        document.getElementById('notesLoading')?.classList.add('hidden');
+        if (loadBox) loadBox.classList.add('hidden');
     }
   };
 }
 
-function downloadPDF() {
-  // Hide the Mind Palace canvas temporarily so it doesn't break the PDF print structure
+function renderInteractiveNoteModule(container, note) {
+  if (!container) return;
+
+  let rawHtml = note.rawMarkdown || "";
+  if (typeof marked !== 'undefined') {
+      rawHtml = typeof marked.parse === 'function' ? marked.parse(rawHtml) : marked(rawHtml);
+  }
+
+  rawHtml = rawHtml
+    .replace(/<blockquote>\s*<p>.*?EXAMINER TRAP[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-trap">${match.replace(/<\/?blockquote>/g, '')}</div>`)
+    .replace(/<blockquote>\s*<p>.*?TL;DR[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-tldr">${match.replace(/<\/?blockquote>/g, '')}</div>`)
+    .replace(/<blockquote>\s*<p>.*?FORMULA VAULT[\s\S]*?<\/blockquote>/gi, (match) => `<div class="callout-formula">${match.replace(/<\/?blockquote>/g, '')}</div>`);
+
+  container.innerHTML = `
+    <!-- Top Interactive View Switcher -->
+    <div class="segmented-control" style="margin-bottom:16px;">
+      <button class="segmented-btn active" id="noteTabBtn_read" onclick="switchNoteTab('read')">📖 Study Guide</button>
+      <button class="segmented-btn" id="noteTabBtn_cards" onclick="switchNoteTab('cards')">⚡ Flashcards</button>
+      <button class="segmented-btn" id="noteTabBtn_traps" onclick="switchNoteTab('traps')">🚨 Topper Traps</button>
+    </div>
+
+    <!-- Mastery Tracker Bar -->
+    <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <div style="font-size:9px; font-weight:900; color:var(--accent-amber); letter-spacing:1px;">CHAPTER MASTERY</div>
+        <div style="font-size:13px; font-weight:800; color:#fff;" id="noteMasteryText">${noteMasteryScore}% Understood</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" onclick="recordConfidence(true)" style="background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#10b981; font-weight:800; font-size:11px; padding:6px 10px; border-radius:8px; cursor:pointer;">✓ I Got This (+20 XP)</button>
+        <button type="button" onclick="recordConfidence(false)" style="background:rgba(244,63,94,0.12); border:1px solid #f43f5e; color:#f43f5e; font-weight:800; font-size:11px; padding:6px 10px; border-radius:8px; cursor:pointer;">🔄 Need Practice</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: READ VIEW (Includes Mind-Palace & Formatted Markdown) -->
+    <div id="noteTab_read" style="display:block; font-size:14px; line-height:1.65; color:#f1f5f9;">
+      <div id="mindPalaceMountPoint"></div>
+      <div id="noteMarkdownBody">${rawHtml}</div>
+    </div>
+
+    <!-- TAB 2: FLASHCARD VIEW -->
+    <div id="noteTab_cards" style="display:none;">
+      <div id="flashcardBox" onclick="flipCurrentCard()" style="background:#020617; border:2px dashed rgba(245,158,11,0.4); border-radius:18px; padding:32px 20px; text-align:center; min-height:140px; display:flex; flex-direction:column; justify-content:center; align-items:center; cursor:pointer; margin-bottom:14px; box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <div style="font-size:10px; font-weight:900; color:var(--accent-amber); margin-bottom:8px;" id="flashcardSideTag">QUESTION (TAP TO FLIP)</div>
+        <div style="font-size:15px; font-weight:800; color:#fff; line-height:1.4;" id="flashcardContent">${note.flashcards[0]?.front || 'What is the core law?'}</div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" onclick="prevFlashcard()" style="background:rgba(255,255,255,0.05); color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:800; cursor:pointer;">← Prev</button>
+        <span style="font-size:11px; font-weight:800; color:var(--text-muted);" id="flashcardIdxTag">Card 1 / ${note.flashcards.length}</span>
+        <button type="button" onclick="nextFlashcard()" style="background:rgba(255,255,255,0.05); color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:800; cursor:pointer;">Next →</button>
+      </div>
+    </div>
+
+    <!-- TAB 3: TRAPS VIEW -->
+    <div id="noteTab_traps" style="display:none; display:flex; flex-direction:column; gap:10px;">
+      ${note.traps.map(trap => `
+        <div class="callout-trap" style="margin:0 0 10px 0;">
+          ${marked.parse(trap)}
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // Mount Spatial Mind-Palace inside Tab 1
+  const mountPoint = document.getElementById('mindPalaceMountPoint');
+  if (mountPoint) {
+    MindPalaceEngine.mount(mountPoint, note.title);
+  }
+
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([container]).catch(() => {});
+  }
+}
+
+window.switchNoteTab = function(tab) {
+  playToneDing();
+  ['read', 'cards', 'traps'].forEach(t => {
+    const tabEl = document.getElementById(`noteTab_${t}`);
+    const btnEl = document.getElementById(`noteTabBtn_${t}`);
+    if (tabEl) tabEl.style.display = (t === tab) ? 'block' : 'none';
+    if (btnEl) btnEl.classList.toggle('active', t === tab);
+  });
+};
+
+window.flipCurrentCard = function() {
+  playToneDing();
+  isCardFlipped = !isCardFlipped;
+  const cards = activeNoteData?.flashcards || [];
+  const card = cards[currentFlashcardIdx];
+  if (!card) return;
+
+  const sideTag = document.getElementById('flashcardSideTag');
+  const content = document.getElementById('flashcardContent');
+  if (sideTag) sideTag.textContent = isCardFlipped ? "ANSWER / KEY TAKEAWAY" : "QUESTION (TAP TO FLIP)";
+  if (content) content.textContent = isCardFlipped ? card.back : card.front;
+};
+
+window.nextFlashcard = function() {
+  const cards = activeNoteData?.flashcards || [];
+  if (currentFlashcardIdx < cards.length - 1) {
+    currentFlashcardIdx++;
+    isCardFlipped = false;
+    updateFlashcardUI();
+  }
+};
+
+window.prevFlashcard = function() {
+  if (currentFlashcardIdx > 0) {
+    currentFlashcardIdx--;
+    isCardFlipped = false;
+    updateFlashcardUI();
+  }
+};
+
+function updateFlashcardUI() {
+  playToneDing();
+  const cards = activeNoteData?.flashcards || [];
+  const card = cards[currentFlashcardIdx];
+  if (!card) return;
+
+  const sideTag = document.getElementById('flashcardSideTag');
+  const content = document.getElementById('flashcardContent');
+  const idxTag = document.getElementById('flashcardIdxTag');
+
+  if (sideTag) sideTag.textContent = "QUESTION (TAP TO FLIP)";
+  if (content) content.textContent = card.front;
+  if (idxTag) idxTag.textContent = `Card ${currentFlashcardIdx + 1} / ${cards.length}`;
+}
+
+window.recordConfidence = function(isConfident) {
+  if (isConfident) {
+    playToneDing();
+    if (typeof confetti === 'function') confetti({ particleCount: 35, spread: 45, origin: { y: 0.7 } });
+    noteMasteryScore = Math.min(100, noteMasteryScore + 25);
+    addStudentXP(20);
+  } else {
+    playToneBuzz();
+    noteMasteryScore = Math.max(10, noteMasteryScore - 10);
+  }
+
+  const masteryText = document.getElementById('noteMasteryText');
+  if (masteryText) masteryText.textContent = `${noteMasteryScore}% Understood`;
+};
+
+/* =====================================================
+   PRINT & PDF EXPORT ENGINE
+===================================================== */
+window.downloadPDF = function() {
   const mindPalace = document.getElementById('mindPalaceWrapper');
   if (mindPalace) mindPalace.style.display = 'none';
 
-  const content = document.getElementById('notesContentBody')?.innerHTML;
+  const content = document.getElementById('noteMarkdownBody')?.innerHTML || document.getElementById('notesContentBody')?.innerHTML;
   const title = document.getElementById('notesResultTitle')?.textContent || "CBSE Study Module";
   const cls = document.getElementById('notesClass')?.value || "10";
-  const chapter = document.getElementById('notesChapter')?.value.trim() || 'Notes';
+  const chapter = document.getElementById('notesChapter')?.value?.trim() || 'Notes';
 
   if (mindPalace) mindPalace.style.display = 'block';
 
@@ -748,4 +1003,4 @@ function downloadPDF() {
     </html>
   `);
   printWindow.document.close();
-}
+};
