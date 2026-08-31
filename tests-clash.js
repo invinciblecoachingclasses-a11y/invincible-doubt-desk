@@ -419,10 +419,18 @@ window.handleTestOptionSelect = function(qId, selectedIdx, correctIdx) {
 
 function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions; activeTestTitle = testTitle;
-    testSetup.classList.add("hidden"); testArea.classList.remove("hidden"); testResult.style.display = "none";
-    reviewContainer.innerHTML = ""; badgesContainer.innerHTML = "";
-    testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
-    questionsContainer.innerHTML = "";
+    if (testSetup) testSetup.classList.add("hidden"); 
+    if (testArea) testArea.classList.remove("hidden"); 
+    if (testResult) testResult.style.display = "none";
+    if (reviewContainer) reviewContainer.innerHTML = ""; 
+    
+    // SAFETY FIX: Prevent crash if badgesContainer is missing
+    if (badgesContainer) {
+      badgesContainer.innerHTML = "";
+    }
+    
+    if (testHeader) testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
+    if (questionsContainer) questionsContainer.innerHTML = "";
 
     questions.forEach(function(q, index){
         const card = document.createElement("div"); 
@@ -459,7 +467,7 @@ function startQuestions(questions, headerTitle, testTitle){
           ${optionsHTML}
         `;
         
-        questionsContainer.appendChild(card);
+        if (questionsContainer) questionsContainer.appendChild(card);
 
         // Add visual snap effect to the custom radio dots
         const blocks = card.querySelectorAll('.engineering-snap-block');
@@ -472,7 +480,7 @@ function startQuestions(questions, headerTitle, testTitle){
     });
 
     try {
-        if (window.MathJax && MathJax.typesetPromise) {
+        if (window.MathJax && MathJax.typesetPromise && questionsContainer) {
             MathJax.typesetPromise([questionsContainer]).catch(() => {});
         }
     } catch(e) {}
@@ -519,11 +527,15 @@ if (submitTestBtn) {
     else { if(typeof playBuzz === 'function') playBuzz(); }
 
     finalScoreData = { percentage: percentage, scoreString: correct + "/" + questions.length, testName: activeTestTitle };
-    scoreText.textContent = correct + "/" + questions.length;
-    resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
-    reviewContainer.innerHTML = reviewHTML;
-    testArea.classList.add("hidden"); testResult.style.display = "block";
-    testResult.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (scoreText) scoreText.textContent = correct + "/" + questions.length;
+    if (resultDetail) resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
+    if (reviewContainer) reviewContainer.innerHTML = reviewHTML;
+    
+    if (testArea) testArea.classList.add("hidden"); 
+    if (testResult) {
+      testResult.style.display = "block";
+      testResult.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 
     const studentName = document.getElementById("studentName")?.value?.trim() || localStorage.getItem("studentName") || "Student";
     const studentMobile = document.getElementById("studentMobile")?.value?.trim() || "";
@@ -533,7 +545,7 @@ if (submitTestBtn) {
     try {
         await fetch("/api/save-test-attempt", {
             method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || testClass.value, subject: activeTestSubject || testSubject.value, chapter: chapterName, testTitle: activeTestTitle, testType: "Algorithmic Generation", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: attempted - correct, unanswered: questions.length - attempted, percentage: percentage, answers: answers })
+            body: JSON.stringify({ studentName: studentName, studentMobile: studentMobile, organization: org, studentClass: activeTestClass || (testClass ? testClass.value : ''), subject: activeTestSubject || (testSubject ? testSubject.value : ''), chapter: chapterName, testTitle: activeTestTitle, testType: "Algorithmic Generation", totalQuestions: questions.length, attempted: attempted, correct: correct, wrong: attempted - correct, unanswered: questions.length - attempted, percentage: percentage, answers: answers })
         });
         if(typeof loadPlatformData === 'function') loadPlatformData();
     } catch(e){}
@@ -543,7 +555,9 @@ if (submitTestBtn) {
 
 if (restartTestBtn) {
   restartTestBtn.addEventListener("click", function(){
-    testResult.style.display = "none"; testSetup.classList.remove("hidden"); testArea.classList.add("hidden");
+    if (testResult) testResult.style.display = "none"; 
+    if (testSetup) testSetup.classList.remove("hidden"); 
+    if (testArea) testArea.classList.add("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
@@ -555,6 +569,57 @@ if (whatsappShareBtn) {
   });
 }
 
+/* =====================================================
+   BOOTSTRAP AND GREATER NOIDA SCHOOL LIST POPULATOR
+===================================================== */
 document.addEventListener('DOMContentLoaded', () => {
     if(typeof initBlitzCountdown === 'function') initBlitzCountdown();
+    
+    // Auto-Populate School Dropdown
+    const testOrgSelect = document.getElementById("testOrg");
+    if (testOrgSelect) {
+        const noidaSchools = [
+            "DVM Public School (Dayanand Vidya Mandir)",
+            "Greater Noida Public School",
+            "The Ideal Public School",
+            "DSR School",
+            "H R International School",
+            "Immanuel International Public School",
+            "Bharat Public School",
+            "SMPN Public School",
+            "RSP Global School",
+            "Modern DAV Public School",
+            "Uma Education Public School",
+            "Navrang Public School",
+            "Upper Primary School Kulesra",
+            "Composite School Kulesra",
+            "Swami Dayanand Higher Secondary School",
+            "Horizon National Public School",
+            "The Heritage Public School"
+        ];
+        
+        let defaultOption = testOrgSelect.querySelector('option[value=""]');
+        if (!defaultOption) {
+            defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "Select School/Institute";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+        }
+        
+        testOrgSelect.innerHTML = "";
+        testOrgSelect.appendChild(defaultOption);
+        
+        noidaSchools.forEach(school => {
+            const opt = document.createElement('option');
+            opt.value = school;
+            opt.textContent = school;
+            testOrgSelect.appendChild(opt);
+        });
+        
+        const savedSchool = localStorage.getItem('userSchool') || localStorage.getItem('testOrg');
+        if (savedSchool && noidaSchools.includes(savedSchool)) {
+            testOrgSelect.value = savedSchool;
+        }
+    }
 });
