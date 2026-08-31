@@ -1,6 +1,13 @@
 /* =====================================================
-   ARENA 1v1 LOGIC (NEON BEAM-CLASH TUG-OF-WAR ENGINE)
+   ⚡ INVINCIBLE 360 - 1v1 BATTLE ARENA MASTER ENGINE
+   - Cinematic Matchmaking & VS Match Cards
+   - 3-2-1 Countdown Sequence
+   - Combo Multipliers (x1.2 to x2.5 GODLIKE)
+   - Neon Beam-Clash Tug-of-War Canvas Engine
+   - Tactical Weapons (50:50 Laser Slice & Cryo-Freeze)
+   - Real-Time P2P WebRTC Voice Chat Engine
 ===================================================== */
+
 let arena = { 
   code: null, 
   playerNum: 1, 
@@ -12,11 +19,13 @@ let arena = {
   timer: 15, 
   timeLimit: 15,
   streak: 0,
+  highestStreak: 0,
+  comboMultiplier: 1.0,
   interval: null, 
   pollInterval: null, 
   isBotMatch: false, 
   botScore: 0,
-  botFrozenUntil: 0 // New state to track if opponent is frozen in ice
+  botFrozenUntil: 0
 };
 
 /* =====================================================
@@ -81,24 +90,25 @@ const ArenaVisualEngine = {
         }
     },
 
-    triggerShockwave: function(playerNum) {
+    triggerShockwave: function(playerNum, intensity = 1) {
         this.shockwaves.push({
             x: playerNum === 1 ? 0 : this.w,
-            radius: 5,
+            radius: 5 * intensity,
             color: playerNum === 1 ? '#00e5ff' : '#f43f5e',
             dir: playerNum === 1 ? 1 : -1,
-            life: 1.0
+            life: 1.0,
+            intensity: intensity
         });
     },
 
     triggerGlitch: function(playerNum) {
         const clashX = this.tugPos * this.w;
-        for(let i=0; i<8; i++) {
+        for(let i=0; i<12; i++) {
             this.particles.push({
                 x: clashX,
                 y: this.h / 2,
                 vx: (Math.random() * 8) * (playerNum === 1 ? -1 : 1),
-                vy: (Math.random() - 0.5) * 6,
+                vy: (Math.random() - 0.5) * 8,
                 life: 1.0,
                 color: playerNum === 1 ? '#00e5ff' : '#f43f5e'
             });
@@ -133,13 +143,13 @@ const ArenaVisualEngine = {
 
         for (let i = this.shockwaves.length - 1; i >= 0; i--) {
             let sw = this.shockwaves[i];
-            sw.x += sw.dir * 18; 
-            sw.radius += 1;
+            sw.x += sw.dir * (16 + (sw.intensity * 2)); 
+            sw.radius += 1.2;
             sw.life -= 0.04;
 
             if (sw.life <= 0 || (sw.dir === 1 && sw.x >= clashX) || (sw.dir === -1 && sw.x <= clashX)) {
                 this.shockwaves.splice(i, 1);
-                for(let p = 0; p < 12; p++) {
+                for(let p = 0; p < (10 * sw.intensity); p++) {
                     this.particles.push({
                         x: clashX, 
                         y: this.h / 2,
@@ -192,10 +202,100 @@ const ArenaVisualEngine = {
 };
 
 /* =====================================================
+   CINEMATIC MATCHMAKING & 3-2-1 INTRO SEQUENCE
+===================================================== */
+function triggerArenaMatchIntro(p1Name, p2Name, onComplete) {
+    const existing = document.getElementById('arenaCinematicOverlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'arenaCinematicOverlay';
+    overlay.style.cssText = "position:fixed; inset:0; z-index:99999; background:rgba(3,7,18,0.95); backdrop-filter:blur(16px); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;";
+
+    overlay.innerHTML = `
+      <div id="introMatchmakingStage" style="display:flex; flex-direction:column; align-items:center;">
+        <div style="position:relative; width:80px; height:80px; margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
+           <div style="position:absolute; inset:0; border-radius:50%; border:2px solid #00e5ff; animation:ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite; opacity:0.6;"></div>
+           <div style="width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg, #00e5ff, #0284c7); display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 0 25px rgba(0,229,255,0.6);">⚡</div>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:900; color:#fff; letter-spacing:1px; margin-bottom:4px;">CONNECTING TO ARENA...</div>
+        <div style="font-size:11px; color:#94a3b8; font-weight:700;">Matching syllabus difficulty & ping</div>
+      </div>
+
+      <div id="introVsStage" style="display:none; width:100%; max-width:340px; flex-direction:column; align-items:center; animation:popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);">
+        <div style="font-size:11px; font-weight:900; color:var(--accent-cyan); letter-spacing:2px; text-transform:uppercase; margin-bottom:16px;">⚔️ OPPONENT FOUND</div>
+        
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-bottom:24px;">
+          <!-- Player 1 Card -->
+          <div style="flex:1; background:rgba(0,229,255,0.06); border:1px solid rgba(0,229,255,0.3); border-radius:16px; padding:12px; text-align:center;">
+            <div style="width:44px; height:44px; border-radius:50%; background:#00e5ff; color:#000; font-weight:900; font-size:18px; display:flex; align-items:center; justify-content:center; margin:0 auto 6px auto; box-shadow:0 0 15px rgba(0,229,255,0.4);">${p1Name.charAt(0).toUpperCase()}</div>
+            <div style="font-size:12px; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p1Name}</div>
+            <div style="font-size:9px; font-weight:800; color:#00e5ff;">RANK #1</div>
+          </div>
+
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:900; color:#f43f5e; padding:0 12px; text-shadow:0 0 15px rgba(244,63,94,0.6);">VS</div>
+
+          <!-- Player 2 Card -->
+          <div style="flex:1; background:rgba(244,63,94,0.06); border:1px solid rgba(244,63,94,0.3); border-radius:16px; padding:12px; text-align:center;">
+            <div style="width:44px; height:44px; border-radius:50%; background:#f43f5e; color:#fff; font-weight:900; font-size:18px; display:flex; align-items:center; justify-content:center; margin:0 auto 6px auto; box-shadow:0 0 15px rgba(244,63,94,0.4);">${p2Name.charAt(0).toUpperCase()}</div>
+            <div style="font-size:12px; font-weight:900; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p2Name}</div>
+            <div style="font-size:9px; font-weight:800; color:#f43f5e;">CHALLENGER</div>
+          </div>
+        </div>
+
+        <div id="introCountdownNum" style="font-family:'Space Grotesk',sans-serif; font-size:54px; font-weight:900; color:#fbbf24; text-shadow:0 0 30px rgba(251,191,36,0.6);">3</div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Sequence timing
+    setTimeout(() => {
+        const mmStage = document.getElementById('introMatchmakingStage');
+        const vsStage = document.getElementById('introVsStage');
+        if (mmStage) mmStage.style.display = 'none';
+        if (vsStage) vsStage.style.display = 'flex';
+        if (typeof playDing === 'function') playDing();
+
+        let count = 3;
+        const countNum = document.getElementById('introCountdownNum');
+
+        const cdInterval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                if (countNum) {
+                    countNum.textContent = count;
+                    countNum.style.transform = 'scale(1.2)';
+                    setTimeout(() => { if (countNum) countNum.style.transform = 'scale(1)'; }, 150);
+                }
+                if (typeof playTick === 'function') playTick();
+            } else if (count === 0) {
+                if (countNum) {
+                    countNum.textContent = "BATTLE!";
+                    countNum.style.color = "#10b981";
+                    countNum.style.fontSize = "40px";
+                }
+                if (typeof playWin === 'function') playWin();
+                if (typeof triggerHaptic === 'function') triggerHaptic([50, 50]);
+            } else {
+                clearInterval(cdInterval);
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.25s ease';
+                setTimeout(() => {
+                    overlay.remove();
+                    if (typeof onComplete === 'function') onComplete();
+                }, 250);
+            }
+        }, 750);
+
+    }, 800);
+}
+
+/* =====================================================
    CORE ARENA GAMEPLAY LOGIC
 ===================================================== */
 function startBotMatch() {
-    const name = document.getElementById('arenaPlayerName')?.value.trim() || 'Player 1';
+    const name = document.getElementById('arenaPlayerName')?.value.trim() || localStorage.getItem('studentName') || 'Player 1';
     const timerSec = parseInt(document.getElementById('arenaTimePerQ')?.value, 10) || 15;
     const qCount = parseInt(document.getElementById('arenaQuestionCount')?.value, 10) || 5;
 
@@ -206,6 +306,8 @@ function startBotMatch() {
     arena.botScore = 0;
     arena.timeLimit = timerSec;
     arena.streak = 0;
+    arena.highestStreak = 0;
+    arena.comboMultiplier = 1.0;
     arena.botFrozenUntil = 0;
 
     const samplePool = [
@@ -213,28 +315,31 @@ function startBotMatch() {
         { question_text: "Which particle carries a negative charge? / कौन सा कण ऋणात्मक आवेश वहन करता है?", options: ["Proton (प्रोटॉन)", "Neutron (न्यूट्रॉन)", "Electron (इलेक्ट्रॉन)", "Positron (पॉज़िट्रॉन)"], correct_option: 2, explanation: "Electrons have a charge of -1.6 × 10⁻¹⁹ C." },
         { question_text: "Formula for kinetic energy: / गतिज ऊर्जा का सूत्र है:", options: ["1/2 mv²", "mgh", "F×d", "mv"], correct_option: 0, explanation: "KE = 1/2 m v²." },
         { question_text: "Which gas is released during photosynthesis? / प्रकाश संश्लेषण में कौन सी गैस निकलती है?", options: ["CO2", "Oxygen (ऑक्सीजन)", "Nitrogen", "Hydrogen"], correct_option: 1, explanation: "Plants split water molecules to release Oxygen (O2)." },
-        { question_text: "Value of acceleration due to gravity (g) on Earth:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0, explanation: "Standard standard gravity at sea level is ~9.8 m/s²." }
+        { question_text: "Value of acceleration due to gravity (g) on Earth:", options: ["9.8 m/s²", "8.9 m/s²", "10.8 m/s²", "12 m/s²"], correct_option: 0, explanation: "Standard gravity at sea level is ~9.8 m/s²." }
     ];
 
     arena.questions = samplePool.slice(0, qCount);
-    const p1 = document.getElementById('uiP1Name'); if(p1) p1.textContent = name;
-    const p2 = document.getElementById('uiP2Name'); if(p2) p2.textContent = "Invincible AI 🤖";
-    const s1 = document.getElementById('uiP1Score'); if(s1) s1.textContent = "0";
-    const s2 = document.getElementById('uiP2Score'); if(s2) s2.textContent = "0";
     
-    updateClashBar(0, 0);
-    startArenaGame();
+    triggerArenaMatchIntro(name, "Invincible AI 🤖", () => {
+        const p1 = document.getElementById('uiP1Name'); if(p1) p1.textContent = name;
+        const p2 = document.getElementById('uiP2Name'); if(p2) p2.textContent = "Invincible AI 🤖";
+        const s1 = document.getElementById('uiP1Score'); if(s1) s1.textContent = "0";
+        const s2 = document.getElementById('uiP2Score'); if(s2) s2.textContent = "0";
+        
+        updateClashBar(0, 0);
+        startArenaGame();
+    });
 }
 
 const btnCreate = document.getElementById('btnCreateRoom');
 if (btnCreate) {
   btnCreate.onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim();
-    const className = document.getElementById('arenaClass').value;
-    const subject = document.getElementById('arenaSubject').value;
-    const chapter = document.getElementById('arenaChapter').value.trim();
-    const timePerQ = document.getElementById('arenaTimePerQ').value;
-    const qCount = document.getElementById('arenaQuestionCount').value;
+    const name = document.getElementById('arenaPlayerName')?.value.trim() || localStorage.getItem('studentName');
+    const className = document.getElementById('arenaClass')?.value || '10';
+    const subject = document.getElementById('arenaSubject')?.value || 'Physics';
+    const chapter = document.getElementById('arenaChapter')?.value.trim() || 'General Syllabus';
+    const timePerQ = document.getElementById('arenaTimePerQ')?.value || '15';
+    const qCount = document.getElementById('arenaQuestionCount')?.value || '5';
 
     if(!name) return alert("Please enter your battle tag name.");
 
@@ -258,6 +363,7 @@ if (btnCreate) {
         arena.playerNum = 1;
         arena.timeLimit = parseInt(data.time_per_question, 10) || parseInt(timePerQ, 10) || 15;
         arena.streak = 0;
+        arena.highestStreak = 0;
 
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
@@ -273,9 +379,9 @@ if (btnCreate) {
 const btnJoin = document.getElementById('btnJoinRoom');
 if (btnJoin) {
   btnJoin.onclick = async () => {
-    const name = document.getElementById('arenaPlayerName').value.trim();
-    const code = document.getElementById('arenaJoinCode').value.trim();
-    if(!name || !code) return alert("Enter your name and the 4-digit code.");
+    const name = document.getElementById('arenaPlayerName')?.value.trim() || localStorage.getItem('studentName');
+    const code = document.getElementById('arenaJoinCode')?.value.trim();
+    if(!name || !code) return alert("Enter your name and the 4-digit room code.");
 
     try {
         const res = await fetch('/api/arena', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ action: 'join', room_code: code, player_name: name }) });
@@ -289,13 +395,15 @@ if (btnJoin) {
         arena.playerNum = 2;
         arena.timeLimit = 15;
         arena.streak = 0;
+        arena.highestStreak = 0;
 
-        document.getElementById('uiP1Name').textContent = data.room.player1_name;
-        document.getElementById('uiP2Name').textContent = name;
-        
-        startArenaVoiceChat(code);
-        startArenaGame();
-        arena.pollInterval = setInterval(pollRoomState, 2000);
+        triggerArenaMatchIntro(data.room.player1_name, name, () => {
+            document.getElementById('uiP1Name').textContent = data.room.player1_name;
+            document.getElementById('uiP2Name').textContent = name;
+            startArenaVoiceChat(code);
+            startArenaGame();
+            arena.pollInterval = setInterval(pollRoomState, 2000);
+        });
     } catch(err) { alert("Join Error: " + err.message); }
   };
 }
@@ -309,9 +417,11 @@ async function pollRoomState() {
         const room = data.room;
 
         if (arena.playerNum === 1 && room.player2_name && !document.getElementById('arenaWaiting').classList.contains('hidden')) {
-            document.getElementById('uiP1Name').textContent = arena.name;
-            document.getElementById('uiP2Name').textContent = room.player2_name;
-            startArenaGame();
+            triggerArenaMatchIntro(arena.name, room.player2_name, () => {
+                document.getElementById('uiP1Name').textContent = arena.name;
+                document.getElementById('uiP2Name').textContent = room.player2_name;
+                startArenaGame();
+            });
         }
         if (document.getElementById('uiP1Score')) document.getElementById('uiP1Score').textContent = room.player1_score || 0;
         if (document.getElementById('uiP2Score')) document.getElementById('uiP2Score').textContent = room.player2_score || 0;
@@ -378,6 +488,23 @@ function startArenaGame() {
     loadArenaQuestion();
 }
 
+function showFloatingCombatText(text, color = '#10b981') {
+    const battleArea = document.getElementById('arenaBattle');
+    if (!battleArea) return;
+
+    const floatEl = document.createElement('div');
+    floatEl.style.cssText = `position:absolute; top:40%; left:50%; transform:translate(-50%, -50%) scale(0.8); color:${color}; font-family:'Space Grotesk',sans-serif; font-size:24px; font-weight:900; text-shadow:0 0 20px ${color}; pointer-events:none; z-index:90; transition:all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity:1;`;
+    floatEl.innerHTML = text;
+    battleArea.appendChild(floatEl);
+
+    setTimeout(() => {
+        floatEl.style.transform = 'translate(-50%, -100%) scale(1.1)';
+        floatEl.style.opacity = '0';
+    }, 50);
+
+    setTimeout(() => floatEl.remove(), 550);
+}
+
 function loadArenaQuestion() {
     if (arena.currentQ >= arena.questions.length) { 
         stopArenaVoiceChat();
@@ -388,8 +515,9 @@ function loadArenaQuestion() {
     const q = arena.questions[arena.currentQ];
     
     let streakEmoji = '';
-    if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE x' + arena.streak;
-    else if (arena.streak >= 3) streakEmoji = ' ⚡ ON FIRE x' + arena.streak;
+    if (arena.streak >= 5) streakEmoji = ' 🔥 GODLIKE x' + arena.streak + ' (2.5x)';
+    else if (arena.streak >= 3) streakEmoji = ' ⚡ COMBO x' + arena.streak + ' (1.5x)';
+    else if (arena.streak >= 2) streakEmoji = ' 🎯 STREAK x' + arena.streak + ' (1.2x)';
 
     const qNumEl = document.getElementById('arenaQNum');
     if (qNumEl) qNumEl.innerHTML = `QUESTION ${arena.currentQ + 1}/${arena.questions.length} <span style="color:var(--accent-amber); font-weight:900;">${streakEmoji}</span>`;
@@ -411,6 +539,7 @@ function loadArenaQuestion() {
     const timerDisplay = document.getElementById('arenaTimerDisplay');
     if (timerDisplay) {
       timerDisplay.textContent = `⏱ ${arena.timer}s`;
+      timerDisplay.classList.remove('panic');
     }
     
     clearInterval(arena.interval);
@@ -437,18 +566,33 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         if(typeof playDing === 'function') playDing(); 
         
         arena.streak++;
-        const speedBonus = arena.timer > (arena.timeLimit / 2) ? 5 : 0;
-        arena.score += (10 + arena.timer + speedBonus);
+        if (arena.streak > arena.highestStreak) arena.highestStreak = arena.streak;
 
-        ArenaVisualEngine.triggerShockwave(arena.playerNum);
+        // Dynamic Combo Multipliers
+        let multiplier = 1.0;
+        let comboTag = "CRITICAL HIT!";
+        if (arena.streak >= 5) { multiplier = 2.5; comboTag = "🔥 GODLIKE COMBO!"; }
+        else if (arena.streak >= 3) { multiplier = 1.5; comboTag = "⚡ COMBO x" + arena.streak; }
+        else if (arena.streak >= 2) { multiplier = 1.2; comboTag = "🎯 2x HIT"; }
+
+        const speedBonus = arena.timer > (arena.timeLimit / 2) ? 8 : 0;
+        const earnedPoints = Math.round((10 + arena.timer + speedBonus) * multiplier);
+        arena.score += earnedPoints;
+
+        showFloatingCombatText(`+${earnedPoints} PTS<br><span style="font-size:14px;">${comboTag}</span>`, '#10b981');
+        ArenaVisualEngine.triggerShockwave(arena.playerNum, multiplier);
 
         if (arena.streak >= 3) {
           if(typeof playComboDrop === 'function') playComboDrop(arena.streak);
-          if(typeof confetti === 'function') confetti({ particleCount: 25, spread: 35, origin: { y: 0.7 } });
+          if(typeof confetti === 'function') confetti({ particleCount: 30, spread: 45, origin: { y: 0.7 } });
         }
     } else {
         if(typeof playBuzz === 'function') playBuzz();
         if(typeof triggerHaptic === 'function') triggerHaptic([90]);
+        
+        if (arena.streak >= 2) {
+            showFloatingCombatText("✕ COMBO BROKEN", '#f43f5e');
+        }
         arena.streak = 0;
         
         const card = document.getElementById('arenaCardContainer');
@@ -488,7 +632,6 @@ function finishArenaGame() {
     document.getElementById('arenaBattle').classList.add('hidden');
     ArenaVisualEngine.stop(); 
 
-    // Remove ice if active
     const oldIce = document.getElementById('iceOverlayEffect');
     if (oldIce) oldIce.remove();
 
@@ -518,28 +661,72 @@ function showArenaResult(room) {
     document.getElementById('arenaResult').classList.remove('hidden');
 
     const resultTextEl = document.getElementById('arenaResultText');
-    if (myScore > opScore) {
+    const isWin = myScore > opScore;
+    const isTie = myScore === opScore;
+
+    // Calculate XP Rewards
+    let earnedXP = isWin ? 100 : (isTie ? 40 : 20);
+    earnedXP += (arena.highestStreak * 10);
+
+    // Update global student XP
+    const xpEl = document.getElementById('xpCounter');
+    let currentXP = parseInt(xpEl?.textContent || localStorage.getItem('student_xp') || '680', 10);
+    currentXP += earnedXP;
+    if (xpEl) xpEl.textContent = currentXP;
+    localStorage.setItem('student_xp', currentXP.toString());
+
+    if (isWin) {
         if(typeof playWin === 'function') playWin();
         if(typeof triggerHaptic === 'function') triggerHaptic([40, 60, 80]);
         if (resultTextEl) {
-          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">👑</div><div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">DOMINANT VICTORY</div>`;
+          resultTextEl.innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">👑</div>
+            <div style="font-size:26px; font-weight:900; color:var(--accent-emerald);">DOMINANT VICTORY</div>
+            <div style="display:inline-block; margin-top:8px; background:rgba(16,185,129,0.15); border:1px solid #10b981; color:#10b981; font-weight:900; font-size:12px; padding:4px 12px; border-radius:8px;">+${earnedXP} XP EARNED (Max Combo: x${arena.highestStreak})</div>
+          `;
         }
         if(typeof confetti === 'function') confetti({ particleCount: 140, spread: 80, origin: { y: 0.5 } });
-    } else if(myScore === opScore) {
+    } else if(isTie) {
         if (resultTextEl) {
-          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">🤝</div><div style="font-size:24px; font-weight:900; color:var(--accent-amber);">STALEMATE TIE</div>`;
+          resultTextEl.innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">🤝</div>
+            <div style="font-size:24px; font-weight:900; color:var(--accent-amber);">STALEMATE TIE</div>
+            <div style="display:inline-block; margin-top:8px; background:rgba(251,191,36,0.15); border:1px solid #fbbf24; color:#fbbf24; font-weight:900; font-size:12px; padding:4px 12px; border-radius:8px;">+${earnedXP} XP EARNED</div>
+          `;
         }
     } else {
         if (resultTextEl) {
-          resultTextEl.innerHTML = `<div style="font-size:42px; margin-bottom:4px;">💥</div><div style="font-size:24px; font-weight:900; color:var(--accent-rose);">DEFEATED</div>`;
+          resultTextEl.innerHTML = `
+            <div style="font-size:42px; margin-bottom:4px;">💥</div>
+            <div style="font-size:24px; font-weight:900; color:var(--accent-rose);">DEFEATED</div>
+            <div style="display:inline-block; margin-top:8px; background:rgba(244,63,94,0.15); border:1px solid #f43f5e; color:#f43f5e; font-weight:900; font-size:12px; padding:4px 12px; border-radius:8px;">+${earnedXP} XP FOR EFFORT</div>
+          `;
         }
+    }
+
+    // Add Rematch Button
+    let rematchBtn = document.getElementById('arenaRematchBtn');
+    if (!rematchBtn) {
+        rematchBtn = document.createElement('button');
+        rematchBtn.id = 'arenaRematchBtn';
+        rematchBtn.className = 'btn-primary';
+        rematchBtn.style.cssText = "margin-top:16px; width:100%; background:linear-gradient(135deg, #00e5ff, #0284c7); font-weight:900; font-size:14px; padding:12px 0; border-radius:12px; cursor:pointer;";
+        rematchBtn.textContent = "🔄 REMATCH OPPONENT";
+        rematchBtn.onclick = () => {
+            document.getElementById('arenaResult').classList.add('hidden');
+            if (arena.isBotMatch) startBotMatch();
+            else {
+                document.getElementById('arenaSetup').classList.remove('hidden');
+            }
+        };
+        const resBox = document.getElementById('arenaResult');
+        if (resBox) resBox.appendChild(rematchBtn);
     }
 }
 
 /* =====================================================
    TACTICAL VISUAL WEAPONS (POWER-UPS)
 ===================================================== */
-
 window.activateArena5050 = function() {
     let count = parseInt(localStorage.getItem('blitz_pup_fiftyFifty') || '0', 10);
     if (count <= 0) return alert("No 50:50 power-ups left! Win matches to recharge.");
@@ -560,14 +747,12 @@ window.activateArena5050 = function() {
             opt.style.overflow = 'hidden';
             opt.style.pointerEvents = 'none';
             
-            // Generate the neon laser slice
             const laser = document.createElement('div');
             laser.style.cssText = "position:absolute; top:50%; left:-10%; width:0%; height:3px; background:#f43f5e; box-shadow:0 0 15px #f43f5e, 0 0 30px #f43f5e; z-index:10; transition:width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);";
             opt.appendChild(laser);
 
             setTimeout(() => { laser.style.width = '120%'; }, 50);
 
-            // Option break animation
             setTimeout(() => {
                 opt.style.transition = 'all 0.4s ease';
                 opt.style.transform = 'scale(0.95) rotate(-2deg)';
@@ -590,13 +775,9 @@ window.activateArenaTimeFreeze = function() {
     if(typeof playWin === 'function') playWin(); 
     if(typeof triggerHaptic === 'function') triggerHaptic([100, 50, 100]);
 
-    // 1. Add time globally
     arena.timer += 10;
-    
-    // 2. Freeze Bot scoring engine for 5 seconds
     arena.botFrozenUntil = Date.now() + 5000; 
 
-    // 3. Screen Ice Overlay
     const battleArea = document.getElementById('arenaBattle');
     if (battleArea) {
         const oldIce = document.getElementById('iceOverlayEffect');
@@ -615,7 +796,6 @@ window.activateArenaTimeFreeze = function() {
             timerDisplay.style.textShadow = '0 0 20px #00e5ff';
         }
 
-        // Melt Ice
         setTimeout(() => {
             ice.style.opacity = '0';
             if (timerDisplay) {
