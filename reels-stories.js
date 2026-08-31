@@ -1452,9 +1452,6 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
 
     const isCorrect = Number(selectedIdx) === Number(correctIdx);
 
-// ✅ CORRECT
-const isCorrect = Number(selectedIdx) === Number(correctIdx);
-
 if (window.InvincibleTelemetry) {
   window.InvincibleTelemetry.emit('REEL_RESOLVED', {
     subject: 'Science',
