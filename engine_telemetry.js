@@ -100,34 +100,36 @@
       this.saveMastery();
     }
 
-    updateReelMastery({ subject, topic, isCorrect, timeTaken, isBoss }) {
-      const entry = this.getTopicEntry(subject, topic);
-      entry.attempts += 1;
-      
-      const difficultyMultiplier = isBoss ? 1.5 : 1.0;
-      const speedBonus = timeTaken && timeTaken < 6 ? 1.2 : 1.0;
-
-      if (isCorrect) {
-        entry.correct += 1;
-        const gain = Math.round(5 * difficultyMultiplier * speedBonus);
-        entry.mastery = Math.min(100, entry.mastery + gain);
-        entry.skills.concepts = Math.min(100, entry.skills.concepts + gain);
-      } else {
-        const drop = Math.round(4 / difficultyMultiplier);
-        entry.mastery = Math.max(15, entry.mastery - drop);
-        entry.skills.concepts = Math.max(10, entry.skills.concepts - drop);
-        
-        // Auto-tag mistake context
-        this.emit('MISTAKE_LOGGED', {
-          subject: subject,
-          topic: topic,
-          category: 'Concept Confusion',
-          timestamp: Date.now()
-        });
-      }
-
-      entry.lastPracticed = Date.now();
+    updateReelMastery(payload) {
+  const { subject, topic, isCorrect, timeTaken, isBoss, question, yourAnswer, correctAnswer, explanation } = payload;
+  const entry = this.getTopicEntry(subject, topic);
+  entry.attempts += 1;
+  
+  if (isCorrect) {
+    entry.correct += 1;
+    entry.mastery = Math.min(100, entry.mastery + 6);
+    entry.skills.concepts = Math.min(100, entry.skills.concepts + 6);
+  } else {
+    entry.mastery = Math.max(15, entry.mastery - 4);
+    entry.skills.concepts = Math.max(10, entry.skills.concepts - 4);
+    
+    // Auto-log full mistake context with feedback
+    if (window.InvincibleVault) {
+      window.InvincibleVault.recordMistake({
+        subject: subject || 'Science',
+        topic: topic || 'General Concept',
+        question: question,
+        yourAnswer: yourAnswer,
+        correctAnswer: correctAnswer,
+        category: 'Concept Trap',
+        explanation: explanation || 'Review the core formula and verify sign conventions.'
+      });
     }
+  }
+
+  entry.lastPracticed = Date.now();
+}
+
 
     updateArenaMastery({ subject, chapter, won, accuracy, comboStreak }) {
       const entry = this.getTopicEntry(subject, chapter || 'General Syllabus');
