@@ -144,15 +144,19 @@
       }
     }
 
-    initAudioContext() {
-      if (!this.audioCtx) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        this.audioCtx = new AudioCtx();
-      }
-      if (this.audioCtx.state === 'suspended') {
-        this.audioCtx.resume();
+      initAudioContext() {
+    if (!window._sharedAudioCtx) {
+      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtxClass) {
+        window._sharedAudioCtx = new AudioCtxClass();
       }
     }
+    this.audioCtx = window._sharedAudioCtx;
+    if (this.audioCtx && this.audioCtx.state === 'suspended') {
+      this.audioCtx.resume();
+    }
+  }
+
 
     startBinauralSynth() {
       this.initAudioContext();
