@@ -2,7 +2,7 @@
  * =====================================================
  * MODULE: RAY OPTICS PREDICTION & DRAWING ENGINE
  * Type: Interactive Vector / Ray Sketchpad
- * Architecture: Micro-Engine Plugin (DevicePixelRatio Aware)
+ * Architecture: Micro-Engine Plugin (Touch-Safe & Leak-Proof)
  * =====================================================
  */
 
@@ -11,13 +11,14 @@ window.ReelSimRegistry = window.ReelSimRegistry || {};
 class RayDrawEngine {
   constructor(canvas, customParams = {}) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
-    this.cardId = canvas.getAttribute('data-sim-card-id');
+    this.ctx = canvas ? canvas.getContext('2d') : null;
+    this.cardId = canvas ? canvas.getAttribute('data-sim-card-id') : null;
     this.isDestroyed = false;
+    this.isVisible = false;
 
     this.params = {
-      incidentAngleDeg: 45, // Target reflection angle
-      toleranceDeg: 6,       // Angular error tolerance (±6°)
+      incidentAngleDeg: 45, 
+      toleranceDeg: 6,       
       ...customParams
     };
 
@@ -25,77 +26,94 @@ class RayDrawEngine {
     this.isDrawing = false;
     this.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
+    this.boundMove = this.handleMove.bind(this);
+    this.boundEnd = this.handleEnd.bind(this);
+
     this.resize();
     this.bindDrawingEvents();
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        this.isVisible = entry.isIntersecting;
+        if (this.isVisible) this.render();
+      });
+    }, { threshold: 0.1 });
+
+    if (this.canvas) this.observer.observe(this.canvas);
     this.render();
   }
 
   resize() {
     if (!this.canvas) return;
     const rect = this.canvas.getBoundingClientRect();
-    this.width = rect.width || 320;
-    this.height = rect.height || 165;
+    this.width = Math.max(100, rect.width || 320);
+    this.height = Math.max(100, rect.height || 165);
 
     this.canvas.width = this.width * this.dpr;
     this.canvas.height = this.height * this.dpr;
-    this.ctx.scale(this.dpr, this.dpr);
+    if (this.ctx) this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
-    // Anchor origin at the center-bottom reflective surface
     this.originX = this.width * 0.5;
     this.originY = this.height * 0.72;
   }
 
+  getPos(e) {
+    if (!this.canvas) return { x: 0, y: 0 };
+    const rect = this.canvas.getBoundingClientRect();
+    const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+    const clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    };
+  }
+
   bindDrawingEvents() {
-    const getPos = (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-      };
-    };
+    if (!this.canvas) return;
+    this.canvas.style.touchAction = 'none'; // Keeps gesture strictly isolated to this canvas
 
-    const startDraw = (e) => {
-      if (this.userRay && this.userRay.isSubmitted) return;
+    this.canvas.addEventListener('pointerdown', (e) => {
+      if (this.isDestroyed || (this.userRay && this.userRay.isSubmitted)) return;
       this.isDrawing = true;
-      moveDraw(e);
+      try { this.canvas.setPointerCapture(e.pointerId); } catch(err){}
+      this.handleMove(e);
+    });
+
+    this.canvas.addEventListener('pointermove', this.boundMove);
+    this.canvas.addEventListener('pointerup', this.boundEnd);
+    this.canvas.addEventListener('pointercancel', this.boundEnd);
+  }
+
+  handleMove(e) {
+    if (!this.isDrawing || this.isDestroyed || !this.canvas) return;
+
+    const pos = this.getPos(e);
+    const dx = pos.x - this.originX;
+    const dy = pos.y - this.originY;
+
+    let drawnAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
+    if (drawnAngle < 0) drawnAngle += 360;
+
+    this.userRay = {
+      endX: pos.x,
+      endY: pos.y,
+      angleDeg: Math.round(drawnAngle),
+      isSubmitted: false
     };
 
-    const moveDraw = (e) => {
-      if (!this.isDrawing) return;
-      if (e.cancelable) e.preventDefault();
+    this.render();
+    this.updateAngleHUD(this.userRay.angleDeg);
+  }
 
-      const pos = getPos(e);
-      const dx = pos.x - this.originX;
-      const dy = pos.y - this.originY;
-
-      // Calculate angle relative to Normal (Upward normal vector)
-      let drawnAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
-      if (drawnAngle < 0) drawnAngle += 360;
-
-      this.userRay = {
-        endX: pos.x,
-        endY: pos.y,
-        angleDeg: Math.round(drawnAngle),
-        isSubmitted: false
-      };
-
-      this.render();
-      this.updateAngleHUD(this.userRay.angleDeg);
-    };
-
-    const endDraw = () => {
-      if (!this.isDrawing) return;
-      this.isDrawing = false;
-      if (this.userRay) {
-        this.verifyPrediction();
-      }
-    };
-
-    this.canvas.addEventListener('pointerdown', startDraw);
-    window.addEventListener('pointermove', moveDraw, { passive: false });
-    window.addEventListener('pointerup', endDraw);
+  handleEnd(e) {
+    if (!this.isDrawing || this.isDestroyed) return;
+    this.isDrawing = false;
+    if (e && e.pointerId && this.canvas) {
+      try { this.canvas.releasePointerCapture(e.pointerId); } catch(err){}
+    }
+    if (this.userRay) {
+      this.verifyPrediction();
+    }
   }
 
   updateAngleHUD(deg) {
@@ -106,6 +124,7 @@ class RayDrawEngine {
   }
 
   verifyPrediction() {
+    if (!this.userRay) return;
     const expectedAngle = this.params.incidentAngleDeg;
     const error = Math.abs(this.userRay.angleDeg - expectedAngle);
     const isCorrect = error <= this.params.toleranceDeg;
@@ -122,14 +141,15 @@ class RayDrawEngine {
     const ctx = this.ctx;
     const w = this.width;
     const h = this.height;
-    if (!ctx || w === 0 || h === 0) return;
+    if (!ctx || this.isDestroyed || w === 0 || h === 0) return;
 
-    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#05070D';
+    ctx.fillRect(0, 0, w, h);
 
     const ox = this.originX;
     const oy = this.originY;
 
-    // --- 1. REFLECTING PLANE / MIRROR ---
+    // Reflecting plane
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
@@ -137,7 +157,7 @@ class RayDrawEngine {
     ctx.lineTo(w - 16, oy);
     ctx.stroke();
 
-    // Mirror Hatch Lines
+    // Hatching
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 1;
     for (let x = 20; x < w - 16; x += 10) {
@@ -147,7 +167,7 @@ class RayDrawEngine {
       ctx.stroke();
     }
 
-    // --- 2. NORMAL LINE (DASHED) ---
+    // Normal line
     ctx.setLineDash([4, 4]);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
     ctx.lineWidth = 1.2;
@@ -161,7 +181,7 @@ class RayDrawEngine {
     ctx.font = '9px monospace';
     ctx.fillText('Normal (N)', ox + 6, oy - 70);
 
-    // --- 3. INCIDENT LASER BEAM ---
+    // Incident Beam
     const incRad = (this.params.incidentAngleDeg * Math.PI) / 180;
     const rayLength = 75;
     const sourceX = ox - Math.sin(incRad) * rayLength;
@@ -177,13 +197,12 @@ class RayDrawEngine {
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Point of incidence beacon
     ctx.fillStyle = '#00f3ff';
     ctx.beginPath();
     ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // --- 4. USER DRAWN / SUBMITTED RAY ---
+    // Drawn Ray
     if (this.userRay) {
       const isCorrect = this.userRay.isSubmitted && Math.abs(this.userRay.angleDeg - this.params.incidentAngleDeg) <= this.params.toleranceDeg;
       const rayColor = !this.userRay.isSubmitted ? '#00f3ff' : (isCorrect ? '#10b981' : '#f43f5e');
@@ -199,7 +218,6 @@ class RayDrawEngine {
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      // Pointer Target Ring
       ctx.strokeStyle = rayColor;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -210,10 +228,17 @@ class RayDrawEngine {
 
   destroy() {
     this.isDestroyed = true;
+    this.isDrawing = false;
+    if (this.canvas) {
+      this.canvas.removeEventListener('pointermove', this.boundMove);
+      this.canvas.removeEventListener('pointerup', this.boundEnd);
+      this.canvas.removeEventListener('pointercancel', this.boundEnd);
+      if (this.observer) this.observer.unobserve(this.canvas);
+    }
     this.canvas = null;
     this.ctx = null;
+    this.userRay = null;
   }
 }
 
-// Register into Invincible 360 Plugin Registry
 window.ReelSimRegistry['phy_ray_draw'] = RayDrawEngine;
