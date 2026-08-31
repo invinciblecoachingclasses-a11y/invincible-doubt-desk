@@ -1452,10 +1452,25 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
 
     const isCorrect = Number(selectedIdx) === Number(correctIdx);
 
+// Extract actual question & option text for Mistake Vault feedback
+const qTitleEl = card ? card.querySelector('.reel-q-title, h3, .reel-question-text') : null;
+const questionText = qTitleEl ? qTitleEl.innerText.trim() : 'Academic Problem';
+
+const allOptionBtns = card ? card.querySelectorAll('.reel-opt-btn, .option-btn') : [];
+const yourAnswerText = allOptionBtns[selectedIdx] ? allOptionBtns[selectedIdx].innerText.trim() : `Option ${Number(selectedIdx) + 1}`;
+const correctAnswerText = allOptionBtns[correctIdx] ? allOptionBtns[correctIdx].innerText.trim() : `Option ${Number(correctIdx) + 1}`;
+
+const tipEl = card ? card.querySelector('.reel-tip-text, .topper-content, .reel-feedback') : null;
+const explanationRule = tipEl ? tipEl.innerText.trim() : 'Review the fundamental NCERT law and verify sign conventions before calculating.';
+
 if (window.InvincibleTelemetry) {
   window.InvincibleTelemetry.emit('REEL_RESOLVED', {
-    subject: 'Science',
-    topic: 'General Concept',
+    subject: card.dataset.subject || 'Science',
+    topic: card.dataset.topic || 'General Concept',
+    question: questionText,
+    yourAnswer: yourAnswerText,
+    correctAnswer: correctAnswerText,
+    explanation: explanationRule,
     isCorrect: isCorrect,
     timeTaken: 5,
     isBoss: false
