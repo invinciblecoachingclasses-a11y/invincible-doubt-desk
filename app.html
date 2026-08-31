@@ -272,12 +272,13 @@
     <div class="logo" onclick="switchTab('home')" style="cursor:pointer;">
         <span style="color:#fff;">⚡ INVINCIBLE</span><span style="color:var(--accent-cyan);">360</span>
     </div>
-    <div class="stats">
-        <button type="button" id="lofiToggleBtn" onclick="toggleLofiAudio()" style="background:transparent; border:none; color:var(--text-muted); font-size:16px; cursor:pointer;">🎧</button>
+    <div class="stats" onclick="openPlayerProfile()" style="cursor:pointer;">
+        <button type="button" id="lofiToggleBtn" onclick="event.stopPropagation(); toggleLofiAudio()" style="background:transparent; border:none; color:var(--text-muted); font-size:16px; cursor:pointer;">🎧</button>
         <span style="color:var(--accent-rose);">🔥 <span id="streakCounter">2</span>d</span>
         <span style="color:var(--accent-amber);">✨ <span id="xpCounter">680</span> XP</span>
     </div>
 </header>
+
 
 <!-- =====================================================
      HOME DECK
@@ -997,6 +998,8 @@
 <script src="streak_plasma.js"></script>
 <script src="lofi_cyber_orb.js"></script>
 <script src="reels-stories.js"></script>
+<script src="profile.js"></script>
+
 
 <script src="campus-hub.js"></script>
 <script src="doubt-notes.js"></script>
