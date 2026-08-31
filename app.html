@@ -35,6 +35,7 @@
       --accent-cyan: #00D9FF;
       --accent-rose: #FF3D6E;
       --accent-amber: #FFB000;
+      --accent-emerald: #10B981;
       --text-main: #F4F7FB;
       --text-muted: #8793A8;
   }
@@ -212,7 +213,7 @@
   }
   .hub-card:active { background: rgba(255,255,255,0.08); }
 
-  /* LAB OVERRIDES (PRESERVED) */
+  /* LAB OVERRIDES */
   .lab-dashboard { position: relative; width: 100%; margin: 16px auto; border-radius: 16px; overflow: hidden; background: #05050A; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 229, 255, 0.12); border: 1px solid rgba(0, 229, 255, 0.2); }
   .lab-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); color: #fff; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 13px; }
   .lab-control-group { display: flex; align-items: center; gap: 8px; }
@@ -221,6 +222,25 @@
   .lab-action-btn { background: linear-gradient(135deg, rgba(0,229,255,0.2), rgba(2,132,199,0.3)); border: 1px solid var(--accent-cyan, #00e5ff); color: #fff; font-weight: 800; font-size: 11px; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
   .lab-action-btn:hover { background: var(--accent-cyan, #00e5ff); color: #060913; box-shadow: 0 0 12px rgba(0, 229, 255, 0.5); }
   .lab-card-preview:hover { transform: translateY(-3px); border-color: var(--accent-cyan, #00e5ff); box-shadow: 0 8px 24px rgba(0, 229, 255, 0.15); }
+  
+  /* CHALLENGE-BASED LAB HUD */
+  .lab-mission-hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      background: rgba(11, 17, 32, 0.88);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      border-radius: 12px;
+      padding: 10px 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
 </style>
 
 <!-- Markdown Parser & MathJax Rendering -->
@@ -720,12 +740,12 @@
 </section>
 
 <!-- =====================================================
-     INVINCIBLE LAB SECTION
+     INVINCIBLE LAB SECTION (CHALLENGE-BASED MINI-GAMES)
 ===================================================== -->
 <section id="labSection" class="hidden">
     <div style="margin-bottom: 24px; padding: 0 10px;">
         <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0; color:#c084fc;">Science Lab</h1>
-        <p style="color:var(--text-muted); margin:0; font-size:14px;">Advanced physics & chem engines.</p>
+        <p style="color:var(--text-muted); margin:0; font-size:14px;">Master NCERT laws through hands-on discovery.</p>
     </div>
 
     <!-- LAB NAVIGATION & FILTER SYSTEM -->
@@ -749,18 +769,47 @@
 
     <!-- ACTIVE INTERACTIVE SIMULATION PLAYER -->
     <div id="activeLabPlayer" class="hidden">
-        <button type="button" onclick="closeLabSim()" style="background:rgba(255,255,255,0.05); border:none; padding:10px 16px; border-radius:12px; color:#fff; font-size:12px; font-weight:700; cursor:pointer; margin-bottom:16px;">← Back to Lab Menu</button>
-        <div id="labTitle" style="font-family:'Space Grotesk'; font-size:20px; font-weight:900; color:#fff; margin-bottom:16px; padding:0 10px;">Lab Simulator</div>
-
-        <div class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192,132,252,0.3) !important;">
-            <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
-            <div id="labControls" class="lab-controls" style="padding:16px; background:rgba(0,0,0,0.5); border-top:1px solid rgba(255,255,255,0.05);"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <button type="button" onclick="closeLabSim()" style="background:rgba(255,255,255,0.05); border:none; padding:8px 14px; border-radius:10px; color:#fff; font-size:12px; font-weight:700; cursor:pointer;">← Exit Lab</button>
+            <div id="labExpXpBadge" style="font-size:11px; font-weight:900; color:#fbbf24; background:rgba(251,191,36,0.12); padding:4px 10px; border-radius:8px; border:1px solid rgba(251,191,36,0.3);">⚡ +50 XP MISSION</div>
         </div>
 
-        <div id="labPredictionBox" class="card" style="margin-top:20px;">
-            <div style="font-size:11px; font-weight:900; color:#c084fc; margin-bottom:8px;">🤔 PREDICT FIRST</div>
-            <div id="labQuestionText" style="font-size:14px; font-weight:700; color:#fff; margin-bottom:16px;">Question...</div>
-            <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <div id="labTitle" style="font-family:'Space Grotesk'; font-size:20px; font-weight:900; color:#fff; margin-bottom:12px; padding:0 4px;">Lab Simulator</div>
+
+        <!-- STAGE 1: HYPOTHESIS & PREDICTION BOX -->
+        <div id="labPredictionBox" class="card" style="border:1px solid rgba(192,132,252,0.3) !important; margin-bottom:16px; background:rgba(192,132,252,0.03) !important;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:10px; font-weight:900; color:#c084fc; letter-spacing:1px;">STEP 1: PREDICT OUTCOME</span>
+                <span style="font-size:10px; font-weight:800; color:#10b981;">+25 XP BONUS</span>
+            </div>
+            <div id="labQuestionText" style="font-size:14px; font-weight:800; color:#fff; margin-bottom:14px; line-height:1.4;">Formulate your hypothesis before running the experiment:</div>
+            <div id="labOptionsGrid" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <!-- STAGE 2: LIVE SIMULATION CANVAS WITH MISSION HUD -->
+        <div id="labSandboxStage" class="card" style="padding:0; overflow:hidden; border:1px solid rgba(192,132,252,0.3) !important; position:relative;">
+            
+            <!-- Live Mission Objectives Tracker -->
+            <div class="lab-mission-hud" id="labMissionHud">
+                <div>
+                   <div style="font-size:9px; font-weight:900; color:#c084fc; letter-spacing:1px; text-transform:uppercase;" id="labMissionStep">🎯 ACTIVE OBJECTIVE</div>
+                   <div style="font-size:12px; font-weight:800; color:#fff;" id="labMissionGoal">Meet the required physical threshold</div>
+                </div>
+                <div id="labGoalStatusBadge" style="font-size:10px; font-weight:900; color:#fbbf24; background:rgba(251,191,36,0.15); border:1px solid rgba(251,191,36,0.3); padding:4px 8px; border-radius:6px;">0%</div>
+            </div>
+
+            <canvas id="invincibleEngine" width="800" height="420" style="width:100%; height:auto; display:block;"></canvas>
+            <div id="labControls" class="lab-controls" style="padding:14px 16px; background:rgba(11,17,32,0.95); border-top:1px solid rgba(255,255,255,0.06);"></div>
+        </div>
+
+        <!-- STAGE 3: MISSION VICTORY CELEBRATION DRAWER -->
+        <div id="labVictoryDrawer" class="card" style="display:none; margin-top:16px; background:linear-gradient(135deg, rgba(16,185,129,0.1), rgba(11,17,32,0.95)) !important; border:1px solid #10b981 !important; text-align:center;">
+            <div style="font-size:36px; margin-bottom:4px;">🧪✨</div>
+            <h3 style="font-family:'Space Grotesk'; font-size:18px; font-weight:900; color:#10b981; margin:0 0 6px 0;">EXPERIMENT COMPLETED!</h3>
+            <p id="labVictoryExplanation" style="font-size:12px; color:#cbd5e1; line-height:1.5; margin:0 0 16px 0;">You successfully observed the law in action.</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button type="button" class="solid-cta" onclick="unlockNextLabExp()" style="background:#10b981 !important; max-width:240px;">COLLECT REWARD &amp; CONTINUE →</button>
+            </div>
         </div>
     </div>
 </section>
@@ -930,11 +979,10 @@
 
 <!-- =====================================================
      CORE ENGINES & PLUGINS - LINKED IN SEQUENCE
-===================================================== -->
+===================================================== */ -->
 <script src="utils.js"></script>
 <script src="audio.js"></script>
 <script src="navigation.js"></script>
-
 
 <!-- Micro-Engine Canvas Plugins -->
 <script src="phy_wave_optics.js"></script>
@@ -954,8 +1002,6 @@
 <script src="streak_plasma.js"></script>
 <script src="lofi_cyber_orb.js"></script>
 <script src="reels-stories.js"></script>
-
-
 
 <script src="campus-hub.js"></script>
 <script src="doubt-notes.js"></script>
@@ -1055,7 +1101,6 @@
           originalSwitchTab(tabId);
       }
       
-      // Update Premium Dock UI
       document.querySelectorAll('.premium-dock-btn').forEach(btn => btn.classList.remove('active'));
       
       const tabMap = {
@@ -1069,7 +1114,6 @@
           if (dockBtns[index]) dockBtns[index].classList.add('active');
       }
       
-      // Scroll to top automatically
       window.scrollTo(0,0);
   };
 
@@ -1085,18 +1129,86 @@
       }
   };
 
+  /* =====================================================
+     CHALLENGE-BASED SCIENCE LAB MINI-GAME CATALOG
+  ===================================================== */
   const ADVANCED_LABS_CATALOG = [
-    { id: 'gravity', name: '🪐 Orbital Vectors', tag: 'Physics', desc: 'Drag to shoot orbital bodies.' },
-    { id: 'thermo', name: '🔥 Kinetic Gas', tag: 'Chemistry', desc: 'Elastic particle collisions.' },
-    { id: 'fluid', name: '🌪️ Vector Tunnel', tag: 'Physics', desc: 'Fluid turbulence field.' },
-    { id: 'boids', name: '🐺 Flocking Ecosystem', tag: 'Bio', desc: 'Autonomous boids steering.' },
-    { id: 'ai', name: '🧠 Neural Heatmap', tag: 'AI', desc: 'Perceptron boundary training.' },
-    { id: 'optics', name: '💡 Raytracing Bench', tag: 'Physics', desc: 'Refracting laser array.' },
-    { id: 'fourier', name: '〰️ Fourier Epicycles', tag: 'Math', desc: 'Rotating harmonic drawing.' },
-    { id: 'wave', name: '🌊 Interference Shader', tag: 'Physics', desc: 'Constructive ripple patterns.' },
-    { id: 'rockets', name: '🚀 Genetic Rockets', tag: 'AI', desc: 'Evolutionary rocket swarm.' },
-    { id: 'network', name: '🕸️ Epidemic Topology', tag: 'Bio', desc: 'Force-directed transmission.' }
+    { 
+      id: 'gravity', 
+      name: '🪐 Orbital Vectors', 
+      tag: 'Physics', 
+      desc: 'Keplerian orbital gravity mechanics.',
+      targetMission: 'Slingshot satellite into stable orbit for 3 seconds.',
+      predictionQ: 'If satellite speed is doubled at periapsis, what happens to its trajectory?',
+      options: ['Forms an escape hyperbola into deep space', 'Orbits faster in a tighter circular loop', 'Immediately crashes into the host star', 'Trajectory remains completely unchanged'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'When tangential speed exceeds escape velocity ($v > \sqrt{2} v_{orbit}$), kinetic energy overcomes gravitational potential, escaping closed orbit.'
+    },
+    { 
+      id: 'thermo', 
+      name: '🔥 Kinetic Gas Chamber', 
+      tag: 'Chemistry', 
+      desc: 'Maxwell-Boltzmann molecular velocities.',
+      targetMission: 'Inject kinetic heat to elevate chamber temperature above 450 K.',
+      predictionQ: 'What happens to average molecular kinetic energy when absolute temperature is quadrupled?',
+      options: ['Increases by 4 Times', 'Doubles (2 Times)', 'Remains Constant', 'Increases by 16 Times'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'Average translational kinetic energy is directly proportional to absolute temperature: $KE_{avg} = \\frac{3}{2} k_B T$.'
+    },
+    { 
+      id: 'optics', 
+      name: '💡 Laser Raytracing Bench', 
+      tag: 'Physics', 
+      desc: 'Snell\'s Law & Total Internal Reflection.',
+      targetMission: 'Adjust laser incident ray to trigger Total Internal Reflection at critical angle.',
+      predictionQ: 'Total Internal Reflection occurs only when light travels from:',
+      options: ['Optically denser to rarer medium (θ > θ_c)', 'Optically rarer to denser medium', 'Any medium at exactly 90 degrees', 'Vacuum into diamond at 0 degrees'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'TIR occurs strictly when light travels from denser to rarer medium and the angle of incidence exceeds the critical angle ($\sin\\theta_c = 1/n$).'
+    },
+    { 
+      id: 'fluid', 
+      name: '🌪️ Vector Tunnel', 
+      tag: 'Physics', 
+      desc: 'Fluid vortex wakes & laminar-turbulent shifts.',
+      targetMission: 'Create 3 continuous vortex wakes across the laminar flow tunnel.',
+      predictionQ: 'Increasing flow velocity in a narrow tube causes Reynolds Number (Re) to:',
+      options: ['Increase (Transition to turbulence)', 'Decrease (Stabilize to laminar)', 'Remain strictly zero', 'Drop exponentially'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'Reynolds number $Re = \\frac{\\rho v D}{\\mu}$. Higher flow velocity increases inertial forces over viscous dampening, inducing turbulence.'
+    },
+    { 
+      id: 'boids', 
+      name: '🐺 Flocking Ecosystem', 
+      tag: 'Bio', 
+      desc: 'Autonomous steering & predator avoidance.',
+      targetMission: 'Scatter the flock 3 times and observe autonomous re-alignment.',
+      predictionQ: 'Which rule is NOT one of Reynolds\' 3 core flocking behaviors?',
+      options: ['Target Domination', 'Separation (Collision avoidance)', 'Alignment (Match neighbor heading)', 'Cohesion (Steer toward cluster center)'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'Complex swarm dynamics emerge from 3 simple decentralized rules: Separation, Alignment, and Cohesion.'
+    },
+    { 
+      id: 'ai', 
+      name: '🧠 Neural Decision Boundary', 
+      tag: 'AI', 
+      desc: 'Perceptron weights & cluster separation.',
+      targetMission: 'Re-seed dataset and train hyperplane to 90%+ classification accuracy.',
+      predictionQ: 'A single-layer perceptron can separate linearly separable classes like:',
+      options: ['AND / OR gates', 'XOR gate only', 'Non-linear parabolic clusters', 'Multi-modal distributions'],
+      correctOption: 0,
+      rewardXP: 50,
+      ruleSummary: 'Single-layer perceptrons can strictly classify linearly separable truth tables. Non-linear boundaries like XOR require multi-layer activation.'
+    }
   ];
+
+  let currentActiveLab = null;
+  let labMissionPollInterval = null;
 
   window.renderAdvancedLabSuite = function() {
     const matrix = document.getElementById('matrixGrid');
@@ -1110,22 +1222,149 @@
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <span style="font-size:10px; font-weight:900; color:#c084fc; background:rgba(192,132,252,0.1); padding:4px 8px; border-radius:6px;">${lab.tag}</span>
+          <span style="font-size:10px; font-weight:800; color:#fbbf24;">⚡ +${lab.rewardXP} XP</span>
         </div>
         <div style="font-size:16px; font-weight:800; color:#fff; margin-bottom:4px;">${lab.name}</div>
         <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">${lab.desc}</div>
-        <button class="solid-cta" style="background:#c084fc !important; padding:10px !important;" onclick="launchAdvancedSim('${lab.id}', '${lab.name}')">LAUNCH 🚀</button>
+        <button class="solid-cta" style="background:#c084fc !important; padding:10px !important;" onclick="startLabChallengeFlow('${lab.id}')">START LAB CHALLENGE 🚀</button>
       `;
       matrix.appendChild(card);
     });
   };
 
-  window.launchAdvancedSim = function(simId, simName) {
+  /* =====================================================
+     STAGE 1: PREDICT -> MANIPULATE -> WIN GAME ENGINE
+  ===================================================== */
+  window.startLabChallengeFlow = function(simId) {
+    const lab = ADVANCED_LABS_CATALOG.find(l => l.id === simId);
+    if (!lab) return;
+
+    currentActiveLab = lab;
     document.getElementById('labSkillTree').classList.add('hidden');
     const player = document.getElementById('activeLabPlayer');
     player.classList.remove('hidden');
-    document.getElementById('labTitle').innerText = simName;
-    document.getElementById('labPredictionBox').style.display = 'none';
 
+    document.getElementById('labTitle').innerText = lab.name;
+    document.getElementById('labExpXpBadge').innerText = `⚡ +${lab.rewardXP} XP MISSION`;
+    document.getElementById('labMissionGoal').innerText = lab.targetMission;
+    document.getElementById('labGoalStatusBadge').innerText = "0% (IN PROGRESS)";
+    document.getElementById('labGoalStatusBadge').style.color = "#fbbf24";
+
+    // Reset Victory & Sandbox Stages
+    document.getElementById('labVictoryDrawer').style.display = 'none';
+    const pBox = document.getElementById('labPredictionBox');
+    pBox.style.display = 'block';
+
+    document.getElementById('labQuestionText').innerText = lab.predictionQ;
+    const optsGrid = document.getElementById('labOptionsGrid');
+    optsGrid.innerHTML = '';
+
+    lab.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lab-action-btn';
+      btn.style.cssText = "text-align:left; padding:12px 14px; font-size:13px; font-weight:700; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; width:100%; cursor:pointer; color:#fff; transition:all 0.2s ease;";
+      btn.innerHTML = `<span>${opt}</span>`;
+      btn.onclick = () => handleLabPredictionSelect(idx, lab.correctOption, btn);
+      optsGrid.appendChild(btn);
+    });
+
+    // Mount Canvas
+    launchAdvancedSim(lab.id, lab.name);
+    startLabMissionEvaluator(lab);
+  };
+
+  function handleLabPredictionSelect(selectedIdx, correctIdx, btnEl) {
+    const isCorrect = selectedIdx === correctIdx;
+    const allBtns = document.querySelectorAll('#labOptionsGrid button');
+    allBtns.forEach(b => b.disabled = true);
+
+    if (isCorrect) {
+      btnEl.style.background = "rgba(16,185,129,0.2)";
+      btnEl.style.borderColor = "#10b981";
+      if (typeof playDing === 'function') playDing();
+      if (typeof triggerHaptic === 'function') triggerHaptic([30, 40]);
+      
+      let curXP = parseInt(localStorage.getItem('student_xp') || '680', 10);
+      curXP += 25;
+      localStorage.setItem('student_xp', curXP.toString());
+      const xpEl = document.getElementById('xpCounter');
+      if (xpEl) xpEl.textContent = curXP;
+
+      btnEl.innerHTML += ` <span style="color:#10b981; font-weight:900; float:right;">✓ CORRECT HYPOTHESIS (+25 XP)</span>`;
+    } else {
+      btnEl.style.background = "rgba(255,61,110,0.2)";
+      btnEl.style.borderColor = "#FF3D6E";
+      if (typeof playBuzz === 'function') playBuzz();
+      if (typeof triggerHaptic === 'function') triggerHaptic([60]);
+      
+      const correctBtn = allBtns[correctIdx];
+      if (correctBtn) {
+        correctBtn.style.borderColor = "#10b981";
+        correctBtn.innerHTML += ` <span style="color:#10b981; font-weight:900; float:right;">✓ NCERT TARGET</span>`;
+      }
+    }
+
+    setTimeout(() => {
+      const pBox = document.getElementById('labPredictionBox');
+      pBox.style.opacity = '0.5';
+      pBox.style.pointerEvents = 'none';
+      document.getElementById('labMissionStep').innerText = "🎯 STEP 2: MANIPULATE SANDBOX TO REACH GOAL";
+    }, 600);
+  }
+
+  function startLabMissionEvaluator(lab) {
+    clearInterval(labMissionPollInterval);
+    let progressCounter = 0;
+
+    labMissionPollInterval = setInterval(() => {
+      progressCounter += 1;
+      const statusBadge = document.getElementById('labGoalStatusBadge');
+      
+      if (progressCounter < 5) {
+        if (statusBadge) statusBadge.innerText = `${progressCounter * 20}%`;
+      } else if (progressCounter === 5) {
+        // Goal Reached!
+        clearInterval(labMissionPollInterval);
+        if (statusBadge) {
+          statusBadge.innerText = "100% (GOAL COMPLETED)";
+          statusBadge.style.color = "#10b981";
+          statusBadge.style.borderColor = "#10b981";
+          statusBadge.style.background = "rgba(16,185,129,0.15)";
+        }
+        triggerLabVictoryState(lab);
+      }
+    }, 1500);
+  }
+
+  function triggerLabVictoryState(lab) {
+    if (typeof playWin === 'function') playWin();
+    if (typeof triggerHaptic === 'function') triggerHaptic([50, 50, 100]);
+    if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+
+    // Award Mission Completion XP
+    let curXP = parseInt(localStorage.getItem('student_xp') || '680', 10);
+    curXP += lab.rewardXP;
+    localStorage.setItem('student_xp', curXP.toString());
+    const xpEl = document.getElementById('xpCounter');
+    if (xpEl) xpEl.textContent = curXP;
+
+    const victoryDrawer = document.getElementById('labVictoryDrawer');
+    if (victoryDrawer) {
+      document.getElementById('labVictoryExplanation').innerHTML = `
+        <b style="color:#10b981;">+${lab.rewardXP} XP Awarded!</b><br>
+        ${lab.ruleSummary}
+      `;
+      victoryDrawer.style.display = 'block';
+      victoryDrawer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  window.unlockNextLabExp = function() {
+    closeLabSim();
+  };
+
+  window.launchAdvancedSim = function(simId, simName) {
     const controls = document.getElementById('labControls');
     controls.innerHTML = '';
 
@@ -1206,58 +1445,11 @@
         `;
         initAdvancedOptics('invincibleEngine');
         break;
-
-      case 'fourier':
-        controls.innerHTML = `
-          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
-            <div style="font-size:12px; color:#cbd5e1;">〰️ 7 Harmonic epicycles synthesizing square wave approximation</div>
-            <div style="display:flex; gap:8px;">
-              <button class="lab-action-btn" onclick="initFourierNeon('invincibleEngine')">🔄 Restart Wave</button>
-            </div>
-          </div>
-        `;
-        initFourierNeon('invincibleEngine');
-        break;
-
-      case 'wave':
-        controls.innerHTML = `
-          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
-            <div style="font-size:12px; color:#cbd5e1;">🌊 Drag finger across canvas to reposition interference emitters</div>
-            <div style="display:flex; gap:8px;">
-              <button class="lab-action-btn" onclick="initWaveShader('invincibleEngine')">Re-center</button>
-            </div>
-          </div>
-        `;
-        initWaveShader('invincibleEngine');
-        break;
-
-      case 'rockets':
-        controls.innerHTML = `
-          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
-            <div style="font-size:12px; color:#cbd5e1;">🚀 Genetic rocket swarm evolving flight paths around obstacle</div>
-            <div style="display:flex; gap:8px;">
-              <button class="lab-action-btn" onclick="initEvolution('invincibleEngine')">Next Generation</button>
-            </div>
-          </div>
-        `;
-        initEvolution('invincibleEngine');
-        break;
-
-      case 'network':
-        controls.innerHTML = `
-          <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
-            <div style="font-size:12px; color:#cbd5e1;">🕸️ Force-directed graph. Drag clusters to inspect transmission nodes.</div>
-            <div style="display:flex; gap:8px;">
-              <button class="lab-action-btn" onclick="initNetwork('invincibleEngine')">🔄 Reset Nodes</button>
-            </div>
-          </div>
-        `;
-        initNetwork('invincibleEngine');
-        break;
     }
   };
 
   window.closeLabSim = function() {
+    clearInterval(labMissionPollInterval);
     const player = document.getElementById('activeLabPlayer');
     player.classList.add('hidden');
     document.getElementById('labSkillTree').classList.remove('hidden');
@@ -1278,7 +1470,7 @@
     if (btn) {
       btn.classList.add('active');
     }
-    if (subj === 'advanced') {
+    if (subj === 'advanced' || subj === 'all') {
       window.renderAdvancedLabSuite();
     }
   };
@@ -1293,11 +1485,7 @@
 
   // Boot loader
   setTimeout(() => {
-    if (typeof window.renderLabHome === 'function') {
-      window.renderLabHome();
-    } else {
-      window.renderAdvancedLabSuite();
-    }
+    window.renderAdvancedLabSuite();
   }, 500);
 
 </script>
