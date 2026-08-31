@@ -333,7 +333,11 @@ if (startTestBtn) {
 
     const originalText = startTestBtn.textContent;
     startTestBtn.disabled = true; startTestBtn.textContent = "⚙️ Compiling Assessment... (10s)";
-    document.getElementById('testWarmupBox')?.classList.remove('hidden');
+    const warmupBox = document.getElementById('testWarmupBox');
+    if (warmupBox) {
+        warmupBox.classList.remove('hidden');
+        warmupBox.style.display = 'block';
+    }
 
     try {
         const response = await fetch("/api/generate-test", {
@@ -364,7 +368,10 @@ if (startTestBtn) {
     } finally { 
         startTestBtn.disabled = false; 
         startTestBtn.textContent = originalText; 
-        document.getElementById('testWarmupBox')?.classList.add('hidden');
+        if (warmupBox) {
+            warmupBox.classList.add('hidden');
+            warmupBox.style.display = 'none';
+        }
     }
   });
 }
@@ -419,15 +426,14 @@ window.handleTestOptionSelect = function(qId, selectedIdx, correctIdx) {
 
 function startQuestions(questions, headerTitle, testTitle){
     activeQuestions = questions; activeTestTitle = testTitle;
-    if (testSetup) testSetup.classList.add("hidden"); 
-    if (testArea) testArea.classList.remove("hidden"); 
-    if (testResult) testResult.style.display = "none";
-    if (reviewContainer) reviewContainer.innerHTML = ""; 
     
-    // SAFETY FIX: Prevent crash if badgesContainer is missing
-    if (badgesContainer) {
-      badgesContainer.innerHTML = "";
-    }
+    // ENFORCED VISIBILITY TOGGLES
+    if (testSetup) { testSetup.classList.add("hidden"); testSetup.style.display = "none"; }
+    if (testArea) { testArea.classList.remove("hidden"); testArea.style.display = "block"; }
+    if (testResult) { testResult.classList.add("hidden"); testResult.style.display = "none"; }
+    
+    if (reviewContainer) reviewContainer.innerHTML = ""; 
+    if (badgesContainer) badgesContainer.innerHTML = "";
     
     if (testHeader) testHeader.innerHTML = "<strong>" + escapeHTML(headerTitle) + "</strong><br>" + escapeHTML(testTitle) + " &bull; 20 Questions";
     if (questionsContainer) questionsContainer.innerHTML = "";
@@ -531,10 +537,12 @@ if (submitTestBtn) {
     if (resultDetail) resultDetail.innerHTML = `<strong>${percentage}% Accuracy</strong> &bull; Correct: ${correct} | Incorrect: ${attempted - correct}`;
     if (reviewContainer) reviewContainer.innerHTML = reviewHTML;
     
-    if (testArea) testArea.classList.add("hidden"); 
+    // ENFORCED VISIBILITY TOGGLES
+    if (testArea) { testArea.classList.add("hidden"); testArea.style.display = "none"; }
     if (testResult) {
+      testResult.classList.remove("hidden");
       testResult.style.display = "block";
-      testResult.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => testResult.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
     }
 
     const studentName = document.getElementById("studentName")?.value?.trim() || localStorage.getItem("studentName") || "Student";
@@ -555,9 +563,10 @@ if (submitTestBtn) {
 
 if (restartTestBtn) {
   restartTestBtn.addEventListener("click", function(){
-    if (testResult) testResult.style.display = "none"; 
-    if (testSetup) testSetup.classList.remove("hidden"); 
-    if (testArea) testArea.classList.add("hidden");
+    // ENFORCED VISIBILITY TOGGLES
+    if (testResult) { testResult.classList.add("hidden"); testResult.style.display = "none"; }
+    if (testSetup) { testSetup.classList.remove("hidden"); testSetup.style.display = "block"; }
+    if (testArea) { testArea.classList.add("hidden"); testArea.style.display = "none"; }
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
