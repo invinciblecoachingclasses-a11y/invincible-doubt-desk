@@ -1452,16 +1452,19 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
 
     const isCorrect = Number(selectedIdx) === Number(correctIdx);
 
-// Inside handleReelAnswer() in reels-stories.js
+// ✅ CORRECT
+const isCorrect = Number(selectedIdx) === Number(correctIdx);
+
 if (window.InvincibleTelemetry) {
   window.InvincibleTelemetry.emit('REEL_RESOLVED', {
-    subject: card.subject || 'Science',
-    topic: card.topic || 'General',
+    subject: 'Science',
+    topic: 'General Concept',
     isCorrect: isCorrect,
-    timeTaken: (card.time || 15) - Math.floor(timeLeft / 1000),
-    isBoss: isBoss
+    timeTaken: 5,
+    isBoss: false
   });
 }
+
 
 
     if (isCorrect) {
