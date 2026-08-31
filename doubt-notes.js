@@ -368,18 +368,22 @@ if (askBtn) {
       const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
       doubtHistory = [];
 
-      try {
-          const res = await fetch("/api/ask", {
-              method: "POST", 
-              headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({ 
-                subject: selectedSubject, 
-                question: q, 
-                image: selectedImage, 
+          try {
+        const coachPrompt = window.InvincibleCoach ? window.InvincibleCoach.getModePrompt() : '';
+        const fullPrompt = coachPrompt ? `${coachPrompt}\n\nStudent Question: ${q}` : q;
+
+        const res = await fetch("/api/ask", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                subject: selectedSubject,
+                question: fullPrompt,
+                image: selectedImage,
                 tone: currentTone,
-                history: []
-              })
-          });
+                history: doubtHistory
+            })
+        });
+
           
           const textResponse = await res.text();
           let data;
