@@ -1452,6 +1452,18 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
 
     const isCorrect = Number(selectedIdx) === Number(correctIdx);
 
+// Inside handleReelAnswer() in reels-stories.js
+if (window.InvincibleTelemetry) {
+  window.InvincibleTelemetry.emit('REEL_RESOLVED', {
+    subject: card.subject || 'Science',
+    topic: card.topic || 'General',
+    isCorrect: isCorrect,
+    timeTaken: (card.time || 15) - Math.floor(timeLeft / 1000),
+    isBoss: isBoss
+  });
+}
+
+
     if (isCorrect) {
         if (typeof playDing === 'function') playDing();
         if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
