@@ -1859,3 +1859,47 @@ document.addEventListener('DOMContentLoaded', () => {
     loadActiveStories();
     renderReelsDeck();
 });
+/* =====================================================
+   SAFE MODE OVERRIDES: BYPASSING EXTERNAL CRASHES
+===================================================== */
+
+async function renderReelsDeck() {
+    const container = document.getElementById('studyReelsDeck');
+    
+    // Safety Check: Do not attempt to calculate layout on hidden elements
+    if (!container || container.offsetParent === null) return;
+
+    // SAFE MODE: Bypassing ReelPersistence.js completely to prevent infinite loops
+    activeReelDeck = defaultReelDeck;
+    currentReelIndex = 0;
+
+    setupSwiperEngine(container);
+    hasReelsInitialized = true;
+}
+
+function createReelNode(index, initialOffsetPct) {
+    const node = document.createElement('div');
+    node.className = 'virtual-reel-slot';
+    node.style.position = 'absolute';
+    node.style.top = '0';
+    node.style.left = '0';
+    node.style.width = '100%';
+    node.style.height = '100%';
+    node.style.willChange = 'transform';
+    node.style.transform = `translate3d(0, ${initialOffsetPct}%, 0)`;
+    node.style.transition = 'none';
+    node.dataset.index = index;
+
+    if (index >= 0 && index < activeReelDeck.length) {
+        const card = activeReelDeck[index];
+        node.innerHTML = generateReelHTML(card, index);
+
+        // SAFE MODE: Canvas simulations and MathJax typesetting are disabled.
+        // This guarantees that external plugins cannot lock up the mobile UI thread.
+    } else {
+        node.innerHTML = '';
+        node.style.visibility = 'hidden';
+    }
+    return node;
+}
+
