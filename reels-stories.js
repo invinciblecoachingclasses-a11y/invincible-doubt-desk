@@ -294,15 +294,16 @@ let currentDeltaY = 0;
 /* =====================================================
    SYNTHESIZED AUDIO & HAPTIC FALLBACK ENGINE
 ===================================================== */
-const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-let audioCtx = null;
-
 function getAudioCtx() {
-  if (!audioCtx && AudioCtxClass) {
-    audioCtx = new AudioCtxClass();
+  if (!window._sharedAudioCtx) {
+    const AudioCtxConstructor = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtxConstructor) {
+      window._sharedAudioCtx = new AudioCtxConstructor();
+    }
   }
-  return audioCtx;
+  return window._sharedAudioCtx;
 }
+
 
 function playDing() {
   try {
