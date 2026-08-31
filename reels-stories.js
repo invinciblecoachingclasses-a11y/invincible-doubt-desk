@@ -6,14 +6,12 @@
    - Interactive Simulations (Canvas 2D + Micro-Engines)
    - Formula Builder & Ray Optics Sketchpads
    - Two-Stage State Machine (Challenge -> Master Reveal)
-   - Resilient Mobile Touch Swiper Viewport
+   - Resilient Mobile Touch Swiper Viewport (Infinite Loop)
    - Stories & Community Broadcast Engine
 ===================================================== */
 
 const defaultReelDeck = [
-    // =====================================================
     // --- CLASS 9 INTERACTIVE SUITE ---
-    // =====================================================
     { 
       id: 901, 
       class_name: "9", 
@@ -23,10 +21,10 @@ const defaultReelDeck = [
       subject: "Physics", 
       topic: "Laws of Motion", 
       q_en: "When a moving bus stops suddenly, passengers fall forward due to:", 
-      options: ["Inertia of Rest", "Inertia of Motion", "Inertia of Direction", "Gravitational Pull"], 
+      options: ["Inertia of Rest", "Inertia of Motion", "Inertia of Direction"], 
       answer: 1, 
       time: 5, 
-      trap: "The upper body continues in its forward state of motion while feet stop with the bus floor.", 
+      trap: "The upper body continues in its state of motion while feet stop with the bus.", 
       difficulty: "easy" 
     },
     { 
@@ -37,12 +35,12 @@ const defaultReelDeck = [
       title: "Newton's Second Law", 
       subject: "Physics", 
       topic: "Force & Momentum", 
-      q_en: "Assemble the formula for Net Force in terms of Mass and Acceleration.", 
+      q_en: "Assemble the equation for Net Force in terms of Mass and Acceleration.", 
       template: ["slot", "=", "slot", "×", "slot"], 
       choices: ["F", "m", "a", "v", "p", "t"], 
       answer: ["F", "m", "a"], 
       time: 20, 
-      trap: "Force equals mass times acceleration (F = ma), derived from the rate of change of momentum.", 
+      trap: "Force equals the rate of change of momentum: F = ma.", 
       difficulty: "medium" 
     },
     { 
@@ -57,7 +55,7 @@ const defaultReelDeck = [
       options: ["2 Times", "4 Times", "1/4th", "Half"], 
       answer: 1, 
       time: 15, 
-      trap: "Inverse-Square Law: F ∝ 1/r². Halving r (1/2) squares to 1/4 in the denominator, multiplying force by 4.", 
+      trap: "Inverse-Square Law: F ∝ 1/r². Halving r multiplies F by 4.", 
       difficulty: "boss" 
     },
     { 
@@ -89,38 +87,11 @@ const defaultReelDeck = [
       q_en: "Tap operations in sequence to isolate x in: 2x + 6 = 18.", 
       controls: [], 
       time: 25, 
-      trap: "Operations applied to one side must be equally applied to the other to maintain beam equilibrium.", 
+      trap: "Whatever operation you apply to one side, you must apply equally to the other side to keep the beam balanced.", 
       difficulty: "medium" 
     },
-    { 
-      id: 906, 
-      class_name: "9", 
-      type: "mcq", 
-      hook: "🧠 CELL BIOLOGY", 
-      title: "Autonomous Organelle", 
-      subject: "Biology", 
-      topic: "The Fundamental Unit of Life", 
-      q_en: "Which organelle contains its own circular DNA and 70S ribosomes?", 
-      options: ["Golgi Body", "Mitochondria", "Lysosome", "Endoplasmic Reticulum"], 
-      answer: 1, 
-      time: 10, 
-      trap: "Mitochondria and Chloroplasts are semi-autonomous organelles capable of synthesizing their own proteins.", 
-      difficulty: "easy" 
-    },
-    { 
-      id: 907, 
-      class_name: "9", 
-      type: "trap", 
-      subject: "Chemistry", 
-      topic: "Matter in Our Surroundings", 
-      title: "🚨 Latent Heat Trap", 
-      content: "During phase transition (ice to water or water to steam), temperature remains strictly CONSTANT despite continuous heating!", 
-      rule: "The supplied heat is consumed as Latent Heat to overcome intermolecular attraction forces without raising kinetic energy." 
-    },
 
-    // =====================================================
     // --- CLASS 10 INTERACTIVE SUITE ---
-    // =====================================================
     { 
       id: 101, 
       class_name: "10", 
@@ -130,10 +101,10 @@ const defaultReelDeck = [
       subject: "Physics", 
       topic: "Light - Reflection", 
       q_en: "If linear magnification m = -1 for a concave mirror, where is the object?", 
-      options: ["At Infinity", "At Principal Focus (F)", "At Centre of Curvature (C)", "Between F and P"], 
+      options: ["At Infinity", "At Principal Focus (F)", "At Centre of Curvature (C)"], 
       answer: 2, 
       time: 5, 
-      trap: "Negative sign = Real/Inverted. Magnitude 1 = Same size as object. This only occurs at C.", 
+      trap: "Negative sign = Real/Inverted. Magnitude 1 = Same size. Only occurs at C.", 
       difficulty: "easy" 
     },
     { 
@@ -147,7 +118,7 @@ const defaultReelDeck = [
       topic: "Light - Optics", 
       q_en: "Touch and drag on the sketchpad to aim the reflected ray for θ_i = 45°.", 
       time: 20, 
-      trap: "First Law: Angle of incidence strictly equals angle of reflection (θ_i = θ_r = 45°).", 
+      trap: "First Law: Angle of incidence strictly equals angle of reflection (θ_i = θ_r).", 
       difficulty: "medium" 
     },
     { 
@@ -162,7 +133,7 @@ const defaultReelDeck = [
       q_en: "Tap the Left Ventricle (the thickest chamber pumping oxygenated blood to the body).", 
       controls: [], 
       time: 20, 
-      trap: "The Left Ventricle has the thickest muscular myocardium to pump systemic blood against high systemic resistance.", 
+      trap: "The Left Ventricle has the thickest muscular walls to pump blood at high pressure throughout systemic circulation.", 
       difficulty: "medium" 
     },
     { 
@@ -173,7 +144,7 @@ const defaultReelDeck = [
       title: "Ohm's Law", 
       subject: "Physics", 
       topic: "Electricity", 
-      q_en: "Construct the fundamental formula for Potential Difference across a resistor.", 
+      q_en: "Drag or tap the tokens to construct the formula for Potential Difference.", 
       template: ["slot", "=", "slot", "×", "slot"], 
       choices: ["V", "I", "R", "P", "W", "Q"], 
       answer: ["V", "I", "R"], 
@@ -188,7 +159,7 @@ const defaultReelDeck = [
       subject: "Physics", 
       topic: "Current Electricity", 
       title: "🚨 The Temperature Trap", 
-      content: "V = IR is NOT universally true for all materials. It fails completely if conductor temperature changes due to Joule heating!", 
+      content: "V = IR is NOT universally true for all conductors. It fails completely if conductor temperature changes due to Joule heating!", 
       rule: "Always write 'At constant temperature' in CBSE Board answers to secure full marks." 
     },
     { 
@@ -199,11 +170,11 @@ const defaultReelDeck = [
       title: "Thermal Decomposition", 
       subject: "Chemistry", 
       topic: "Chemical Reactions", 
-      q_en: "Heating dry lead nitrate powder [Pb(NO₃)₂] yields brown pungent fumes of which gas?", 
-      options: ["Nitrogen Monoxide (NO)", "Nitrogen Dioxide (NO₂)", "Dinitrogen Oxide (N₂O)", "Lead Oxide (PbO)"], 
+      q_en: "Heating dry lead nitrate powder yields brown pungent fumes of which gas?", 
+      options: ["Nitrogen Monoxide (NO)", "Nitrogen Dioxide (NO₂)", "Dinitrogen Oxide (N₂O)"], 
       answer: 1, 
       time: 15, 
-      trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. The characteristic brown fumes are strictly NO₂ gas.", 
+      trap: "2Pb(NO₃)₂ → 2PbO + 4NO₂↑ + O₂. The brown fumes are strictly NO₂.", 
       difficulty: "boss" 
     },
     { 
@@ -215,10 +186,10 @@ const defaultReelDeck = [
       title: "DC Circuit & Ohm's Law", 
       subject: "Physics", 
       topic: "Electricity", 
-      q_en: "Toggle the knife switch to close the circuit and observe closed loop current flow.", 
+      q_en: "Toggle the knife switch to close the circuit and power the filament load.", 
       controls: [], 
       time: 20, 
-      trap: "Current flows only in a closed conductive path: I = V/R = 12V / 4Ω = 3.0A.", 
+      trap: "Current flows only in a closed conductive loop: I = V/R = 12V / 4Ω = 3.0A.", 
       difficulty: "easy" 
     },
     { 
@@ -245,16 +216,14 @@ const defaultReelDeck = [
       title: "Phenolphthalein Endpoint", 
       subject: "Chemistry", 
       topic: "Acids, Bases & Salts", 
-      q_en: "Dispense drops of 0.1M NaOH into HCl until the flask turns faint pink at exact neutralization.", 
+      q_en: "Dispense drops of 0.1M NaOH into HCl until the flask turns faint pink at exact neutralization (pH 7.0).", 
       controls: [], 
       time: 25, 
-      trap: "At equivalence (pH 7.0), moles of H⁺ equal moles of OH⁻. Excess NaOH turns phenolphthalein pink.", 
+      trap: "At equivalence (pH 7), moles of H⁺ equal moles of OH⁻. Excess NaOH turns phenolphthalein deep magenta.", 
       difficulty: "medium" 
     },
 
-    // =====================================================
-    // --- CLASS 11 INTERACTIVE SUITE ---
-    // =====================================================
+    // --- CLASS 11 & 12 ADVANCED SUITE ---
     { 
       id: 1101, 
       class_name: "11", 
@@ -267,71 +236,11 @@ const defaultReelDeck = [
       q_en: "Drag the radial coordinate vector to lock onto θ = 45° (π/4 rad).", 
       controls: [], 
       time: 20, 
-      trap: "At 45° (π/4 rad), both sin(45°) and cos(45°) equal 1/√2 ≈ 0.707.", 
+      trap: "At 45° (π/4 rad), both sin(45°) and cos(45°) equal 1/√2 ≈ 0.71.", 
       difficulty: "easy" 
     },
     { 
-      id: 1102, 
-      class_name: "11", 
-      type: "mcq", 
-      hook: "🚀 KINEMATICS VECTOR", 
-      title: "Projectile at Apex", 
-      subject: "Physics", 
-      topic: "Motion in a Plane", 
-      q_en: "At the peak apex of a parabolic flight, what is the angle between velocity and acceleration?", 
-      options: ["0°", "45°", "90°", "180°"], 
-      answer: 2, 
-      time: 10, 
-      trap: "At apex, vertical velocity vy = 0. Velocity is purely horizontal (vx) while gravity (g) acts downward. θ = 90°.", 
-      difficulty: "medium" 
-    },
-    { 
-      id: 1103, 
-      class_name: "11", 
-      type: "mcq", 
-      hook: "🧪 THERMODYNAMICS", 
-      title: "First Law of Thermodynamics", 
-      subject: "Chemistry", 
-      topic: "Chemical Thermodynamics", 
-      q_en: "In an adiabatic expansion process of an ideal gas, which parameter is strictly zero?", 
-      options: ["Work Done (W)", "Heat Exchange (q)", "Internal Energy Change (ΔU)", "Enthalpy (ΔH)"], 
-      answer: 1, 
-      time: 10, 
-      trap: "An adiabatic boundary prevents all thermal exchange: q = 0, so ΔU = W.", 
-      difficulty: "medium" 
-    },
-    { 
-      id: 1104, 
-      class_name: "11", 
-      type: "build", 
-      hook: "🧩 BUILD IT", 
-      title: "Centripetal Acceleration", 
-      subject: "Physics", 
-      topic: "Circular Motion", 
-      q_en: "Assemble the formula for centripetal acceleration in terms of linear velocity and radius.", 
-      template: ["slot", "=", "slot", "²", "/", "slot"], 
-      choices: ["a", "v", "r", "ω", "m", "F"], 
-      answer: ["a", "v", "r"], 
-      time: 20, 
-      trap: "Centripetal acceleration is directed radially inward with magnitude a_c = v²/r.", 
-      difficulty: "medium" 
-    },
-    { 
-      id: 1105, 
-      class_name: "11", 
-      type: "trap", 
-      subject: "Physics", 
-      topic: "Work, Energy & Power", 
-      title: "🚨 Work-Energy Trap", 
-      content: "Centripetal force never does any work on an object in uniform circular motion!", 
-      rule: "Because the force vector is always perpendicular to instantaneous displacement (cos 90° = 0), W = F · d · cos(90°) = 0." 
-    },
-
-    // =====================================================
-    // --- CLASS 12 INTERACTIVE SUITE ---
-    // =====================================================
-    { 
-      id: 1201, 
+      id: 401, 
       class_name: "12", 
       type: "sim", 
       sim_id: "phy_wave_optics", 
@@ -346,69 +255,31 @@ const defaultReelDeck = [
         { id: "ctrl_bigD", label: "Screen Dist (D)", min: 0.5, max: 2.5, step: 0.1, val: 1.2, unit: "m" }
       ], 
       time: 30, 
-      trap: "Fringe Width β = λD/d. Decreasing slit separation d widens the fringe spacing.", 
+      trap: "Fringe Width β = λD/d. Narrowing slit distance d spreads fringe spacing wider!", 
       difficulty: "medium" 
     },
     { 
-      id: 1202, 
-      class_name: "12", 
-      type: "mcq", 
-      hook: "⚡ GAUSS LAW TRAP", 
-      title: "Electrostatic Flux", 
-      subject: "Physics", 
-      topic: "Electric Charges & Fields", 
-      q_en: "If the radius of a Gaussian sphere enclosing a point charge Q is doubled, the outward flux:", 
-      options: ["Doubles (2×)", "Quadruples (4×)", "Halves (0.5×)", "Remains Unchanged"], 
-      answer: 3, 
-      time: 10, 
-      trap: "Gauss's Law states Φ = Q_enclosed / ε₀. Total flux depends solely on charge enclosed, independent of radius.", 
-      difficulty: "medium" 
-    },
-    { 
-      id: 1203, 
-      class_name: "12", 
-      type: "mcq", 
-      hook: "💀 BOSS QUESTION", 
-      title: "Chemical Kinetics", 
-      subject: "Chemistry", 
-      topic: "Chemical Kinetics", 
-      q_en: "For a first-order reaction, if 75% completes in 32 minutes, what is its half-life (t₁/₂)?", 
-      options: ["8 minutes", "16 minutes", "24 minutes", "32 minutes"], 
-      answer: 1, 
-      time: 15, 
-      trap: "75% completion corresponds to 2 consecutive half-lives (100% → 50% → 25%). 2 × t₁/₂ = 32 mins → t₁/₂ = 16 mins.", 
-      difficulty: "boss" 
-    },
-    { 
-      id: 1204, 
+      id: 301, 
       class_name: "12", 
       type: "build", 
       hook: "🧩 BUILD IT", 
       title: "Joule's Heating Law", 
       subject: "Physics", 
       topic: "Current Electricity", 
-      q_en: "Construct the expression for heat dissipated across a series resistor in time t.", 
+      q_en: "Construct the expression for heat dissipated across a series resistor.", 
       template: ["slot", "=", "slot", "²", "×", "slot", "×", "slot"], 
       choices: ["H", "I", "R", "t", "V", "P"], 
       answer: ["H", "I", "R", "t"], 
       time: 25, 
-      trap: "Heat produced by electric current is H = I²Rt.", 
+      trap: "Heat produced in time t is H = I²Rt.", 
       difficulty: "medium" 
-    },
-    { 
-      id: 1205, 
-      class_name: "12", 
-      type: "trap", 
-      subject: "Physics", 
-      topic: "Electromagnetic Induction", 
-      title: "🚨 Lenz's Law Sign Trap", 
-      content: "The negative sign in Faraday-Lenz equation ε = -dΦ/dt is NOT optional in Board Exams!", 
-      rule: "The negative sign represents Lenz's Law reflecting Conservation of Energy: the induced EMF always opposes the magnetic flux change producing it." 
     }
 ];
 
-/* --- STATE MANAGEMENT --- */
 let currentReelsClass = localStorage.getItem('invincible_user_class') || "10";
+let reelStreak = 0;
+
+/* --- ENGINE STATE --- */
 let activeReelDeck = [];
 let currentReelIndex = 0;
 let activeReelTimers = {};
@@ -421,7 +292,15 @@ let touchStartY = 0;
 let currentDeltaY = 0;
 
 /* =====================================================
-   SYNTHESIZED AUDIO & HAPTICS (COLLISION SAFE)
+   MATH UTILS & WRAPPERS (FOR INFINITE SCROLL)
+===================================================== */
+function getWrappedIndex(idx, total) {
+  if (total <= 0) return 0;
+  return ((idx % total) + total) % total;
+}
+
+/* =====================================================
+   SYNTHESIZED AUDIO & HAPTIC FALLBACK ENGINE
 ===================================================== */
 function getAudioCtx() {
   if (!window._sharedAudioCtx) {
@@ -487,7 +366,6 @@ function safeFormatMath(str) {
     return String(str || '');
 }
 
-/* --- Class Selector Hook --- */
 async function setReelsClass(cls, btn) {
     currentReelsClass = String(cls);
     localStorage.setItem('invincible_user_class', currentReelsClass);
@@ -502,75 +380,75 @@ async function setReelsClass(cls, btn) {
 }
 
 /* =====================================================
-   SUBJECT-AWARE AMBIENT SVG VISUALS
+   ROADMAP PHASE 3: SUBJECT-AWARE PROGRAMMATIC VISUALS
 ===================================================== */
 function generateSubjectVisual(subject, topic) {
     const s = String(subject || '').toLowerCase();
     const t = String(topic || '').toLowerCase();
 
     // 1. Physics: Mechanics / Motion / Vectors
-    if (s.includes('phys') && (t.includes('motion') || t.includes('force') || t.includes('grav') || t.includes('law') || t.includes('momentum'))) {
+    if (s.includes('phys') && (t.includes('motion') || t.includes('force') || t.includes('grav') || t.includes('law'))) {
         return `
-          <div class="subject-ambient-visual physics-mechanics" style="width:100%; height:48px; background:radial-gradient(circle at 50% 50%, rgba(0,217,255,0.08) 0%, transparent 75%); border:1px solid rgba(0,217,255,0.2); border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-             <svg width="100%" height="100%" viewBox="0 0 280 48" preserveAspectRatio="none">
-               <line x1="20" y1="38" x2="260" y2="38" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="4 4" />
-               <path d="M 25 38 Q 140 4, 255 38" stroke="#00D9FF" stroke-width="2" fill="none" stroke-linecap="round" />
-               <line x1="140" y1="21" x2="175" y2="9" stroke="#FF3D6E" stroke-width="2" />
-               <circle cx="140" cy="21" r="3.5" fill="#00D9FF" />
-               <text x="180" y="14" fill="#FF3D6E" font-size="9" font-family="monospace" font-weight="bold">v⃗</text>
+          <div class="subject-ambient-visual physics-mechanics" style="width:100%; height:52px; background:radial-gradient(circle at 50% 50%, rgba(0,243,255,0.06) 0%, transparent 75%); border:1px solid rgba(0,243,255,0.12); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 52" preserveAspectRatio="none" style="opacity:0.85;">
+               <line x1="20" y1="42" x2="280" y2="42" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" stroke-dasharray="4 4" />
+               <path d="M 30 42 Q 140 6, 250 42" stroke="#00f3ff" stroke-width="2" fill="none" stroke-linecap="round" />
+               <line x1="140" y1="24" x2="180" y2="10" stroke="#ff007f" stroke-width="2" marker-end="url(#arrow)" />
+               <circle cx="140" cy="24" r="3.5" fill="#00f3ff" style="filter:drop-shadow(0 0 5px #00f3ff);" />
+               <text x="185" y="14" fill="#ff007f" font-size="9" font-family="monospace" font-weight="bold">v⃗</text>
              </svg>
           </div>
         `;
     }
 
     // 2. Physics: Light / Optics
-    if (s.includes('phys') && (t.includes('light') || t.includes('optics') || t.includes('reflect') || t.includes('mirror') || t.includes('wave'))) {
+    if (s.includes('phys') && (t.includes('light') || t.includes('optics') || t.includes('reflect') || t.includes('refract'))) {
         return `
-          <div class="subject-ambient-visual physics-optics" style="width:100%; height:48px; background:radial-gradient(circle at 50% 50%, rgba(255,61,110,0.08) 0%, transparent 75%); border:1px solid rgba(255,61,110,0.2); border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-             <svg width="100%" height="100%" viewBox="0 0 280 48" preserveAspectRatio="none">
-               <line x1="140" y1="4" x2="140" y2="42" stroke="rgba(255,255,255,0.25)" stroke-width="1" stroke-dasharray="3 3" />
-               <line x1="50" y1="42" x2="230" y2="42" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
-               <line x1="75" y1="10" x2="140" y2="42" stroke="#FF3D6E" stroke-width="2" />
-               <line x1="140" y1="42" x2="205" y2="10" stroke="#00D9FF" stroke-width="2" />
-               <circle cx="140" cy="42" r="3" fill="#fff" />
+          <div class="subject-ambient-visual physics-optics" style="width:100%; height:52px; background:radial-gradient(circle at 50% 50%, rgba(255,0,127,0.06) 0%, transparent 75%); border:1px solid rgba(255,0,127,0.15); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 52" preserveAspectRatio="none" style="opacity:0.85;">
+               <line x1="150" y1="6" x2="150" y2="46" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="3 3" />
+               <line x1="60" y1="46" x2="240" y2="46" stroke="rgba(255,255,255,0.4)" stroke-width="2" />
+               <line x1="80" y1="12" x2="150" y2="46" stroke="#ff007f" stroke-width="2" />
+               <line x1="150" y1="46" x2="220" y2="12" stroke="#00f3ff" stroke-width="2" />
+               <circle cx="150" cy="46" r="3" fill="#fff" style="filter:drop-shadow(0 0 5px #fff);" />
              </svg>
           </div>
         `;
     }
 
-    // 3. Chemistry: Atoms, Bonds & Kinetics
+    // 3. Chemistry: Atoms, Bonding & Reactions
     if (s.includes('chem')) {
         return `
-          <div class="subject-ambient-visual chem-bonds" style="width:100%; height:48px; background:radial-gradient(circle at 50% 50%, rgba(16,185,129,0.08) 0%, transparent 75%); border:1px solid rgba(16,185,129,0.2); border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-             <svg width="100%" height="100%" viewBox="0 0 280 48" preserveAspectRatio="none">
-               <polygon points="115,24 128,10 152,10 165,24 152,38 128,38" stroke="#10b981" stroke-width="1.5" fill="rgba(16,185,129,0.08)" />
-               <circle cx="115" cy="24" r="2.5" fill="#10b981" />
-               <circle cx="140" cy="24" r="3.5" fill="#00D9FF" />
-               <circle cx="165" cy="24" r="2.5" fill="#10b981" />
+          <div class="subject-ambient-visual chem-bonds" style="width:100%; height:52px; background:radial-gradient(circle at 50% 50%, rgba(16,185,129,0.06) 0%, transparent 75%); border:1px solid rgba(16,185,129,0.15); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 52" preserveAspectRatio="none" style="opacity:0.85;">
+               <polygon points="120,26 135,10 165,10 180,26 165,42 135,42" stroke="#10b981" stroke-width="1.5" fill="rgba(16,185,129,0.05)" />
+               <circle cx="120" cy="26" r="2.5" fill="#10b981" />
+               <circle cx="150" cy="26" r="3.5" fill="#00f3ff" style="filter:drop-shadow(0 0 4px #00f3ff);" />
+               <circle cx="180" cy="26" r="2.5" fill="#10b981" />
              </svg>
           </div>
         `;
     }
 
-    // 4. Biology: Helix & Life Systems
+    // 4. Biology: Cells, Genetics & Anatomy
     if (s.includes('bio')) {
         return `
-          <div class="subject-ambient-visual bio-helix" style="width:100%; height:48px; background:radial-gradient(circle at 50% 50%, rgba(255,176,0,0.08) 0%, transparent 75%); border:1px solid rgba(255,176,0,0.2); border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-             <svg width="100%" height="100%" viewBox="0 0 280 48" preserveAspectRatio="none">
-               <path d="M 40 12 Q 80 36, 120 12 T 200 12 T 260 12" stroke="#FFB000" stroke-width="1.8" fill="none" />
-               <path d="M 40 36 Q 80 12, 120 36 T 200 36 T 260 36" stroke="#00D9FF" stroke-width="1.8" fill="none" />
+          <div class="subject-ambient-visual bio-helix" style="width:100%; height:52px; background:radial-gradient(circle at 50% 50%, rgba(245,158,11,0.06) 0%, transparent 75%); border:1px solid rgba(245,158,11,0.15); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+             <svg width="100%" height="100%" viewBox="0 0 300 52" preserveAspectRatio="none" style="opacity:0.85;">
+               <path d="M 50 14 Q 90 42, 130 14 T 210 14 T 290 14" stroke="#f59e0b" stroke-width="1.8" fill="none" />
+               <path d="M 50 40 Q 90 12, 130 40 T 210 40 T 290 40" stroke="#00f3ff" stroke-width="1.8" fill="none" />
              </svg>
           </div>
         `;
     }
 
-    // 5. Mathematics & Coordinate Functions
+    // 5. Mathematics & Coordinate Geometry Default
     return `
-      <div class="subject-ambient-visual math-grid" style="width:100%; height:48px; background:radial-gradient(circle at 50% 50%, rgba(192,132,252,0.08) 0%, transparent 75%); border:1px solid rgba(192,132,252,0.2); border-radius:10px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
-         <svg width="100%" height="100%" viewBox="0 0 280 48" preserveAspectRatio="none">
-           <line x1="20" y1="24" x2="260" y2="24" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
-           <line x1="140" y1="4" x2="140" y2="44" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
-           <path d="M 60 38 Q 140 6, 220 38" stroke="#c084fc" stroke-width="1.8" fill="none" />
+      <div class="subject-ambient-visual math-grid" style="width:100%; height:52px; background:radial-gradient(circle at 50% 50%, rgba(192,132,252,0.06) 0%, transparent 75%); border:1px solid rgba(192,132,252,0.15); border-radius:12px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;">
+         <svg width="100%" height="100%" viewBox="0 0 300 52" preserveAspectRatio="none" style="opacity:0.85;">
+           <line x1="30" y1="26" x2="270" y2="26" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+           <line x1="150" y1="6" x2="150" y2="46" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+           <path d="M 70 42 Q 150 8, 230 42" stroke="#c084fc" stroke-width="1.8" fill="none" />
          </svg>
       </div>
     `;
@@ -578,6 +456,7 @@ function generateSubjectVisual(subject, topic) {
 
 function generateDynamicHook(card) {
     if (card.hook && card.hook !== "⚡ QUICK CHECK") return card.hook;
+
     const diff = String(card.difficulty || '').toLowerCase();
     const time = parseInt(card.time || 15, 10);
 
@@ -590,7 +469,7 @@ function generateDynamicHook(card) {
     const hookPool = [
         "🧠 THINK BEFORE YOU TAP",
         "⚠️ TOPPER TRAP",
-        "🎯 BOARD EXAM ESSENTIAL",
+        "🎯 ONLY 22% GET THIS",
         "⚡ SPEED CHECK",
         "🔍 SPOT THE CORE RULE"
     ];
@@ -598,8 +477,17 @@ function generateDynamicHook(card) {
     return hookPool[hash % hookPool.length];
 }
 
+function generateDynamicTitle(card) {
+    if (card.title && card.title !== "Can you solve this?" && !card.title.toLowerCase().includes("beat the clock")) {
+        return card.title;
+    }
+    const topic = card.topic || card.subject || 'Core Concept';
+    return `${topic} Matrix`;
+}
+
 /* =====================================================
-   VIRTUALIZED 3-NODE SWIPER VIEWPORT
+   ROADMAP PHASE 1 & 5: 3-NODE VIRTUALIZED SWIPER & MIXER
+   (Upgraded with Circular Logic for Infinite Scrolling)
 ===================================================== */
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
@@ -614,27 +502,31 @@ async function renderReelsDeck() {
         }
     } catch(e) {}
 
-    // Strict class isolation
-    const classFilteredCards = defaultReelDeck.filter(item => String(item.class_name) === String(currentReelsClass));
-    let finalDeck = classFilteredCards.length > 0 ? classFilteredCards : defaultReelDeck;
+    const interactiveCards = defaultReelDeck.filter(c => 
+        (String(c.class_name) === String(currentReelsClass) || c.type === 'build' || c.type === 'sim' || c.type === 'draw')
+    );
+
+    let finalDeck = [];
 
     if (apiDeck.length > 0) {
         let interIdx = 0;
-        finalDeck = [];
         for (let i = 0; i < apiDeck.length; i++) {
             finalDeck.push(apiDeck[i]);
-            if ((i + 1) % 2 === 0 && interIdx < classFilteredCards.length) {
-                finalDeck.push(classFilteredCards[interIdx]);
+            if ((i + 1) % 2 === 0 && interIdx < interactiveCards.length) {
+                finalDeck.push(interactiveCards[interIdx]);
                 interIdx++;
             }
         }
+    } else {
+        const classDeck = defaultReelDeck.filter(item => String(item.class_name) === String(currentReelsClass));
+        finalDeck = classDeck.length > 0 ? classDeck : defaultReelDeck;
     }
 
     if (window.ReelPersistence && typeof window.ReelPersistence.filterUnsolvedDeck === 'function') {
         finalDeck = window.ReelPersistence.filterUnsolvedDeck(finalDeck);
     }
 
-    activeReelDeck = finalDeck;
+    activeReelDeck = finalDeck.length > 0 ? finalDeck : defaultReelDeck;
     currentReelIndex = 0;
 
     setupSwiperEngine(container);
@@ -644,7 +536,8 @@ function createReelNode(index, initialOffsetPct) {
     const node = document.createElement('div');
     node.className = 'virtual-reel-slot';
     node.style.position = 'absolute';
-    node.style.inset = '0';
+    node.style.top = '0';
+    node.style.left = '0';
     node.style.width = '100%';
     node.style.height = '100%';
     node.style.willChange = 'transform';
@@ -652,12 +545,15 @@ function createReelNode(index, initialOffsetPct) {
     node.style.transition = 'none';
     node.dataset.index = index;
 
-    if (index >= 0 && index < activeReelDeck.length) {
-        const card = activeReelDeck[index];
-        node.innerHTML = generateReelHTML(card, index);
+    if (activeReelDeck.length > 0) {
+        // Core fix: modulo wrapping prevents blank slots
+        const wrappedIdx = getWrappedIndex(index, activeReelDeck.length);
+        const card = activeReelDeck[wrappedIdx];
+        
+        node.innerHTML = generateReelHTML(card, wrappedIdx);
 
         if (card.type === 'sim' || card.type === 'draw') {
-          setTimeout(() => mountReelSimulation(card.id || index, card.sim_id), 80);
+          setTimeout(() => mountReelSimulation(card.id || wrappedIdx, card.sim_id), 50);
         }
 
         try {
@@ -687,13 +583,14 @@ function setupSwiperEngine(container) {
 
     container.innerHTML = '';
     container.style.position = 'relative';
-    container.style.height = 'calc(100vh - 175px)';
-    container.style.minHeight = '500px';
     container.style.overflow = 'hidden';
     container.style.touchAction = 'none';
     container.style.userSelect = 'none';
     container.style.webkitUserSelect = 'none';
-    container.style.borderRadius = '20px';
+    
+    // Core fix: Adaptive height with lower minimum to prevent overflow pushing the dock away
+    container.style.height = 'calc(100vh - 180px)';
+    container.style.minHeight = '420px';
 
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     activeNodes.current = createReelNode(currentReelIndex, 0);
@@ -703,9 +600,9 @@ function setupSwiperEngine(container) {
     container.appendChild(activeNodes.current);
     container.appendChild(activeNodes.next);
 
-    const currentCard = activeReelDeck[currentReelIndex];
+    const currentCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
     if (currentCard) {
-        setTimeout(() => startReelTimer(currentCard.id || currentReelIndex), 350);
+        setTimeout(() => startReelTimer(currentCard.id || currentReelIndex), 400);
     }
 
     attachGestureListeners(container);
@@ -732,11 +629,8 @@ function attachGestureListeners(container) {
 
         if (e && e.cancelable) e.preventDefault();
 
+        // Removed the end-of-deck damping to allow fully infinite swiping
         let dampedDelta = currentDeltaY;
-        if ((currentReelIndex === 0 && currentDeltaY > 0) || 
-            (currentReelIndex === activeReelDeck.length - 1 && currentDeltaY < 0)) {
-            dampedDelta = currentDeltaY * 0.22;
-        }
 
         if (activeNodes.prev) activeNodes.prev.style.transform = `translate3d(0, calc(-100% + ${dampedDelta}px), 0)`;
         if (activeNodes.current) activeNodes.current.style.transform = `translate3d(0, ${dampedDelta}px, 0)`;
@@ -748,11 +642,12 @@ function attachGestureListeners(container) {
         isDraggingReel = false;
 
         const containerHeight = container.clientHeight || window.innerHeight;
-        const threshold = Math.max(55, containerHeight * 0.14);
+        const threshold = Math.max(60, containerHeight * 0.16);
 
-        if (currentDeltaY < -threshold && currentReelIndex < activeReelDeck.length - 1) {
+        // Core fix: Removed absolute array limits to allow infinite loop forward and backward
+        if (currentDeltaY < -threshold) {
             snapToNode('next');
-        } else if (currentDeltaY > threshold && currentReelIndex > 0) {
+        } else if (currentDeltaY > threshold) {
             snapToNode('prev');
         } else {
             snapToNode('center');
@@ -770,46 +665,69 @@ function attachGestureListeners(container) {
 
     container.addEventListener('touchend', onEnd);
     container.addEventListener('touchcancel', onEnd);
+
+    container.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        onStart(e.clientY, e.target);
+        
+        const onMouseMove = (ev) => onMove(ev.clientY, ev);
+        const onMouseUp = () => {
+            onEnd();
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        };
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+    });
+
+    container.onwheel = (e) => {
+        if (isTransitioning || isTokenDragging) return;
+        if (Math.abs(e.deltaY) > 35) {
+            if (e.deltaY > 0) snapToNode('next');
+            else if (e.deltaY < 0) snapToNode('prev');
+        }
+    };
 }
 
 function snapToNode(direction) {
     if (isTransitioning) return;
     isTransitioning = true;
 
-    setTimeout(() => { isTransitioning = false; }, 320);
+    // ULTIMATE FAILSAFE: Forces swipes to unlock even if JavaScript lags
+    setTimeout(() => { isTransitioning = false; }, 350);
 
-    const transitionCSS = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+    const transitionCSS = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = transitionCSS;
     });
 
-    if (direction === 'next' && currentReelIndex < activeReelDeck.length - 1) {
+    if (direction === 'next') {
         activeNodes.prev.style.transform = 'translate3d(0, -200%, 0)';
         activeNodes.current.style.transform = 'translate3d(0, -100%, 0)';
         activeNodes.next.style.transform = 'translate3d(0, 0%, 0)';
 
-        const oldCard = activeReelDeck[currentReelIndex];
+        const oldCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
         if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
 
         setTimeout(() => {
             currentReelIndex++;
             recycleForward();
             isTransitioning = false;
-        }, 250);
+        }, 300);
 
-    } else if (direction === 'prev' && currentReelIndex > 0) {
+    } else if (direction === 'prev') {
         activeNodes.prev.style.transform = 'translate3d(0, 0%, 0)';
         activeNodes.current.style.transform = 'translate3d(0, 100%, 0)';
         activeNodes.next.style.transform = 'translate3d(0, 200%, 0)';
 
-        const oldCard = activeReelDeck[currentReelIndex];
+        const oldCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
         if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
 
         setTimeout(() => {
             currentReelIndex--;
             recycleBackward();
             isTransitioning = false;
-        }, 250);
+        }, 300);
 
     } else {
         activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
@@ -818,7 +736,7 @@ function snapToNode(direction) {
 
         setTimeout(() => {
             isTransitioning = false;
-        }, 250);
+        }, 300);
     }
 }
 
@@ -844,7 +762,7 @@ function recycleForward() {
     activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
     activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
 
-    const newCard = activeReelDeck[currentReelIndex];
+    const newCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
 }
 
@@ -870,19 +788,22 @@ function recycleBackward() {
     activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
     activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
 
-    const newCard = activeReelDeck[currentReelIndex];
+    const newCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
 }
 
 /* =====================================================
-   SIMULATION LIFECYCLE & TELEMETRY
+   ROADMAP PHASE 4: SIMULATION LIFECYCLE & TELEMETRY
 ===================================================== */
 function mountReelSimulation(cardId, simId) {
   const canvas = document.querySelector(`canvas[data-sim-card-id="${cardId}"]`);
   if (!canvas) return;
 
   const EngineClass = window.ReelSimRegistry ? window.ReelSimRegistry[simId] : null;
-  if (!EngineClass) return;
+  if (!EngineClass) {
+    console.warn(`[Invincible 360] Sim Engine "${simId}" not found in ReelSimRegistry.`);
+    return;
+  }
 
   if (activeSimInstances[cardId]) {
     activeSimInstances[cardId].destroy();
@@ -890,6 +811,7 @@ function mountReelSimulation(cardId, simId) {
 
   const instance = new EngineClass(canvas);
   activeSimInstances[cardId] = instance;
+
   updateSimTelemetryHUD(cardId, instance);
 }
 
@@ -923,7 +845,7 @@ function updateSimTelemetryHUD(cardId, instance) {
 }
 
 /* =====================================================
-   FORMULA BUILDER TOKEN INTERACTION
+   ROADMAP PHASE 4: TACTILE DRAG-AND-DROP BUILDER ENGINE
 ===================================================== */
 function attachTokenDragEngine(container) {
     let dragGhost = null;
@@ -1117,7 +1039,7 @@ window.checkBuildAnswer = function(cardId) {
         let totalXP = isBoss ? 50 : 20;
         let streakCount = 1;
         if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
-            const res = window.ReelPersistence.recordSuccess(cardId, totalXP, isBoss);
+            const res = window.ReelPersistence.recordSuccess(cardId, isBoss ? 50 : 20, isBoss);
             totalXP = res.totalEarnedXP;
             streakCount = res.currentStreak;
         }
@@ -1138,22 +1060,71 @@ window.checkBuildAnswer = function(cardId) {
             window.ReelPersistence.recordFailure(cardId);
         }
 
-        revealTitle.innerHTML = `<span style="color:var(--accent-rose, #ff007f);">✕ FORMULA MISMATCH</span>`;
+        revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ CIRCUIT BROKEN</span>`;
         xpBadge.innerText = `+0 XP`;
         xpBadge.style.background = 'rgba(255,255,255,0.05)';
         xpBadge.style.color = '#94a3b8';
     }
 
-    setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 350);
+    setTimeout(() => { if (reveal) reveal.style.transform = 'translateY(0)'; }, 400);
 };
 
 /* =====================================================
-   REEL CARD HTML GENERATOR
+   ROADMAP PHASE 4: VECTOR & RAY DRAWING EVALUATOR
+===================================================== */
+window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAngle) {
+  stopReelTimer(cardId);
+  const reveal = document.getElementById(`revealState_${cardId}`);
+  const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
+  const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
+  const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
+  if (!reveal) return;
+
+  if (isCorrect) {
+    if (typeof playDing === 'function') playDing();
+    if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
+    if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
+
+    let totalXP = 25;
+    let streakCount = 1;
+    if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
+        const res = window.ReelPersistence.recordSuccess(cardId, 25, false);
+        totalXP = res.totalEarnedXP;
+        streakCount = res.currentStreak;
+    }
+
+    revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ LOCKED (${drawnAngle})</span>`;
+    xpBadge.innerText = `+${totalXP} XP`;
+    if (streakCount > 2) {
+      streakBadge.style.display = 'inline-block';
+      streakBadge.innerText = `🔥 x${streakCount} STREAK`;
+    }
+  } else {
+    if (typeof playBuzz === 'function') playBuzz();
+    if (typeof triggerHaptic === 'function') triggerHaptic([80]);
+
+    if (window.ReelPersistence && typeof window.ReelPersistence.recordFailure === 'function') {
+        window.ReelPersistence.recordFailure(cardId);
+    }
+
+    revealTitle.innerHTML = `<span style="color:var(--accent-rose, #f43f5e);">✕ MISSED (${drawnAngle} vs ${expectedAngle})</span>`;
+    xpBadge.innerText = `+0 XP`;
+    xpBadge.style.background = 'rgba(255,255,255,0.05)';
+    xpBadge.style.color = '#94a3b8';
+  }
+
+  setTimeout(() => { 
+    reveal.style.transform = 'translateY(0)'; 
+  }, 400);
+};
+
+/* =====================================================
+   ROADMAP PHASE 1 & 2: FULL-VIEWPORT REEL RENDERER
 ===================================================== */
 function generateReelHTML(card, idx) {
     const sub = card.subject || 'Science';
     const hook = generateDynamicHook(card);
-    const dynamicTitle = card.title || 'Core Concept';
+    const dynamicTitle = generateDynamicTitle(card);
     const safeCardId = String(card.id || idx);
     const timeLimit = card.time || 15;
     const isBoss = card.difficulty === 'boss';
@@ -1166,25 +1137,28 @@ function generateReelHTML(card, idx) {
     const qJS = rawTitle.replace(/'/g, "\\'").replace(/"/g, "&quot;");
     const subJS = rawSub.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
-    const dockStyle = `position:absolute; right:8px; bottom:14px; display:flex; flex-direction:column; gap:8px; align-items:center; z-index:25;`;
-    const dockBtnStyle = `width:36px; height:36px; border-radius:50%; background:rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 6px 18px rgba(0,0,0,0.5);`;
+    // Core fix: Vertical centered positioning prevents buttons from spilling out of bounds
+    const dockStyle = `position:absolute; right:8px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:12px; align-items:center; z-index:25;`;
+    const dockBtnStyle = `width:36px; height:36px; border-radius:50%; background:rgba(15,23,42,0.75); border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:14px; cursor:pointer; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 6px 18px rgba(0,0,0,0.5); transition:transform 0.2s;`;
     const dockLabelStyle = `font-size:8.5px; color:#cbd5e1; font-weight:800; margin-top:2px; text-shadow:0 1px 3px #000;`;
 
-    // 1. STANDARD MCQ
+    // 1. STANDARD MCQ 
     if (card.type === 'mcq') {
         let opts = Array.isArray(card.options) ? card.options : [];
         if (typeof card.options === 'string') {
             try { opts = JSON.parse(card.options); } catch(e) { opts = []; }
         }
         
+        const ambientVisualHTML = generateSubjectVisual(card.subject, card.topic);
+
         contentHTML = `
-          ${generateSubjectVisual(card.subject, card.topic)}
-          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
-          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:8px;">
+          ${ambientVisualHTML}
+          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-options-grid" style="display:flex; flex-direction:column; gap:7px; margin-top:6px;">
             ${opts.map((opt, oIdx) => `
-              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); padding:12px 14px; border-radius:12px; color:#fff; font-size:13px; font-weight:700; cursor:pointer; text-align:left; transition:all 0.15s ease;">
+              <button type="button" class="reel-opt-btn" onclick="handleReelAnswer('${safeCardId}', ${oIdx}, ${card.answer}, ${isBoss}, this)">
                   <span>${safeFormatMath(String(opt))}</span>
-                  <span class="opt-indicator" style="width:13px; height:13px; border-radius:50%; border:2px solid rgba(255,255,255,0.3); flex-shrink:0;"></span>
+                  <span class="opt-indicator" style="width:12px; height:12px; border-radius:50%; border:2px solid rgba(255,255,255,0.3);"></span>
               </button>
             `).join('')}
           </div>
@@ -1197,24 +1171,24 @@ function generateReelHTML(card, idx) {
         
         const builderSlotsHTML = templateArray.map((item) => {
             if (item === 'slot') {
-                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled="" style="min-width:38px; height:38px; border:2px dashed rgba(0,243,255,0.4); border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; color:#00f3ff; background:rgba(0,243,255,0.05); margin:0 3px;"></div>`;
+                return `<div class="build-slot" onclick="window.removeBuildTap('${safeCardId}', this)" data-filled=""></div>`;
             } else {
-                return `<div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:900; color:#cbd5e1; display:inline-flex; align-items:center; margin:0 3px;">${item}</div>`;
+                return `<div style="font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:900; color:#cbd5e1; display:flex; align-items:center;">${item}</div>`;
             }
         }).join('');
 
         const choicesHTML = choicesArray.map((choice, cIdx) => `
-            <button type="button" class="build-choice-btn" data-card-id="${safeCardId}" data-choice="${choice}" data-choice-idx="${cIdx}" style="padding:8px 14px; border-radius:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; font-weight:900; font-size:14px; cursor:pointer;">${choice}</button>
+            <button type="button" class="build-choice-btn" data-card-id="${safeCardId}" data-choice="${choice}" data-choice-idx="${cIdx}">${choice}</button>
         `).join('');
 
         contentHTML = `
-          <div class="reel-q-title" style="font-size:14px; font-weight:800; color:#ffffff; margin:0 0 10px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.4;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}' style="margin-top:10px;">
-              <div class="build-slots-tray" style="display:flex; align-items:center; justify-content:center; margin-bottom:16px; flex-wrap:wrap; gap:4px;">
+          <div class="build-matrix" data-answer='${JSON.stringify(card.answer)}' data-boss='${isBoss}'>
+              <div class="build-slots-tray" style="margin-bottom:14px;">
                   ${builderSlotsHTML}
               </div>
-              <div class="build-choices-tray" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+              <div class="build-choices-tray">
                   ${choicesHTML}
               </div>
           </div>
@@ -1224,6 +1198,10 @@ function generateReelHTML(card, idx) {
     else if (card.type === 'sim') {
         const controls = Array.isArray(card.controls) ? card.controls : [];
         const isAlgebra = card.sim_id === 'math_algebra_drag';
+        const isDna = card.sim_id === 'bio_dna';
+        const isCircuit = card.sim_id === 'phy_circuits';
+        const isTitration = card.sim_id === 'chem_titration';
+        const isTrigCircle = card.sim_id === 'math_trig_circle';
         
         const slidersHTML = controls.map(ctrl => `
           <div style="margin-bottom:4px;">
@@ -1245,17 +1223,46 @@ function generateReelHTML(card, idx) {
           </div>
         `;
 
+        const dnaControlsHTML = `
+          <div style="display:flex; gap:8px; justify-content:center; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'A')">A</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'T')">T</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'G')">G</button>
+            <button type="button" class="reel-opt-btn" style="flex:1; justify-content:center; font-size:13px; font-weight:900;" onclick="window.slotDnaBase('${safeCardId}', 'C')">C</button>
+          </div>
+        `;
+
+        const circuitControlsHTML = `
+          <div style="display:flex; justify-content:center; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="width:100%; justify-content:center; padding:9px 12px; font-size:11px; font-weight:800; background:rgba(0,229,255,0.08); border-color:var(--accent-cyan);" onclick="window.toggleCircuitSwitch('${safeCardId}')">🔌 TOGGLE KNIFE SWITCH</button>
+          </div>
+        `;
+
+        const titrationControlsHTML = `
+          <div style="display:flex; justify-content:center; margin-top:6px;">
+            <button type="button" class="reel-opt-btn" style="width:100%; justify-content:center; padding:9px 12px; font-size:11px; font-weight:800; background:rgba(244,114,182,0.12); border-color:#f472b6; color:#f472b6;" onclick="window.dispenseTitrationDrop('${safeCardId}')">💧 DISPENSE NaOH DROP</button>
+          </div>
+        `;
+
+        const trigControlsHTML = `
+          <div style="font-size:10px; color:#64748b; font-weight:700; text-align:center; margin-top:6px;">👆 Touch and drag radial handle around circle</div>
+        `;
+
         let activeSimControlsHTML = '';
         if (isAlgebra) activeSimControlsHTML = algebraControlsHTML;
+        else if (isDna) activeSimControlsHTML = dnaControlsHTML;
+        else if (isCircuit) activeSimControlsHTML = circuitControlsHTML;
+        else if (isTitration) activeSimControlsHTML = titrationControlsHTML;
+        else if (isTrigCircle) activeSimControlsHTML = trigControlsHTML;
         else if (controls.length > 0) activeSimControlsHTML = `<div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:6px 10px;">${slidersHTML}</div>`;
 
         contentHTML = `
-          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 6px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div style="position:relative; width:100%; height:140px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:14px; overflow:hidden; margin-bottom:8px;">
+          <div style="position:relative; width:100%; height:130px; background:#020617; border:1px solid rgba(0,229,255,0.25); border-radius:14px; overflow:hidden; margin-bottom:8px; box-shadow:inset 0 0 20px rgba(0,0,0,0.8);">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block;"></canvas>
              
-             <div style="position:absolute; top:6px; right:6px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:6px; padding:2px 6px; font-size:9px; font-family:monospace; font-weight:900; color:var(--accent-cyan);">
+             <div style="position:absolute; top:6px; right:6px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.3); border-radius:6px; padding:2px 6px; font-size:9px; font-family:monospace; font-weight:900; color:var(--accent-cyan); backdrop-filter:blur(8px);">
                <span id="angleReadout_${safeCardId}">β = <span id="telemetryVal_${safeCardId}">-- mm</span></span>
              </div>
           </div>
@@ -1263,25 +1270,26 @@ function generateReelHTML(card, idx) {
           ${activeSimControlsHTML}
         `;
     }
-    // 4. DRAWING PREDICTION ENGINE
+    // 4. PREDICTION & TOUCH DRAWING ENGINE
     else if (card.type === 'draw') {
         contentHTML = `
-          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 8px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
+          <div class="reel-q-title" style="font-size:13.5px; font-weight:800; color:#ffffff; margin:0 0 6px 0; line-height:1.35;">${safeFormatMath(card.q_en || '')}</div>
           
-          <div class="draw-canvas-container" style="position:relative; width:100%; height:140px; background:#020617; border:1px solid rgba(0,243,255,0.25); border-radius:14px; overflow:hidden; margin-bottom:8px;">
+          <div class="draw-canvas-container" style="position:relative; width:100%; height:135px; background:#020617; border:1px solid rgba(0,243,255,0.25); border-radius:14px; overflow:hidden; margin-bottom:8px;">
              <canvas data-sim-card-id="${safeCardId}" style="width:100%; height:100%; display:block; cursor:crosshair;"></canvas>
              <div style="position:absolute; top:6px; left:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:2px 6px; font-size:9px; font-weight:800; color:#cbd5e1;">👆 Drag reflected ray</div>
              <div style="position:absolute; top:6px; right:8px; background:rgba(8,13,26,0.85); border:1px solid rgba(0,229,255,0.35); border-radius:6px; padding:2px 6px; font-size:9.5px; font-family:monospace; font-weight:900; color:var(--accent-cyan);" id="angleReadout_${safeCardId}">θ_drawn = --°</div>
           </div>
+          
+          <div style="font-size:10px; color:#64748b; font-weight:700; text-align:center;">Release finger to lock prediction</div>
         `;
     }
     // 5. TOPPER TRAP / HACK
     else if (card.type === 'trap' || card.type === 'hack') {
         const isTrap = card.type === 'trap';
         return `
-          <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, #0f172a 0%, #030712 100%); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? '#ff007f' : '#00f3ff'}; border-radius:20px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-size:10px; font-weight:900; color:${isTrap ? '#ff007f' : '#00f3ff'}; text-transform:uppercase; margin-bottom:6px;">${sub} • Class ${card.class_name}</div>
-            <div class="reel-q-title" style="font-size:18px; font-weight:900; color:#fff; margin:0 0 10px 0;">${dynamicTitle}</div>
+          <div class="reel-card-inner" style="position:relative; width:100%; height:100%; background:linear-gradient(180deg, rgba(15,23,42,0.92) 0%, rgba(3,7,18,0.96) 100%); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,0.08); border-left:4px solid ${isTrap ? 'var(--accent-rose, #ff007f)' : 'var(--accent-cyan, #00f3ff)'}; border-radius:24px; padding:20px; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; box-shadow:0 24px 60px rgba(0,0,0,0.85);">
+            <div class="reel-q-title" style="font-size:18px; font-weight:900; color:${isTrap ? '#ff007f' : 'var(--accent-cyan, #00f3ff)'}; margin:0 0 10px 0;">${dynamicTitle}</div>
             <div style="font-size:13.5px; color:#f1f5f9; line-height:1.55; background:rgba(255,255,255,0.04); padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">${card.content || ''}</div>
             ${card.rule ? `<div style="font-size:12px; color:#10b981; font-weight:800; margin-top:10px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); padding:10px; border-radius:10px;">✅ NCERT RULE: ${card.rule}</div>` : ''}
             
@@ -1306,46 +1314,46 @@ function generateReelHTML(card, idx) {
     }
 
     return `
-      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:#0B1120; border:1px solid rgba(255,255,255,0.08); border-radius:20px; display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box;">
+      <div class="reel-card-inner" id="reelCard_${safeCardId}" data-time="${timeLimit}" data-id="${safeCardId}" style="position:relative; width:100%; height:100%; background:#0B1120 !important; border:1px solid rgba(255,255,255,0.08) !important; border-radius:20px; display:flex; flex-direction:column; padding:0; margin:0; box-sizing:border-box; overflow:hidden;">
         
-        <!-- STATE A: Linear Timer -->
+        <!-- STATE A: Linear Urgency Timer -->
         <div style="width:100%; height:3px; background:rgba(255,255,255,0.05); flex-shrink:0;">
-            <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; transition:width 0.1s linear;"></div>
+            <div id="timerFill_${safeCardId}" style="height:100%; width:100%; background:${hookColor}; box-shadow:0 0 10px ${hookColor}; transition:width 0.1s linear;"></div>
         </div>
 
-        <div style="padding:14px 14px 10px; flex:1; display:flex; flex-direction:column; overflow-y:auto; box-sizing:border-box;">
+        <div style="padding:14px 14px 10px; flex:1; display:flex; flex-direction:column; justify-content:flex-start; overflow-y:auto; overflow-x:hidden; box-sizing:border-box;">
             <div style="margin-bottom:8px; flex-shrink:0;">
                 <div style="font-size:9px; font-weight:900; letter-spacing:0.8px; color:${hookColor}; background:rgba(255,255,255,0.05); border:1px solid ${hookColor}; display:inline-block; padding:3px 7px; border-radius:6px; margin-bottom:4px;">
                     ${hook}
                 </div>
-                <div style="font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:2px;">${dynamicTitle}</div>
-                <div style="font-size:10px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase;">${sub} • ${card.topic || 'Syllabus'} | CLASS ${card.class_name || currentReelsClass}</div>
+                <div style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:17px; font-weight:900; color:#fff; line-height:1.2; margin-bottom:2px;">${dynamicTitle}</div>
+                <div style="font-size:10px; color:rgba(203,213,225,0.7); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">${sub} • ${card.topic || 'Syllabus'} | CLASS ${card.class_name || currentReelsClass}</div>
             </div>
             
-            <div style="position:relative; z-index:10; padding-right:40px;">
+            <div style="position:relative; z-index:10; padding-right:52px;">
                 ${contentHTML}
             </div>
         </div>
 
-        <!-- STATE B: REVEAL TRAY -->
-        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.98); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.12); padding:16px 14px; transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:30; border-radius:20px 20px 0 0;">
-            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:900; margin-bottom:4px; color:#10b981;">✓ MASTER EXPLANATION</div>
+        <!-- STATE B: TWO-STAGE GLASS REVEAL DRAWER -->
+        <div id="revealState_${safeCardId}" style="position:absolute; bottom:0; left:0; right:0; background:rgba(11,17,32,0.96); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.12); padding:16px 14px; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index:30; border-radius:20px 20px 0 0;">
+            <div id="revealResultTitle_${safeCardId}" style="font-family:'Space Grotesk', system-ui, sans-serif; font-size:18px; font-weight:900; margin-bottom:4px;"></div>
             <div style="font-size:12px; color:#cbd5e1; line-height:1.45; margin-bottom:10px; padding:8px 10px; background:rgba(255,255,255,0.04); border-radius:10px; border:1px solid rgba(255,255,255,0.06);">
-                ${card.trap || 'Master the fundamental concepts in your syllabus.'}
+                ${card.trap || 'Master the core NCERT definitions in the Science Lab.'}
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <div style="display:flex; gap:6px;">
                     <span id="revealXpBadge_${safeCardId}" style="background:rgba(245,158,11,0.15); color:#fbbf24; font-weight:900; font-size:10px; padding:4px 8px; border-radius:6px; border:1px solid rgba(245,158,11,0.3);">+0 XP</span>
                     <span id="revealStreakBadge_${safeCardId}" style="display:none; background:rgba(244,63,94,0.15); color:#f43f5e; font-weight:900; font-size:10px; padding:4px 8px; border-radius:6px; border:1px solid rgba(244,63,94,0.3);">🔥 STREAK</span>
                 </div>
-                <button type="button" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')" style="background:rgba(0,217,255,0.15); border:1px solid var(--accent-cyan); color:var(--accent-cyan); font-size:10px; font-weight:800; padding:4px 8px; border-radius:6px; cursor:pointer;">🧠 Open Doubt</button>
+                <div style="font-size:9.5px; color:#64748b; font-weight:700;">68% Students Solved</div>
             </div>
             <div style="text-align:center; font-size:9.5px; font-weight:800; color:#64748b; letter-spacing:1px;">↑ SWIPE FOR NEXT</div>
         </div>
 
         <div style="${dockStyle}">
           <div style="text-align:center;">
-            <div style="${dockBtnStyle} border-color:var(--accent-cyan, #00f3ff);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
+            <div style="${dockBtnStyle} border-color:var(--accent-cyan, #00f3ff); box-shadow:0 0 12px rgba(0,243,255,0.3);" onclick="sendReelToDoubtSolver('${qJS}', '${subJS}')">🧠</div>
             <div style="${dockLabelStyle}">Doubt</div>
           </div>
           <div style="text-align:center;">
@@ -1361,9 +1369,9 @@ function generateReelHTML(card, idx) {
     `;
 }
 
-/* =====================================================
-   TIMERS & ANSWER EVALUATION
-===================================================== */
+// ---------------------------------------------------
+// TIMERS & GAMEPLAY CONTROLS
+// ---------------------------------------------------
 function startReelTimer(cardId) {
     if (activeReelTimers[cardId]) return; 
     const card = document.getElementById(`reelCard_${cardId}`);
@@ -1395,6 +1403,9 @@ function stopReelTimer(cardId) {
     }
 }
 
+// ---------------------------------------------------
+// TWO-STAGE MCQ REVEAL EVALUATOR
+// ---------------------------------------------------
 function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     stopReelTimer(cardId);
     const card = document.getElementById(`reelCard_${cardId}`);
@@ -1471,53 +1482,9 @@ function handleReelAnswer(cardId, selectedIdx, correctIdx, isBoss, btnEl) {
     setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 350);
 }
 
-window.handleDrawReelAnswer = function(cardId, isCorrect, drawnAngle, expectedAngle) {
-  stopReelTimer(cardId);
-  const reveal = document.getElementById(`revealState_${cardId}`);
-  const revealTitle = document.getElementById(`revealResultTitle_${cardId}`);
-  const xpBadge = document.getElementById(`revealXpBadge_${cardId}`);
-  const streakBadge = document.getElementById(`revealStreakBadge_${cardId}`);
-  if (!reveal) return;
-
-  if (isCorrect) {
-    if (typeof playDing === 'function') playDing();
-    if (typeof triggerHaptic === 'function') triggerHaptic([30, 50]);
-    if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin:{ y: 0.6 } });
-
-    let totalXP = 25;
-    let streakCount = 1;
-    if (window.ReelPersistence && typeof window.ReelPersistence.recordSuccess === 'function') {
-        const res = window.ReelPersistence.recordSuccess(cardId, 25, false);
-        totalXP = res.totalEarnedXP;
-        streakCount = res.currentStreak;
-    }
-
-    revealTitle.innerHTML = `<span style="color:var(--accent-emerald, #10b981);">✓ LOCKED (${drawnAngle}°)</span>`;
-    xpBadge.innerText = `+${totalXP} XP`;
-    if (streakCount > 2) {
-      streakBadge.style.display = 'inline-block';
-      streakBadge.innerText = `🔥 x${streakCount} STREAK`;
-    }
-  } else {
-    if (typeof playBuzz === 'function') playBuzz();
-    if (typeof triggerHaptic === 'function') triggerHaptic([80]);
-
-    if (window.ReelPersistence && typeof window.ReelPersistence.recordFailure === 'function') {
-        window.ReelPersistence.recordFailure(cardId);
-    }
-
-    revealTitle.innerHTML = `<span style="color:var(--accent-rose, #ff007f);">✕ MISSED (${drawnAngle}° vs ${expectedAngle}°)</span>`;
-    xpBadge.innerText = `+0 XP`;
-    xpBadge.style.background = 'rgba(255,255,255,0.05)';
-    xpBadge.style.color = '#94a3b8';
-  }
-
-  setTimeout(() => { reveal.style.transform = 'translateY(0)'; }, 350);
-};
-
 function shareReel(text) {
     if (navigator.share) {
-        navigator.share({ title: 'Invincible 360 Reel', text: `Can you solve this? ${text} 🔥 Solve on Invincible 360!`, url: window.location.href });
+        navigator.share({ title: 'Invincible 360 Reel', text: `Can you solve this? ${text} 🔥 Join the clash on Invincible 360!`, url: window.location.href });
     } else {
         navigator.clipboard.writeText(`${text} - Solve on Invincible 360: ${window.location.href}`);
         alert('📋 Reel link copied to clipboard!');
@@ -1539,7 +1506,7 @@ function sendReelToDoubtSolver(questionText, subject) {
 }
 
 /* =====================================================
-   STORIES & BROADCAST ENGINE
+   STORIES & COMMUNITY BROADCAST ENGINE
 ===================================================== */
 let activeStories = [];
 let currentStoryIdx = 0;
@@ -1638,7 +1605,9 @@ async function loadActiveStories() {
 
         activeStories = dbStories.filter(s => studentSchool === 'ALL' || s.institution === studentSchool || !s.institution);
         renderStoryCircles();
-    } catch(e) {}
+    } catch(e) { 
+        console.error("Story load error:", e); 
+    }
 }
 
 function renderStoryCircles() {
@@ -1897,15 +1866,10 @@ window.reactStory = async function(type) {
   } catch (e) {}
 };
 
-/* =====================================================
-   BOOTSTRAP ENGINE
-===================================================== */
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        loadActiveStories();
-        renderReelsDeck();
-    });
-} else {
+// ---------------------------------------------------
+// BOOTSTRAP INITIALIZER
+// ---------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
     loadActiveStories();
     renderReelsDeck();
-}
+});
