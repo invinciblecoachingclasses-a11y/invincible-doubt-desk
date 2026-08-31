@@ -1,7 +1,7 @@
 /**
  * =====================================================
  * MODULE: INVINCIBLE 360 - REEL PROGRESS & LOCAL TELEMETRY
- * Architecture: 100% Standalone Browser Storage Engine
+ * Architecture: 100% Standalone Browser Storage Engine (Optimized)
  * =====================================================
  */
 
@@ -22,7 +22,12 @@
     getStoredArray(key) {
       try {
         const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : [];
+        // CRITICAL FIX: Prevent massive string parsing from locking the main UI thread
+        if (!item || item.length > 100000) {
+            if (item && item.length > 100000) localStorage.removeItem(key);
+            return [];
+        }
+        return JSON.parse(item);
       } catch (e) {
         return [];
       }
@@ -30,6 +35,8 @@
 
     setStoredArray(key, arr) {
       try {
+        // Prevent array bloat from causing future freezes
+        if (arr.length > 500) arr = arr.slice(-500);
         localStorage.setItem(key, JSON.stringify(arr));
       } catch (e) {}
     }
