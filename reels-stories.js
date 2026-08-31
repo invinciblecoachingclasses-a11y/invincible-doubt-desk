@@ -6,7 +6,7 @@
    - Interactive Simulations (Canvas 2D + Micro-Engines)
    - Formula Builder & Ray Optics Sketchpads
    - Two-Stage State Machine (Challenge -> Master Reveal)
-   - Resilient Mobile Touch Swiper Viewport (Infinite Loop)
+   - Resilient Mobile Touch Swiper Viewport (Infinite Loop & 3D Physics)
    - Stories & Community Broadcast Engine
 ===================================================== */
 
@@ -486,8 +486,7 @@ function generateDynamicTitle(card) {
 }
 
 /* =====================================================
-   ROADMAP PHASE 1 & 5: 3-NODE VIRTUALIZED SWIPER & MIXER
-   (Upgraded with Circular Logic for Infinite Scrolling)
+   VIRTUALIZED 3-NODE SWIPER VIEWPORT (SAFE 3D ENGINE)
 ===================================================== */
 async function renderReelsDeck() {
     const container = document.getElementById('studyReelsDeck');
@@ -536,17 +535,25 @@ function createReelNode(index, initialOffsetPct) {
     const node = document.createElement('div');
     node.className = 'virtual-reel-slot';
     node.style.position = 'absolute';
-    node.style.top = '0';
-    node.style.left = '0';
+    node.style.inset = '0';
     node.style.width = '100%';
     node.style.height = '100%';
     node.style.willChange = 'transform';
-    node.style.transform = `translate3d(0, ${initialOffsetPct}%, 0)`;
+    
+    // SAFE 3D INITIALIZATION
+    let initScale = 1;
+    let initRot = 0;
+    if (initialOffsetPct < 0) { initScale = 0.9; initRot = 12; }
+    else if (initialOffsetPct > 0) { initScale = 0.9; initRot = -12; }
+    
+    node.style.transform = `translate3d(0, ${initialOffsetPct}%, 0) scale(${initScale}) rotateX(${initRot}deg)`;
+    node.style.transformOrigin = 'center center';
+    node.style.backfaceVisibility = 'hidden'; 
+    node.style.transformStyle = 'flat'; // Crucial to prevent canvas freeze
     node.style.transition = 'none';
     node.dataset.index = index;
 
     if (activeReelDeck.length > 0) {
-        // Core fix: modulo wrapping prevents blank slots
         const wrappedIdx = getWrappedIndex(index, activeReelDeck.length);
         const card = activeReelDeck[wrappedIdx];
         
@@ -591,6 +598,9 @@ function setupSwiperEngine(container) {
     // Core fix: Adaptive height with lower minimum to prevent overflow pushing the dock away
     container.style.height = 'calc(100vh - 180px)';
     container.style.minHeight = '420px';
+    
+    // SAFE 3D CAMERA DEPTH
+    container.style.perspective = '1200px';
 
     activeNodes.prev = createReelNode(currentReelIndex - 1, -100);
     activeNodes.current = createReelNode(currentReelIndex, 0);
@@ -626,25 +636,39 @@ function attachGestureListeners(container) {
     const onMove = (clientY, e) => {
         if (!isDraggingReel || isTransitioning || isTokenDragging) return;
         currentDeltaY = clientY - touchStartY;
-
         if (e && e.cancelable) e.preventDefault();
 
-        // Removed the end-of-deck damping to allow fully infinite swiping
-        let dampedDelta = currentDeltaY;
+        const height = container.clientHeight || 600;
+        let progress = currentDeltaY / height; // Returns -1 to 1
 
-        if (activeNodes.prev) activeNodes.prev.style.transform = `translate3d(0, calc(-100% + ${dampedDelta}px), 0)`;
-        if (activeNodes.current) activeNodes.current.style.transform = `translate3d(0, ${dampedDelta}px, 0)`;
-        if (activeNodes.next) activeNodes.next.style.transform = `translate3d(0, calc(100% + ${dampedDelta}px), 0)`;
+        // SAFE 3D MATH ENGINE
+        if (activeNodes.prev) {
+            const p = Math.max(0, progress);
+            const scale = 0.9 + (0.1 * p);
+            const rotX = 12 - (12 * p);
+            activeNodes.prev.style.transform = `translate3d(0, calc(-100% + ${currentDeltaY}px), 0) scale(${scale}) rotateX(${rotX}deg)`;
+        }
+        
+        if (activeNodes.current) {
+            const p = Math.abs(progress);
+            const scale = 1 - (0.1 * p);
+            const rotX = progress * -12; // Tilts backwards as you swipe
+            activeNodes.current.style.transform = `translate3d(0, ${currentDeltaY}px, 0) scale(${scale}) rotateX(${rotX}deg)`;
+        }
+        
+        if (activeNodes.next) {
+            const p = Math.max(0, -progress);
+            const scale = 0.9 + (0.1 * p);
+            const rotX = -12 + (12 * p);
+            activeNodes.next.style.transform = `translate3d(0, calc(100% + ${currentDeltaY}px), 0) scale(${scale}) rotateX(${rotX}deg)`;
+        }
     };
 
     const onEnd = () => {
         if (!isDraggingReel) return;
         isDraggingReel = false;
 
-        const containerHeight = container.clientHeight || window.innerHeight;
-        const threshold = Math.max(60, containerHeight * 0.16);
-
-        // Core fix: Removed absolute array limits to allow infinite loop forward and backward
+        const threshold = 50;
         if (currentDeltaY < -threshold) {
             snapToNode('next');
         } else if (currentDeltaY > threshold) {
@@ -702,9 +726,9 @@ function snapToNode(direction) {
     });
 
     if (direction === 'next') {
-        activeNodes.prev.style.transform = 'translate3d(0, -200%, 0)';
-        activeNodes.current.style.transform = 'translate3d(0, -100%, 0)';
-        activeNodes.next.style.transform = 'translate3d(0, 0%, 0)';
+        activeNodes.prev.style.transform = 'translate3d(0, -200%, 0) scale(0.9) rotateX(12deg)';
+        activeNodes.current.style.transform = 'translate3d(0, -100%, 0) scale(0.9) rotateX(12deg)';
+        activeNodes.next.style.transform = 'translate3d(0, 0%, 0) scale(1) rotateX(0deg)';
 
         const oldCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
         if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
@@ -716,9 +740,9 @@ function snapToNode(direction) {
         }, 300);
 
     } else if (direction === 'prev') {
-        activeNodes.prev.style.transform = 'translate3d(0, 0%, 0)';
-        activeNodes.current.style.transform = 'translate3d(0, 100%, 0)';
-        activeNodes.next.style.transform = 'translate3d(0, 200%, 0)';
+        activeNodes.prev.style.transform = 'translate3d(0, 0%, 0) scale(1) rotateX(0deg)';
+        activeNodes.current.style.transform = 'translate3d(0, 100%, 0) scale(0.9) rotateX(-12deg)';
+        activeNodes.next.style.transform = 'translate3d(0, 200%, 0) scale(0.9) rotateX(-12deg)';
 
         const oldCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
         if (oldCard) stopReelTimer(oldCard.id || currentReelIndex);
@@ -730,9 +754,9 @@ function snapToNode(direction) {
         }, 300);
 
     } else {
-        activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
-        activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
-        activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+        activeNodes.prev.style.transform = 'translate3d(0, -100%, 0) scale(0.9) rotateX(12deg)';
+        activeNodes.current.style.transform = 'translate3d(0, 0%, 0) scale(1) rotateX(0deg)';
+        activeNodes.next.style.transform = 'translate3d(0, 100%, 0) scale(0.9) rotateX(-12deg)';
 
         setTimeout(() => {
             isTransitioning = false;
@@ -758,9 +782,9 @@ function recycleForward() {
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = 'none';
     });
-    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
-    activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
-    activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0) scale(0.9) rotateX(12deg)';
+    activeNodes.current.style.transform = 'translate3d(0, 0%, 0) scale(1) rotateX(0deg)';
+    activeNodes.next.style.transform = 'translate3d(0, 100%, 0) scale(0.9) rotateX(-12deg)';
 
     const newCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
@@ -784,9 +808,9 @@ function recycleBackward() {
     ['prev', 'current', 'next'].forEach(k => {
         if (activeNodes[k]) activeNodes[k].style.transition = 'none';
     });
-    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0)';
-    activeNodes.current.style.transform = 'translate3d(0, 0%, 0)';
-    activeNodes.next.style.transform = 'translate3d(0, 100%, 0)';
+    activeNodes.prev.style.transform = 'translate3d(0, -100%, 0) scale(0.9) rotateX(12deg)';
+    activeNodes.current.style.transform = 'translate3d(0, 0%, 0) scale(1) rotateX(0deg)';
+    activeNodes.next.style.transform = 'translate3d(0, 100%, 0) scale(0.9) rotateX(-12deg)';
 
     const newCard = activeReelDeck[getWrappedIndex(currentReelIndex, activeReelDeck.length)];
     if (newCard) startReelTimer(newCard.id || currentReelIndex);
