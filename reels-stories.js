@@ -1463,19 +1463,25 @@ const correctAnswerText = allOptionBtns[correctIdx] ? allOptionBtns[correctIdx].
 const tipEl = card ? card.querySelector('.reel-tip-text, .topper-content, .reel-feedback') : null;
 const explanationRule = tipEl ? tipEl.innerText.trim() : 'Review the fundamental NCERT law and verify sign conventions before calculating.';
 
+// 🧠 TELEMETRY INJECTION: Broadcast Reel Completion to Mastery Engine
 if (window.InvincibleTelemetry) {
+  // Extract accurate subject and topic from the DOM or card data
+  const subjectStr = card.dataset.subject || (card.querySelector('.reel-q-title') ? card.querySelector('.reel-q-title').innerText : 'Science');
+  const topicStr = card.dataset.topic || 'General Concept';
+
   window.InvincibleTelemetry.emit('REEL_RESOLVED', {
-    subject: card.dataset.subject || 'Science',
-    topic: card.dataset.topic || 'General Concept',
+    subject: subjectStr,
+    topic: topicStr,
     question: questionText,
     yourAnswer: yourAnswerText,
     correctAnswer: correctAnswerText,
     explanation: explanationRule,
     isCorrect: isCorrect,
     timeTaken: 5,
-    isBoss: false
+    isBoss: isBoss
   });
 }
+
 
 
 
