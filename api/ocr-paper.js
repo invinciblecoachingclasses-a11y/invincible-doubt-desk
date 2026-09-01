@@ -60,7 +60,7 @@ INSTRUCTIONS:
 2. Transcribe every question text, multiple-choice options (a, b, c, d), fill-in blanks, true/false statements, and subjective questions with absolute fidelity.
 3. Preserve the exact marks indicated for each question or section.
 4. Provide accurate answer keys for each transcribed question based on standard academic curriculum.
-5. CRITICAL FOR "MATCH THE FOLLOWING": Do NOT flatten matching questions into a single line. Format them cleanly as a list in the "options" array so Column A and Column B sit on their own individual lines.
+5. CRITICAL FOR "MATCH THE FOLLOWING": Web browsers collapse standard empty spaces, so you MUST separate Column A and Column B using multiple Unicode non-breaking spaces (\\u00A0) to create a clean, invisible wide gap. Format them cleanly as a list in the "options" array like this example.
 
 Respond ONLY with valid, raw JSON matching this exact schema:
 {
@@ -85,11 +85,11 @@ Respond ONLY with valid, raw JSON matching this exact schema:
           "question_number": 1,
           "question_text": "Match Column A with Column B:",
           "options": [
-            "1. Doctor         (a) Milk",
-            "2. Teacher        (b) Water",
-            "3. Cow            (c) Hospital",
-            "4. Fish           (d) Light",
-            "5. Sun            (e) School"
+            "1. Doctor \\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0 (a) Milk",
+            "2. Teacher \\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0 (b) Water",
+            "3. Cow \\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0 (c) Hospital",
+            "4. Fish \\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0 (d) Light",
+            "5. Sun \\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0\\u00A0 (e) School"
           ],
           "marks": 10,
           "answer_key": "1-(c), 2-(e), 3-(a), 4-(b), 5-(d)"
