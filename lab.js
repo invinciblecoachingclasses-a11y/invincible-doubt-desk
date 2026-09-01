@@ -1,6 +1,7 @@
 /**
  * INVINCIBLE 360 - INTERACTIVE SCIENCE LAB ENGINE
  * "Don't just learn it. Make it happen."
+ * 🧠 TELEMETRY HOOKED: Practical Mastery & Application Errors
  */
 
 // --- ULTRA-SAFE STATE INITIALIZATION (Prevents Memory Crashes) ---
@@ -60,7 +61,7 @@ function triggerLabHaptic(pattern = [40]) {
   } catch(e) {}
 }
 
-// --- FULL SIMULATION DATABASE (Including Lazy-Loaded Bio Heart) ---
+// --- FULL SIMULATION DATABASE ---
 const SIMULATIONS = {
   'ohms_law': {
     id: 'ohms_law',
@@ -678,12 +679,6 @@ const SIMULATIONS = {
       { id: 'ctrl_cat', label: 'Catalyst Added', min: 0, max: 100, step: 10, default: 0, unit: '%' }
     ]
   }
-
-
-
-
-
-
 };
 
 // --- CORE CONTROLLER FUNCTIONS WITH CRASH ALERTS ---
@@ -822,7 +817,7 @@ window.handleParamChange = function(paramId, value, unit) {
   if (window.labState.activeSim) window.labState.activeSim.update(paramId, value);
 };
 
-// --- VARIABLE REWARD ENGINE ---
+// --- VARIABLE REWARD & TELEMETRY ENGINE ---
 function triggerLootDrop() {
   const randomXP = Math.floor(Math.random() * (150 - 30 + 1)) + 30; 
   const xpEl = document.getElementById('xpCounter');
@@ -834,6 +829,20 @@ function triggerLootDrop() {
   if (window.labState.activeSim && !window.labState.completedSims.includes(window.labState.activeSim.id)) {
     window.labState.completedSims.push(window.labState.activeSim.id);
     localStorage.setItem('invincible_lab_completed', JSON.stringify(window.labState.completedSims));
+
+    // =====================================================
+    // 🧠 TELEMETRY HOOK: Log First-Time Lab Completion
+    // =====================================================
+    if (window.InvincibleTelemetry) {
+        window.InvincibleTelemetry.emit('LAB_COMPLETED', {
+            subject: window.labState.activeSim.subject,
+            topic: window.labState.activeSim.title,
+            earnedXP: randomXP
+        });
+        // Boost global mastery specifically for "Practical Application"
+        window.InvincibleTelemetry.updateMastery(window.labState.activeSim.title, 5); 
+    }
+    // =====================================================
   }
   alert(`🎁 QUANTUM CRATE UNLOCKED!\n\nYou earned +${randomXP} XP for your mastery!`);
 }
@@ -855,6 +864,7 @@ function renderPredictionUI(sim) {
     btn.type = 'button';
     btn.style.cssText = 'background:#0f172a; border:1px solid #1e293b; color:#fff; text-align:left; padding:10px 14px; border-radius:10px; font-size:12px; font-weight:700; cursor:pointer; width:100%;';
     btn.textContent = opt.text;
+    
     btn.onclick = () => {
       if (window.labState.predictionMade) return;
       window.labState.predictionMade = true;
@@ -867,6 +877,22 @@ function renderPredictionUI(sim) {
       } else {
         btn.style.borderColor = 'var(--accent-rose)'; btn.style.background = 'rgba(244, 63, 94, 0.15)';
         triggerLabHaptic([100]);
+
+        // =====================================================
+        // 🧠 TELEMETRY HOOK: Log Practical Errors to Mistake Vault
+        // =====================================================
+        if (window.InvincibleTelemetry) {
+            const correctOpt = sim.prediction.options.find(o => o.correct);
+            window.InvincibleTelemetry.emit('MISTAKE_LOGGED', {
+                subject: sim.subject,
+                topic: sim.title,
+                mistakeType: "PRACTICAL_APPLICATION_ERROR",
+                originalQuestion: sim.prediction.prompt,
+                studentAnswer: opt.text,
+                correctAnswer: correctOpt ? correctOpt.text : "See explanation."
+            });
+        }
+        // =====================================================
       }
 
       const expDiv = document.createElement('div');
