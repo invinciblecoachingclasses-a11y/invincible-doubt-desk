@@ -57,9 +57,10 @@ EXAM METADATA:
 
 INSTRUCTIONS:
 1. Extract all sections (e.g., Section A, Section B, Section C, Section D, Section E, Section F, Section G) exactly as presented in the images.
-2. Transcribe every question text, multiple-choice options (a, b, c, d), fill-in blanks, true/false statements, matching items, and subjective questions with absolute fidelity.
+2. Transcribe every question text, multiple-choice options (a, b, c, d), fill-in blanks, true/false statements, and subjective questions with absolute fidelity.
 3. Preserve the exact marks indicated for each question or section.
 4. Provide accurate answer keys for each transcribed question based on standard academic curriculum.
+5. CRITICAL FOR "MATCH THE FOLLOWING": Do NOT flatten matching questions into a single line. Format them cleanly as a list in the "options" array so Column A and Column B sit on their own individual lines.
 
 Respond ONLY with valid, raw JSON matching this exact schema:
 {
@@ -78,14 +79,20 @@ Respond ONLY with valid, raw JSON matching this exact schema:
   ],
   "sections": [
     {
-      "section_name": "SECTION A - Tick the correct option",
+      "section_name": "SECTION D - Match the Following",
       "questions": [
         {
           "question_number": 1,
-          "question_text": "Parents love and take care of their __.",
-          "options": ["(a) animals", "(b) friends", "(c) children", "(d) all of these"],
-          "marks": 1,
-          "answer_key": "(c) children"
+          "question_text": "Match Column A with Column B:",
+          "options": [
+            "1. Doctor         (a) Milk",
+            "2. Teacher        (b) Water",
+            "3. Cow            (c) Hospital",
+            "4. Fish           (d) Light",
+            "5. Sun            (e) School"
+          ],
+          "marks": 10,
+          "answer_key": "1-(c), 2-(e), 3-(a), 4-(b), 5-(d)"
         }
       ]
     }
