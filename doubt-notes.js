@@ -7,6 +7,7 @@
    4. Spatial Mind-Palace Constellation Engine (Node Physics)
    5. Interactive Topper Notes Module (Tabs, Flashcards, Traps & Mastery)
    6. Custom A4 Print & PDF Compilation Engine
+   7. 🧠 TELEMETRY HOOKED: Curiosity & Proactive Learning
 ===================================================== */
 
 let selectedSubject = "Mathematics";
@@ -358,6 +359,20 @@ if (askBtn) {
       const q = questionInput ? questionInput.value.trim() : "";
       if(!q && !selectedImage) return alert("Please enter a question or upload a photo.");
 
+      // =====================================================
+      // 🧠 TELEMETRY HOOK: Log proactive learning / curiosity
+      // =====================================================
+      if (window.InvincibleTelemetry) {
+          window.InvincibleTelemetry.emit('DOUBT_ASKED', {
+              subject: selectedSubject || 'General',
+              topic: 'Doubt Desk Query',
+              questionLength: q ? q.length : 0,
+              hasImage: !!selectedImage,
+              tone: currentTone
+          });
+      }
+      // =====================================================
+
       askBtn.disabled = true;
       const loadingEl = document.getElementById("loadingDoubt");
       const answerBoxEl = document.getElementById("answerBox");
@@ -368,7 +383,7 @@ if (askBtn) {
       const attachedImageBase64 = selectedImage ? `data:${selectedImage.mimeType};base64,${selectedImage.data}` : null;
       doubtHistory = [];
 
-          try {
+      try {
         const coachPrompt = window.InvincibleCoach ? window.InvincibleCoach.getModePrompt() : '';
         const fullPrompt = coachPrompt ? `${coachPrompt}\n\nStudent Question: ${q}` : q;
 
@@ -408,17 +423,19 @@ if (askBtn) {
           
           if (answerBoxEl) answerBoxEl.style.display = "block"; 
           
-                  // Reward Doubt Solving XP
+        // Reward Doubt Solving XP
         if (typeof addStudentXP === 'function') addStudentXP(15);
 
-        // 🧠 TELEMETRY INJECTION: Broadcast the solved doubt to the learning engine
+        // 🧠 TELEMETRY HOOK: Broadcast the solved doubt to the learning engine
         if (window.InvincibleTelemetry) {
             window.InvincibleTelemetry.emit('DOUBT_SOLVED', {
                 subject: selectedSubject || 'General',
-                topic: 'General Concept', // In a future update, we can have the AI extract the exact topic
+                topic: 'General Concept',
                 timeTaken: 0,
                 question: q
             });
+            // Give a micro-boost to global mastery for seeking help
+            window.InvincibleTelemetry.updateMastery('Curiosity', 1);
         }
 
           // INJECT INTERACTIVE VISUAL BLACKBOARD
@@ -444,6 +461,20 @@ if (sendFollowUpBtn && followUpInput) {
   const submitFollowUp = async () => {
     const followQ = followUpInput.value.trim();
     if (!followQ) return;
+
+    // =====================================================
+    // 🧠 TELEMETRY HOOK: Log deep engagement (Follow-Up Question)
+    // =====================================================
+    if (window.InvincibleTelemetry) {
+        window.InvincibleTelemetry.emit('DOUBT_FOLLOWUP_ASKED', {
+            subject: selectedSubject || 'General',
+            questionLength: followQ.length,
+            tone: currentTone
+        });
+        // Extra mastery boost for diving deeper!
+        window.InvincibleTelemetry.updateMastery('Deep Learning', 2);
+    }
+    // =====================================================
 
     sendFollowUpBtn.disabled = true;
     sendFollowUpBtn.textContent = "...";
