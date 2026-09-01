@@ -65,25 +65,41 @@
         `;
       }
     }
-
     /* --------------------------------------------------
-       2. AI GENERATION (MOCK/API BRIDGE)
+       2. AI GENERATION (SECURE API BRIDGE)
     -------------------------------------------------- */
     async fetchFixFromAI(payload) {
-      // Note: Replace this mock delay with your actual API call to Gemini (e.g., fetch('/api/chat'))
-      // You want to prompt Gemini to return a JSON with: explanation, example, question, options, correctIndex
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            explanation: `You previously struggled with ${payload.topic} because of this core issue: ${payload.coreMisconception}. Let's simplify it.`,
-            example: `Think of it like this: If you apply a force (F) of 10N to a 2kg mass, the acceleration (a) is simply 10/2 = 5 m/s².`,
-            question: `Based on this rule, if a 4kg mass is accelerating at 3 m/s², what is the net force applied?`,
-            options: ["7 N", "12 N", "1.33 N", "24 N"],
-            correctIndex: 1
-          });
-        }, 2500); // Simulating network latency
-      });
+      try {
+        // Point this to your secure backend endpoint
+        const response = await fetch('/api/generate-fix', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            subject: payload.subject,
+            topic: payload.topic,
+            originalQuestion: payload.originalQuestion,
+            coreMisconception: payload.coreMisconception
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API returned status: ${response.status}`);
+        }
+
+        // The backend must return a strict JSON object containing: 
+        // { explanation, example, question, options, correctIndex }
+        const aiData = await response.json();
+        return aiData;
+
+      } catch (error) {
+        console.error("[AI Orchestrator] Secure Fetch Failed:", error);
+        throw error; // Let the initiator handle the error UI
+      }
     }
+
+    
 
     /* --------------------------------------------------
        3. RENDER THE INTERVENTION UI
