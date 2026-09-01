@@ -41,71 +41,51 @@ export default async function handler(req, res) {
       durationMinutes,
       academicSession,
       setCode,
-      includeStudentBlanks,
-      difficulty,
-      includeMCQs,
-      includeAssertionReason,
-      includeCaseStudy,
-      isBilingual
+      includeStudentBlanks
     } = req.body || {};
 
     const systemPrompt = `
-You are an expert school examination setter and board evaluator for Indian schools (CBSE / NCERT / ICSE / State Boards).
+You are an expert OCR Transcription and Examination Formatting Engine. Your task is to accurately transcribe the handwritten question paper from the provided images word-for-word, preserving every section, question number, option, sub-part, and mark allocation exactly as written on the paper. Do NOT invent, generate, or create new questions. Transcribe precisely what is shown in the images.
 
-EXAM SPECIFICATIONS:
-- School / Institute: ${schoolName || "Academic Institution"}
-- Class: ${classGrade || "Class 10"}
-- Subject: ${subject || "Science"}
-- Syllabus / Chapters / Topics: ${chapterName || rawText || "Standard Curriculum"}
-- Total Marks: ${totalMarks || 25}
-- Exam Type: ${examType || "Periodic Test"}
-- Duration: ${durationMinutes || 45} Minutes
-- Academic Session / Date: ${academicSession || "2025-26"}
-- Set Code: ${setCode || "None"}
-- Difficulty Level: ${difficulty || "Standard"}
-- Include MCQs (4 options A, B, C, D): ${includeMCQs ? "YES" : "NO"}
-- Include Assertion-Reason: ${includeAssertionReason ? "YES" : "NO"}
-- Include Case-Based / Passage Questions: ${includeCaseStudy ? "YES" : "NO"}
-- Bilingual (English + Hindi): ${isBilingual ? "YES" : "NO"}
+EXAM METADATA:
+- School / Institute: ${schoolName || "Invincible Coaching Classes"}
+- Class: ${classGrade || "Class 4"}
+- Subject: ${subject || "E.V.S"}
+- Total Marks: ${totalMarks || 80}
+- Exam Type: ${examType || "Summative Assessment (SA-1)"}
+- Duration: ${durationMinutes || 150} Minutes
 
 INSTRUCTIONS:
-1. Generate an authentic school question paper perfectly matching the official Indian board format.
-2. The sum of marks across all questions MUST equal exactly ${totalMarks || 25}.
-3. Structure sections logically:
-   - Section A: MCQs (1 Mark each, with options A, B, C, D) and/or Assertion-Reason.
-   - Section B: Very Short Answer (2 Marks).
-   - Section C: Short Answer (3 Marks).
-   - Section D: Long Answer (5 Marks) / Case-Based Integrated Study (4-5 Marks).
-4. Provide comprehensive, step-by-step marking keys for each question. For MCQs, state the correct option letter + explanation.
-5. Use standard LaTeX notation ($ for inline math, $$ for display equations) where formulas or chemical equations are needed.
+1. Extract all sections (e.g., Section A, Section B, Section C, Section D, Section E, Section F, Section G) exactly as presented in the images.
+2. Transcribe every question text, multiple-choice options (a, b, c, d), fill-in blanks, true/false statements, matching items, and subjective questions with absolute fidelity.
+3. Preserve the exact marks indicated for each question or section.
+4. Provide accurate answer keys for each transcribed question based on standard academic curriculum.
 
-Respond ONLY with valid, raw JSON matching this schema:
+Respond ONLY with valid, raw JSON matching this exact schema:
 {
-  "school_name": "${schoolName || "Academic Institution"}",
-  "title": "${examType || "Periodic Assessment"}",
-  "subject": "${subject || "Science"}",
-  "class_grade": "${classGrade || "Class 10"}",
-  "total_marks": ${totalMarks || 25},
-  "duration_minutes": ${durationMinutes || 45},
+  "school_name": "${schoolName || "Invincible Coaching Classes"}",
+  "title": "${examType || "Summative Assessment (SA-1)"}",
+  "subject": "${subject || "E.V.S"}",
+  "class_grade": "${classGrade || "Class 4"}",
+  "total_marks": ${totalMarks || 80},
+  "duration_minutes": ${durationMinutes || 150},
   "academic_session": "${academicSession || "2025-26"}",
   "set_code": "${setCode || ""}",
-  "has_student_blanks": ${includeStudentBlanks ? "true" : "false"},
+  "has_student_blanks": true,
   "instructions": [
     "All questions are compulsory.",
-    "Section A contains Objective/MCQ questions carrying 1 mark each.",
-    "Section B, C, and D contain subjective questions with step-marking criteria.",
-    "Use of calculators or electronic devices is strictly prohibited."
+    "Write neat and legible answers. Diagrams must be drawn clearly where required."
   ],
   "sections": [
     {
-      "section_name": "Section A (Objective & MCQs)",
+      "section_name": "SECTION A - Tick the correct option",
       "questions": [
         {
           "question_number": 1,
-          "question_text": "Question text here",
-          "options": ["(A) Option 1", "(B) Option 2", "(C) Option 3", "(D) Option 4"],
+          "question_text": "Parents love and take care of their __.",
+          "options": ["(a) animals", "(b) friends", "(c) children", "(d) all of these"],
           "marks": 1,
-          "answer_key": "(B) Option 2 - Step-by-step explanation or rationale."
+          "answer_key": "(c) children"
         }
       ]
     }
@@ -115,8 +95,8 @@ Respond ONLY with valid, raw JSON matching this schema:
 
     const parts = [{ text: systemPrompt }];
 
-    if (inputType === 'text' || inputType === 'ncert' || rawText || chapterName) {
-      parts.push({ text: `Detailed Curriculum / Source Input:\n${chapterName || rawText || "Standard Board Syllabus"}` });
+    if (inputType === 'text' || rawText || chapterName) {
+      parts.push({ text: `Additional Context / Notes:\n${chapterName || rawText || ""}` });
     }
 
     if (imageBase64Array && Array.isArray(imageBase64Array) && imageBase64Array.length > 0) {
@@ -132,14 +112,13 @@ Respond ONLY with valid, raw JSON matching this schema:
       });
     }
 
-        // Multi-model resilience hierarchy
+    // Multi-model resilience hierarchy utilizing current available models
     const MODELS = [
       "gemini-3.6-flash",
       "gemini-1.5-pro",
       "gemini-1.5-flash",
       "gemini-1.5-flash-8b"
     ];
-
 
     let examData = null;
     let errorLog = [];
@@ -156,7 +135,7 @@ Respond ONLY with valid, raw JSON matching this schema:
               contents: [{ role: "user", parts }],
               generationConfig: {
                 responseMimeType: "application/json",
-                temperature: 0.2
+                temperature: 0.1
               }
             })
           });
@@ -184,7 +163,7 @@ Respond ONLY with valid, raw JSON matching this schema:
     if (!examData) {
       return res.status(500).json({ 
         success: false, 
-        error: `OCR Question Paper generation failed: ${errorLog.slice(0, 2).join(" | ")}` 
+        error: `OCR Question Paper transcription failed: ${errorLog.slice(0, 2).join(" | ")}` 
       });
     }
 
@@ -195,6 +174,6 @@ Respond ONLY with valid, raw JSON matching this schema:
 
   } catch (error) {
     console.error("OCR Paper Fatal Error:", error);
-    return res.status(500).json({ success: false, error: error.message || "Server error processing question paper." });
+    return res.status(500).json({ success: false, error: error.message || "Server error processing handwritten paper." });
   }
 }
