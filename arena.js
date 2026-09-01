@@ -6,6 +6,7 @@
    - Neon Beam-Clash Tug-of-War Canvas Engine
    - Tactical Weapons (50:50 Laser Slice & Cryo-Freeze)
    - Real-Time P2P WebRTC Voice Chat Engine
+   - 🧠 TELEMETRY HOOKED: Time-Pressure Tracking
 ===================================================== */
 
 let arena = { 
@@ -553,13 +554,45 @@ function loadArenaQuestion() {
           }
         }
         if (arena.timer <= 0) {
-            handleArenaAnswer(null, -1, -1);
+            handleArenaAnswer(null, -1, arena.correctAnswerIndex);
         }
     }, 1000);
 }
 
 async function handleArenaAnswer(element, selectedIdx, correctIdx) {
     clearInterval(arena.interval);
+
+    // =====================================================
+    // 🧠 INJECTED TELEMETRY HOOK: Time-Pressure Tracking
+    // =====================================================
+    if (window.InvincibleTelemetry && arena.questions[arena.currentQ]) {
+        const currentQ = arena.questions[arena.currentQ];
+        const isCorrect = (selectedIdx === Number(correctIdx));
+        const isPanic = (arena.timer <= 4); // Answered with 4 or fewer seconds left
+        
+        // Grab subject info from DOM if available
+        const subjectEl = document.getElementById('arenaSubject');
+        const topicEl = document.getElementById('arenaChapter');
+        const subject = subjectEl ? subjectEl.value : 'Arena Battle';
+        const topic = topicEl ? topicEl.value : 'Time Pressure Match';
+
+        // 1. If wrong under pressure, send a specific Panic Mistake to the Vault
+        if (!isCorrect && selectedIdx !== -1) {
+            window.InvincibleTelemetry.emit('MISTAKE_LOGGED', {
+                subject: subject,
+                topic: topic,
+                mistakeType: isPanic ? "TIME_PRESSURE_PANIC" : "CONCEPTUAL_ERROR",
+                originalQuestion: currentQ.question_text || currentQ.question,
+                studentAnswer: "Option " + (selectedIdx + 1),
+                correctAnswer: "Option " + (correctIdx + 1)
+            });
+        }
+        
+        // 2. Adjust overall global mastery based on high-pressure performance
+        const masteryDelta = isCorrect ? (isPanic ? 3 : 1) : -2; // High reward for clutch answers
+        window.InvincibleTelemetry.updateMastery(topic, masteryDelta);
+    }
+    // =====================================================
     
     if (selectedIdx === Number(correctIdx)) {
         if(element) element.classList.add('hit-correct');
