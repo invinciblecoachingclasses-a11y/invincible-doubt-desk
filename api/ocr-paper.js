@@ -132,13 +132,14 @@ Respond ONLY with valid, raw JSON matching this schema:
       });
     }
 
-    // Multi-model resilience hierarchy
+        // Multi-model resilience hierarchy
     const MODELS = [
-      "gemini-2.5-flash",
-      "gemini-2.0-flash",
+      "gemini-3.6-flash",
+      "gemini-1.5-pro",
       "gemini-1.5-flash",
       "gemini-1.5-flash-8b"
     ];
+
 
     let examData = null;
     let errorLog = [];
