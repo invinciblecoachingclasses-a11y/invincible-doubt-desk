@@ -6,6 +6,7 @@
    3. Spaced-Repetition Knowledge Decay Algorithm (Ebbinghaus)
    4. Unified XP, Streak & Progression Manager
    5. Intelligent "Next Best Move" Recommendation Generator
+   6. Supabase Cloud Sync (Learning Events & Mastery States)
 ===================================================== */
 
 (function(window) {
@@ -26,8 +27,13 @@
     constructor() {
       this.mastery = this.loadMastery();
       this.eventQueue = this.loadEvents();
+      this.syncQueue = []; // Holds events waiting to be pushed to Supabase
       this.subscribers = {};
+      
       this.initDecayEngine();
+      
+      // Attempt to sync to Supabase every 15 seconds
+      this.syncInterval = setInterval(() => this.flushQueueToSupabase(), 15000);
     }
 
     /* --------------------------------------------------
@@ -63,6 +69,8 @@
 
     logEvent(eventRecord) {
       this.eventQueue.push(eventRecord);
+      this.syncQueue.push(eventRecord); // Queue for cloud sync
+
       if (this.eventQueue.length > 250) this.eventQueue.shift(); // Keep last 250 events locally
       try {
         localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(this.eventQueue));
@@ -79,21 +87,23 @@
         case 'REEL_RESOLVED':
           this.updateReelMastery(payload);
           break;
-
         case 'ARENA_FINISHED':
           this.updateArenaMastery(payload);
           break;
-
         case 'LAB_COMPLETED':
           this.updateLabMastery(payload);
           break;
-
         case 'TEST_SUBMITTED':
           this.updateTestMastery(payload);
           break;
-
         case 'MISTAKE_RECOVERED':
           this.updateMistakeRecovery(payload);
+          break;
+        case 'DOUBT_SOLVED':
+          this.updateDoubtMastery(payload);
+          break;
+        case '2_MIN_FIX_COMPLETED':
+          this.updateTwoMinFixMastery(payload);
           break;
       }
 
@@ -101,35 +111,34 @@
     }
 
     updateReelMastery(payload) {
-  const { subject, topic, isCorrect, timeTaken, isBoss, question, yourAnswer, correctAnswer, explanation } = payload;
-  const entry = this.getTopicEntry(subject, topic);
-  entry.attempts += 1;
-  
-  if (isCorrect) {
-    entry.correct += 1;
-    entry.mastery = Math.min(100, entry.mastery + 6);
-    entry.skills.concepts = Math.min(100, entry.skills.concepts + 6);
-  } else {
-    entry.mastery = Math.max(15, entry.mastery - 4);
-    entry.skills.concepts = Math.max(10, entry.skills.concepts - 4);
-    
-    // Auto-log full mistake context with feedback
-    if (window.InvincibleVault) {
-      window.InvincibleVault.recordMistake({
-        subject: subject || 'Science',
-        topic: topic || 'General Concept',
-        question: question,
-        yourAnswer: yourAnswer,
-        correctAnswer: correctAnswer,
-        category: 'Concept Trap',
-        explanation: explanation || 'Review the core formula and verify sign conventions.'
-      });
+      const { subject, topic, isCorrect, timeTaken, isBoss, question, yourAnswer, correctAnswer, explanation } = payload;
+      const entry = this.getTopicEntry(subject, topic);
+      entry.attempts += 1;
+      
+      if (isCorrect) {
+        entry.correct += 1;
+        entry.mastery = Math.min(100, entry.mastery + 6);
+        entry.skills.concepts = Math.min(100, entry.skills.concepts + 6);
+      } else {
+        entry.mastery = Math.max(15, entry.mastery - 4);
+        entry.skills.concepts = Math.max(10, entry.skills.concepts - 4);
+        
+        // Auto-log full mistake context with feedback
+        if (window.InvincibleVault) {
+          window.InvincibleVault.recordMistake({
+            subject: subject || 'Science',
+            topic: topic || 'General Concept',
+            question: question,
+            yourAnswer: yourAnswer,
+            correctAnswer: correctAnswer,
+            category: 'Concept Trap',
+            explanation: explanation || 'Review the core formula and verify sign conventions.'
+          });
+        }
+      }
+
+      entry.lastPracticed = Date.now();
     }
-  }
-
-  entry.lastPracticed = Date.now();
-}
-
 
     updateArenaMastery({ subject, chapter, won, accuracy, comboStreak }) {
       const entry = this.getTopicEntry(subject, chapter || 'General Syllabus');
@@ -168,6 +177,21 @@
       const entry = this.getTopicEntry(subject, topic);
       const boost = (fixedCount || 1) * 6;
       entry.mastery = Math.min(100, entry.mastery + boost);
+      entry.lastPracticed = Date.now();
+    }
+
+    updateDoubtMastery({ subject, topic }) {
+      const entry = this.getTopicEntry(subject, topic);
+      // Asking a doubt shows engagement, minor boost to baseline
+      entry.mastery = Math.min(100, entry.mastery + 2);
+      entry.lastPracticed = Date.now();
+    }
+
+    updateTwoMinFixMastery({ subject, topic }) {
+      const entry = this.getTopicEntry(subject, topic);
+      // High reward for dedicated mistake correction intervention
+      entry.mastery = Math.min(100, entry.mastery + 12);
+      entry.skills.concepts = Math.min(100, entry.skills.concepts + 10);
       entry.lastPracticed = Date.now();
     }
 
@@ -233,9 +257,9 @@
               mastery: item.mastery,
               reason: item.decayFlag 
                 ? `You haven't practiced ${top} in 5+ days. Memory retention is decaying.` 
-                : `Your mastery in ${top} is at ${item.mastery}%. A 2-min drill will level it up.`,
-              actionTitle: `Master ${top}`,
-              actionTab: 'reels'
+                : `Your mastery in ${top} is critically low at ${item.mastery}%. Start a 2-Min Fix to recover.`,
+              actionTitle: item.mastery < 40 ? `Launch 2-Min Fix` : `Master ${top}`,
+              actionTab: item.mastery < 40 ? 'coach' : 'reels'
             };
           }
         });
@@ -246,10 +270,10 @@
         targetMove = {
           type: 'DAILY_CHALLENGE',
           subject: 'Science',
-          topic: 'Electricity & Circuits',
-          mastery: 75,
-          reason: 'Complete today’s high-yield challenge to maintain your rank on the leaderboard.',
-          actionTitle: 'Launch 2-Min Speed Drill',
+          topic: 'Blitz Challenge',
+          mastery: 85,
+          reason: 'All concepts are stable. Complete a High-Speed Blitz to maintain your leaderboard rank.',
+          actionTitle: 'Launch 60s Blitz',
           actionTab: 'arena'
         };
       }
@@ -258,7 +282,61 @@
     }
 
     /* --------------------------------------------------
-       5. PERSISTENCE HELPERS
+       5. SUPABASE CLOUD SYNC ENGINE
+    -------------------------------------------------- */
+    async flushQueueToSupabase() {
+      if (this.syncQueue.length === 0 || !window.supabase) return;
+
+      const eventsToSend = [...this.syncQueue];
+      this.syncQueue = []; 
+
+      // Note: In production, hook this into your auth state
+      const mockStudentId = '00000000-0000-0000-0000-000000000000'; 
+
+      try {
+        const payload = eventsToSend.map(e => ({
+          student_id: mockStudentId,
+          event_type: e.type,
+          subject: e.payload.subject || 'General',
+          chapter: e.payload.chapter || 'General',
+          concept: e.payload.topic || 'General',
+          score: e.payload.percentage || e.payload.accuracy || 0,
+          metadata: e.payload,
+          created_at: new Date(e.timestamp).toISOString()
+        }));
+
+        await window.supabase.from('learning_events').insert(payload);
+        
+        // Upsert current mastery states to cloud
+        const masteryPayloads = [];
+        Object.keys(this.mastery).forEach(sub => {
+          Object.keys(this.mastery[sub]).forEach(top => {
+            const c = this.mastery[sub][top];
+            masteryPayloads.push({
+              student_id: mockStudentId,
+              subject: sub,
+              chapter: top, // Assuming topic maps to chapter/concept here
+              concept: top, 
+              mastery_level: c.mastery,
+              times_practiced: c.attempts,
+              last_practiced: new Date(c.lastPracticed).toISOString()
+            });
+          });
+        });
+
+        if (masteryPayloads.length > 0) {
+          await window.supabase.from('concept_mastery').upsert(masteryPayloads, { onConflict: 'student_id, concept' });
+        }
+
+      } catch (err) {
+        console.error("[Telemetry] Sync Failed:", err);
+        // Put events back in queue if network fails
+        this.syncQueue = [...eventsToSend, ...this.syncQueue];
+      }
+    }
+
+    /* --------------------------------------------------
+       6. PERSISTENCE HELPERS
     -------------------------------------------------- */
     loadMastery() {
       try {
@@ -285,6 +363,7 @@
   window.InvincibleTelemetry = new TelemetryEngine();
 
 })(window);
+
 /* =====================================================
    DASHBOARD INTELLIGENCE & NEXT BEST MOVE SYNC
 ===================================================== */
@@ -338,4 +417,3 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('invincible:event', () => {
   setTimeout(window.renderNextBestMove, 150);
 });
-
