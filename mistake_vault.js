@@ -142,7 +142,7 @@
       if (modal) modal.remove();
     }
 
-    /* --------------------------------------------------
+        /* --------------------------------------------------
        BATTLE MY MISTAKES (RECOVERY DRILL)
     -------------------------------------------------- */
     startBattleMyMistakes() {
@@ -150,13 +150,29 @@
       const activeList = this.getActiveMistakes();
       if (!activeList.length) return alert("No active mistakes to battle!");
 
-      // Route directly into Arena or a 5-question recovery clash
-      if (typeof switchTab === 'function') {
-        switchTab('arena');
+      // 1. Find the highest priority mistake (most attempts or oldest)
+      const priorityMistake = activeList.sort((a, b) => (b.attempts || 0) - (a.attempts || 0))[0];
+
+      // 2. Prepare payload for the AI Orchestrator to generate a 2-Minute Fix
+      const fixPayload = {
+          subject: priorityMistake.subject,
+          topic: priorityMistake.topic,
+          originalQuestion: priorityMistake.question,
+          coreMisconception: priorityMistake.explanation,
+          mistakeId: priorityMistake.id
+      };
+
+      // 3. Emit event to trigger the AI Coach / 2-Min Fix
+      if (window.InvincibleTelemetry) {
+          window.InvincibleTelemetry.emit('2_MIN_FIX_REQUESTED', fixPayload);
       }
 
-      // Inject custom battle notification
-      alert(`⚔️ BATTLE MISTAKES ACTIVATED!\n\nLoaded ${Math.min(activeList.length, 5)} priority concept variations. Conquer them to restore your mastery rating!`);
+      // Route directly to the AI Coach tab where the fix will be generated
+      if (typeof switchTab === 'function') {
+        switchTab('coach');
+      } else {
+        alert(`⚡ BATTLE MODE: AI is preparing a 2-Minute Fix for your weakness in ${priorityMistake.topic}...`);
+      }
     }
 
     markResolved(mistakeId) {
@@ -165,6 +181,7 @@
         item.resolved = true;
         this.saveVault();
 
+        // 🧠 TELEMETRY INJECTION: Massive mastery recovery boost
         if (window.InvincibleTelemetry) {
           window.InvincibleTelemetry.emit('MISTAKE_RECOVERED', {
             subject: item.subject,
@@ -172,8 +189,15 @@
             fixedCount: 1
           });
         }
+
+        // Gamification: Reward student for fixing errors
+        if (typeof addStudentXP === 'function') {
+            addStudentXP(30); 
+            console.log(`[Vault] Mistake ${mistakeId} resolved. +30 XP awarded.`);
+        }
       }
     }
+
   }
 
   window.InvincibleVault = new MistakeVaultEngine();
