@@ -408,8 +408,18 @@ if (askBtn) {
           
           if (answerBoxEl) answerBoxEl.style.display = "block"; 
           
-          // Reward Doubt Solving XP
-          addStudentXP(15);
+                  // Reward Doubt Solving XP
+        if (typeof addStudentXP === 'function') addStudentXP(15);
+
+        // 🧠 TELEMETRY INJECTION: Broadcast the solved doubt to the learning engine
+        if (window.InvincibleTelemetry) {
+            window.InvincibleTelemetry.emit('DOUBT_SOLVED', {
+                subject: selectedSubject || 'General',
+                topic: 'General Concept', // In a future update, we can have the AI extract the exact topic
+                timeTaken: 0,
+                question: q
+            });
+        }
 
           // INJECT INTERACTIVE VISUAL BLACKBOARD
           const thread = document.getElementById("doubtConversationThread");
