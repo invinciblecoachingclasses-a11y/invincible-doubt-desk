@@ -119,10 +119,9 @@ Respond ONLY with valid, raw JSON matching this exact schema:
       });
     }
 
-    // Multi-model resilience hierarchy utilizing current available models
+    // Updated resilience hierarchy using stable available models
     const MODELS = [
-      "gemini-3.6-flash",
-      "gemini-1.5-pro",
+      "gemini-2.5-flash",
       "gemini-1.5-flash",
       "gemini-1.5-flash-8b"
     ];
