@@ -1199,14 +1199,19 @@
   }
 
   // Intercept Navigation to update the new 5-item dock & Teacher Command Section
+    // Intercept Navigation to update the dock, Teacher OS, & Principal's Eye
   const originalSwitchTab = window.switchTab;
   window.switchTab = function(tabId) {
       if (typeof originalSwitchTab === 'function') {
           originalSwitchTab(tabId);
       }
       
-      // Explicit section toggle safeguard for Campus OS
-      const allSections = ['homeSection', 'reelsSection', 'doubtSection', 'testSection', 'arenaSection', 'feedSection', 'notesSection', 'labSection', 'teacherSection'];
+      const allSections = [
+          'homeSection', 'reelsSection', 'doubtSection', 'testSection', 
+          'arenaSection', 'feedSection', 'notesSection', 'labSection', 
+          'teacherSection', 'principalSection'
+      ];
+
       if (tabId === 'teacher') {
           allSections.forEach(s => {
               const el = document.getElementById(s);
@@ -1219,16 +1224,31 @@
                   window.TeacherCommandCenter.init(document.getElementById('mainTeacherView'));
               }
           }
+      } else if (tabId === 'principal') {
+          allSections.forEach(s => {
+              const el = document.getElementById(s);
+              if (el) el.classList.add('hidden');
+          });
+          const principalEl = document.getElementById('principalSection');
+          if (principalEl) {
+              principalEl.classList.remove('hidden');
+              if (window.PrincipalCommandCenter) {
+                  window.PrincipalCommandCenter.init(document.getElementById('mainPrincipalView'));
+              }
+          }
       } else {
           const teacherEl = document.getElementById('teacherSection');
+          const principalEl = document.getElementById('principalSection');
           if (teacherEl) teacherEl.classList.add('hidden');
+          if (principalEl) principalEl.classList.add('hidden');
       }
 
       document.querySelectorAll('.premium-dock-btn').forEach(btn => btn.classList.remove('active'));
       
       const tabMap = {
           'home': 0, 'reels': 1, 'doubt': 2, 'arena': 3, 
-          'lab': 4, 'test': 4, 'notes': 4, 'feed': 4, 'teacher': 4
+          'lab': 4, 'test': 4, 'notes': 4, 'feed': 4, 
+          'teacher': 4, 'principal': 4
       };
       
       const index = tabMap[tabId];
@@ -1237,8 +1257,9 @@
           if (dockBtns[index]) dockBtns[index].classList.add('active');
       }
       
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
   };
+
 
   window.updateTestSubjects = function() {
       const cls = document.getElementById('testClass').value;
