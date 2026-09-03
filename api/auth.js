@@ -1,3 +1,4 @@
+// api/auth.js
 export default async function handler(req, res) {
   // ============================================================
   // CORS HEADERS
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
     : `${SUPABASE_URL}/auth/v1/token?grant_type=password`;
 
   try {
-    // Build Payload dynamically to include Multi-Tenant Meta Data
+    // Build Payload dynamically to include Multi-Tenant Metadata
     const requestBody = {
       email: String(email).trim().toLowerCase(),
       password: String(password).trim()
