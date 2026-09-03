@@ -279,7 +279,6 @@
     </div>
 </header>
 
-
 <!-- =====================================================
      HOME DECK
 ===================================================== -->
@@ -298,13 +297,12 @@
     </div>
 </section>
 
-    
     <div style="margin-bottom: 24px; padding: 0 10px;">
         <h1 style="font-family:'Space Grotesk'; font-size:28px; margin:0 0 4px 0;">Welcome back.</h1>
         <p style="color:var(--text-muted); margin:0; font-size:14px;">Let's master the syllabus today.</p>
     </div>
     
-    <!-- =====================================================
+<!-- =====================================================
      INTELLIGENT AI ENGINE: NEXT BEST MOVE & CONTINUE
 ===================================================== -->
 <!-- 1. YOUR NEXT BEST MOVE HERO CARD -->
@@ -346,7 +344,6 @@
         </div>
     </div>
 </div>
-
 
     <!-- Today's Mission -->
     <section class="card">
@@ -887,6 +884,13 @@
     </div>
 </section>
 
+<!-- =====================================================
+     TEACHER COMMAND CENTER SECTION (CAMPUS OS)
+===================================================== -->
+<section id="teacherSection" class="hidden">
+    <div id="mainTeacherView"></div>
+</section>
+
 </main>
 
 <!-- BOTTOM DOCK (Premium 5-Item) -->
@@ -919,6 +923,11 @@
             <div class="hub-card" onclick="closeStudyHub(); switchTab('feed')">
                 <span style="font-size:28px;">📢</span>
                 <span>Campus Feed</span>
+            </div>
+            <!-- Campus OS: Teacher Command Center Tile -->
+            <div class="hub-card" onclick="closeStudyHub(); switchTab('teacher')" style="border: 1px solid rgba(0, 229, 255, 0.4); background: rgba(0, 229, 255, 0.05);">
+                <span style="font-size:28px;">👨‍🏫</span>
+                <span style="color:var(--accent-cyan);">Teacher OS</span>
             </div>
         </div>
     </div>
@@ -1060,9 +1069,7 @@
 <script src="mistake_vault.js"></script>
 <script src="rush_engine.js"></script>
 <script src="coach_engine.js"></script>
-
-
-
+<script src="teacher_command.js"></script>
 
 <script src="utils.js"></script>
 <script src="audio.js"></script>
@@ -1087,7 +1094,6 @@
 <script src="lofi_cyber_orb.js"></script>
 <script src="reels-stories.js"></script>
 <script src="profile.js"></script>
-
 
 <script src="campus-hub.js"></script>
 <script src="doubt-notes.js"></script>
@@ -1180,18 +1186,37 @@
       document.getElementById('studyHubSheet').classList.remove('open');
   }
 
-  // Intercept Navigation to update the new 5-item dock
+  // Intercept Navigation to update the new 5-item dock & Teacher Command Section
   const originalSwitchTab = window.switchTab;
   window.switchTab = function(tabId) {
       if (typeof originalSwitchTab === 'function') {
           originalSwitchTab(tabId);
       }
       
+      // Explicit section toggle safeguard for Campus OS
+      const allSections = ['homeSection', 'reelsSection', 'doubtSection', 'testSection', 'arenaSection', 'feedSection', 'notesSection', 'labSection', 'teacherSection'];
+      if (tabId === 'teacher') {
+          allSections.forEach(s => {
+              const el = document.getElementById(s);
+              if (el) el.classList.add('hidden');
+          });
+          const teacherEl = document.getElementById('teacherSection');
+          if (teacherEl) {
+              teacherEl.classList.remove('hidden');
+              if (window.TeacherCommandCenter) {
+                  window.TeacherCommandCenter.init(document.getElementById('mainTeacherView'));
+              }
+          }
+      } else {
+          const teacherEl = document.getElementById('teacherSection');
+          if (teacherEl) teacherEl.classList.add('hidden');
+      }
+
       document.querySelectorAll('.premium-dock-btn').forEach(btn => btn.classList.remove('active'));
       
       const tabMap = {
           'home': 0, 'reels': 1, 'doubt': 2, 'arena': 3, 
-          'lab': 4, 'test': 4, 'notes': 4, 'feed': 4
+          'lab': 4, 'test': 4, 'notes': 4, 'feed': 4, 'teacher': 4
       };
       
       const index = tabMap[tabId];
@@ -1568,6 +1593,11 @@
   // Boot loader
   setTimeout(() => {
     window.renderAdvancedLabSuite();
+    // Auto-mount Teacher Command Center
+    if (window.TeacherCommandCenter) {
+      const mount = document.getElementById('mainTeacherView');
+      if (mount) window.TeacherCommandCenter.init(mount);
+    }
   }, 500);
 
 </script>
