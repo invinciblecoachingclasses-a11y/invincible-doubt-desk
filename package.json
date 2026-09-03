@@ -2,9 +2,6 @@
   "name": "invincible-doubt-desk",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "build": "echo 'Static build complete'"
-  },
   "dependencies": {
     "@google-cloud/text-to-speech": "^5.8.0",
     "@google/generative-ai": "^0.21.0",
