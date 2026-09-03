@@ -506,10 +506,27 @@ if (submitTestBtn) {
     questions.forEach(function(q, index){
         const selected = document.querySelector('input[name="q' + q.id + '"]:checked');
         let selectedAnswer = null; let isCorrect = false;
-        if(selected){
-            attempted++; selectedAnswer = Number(selected.value);
-            if(selectedAnswer === Number(q.answer)){ correct++; isCorrect = true; }
+                if(selected){
+            attempted++; 
+            selectedAnswer = Number(selected.value);
+            if(selectedAnswer === Number(q.answer)){ 
+                correct++; 
+                isCorrect = true; 
+            } else {
+                // Record mistake for Principal's Eye & 2-Minute Fix
+                if (window.TelemetryEngine) {
+                    window.TelemetryEngine.recordMistake({
+                        subject: activeTestSubject || document.getElementById("testSubject")?.value || 'Subject',
+                        chapter: document.getElementById("testChapter")?.value || 'Chapter Test',
+                        questionText: q.question,
+                        studentAnswer: q.options[selectedAnswer],
+                        correctAnswer: q.options[q.answer],
+                        explanation: q.explanation || 'Review core concepts in your notes.'
+                    });
+                }
+            }
         }
+
         answers.push({ questionNumber: index + 1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
         let statusBadge = isCorrect ? '<span style="color:var(--accent-emerald); font-weight:800; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">✓ Correct</span>' : '<span style="color:var(--accent-rose); font-weight:800; background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px;">✗ Incorrect</span>';
         
