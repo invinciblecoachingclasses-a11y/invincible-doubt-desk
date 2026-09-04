@@ -1,14 +1,3 @@
 {
-  "outputDirectory": ".",
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 60
-    }
-  },
-  "crons": [
-    {
-      "path": "/api/cron-daily-blitz",
-      "schedule": "30 22 * * *"
-    }
-  ]
+  "outputDirectory": "."
 }
