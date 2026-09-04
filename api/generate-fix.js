@@ -1,5 +1,4 @@
-// api/generate-fix.js
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -58,4 +57,4 @@ export default async function handler(req, res) {
         console.error("AI Generation Failed:", error);
         return res.status(500).json({ error: "Failed to generate AI fix" });
     }
-}
+};
