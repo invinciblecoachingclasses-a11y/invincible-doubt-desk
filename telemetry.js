@@ -66,13 +66,6 @@ window.TelemetryEngine = {
             vaultBadge.style.display = unresolved > 0 ? 'inline-block' : 'none';
         }
     },
-            if (vaultBadge) {
-            const currentVault = JSON.parse(localStorage.getItem('mistake_vault') || '[]');
-            const unresolved = currentVault.filter(m => !m.remediated).length;
-            vaultBadge.textContent = unresolved > 0 ? unresolved : '';
-            vaultBadge.style.display = unresolved > 0 ? 'inline-block' : 'none';
-        }
-    }, // <--- ADD THIS COMMA (Was line 68)
 
     // 4. Open the Mistake Vault UI
     openMistakeVault() {
@@ -164,8 +157,4 @@ window.TelemetryEngine = {
             btn.disabled = false;
         }
     }
-}; // <--- THIS REMAINS YOUR FINAL LINE (Was line 69)
-
-    
-    
 };
