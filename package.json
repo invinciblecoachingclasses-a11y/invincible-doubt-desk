@@ -1,10 +1,11 @@
 {
-  "name": "invincible-doubt-desk",
+  "name": "invincible-360",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Invincible 360 Educational Platform",
   "dependencies": {
-    "@google-cloud/text-to-speech": "^5.8.0",
-    "@google/generative-ai": "^0.21.0",
-    "@supabase/supabase-js": "^2.45.0"
+    "@google/generative-ai": "^0.1.1"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
