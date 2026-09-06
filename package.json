@@ -4,6 +4,7 @@
   "description": "Invincible 360 Educational Platform",
   "type": "module",
   "dependencies": {
+    "PASTE_ALL_YOUR_ORIGINAL_115_PACKAGES_HERE": "1.0.0",
     "@google/generative-ai": "^0.1.1"
   },
   "engines": {
