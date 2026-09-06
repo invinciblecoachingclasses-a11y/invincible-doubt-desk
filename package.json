@@ -1,7 +1,6 @@
 {
   "name": "invincible-doubt-desk",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "build": "echo 'Static build complete'"
   },
