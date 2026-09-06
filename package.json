@@ -2,6 +2,7 @@
   "name": "invincible-360",
   "version": "1.0.0",
   "description": "Invincible 360 Educational Platform",
+  "type": "module",
   "dependencies": {
     "@google/generative-ai": "^0.1.1"
   },
