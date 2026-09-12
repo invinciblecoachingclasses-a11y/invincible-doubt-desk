@@ -668,3 +668,91 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+/* =====================================================
+   INVINCIBLE 360 — TEST CONCEPT METADATA BRIDGE
+   Keeps generated topic/concept metadata attached to
+   the canonical TEST_SUBMITTED learning event.
+===================================================== */
+
+(function () {
+    if (
+        !window.InvincibleTelemetry ||
+        typeof window.InvincibleTelemetry.emit !== "function"
+    ) {
+        return;
+    }
+
+    if (window.InvincibleTelemetry.__testMetadataBridgeInstalled) {
+        return;
+    }
+
+    const originalEmit =
+        window.InvincibleTelemetry.emit.bind(
+            window.InvincibleTelemetry
+        );
+
+    window.InvincibleTelemetry.emit = function (
+        eventName,
+        payload = {}
+    ) {
+        try {
+            if (
+                eventName === "TEST_SUBMITTED" &&
+                Array.isArray(window.activeQuestions)
+            ) {
+                const questionsWithMetadata =
+                    window.activeQuestions.map(
+                        (q, index) => ({
+                            questionNumber:
+                                index + 1,
+
+                            question:
+                                q.question || "",
+
+                            topic:
+                                q.topic || "",
+
+                            concept:
+                                q.concept || "",
+
+                            selectedAnswer:
+                                null,
+
+                            correctAnswer:
+                                Number.isFinite(
+                                    Number(q.answer)
+                                )
+                                    ? Number(q.answer)
+                                    : null,
+
+                            isCorrect:
+                                null
+                        })
+                    );
+
+                payload =
+                    Object.assign(
+                        {},
+                        payload,
+                        {
+                            questions:
+                                questionsWithMetadata
+                        }
+                    );
+            }
+        } catch (e) {
+            console.warn(
+                "[Test Metadata Bridge] Metadata enrichment skipped:",
+                e
+            );
+        }
+
+        return originalEmit(
+            eventName,
+            payload
+        );
+    };
+
+    window.InvincibleTelemetry.__testMetadataBridgeInstalled =
+        true;
+})();
