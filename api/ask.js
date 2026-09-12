@@ -712,13 +712,9 @@ Be the student's Board Master.
 
             // Google Search grounding for the primary
             // Board Master model.
-            if (model === "gemini-3.6-flash") {
-              body.tools = [
-                {
-                  google_search: {}
-                }
-              ];
-            }
+            // Keep normal generation reliable.
+// Google Search grounding can be enabled later
+// after the model/quota configuration is stable.
 
             const response = await fetch(
               `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
