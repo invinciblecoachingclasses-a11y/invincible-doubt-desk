@@ -474,7 +474,9 @@ if (sendFollowUpBtn && followUpInput) {
             tone: currentTone
         });
         // Extra mastery boost for diving deeper!
-        window.InvincibleTelemetry.updateMastery('Deep Learning', 2);
+        if (typeof window.InvincibleTelemetry.updateMastery === 'function') {
+    window.InvincibleTelemetry.updateMastery('Deep Learning', 2);
+}
     }
     // =====================================================
 
