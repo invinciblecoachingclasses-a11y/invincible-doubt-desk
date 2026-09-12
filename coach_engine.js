@@ -11,31 +11,34 @@
   let currentCoachMode = 'quick';
 
   const COACH_MODES = {
-    socratic: {
-      name: 'Socratic Guide',
-      icon: '🧠',
-      tagline: 'Guides step-by-step with leading questions instead of dumping answers.',
-      promptPrefix: 'Act as a Socratic tutor. Do NOT give the final answer immediately. Ask 1-2 guiding questions to lead the student to derive the solution themselves.'
-    },
-    hint: {
-      name: 'Key Hint Only',
-      icon: '💡',
-      tagline: 'Delivers the single governing NCERT formula/rule without spoiling the solution.',
-      promptPrefix: 'Provide ONLY the core governing concept, formula, or sign convention needed to solve this problem in under 3 sentences. Do not solve it completely.'
-    },
-    exam: {
-      name: 'Board Exam Fix',
-      icon: '📝',
-      tagline: 'CBSE-formatted steps with marking scheme breakdown and common traps.',
-      promptPrefix: 'Provide a structured CBSE Board Exam solution with step-by-step marks breakdown, SI units, and explicit 🚨 Examiner Trap callouts.'
-    },
-    deepdive: {
-      name: 'Deep Visual Dive',
-      icon: '🔬',
-      tagline: 'Comprehensive explanation with real-world analogy and diagram logic.',
-      promptPrefix: 'Provide a deep visual intuition, real-world practical application, and full mathematical derivation.'
-    }
-  };
+  quick: {
+    name: 'Quick Answer',
+    icon: '⚡',
+    tagline: 'Gives the answer immediately, then explains only what is needed.',
+    promptPrefix: 'Give the student the direct answer immediately. Do NOT ask prerequisite questions or use Socratic questioning. Keep the explanation concise and easy.'
+  },
+
+  hint: {
+    name: 'Key Hint',
+    icon: '💡',
+    tagline: 'Gives the key formula or idea without the full solution.',
+    promptPrefix: 'Give only the key governing concept, formula, rule, or hint needed to solve the problem. Do not ask prerequisite questions.'
+  },
+
+  exam: {
+    name: 'Exam Fix',
+    icon: '📝',
+    tagline: 'Shows the cleanest board-exam method.',
+    promptPrefix: 'Give a clean CBSE board-exam-ready solution with the necessary steps, formula, units and relevant examiner trap. Do not unnecessarily delay the answer.'
+  },
+
+  deepdive: {
+    name: 'Deep Dive',
+    icon: '🔬',
+    tagline: 'For students who want complete conceptual understanding.',
+    promptPrefix: 'Give a deeper conceptual explanation with intuition, reasoning and derivation where useful. Teach progressively, but still state the main answer first.'
+  }
+};
 
   class CoachEngine {
     constructor() {
