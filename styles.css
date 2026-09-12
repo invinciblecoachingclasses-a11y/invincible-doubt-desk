@@ -1220,4 +1220,132 @@ textarea:focus, input:focus, select:focus {
   border-color: rgba(0, 229, 255, 0.4);
   box-shadow: 0 0 16px rgba(0, 229, 255, 0.15);
 }
+/* =====================================================
+   INVINCIBLE DOUBT DESK — MOBILE READABILITY PATCH
+   ===================================================== */
+
+#doubtSection {
+  scroll-margin-top: 82px;
+}
+
+#doubtSection .topper-content,
+#doubtSection #answerText {
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+#doubtSection #answerText h1,
+#doubtSection #answerText h2,
+#doubtSection #answerText h3 {
+  margin: 14px 0 7px;
+  line-height: 1.25;
+}
+
+#doubtSection #answerText p {
+  margin: 7px 0;
+}
+
+#doubtSection #answerText ul,
+#doubtSection #answerText ol {
+  margin: 7px 0 9px;
+  padding-left: 20px;
+}
+
+#doubtSection #answerText li {
+  margin: 4px 0;
+}
+
+/* Prevent long mathematical equations from
+   breaking the entire mobile layout */
+#doubtSection #answerText mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+
+/* Conversation thread */
+#doubtSection #doubtConversationThread {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#doubtSection #doubtConversationThread > div {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Follow-up input */
+#doubtSection #followUpInput {
+  min-width: 0;
+  margin: 0 !important;
+}
+
+/* Follow-up Ask button */
+#doubtSection #sendFollowUpBtn {
+  flex: 0 0 auto;
+  min-width: 70px;
+}
+
+/* AI callout boxes */
+#doubtSection .callout-trap,
+#doubtSection .callout-tldr,
+#doubtSection .callout-formula {
+  margin: 10px 0;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   IPHONE / SMALL SCREEN OPTIMIZATION
+   ===================================================== */
+
+@media (max-width: 600px) {
+
+  #doubtSection {
+    padding-bottom: 18px;
+  }
+
+  #doubtSection .premium-input {
+    font-size: 14px !important;
+  }
+
+  #doubtSection #answerText {
+    font-size: 14px;
+    line-height: 1.58;
+  }
+
+  #doubtSection #answerText h2 {
+    font-size: 18px;
+  }
+
+  #doubtSection #answerText h3 {
+    font-size: 15px;
+  }
+
+  /* Make the interactive blackboard shorter
+     on phones */
+  #doubtSection #doubtBlackboardWrapper {
+    margin-bottom: 10px !important;
+    padding: 10px !important;
+  }
+
+  #doubtSection #doubtBlackboardCanvas {
+    height: 130px !important;
+  }
+
+  /* Comfortable follow-up typing area */
+  #doubtSection #followUpInput {
+    padding: 12px !important;
+  }
+
+  /* Compact follow-up button */
+  #doubtSection #sendFollowUpBtn {
+    padding: 12px 15px !important;
+  }
+}
 
