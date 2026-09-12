@@ -440,10 +440,7 @@ if (askBtn) {
 }
         }
 
-          // INJECT INTERACTIVE VISUAL BLACKBOARD
-          const thread = document.getElementById("doubtConversationThread");
-          if (thread) DoubtVisualEngine.mount(thread, selectedSubject);
-
+          
           playToneDing();
           if (typeof confetti === 'function') confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
       } catch(err) {
