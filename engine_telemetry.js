@@ -252,12 +252,13 @@
 }
 
     updateTwoMinFixMastery({ subject, topic }) {
-      const entry = this.getTopicEntry(subject, topic);
-      // High reward for dedicated mistake correction intervention
-      entry.mastery = Math.min(100, entry.mastery + 12);
-      entry.skills.concepts = Math.min(100, entry.skills.concepts + 10);
-      entry.lastPracticed = Date.now();
-    }
+  const entry = this.getTopicEntry(subject, topic);
+
+  // Completing a Fix is an intervention, not proof of mastery.
+  // Mastery increases only after successful verification
+  // through MISTAKE_RECOVERED.
+  entry.lastPracticed = Date.now();
+}
     updateMastery(topic, delta = 1, subject = 'General') {
   const safeTopic = String(topic || 'General').trim() || 'General';
   const safeDelta = Number.isFinite(Number(delta)) ? Number(delta) : 0;
