@@ -412,7 +412,14 @@ window.renderNextBestMove = function() {
   }
 
   if (btnEl) btnEl.innerText = `${nbm.actionTitle.toUpperCase()} 🚀`;
-  currentNextAction = { tab: nbm.actionTab || 'reels', topic: nbm.topic };
+  currentNextAction = {
+  tab: nbm.actionTab || 'reels',
+  subject: nbm.subject || 'General',
+  topic: nbm.topic || 'General',
+  reason: nbm.reason || '',
+  originalQuestion: nbm.originalQuestion || '',
+  mistakeId: nbm.mistakeId || null
+};
 };
 
 window.executeNextBestMove = function() {
