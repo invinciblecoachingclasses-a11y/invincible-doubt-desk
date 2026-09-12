@@ -224,11 +224,32 @@
 }
 
     updateDoubtMastery({ subject, topic }) {
-      const entry = this.getTopicEntry(subject, topic);
-      // Asking a doubt shows engagement, minor boost to baseline
-      entry.mastery = Math.min(100, entry.mastery + 2);
-      entry.lastPracticed = Date.now();
-    }
+  const safeSubject =
+    String(subject || 'General').trim() || 'General';
+
+  const safeTopic =
+    String(topic || 'General').trim() || 'General';
+
+  const entry =
+    this.getTopicEntry(
+      safeSubject,
+      safeTopic
+    );
+
+  /*
+     Asking a doubt proves engagement,
+     not mastery.
+
+     We therefore update practice metadata
+     but do NOT artificially increase mastery.
+  */
+
+  entry.lastPracticed =
+    Date.now();
+
+  entry.doubtCount =
+    (Number(entry.doubtCount) || 0) + 1;
+}
 
     updateTwoMinFixMastery({ subject, topic }) {
       const entry = this.getTopicEntry(subject, topic);
