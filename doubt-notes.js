@@ -429,11 +429,13 @@ if (askBtn) {
         // 🧠 TELEMETRY HOOK: Broadcast the solved doubt to the learning engine
         if (window.InvincibleTelemetry) {
             window.InvincibleTelemetry.emit('DOUBT_SOLVED', {
-                subject: selectedSubject || 'General',
-                topic: 'General Concept',
-                timeTaken: 0,
-                question: q
-            });
+    subject: selectedSubject || 'General',
+    topic: data.topic || 'Unclassified Doubt',
+    chapter: data.chapter || '',
+    concept: data.concept || '',
+    timeTaken: 0,
+    question: q
+});
             // Give a micro-boost to global mastery for seeking help
             if (typeof window.InvincibleTelemetry.updateMastery === 'function') {
     window.InvincibleTelemetry.updateMastery('Curiosity', 1);
