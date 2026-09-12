@@ -270,8 +270,8 @@
               reason: item.decayFlag 
                 ? `You haven't practiced ${top} in 5+ days. Memory retention is decaying.` 
                 : `Your mastery in ${top} is critically low at ${item.mastery}%. Start a 2-Min Fix to recover.`,
-              actionTitle: item.mastery < 40 ? `Launch 2-Min Fix` : `Master ${top}`,
-              actionTab: item.mastery < 40 ? 'coach' : 'reels'
+              actionTitle: item.mastery < 65 ? `Launch 2-Min Fix` : `Master ${top}`,
+actionTab: item.mastery < 65 ? 'fix' : 'reels'
             };
           }
         });
