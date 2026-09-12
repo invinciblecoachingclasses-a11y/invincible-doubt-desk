@@ -103,8 +103,10 @@
           this.updateDoubtMastery(payload);
           break;
         case '2_MIN_FIX_COMPLETED':
-          this.updateTwoMinFixMastery(payload);
-          break;
+  // Completion is recorded as a learning event.
+  // Mastery is updated only by MISTAKE_RECOVERED
+  // after the student successfully proves the concept.
+  break;
       }
 
       this.saveMastery();
