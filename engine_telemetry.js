@@ -1,4 +1,4 @@
-/* =====================================================
+no/* =====================================================
    ⚡ INVINCIBLE 360 - UNIFIED EVENT & MASTERY ENGINE
    Core Modules:
    1. Centralized Event Bus (InvincibleTelemetry.emit)
@@ -194,6 +194,18 @@
       entry.skills.concepts = Math.min(100, entry.skills.concepts + 10);
       entry.lastPracticed = Date.now();
     }
+    updateMastery(topic, delta = 1, subject = 'General') {
+  const safeTopic = String(topic || 'General').trim() || 'General';
+  const safeDelta = Number.isFinite(Number(delta)) ? Number(delta) : 0;
+
+  const entry = this.getTopicEntry(subject, safeTopic);
+
+  entry.mastery = Math.max(0, Math.min(100, entry.mastery + safeDelta));
+  entry.lastPracticed = Date.now();
+
+  this.saveMastery();
+  return entry.mastery;
+}
 
     getTopicEntry(subject = 'Science', topic = 'General') {
       const subKey = String(subject).trim();
