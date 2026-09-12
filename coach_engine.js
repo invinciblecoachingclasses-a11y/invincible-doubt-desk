@@ -155,7 +155,7 @@
         <div style="margin-bottom:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
             <label style="margin:0; font-size:10px;">AI COACHING MODE</label>
-            <span id="coachModeDescription" style="font-size:10px; color:var(--accent-cyan); font-weight:700;">Guides step-by-step with leading questions.</span>
+            <span id="coachModeDescription" style="font-size:10px; color:var(--accent-cyan); font-weight:700;">Instant answer with just enough explanation.</span>
           </div>
           <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
           <button type="button" class="coach-mode-pill active" data-mode="quick" onclick="window.InvincibleCoach.setMode('quick')">
