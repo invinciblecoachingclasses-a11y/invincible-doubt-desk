@@ -8,7 +8,7 @@
 (function(window) {
   'use strict';
 
-  let currentCoachMode = 'socratic';
+  let currentCoachMode = 'quick';
 
   const COACH_MODES = {
     socratic: {
