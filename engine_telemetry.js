@@ -360,7 +360,32 @@ actionTab: item.mastery < 65 ? 'fix' : 'reels'
     /* --------------------------------------------------
        5. SUPABASE CLOUD SYNC ENGINE
     -------------------------------------------------- */
-    async flushQueueToSupabase() {
+  async getAuthenticatedStudentId() {
+  try {
+    if (!window.supabase || !window.supabase.auth) {
+      return null;
+    }
+
+    const { data, error } =
+      await window.supabase.auth.getSession();
+
+    if (error || !data || !data.session || !data.session.user) {
+      return null;
+    }
+
+    return data.session.user.id || null;
+
+  } catch (e) {
+    console.warn(
+      '[Telemetry] Could not resolve authenticated student:',
+      e
+    );
+
+    return null;
+  }
+}
+    
+        async flushQueueToSupabase() {
       if (this.syncQueue.length === 0 || !window.supabase) return;
 
       const eventsToSend = [...this.syncQueue];
