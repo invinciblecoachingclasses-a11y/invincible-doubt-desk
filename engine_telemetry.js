@@ -416,6 +416,47 @@ window.renderNextBestMove = function() {
 };
 
 window.executeNextBestMove = function() {
+
+  if (!window.InvincibleTelemetry) {
+    return;
+  }
+
+  /*
+     A weak concept should launch the actual
+     2-Minute Fix event rather than merely
+     navigating to another tab.
+  */
+
+  if (currentNextAction.tab === 'fix') {
+
+    window.InvincibleTelemetry.emit(
+      '2_MIN_FIX_REQUESTED',
+      {
+        subject:
+          currentNextAction.subject || 'General',
+
+        topic:
+          currentNextAction.topic || 'General',
+
+        originalQuestion:
+          currentNextAction.originalQuestion || '',
+
+        coreMisconception:
+          currentNextAction.reason || '',
+
+        mistakeId:
+          currentNextAction.mistakeId || null
+      }
+    );
+
+    return;
+  }
+
+
+  /*
+     Normal Next Best Move navigation.
+  */
+
   if (typeof switchTab === 'function') {
     switchTab(currentNextAction.tab);
   }
