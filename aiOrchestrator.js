@@ -32,23 +32,7 @@
       }
 
 
-      window.addEventListener(
-        'invincible:event',
-        event => {
-
-          if (
-            event.detail &&
-            event.detail.type === '2_MIN_FIX_REQUESTED'
-          ) {
-
-            this.initiateTwoMinuteFix(
-              event.detail.payload
-            );
-
-          }
-
-        }
-      );
+    
     }
 
 
