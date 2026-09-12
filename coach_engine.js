@@ -158,18 +158,21 @@
             <span id="coachModeDescription" style="font-size:10px; color:var(--accent-cyan); font-weight:700;">Guides step-by-step with leading questions.</span>
           </div>
           <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:6px;">
-            <button type="button" class="coach-mode-pill active" data-mode="socratic" onclick="window.InvincibleCoach.setMode('socratic')">
-              🧠 Socratic
-            </button>
-            <button type="button" class="coach-mode-pill" data-mode="hint" onclick="window.InvincibleCoach.setMode('hint')">
-              💡 Hint
-            </button>
-            <button type="button" class="coach-mode-pill" data-mode="exam" onclick="window.InvincibleCoach.setMode('exam')">
-              📝 Exam Fix
-            </button>
-            <button type="button" class="coach-mode-pill" data-mode="deepdive" onclick="window.InvincibleCoach.setMode('deepdive')">
-              🔬 Deep Dive
-            </button>
+          <button type="button" class="coach-mode-pill active" data-mode="quick" onclick="window.InvincibleCoach.setMode('quick')">
+  ⚡ Quick
+</button>
+
+<button type="button" class="coach-mode-pill" data-mode="hint" onclick="window.InvincibleCoach.setMode('hint')">
+  💡 Hint
+</button>
+
+<button type="button" class="coach-mode-pill" data-mode="exam" onclick="window.InvincibleCoach.setMode('exam')">
+  📝 Exam
+</button>
+
+<button type="button" class="coach-mode-pill" data-mode="deepdive" onclick="window.InvincibleCoach.setMode('deepdive')">
+  🔬 Deep Dive
+</button>
           </div>
         </div>
       `;
