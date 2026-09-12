@@ -378,19 +378,72 @@ if (startTestBtn) {
 
 function extractQuestions(data){
     let questions = [];
-    if(Array.isArray(data)) questions = data;
-    else if(data && Array.isArray(data.questions)) questions = data.questions;
-    else if(data && data.test && Array.isArray(data.test.questions)) questions = data.test.questions;
+
+    if(Array.isArray(data)) {
+        questions = data;
+    }
+    else if(data && Array.isArray(data.questions)) {
+        questions = data.questions;
+    }
+    else if(data && data.test && Array.isArray(data.test.questions)) {
+        questions = data.test.questions;
+    }
 
     return questions.map(function(q, index){
+
         let options = q.options || q.choices || [];
-        let answer = q.answer !== undefined ? q.answer : q.correctAnswer;
+
+        let answer =
+            q.answer !== undefined
+                ? q.answer
+                : q.correctAnswer;
+
         if(typeof answer === "string" && options.length){
             const letter = answer.trim().toUpperCase();
-            if(letter === "A") answer = 0; if(letter === "B") answer = 1; if(letter === "C") answer = 2; if(letter === "D") answer = 3;
+
+            if(letter === "A") answer = 0;
+            if(letter === "B") answer = 1;
+            if(letter === "C") answer = 2;
+            if(letter === "D") answer = 3;
         }
-        return { id: index + 1, question: q.question || q.questionText || ("Question " + (index + 1)), options: options, answer: Number(answer), explanation: q.explanation || "Review fundamental formulas." };
-    }).filter(q => q.question && q.options.length >= 2 && Number.isFinite(q.answer));
+
+        return {
+            id:
+                q.id ||
+                `q_${Date.now()}_${index}`,
+
+            question:
+                q.question ||
+                q.question_en ||
+                "",
+
+            options:
+                options,
+
+            answer:
+                Number(answer),
+
+            explanation:
+                q.explanation ||
+                q.solution ||
+                "",
+
+            /* ---------------------------------------
+               CONCEPT METADATA
+               Preserve this information so the
+               telemetry engine can measure mastery
+               at topic/concept level.
+            --------------------------------------- */
+
+            topic:
+                q.topic ||
+                "",
+
+            concept:
+                q.concept ||
+                ""
+        };
+    });
 }
 
 // REAL-TIME OPTION TAP INTERACTION (Sound, Haptics & Visual Feedback)
