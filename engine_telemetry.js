@@ -410,7 +410,7 @@ if (!studentId) {
 
       try {
         const payload = eventsToSend.map(e => ({
-          student_id: mockStudentId,
+          student_id: studentId,
           event_type: e.type,
           subject: e.payload.subject || 'General',
           chapter: e.payload.chapter || 'General',
@@ -428,7 +428,7 @@ if (!studentId) {
           Object.keys(this.mastery[sub]).forEach(top => {
             const c = this.mastery[sub][top];
             masteryPayloads.push({
-              student_id: mockStudentId,
+              student_id: studentId,
               subject: sub,
               chapter: top, // Assuming topic maps to chapter/concept here
               concept: top, 
