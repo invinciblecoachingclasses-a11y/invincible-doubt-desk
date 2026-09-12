@@ -164,16 +164,163 @@
       entry.lastPracticed = Date.now();
     }
 
-    updateTestMastery({ subject, chapter, percentage, attempted, correct }) {
-      const entry = this.getTopicEntry(subject, chapter);
-      entry.attempts += attempted;
-      entry.correct += correct;
+    updateTestMastery({
+  subject,
+  chapter,
+  percentage,
+  attempted,
+  correct,
+  questions = []
+}) {
+  const safeSubject =
+    String(subject || 'General').trim() || 'General';
 
-      const testDelta = Math.round((percentage - entry.mastery) * 0.25);
-      entry.mastery = Math.max(10, Math.min(100, entry.mastery + testDelta));
-      entry.skills.numericals = Math.max(10, Math.min(100, entry.skills.numericals + (percentage >= 70 ? 8 : -6)));
-      entry.lastPracticed = Date.now();
+  const safeChapter =
+    String(chapter || 'General').trim() || 'General';
+
+  const chapterEntry =
+    this.getTopicEntry(
+      safeSubject,
+      safeChapter
+    );
+
+  /* -----------------------------------------------
+     1. RECORD OVERALL TEST PERFORMANCE
+  ------------------------------------------------ */
+
+  chapterEntry.attempts +=
+    Number(attempted) || 0;
+
+  chapterEntry.correct +=
+    Number(correct) || 0;
+
+  const testDelta =
+    Math.round(
+      (
+        Number(percentage) -
+        chapterEntry.mastery
+      ) * 0.25
+    );
+
+  chapterEntry.mastery =
+    Math.max(
+      10,
+      Math.min(
+        100,
+        chapterEntry.mastery + testDelta
+      )
+    );
+
+  chapterEntry.skills.numericals =
+    Math.max(
+      10,
+      Math.min(
+        100,
+        chapterEntry.skills.numericals +
+        (
+          Number(percentage) >= 70
+            ? 8
+            : -6
+        )
+      )
+    );
+
+  chapterEntry.lastPracticed =
+    Date.now();
+
+
+  /* -----------------------------------------------
+     2. PROCESS INDIVIDUAL QUESTION CONCEPTS
+     
+     A test should teach the system:
+     "Which concepts did the student actually
+      demonstrate correctly or incorrectly?"
+  ------------------------------------------------ */
+
+  if (!Array.isArray(questions)) {
+    return;
+  }
+
+  questions.forEach(q => {
+    if (!q) return;
+
+    const topic =
+      String(q.topic || '').trim();
+
+    const concept =
+      String(q.concept || '').trim();
+
+    /*
+       If metadata is unavailable, do not invent
+       a concept. The chapter-level result above
+       remains valid.
+    */
+    if (!topic && !concept) {
+      return;
     }
+
+    const conceptKey =
+      concept || topic;
+
+    const conceptEntry =
+      this.getTopicEntry(
+        safeSubject,
+        conceptKey
+      );
+
+    conceptEntry.attempts += 1;
+
+    if (q.isCorrect === true) {
+      conceptEntry.correct += 1;
+
+      /*
+         Correct demonstration gives a modest
+         mastery increase.
+      */
+      conceptEntry.mastery =
+        Math.min(
+          100,
+          conceptEntry.mastery + 4
+        );
+
+      conceptEntry.skills.concepts =
+        Math.min(
+          100,
+          conceptEntry.skills.concepts + 4
+        );
+
+    } else if (q.isCorrect === false) {
+
+      /*
+         Wrong answers identify a weakness,
+         but do not destroy mastery.
+      */
+      conceptEntry.mastery =
+        Math.max(
+          10,
+          conceptEntry.mastery - 3
+        );
+
+      conceptEntry.skills.concepts =
+        Math.max(
+          10,
+          conceptEntry.skills.concepts - 3
+        );
+    }
+
+    conceptEntry.lastPracticed =
+      Date.now();
+
+    /*
+       Store the broader topic relationship
+       without changing the mastery key.
+    */
+    if (topic) {
+      conceptEntry.parentTopic =
+        topic;
+    }
+  });
+}
 
     updateMistakeRecovery({ subject, topic, fixedCount }) {
   const safeSubject =
