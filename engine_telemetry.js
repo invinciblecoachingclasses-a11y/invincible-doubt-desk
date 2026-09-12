@@ -392,7 +392,21 @@ actionTab: item.mastery < 65 ? 'fix' : 'reels'
       this.syncQueue = []; 
 
       // Note: In production, hook this into your auth state
-      const mockStudentId = '00000000-0000-0000-0000-000000000000'; 
+      const studentId =
+  await this.getAuthenticatedStudentId();
+
+if (!studentId) {
+  console.warn(
+    '[Telemetry] Cloud sync skipped: no authenticated student.'
+  );
+
+  this.syncQueue = [
+    ...eventsToSend,
+    ...this.syncQueue
+  ];
+
+  return;
+}
 
       try {
         const payload = eventsToSend.map(e => ({
