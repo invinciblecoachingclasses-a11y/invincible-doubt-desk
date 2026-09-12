@@ -176,11 +176,52 @@
     }
 
     updateMistakeRecovery({ subject, topic, fixedCount }) {
-      const entry = this.getTopicEntry(subject, topic);
-      const boost = (fixedCount || 1) * 6;
-      entry.mastery = Math.min(100, entry.mastery + boost);
-      entry.lastPracticed = Date.now();
-    }
+  const safeSubject =
+    String(subject || 'General').trim() || 'General';
+
+  const safeTopic =
+    String(topic || 'General').trim() || 'General';
+
+  const entry =
+    this.getTopicEntry(
+      safeSubject,
+      safeTopic
+    );
+
+  /*
+     A successful 2-Minute Fix is stronger
+     evidence than merely asking a doubt.
+
+     Keep the gain meaningful but bounded.
+  */
+
+  const boost =
+    Math.min(
+      12,
+      Math.max(
+        6,
+        Number(fixedCount) || 1
+      ) * 6
+    );
+
+  entry.mastery =
+    Math.min(
+      100,
+      entry.mastery + boost
+    );
+
+  entry.skills.concepts =
+    Math.min(
+      100,
+      entry.skills.concepts + 8
+    );
+
+  entry.lastPracticed =
+    Date.now();
+
+  entry.decayFlag =
+    false;
+}
 
     updateDoubtMastery({ subject, topic }) {
       const entry = this.getTopicEntry(subject, topic);
