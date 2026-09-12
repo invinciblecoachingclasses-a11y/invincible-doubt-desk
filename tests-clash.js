@@ -670,8 +670,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 /* =====================================================
    INVINCIBLE 360 — TEST CONCEPT METADATA BRIDGE
-   Keeps generated topic/concept metadata attached to
-   the canonical TEST_SUBMITTED learning event.
+   Connect generated topic/concept data to canonical
+   test learning events without changing test UI.
 ===================================================== */
 
 (function () {
@@ -682,7 +682,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    if (window.InvincibleTelemetry.__testMetadataBridgeInstalled) {
+    if (
+        window.InvincibleTelemetry.__testMetadataBridgeInstalled
+    ) {
         return;
     }
 
@@ -698,37 +700,51 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (
                 eventName === "TEST_SUBMITTED" &&
-                Array.isArray(window.activeQuestions)
+                Array.isArray(activeQuestions)
             ) {
-                const questionsWithMetadata =
-                    window.activeQuestions.map(
-                        (q, index) => ({
-                            questionNumber:
-                                index + 1,
+                const questionResults =
+                    Array.isArray(answers)
+                        ? answers.map((answer, index) => {
+                              const sourceQuestion =
+                                  activeQuestions[index] || {};
 
-                            question:
-                                q.question || "",
+                              return {
+                                  questionNumber:
+                                      answer.questionNumber ||
+                                      index + 1,
 
-                            topic:
-                                q.topic || "",
+                                  question:
+                                      answer.question ||
+                                      sourceQuestion.question ||
+                                      "",
 
-                            concept:
-                                q.concept || "",
+                                  topic:
+                                      sourceQuestion.topic ||
+                                      "",
 
-                            selectedAnswer:
-                                null,
+                                  concept:
+                                      sourceQuestion.concept ||
+                                      "",
 
-                            correctAnswer:
-                                Number.isFinite(
-                                    Number(q.answer)
-                                )
-                                    ? Number(q.answer)
-                                    : null,
+                                  selectedAnswer:
+                                      answer.selectedAnswer ?? null,
 
-                            isCorrect:
-                                null
-                        })
-                    );
+                                  correctAnswer:
+                                      Number.isFinite(
+                                          Number(
+                                              answer.correctAnswer
+                                          )
+                                      )
+                                          ? Number(
+                                                answer.correctAnswer
+                                            )
+                                          : null,
+
+                                  isCorrect:
+                                      answer.isCorrect === true
+                              };
+                          })
+                        : [];
 
                 payload =
                     Object.assign(
@@ -736,7 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         payload,
                         {
                             questions:
-                                questionsWithMetadata
+                                questionResults
                         }
                     );
             }
@@ -755,4 +771,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.InvincibleTelemetry.__testMetadataBridgeInstalled =
         true;
+
+    console.log(
+        "[Invincible 360] Test metadata bridge installed."
+    );
 })();
