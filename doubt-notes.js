@@ -435,7 +435,9 @@ if (askBtn) {
                 question: q
             });
             // Give a micro-boost to global mastery for seeking help
-            window.InvincibleTelemetry.updateMastery('Curiosity', 1);
+            if (typeof window.InvincibleTelemetry.updateMastery === 'function') {
+    window.InvincibleTelemetry.updateMastery('Curiosity', 1);
+}
         }
 
           // INJECT INTERACTIVE VISUAL BLACKBOARD
