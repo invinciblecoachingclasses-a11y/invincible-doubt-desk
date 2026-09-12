@@ -88,6 +88,12 @@
       */
 
       container.style.display = 'flex';
+container.style.overflowY = 'auto';
+container.style.overflowX = 'hidden';
+container.style.alignItems = 'flex-start';
+container.style.boxSizing = 'border-box';
+container.style.padding = '20px 12px 100px';
+container.style.webkitOverflowScrolling = 'touch';
 
 
       container.innerHTML = `
