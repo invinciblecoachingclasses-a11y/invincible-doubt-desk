@@ -297,10 +297,18 @@
 
     } else if (q.isCorrect === false) {
 
-      /*
-         Wrong answers identify a weakness,
-         but do not destroy mastery.
-      */
+  conceptEntry.wrongCount =
+    (Number(conceptEntry.wrongCount) || 0) + 1;
+
+  conceptEntry.lastWrongQuestion =
+    String(q.question || '').trim();
+
+  conceptEntry.lastWasCorrect = false;
+
+  /*
+     Wrong answers identify a weakness,
+     but do not destroy mastery.
+  */
       conceptEntry.mastery =
         Math.max(
           10,
