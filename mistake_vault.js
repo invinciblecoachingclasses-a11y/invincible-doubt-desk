@@ -243,15 +243,19 @@
 
 
         topic:
-          this.safeString(
-            item.topic ||
-            item.chapter,
-            'General'
-          ),
+  this.safeString(
+    item.topic ||
+    item.chapter,
+    'General'
+  ),
 
+concept:
+  this.safeString(
+    item.concept,
+    ''
+  ),
 
-        question,
-
+question:
 
         yourAnswer:
           this.safeString(
