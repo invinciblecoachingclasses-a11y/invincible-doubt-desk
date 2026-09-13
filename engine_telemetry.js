@@ -981,6 +981,8 @@ entry.recommendedAction =
             const decayAmount = Math.min(15, Math.floor(daysInactive * 3));
             item.mastery = Math.max(20, item.mastery - decayAmount);
             item.decayFlag = true;
+            item.recommendedAction =
+  'REFRESH';
             decayOccurred = true;
           }
         });
