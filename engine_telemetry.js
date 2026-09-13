@@ -263,12 +263,18 @@
       concept || topic;
 
     const conceptEntry =
-      this.getTopicEntry(
-        safeSubject,
-        conceptKey
-      );
+  this.getTopicEntry(
+    safeSubject,
+    conceptKey
+  );
 
-    conceptEntry.attempts += 1;
+/*
+   This entry came from an actual test question.
+   It is a real concept-level learning signal.
+*/
+conceptEntry.isConcept = true;
+
+conceptEntry.attempts += 1;
 
     if (q.isCorrect === true) {
 
