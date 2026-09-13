@@ -617,6 +617,10 @@
     let showAnswers = false;
 
     async function checkAuth() {
+      const allowed = await window.InvincibleRoleGuard.requireTeacher();
+
+      if (!allowed) return;
+
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && session.user) {
