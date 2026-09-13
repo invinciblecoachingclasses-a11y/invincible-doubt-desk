@@ -558,12 +558,12 @@ export default async function handler(
     try {
 
         const {
-            subject,
-            topic,
-            coreMisconception,
-            originalQuestion
-        } = req.body || {};
-
+    subject,
+    topic,
+    concept,
+    coreMisconception,
+    originalQuestion
+} = req.body || {};
 
         /*
            Basic validation.
