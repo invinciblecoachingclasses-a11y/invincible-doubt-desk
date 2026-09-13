@@ -478,6 +478,12 @@ question:
             normalized.explanation;
 
         }
+        if (normalized.concept) {
+
+  existing.concept =
+    normalized.concept;
+
+}
 
 
         this.saveVault();
