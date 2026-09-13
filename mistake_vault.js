@@ -1031,12 +1031,15 @@ question:
           'General',
 
 
-        topic:
-          mistake.topic ||
-          'General',
+     topic:
+  mistake.topic ||
+  'General',
 
+concept:
+  mistake.concept ||
+  '',
 
-        originalQuestion:
+originalQuestion:
           mistake.question ||
           '',
 
