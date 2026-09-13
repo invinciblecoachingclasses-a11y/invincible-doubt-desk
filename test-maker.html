@@ -45,15 +45,126 @@
       background-repeat: no-repeat; background-position: right 16px center; background-size: 18px;
     }
 
-    @media print {
-      @page { margin: 10mm 12mm; size: A4 portrait; }
-      body { background: #ffffff !important; color: #000000 !important; }
-      body * { visibility: hidden; }
-      #printable-area, #printable-area * { visibility: visible; }
-      #printable-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0 !important; border: none !important; box-shadow: none !important; }
-      .no-print { display: none !important; }
-      #paperSections > div > div > div, #paperSections .space-y-4 > div { break-inside: avoid !important; page-break-inside: avoid !important; display: block !important; margin-bottom: 0.85rem !important; }
-    }
+  @media print {
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    min-height: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-area,
+  #printable-area * {
+    visibility: visible;
+  }
+
+  #printable-area {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+
+    width: 100% !important;
+    max-width: none !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: visible !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    background: #ffffff !important;
+
+    display: block !important;
+  }
+
+  #paperSections {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  #paperSections > div {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  #paperSections .space-y-4 {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  #paperSections .space-y-4 > div {
+    display: block !important;
+
+    height: auto !important;
+    max-height: none !important;
+
+    overflow: visible !important;
+
+    break-inside: avoid;
+    page-break-inside: avoid;
+
+    margin-bottom: 0.85rem !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  table {
+    width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  tr,
+  td,
+  th {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Never clip long examination papers */
+  * {
+    max-height: none !important;
+  }
+}
 
     .glass-input {
       background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
