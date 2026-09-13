@@ -1,10 +1,10 @@
 /* ============================================================
    INVINCIBLE 360 — ROLE GUARD
-   Central client-side role boundary for Student / Teacher / Admin
+   Student / Teacher / Admin role boundary
 
    IMPORTANT:
-   This is a UI/navigation guard.
-   Supabase RLS/backend authorization must remain the real
+   This is a CLIENT-SIDE navigation/UI guard.
+   Supabase RLS/backend authorization remains the real
    security boundary for protected data.
 ============================================================ */
 
@@ -15,11 +15,19 @@
     'https://cbgwbzidkmcefoithipp.supabase.co';
 
   const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmxlIiwicmVmIjoiY2Jn'
-    + 'd2J6aWRrTWNlZm9pdGhpcHAiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc4NjIwODI1NCwiZXhwIj'
-    + 'oyMTAxNzg0MjU0fQ.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZ3diemlka21jZWZvaXRoaXBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYyMDgyNTQsImV4cCI6MjEwMTc4NDI1NH0.gJq3-0tU-8fxdF0Y_1_qcet_VYp7gysv5yWfl_o8T0g';
 
   const ROLE_KEY = 'invincible_user_role';
+
+  /*
+     This flag is used only for legacy teacher accounts that were
+     created before role metadata was introduced.
+
+     It is set by login.html only after successful authentication
+     through the dedicated Faculty Login.
+  */
+  const LEGACY_TEACHER_KEY =
+    'invincible_legacy_teacher_session';
 
   const ROLE_CONFIG = {
     student: {
@@ -76,6 +84,33 @@
     } catch (e) {}
   }
 
+  function hasLegacyTeacherSession() {
+    try {
+      return (
+        sessionStorage.getItem(LEGACY_TEACHER_KEY) === 'true'
+      );
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setLegacyTeacherSession() {
+    try {
+      sessionStorage.setItem(
+        LEGACY_TEACHER_KEY,
+        'true'
+      );
+    } catch (e) {}
+  }
+
+  function clearLegacyTeacherSession() {
+    try {
+      sessionStorage.removeItem(
+        LEGACY_TEACHER_KEY
+      );
+    } catch (e) {}
+  }
+
   function normalizeRole(role) {
     const value =
       String(role || '')
@@ -112,6 +147,7 @@
       }
 
       return data.session.user;
+
     } catch (error) {
       console.warn(
         '[RoleGuard] Could not read Supabase session:',
@@ -127,12 +163,17 @@
 
     if (!user) {
       clearStoredRole();
+      clearLegacyTeacherSession();
       return null;
     }
 
     const metadata =
       user.user_metadata || {};
 
+    /*
+       PRIMARY ROLE SOURCE
+       New accounts use explicit Supabase metadata.
+    */
     const role =
       normalizeRole(
         metadata.role
@@ -140,7 +181,28 @@
 
     if (role) {
       storeRole(role);
+
+      /*
+         If Supabase explicitly says student/admin,
+         never allow the legacy teacher fallback.
+      */
+      if (role !== 'teacher') {
+        clearLegacyTeacherSession();
+      }
+
       return role;
+    }
+
+    /*
+       LEGACY TEACHER FALLBACK
+
+       Existing teachers created before role metadata was
+       introduced are allowed when they authenticated through
+       the dedicated Faculty Login in the current session.
+    */
+    if (hasLegacyTeacherSession()) {
+      storeRole('teacher');
+      return 'teacher';
     }
 
     return null;
@@ -159,8 +221,12 @@
   async function requireRole(allowedRoles) {
     const roles =
       Array.isArray(allowedRoles)
-        ? allowedRoles.map(normalizeRole).filter(Boolean)
-        : [normalizeRole(allowedRoles)].filter(Boolean);
+        ? allowedRoles
+            .map(normalizeRole)
+            .filter(Boolean)
+        : [
+            normalizeRole(allowedRoles)
+          ].filter(Boolean);
 
     const role =
       await getCurrentRole();
@@ -210,6 +276,9 @@
     return normalizeRole(role) === 'admin';
   }
 
+  /*
+     Expose public API
+  */
   window.InvincibleRoleGuard = {
     getRole,
     getCurrentUser,
@@ -220,12 +289,17 @@
     isTeacher,
     isStudent,
     isAdmin,
-    normalizeRole
+    normalizeRole,
+
+    /*
+       Used by the dedicated Faculty Login after
+       successful authentication.
+    */
+    setLegacyTeacherSession
   };
 
   /*
-     Keep role state synchronized when Supabase authentication
-     changes.
+     Keep role state synchronized with Supabase auth.
   */
   const sb = getSupabaseClient();
 
@@ -236,6 +310,7 @@
   ) {
     sb.auth.onAuthStateChange(
       function (event, session) {
+
         if (
           session &&
           session.user
@@ -247,11 +322,17 @@
 
           if (role) {
             storeRole(role);
+
+            if (role !== 'teacher') {
+              clearLegacyTeacherSession();
+            }
           }
+
         } else if (
           event === 'SIGNED_OUT'
         ) {
           clearStoredRole();
+          clearLegacyTeacherSession();
         }
       }
     );
