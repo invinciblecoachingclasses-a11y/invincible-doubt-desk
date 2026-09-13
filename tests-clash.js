@@ -506,7 +506,7 @@ function startQuestions(questions, headerTitle, testTitle){
         let optionsHTML = '<div style="display:flex; flex-direction:column; gap:10px;">';
         q.options.forEach(function(option, optionIndex){
             optionsHTML += `
-              <div class="engineering-snap-block" onclick="handleTestOptionSelect('${q.id}', ${optionIndex}, ${q.answer})" style="display:flex; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); padding:14px 16px; border-radius:12px; cursor:pointer; transition:all 0.2s;">
+              <div class="engineering-snap-block" style="display:flex; align-items:center; background:#0f172a; border:1px solid rgba(255,255,255,0.1); padding:14px 16px; border-radius:12px; cursor:pointer; transition:all 0.2s;">
                 <input type="radio" name="q${q.id}" value="${optionIndex}" style="display:none;">
                 <div style="width:18px; height:18px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); margin-right:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                   <div class="snap-dot" style="width:10px; height:10px; border-radius:50%; background:var(--accent-cyan); opacity:0; transition:opacity 0.2s;"></div>
