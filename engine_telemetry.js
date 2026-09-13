@@ -263,22 +263,21 @@
       concept || topic;
 
     const conceptEntry =
-  this.getTopicEntry(
-    safeSubject,
-    conceptKey
-  );
+      this.getTopicEntry(
+        safeSubject,
+        conceptKey
+      );
 
-/*
-   This entry came from an actual test question.
-   It is therefore a real concept-level learning signal,
-   not a chapter summary.
-*/
-conceptEntry.isConcept = true;
-
-conceptEntry.attempts += 1;
+    conceptEntry.attempts += 1;
 
     if (q.isCorrect === true) {
-      conceptEntry.correct += 1;
+
+  conceptEntry.correct += 1;
+
+  conceptEntry.lastQuestion =
+    String(q.question || '').trim();
+
+  conceptEntry.lastWasCorrect = true;
 
       /*
          Correct demonstration gives a modest
