@@ -256,6 +256,12 @@ concept:
   ),
 
 question:
+  this.safeString(
+    item.question ||
+    item.questionText ||
+    item.question_text,
+    'Question not recorded'
+  ),
 
         yourAnswer:
           this.safeString(
