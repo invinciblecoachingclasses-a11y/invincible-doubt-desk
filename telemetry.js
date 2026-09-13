@@ -379,14 +379,20 @@
             'General'
           ),
 
-        topic:
-          safeString(
-            payload.topic ||
-            payload.chapter,
-            'General'
-          ),
+     topic:
+  safeString(
+    payload.topic ||
+    payload.chapter,
+    'General'
+  ),
 
-        question:
+concept:
+  safeString(
+    payload.concept,
+    ''
+  ),
+
+question:
           safeString(
             payload.question ||
             payload.questionText,
