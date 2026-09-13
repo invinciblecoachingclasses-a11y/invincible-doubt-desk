@@ -509,7 +509,7 @@ conceptEntry.isConcept = true;
 
 conceptEntry.attempts += 1;
 
-    if (q.isCorrect === true) {
+if (q.isCorrect === true) {
 
   conceptEntry.correct += 1;
 
