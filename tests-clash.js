@@ -573,9 +573,46 @@ if (submitTestBtn) {
             attempted++; 
             selectedAnswer = Number(selected.value);
             if(selectedAnswer === Number(q.answer)){ 
-                correct++; 
-                isCorrect = true; 
-            } else {
+    correct++; 
+    isCorrect = true;
+
+    // Canonical positive learning evidence:
+    // the student successfully demonstrated this concept.
+    if (window.InvincibleTelemetry) {
+        window.InvincibleTelemetry.emit('QUESTION_SOLVED', {
+            subject:
+                activeTestSubject ||
+                document.getElementById("testSubject")?.value ||
+                'General',
+
+            chapter:
+                document.getElementById("testChapter")?.value ||
+                'Chapter Assessment',
+
+            topic:
+                q.topic || '',
+
+            concept:
+                q.concept || '',
+
+            question:
+                q.question || '',
+
+            questionNumber:
+                index + 1,
+
+            result:
+                'correct',
+
+            isCorrect:
+                true,
+
+            source:
+                'test'
+        });
+    }
+
+} else {
                 // Record mistake for Principal's Eye & 2-Minute Fix
                 if (window.TelemetryEngine) {
                     window.TelemetryEngine.recordMistake({
