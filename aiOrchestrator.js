@@ -179,10 +179,13 @@ container.style.webkitOverflowScrolling = 'touch';
             subject:
               payload?.subject || 'General',
 
-            topic:
-              payload?.topic || 'General',
+          topic:
+  payload?.topic || 'General',
 
-            originalQuestion:
+concept:
+  payload?.concept || '',
+
+originalQuestion:
               payload?.originalQuestion || '',
 
             coreMisconception:
