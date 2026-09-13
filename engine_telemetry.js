@@ -1080,14 +1080,46 @@ if (!studentId) {
           Object.keys(this.mastery[sub]).forEach(top => {
             const c = this.mastery[sub][top];
             masteryPayloads.push({
-              student_id: studentId,
-              subject: sub,
-              chapter: top, // Assuming topic maps to chapter/concept here
-              concept: top, 
-              mastery_level: c.mastery,
-              times_practiced: c.attempts,
-              last_practiced: new Date(c.lastPracticed).toISOString()
-            });
+
+  student_id:
+    studentId,
+
+  subject:
+    sub,
+
+  /*
+     For a real concept entry, parentTopic is the
+     broader chapter/topic.
+
+     For older entries where no parentTopic exists,
+     retain top as the fallback so existing data
+     is not lost.
+  */
+  chapter:
+    c.parentTopic ||
+    top ||
+    'General',
+
+  /*
+     The mastery key is the actual concept/topic
+     represented by this entry.
+  */
+  concept:
+    top ||
+    'General',
+
+  mastery_level:
+    Number(c.mastery) || 0,
+
+  times_practiced:
+    Number(c.attempts) || 0,
+
+  last_practiced:
+    new Date(
+      c.lastPracticed ||
+      Date.now()
+    ).toISOString()
+});
           });
         });
 
