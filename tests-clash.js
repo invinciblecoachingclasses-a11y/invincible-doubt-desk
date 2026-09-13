@@ -530,12 +530,22 @@ function startQuestions(questions, headerTitle, testTitle){
 
         // Add visual snap effect to the custom radio dots
         const blocks = card.querySelectorAll('.engineering-snap-block');
-        blocks.forEach(block => {
-            block.addEventListener('click', () => {
-                blocks.forEach(b => b.querySelector('.snap-dot').style.opacity = '0');
-                block.querySelector('.snap-dot').style.opacity = '1';
-            });
+        blocks.forEach((block, optionIndex) => {
+    block.addEventListener('click', () => {
+
+        window.handleTestOptionSelect(
+            q.id,
+            optionIndex,
+            q.answer
+        );
+
+        blocks.forEach(b => {
+            b.querySelector('.snap-dot').style.opacity = '0';
         });
+
+        block.querySelector('.snap-dot').style.opacity = '1';
+    });
+});
     });
 
     try {
