@@ -193,6 +193,7 @@ function validateFix(data) {
 function buildPrompt({
     subject,
     topic,
+    concept,
     coreMisconception,
     originalQuestion
 }) {
