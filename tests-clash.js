@@ -623,20 +623,54 @@ questionText: q.question,
     // Canonical learning event: completed test result
 if (window.InvincibleTelemetry) {
     window.InvincibleTelemetry.emit('TEST_SUBMITTED', {
-        subject:
-            activeTestSubject ||
-            document.getElementById("testSubject")?.value ||
-            'General',
+    subject:
+        activeTestSubject ||
+        document.getElementById("testSubject")?.value ||
+        'General',
 
-        chapter:
-            document.getElementById("testChapter")?.value ||
-            'Chapter Assessment',
+    chapter:
+        document.getElementById("testChapter")?.value ||
+        'Chapter Assessment',
 
-        percentage: percentage,
-        attempted: attempted,
-        correct: correct,
-        totalQuestions: questions.length
-    });
+    percentage: percentage,
+    attempted: attempted,
+    correct: correct,
+    totalQuestions: questions.length,
+
+    questions: answers.map(function(answer, index) {
+        const sourceQuestion =
+            questions[index] || {};
+
+        return {
+            questionNumber:
+                answer.questionNumber,
+
+            question:
+                answer.question ||
+                sourceQuestion.question ||
+                '',
+
+            topic:
+                answer.topic ||
+                sourceQuestion.topic ||
+                '',
+
+            concept:
+                answer.concept ||
+                sourceQuestion.concept ||
+                '',
+
+            selectedAnswer:
+                answer.selectedAnswer,
+
+            correctAnswer:
+                answer.correctAnswer,
+
+            isCorrect:
+                answer.isCorrect === true
+        };
+    })
+});
 }
     if (percentage >= 80) { if(typeof playWin === 'function') playWin(); if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } }); }
     else { if(typeof playBuzz === 'function') playBuzz(); }
