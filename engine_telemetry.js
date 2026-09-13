@@ -46,26 +46,69 @@
       this.subscribers[eventName].push(callback);
     }
 
-    emit(eventName, payload = {}) {
-      const eventRecord = {
-        id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-        type: eventName,
-        timestamp: Date.now(),
-        payload: payload
-      };
+emit(eventName, payload = {}) {
 
-      this.logEvent(eventRecord);
-      this.processTelemetry(eventRecord);
+  const normalizedPayload =
+    this.normalizeLearningPayload(
+      eventName,
+      payload
+    );
 
-      if (this.subscribers[eventName]) {
-        this.subscribers[eventName].forEach(cb => {
-          try { cb(payload, eventRecord); } catch(e) { console.error(`[Telemetry Error: ${eventName}]`, e); }
-        });
+  const eventRecord = {
+    id:
+      'evt_' +
+      Date.now() +
+      '_' +
+      Math.random()
+        .toString(36)
+        .substr(2, 5),
+
+    type: eventName,
+
+    timestamp: Date.now(),
+
+    payload: normalizedPayload
+  };
+
+  this.logEvent(eventRecord);
+
+  this.processTelemetry(eventRecord);
+
+  if (this.subscribers[eventName]) {
+
+    this.subscribers[eventName]
+      .forEach(cb => {
+
+        try {
+          cb(
+            normalizedPayload,
+            eventRecord
+          );
+        } catch(e) {
+
+          console.error(
+            `[Telemetry Error: ${eventName}]`,
+            e
+          );
+
+        }
+
+      });
+
+  }
+
+  /*
+     Sync across open tabs.
+  */
+  window.dispatchEvent(
+    new CustomEvent(
+      'invincible:event',
+      {
+        detail: eventRecord
       }
-
-      // Sync across open tabs
-      window.dispatchEvent(new CustomEvent('invincible:event', { detail: eventRecord }));
-    }
+    )
+  );
+}
 
     logEvent(eventRecord) {
       this.eventQueue.push(eventRecord);
