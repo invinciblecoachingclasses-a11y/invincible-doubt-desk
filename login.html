@@ -199,17 +199,43 @@
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         
         if (error) {
-          showStatus(error.message, true);
-          signInBtn.disabled = false;
-          signInBtn.textContent = "Sign In";
-        } else {
-          // Store school_id locally for fast reference
-          const userSchool = data.user?.user_metadata?.school_id || 'Invincible Coaching Classes';
-          localStorage.setItem('userSchool', userSchool);
-          
-          showStatus("Verified! Loading Campus OS...", false);
-          setTimeout(() => { window.location.href = "test-maker.html"; }, 500);
-        }
+  showStatus(error.message, true);
+  signInBtn.disabled = false;
+  signInBtn.textContent = "Sign In";
+} else {
+  // Store school_id locally for fast reference
+  const userSchool =
+    data.user?.user_metadata?.school_id ||
+    'Invincible Coaching Classes';
+
+  localStorage.setItem(
+    'userSchool',
+    userSchool
+  );
+
+  /*
+     Mark this authenticated session as coming from
+     the dedicated Faculty Login.
+
+     This keeps older teacher accounts working even
+     if they were created before role metadata existed.
+  */
+  if (
+    window.InvincibleRoleGuard &&
+    typeof window.InvincibleRoleGuard.setLegacyTeacherSession === 'function'
+  ) {
+    window.InvincibleRoleGuard.setLegacyTeacherSession();
+  }
+
+  showStatus(
+    "Verified! Loading Campus OS...",
+    false
+  );
+
+  setTimeout(() => {
+    window.location.href = "test-maker.html";
+  }, 500);
+}
       } catch (err) {
         showStatus(err.message || "Authentication failed.", true);
         signInBtn.disabled = false;
