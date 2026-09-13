@@ -581,7 +581,9 @@ if (submitTestBtn) {
                     window.TelemetryEngine.recordMistake({
                         subject: activeTestSubject || document.getElementById("testSubject")?.value || 'Subject',
                         chapter: document.getElementById("testChapter")?.value || 'Chapter Test',
-                        questionText: q.question,
+topic: q.topic || '',
+concept: q.concept || '',
+questionText: q.question,
                         studentAnswer: q.options[selectedAnswer],
                         correctAnswer: q.options[q.answer],
                         explanation: q.explanation || 'Review core concepts in your notes.'
