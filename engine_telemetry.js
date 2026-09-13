@@ -507,16 +507,51 @@ emit(eventName, payload = {}) {
 */
 conceptEntry.isConcept = true;
 
-conceptEntry.attempts += 1;
+conceptEntry.correct += 1;
 
-if (q.isCorrect === true) {
+conceptEntry.lastQuestion =
+  String(q.question || '').trim();
 
-  conceptEntry.correct += 1;
+conceptEntry.lastWasCorrect = true;
 
-  conceptEntry.lastQuestion =
-    String(q.question || '').trim();
+/*
+   A correct answer is direct evidence that
+   the student can currently apply the concept.
+*/
+conceptEntry.lastVerified =
+  Date.now();
 
-  conceptEntry.lastWasCorrect = true;
+/*
+   Recalculate observed accuracy.
+*/
+conceptEntry.accuracy =
+  Math.round(
+    (
+      conceptEntry.correct /
+      Math.max(
+        1,
+        conceptEntry.attempts
+      )
+    ) * 100
+  );
+
+/*
+   Confidence grows with repeated evidence,
+   but never exceeds 100.
+*/
+conceptEntry.confidence =
+  Math.min(
+    100,
+    Math.round(
+      conceptEntry.attempts * 12
+    )
+  );
+
+/*
+   Correct evidence clears an active decay flag.
+*/
+conceptEntry.decayFlag =
+  false;
 
       /*
          Correct demonstration gives a modest
