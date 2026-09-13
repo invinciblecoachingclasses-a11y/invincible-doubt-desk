@@ -672,22 +672,198 @@ conceptEntry.attempts += 1;
   return entry.mastery;
 }
 
-    getTopicEntry(subject = 'Science', topic = 'General') {
-      const subKey = String(subject).trim();
-      const topKey = String(topic).trim();
+    getTopicEntry(
+  subject = 'Science',
+  topic = 'General'
+) {
 
-      if (!this.mastery[subKey]) this.mastery[subKey] = {};
-      if (!this.mastery[subKey][topKey]) {
-        this.mastery[subKey][topKey] = {
-          mastery: 50, // Baseline start
-          attempts: 0,
-          correct: 0,
-          skills: { ...DEFAULT_SKILLS },
-          lastPracticed: Date.now()
-        };
+  const subKey =
+    String(
+      subject || 'General'
+    ).trim() || 'General';
+
+  const topKey =
+    String(
+      topic || 'General'
+    ).trim() || 'General';
+
+  if (!this.mastery[subKey]) {
+    this.mastery[subKey] = {};
+  }
+
+  if (!this.mastery[subKey][topKey]) {
+
+    this.mastery[subKey][topKey] = {
+
+      /*
+         --------------------------------------------------
+         CORE MASTERY
+      --------------------------------------------------
+      */
+
+      mastery: 50,
+
+      /*
+         Demonstrated performance.
+      */
+      accuracy: 50,
+
+      attempts: 0,
+
+      correct: 0,
+
+      wrongCount: 0,
+
+      /*
+         --------------------------------------------------
+         CONFIDENCE
+      --------------------------------------------------
+
+         Confidence is NOT the same as mastery.
+
+         It represents how much evidence the system
+         has that the mastery estimate is trustworthy.
+      */
+      confidence: 0,
+
+      /*
+         --------------------------------------------------
+         LEARNING HISTORY
+      --------------------------------------------------
+      */
+
+      lastQuestion: '',
+
+      lastWrongQuestion: '',
+
+      lastWasCorrect: null,
+
+      lastPracticed:
+        Date.now(),
+
+      lastVerified: null,
+
+      /*
+         --------------------------------------------------
+         STRUCTURAL IDENTITY
+      --------------------------------------------------
+      */
+
+      parentTopic: '',
+
+      isConcept: false,
+
+      /*
+         --------------------------------------------------
+         INTERVENTION STATE
+      --------------------------------------------------
+      */
+
+      doubtCount: 0,
+
+      decayFlag: false,
+
+      /*
+         What the recommendation engine should
+         currently consider doing.
+      */
+      recommendedAction:
+        'PRACTICE',
+
+      /*
+         --------------------------------------------------
+         SUB-SKILLS
+      --------------------------------------------------
+      */
+
+      skills: {
+        ...DEFAULT_SKILLS
       }
-      return this.mastery[subKey][topKey];
-    }
+    };
+  }
+
+  /*
+     ------------------------------------------------------
+     BACKWARD COMPATIBILITY
+
+     Older locally stored mastery objects will not contain
+     the new fields. Add them without destroying existing
+     progress.
+     ------------------------------------------------------
+  */
+
+  const entry =
+    this.mastery[subKey][topKey];
+
+  if (
+    typeof entry.accuracy !== 'number'
+  ) {
+    const attempts =
+      Number(entry.attempts) || 0;
+
+    const correct =
+      Number(entry.correct) || 0;
+
+    entry.accuracy =
+      attempts > 0
+        ? Math.round(
+            (correct / attempts) * 100
+          )
+        : 50;
+  }
+
+  if (
+    typeof entry.wrongCount !== 'number'
+  ) {
+    entry.wrongCount = 0;
+  }
+
+  if (
+    typeof entry.confidence !== 'number'
+  ) {
+    entry.confidence =
+      Math.min(
+        100,
+        (Number(entry.attempts) || 0) * 10
+      );
+  }
+
+  if (
+    typeof entry.doubtCount !== 'number'
+  ) {
+    entry.doubtCount = 0;
+  }
+
+  if (
+    typeof entry.isConcept !== 'boolean'
+  ) {
+    entry.isConcept = false;
+  }
+
+  if (
+    typeof entry.decayFlag !== 'boolean'
+  ) {
+    entry.decayFlag = false;
+  }
+
+  if (
+    typeof entry.recommendedAction !== 'string'
+  ) {
+    entry.recommendedAction =
+      'PRACTICE';
+  }
+
+  if (
+    !entry.skills ||
+    typeof entry.skills !== 'object'
+  ) {
+    entry.skills = {
+      ...DEFAULT_SKILLS
+    };
+  }
+
+  return entry;
+}
 
     /* --------------------------------------------------
        3. SPACED REPETITION & KNOWLEDGE DECAY (EBBINGHAUS)
