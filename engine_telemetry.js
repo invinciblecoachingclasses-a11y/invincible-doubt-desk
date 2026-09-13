@@ -45,6 +45,196 @@
       }
       this.subscribers[eventName].push(callback);
     }
+    normalizeLearningPayload(eventName, payload = {}) {
+
+  const safePayload =
+    payload &&
+    typeof payload === 'object'
+      ? { ...payload }
+      : {};
+
+  /*
+     ---------------------------------------------------------
+     CANONICAL LEARNING IDENTITY
+     ---------------------------------------------------------
+
+     Keep old field names working while creating one
+     consistent representation for the entire platform.
+  */
+
+  const subject =
+    String(
+      safePayload.subject ||
+      'General'
+    ).trim() || 'General';
+
+  const chapter =
+    String(
+      safePayload.chapter ||
+      safePayload.parentTopic ||
+      safePayload.chapterName ||
+      ''
+    ).trim();
+
+  const topic =
+    String(
+      safePayload.topic ||
+      safePayload.topicName ||
+      ''
+    ).trim();
+
+  const concept =
+    String(
+      safePayload.concept ||
+      ''
+    ).trim();
+
+  const question =
+    String(
+      safePayload.question ||
+      safePayload.originalQuestion ||
+      ''
+    ).trim();
+
+  /*
+     Identify the learning source centrally.
+  */
+
+  let source =
+    String(
+      safePayload.source ||
+      ''
+    ).trim();
+
+  if (!source) {
+
+    const sourceMap = {
+
+      DOUBT_ASKED:
+        'doubt',
+
+      DOUBT_SOLVED:
+        'doubt',
+
+      MISTAKE_LOGGED:
+        'test',
+
+      MISTAKE_RECOVERED:
+        '2_min_fix',
+
+      TEST_SUBMITTED:
+        'test',
+
+      QUESTION_SOLVED:
+        'practice',
+
+      QUESTION_WRONG:
+        'practice',
+
+      QUESTION_MASTERED:
+        'practice',
+
+      REEL_RESOLVED:
+        'reels',
+
+      LAB_COMPLETED:
+        'lab',
+
+      ARENA_FINISHED:
+        'arena',
+
+      PRACTICE_STARTED:
+        'practice',
+
+      PRACTICE_COMPLETED:
+        'practice',
+
+      FOLLOWUP_ASKED:
+        'doubt',
+
+      TEACHER_HELP_REQUESTED:
+        'teacher_help'
+
+    };
+
+    source =
+      sourceMap[eventName] ||
+      'system';
+  }
+
+  /*
+     Canonical learning result.
+
+     We do NOT force a result on events where there
+     is no meaningful correctness outcome.
+  */
+
+  let result =
+    safePayload.result ||
+    '';
+
+  if (!result) {
+
+    if (
+      safePayload.isCorrect === true
+    ) {
+      result = 'correct';
+
+    } else if (
+      safePayload.isCorrect === false
+    ) {
+      result = 'wrong';
+
+    } else if (
+      eventName === 'MISTAKE_RECOVERED'
+    ) {
+      result = 'recovered';
+
+    } else if (
+      eventName === 'DOUBT_SOLVED'
+    ) {
+      result = 'solved';
+
+    } else if (
+      eventName === 'MISTAKE_LOGGED'
+    ) {
+      result = 'wrong';
+    }
+  }
+
+  /*
+     Return the old payload PLUS canonical fields.
+
+     This is important:
+     existing modules continue receiving their old fields.
+  */
+
+  return {
+
+    ...safePayload,
+
+    studentId:
+      safePayload.studentId ||
+      null,
+
+    subject,
+
+    chapter,
+
+    topic,
+
+    concept,
+
+    question,
+
+    source,
+
+    result,
+
+    eventVersion:
+      1
+  };
+}
 
 emit(eventName, payload = {}) {
 
