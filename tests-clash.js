@@ -610,49 +610,9 @@ if (submitTestBtn) {
 
     const percentage = Math.round((correct / questions.length) * 100);
     
-  // Canonical learning event: completed test result
-// Includes per-question concept evidence for the adaptive mastery engine.
+    // Canonical learning event: completed test result
 if (window.InvincibleTelemetry) {
-
-    const questionResults = answers.map(function(answer, index) {
-
-        const sourceQuestion =
-            questions[index] || {};
-
-        return {
-            questionNumber:
-                answer.questionNumber || index + 1,
-
-            question:
-                answer.question ||
-                sourceQuestion.question ||
-                "",
-
-            topic:
-                sourceQuestion.topic ||
-                "",
-
-            concept:
-                sourceQuestion.concept ||
-                "",
-
-            selectedAnswer:
-                answer.selectedAnswer ?? null,
-
-            correctAnswer:
-                Number.isFinite(
-                    Number(answer.correctAnswer)
-                )
-                    ? Number(answer.correctAnswer)
-                    : null,
-
-            isCorrect:
-                answer.isCorrect === true
-        };
-    });
-
     window.InvincibleTelemetry.emit('TEST_SUBMITTED', {
-
         subject:
             activeTestSubject ||
             document.getElementById("testSubject")?.value ||
@@ -662,20 +622,10 @@ if (window.InvincibleTelemetry) {
             document.getElementById("testChapter")?.value ||
             'Chapter Assessment',
 
-        percentage:
-            percentage,
-
-        attempted:
-            attempted,
-
-        correct:
-            correct,
-
-        totalQuestions:
-            questions.length,
-
-        questions:
-            questionResults
+        percentage: percentage,
+        attempted: attempted,
+        correct: correct,
+        totalQuestions: questions.length
     });
 }
     if (percentage >= 80) { if(typeof playWin === 'function') playWin(); if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } }); }
@@ -781,111 +731,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-/* =====================================================
-   INVINCIBLE 360 — TEST CONCEPT METADATA BRIDGE
-   Connect generated topic/concept data to canonical
-   test learning events without changing test UI.
-===================================================== */
-
-(function () {
-    if (
-        !window.InvincibleTelemetry ||
-        typeof window.InvincibleTelemetry.emit !== "function"
-    ) {
-        return;
-    }
-
-    if (
-        window.InvincibleTelemetry.__testMetadataBridgeInstalled
-    ) {
-        return;
-    }
-
-    const originalEmit =
-        window.InvincibleTelemetry.emit.bind(
-            window.InvincibleTelemetry
-        );
-
-    window.InvincibleTelemetry.emit = function (
-        eventName,
-        payload = {}
-    ) {
-        try {
-            if (
-                eventName === "TEST_SUBMITTED" &&
-                Array.isArray(activeQuestions)
-            ) {
-                const questionResults =
-                    Array.isArray(answers)
-                        ? answers.map((answer, index) => {
-                              const sourceQuestion =
-                                  activeQuestions[index] || {};
-
-                              return {
-                                  questionNumber:
-                                      answer.questionNumber ||
-                                      index + 1,
-
-                                  question:
-                                      answer.question ||
-                                      sourceQuestion.question ||
-                                      "",
-
-                                  topic:
-                                      sourceQuestion.topic ||
-                                      "",
-
-                                  concept:
-                                      sourceQuestion.concept ||
-                                      "",
-
-                                  selectedAnswer:
-                                      answer.selectedAnswer ?? null,
-
-                                  correctAnswer:
-                                      Number.isFinite(
-                                          Number(
-                                              answer.correctAnswer
-                                          )
-                                      )
-                                          ? Number(
-                                                answer.correctAnswer
-                                            )
-                                          : null,
-
-                                  isCorrect:
-                                      answer.isCorrect === true
-                              };
-                          })
-                        : [];
-
-                payload =
-                    Object.assign(
-                        {},
-                        payload,
-                        {
-                            questions:
-                                questionResults
-                        }
-                    );
-            }
-        } catch (e) {
-            console.warn(
-                "[Test Metadata Bridge] Metadata enrichment skipped:",
-                e
-            );
-        }
-
-        return originalEmit(
-            eventName,
-            payload
-        );
-    };
-
-    window.InvincibleTelemetry.__testMetadataBridgeInstalled =
-        true;
-
-    console.log(
-        "[Invincible 360] Test metadata bridge installed."
-    );
-})();
