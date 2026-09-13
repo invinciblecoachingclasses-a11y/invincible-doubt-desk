@@ -610,9 +610,49 @@ if (submitTestBtn) {
 
     const percentage = Math.round((correct / questions.length) * 100);
     
-    // Canonical learning event: completed test result
+  // Canonical learning event: completed test result
+// Includes per-question concept evidence for the adaptive mastery engine.
 if (window.InvincibleTelemetry) {
+
+    const questionResults = answers.map(function(answer, index) {
+
+        const sourceQuestion =
+            questions[index] || {};
+
+        return {
+            questionNumber:
+                answer.questionNumber || index + 1,
+
+            question:
+                answer.question ||
+                sourceQuestion.question ||
+                "",
+
+            topic:
+                sourceQuestion.topic ||
+                "",
+
+            concept:
+                sourceQuestion.concept ||
+                "",
+
+            selectedAnswer:
+                answer.selectedAnswer ?? null,
+
+            correctAnswer:
+                Number.isFinite(
+                    Number(answer.correctAnswer)
+                )
+                    ? Number(answer.correctAnswer)
+                    : null,
+
+            isCorrect:
+                answer.isCorrect === true
+        };
+    });
+
     window.InvincibleTelemetry.emit('TEST_SUBMITTED', {
+
         subject:
             activeTestSubject ||
             document.getElementById("testSubject")?.value ||
@@ -622,10 +662,20 @@ if (window.InvincibleTelemetry) {
             document.getElementById("testChapter")?.value ||
             'Chapter Assessment',
 
-        percentage: percentage,
-        attempted: attempted,
-        correct: correct,
-        totalQuestions: questions.length
+        percentage:
+            percentage,
+
+        attempted:
+            attempted,
+
+        correct:
+            correct,
+
+        totalQuestions:
+            questions.length,
+
+        questions:
+            questionResults
     });
 }
     if (percentage >= 80) { if(typeof playWin === 'function') playWin(); if(typeof confetti === 'function') confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } }); }
