@@ -218,6 +218,9 @@ ${subject || 'General'}
 Topic:
 ${topic || 'General Concept'}
 
+Specific Concept:
+${concept || 'Not specified'}
+
 Original Question:
 ${originalQuestion || 'Not available'}
 
