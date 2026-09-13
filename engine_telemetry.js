@@ -746,6 +746,8 @@ entry.recommendedAction =
 
   entry.doubtCount =
     (Number(entry.doubtCount) || 0) + 1;
+    entry.recommendedAction =
+  'UNDERSTAND';
 }
 
     updateTwoMinFixMastery({ subject, topic }) {
