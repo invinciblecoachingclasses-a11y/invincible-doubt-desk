@@ -478,46 +478,217 @@
     /* --------------------------------------------------
        4. INTELLIGENT "NEXT BEST MOVE" ENGINE
     -------------------------------------------------- */
-    getNextBestMove() {
-      let lowestMastery = 101;
-      let targetMove = null;
+getNextBestMove() {
 
-      // 1. Scan for decayed or critically low concepts (<65%)
-      Object.keys(this.mastery).forEach(sub => {
-        Object.keys(this.mastery[sub]).forEach(top => {
-          const item = this.mastery[sub][top];
-          if (item.mastery < lowestMastery) {
-            lowestMastery = item.mastery;
-            targetMove = {
-              type: 'MASTERY_RECOVERY',
-              subject: sub,
-              topic: top,
-              mastery: item.mastery,
-              reason: item.decayFlag 
-                ? `You haven't practiced ${top} in 5+ days. Memory retention is decaying.` 
-                : `Your mastery in ${top} is critically low at ${item.mastery}%. Start a 2-Min Fix to recover.`,
-              actionTitle: item.mastery < 65 ? `Launch 2-Min Fix` : `Master ${top}`,
-actionTab: item.mastery < 65 ? 'fix' : 'reels'
-            };
-          }
-        });
-      });
+  let targetMove = null;
+  let weakestScore = Infinity;
 
-      // 2. Default fallback if no low scores exist
-      if (!targetMove) {
-        targetMove = {
-          type: 'DAILY_CHALLENGE',
-          subject: 'Science',
-          topic: 'Blitz Challenge',
-          mastery: 85,
-          reason: 'All concepts are stable. Complete a High-Speed Blitz to maintain your leaderboard rank.',
-          actionTitle: 'Launch 60s Blitz',
-          actionTab: 'arena'
-        };
+
+  /* =================================================
+     1. PRIORITIZE REAL TEST-DERIVED CONCEPTS
+  ================================================= */
+
+  Object.keys(this.mastery).forEach(sub => {
+
+    Object.keys(this.mastery[sub]).forEach(top => {
+
+      const item =
+        this.mastery[sub][top];
+
+      /*
+         Only test-derived concept entries
+         participate in diagnostic selection.
+      */
+      if (
+        !item ||
+        item.isConcept !== true ||
+        Number(item.attempts) <= 0
+      ) {
+        return;
       }
 
-      return targetMove;
+
+      const attempts =
+        Number(item.attempts) || 0;
+
+      const correct =
+        Number(item.correct) || 0;
+
+      const wrongCount =
+        Number(item.wrongCount) || 0;
+
+
+      const accuracy =
+        attempts > 0
+          ? (correct / attempts) * 100
+          : 50;
+
+
+      /*
+         Lower accuracy = weaker concept.
+
+         Repeated mistakes increase priority.
+      */
+      const weaknessScore =
+        accuracy -
+        Math.min(20, wrongCount * 5);
+
+
+      if (weaknessScore < weakestScore) {
+
+        weakestScore =
+          weaknessScore;
+
+
+        targetMove = {
+
+          type:
+            'MASTERY_RECOVERY',
+
+          subject:
+            sub,
+
+          topic:
+            top,
+
+          parentTopic:
+            item.parentTopic || '',
+
+          mastery:
+            Number(item.mastery) || 50,
+
+          accuracy:
+            Math.round(accuracy),
+
+          wrongCount:
+            wrongCount,
+
+          originalQuestion:
+            item.lastWrongQuestion ||
+            item.lastQuestion ||
+            '',
+
+          coreMisconception:
+            wrongCount > 0
+              ? `The student is struggling with ${top}. The concept was missed in a recent assessment question.`
+              : `The student needs additional practice with ${top}.`,
+
+          reason:
+            wrongCount > 0
+              ? `You missed ${wrongCount} question${wrongCount === 1 ? '' : 's'} related to ${top}.`
+              : `Your current performance in ${top} needs reinforcement.`,
+
+          actionTitle:
+            'Launch 2-Min Fix',
+
+          actionTab:
+            'fix'
+        };
+
+      }
+
+    });
+
+  });
+
+
+  /* =================================================
+     2. FALLBACK TO EXISTING MASTERY / DECAY LOGIC
+  ================================================= */
+
+  if (!targetMove) {
+
+    let lowestMastery = 101;
+
+    Object.keys(this.mastery).forEach(sub => {
+
+      Object.keys(this.mastery[sub]).forEach(top => {
+
+        const item =
+          this.mastery[sub][top];
+
+        if (
+          item &&
+          item.mastery < lowestMastery
+        ) {
+
+          lowestMastery =
+            item.mastery;
+
+          targetMove = {
+
+            type:
+              'MASTERY_RECOVERY',
+
+            subject:
+              sub,
+
+            topic:
+              top,
+
+            mastery:
+              item.mastery,
+
+            reason:
+              item.decayFlag
+                ? `You haven't practiced ${top} in 5+ days. Memory retention is decaying.`
+                : `Your mastery in ${top} is low at ${item.mastery}%.`,
+
+            actionTitle:
+              item.mastery < 65
+                ? 'Launch 2-Min Fix'
+                : `Master ${top}`,
+
+            actionTab:
+              item.mastery < 65
+                ? 'fix'
+                : 'reels'
+          };
+
+        }
+
+      });
+
     }
+
+  }
+
+
+  /* =================================================
+     3. FINAL FALLBACK
+  ================================================= */
+
+  if (!targetMove) {
+
+    targetMove = {
+
+      type:
+        'DAILY_CHALLENGE',
+
+      subject:
+        'Science',
+
+      topic:
+        'Blitz Challenge',
+
+      mastery:
+        85,
+
+      reason:
+        'All concepts are stable. Complete a High-Speed Blitz to maintain your leaderboard rank.',
+
+      actionTitle:
+        'Launch 60s Blitz',
+
+      actionTab:
+        'arena'
+    };
+
+  }
+
+
+  return targetMove;
+}
 
     /* --------------------------------------------------
        5. SUPABASE CLOUD SYNC ENGINE
