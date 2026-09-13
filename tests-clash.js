@@ -592,7 +592,15 @@ questionText: q.question,
             }
         }
 
-        answers.push({ questionNumber: index + 1, question: q.question, selectedAnswer: selectedAnswer, correctAnswer: Number(q.answer), isCorrect: isCorrect });
+        answers.push({
+    questionNumber: index + 1,
+    question: q.question,
+    topic: q.topic || '',
+    concept: q.concept || '',
+    selectedAnswer: selectedAnswer,
+    correctAnswer: Number(q.answer),
+    isCorrect: isCorrect
+});
         let statusBadge = isCorrect ? '<span style="color:var(--accent-emerald); font-weight:800; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px;">✓ Correct</span>' : '<span style="color:var(--accent-rose); font-weight:800; background:rgba(244,63,94,0.1); padding:2px 6px; border-radius:4px;">✗ Incorrect</span>';
         
         let correctStr = q.options[q.answer] !== undefined ? q.options[q.answer] : "N/A";
