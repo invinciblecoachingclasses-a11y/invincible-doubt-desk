@@ -120,11 +120,14 @@ Respond ONLY with valid, raw JSON matching this exact schema:
     }
 
     // Updated resilience hierarchy using stable available models
-    const MODELS = [
-      "gemini-2.5-flash",
-      "gemini-1.5-flash",
-      "gemini-1.5-flash-8b"
-    ];
+    // Current Gemini model fallback hierarchy
+const MODELS = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite"
+];
 
     let examData = null;
     let errorLog = [];
