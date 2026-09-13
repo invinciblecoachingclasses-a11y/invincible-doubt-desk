@@ -1136,9 +1136,10 @@ originalQuestion:
               item.subject,
 
             topic:
-              item.topic,
+  item.concept ||
+  item.topic,
 
-            mistakeId:
+mistakeId:
               item.id,
 
             fixedCount:
