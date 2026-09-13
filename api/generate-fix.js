@@ -587,24 +587,13 @@ export default async function handler(
         }
 
 
-        const prompt =
-            buildPrompt({
-
-                subject:
-                    subject || 'General',
-
-                topic:
-                    topic || 'General Concept',
-
-                coreMisconception:
-                    coreMisconception ||
-                    'The student needs help understanding the core concept.',
-
-                originalQuestion:
-                    originalQuestion ||
-                    ''
-
-            });
+        const prompt = buildPrompt({
+    subject,
+    topic,
+    concept,
+    coreMisconception,
+    originalQuestion
+});
 
 
         /*
