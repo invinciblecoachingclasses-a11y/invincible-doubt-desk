@@ -678,24 +678,48 @@ conceptEntry.recommendedAction =
     );
 
   entry.mastery =
-    Math.min(
-      100,
-      entry.mastery + boost
-    );
+  Math.min(
+    100,
+    entry.mastery + boost
+  );
 
-  entry.skills.concepts =
-    Math.min(
-      100,
-      entry.skills.concepts + 8
-    );
+entry.skills.concepts =
+  Math.min(
+    100,
+    entry.skills.concepts + 8
+  );
 
-  entry.lastPracticed =
-    Date.now();
+/*
+   Successful mistake recovery is strong
+   evidence of conceptual repair.
+*/
+entry.lastVerified =
+  Date.now();
 
-  entry.decayFlag =
-    false;
-}
+entry.lastPracticed =
+  Date.now();
 
+entry.decayFlag =
+  false;
+
+/*
+   Increase confidence because the student
+   successfully repaired a previously demonstrated
+   misconception.
+*/
+entry.confidence =
+  Math.min(
+    100,
+    Math.max(
+      Number(entry.confidence) || 0,
+      60
+    ) + 10
+  );
+
+entry.recommendedAction =
+  entry.mastery < 75
+    ? 'PRACTICE'
+    : 'MAINTAIN';
     updateDoubtMastery({ subject, topic }) {
   const safeSubject =
     String(subject || 'General').trim() || 'General';
