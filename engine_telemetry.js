@@ -572,12 +572,50 @@ conceptEntry.decayFlag =
     } else if (q.isCorrect === false) {
 
   conceptEntry.wrongCount =
-    (Number(conceptEntry.wrongCount) || 0) + 1;
+  (Number(conceptEntry.wrongCount) || 0) + 1;
 
-  conceptEntry.lastWrongQuestion =
-    String(q.question || '').trim();
+conceptEntry.lastWrongQuestion =
+  String(q.question || '').trim();
 
-  conceptEntry.lastWasCorrect = false;
+conceptEntry.lastWasCorrect = false;
+
+/*
+   Recalculate observed accuracy after
+   the new wrong answer.
+*/
+conceptEntry.accuracy =
+  Math.round(
+    (
+      conceptEntry.correct /
+      Math.max(
+        1,
+        conceptEntry.attempts
+      )
+    ) * 100
+  );
+
+/*
+   A wrong answer does not erase all confidence,
+   but repeated evidence of weakness should reduce
+   confidence in the mastery estimate.
+*/
+conceptEntry.confidence =
+  Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        conceptEntry.attempts * 12 -
+        conceptEntry.wrongCount * 8
+      )
+    )
+  );
+
+/*
+   This concept now needs attention.
+*/
+conceptEntry.recommendedAction =
+  '2_MIN_FIX';
 
   /*
      Wrong answers identify a weakness,
