@@ -981,16 +981,96 @@ if (!studentId) {
 }
 
       try {
-        const payload = eventsToSend.map(e => ({
-          student_id: studentId,
-          event_type: e.type,
-          subject: e.payload.subject || 'General',
-          chapter: e.payload.chapter || 'General',
-          concept: e.payload.topic || 'General',
-          score: e.payload.percentage || e.payload.accuracy || 0,
-          metadata: e.payload,
-          created_at: new Date(e.timestamp).toISOString()
-        }));
+        const payload =
+  eventsToSend.map(e => ({
+
+    student_id:
+      studentId,
+
+    event_type:
+      e.type,
+
+    subject:
+      e.payload.subject ||
+      'General',
+
+    chapter:
+      e.payload.chapter ||
+      e.payload.parentTopic ||
+      'General',
+
+    /*
+       IMPORTANT:
+       Cloud concept must come from the actual
+       concept field, NOT topic.
+    */
+    concept:
+      e.payload.concept ||
+      e.payload.topic ||
+      'General',
+
+    score:
+      Number(
+        e.payload.percentage ??
+        e.payload.accuracy ??
+        e.payload.score ??
+        0
+      ),
+
+    /*
+       Keep the complete canonical event inside metadata.
+       This allows future analytics to evolve without
+       destroying historical information.
+    */
+    metadata: {
+      ...e.payload,
+
+      canonical: {
+        studentId:
+          studentId,
+
+        subject:
+          e.payload.subject ||
+          'General',
+
+        chapter:
+          e.payload.chapter ||
+          e.payload.parentTopic ||
+          '',
+
+        topic:
+          e.payload.topic ||
+          '',
+
+        concept:
+          e.payload.concept ||
+          '',
+
+        question:
+          e.payload.question ||
+          e.payload.originalQuestion ||
+          '',
+
+        source:
+          e.payload.source ||
+          'system',
+
+        result:
+          e.payload.result ||
+          '',
+
+        eventVersion:
+          e.payload.eventVersion ||
+          1
+      }
+    },
+
+    created_at:
+      new Date(
+        e.timestamp
+      ).toISOString()
+
+  }));
 
         await window.supabase.from('learning_events').insert(payload);
         
