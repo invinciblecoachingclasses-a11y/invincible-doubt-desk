@@ -119,9 +119,11 @@ function normalizeExam(exam, meta) {
                 : [],
 
             marks:
-              Number.isFinite(marks) && marks > 0
-                ? marks
-                : 1,
+  Number.isFinite(marks) && marks > 0
+    ? marks
+    : meta.inputType === "camera"
+      ? 0
+      : 1,
 
             answer_key:
               item.answer_key ??
