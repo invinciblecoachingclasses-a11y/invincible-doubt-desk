@@ -1,10 +1,925 @@
 // api/ocr-paper.js
+// Faculty Studio — OCR + Exact-Mark Examination Generator
+//
+// IMPORTANT:
+// 1. Camera/Photos = exact OCR/transcription.
+// 2. Multi-Chapter Syllabus + Paste Text = NEW EXAM GENERATION.
+// 3. Generated papers are accepted only when the server-calculated
+//    marks exactly equal the requested total.
+// 4. This keeps OCR faithful while preventing 70/80-type papers.
+
 export const maxDuration = 60;
 
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+const MODELS = [
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite"
+];
+
+function numberOr(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function cleanText(value, fallback = "") {
+  const text = String(value ?? "").trim();
+  return text || fallback;
+}
+
+function stripJsonFences(text) {
+  return String(text || "")
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+}
+
+function calculateMarks(exam) {
+  let total = 0;
+  let count = 0;
+
+  const sections = Array.isArray(exam?.sections)
+    ? exam.sections
+    : [];
+
+  for (const section of sections) {
+    const questions = Array.isArray(section?.questions)
+      ? section.questions
+      : [];
+
+    for (const q of questions) {
+      const marks = Number(q?.marks);
+
+      if (Number.isFinite(marks) && marks > 0) {
+        total += marks;
+      }
+
+      count += 1;
+    }
+  }
+
+  return { total, count };
+}
+
+function normalizeExam(exam, meta) {
+  const normalized =
+    exam && typeof exam === "object"
+      ? exam
+      : {};
+
+  if (!Array.isArray(normalized.sections)) {
+    normalized.sections = [];
+  }
+
+  normalized.sections =
+    normalized.sections.map((section, si) => {
+      const s =
+        section && typeof section === "object"
+          ? section
+          : {};
+
+      if (!Array.isArray(s.questions)) {
+        s.questions = [];
+      }
+
+      s.section_name =
+        cleanText(
+          s.section_name,
+          `SECTION ${String.fromCharCode(65 + si)}`
+        );
+
+      s.questions =
+        s.questions.map((q, qi) => {
+          const item =
+            q && typeof q === "object"
+              ? q
+              : {};
+
+          const marks =
+            Number(item.marks);
+
+          return {
+            question_number:
+              item.question_number ??
+              item.questionNumber ??
+              qi + 1,
+
+            question_text:
+              cleanText(
+                item.question_text ??
+                item.question ??
+                item.text
+              ),
+
+            options:
+              Array.isArray(item.options)
+                ? item.options.map(v => String(v))
+                : [],
+
+            marks:
+              Number.isFinite(marks) && marks > 0
+                ? marks
+                : 1,
+
+            answer_key:
+              item.answer_key ??
+              item.answer ??
+              "",
+
+            topic:
+              cleanText(item.topic),
+
+            concept:
+              cleanText(item.concept),
+
+            sub_questions:
+              Array.isArray(item.sub_questions)
+                ? item.sub_questions
+                : []
+          };
+        });
+
+      return s;
+    });
+
+  const stats =
+    calculateMarks(normalized);
+
+  normalized.school_name =
+    meta.schoolName;
+
+  normalized.title =
+    meta.examType;
+
+  normalized.subject =
+    meta.subject;
+
+  normalized.class_grade =
+    meta.classGrade;
+
+  normalized.total_marks =
+    meta.totalMarks;
+
+  normalized.duration_minutes =
+    meta.durationMinutes;
+
+  normalized.academic_session =
+    meta.academicSession;
+
+  normalized.set_code =
+    meta.setCode;
+
+  normalized.has_student_blanks =
+    meta.includeStudentBlanks;
+
+  normalized.generated_question_count =
+    stats.count;
+
+  normalized.generated_total_marks =
+    stats.total;
+
+  return normalized;
+}
+
+
+/*
+  Deterministic exact-mark blueprints.
+
+  These are used for generation mode only.
+  OCR mode never uses them.
+
+  Common school totals:
+
+  25 = 5×1 + 5×2 + 2×5
+  40 = 8×1 + 6×2 + 4×3 + 2×4
+  50 = 10×1 + 5×2 + 5×3 + 3×5
+  80 = 10×1 + 5×2 + 5×3 + 4×5 + 2×10
+  100 = 10×1 + 10×2 + 10×3 + 4×5 + 2×10
+*/
+function buildMarksBlueprint(target) {
+  const t =
+    Math.max(
+      1,
+      Math.round(Number(target) || 80)
+    );
+
+  const common = {
+    25: [
+      { marks: 1, count: 5 },
+      { marks: 2, count: 5 },
+      { marks: 5, count: 2 }
+    ],
+
+    40: [
+      { marks: 1, count: 8 },
+      { marks: 2, count: 6 },
+      { marks: 3, count: 4 },
+      { marks: 4, count: 2 }
+    ],
+
+    50: [
+      { marks: 1, count: 10 },
+      { marks: 2, count: 5 },
+      { marks: 3, count: 5 },
+      { marks: 5, count: 3 }
+    ],
+
+    80: [
+      { marks: 1, count: 10 },
+      { marks: 2, count: 5 },
+      { marks: 3, count: 5 },
+      { marks: 5, count: 4 },
+      { marks: 10, count: 2 }
+    ],
+
+    100: [
+      { marks: 1, count: 10 },
+      { marks: 2, count: 10 },
+      { marks: 3, count: 10 },
+      { marks: 5, count: 4 },
+      { marks: 10, count: 2 }
+    ]
+  };
+
+  if (common[t]) {
+    return common[t];
+  }
+
+  const result = [];
+  let remaining = t;
+
+  for (const mark of [10, 5, 4, 3, 2, 1]) {
+    if (remaining <= 0) {
+      break;
+    }
+
+    const count =
+      Math.floor(remaining / mark);
+
+    if (count > 0) {
+      result.push({
+        marks: mark,
+        count
+      });
+
+      remaining -=
+        count * mark;
+    }
+  }
+
+  return result;
+}
+
+function blueprintText(blueprint) {
+  return blueprint
+    .map(
+      item =>
+        `${item.count} question(s) × ${item.marks} mark(s)`
+    )
+    .join("\n");
+}
+
+function generationPrompt(meta, blueprint) {
+  const context = [
+    meta.chapterName
+      ? `CHAPTERS / SYLLABUS:\n${meta.chapterName}`
+      : "",
+
+    meta.rawText
+      ? `SOURCE TEXT / NOTES:\n${meta.rawText}`
+      : ""
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const selectedTypes = [
+    meta.includeMCQs
+      ? "MCQ"
+      : "",
+
+    meta.includeAssertionReason
+      ? "Assertion-Reason"
+      : "",
+
+    meta.includeCaseStudy
+      ? "Case Study"
+      : ""
+  ]
+    .filter(Boolean);
+
+  return `
+You are an expert school examination paper generator.
+
+THIS IS A NEW EXAMINATION GENERATION TASK.
+It is NOT OCR.
+
+Create a complete, board-appropriate examination paper from the
+supplied syllabus/notes.
+
+ACADEMIC INFORMATION
+School: ${meta.schoolName}
+Class: ${meta.classGrade}
+Subject: ${meta.subject}
+Exam: ${meta.examType}
+Academic session: ${meta.academicSession}
+Duration: ${meta.durationMinutes} minutes
+Set: ${meta.setCode || "A"}
+
+TARGET TOTAL MARKS: ${meta.totalMarks}
+
+EXACT MARK BLUEPRINT:
+${blueprintText(blueprint)}
+
+The blueprint is a HARD requirement.
+
+The sum of marks of every returned top-level question MUST equal
+exactly ${meta.totalMarks}.
+
+The count of each mark value MUST exactly match the blueprint.
+
+Do not output 79, 81, 78, 70 or any other total.
+
+QUESTION DESIGN RULES
+- Every question must be answerable from the supplied syllabus/notes.
+- Use the class level and subject appropriately.
+- Do not invent chapters outside the supplied content.
+- Avoid duplicate questions.
+- Mix recall, understanding, application and higher-order questions
+  where appropriate for the class.
+- Marks must match the depth and expected answer length.
+- A 1-mark question should not require a long answer.
+- A 5/10-mark question should have sufficient scope for its marks.
+- Keep language clear and examination-ready.
+- Number questions sequentially.
+- Put questions into logical sections.
+- Include answer keys.
+- Include topic and concept metadata for every question.
+
+OPTIONAL QUESTION TYPES REQUESTED BY TEACHER:
+${
+    selectedTypes.length
+      ? selectedTypes.join(", ")
+      : "No special type required."
+  }
+
+If MCQ is requested:
+- provide exactly 4 options.
+- answer_key must identify the correct option.
+
+If Assertion-Reason is requested:
+- use a clear assertion and reason.
+- provide standard options and answer key.
+
+If Case Study is requested:
+- include a meaningful passage/case.
+- include its sub-questions.
+- the parent marks must equal the sum of its sub-question marks.
+
+${context}
+
+FINAL VALIDATION BEFORE RESPONSE
+1. Count every top-level question.
+2. Add every top-level question's marks.
+3. Confirm the sum is exactly ${meta.totalMarks}.
+4. Confirm the distribution exactly follows the blueprint.
+5. Confirm every question has question_text and marks.
+6. Confirm no section/question was omitted.
+
+Respond ONLY with valid JSON.
+
+JSON FORMAT:
+{
+  "school_name": "${meta.schoolName}",
+  "title": "${meta.examType}",
+  "subject": "${meta.subject}",
+  "class_grade": "${meta.classGrade}",
+  "total_marks": ${meta.totalMarks},
+  "duration_minutes": ${meta.durationMinutes},
+  "academic_session": "${meta.academicSession}",
+  "set_code": "${meta.setCode}",
+  "has_student_blanks": ${meta.includeStudentBlanks},
+  "instructions": [],
+  "sections": [
+    {
+      "section_name": "SECTION A",
+      "questions": [
+        {
+          "question_number": 1,
+          "question_text": "Question",
+          "options": [],
+          "marks": 1,
+          "answer_key": "Answer",
+          "topic": "Topic",
+          "concept": "Concept",
+          "sub_questions": []
+        }
+      ]
+    }
+  ]
+}
+`;
+}
+
+function repairPrompt(
+  exam,
+  meta,
+  blueprint,
+  calculated
+) {
+  return `
+You are a strict examination-paper validator and repair engine.
+
+The generated paper below is intended to be a
+${meta.totalMarks}-mark paper, but its server-calculated
+total is ${calculated}.
+
+Repair the paper so that:
+
+1. It contains the same subject/syllabus intent.
+2. It remains appropriate for ${meta.classGrade}.
+3. It follows this exact marks blueprint:
+
+${blueprintText(blueprint)}
+
+4. The final sum of ALL returned top-level question marks is exactly
+${meta.totalMarks}.
+5. Do not simply change the header total.
+6. Do not leave any question without marks.
+7. Do not delete useful syllabus coverage unnecessarily.
+8. Do not invent unrelated content.
+9. Preserve answer keys, topic and concept metadata.
+10. Return the COMPLETE repaired paper, not a patch.
+
+IMPORTANT:
+The server will calculate the total again after your response.
+If it is not exactly ${meta.totalMarks}, the paper will be rejected.
+
+CURRENT PAPER:
+${JSON.stringify(exam)}
+
+Respond ONLY with valid JSON in the same examination-paper schema.
+`;
+}
+
+async function callGemini(
+  keys,
+  prompt,
+  temperature = 0.15
+) {
+  const errors = [];
+
+  for (const key of keys) {
+    for (const model of MODELS) {
+      try {
+        const url =
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+
+        const response =
+          await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [
+                    {
+                      text: prompt
+                    }
+                  ]
+                }
+              ],
+
+              generationConfig: {
+                responseMimeType:
+                  "application/json",
+
+                temperature
+              }
+            })
+          });
+
+        const data =
+          await response.json();
+
+        const text =
+          data?.candidates?.[0]
+            ?.content?.parts?.[0]
+            ?.text;
+
+        if (response.ok && text) {
+          try {
+            return JSON.parse(
+              stripJsonFences(text)
+            );
+          } catch {
+            errors.push(
+              `Gemini [${model}]: invalid JSON`
+            );
+          }
+        } else {
+          errors.push(
+            `Gemini [${model}]: ${
+              data?.error?.message ||
+              response.statusText
+            }`
+          );
+        }
+      } catch (error) {
+        errors.push(
+          `Gemini [${model}]: ${
+            error?.message ||
+            "request failed"
+          }`
+        );
+      }
+    }
+  }
+
+  const error =
+    new Error(
+      errors.slice(0, 5).join(" | ") ||
+      "No Gemini model returned a usable response."
+    );
+
+  error.details = errors;
+
+  throw error;
+}
+
+async function runGeneration(
+  keys,
+  meta
+) {
+  const blueprint =
+    buildMarksBlueprint(
+      meta.totalMarks
+    );
+
+  let exam =
+    await callGemini(
+      keys,
+      generationPrompt(
+        meta,
+        blueprint
+      ),
+      0.12
+    );
+
+  exam =
+    normalizeExam(
+      exam,
+      meta
+    );
+
+  let stats =
+    calculateMarks(exam);
+
+  /*
+    One controlled repair pass.
+
+    We do NOT silently accept a wrong total.
+  */
+  if (stats.total !== meta.totalMarks) {
+    exam =
+      await callGemini(
+        keys,
+        repairPrompt(
+          exam,
+          meta,
+          blueprint,
+          stats.total
+        ),
+        0.05
+      );
+
+    exam =
+      normalizeExam(
+        exam,
+        meta
+      );
+
+    stats =
+      calculateMarks(exam);
+  }
+
+  /*
+    Hard server-side total validation.
+  */
+  if (stats.total !== meta.totalMarks) {
+    const error =
+      new Error(
+        `Generated paper mark validation failed. ` +
+        `Requested ${meta.totalMarks}, calculated ${stats.total}.`
+      );
+
+    error.code =
+      "MARK_TOTAL_MISMATCH";
+
+    error.requested =
+      meta.totalMarks;
+
+    error.calculated =
+      stats.total;
+
+    throw error;
+  }
+
+  /*
+    Hard server-side distribution validation.
+  */
+  const actualDistribution = {};
+
+  for (const section of exam.sections) {
+    for (const q of section.questions) {
+      const marks =
+        Number(q.marks);
+
+      actualDistribution[marks] =
+        (actualDistribution[marks] || 0) + 1;
+    }
+  }
+
+  for (const item of blueprint) {
+    if (
+      Number(
+        actualDistribution[item.marks] || 0
+      ) !== Number(item.count)
+    ) {
+      const error =
+        new Error(
+          `Generated paper distribution failed. ` +
+          `Expected ${item.count}×${item.marks}, ` +
+          `received ${actualDistribution[item.marks] || 0}×${item.marks}.`
+        );
+
+      error.code =
+        "MARK_DISTRIBUTION_MISMATCH";
+
+      throw error;
+    }
+  }
+
+  exam.generated_total_marks =
+    stats.total;
+
+  exam.generated_question_count =
+    stats.count;
+
+  exam.mark_blueprint =
+    blueprint;
+
+  return exam;
+}
+
+async function runOCR(
+  keys,
+  meta,
+  images
+) {
+  const sourcePageCount =
+    images.length;
+
+  const prompt = `
+You are an expert Examination Paper OCR and Transcription Engine.
+
+THIS IS AN EXACT TRANSCRIPTION TASK.
+
+Process EVERY supplied page image.
+
+DO NOT:
+- invent questions
+- replace questions
+- summarize
+- shorten
+- skip questions
+- skip sub-questions
+- skip sections
+- skip options
+- skip instructions
+- change marks
+- merge questions
+- silently discard unclear content
+
+Preserve:
+- original numbering
+- all question text
+- all sub-question text
+- all options
+- all printed marks
+- section names
+- instructions
+- tables/matching questions
+- case-study structure
+
+If a question continues onto another page, preserve it as one
+logical question.
+
+If a tiny part is genuinely unreadable, use [unclear] only there.
+
+IMPORTANT:
+This is OCR.
+
+The marks printed on the source paper are authoritative.
+DO NOT alter marks to make them equal ${meta.totalMarks}.
+
+Calculate the actual transcribed total separately.
+
+SOURCE PAGE COUNT: ${sourcePageCount}
+
+Metadata:
+School: ${meta.schoolName}
+Class: ${meta.classGrade}
+Subject: ${meta.subject}
+Exam: ${meta.examType}
+Duration: ${meta.durationMinutes} minutes
+
+Respond ONLY with valid JSON.
+
+JSON:
+{
+  "school_name": "${meta.schoolName}",
+  "title": "${meta.examType}",
+  "subject": "${meta.subject}",
+  "class_grade": "${meta.classGrade}",
+  "total_marks": ${meta.totalMarks},
+  "duration_minutes": ${meta.durationMinutes},
+  "academic_session": "${meta.academicSession}",
+  "set_code": "${meta.setCode}",
+  "source_page_count": ${sourcePageCount},
+  "transcribed_question_count": 0,
+  "transcribed_total_marks": 0,
+  "has_student_blanks": ${meta.includeStudentBlanks},
+  "instructions": [],
+  "sections": [
+    {
+      "section_name": "SECTION A",
+      "questions": [
+        {
+          "question_number": 1,
+          "question_text": "Complete source question",
+          "options": [],
+          "marks": 1,
+          "answer_key": "",
+          "topic": "",
+          "concept": "",
+          "sub_questions": []
+        }
+      ]
+    }
+  ]
+}
+`;
+
+  const parts = [
+    {
+      text: prompt
+    }
+  ];
+
+  images.forEach(
+    (b64, index) => {
+      parts.push({
+        text:
+          `SOURCE PAGE ${index + 1} OF ${sourcePageCount}`
+      });
+
+      parts.push({
+        inlineData: {
+          mimeType:
+            "image/jpeg",
+
+          data:
+            String(b64).replace(
+              /^data:image\/\w+;base64,/,
+              ""
+            )
+        }
+      });
+    }
+  );
+
+  const errors = [];
+
+  for (const key of keys) {
+    for (const model of MODELS) {
+      try {
+        const url =
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+
+        const response =
+          await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts
+                }
+              ],
+
+              generationConfig: {
+                responseMimeType:
+                  "application/json",
+
+                temperature: 0.05
+              }
+            })
+          });
+
+        const data =
+          await response.json();
+
+        const text =
+          data?.candidates?.[0]
+            ?.content?.parts?.[0]
+            ?.text;
+
+        if (response.ok && text) {
+          try {
+            const exam =
+              JSON.parse(
+                stripJsonFences(text)
+              );
+
+            const normalized =
+              normalizeExam(
+                exam,
+                meta
+              );
+
+            normalized.source_page_count =
+              sourcePageCount;
+
+            const stats =
+              calculateMarks(
+                normalized
+              );
+
+            normalized.transcribed_question_count =
+              stats.count;
+
+            normalized.transcribed_total_marks =
+              stats.total;
+
+            return normalized;
+          } catch {
+            errors.push(
+              `Gemini [${model}]: invalid JSON`
+            );
+          }
+        } else {
+          errors.push(
+            `Gemini [${model}]: ${
+              data?.error?.message ||
+              response.statusText
+            }`
+          );
+        }
+      } catch (error) {
+        errors.push(
+          `Gemini [${model}]: ${
+            error?.message ||
+            "request failed"
+          }`
+        );
+      }
+    }
+  }
+
+  throw new Error(
+    `OCR transcription failed: ${
+      errors.slice(0, 5).join(" | ")
+    }`
+  );
+}
+
+export default async function handler(
+  req,
+  res
+) {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "*"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "POST, OPTIONS"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type"
+  );
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();
@@ -24,436 +939,204 @@ export default async function handler(req, res) {
   if (!rawGeminiKeys) {
     return res.status(500).json({
       success: false,
-      error: "GEMINI_API_KEY is not configured in environment variables."
+      error:
+        "GEMINI_API_KEY is not configured in environment variables."
     });
   }
 
-  const geminiKeys = rawGeminiKeys
-    .split(",")
-    .map(k => k.trim())
-    .filter(Boolean);
+  const geminiKeys =
+    rawGeminiKeys
+      .split(",")
+      .map(k => k.trim())
+      .filter(Boolean);
 
   try {
-    const {
-      inputType,
-      rawText,
-      imageBase64Array,
-      subject,
-      classGrade,
-      chapterName,
-      schoolName,
-      totalMarks,
-      examType,
-      durationMinutes,
-      academicSession,
-      setCode,
-      includeStudentBlanks
-    } = req.body || {};
+    const body =
+      req.body ||
+      {};
+
+    const meta = {
+      inputType:
+        cleanText(
+          body.inputType,
+          "ncert"
+        ).toLowerCase(),
+
+      rawText:
+        cleanText(
+          body.rawText
+        ),
+
+      chapterName:
+        cleanText(
+          body.chapterName
+        ),
+
+      schoolName:
+        cleanText(
+          body.schoolName,
+          "Invincible Coaching Classes"
+        ),
+
+      subject:
+        cleanText(
+          body.subject,
+          "General"
+        ),
+
+      classGrade:
+        cleanText(
+          body.classGrade,
+          "Class 10"
+        ),
+
+      totalMarks:
+        Math.max(
+          1,
+          Math.round(
+            numberOr(
+              body.totalMarks,
+              80
+            )
+          )
+        ),
+
+      examType:
+        cleanText(
+          body.examType,
+          "Summative Assessment"
+        ),
+
+      durationMinutes:
+        Math.max(
+          1,
+          Math.round(
+            numberOr(
+              body.durationMinutes,
+              180
+            )
+          )
+        ),
+
+      academicSession:
+        cleanText(
+          body.academicSession,
+          "2026-27"
+        ),
+
+      setCode:
+        cleanText(
+          body.setCode,
+          "A"
+        ),
+
+      includeStudentBlanks:
+        body.includeStudentBlanks !== false,
+
+      includeMCQs:
+        body.includeMCQs === true,
+
+      includeAssertionReason:
+        body.includeAssertionReason === true,
+
+      includeCaseStudy:
+        body.includeCaseStudy === true
+    };
 
     const images =
-      Array.isArray(imageBase64Array)
-        ? imageBase64Array.filter(Boolean)
+      Array.isArray(
+        body.imageBase64Array
+      )
+        ? body.imageBase64Array.filter(Boolean)
         : [];
 
-    const sourcePageCount = images.length;
-
     /*
-      ============================================================
-      IMPORTANT OCR RULE
-
-      This endpoint is TRANSCRIPTION, not creative generation.
-
-      Every uploaded image represents one source page.
-      Gemini must inspect every page and preserve every question,
-      sub-question, section and mark allocation.
-      ============================================================
+      CAMERA / PHOTOS
+      ===============
+      Exact OCR.
+      Never force the requested total.
     */
-
-    const systemPrompt = `
-You are an expert Examination Paper OCR and Transcription Engine.
-
-THIS IS AN EXACT TRANSCRIPTION TASK.
-
-You are given an examination paper as one or more page images.
-
-Your primary responsibility is to reproduce the COMPLETE paper
-shown in the supplied images.
-
-ABSOLUTELY DO NOT:
-- invent questions
-- create replacement questions
-- summarize questions
-- shorten questions
-- skip questions
-- skip sub-questions
-- skip sections
-- skip options
-- skip instructions
-- change marks
-- merge separate questions
-- silently discard unclear content
-
-Every visible page must be processed.
-
-SOURCE PAGE COUNT:
-${sourcePageCount}
-
-You MUST inspect all ${sourcePageCount} supplied page image(s).
-
-For each source page:
-1. Read the complete page from top to bottom.
-2. Identify every question and sub-question.
-3. Preserve its original question number.
-4. Preserve all options.
-5. Preserve all marks.
-6. Preserve section names.
-7. Preserve instructions.
-8. Preserve tables, matching questions and case-study structure.
-9. Continue to the next page only after checking the entire current page.
-
-COMPLETENESS IS MORE IMPORTANT THAN BREVITY.
-
-If a question continues onto the next page, keep it as one logical
-question while preserving all of its visible content.
-
-Do not stop after finding an apparently complete examination section.
-
-EXAM METADATA:
-- School / Institute: ${schoolName || "Invincible Coaching Classes"}
-- Class: ${classGrade || "Class 4"}
-- Subject: ${subject || "E.V.S"}
-- Requested Total Marks: ${totalMarks || 80}
-- Exam Type: ${examType || "Summative Assessment (SA-1)"}
-- Duration: ${durationMinutes || 150} Minutes
-
-MARKS RULE:
-
-For OCR mode, the marks printed in the source paper are authoritative.
-
-Do NOT modify the marks merely to make them equal to the requested
-total marks.
-
-At the end, calculate:
-
-TOTAL_TRANSCRIBED_MARKS =
-sum of the marks of every top-level question/sub-question exactly
-as represented in the source.
-
-If the source paper itself says a different total, preserve the
-source information rather than inventing marks.
-
-QUESTION NUMBER RULES:
-
-Preserve original numbering exactly where possible.
-
-Examples:
-1, 2, 3
-21(a), 21(b)
-Q1, Q2
-Section A: 1-10
-
-Do not renumber the source paper merely for convenience.
-
-MATCH THE FOLLOWING:
-
-Keep Column A and Column B clearly separated.
-
-Use Unicode non-breaking spaces where necessary.
-
-CASE STUDIES:
-
-Preserve:
-- passage
-- sub-parts
-- options
-- marks
-- numbering
-
-MULTIPLE CHOICE QUESTIONS:
-
-Preserve all options exactly.
-
-ANSWER KEYS:
-
-Provide an answer key for every transcribed question when it can be
-determined from the source and standard curriculum.
-
-Do not remove a question merely because its answer is difficult.
-
-OCR UNCERTAINTY:
-
-If a small portion is genuinely unreadable, preserve the readable
-text and use "[unclear]" only for the unreadable portion.
-
-Never replace an unreadable question with a newly invented question.
-
-FINAL COMPLETENESS CHECK:
-
-Before responding, internally verify:
-
-1. Number of source pages received = ${sourcePageCount}
-2. Every source page was inspected.
-3. No source page was skipped.
-4. Every visible question was transcribed.
-5. Every visible sub-question was transcribed.
-6. Every visible option was transcribed.
-7. Every visible mark allocation was preserved.
-8. The final JSON contains all extracted sections and questions.
-
-Respond ONLY with valid raw JSON.
-
-JSON SCHEMA:
-
-{
-  "school_name": "${schoolName || "Invincible Coaching Classes"}",
-  "title": "${examType || "Summative Assessment (SA-1)"}",
-  "subject": "${subject || "E.V.S"}",
-  "class_grade": "${classGrade || "Class 4"}",
-  "total_marks": ${Number(totalMarks) || 80},
-  "duration_minutes": ${Number(durationMinutes) || 150},
-  "academic_session": "${academicSession || "2025-26"}",
-  "set_code": "${setCode || ""}",
-  "source_page_count": ${sourcePageCount},
-  "transcribed_question_count": 0,
-  "transcribed_total_marks": 0,
-  "has_student_blanks": ${includeStudentBlanks !== false},
-  "instructions": [],
-  "sections": [
-    {
-      "section_name": "SECTION A",
-      "questions": [
-        {
-          "question_number": 1,
-          "question_text": "Complete question text",
-          "options": [],
-          "marks": 1,
-          "answer_key": "Answer"
-        }
-      ]
-    }
-  ]
-}
-
-The values 0 in the example are placeholders.
-Replace them with the ACTUAL calculated values.
-
-Again:
-
-PROCESS ALL ${sourcePageCount} SOURCE PAGES.
-DO NOT STOP EARLY.
-DO NOT SUMMARIZE.
-DO NOT INVENT.
-DO NOT OMIT.
-`;
-
-    const parts = [
-      {
-        text: systemPrompt
-      }
-    ];
-
     if (
-      inputType === "text" ||
-      rawText ||
-      chapterName
+      meta.inputType ===
+      "camera"
     ) {
-      parts.push({
-        text:
-          `Additional Context / Notes:\n${
-            chapterName || rawText || ""
-          }`
+      if (!images.length) {
+        return res.status(400).json({
+          success: false,
+          error:
+            "Camera/OCR mode requires at least one page image."
+        });
+      }
+
+      const exam =
+        await runOCR(
+          geminiKeys,
+          meta,
+          images
+        );
+
+      return res.status(200).json({
+        success: true,
+        mode: "ocr",
+        exam
       });
     }
 
     /*
-      Send every uploaded page image.
-      We deliberately preserve the existing image compression
-      and data-url handling.
+      SYLLABUS / TEXT
+      ===============
+      New generated examination
+      with exact mark validation.
     */
-    images.forEach((b64, index) => {
-      parts.push({
-        text:
-          `\nSOURCE PAGE ${index + 1} OF ${sourcePageCount}\n`
-      });
-
-      parts.push({
-        inlineData: {
-          mimeType: "image/jpeg",
-          data: String(b64)
-            .replace(
-              /^data:image\/\w+;base64,/,
-              ""
-            )
-        }
-      });
-    });
-
-    const MODELS = [
-      "gemini-3.6-flash",
-      "gemini-3.5-flash",
-      "gemini-3.5-flash-lite",
-      "gemini-2.5-flash",
-      "gemini-2.5-flash-lite"
-    ];
-
-    let examData = null;
-    const errorLog = [];
-
-    keyLoop:
-    for (const key of geminiKeys) {
-      for (const model of MODELS) {
-        try {
-          const url =
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
-
-          const response = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              contents: [
-                {
-                  role: "user",
-                  parts
-                }
-              ],
-              generationConfig: {
-                responseMimeType: "application/json",
-                temperature: 0.05
-              }
-            })
-          });
-
-          const data = await response.json();
-
-          if (
-            response.ok &&
-            data?.candidates?.[0]?.content?.parts?.[0]?.text
-          ) {
-            const rawOutput =
-              data.candidates[0]
-                .content.parts[0].text;
-
-            const cleanJson =
-              rawOutput
-                .replace(
-                  /^```json\s*/i,
-                  ""
-                )
-                .replace(
-                  /^```\s*/i,
-                  ""
-                )
-                .replace(
-                  /\s*```$/i,
-                  ""
-                )
-                .trim();
-
-            try {
-              examData =
-                JSON.parse(cleanJson);
-            } catch (parseError) {
-              errorLog.push(
-                `Gemini [${model}]: Invalid JSON response`
-              );
-              continue;
-            }
-
-            break keyLoop;
-
-          } else {
-            errorLog.push(
-              `Gemini [${model}]: ${
-                data?.error?.message ||
-                response.statusText
-              }`
-            );
-          }
-
-        } catch (err) {
-          errorLog.push(
-            `Gemini [${model}]: ${err.message}`
-          );
-        }
-      }
-    }
-
-    if (!examData) {
-      return res.status(500).json({
+    if (
+      !meta.chapterName &&
+      !meta.rawText
+    ) {
+      return res.status(400).json({
         success: false,
         error:
-          `OCR Question Paper transcription failed: ${
-            errorLog.slice(0, 3).join(" | ")
-          }`
+          "Please provide chapters/syllabus or paste text/notes before generating the paper."
       });
     }
 
-    /*
-      ============================================================
-      SERVER-SIDE COMPLETENESS NORMALIZATION
-      ============================================================
-    */
-
-    if (!Array.isArray(examData.sections)) {
-      examData.sections = [];
-    }
-
-    let questionCount = 0;
-    let calculatedMarks = 0;
-
-    examData.sections.forEach(section => {
-      if (!Array.isArray(section.questions)) {
-        section.questions = [];
-      }
-
-      section.questions.forEach(question => {
-        questionCount++;
-
-        const marks =
-          Number(question.marks);
-
-        if (
-          Number.isFinite(marks) &&
-          marks > 0
-        ) {
-          calculatedMarks += marks;
-        }
-      });
-    });
-
-    examData.source_page_count =
-      sourcePageCount;
-
-    examData.transcribed_question_count =
-      questionCount;
-
-    examData.transcribed_total_marks =
-      calculatedMarks;
-
-    /*
-      IMPORTANT:
-      Do not silently change the source marks.
-      This is OCR, so the source paper remains authoritative.
-    */
+    const exam =
+      await runGeneration(
+        geminiKeys,
+        meta
+      );
 
     return res.status(200).json({
       success: true,
-      exam: examData
+      mode: "generate",
+      exam
     });
 
   } catch (error) {
     console.error(
-      "OCR Paper Fatal Error:",
+      "Faculty Studio Paper Error:",
       error
     );
 
-    return res.status(500).json({
+    const isValidationError =
+      error?.code ===
+        "MARK_TOTAL_MISMATCH" ||
+      error?.code ===
+        "MARK_DISTRIBUTION_MISMATCH";
+
+    return res.status(
+      isValidationError
+        ? 422
+        : 500
+    ).json({
       success: false,
+
       error:
-        error.message ||
-        "Server error processing examination paper."
+        error?.message ||
+        "Server error processing examination paper.",
+
+      code:
+        error?.code ||
+        "PAPER_GENERATION_ERROR"
     });
   }
 }
