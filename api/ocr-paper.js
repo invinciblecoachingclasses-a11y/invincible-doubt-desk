@@ -681,6 +681,544 @@ async function runOCR(
   meta,
   images
 ) {
+  const sourcePageCount = images.length;
+
+  /*
+    ============================================================
+    MULTI-PAGE OCR ARCHITECTURE
+    ============================================================
+
+    NEVER send all handwritten pages to Gemini in one request.
+
+    Each page is independently transcribed first.
+    The server then merges the pages strictly in source order.
+
+    This prevents:
+    - page reordering
+    - missing questions
+    - accidental summarization
+    - cross-page merging
+    - model-created numbering changes
+  */
+
+  async function ocrSinglePage(
+    key,
+    model,
+    imageBase64,
+    pageNumber
+  ) {
+    const prompt = `
+You are an expert Hindi handwritten examination-paper OCR engine.
+
+THIS IS EXACT TRANSCRIPTION.
+
+You are processing ONLY SOURCE PAGE ${pageNumber} OF ${sourcePageCount}.
+
+Read this page from TOP TO BOTTOM.
+
+You MUST preserve the exact order in which material appears
+on this page.
+
+DO NOT:
+- invent text
+- summarize
+- shorten
+- rewrite
+- improve language
+- correct grammar
+- reorder questions
+- move a question to another section
+- omit any question
+- omit any sub-question
+- omit options
+- omit tables
+- omit headings
+- omit instructions
+- combine unrelated questions
+- create questions that are not visible
+
+IMPORTANT NUMBERING RULE:
+
+Preserve the question number exactly as written.
+
+If this page contains Q1, Q2, Q3...
+keep those numbers.
+
+If numbering restarts inside another section, preserve that restart.
+
+Do NOT globally renumber questions.
+
+IMPORTANT MARKS RULE:
+
+Only record marks when marks are visibly written on this page.
+
+If a question has NO visible individual mark:
+use 0 for "marks".
+
+DO NOT invent [1 Mark].
+
+If a section heading visibly contains a section total,
+preserve it in "section_marks".
+
+Do not convert a section total into individual question marks.
+
+HANDWRITTEN HINDI:
+
+Transcribe Devanagari carefully.
+
+Do not replace Hindi words with approximate OCR spellings.
+
+If a tiny portion is genuinely impossible to read,
+write [unclear] only for that portion.
+
+PAGE ORDER:
+
+The output must contain only material physically visible
+on this page.
+
+Do not use information from other pages.
+
+Return JSON only.
+
+FORMAT:
+
+{
+  "page_number": ${pageNumber},
+  "section_marks": "",
+  "instructions": [],
+  "sections": [
+    {
+      "section_name": "",
+      "questions": [
+        {
+          "question_number": "",
+          "question_text": "",
+          "options": [],
+          "marks": 0,
+          "answer_key": "",
+          "topic": "",
+          "concept": "",
+          "sub_questions": [],
+          "source_page": ${pageNumber}
+        }
+      ]
+    }
+  ]
+}
+`;
+
+    const url =
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+
+            parts: [
+              {
+                text: prompt
+              },
+
+              {
+                inlineData: {
+                  mimeType: "image/jpeg",
+
+                  data:
+                    String(imageBase64).replace(
+                      /^data:image\/\w+;base64,/,
+                      ""
+                    )
+                }
+              }
+            ]
+          }
+        ],
+
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.02
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    const text =
+      data?.candidates?.[0]
+        ?.content?.parts?.[0]
+        ?.text;
+
+    if (!response.ok || !text) {
+      throw new Error(
+        data?.error?.message ||
+        response.statusText ||
+        "Empty OCR response"
+      );
+    }
+
+    return JSON.parse(
+      stripJsonFences(text)
+    );
+  }
+
+
+  /*
+    ============================================================
+    PROCESS EVERY PAGE IN PARALLEL
+    BUT KEEP ORIGINAL ARRAY ORDER.
+    ============================================================
+  */
+
+  const pageResults =
+    await Promise.all(
+      images.map(
+        async (imageBase64, index) => {
+
+          const pageNumber =
+            index + 1;
+
+          const errors = [];
+
+          for (const key of keys) {
+
+            for (const model of MODELS) {
+
+              try {
+
+                const result =
+                  await ocrSinglePage(
+                    key,
+                    model,
+                    imageBase64,
+                    pageNumber
+                  );
+
+                return {
+                  pageNumber,
+                  result
+                };
+
+              } catch (error) {
+
+                errors.push(
+                  `Page ${pageNumber} / ${model}: ${
+                    error?.message ||
+                    "OCR failed"
+                  }`
+                );
+              }
+            }
+          }
+
+          throw new Error(
+            `OCR failed for source page ${pageNumber}: ${
+              errors.slice(0, 5).join(" | ")
+            }`
+          );
+        }
+      )
+    );
+
+
+  /*
+    ============================================================
+    STRICT SOURCE-PAGE MERGE
+    ============================================================
+
+    Promise.all preserves input order.
+
+    We additionally sort explicitly so that this remains
+    deterministic even if the implementation changes later.
+  */
+
+  pageResults.sort(
+    (a, b) =>
+      a.pageNumber -
+      b.pageNumber
+  );
+
+
+  const mergedSections = [];
+
+  const instructions = [];
+
+  let questionCount = 0;
+
+  let transcribedTotalMarks = 0;
+
+
+  /*
+    Keep sections in physical page order.
+
+    If the same section continues on a later page,
+    append its questions to the existing section rather than
+    allowing Gemini to reorder them.
+  */
+
+  for (const page of pageResults) {
+
+    const examPage =
+      page.result || {};
+
+    if (
+      Array.isArray(
+        examPage.instructions
+      )
+    ) {
+      instructions.push(
+        ...examPage.instructions
+      );
+    }
+
+
+    const sections =
+      Array.isArray(
+        examPage.sections
+      )
+        ? examPage.sections
+        : [];
+
+
+    for (
+      const section
+      of sections
+    ) {
+
+      const sectionName =
+        cleanText(
+          section?.section_name,
+          `SECTION ${mergedSections.length + 1}`
+        );
+
+
+      let targetSection =
+        mergedSections.find(
+          item =>
+            item.section_name
+              .trim()
+              .toLowerCase() ===
+            sectionName
+              .trim()
+              .toLowerCase()
+        );
+
+
+      if (!targetSection) {
+
+        targetSection = {
+          section_name:
+            sectionName,
+
+          questions: []
+        };
+
+        mergedSections.push(
+          targetSection
+        );
+      }
+
+
+      const questions =
+        Array.isArray(
+          section?.questions
+        )
+          ? section.questions
+          : [];
+
+
+      for (
+        const q
+        of questions
+      ) {
+
+        const item =
+          q &&
+          typeof q === "object"
+            ? q
+            : {};
+
+
+        /*
+          IMPORTANT:
+
+          OCR mode must NEVER turn an absent mark into
+          a fabricated 1-mark question.
+
+          0 means "no individual mark visibly specified".
+        */
+
+        const rawMarks =
+          Number(item.marks);
+
+        const marks =
+          Number.isFinite(
+            rawMarks
+          ) &&
+          rawMarks > 0
+            ? rawMarks
+            : 0;
+
+
+        const normalizedQuestion = {
+
+          question_number:
+            item.question_number ??
+            item.questionNumber ??
+            "",
+
+          question_text:
+            cleanText(
+              item.question_text ??
+              item.question ??
+              item.text
+            ),
+
+          options:
+            Array.isArray(
+              item.options
+            )
+              ? item.options.map(
+                  value =>
+                    String(value)
+                )
+              : [],
+
+          marks,
+
+          answer_key:
+            item.answer_key ??
+            item.answer ??
+            "",
+
+          topic:
+            cleanText(
+              item.topic
+            ),
+
+          concept:
+            cleanText(
+              item.concept
+            ),
+
+          sub_questions:
+            Array.isArray(
+              item.sub_questions
+            )
+              ? item.sub_questions
+              : [],
+
+          source_page:
+            page.pageNumber
+        };
+
+
+        targetSection.questions.push(
+          normalizedQuestion
+        );
+
+        questionCount += 1;
+
+        if (marks > 0) {
+          transcribedTotalMarks +=
+            marks;
+        }
+      }
+    }
+  }
+
+
+  /*
+    ============================================================
+    FINAL OCR OBJECT
+    ============================================================
+  */
+
+  const normalized = {
+
+    school_name:
+      meta.schoolName,
+
+    title:
+      meta.examType,
+
+    subject:
+      meta.subject,
+
+    class_grade:
+      meta.classGrade,
+
+    /*
+      Header value comes from teacher's form.
+      It is NOT treated as the OCR-calculated total.
+    */
+
+    total_marks:
+      meta.totalMarks,
+
+    duration_minutes:
+      meta.durationMinutes,
+
+    academic_session:
+      meta.academicSession,
+
+    set_code:
+      meta.setCode,
+
+    source_page_count:
+      sourcePageCount,
+
+    transcribed_question_count:
+      questionCount,
+
+    transcribed_total_marks:
+      transcribedTotalMarks,
+
+    has_student_blanks:
+      meta.includeStudentBlanks,
+
+    instructions:
+      Array.from(
+        new Set(
+          instructions.filter(Boolean)
+        )
+      ),
+
+    sections:
+      mergedSections
+  };
+
+
+  /*
+    ============================================================
+    SANITY CHECK
+    ============================================================
+
+    A six-page source must never silently become a tiny
+    three-page content structure.
+
+    We cannot know the expected question count beforehand,
+    so we only reject a completely empty transcription.
+  */
+
+  if (
+    questionCount === 0
+  ) {
+    throw new Error(
+      "OCR returned zero questions from the supplied pages."
+    );
+  }
+
+
+  return normalized;
+}
   const sourcePageCount =
     images.length;
 
