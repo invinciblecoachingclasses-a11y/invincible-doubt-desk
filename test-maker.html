@@ -929,8 +929,24 @@
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
-        if (!data.success || !data.exam) throw new Error(data.error || 'Failed to construct exam paper.');
+        const responseText = await res.text();
+
+console.log('OCR API STATUS:', res.status);
+console.log('OCR API RESPONSE:', responseText);
+
+let data;
+
+try {
+  data = JSON.parse(responseText);
+} catch (parseError) {
+  throw new Error(
+    `Server returned invalid JSON (${res.status}): ${responseText.slice(0, 500)}`
+  );
+}
+
+if (!data.success || !data.exam) {
+  throw new Error(data.error || 'Failed to construct exam paper.');
+}
 
         if (currentUser) {
           try {
