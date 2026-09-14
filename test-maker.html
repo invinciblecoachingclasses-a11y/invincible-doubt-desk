@@ -210,9 +210,81 @@
 </style>
 
     <!-- ========================================================
-         TAB 1: ATTENDANCE & ROSTER CONTROL
-    ======================================================== -->
-    <div id="section-attendance" class="block no-print">
+     FACULTY OS NAVIGATION
+     Attendance • Exam Studio • PPT Studio • Marksheet
+======================================================== -->
+
+<div
+  id="facultyOSNavigation"
+  class="no-print bg-[#0d1324]/80 backdrop-blur-xl rounded-3xl border border-white/5 shadow-xl p-3 mb-6"
+>
+  <div class="mb-3 px-2">
+    <div class="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-400">
+      Faculty OS
+    </div>
+
+    <div class="text-xs text-slate-400 mt-1">
+      Select a teacher workspace
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-2 sm:grid-cols-4 gap-2"
+  >
+
+    <!-- ATTENDANCE -->
+    <button
+      type="button"
+      id="nav-attendance"
+      onclick="switchOSTab('attendance')"
+      class="active bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_15px_rgba(0,229,255,0.15)] rounded-2xl px-3 py-3 text-xs font-black transition"
+    >
+      <span class="block text-xl mb-1">📅</span>
+      Attendance
+    </button>
+
+    <!-- EXAM STUDIO -->
+    <button
+      type="button"
+      id="nav-exam"
+      onclick="switchOSTab('exam')"
+      class="rounded-2xl px-3 py-3 text-xs font-black text-slate-400 border border-slate-700/60 bg-slate-800/60 hover:text-white hover:border-cyan-500/40 transition"
+    >
+      <span class="block text-xl mb-1">📝</span>
+      Exam Studio
+    </button>
+
+    <!-- PPT / REVISION STUDIO -->
+    <button
+      type="button"
+      id="nav-ppt"
+      onclick="switchOSTab('ppt')"
+      class="rounded-2xl px-3 py-3 text-xs font-black text-slate-400 border border-slate-700/60 bg-slate-800/60 hover:text-white hover:border-cyan-500/40 transition"
+    >
+      <span class="block text-xl mb-1">📚</span>
+      PPT Studio
+    </button>
+
+    <!-- MARKSHEET / GRADEBOOK -->
+    <button
+      type="button"
+      id="nav-marksheet"
+      onclick="switchOSTab('marksheet')"
+      class="rounded-2xl px-3 py-3 text-xs font-black text-slate-400 border border-slate-700/60 bg-slate-800/60 hover:text-white hover:border-cyan-500/40 transition"
+    >
+      <span class="block text-xl mb-1">📊</span>
+      Marksheet
+    </button>
+
+  </div>
+</div>
+
+
+<!-- ========================================================
+     TAB 1: ATTENDANCE & ROSTER CONTROL
+======================================================== -->
+
+<div id="section-attendance" class="block no-print">
       <div class="bg-[#0d1324]/60 rounded-3xl shadow-xl border border-white/5 p-6 backdrop-blur-xl">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-white/10 pb-4 gap-4">
           <div>
