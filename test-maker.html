@@ -883,7 +883,7 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
-            const compressedB64 = canvas.toDataURL('image/jpeg', 0.88);
+            const compressedB64 = canvas.toDataURL('image/jpeg', 0.72);
             base64Images.push(compressedB64);
 
             const thumb = document.createElement('img');
