@@ -46,8 +46,7 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300e5ff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 16px center; background-size: 18px;
     }
-
-  @media print {
+@media print {
 
   @page {
     size: A4 portrait;
@@ -57,26 +56,36 @@
   html,
   body {
     width: 100% !important;
-    min-height: 100% !important;
+    min-height: 0 !important;
     height: auto !important;
     overflow: visible !important;
     background: #ffffff !important;
     color: #000000 !important;
   }
 
-  body * {
-    visibility: hidden;
+  /*
+    IMPORTANT:
+    Do NOT use visibility:hidden for the whole document.
+    visibility:hidden still occupies layout space and was
+    causing the huge blank area before the paper.
+  */
+
+  body > * {
+    visibility: hidden !important;
   }
 
-  #printable-area,
-  #printable-area * {
-    visibility: visible;
-  }
+  /*
+    The Faculty Studio content is nested inside the main
+    wrapper, so make the printable paper independently
+    visible and take it out of the previous screen layout.
+  */
 
   #printable-area {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
+    visibility: visible !important;
+
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
 
     width: 100% !important;
     max-width: none !important;
@@ -90,6 +99,7 @@
     padding: 0 !important;
 
     border: none !important;
+    border-radius: 0 !important;
     box-shadow: none !important;
 
     background: #ffffff !important;
@@ -97,10 +107,28 @@
     display: block !important;
   }
 
+  #printable-area * {
+    visibility: visible !important;
+  }
+
+  /*
+    Remove screen-only controls completely.
+  */
+
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /*
+    Never constrain the generated paper vertically.
+  */
+
   #paperSections {
     width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
     display: block !important;
   }
@@ -108,6 +136,7 @@
   #paperSections > div {
     height: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
     display: block !important;
   }
@@ -115,6 +144,7 @@
   #paperSections .space-y-4 {
     height: auto !important;
     min-height: 0 !important;
+    max-height: none !important;
     overflow: visible !important;
     display: block !important;
   }
@@ -123,6 +153,7 @@
     display: block !important;
 
     height: auto !important;
+    min-height: 0 !important;
     max-height: none !important;
 
     overflow: visible !important;
@@ -130,88 +161,52 @@
     break-inside: avoid;
     page-break-inside: avoid;
 
-    margin-bottom: 0.85rem !important;
+    margin-bottom: 0.7rem !important;
   }
 
-  .no-print {
-    display: none !important;
-  }
-
-  img {
-    max-width: 100% !important;
-  }
-
-  table {
-    width: 100% !important;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  tr,
-  td,
-  th {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
+  /*
+    Keep headings with their following content.
+  */
 
   h1,
   h2,
   h3,
   h4 {
-    break-after: avoid;
-    page-break-after: avoid;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
 
-  /* Never clip long examination papers */
+  /*
+    Do not allow images/tables to create clipping.
+  */
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  table {
+    width: 100% !important;
+    max-height: none !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  tr,
+  td,
+  th {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /*
+    Absolutely no artificial height restrictions.
+  */
+
   * {
     max-height: none !important;
   }
 }
-
-    .glass-input {
-      background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
-      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;
-    }
-    .glass-input:focus {
-      border-color: rgba(0, 229, 255, 0.6); background: rgba(0, 0, 0, 0.45);
-      box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.15), inset 0 2px 10px rgba(0,0,0,0.5); outline: none;
-    }
-    
-    .ghost-btn {
-      background: rgba(0, 229, 255, 0.05); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.4);
-      box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); backdrop-filter: blur(8px);
-    }
-    .ghost-btn:hover { background: rgba(0, 229, 255, 0.15); box-shadow: 0 0 30px rgba(0, 229, 255, 0.3); transform: scale(0.98); }
-    
-    .os-tab.active { background: rgba(0, 229, 255, 0.1); color: #00e5ff; border-color: rgba(0, 229, 255, 0.4); box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
-  </style>
-</head>
-<body class="min-h-screen antialiased pb-20">
-  
-  <div class="max-w-5xl mx-auto p-4 md:py-8">
-    
-    <!-- OS Top Navigation HUD -->
-    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 no-print bg-[#0d1324]/80 border border-white/10 backdrop-blur-xl px-5 py-4 rounded-3xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8)] gap-4">
-      <div class="flex items-center gap-4 w-full sm:w-auto justify-between">
-        <a href="app.html" class="flex items-center gap-2 font-heading font-black text-white text-lg tracking-tight">
-          <span class="text-2xl">⚡</span> Campus<span class="text-cyan-400">OS</span>
-        </a>
-        <span id="facultySchoolBadge" class="text-[11px] font-bold text-slate-300 bg-white/5 border border-white/10 px-3 py-1 rounded-xl">
-          🏫 Loading School...
-        </span>
-      </div>
-      <div class="flex items-center gap-3 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-hide">
-        <div class="flex bg-black/40 border border-white/5 rounded-2xl p-1 gap-1">
-          <button onclick="switchOSTab('attendance')" id="nav-attendance" class="os-tab active px-4 py-2 rounded-xl text-xs font-bold text-cyan-400 bg-cyan-500/20 border border-cyan-500/40 transition whitespace-nowrap">📅 Attendance</button>
-          <button onclick="switchOSTab('exam')" id="nav-exam" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📝 Exam Studio</button>
-          <button onclick="switchOSTab('ppt')" id="nav-ppt" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">📚 PPT & Notes</button>
-          <button onclick="switchOSTab('marksheet')" id="nav-marksheet" class="os-tab px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition whitespace-nowrap">🏆 Marksheets</button>
-        </div>
-        <button id="logoutBtn" class="text-xs text-rose-400 border border-rose-500/30 bg-rose-500/10 font-bold px-4 py-2.5 rounded-xl hover:bg-rose-500/20 transition whitespace-nowrap">
-          Logout
-        </button>
-      </div>
-    </div>
 
     <!-- ========================================================
          TAB 1: ATTENDANCE & ROSTER CONTROL
