@@ -26,8 +26,11 @@ let arena = {
   pollInterval: null, 
   isBotMatch: false, 
   botScore: 0,
-  botFrozenUntil: 0
+  botFrozenUntil: 0,
+  correctCount: 0
 };
+
+window.arena = arena;
 
 /* =====================================================
    VISUAL ENGINE: CANVAS BEAM CLASH
@@ -310,6 +313,7 @@ function startBotMatch() {
     arena.highestStreak = 0;
     arena.comboMultiplier = 1.0;
     arena.botFrozenUntil = 0;
+    arena.correctCount = 0;
 
     const samplePool = [
         { question_text: "What is the SI unit of force? / बल का SI मात्रक क्या है?", options: ["Newton (न्यूटन)", "Joule (जूल)", "Pascal (पास्कल)", "Watt (वाट)"], correct_option: 0, explanation: "Force = mass × acceleration, measured in Newtons." },
@@ -365,6 +369,7 @@ if (btnCreate) {
         arena.timeLimit = parseInt(data.time_per_question, 10) || parseInt(timePerQ, 10) || 15;
         arena.streak = 0;
         arena.highestStreak = 0;
+        arena.correctCount = 0;
 
         document.getElementById('arenaSetup').classList.add('hidden');
         document.getElementById('arenaWaiting').classList.remove('hidden');
@@ -397,6 +402,7 @@ if (btnJoin) {
         arena.timeLimit = 15;
         arena.streak = 0;
         arena.highestStreak = 0;
+        arena.correctCount = 0;
 
         triggerArenaMatchIntro(data.room.player1_name, name, () => {
             document.getElementById('uiP1Name').textContent = data.room.player1_name;
@@ -575,6 +581,12 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
         const topicEl = document.getElementById('arenaChapter');
         const subject = subjectEl ? subjectEl.value : 'Arena Battle';
         const topic = topicEl ? topicEl.value : 'Time Pressure Match';
+        const questionText =
+            currentQ.question_text || currentQ.question || '';
+
+        if (isCorrect) {
+            arena.correctCount = (arena.correctCount || 0) + 1;
+        }
 
         // 1. If wrong under pressure, send a specific Panic Mistake to the Vault
         if (!isCorrect && selectedIdx !== -1) {
@@ -582,7 +594,8 @@ async function handleArenaAnswer(element, selectedIdx, correctIdx) {
                 subject: subject,
                 topic: topic,
                 mistakeType: isPanic ? "TIME_PRESSURE_PANIC" : "CONCEPTUAL_ERROR",
-                originalQuestion: currentQ.question_text || currentQ.question,
+                question: questionText,
+                originalQuestion: questionText,
                 studentAnswer: "Option " + (selectedIdx + 1),
                 correctAnswer: "Option " + (correctIdx + 1)
             });
@@ -696,6 +709,21 @@ function showArenaResult(room) {
     const resultTextEl = document.getElementById('arenaResultText');
     const isWin = myScore > opScore;
     const isTie = myScore === opScore;
+
+    if (window.InvincibleTelemetry) {
+        const totalQ = arena.questions?.length || 0;
+        const accuracy = totalQ
+            ? Math.round(((arena.correctCount || 0) / totalQ) * 100)
+            : 0;
+
+        window.InvincibleTelemetry.emit('ARENA_FINISHED', {
+            subject: document.getElementById('arenaSubject')?.value || 'Arena Battle',
+            chapter: document.getElementById('arenaChapter')?.value || 'Arena Match',
+            won: isWin,
+            accuracy,
+            comboStreak: arena.highestStreak || 0
+        });
+    }
 
     // Calculate XP Rewards
     let earnedXP = isWin ? 100 : (isTie ? 40 : 20);

@@ -61,6 +61,26 @@
     return null;
   }
 
+  function formatTitle(
+    recommendation
+  ) {
+
+    const subject =
+      recommendation.subject ||
+      'General';
+
+    const concept =
+      recommendation.concept ||
+      recommendation.topic ||
+      'General';
+
+    return (
+      subject +
+      ': ' +
+      concept
+    );
+  }
+
   function findActionButton(card) {
     if (!card) {
       return null;
@@ -72,6 +92,7 @@
 
     const explicit =
       findElement([
+        'nbmActionBtn',
         'nextBestMoveAction',
         'nbmActionButton',
         'nextBestMoveBtn'
@@ -152,11 +173,17 @@
     const actionButton =
       findActionButton(card);
 
+    const masteryBadge =
+      findElement([
+        'nbmMasteryBadge',
+        'nextBestMoveMasteryBadge'
+      ]);
+
     if (title) {
       title.textContent =
-        recommendation.actionTitle ||
-        recommendation.title ||
-        'Your Next Best Move';
+        formatTitle(
+          recommendation
+        );
     }
 
     if (description) {
@@ -164,6 +191,24 @@
         recommendation.description ||
         recommendation.reason ||
         '';
+    }
+
+    if (
+      masteryBadge &&
+      recommendation.mastery !==
+        undefined &&
+      recommendation.mastery !==
+        null &&
+      recommendation.mastery !==
+        ''
+    ) {
+      masteryBadge.textContent =
+        Math.round(
+          Number(
+            recommendation.mastery
+          ) || 0
+        ) +
+        '% MASTERY';
     }
 
     /*
@@ -176,7 +221,10 @@
       recommendation.actionTitle
     ) {
       actionButton.textContent =
-        recommendation.actionTitle;
+        (
+          recommendation.actionTitle +
+          ' 🚀'
+        ).toUpperCase();
     }
 
     /*
@@ -247,13 +295,15 @@
     return recommendation;
   }
 
-  function refresh() {
+  function refresh(
+    force
+  ) {
 
     const recommendation =
       exposeRecommendation();
 
     if (!recommendation) {
-      return;
+      return false;
     }
 
     const key =
@@ -266,20 +316,130 @@
     */
 
     if (
+      !force &&
       key === lastRecommendationKey
     ) {
-      return;
+      return false;
     }
 
     lastRecommendationKey =
       key;
 
-    updateExistingCard(
+    return updateExistingCard(
       recommendation
     );
   }
 
+  function wrapLegacyRenderNextBestMove() {
+
+    if (
+      window.__adaptiveNBMWrapped
+    ) {
+      return;
+    }
+
+    const legacyRender =
+      window.renderNextBestMove;
+
+    if (
+      typeof legacyRender !==
+      'function'
+    ) {
+      return;
+    }
+
+    window.__adaptiveNBMWrapped =
+      true;
+
+    window.renderNextBestMove =
+      function canonicalRenderNextBestMove() {
+
+        const recommendation =
+          getRecommendation();
+
+        if (
+          recommendation &&
+          updateExistingCard(
+            recommendation
+          )
+        ) {
+
+          exposeRecommendation();
+
+          lastRecommendationKey =
+            recommendationKey(
+              recommendation
+            );
+
+          return;
+        }
+
+        legacyRender();
+      };
+  }
+
+  function executeCanonicalNextBestMove() {
+
+    if (
+      window.InvincibleAdaptiveActionRouter &&
+      typeof
+        window.InvincibleAdaptiveActionRouter
+          .execute === 'function'
+    ) {
+
+      const routed =
+        window.InvincibleAdaptiveActionRouter
+          .execute();
+
+      if (routed) {
+        return true;
+      }
+    }
+
+    if (
+      typeof
+        window.executeAdaptiveNextBestMove ===
+      'function'
+    ) {
+
+      const routed =
+        window.executeAdaptiveNextBestMove();
+
+      if (routed) {
+        return true;
+      }
+    }
+
+    if (
+      typeof
+        window.executeNextBestMove ===
+      'function'
+    ) {
+
+      window.executeNextBestMove();
+
+      return true;
+    }
+
+    if (
+      window.TelemetryEngine &&
+      typeof
+        window.TelemetryEngine
+          .openMistakeVault === 'function'
+    ) {
+
+      window.TelemetryEngine
+        .openMistakeVault();
+
+      return true;
+    }
+
+    return false;
+  }
+
   function install() {
+
+    wrapLegacyRenderNextBestMove();
 
     if (
       !adaptiveEngineReady()
@@ -370,6 +530,13 @@
       .getRecommendation =
         getRecommendation;
 
+    window.InvincibleAdaptiveNBM
+      .executeCanonicalNextBestMove =
+        executeCanonicalNextBestMove;
+
+    window.executeCanonicalNextBestMove =
+      executeCanonicalNextBestMove;
+
     window.InvincibleAdaptiveNBM.version =
       '2.0.0';
 
@@ -381,6 +548,8 @@
   /*
     Initial installation.
   */
+
+  wrapLegacyRenderNextBestMove();
 
   install();
 

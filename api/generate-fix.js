@@ -349,7 +349,7 @@ async function callGemini(
 
                         temperature: 0.2,
 
-                        response_mime_type:
+                        responseMimeType:
                             'application/json'
 
                     }
