@@ -144,7 +144,7 @@ Respond ONLY with valid, raw JSON array (no markdown ticks):
     keyLoop2: for (const key of geminiKeys) {
       for (const model of MODELS) {
         try {
-          const url = `[https://generativelanguage.googleapis.com/v1beta/models/$](https://generativelanguage.googleapis.com/v1beta/models/$){model}:generateContent?key=${encodeURIComponent(key)}`;
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
           const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
