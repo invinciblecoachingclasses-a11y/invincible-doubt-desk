@@ -154,7 +154,7 @@
 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ classLevel, subject, chapter })
+          body: JSON.stringify({ className: classLevel, subject, chapter })
         });
 
         const data = await res.json();
@@ -163,7 +163,7 @@
           throw new Error(data.error || 'Failed to fetch notes');
         }
 
-        display.innerHTML = marked.parse(data.notesMarkdown);
+        display.innerHTML = marked.parse(data.notes || '');
 
         if (window.renderMathInElement) {
           renderMathInElement(display, {

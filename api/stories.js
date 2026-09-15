@@ -174,12 +174,20 @@ export default async function handler(req, res) {
             
             // Action: Delete Story
             if (action === 'delete_story') {
-                const MASTER_ADMIN_PIN = "ADMIN123";
-
                 if (!story_id) return res.status(400).json({ error: 'Missing story ID.' });
 
-                if (admin_key && admin_key !== MASTER_ADMIN_PIN) {
-                    return res.status(403).json({ error: 'Invalid Admin PIN.' });
+                const expectedPin = process.env.STORIES_ADMIN_PIN;
+
+                if (!expectedPin) {
+                    return res.status(503).json({
+                        error: 'Story deletion is not configured.'
+                    });
+                }
+
+                if (!admin_key || admin_key !== expectedPin) {
+                    return res.status(403).json({
+                        error: 'Invalid or missing Admin PIN.'
+                    });
                 }
 
                 const deleteRes = await fetch(`${supabaseUrl}/rest/v1/study_stories?id=eq.${story_id}`, {
