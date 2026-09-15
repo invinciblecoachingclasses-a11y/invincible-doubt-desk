@@ -164,15 +164,15 @@
     */
 
     if (
-      window.InvincibleAIOrchestrator &&
+      window.InvincibleAI &&
       typeof
-        window.InvincibleAIOrchestrator
+        window.InvincibleAI
           .initiateTwoMinuteFix === 'function'
     ) {
 
       try {
 
-        window.InvincibleAIOrchestrator
+        window.InvincibleAI
           .initiateTwoMinuteFix({
             source:
               'adaptive_nbm',

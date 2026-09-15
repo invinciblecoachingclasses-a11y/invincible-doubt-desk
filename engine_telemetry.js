@@ -517,11 +517,9 @@
           );
 
 
-        if (
-          window.InvincibleVault
-        ) {
-
-          window.InvincibleVault.recordMistake({
+        this.emit(
+          'MISTAKE_LOGGED',
+          {
 
             subject:
               subject ||
@@ -545,9 +543,12 @@
 
             explanation:
               explanation ||
-              'Review the core formula and verify sign conventions.'
-          });
-        }
+              'Review the core formula and verify sign conventions.',
+
+            source:
+              'reel'
+          }
+        );
       }
 
 

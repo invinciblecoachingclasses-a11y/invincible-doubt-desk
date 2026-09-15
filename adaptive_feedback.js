@@ -442,19 +442,6 @@
     }
   }
 
-  if (
-    window.InvincibleTelemetry &&
-    typeof
-      window.InvincibleTelemetry.on ===
-        'function'
-  ) {
-
-    window.InvincibleTelemetry.on(
-      'invincible:event',
-      handleEvent
-    );
-  }
-
   /*
     Some versions of the telemetry event bus pass
     the event name directly rather than nesting it.

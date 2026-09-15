@@ -552,7 +552,7 @@
     ) {
       strength =
         safeNumber(
-          evidence.score,
+          evidence.evidenceScore,
           0
         );
     }
